@@ -1,93 +1,145 @@
-import React, { Component } from 'react'
+import React, { Component } from "react";
+import { connect } from "react-redux";
 
-import FroalaEditor from 'react-froala-wysiwyg';
+import FroalaEditor from "react-froala-wysiwyg";
 
-import 'froala-editor/js/froala_editor.pkgd.min.js';
-import 'froala-editor/css/froala_style.min.css';
-import 'froala-editor/css/froala_editor.pkgd.min.css';
+import "froala-editor/js/froala_editor.pkgd.min.js";
+import "froala-editor/css/froala_style.min.css";
+import "froala-editor/css/froala_editor.pkgd.min.css";
 
-import  'froala-editor/js/plugins/image.min.js';
-import  'froala-editor/js/plugins/video.min.js';
-import  'froala-editor/js/plugins/colors.min.js';
-import  'froala-editor/js/plugins/emoticons.min.js';
-import  'froala-editor/js/plugins/font_family.min.js';
-import  'froala-editor/js/plugins/font_size.min.js';
-import  'froala-editor/js/plugins/line_height.min.js';
-import  'froala-editor/js/plugins/lists.min.js';
-import  'froala-editor/js/plugins/align.min.js';
-import  'froala-editor/js/plugins/link.min.js';
-import  'froala-editor/js/plugins/file.min.js';
-import  'froala-editor/js/plugins/code_view.min.js';
-import  'froala-editor/js/plugins/code_beautifier.min.js';
-import  'froala-editor/js/plugins/image.min.js';
-import  'froala-editor/js/third_party/image_tui.min.js';
+import "froala-editor/js/plugins/image.min.js";
+import "froala-editor/js/plugins/video.min.js";
+import "froala-editor/js/plugins/colors.min.js";
+import "froala-editor/js/plugins/emoticons.min.js";
+import "froala-editor/js/plugins/font_family.min.js";
+import "froala-editor/js/plugins/font_size.min.js";
+import "froala-editor/js/plugins/line_height.min.js";
+import "froala-editor/js/plugins/lists.min.js";
+import "froala-editor/js/plugins/align.min.js";
+import "froala-editor/js/plugins/link.min.js";
+import "froala-editor/js/plugins/file.min.js";
+import "froala-editor/js/plugins/code_view.min.js";
+import "froala-editor/js/plugins/code_beautifier.min.js";
+import "froala-editor/js/plugins/image.min.js";
+import "froala-editor/js/third_party/image_tui.min.js";
 
+import "froala-editor/css/plugins/image.min.css";
+import "froala-editor/css/plugins/video.min.css";
+import "froala-editor/css/plugins/colors.min.css";
+import "froala-editor/css/plugins/emoticons.min.css";
+import "froala-editor/css/plugins/file.min.css";
+import "froala-editor/css/plugins/code_view.min.css";
+import "froala-editor/css/plugins/image.min.css";
+import "froala-editor/css/third_party/image_tui.min.css";
 
-import 'froala-editor/css/plugins/image.min.css';
-import 'froala-editor/css/plugins/video.min.css';
-import 'froala-editor/css/plugins/colors.min.css';
-import 'froala-editor/css/plugins/emoticons.min.css';
-import 'froala-editor/css/plugins/file.min.css';
-import 'froala-editor/css/plugins/code_view.min.css';
-import 'froala-editor/css/plugins/image.min.css';
-import 'froala-editor/css/third_party/image_tui.min.css';
-
-
-import regModel from './regModel';
+import regModel from "./regModel";
 
 class Froala extends Component {
-    constructor(props) {
-      super(props);
+	constructor(props) {
+		super(props);
 
-      this.handleModelChange = this.handleModelChange.bind(this);
-  
-      this.state = {
-          model: regModel
-        };
-      }
+		this.handleModelChange = this.handleModelChange.bind(this);
 
-      handleModelChange (model) {
-        this.setState({
-          model: model,
-        });
-        console.log(model);
-      }
-    
-  
-        render(){
+		this.state = {
+			model: regModel,
+		};
+	}
 
-            const config = {
-                toolbarButtons: {
-                  'moreRich': {
-                      'buttons': ['insertImage', 'insertVideo', 'insertLink', 'insertFile', 'emoticons', 'html', 'image'],
-                      buttonsVisible: 7
-                    },
-                  'moreText': {
-                      'buttons': ['bold', 'italic', 'underline', 'strikeThrough', 'subscript', 'superscript', 'fontFamily', 'fontSize', 'textColor', 'backgroundColor', 'inlineClass', 'inlineStyle', 'clearFormatting', 'alignLeft', 'alignCenter', 'formatOLSimple', 'alignRight', 'alignJustify', 'formatOL', 'formatUL', 'paragraphFormat', 'paragraphStyle', 'lineHeight', 'outdent', 'indent', 'quote'],
-                      buttonsVisible: 0
-                    }
-                },
-                autofocus: true,
-                toolbarInline: true,
-                toolbarVisibleWithoutSelection: true,
-                heightMin: '568px',
-                placeholderText: 'Type something \n or click inside me',
-                charCounterCount: true,
-                attribution: false,
-                width: '100%',
-                imageEditButtons: ['imageReplace', 'imageAlign', 'imageCaption', 'imageRemove', '', '|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', '-', 'imageDisplay', 'imageStyle', 'imageAlt', 'imageSize'],
-              };
+	handleModelChange(model) {
+		this.setState({
+			model: model,
+		});
+		//console.log(model);
+	}
 
-            return(
-                <div>
-                    <FroalaEditor 
-                      config={config}
-                      model={this.state.model}
-                      onModelChange={this.handleModelChange}
-                     />
-                </div>
-            )
-        }
-  }
-  
-  export default Froala;
+	render() {
+		const config = {
+			toolbarButtons: {
+				moreRich: {
+					buttons: [
+						"insertImage",
+						"insertVideo",
+						"insertLink",
+						"insertFile",
+						"emoticons",
+						"html",
+						"image",
+					],
+					buttonsVisible: 7,
+				},
+				moreText: {
+					buttons: [
+						"bold",
+						"italic",
+						"underline",
+						"strikeThrough",
+						"subscript",
+						"superscript",
+						"fontFamily",
+						"fontSize",
+						"textColor",
+						"backgroundColor",
+						"inlineClass",
+						"inlineStyle",
+						"clearFormatting",
+						"alignLeft",
+						"alignCenter",
+						"formatOLSimple",
+						"alignRight",
+						"alignJustify",
+						"formatOL",
+						"formatUL",
+						"paragraphFormat",
+						"paragraphStyle",
+						"lineHeight",
+						"outdent",
+						"indent",
+						"quote",
+					],
+					buttonsVisible: 0,
+				},
+			},
+			autofocus: true,
+			toolbarInline: true,
+			toolbarVisibleWithoutSelection: true,
+			heightMin: "568px",
+			placeholderText: "Type something \n or click inside me",
+			charCounterCount: true,
+			attribution: false,
+			width: "100%",
+			imageEditButtons: [
+				"imageReplace",
+				"imageAlign",
+				"imageCaption",
+				"imageRemove",
+				"",
+				"|",
+				"imageLink",
+				"linkOpen",
+				"linkEdit",
+				"linkRemove",
+				"-",
+				"imageDisplay",
+				"imageStyle",
+				"imageAlt",
+				"imageSize",
+			],
+		};
+
+		return (
+			<div>
+				<FroalaEditor
+					config={config}
+					model={this.state.model}
+					onModelChange={this.handleModelChange}
+				/>
+			</div>
+		);
+	}
+}
+
+function mapStateToProps(state) {
+	return { event: state.authReducer };
+}
+
+export default connect(mapStateToProps)(Froala);
