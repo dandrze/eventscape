@@ -1,0 +1,33 @@
+.design {
+    margin: 4%;
+}
+
+#topButtons {
+    display: flex;
+}
+
+#preview {
+    margin-left: 0rem;
+}
+
+#save {
+    margin-left: auto !important;
+    margin-right: 1rem;
+}
+
+#publish {
+
+}
+
+#designBoard {
+    min-height: 568px;
+    min-width: 320px;
+    background-color: white;
+    border-style: solid;
+    border-width: 1px;
+    border: #F1F1F2;
+    box-shadow: 0px 3px 16px rgba(0, 0, 0, .3);
+    width: 100%;
+    padding: 0px;
+    margin: 0 auto;
+}
