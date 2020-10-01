@@ -4,6 +4,7 @@ const authRoutes = require("./routes/authRoutes");
 
 const app = express();
 
+// routes
 app.use(bodyParser.json());
 app.use(authRoutes);
 
