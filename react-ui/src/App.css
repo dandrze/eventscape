@@ -1,5 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Spectral&display=swap');
 
+@font-face {
+  font-family: "San Francisco";
+  font-weight: 400;
+  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+}
+
+@font-face {
+  font-family: "San Francisco";
+  font-weight: bold;
+  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff");
+}
+
 body {
   /* Colour Pallete */
   --main-bg-color: #F8F8F8;
@@ -23,6 +35,10 @@ a {
   line-height: 0px;
 }
 
+:focus {
+  outline: #B0281C;
+}
+
 ul {
   list-style: none;
   margin: 0;
@@ -33,6 +49,20 @@ h1 {
   font-family: 'Spectral', serif;
   font-weight: 400;
   font-size: 48px;
+  color: black;
+}
+
+h2 {
+  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
+  font-weight: bold;
+  font-size: 28px;
+  color: black;
+}
+
+h3 {
+  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
+  font-weight: 400;
+  font-size: 24px;
   color: black;
 }
 
@@ -51,8 +81,8 @@ input {
 
 ::placeholder {
   color: var(--input-border);
-  font-family: Helvetica, Ariel, sans-serif;
-  font-size: 14px;
+  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
+  font-size: 16px;
 }
 
 select {
@@ -68,13 +98,11 @@ select {
 }
 
 label {
-  color: black;
-  font-family: Helvetica, Ariel, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
-  display: inline-block;
-  width: 100%;
-  text-align: left;
+  color: grey;
+  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  float: left;
 }
 
 .App {
@@ -93,7 +121,7 @@ label {
 }
 
 .Button1 {
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'San Francisco', Helvetica, Arial, sans-serif;
   font-weight: bold;
   font-size: 20;
   color: white;
@@ -103,11 +131,43 @@ label {
   border-radius: 6px;
   border-color: var(--main-color);
   border-style: solid;
+  height: min-content;
 }
 
 .Button1:hover {
   color: var(--main-color);
   background-color: white;
+}
+
+.Button1:focus,
+.Button1:active {
+  border-color: var(--main-color);
+  outline: none;
+}
+
+.Button2 {
+  font-family: 'San Francisco', Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 20;
+  color: var(--main-color);
+  background-color: white;
+  padding: 5px;
+  border-width: 1px;
+  border-radius: 6px;
+  border-color: var(--main-color);
+  border-style: solid;
+  height: min-content;
+}
+
+.Button2:hover {
+  color: white;
+  background-color: var(--main-color);
+}
+
+.Button2:focus,
+.Button2:active {
+  border-color: var(--main-color);
+  outline: none;
 }
 
 /* Nav Bar Top */
@@ -172,7 +232,7 @@ margin-left: auto !important
   display: flex;
   justify-content: flex-end;
   text-align: left;
-  font-family: Helvetica, Arial, sans-serif;
+  font-family: 'San Francisco', Helvetica, Arial, sans-serif;
   font-size: 20px;
   color: var(--menu-text);
   text-decoration: none;
@@ -189,13 +249,17 @@ margin-left: auto !important
 .form-box {
   background-color: white;
   padding: 70px;
+  
+  max-width: 100%;
+  margin: 0 auto;
+  box-sizing: border-box;
+}
+
+.shadow-border {
   border-style: solid;
   border-width: 1px;
   border: #F1F1F2;
   box-shadow: 0px 3px 16px rgba(0, 0, 0, .03);
-  max-width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
 }
 
 .row-50-l {
@@ -224,7 +288,7 @@ margin-left: auto !important
   padding: 1.3rem 2rem;
   background-color: var(--tabs-inactive);
   margin-right: 5px;
-  font-family: Helvetica, Ariel, sans-serif;
+  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
   font-size: 14px;
   font-weight: bold;
 }
@@ -242,7 +306,6 @@ margin-left: auto !important
   width: 100%;
   border: solid var(--box-border);
   border-width: 0 1px 1px 1px;
-  box-shadow: 0px 3px 16px rgba(0, 0, 0, .03);
 }
 
 .table1 {
@@ -264,4 +327,24 @@ margin-left: auto !important
 
 .myEventsHead {
   height: 150px
+}
+
+#designBoard {
+  min-height: 568px;
+  min-width: 320px;
+  background-color: white;
+  border-style: solid;
+  border-width: 1px;
+  border: #F1F1F2;
+  box-shadow: 0px 3px 16px rgba(0, 0, 0, .3);
+  width: 100%;
+  padding: 0px;
+  margin: 0 auto;
+  overflow: auto;
+}
+
+.container-width {
+  width: 96%;
+  margin: 0 auto;
+  box-sizing: border-box;
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import MaterialTable from 'material-table';
 import { forwardRef } from 'react';
-
+import { Paper } from '@material-ui/core';
 
 /*Material-Table Icons*/
 import AddBox from '@material-ui/icons/AddBox';
@@ -111,7 +111,7 @@ export default function RegistrationTable2() {
     headerStyle: {
       backgroundColor: '#F0F1F4',
       color: 'black',
-      fontFamily: 'Helvetica, Ariel, sans-serif',
+      fontFamily: 'San Francisco, Helvetica, Ariel, sans-serif',
       fontSize: '14px',
       fontWeight: 'bold',
       margin: '30px'
@@ -120,19 +120,23 @@ export default function RegistrationTable2() {
     cellStyle: {
         backgroundColor: 'white',
         color: 'black',
-        fontFamily: 'Helvetica, Ariel, sans-serif',
+        fontFamily: 'San Francisco, Helvetica, Ariel, sans-serif',
         fontSize: '14px',
         fontWeight: 'normal',
     }
   };
 
   return (
+    <div className="shadow-border">
     <MaterialTable
       title="Registrations"
       columns={state.columns}
       data={state.data}
       options={options}
       icons={tableIcons}
+      components={{
+        Container: props => <Paper {...props} elevation={0}/>
+      }}
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve) => {
@@ -171,5 +175,6 @@ export default function RegistrationTable2() {
           }),
       }}
     />
+    </div>
   );
 }

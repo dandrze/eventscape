@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import clsx from 'clsx';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
@@ -104,8 +105,8 @@ const useStyles = makeStyles((theme) => ({
   currentEvent: {
     display: 'block',
     color: MenuText,
-    fontSize: '14px',
-    fontFamily: 'Helvetica, Arial, sans-serif',
+    fontSize: '18px',
+    fontFamily: 'San Francisco, Helvetica, Arial, sans-serif',
   },
   addEvent: {
     marginLeft: 'auto',
@@ -121,7 +122,7 @@ export default function NavBar3(props) {
   
     const classes = useStyles();
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -139,6 +140,17 @@ export default function NavBar3(props) {
 
     const handleClose = () => {
         setAnchorEl(null);
+    };
+
+  /*Design drop down*/
+  const [anchorElDesign, setAnchorElDesign] = React.useState(null);
+
+    const handleClickDesign = (event) => {
+        setAnchorElDesign(event.currentTarget);
+    };
+
+    const handleCloseDesign = () => {
+        setAnchorElDesign(null);
     };
 
   return (
@@ -227,14 +239,14 @@ export default function NavBar3(props) {
         <Divider />
         <List>
 
-          <ListItem button key="design" component="a" href="/Design">
+          <ListItem button key="design" component="a" onClick={handleClickDesign}>
               <Tooltip title="Design">
                 <ListItemIcon><img src={PenIcon} height='20px'></img></ListItemIcon>
               </Tooltip>
               <ListItemText primary="Design" />
           </ListItem>
 
-          <ListItem button key="communicate">
+          <ListItem button key="communicate" component="a" href="/Communication">
               <Tooltip title="Communicate">
                 <ListItemIcon><img src={EnvelopeIcon} height='20px'></img></ListItemIcon>
               </Tooltip>
@@ -248,12 +260,14 @@ export default function NavBar3(props) {
               <ListItemText primary="Registrations" />
           </ListItem>
 
+          <Link to="./Analytics">
           <ListItem button key="analytics">
               <Tooltip title="Analytics">
                 <ListItemIcon><img src={GraphIcon} height='20px'></img></ListItemIcon>
               </Tooltip>
               <ListItemText primary="Analytics" />
           </ListItem>
+          </Link>
 
           <ListItem button key="messaging">
               <Tooltip title="Messaging">
@@ -263,6 +277,17 @@ export default function NavBar3(props) {
           </ListItem>
 
         </List>
+        <Menu
+            id="simple-menu"
+            anchorEl={anchorElDesign}
+            keepMounted
+            open={Boolean(anchorElDesign)}
+            onClose={handleCloseDesign}
+          >
+            <Link to="./Design"><MenuItem onClick={handleCloseDesign}>Registration Page</MenuItem></Link>
+            <MenuItem onClick={handleCloseDesign}>Event Page</MenuItem>
+            <MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
+          </Menu>
       </Drawer>
         }
       <main className={classes.content}>

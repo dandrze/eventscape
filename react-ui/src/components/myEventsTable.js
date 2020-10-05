@@ -77,7 +77,7 @@ const Table = () => {
         headerStyle: {
           backgroundColor: '#F0F1F4',
           color: 'black',
-          fontFamily: 'Helvetica, Ariel, sans-serif',
+          fontFamily: 'San Francisco, Helvetica, Ariel, sans-serif',
           fontSize: '14px',
           fontWeight: 'bold',
           margin: '30px'
@@ -86,7 +86,7 @@ const Table = () => {
         cellStyle: {
             backgroundColor: 'white',
             color: 'black',
-            fontFamily: 'Helvetica, Ariel, sans-serif',
+            fontFamily: 'San Francisco, Helvetica, Ariel, sans-serif',
             fontSize: '14px',
             fontWeight: 'normal',
         }

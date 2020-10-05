@@ -8,7 +8,10 @@ import Create_Account from './pages/create-account';
 import Event_Details from './pages/event-details';
 import My_Events from './pages/my-events';
 import Design from './pages/design';
+import Communication from './pages/communication';
+import EmailEditor from './pages/emailEditor';
 import Registrations from './pages/registrations';
+import Analytics from './pages/analytics';
 
 
 
@@ -22,7 +25,10 @@ function App() {
         <Route exact path="/Event_Details" component={Event_Details} />
         <Route exact path="/My_Events" component={My_Events} />
         <Route exact path="/Design" component={Design} />
+        <Route exact path="/Communication" component={Communication} />
+        <Route exact path="/CommunicationEditor" component={EmailEditor} />
         <Route exact path="/Registrations" component={Registrations} />
+        <Route exact path="/Analytics" component={Analytics} />
       </header>
     </div>
   );

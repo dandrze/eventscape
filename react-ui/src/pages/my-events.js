@@ -1,7 +1,7 @@
 import React from 'react';
 import NavBar3 from '../components/navBar3.js';
 import Tabs from "../components/Tabs"; 
-import Table from "../components/MaterialTable.js"
+import Table from "../components/myEventsTable.js"
 
 export default class My_Events extends React.Component {
     render() {

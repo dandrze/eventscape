@@ -33,16 +33,16 @@ import 'froala-editor/css/plugins/image.min.css';
 import 'froala-editor/css/third_party/image_tui.min.css';
 
 
-import regModel from './regModel';
 
-class Froala extends Component {
+
+class FroalaEmail extends Component {
     constructor(props) {
       super(props);
 
       this.handleModelChange = this.handleModelChange.bind(this);
   
       this.state = {
-          model: regModel
+          model: contentModel
         };
       }
 
@@ -73,7 +73,6 @@ class Froala extends Component {
                 heightMin: '568px',
                 placeholderText: 'Type something \n or click inside me',
                 charCounterCount: true,
-                keepFormatOnDelete: true,
                 attribution: false,
                 width: '100%',
                 imageEditButtons: ['imageReplace', 'imageAlign', 'imageCaption', 'imageRemove', '', '|', 'imageLink', 'linkOpen', 'linkEdit', 'linkRemove', '-', 'imageDisplay', 'imageStyle', 'imageAlt', 'imageSize'],
@@ -91,4 +90,29 @@ class Froala extends Component {
         }
   }
   
-  export default Froala;
+  export default FroalaEmail;
+
+  const contentModel = `
+    <p style="text-align: left">Hello {first_name},</p>
+    <p style="text-align: left">Thank you for registering for {event_name}.</p>
+    <p style="text-align: left">A few minutes before the event begins, please click the following button to join.</p>
+    <p style="text-align: left;">
+      <button style="
+        font-family: Helvetica, Arial, sans-serif;
+        font-weight: bold;
+        font-size: 20;
+        color: white;
+        background-color: var(--main-color);
+        padding: 16px;
+        border-width: 2px;
+        border-radius: 6px;
+        border-color: var(--main-color);
+        border-style: solid;
+        height: min-content;
+        text-align: left;
+      ">
+        Join Now
+      </button>
+    </p>
+    
+  `
