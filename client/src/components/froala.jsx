@@ -32,9 +32,6 @@ import 'froala-editor/css/plugins/code_view.min.css';
 import 'froala-editor/css/plugins/image.min.css';
 import 'froala-editor/css/third_party/image_tui.min.css';
 
-
-import regModel from './regModel';
-
 class Froala extends Component {
     constructor(props) {
       super(props);
@@ -42,7 +39,7 @@ class Froala extends Component {
       this.handleModelChange = this.handleModelChange.bind(this);
   
       this.state = {
-          model: regModel
+          model: props.sectionModel
         };
       }
 
