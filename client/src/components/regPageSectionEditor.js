@@ -1,13 +1,22 @@
 import React from "react";
 import Froala from "./froala";
-import regModel from "./regModel";
+import { connect } from "react-redux";
+import * as actions from "../actions";
 
-const regPageSectionEditor = (props) => {
+const RegPageSectionEditor = (props) => {
 	return (
 		<div>
-			<Froala sectionModel={regModel} />
+			<Froala key={props.sectionModel} sectionModel={props.sectionModel} />
+			<button
+				className="addSection"
+				onClick={() => {
+					props.addSection();
+				}}
+			>
+				Add Section
+			</button>
 		</div>
 	);
 };
 
-export default regPageSectionEditor;
+export default connect(null, actions)(RegPageSectionEditor);

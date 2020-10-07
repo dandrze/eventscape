@@ -1,15 +1,20 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-import Froala from "./froala";
 
 import "./regPageEditor.css";
 import * as actions from "../actions";
+import RegPageSectionEditor from "./RegPageSectionEditor";
+import { banner, hero, body } from "./regModel";
 
 class RegPageEditor extends Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {};
+	}
+
+	componentDidMount() {
+		this.props.fetchRegModel();
 	}
 
 	render() {
@@ -28,7 +33,15 @@ class RegPageEditor extends Component {
 					<br></br>
 				</div>
 				<div id="designBoard">
-					<Froala />
+					<ul>
+						{this.props.model.map(function (sectionModel) {
+							return (
+								<li key={sectionModel}>
+									<RegPageSectionEditor sectionModel={sectionModel} />
+								</li>
+							);
+						})}
+					</ul>
 				</div>
 				<div style={{ color: "#F8F8F8" }}>
 					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -42,7 +55,7 @@ class RegPageEditor extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event };
+	return { model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(RegPageEditor);

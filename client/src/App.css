@@ -1,350 +1,365 @@
-@import url('https://fonts.googleapis.com/css2?family=Spectral&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Spectral&display=swap");
 
 @font-face {
-  font-family: "San Francisco";
-  font-weight: 400;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
+	font-family: "San Francisco";
+	font-weight: 400;
+	src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
 }
 
 @font-face {
-  font-family: "San Francisco";
-  font-weight: bold;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff");
+	font-family: "San Francisco";
+	font-weight: bold;
+	src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff");
 }
 
 body {
-  /* Colour Pallete */
-  --main-bg-color: #F8F8F8;
-  --main-color: #B0281C;
-  --menu-bg: #2F2F2F;
-  --menu-text: #EAEAEA;
-  --input-border: #D2D2D2;
-  --tabs-inactive: #F0F1F4;
-  --box-border: #EAECEF;
+	/* Colour Pallete */
+	--main-bg-color: #f8f8f8;
+	--main-color: #b0281c;
+	--menu-bg: #2f2f2f;
+	--menu-text: #eaeaea;
+	--input-border: #d2d2d2;
+	--tabs-inactive: #f0f1f4;
+	--box-border: #eaecef;
 
-  --speed: 500ms;
+	--speed: 500ms;
 }
 
 html {
- box-sizing: border-box;
+	box-sizing: border-box;
 }
 
 a {
-  color: inherit;
-  text-decoration: inherit;
-  line-height: 0px;
+	color: inherit;
+	text-decoration: inherit;
+	line-height: 0px;
 }
 
 :focus {
-  outline: #B0281C;
+	outline: #b0281c;
 }
 
 ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+	list-style: none;
+	margin: 0;
+	padding: 0;
 }
 
 h1 {
-  font-family: 'Spectral', serif;
-  font-weight: 400;
-  font-size: 48px;
-  color: black;
+	font-family: "Spectral", serif;
+	font-weight: 400;
+	font-size: 48px;
+	color: black;
 }
 
 h2 {
-  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
-  font-weight: bold;
-  font-size: 28px;
-  color: black;
+	font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+	font-weight: bold;
+	font-size: 28px;
+	color: black;
 }
 
 h3 {
-  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
-  font-weight: 400;
-  font-size: 24px;
-  color: black;
+	font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+	font-weight: 400;
+	font-size: 24px;
+	color: black;
 }
 
 input {
-  border: var(--input-border);
-  border-width: 1px;
-  border-style: solid;
-  padding: 15px;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  margin-left: 0px;
-  margin-right: 0px;
-  width: 100%;
-  box-sizing: border-box;
+	border: var(--input-border);
+	border-width: 1px;
+	border-style: solid;
+	padding: 15px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 100%;
+	box-sizing: border-box;
 }
 
 ::placeholder {
-  color: var(--input-border);
-  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
-  font-size: 16px;
+	color: var(--input-border);
+	font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+	font-size: 16px;
 }
 
 select {
-  border: var(--input-border);
-  border-width: 1px;
-  border-style: solid;
-  padding: 15px;
-  margin-top: 5px;
-  margin-bottom: 20px;
-  margin-left: 0px;
-  margin-right: 0px;
-  width: 100%;
+	border: var(--input-border);
+	border-width: 1px;
+	border-style: solid;
+	padding: 15px;
+	margin-top: 5px;
+	margin-bottom: 20px;
+	margin-left: 0px;
+	margin-right: 0px;
+	width: 100%;
 }
 
 label {
-  color: grey;
-  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
-  font-size: 16px;
-  font-weight: 400;
-  float: left;
+	color: grey;
+	font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+	font-size: 16px;
+	font-weight: 400;
+	float: left;
 }
 
 .App {
-  text-align: center;
+	text-align: center;
 }
 
 .App-header {
-  background-color: var(--main-bg-color);
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: black;
+	background-color: var(--main-bg-color);
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center;
+	font-size: calc(10px + 2vmin);
+	color: black;
 }
 
 .Button1 {
-  font-family: 'San Francisco', Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: 20;
-  color: white;
-  background-color: var(--main-color);
-  padding: 16px;
-  border-width: 2px;
-  border-radius: 6px;
-  border-color: var(--main-color);
-  border-style: solid;
-  height: min-content;
+	font-family: "San Francisco", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 20;
+	color: white;
+	background-color: var(--main-color);
+	padding: 16px;
+	border-width: 2px;
+	border-radius: 6px;
+	border-color: var(--main-color);
+	border-style: solid;
+	height: min-content;
 }
 
 .Button1:hover {
-  color: var(--main-color);
-  background-color: white;
+	color: var(--main-color);
+	background-color: white;
 }
 
 .Button1:focus,
 .Button1:active {
-  border-color: var(--main-color);
-  outline: none;
+	border-color: var(--main-color);
+	outline: none;
 }
 
 .Button2 {
-  font-family: 'San Francisco', Helvetica, Arial, sans-serif;
-  font-weight: bold;
-  font-size: 20;
-  color: var(--main-color);
-  background-color: white;
-  padding: 5px;
-  border-width: 1px;
-  border-radius: 6px;
-  border-color: var(--main-color);
-  border-style: solid;
-  height: min-content;
+	font-family: "San Francisco", Helvetica, Arial, sans-serif;
+	font-weight: bold;
+	font-size: 20;
+	color: var(--main-color);
+	background-color: white;
+	padding: 5px;
+	border-width: 1px;
+	border-radius: 6px;
+	border-color: var(--main-color);
+	border-style: solid;
+	height: min-content;
 }
 
 .Button2:hover {
-  color: white;
-  background-color: var(--main-color);
+	color: white;
+	background-color: var(--main-color);
 }
 
 .Button2:focus,
 .Button2:active {
-  border-color: var(--main-color);
-  outline: none;
+	border-color: var(--main-color);
+	outline: none;
 }
 
 /* Nav Bar Top */
 
 .navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 52px;
-  background-color: var(--menu-bg);
-  color: var(--menu-text);
-  font-size: 20px;
-  max-width: 100%;
-  text-decoration: none;
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 52px;
+	background-color: var(--menu-bg);
+	color: var(--menu-text);
+	font-size: 20px;
+	max-width: 100%;
+	text-decoration: none;
 }
 
 .navbar_nav {
-  display: flex;
-  height: 100%;
-  align-items: center;
-  padding: 0 .75rem;
+	display: flex;
+	height: 100%;
+	align-items: center;
+	padding: 0 0.75rem;
 }
 
 #navbar_logo {
-  margin-left: 0rem;
-  margin-right: 10%;
+	margin-left: 0rem;
+	margin-right: 10%;
 }
 
 #navbar_list_icon {
-  margin-right: .5rem;
+	margin-right: 0.5rem;
 }
 
 #navbar_current_event {
-  font-size: 10px;
+	font-size: 10px;
 }
 
 #spacer {
-  flex: 1;
+	flex: 1;
 }
 
 #plus_icon {
-  margin-right: 2%;
-  margin-left: auto !important
+	margin-right: 2%;
+	margin-left: auto !important;
 }
 
 #profile2 {
-margin-right: 200px;
-margin-left: auto !important
+	margin-right: 200px;
+	margin-left: auto !important;
 }
 
 /* Nav Bar Side */
 
 .navbarside_nav {
-  height: 100%;
-  background-color: var(--menu-bg);
-  box-shadow: 2px 0px 5px rgba(0, 0, 0, .5);
-  position: fixed;
-  top: 52px;
-  left: 0px;
-  max-width: 100%;
-  display: flex;
-  justify-content: flex-end;
-  text-align: left;
-  font-family: 'San Francisco', Helvetica, Arial, sans-serif;
-  font-size: 20px;
-  color: var(--menu-text);
-  text-decoration: none;
+	height: 100%;
+	background-color: var(--menu-bg);
+	box-shadow: 2px 0px 5px rgba(0, 0, 0, 0.5);
+	position: fixed;
+	top: 52px;
+	left: 0px;
+	max-width: 100%;
+	display: flex;
+	justify-content: flex-end;
+	text-align: left;
+	font-family: "San Francisco", Helvetica, Arial, sans-serif;
+	font-size: 20px;
+	color: var(--menu-text);
+	text-decoration: none;
 }
 
 .navbarside_item {
-  padding: 15px 3px;
+	padding: 15px 3px;
 }
 
 .navbarside_item:hover {
-  background-color: rgb(100, 100, 100);
+	background-color: rgb(100, 100, 100);
 }
 
 .form-box {
-  background-color: white;
-  padding: 70px;
-  
-  max-width: 100%;
-  margin: 0 auto;
-  box-sizing: border-box;
+	background-color: white;
+	padding: 70px;
+
+	max-width: 100%;
+	margin: 0 auto;
+	box-sizing: border-box;
 }
 
 .shadow-border {
-  border-style: solid;
-  border-width: 1px;
-  border: #F1F1F2;
-  box-shadow: 0px 3px 16px rgba(0, 0, 0, .03);
+	border-style: solid;
+	border-width: 1px;
+	border: #f1f1f2;
+	box-shadow: 0px 3px 16px rgba(0, 0, 0, 0.03);
 }
 
 .row-50-l {
-  max-width: 49%;
-  float: left;
-  margin-right: 5px;
+	max-width: 49%;
+	float: left;
+	margin-right: 5px;
 }
 
 .row-50-r {
-  max-width: 49%;
-  float: right;
+	max-width: 49%;
+	float: right;
 }
 
 /* Tabs */
 
-.tab-list {  border-bottom: 1px solid #EAECEF;
-  margin-bottom: 0px;
-  text-align: left;
-  padding-left: 0px;
+.tab-list {
+	border-bottom: 1px solid #eaecef;
+	margin-bottom: 0px;
+	text-align: left;
+	padding-left: 0px;
 }
 
 .tab-list-item {
-  display: inline-block;
-  list-style: none;
-  margin-bottom: -1px;
-  padding: 1.3rem 2rem;
-  background-color: var(--tabs-inactive);
-  margin-right: 5px;
-  font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
-  font-size: 14px;
-  font-weight: bold;
+	display: inline-block;
+	list-style: none;
+	margin-bottom: -1px;
+	padding: 1.3rem 2rem;
+	background-color: var(--tabs-inactive);
+	margin-right: 5px;
+	font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+	font-size: 14px;
+	font-weight: bold;
 }
 
 .tab-list-active {
-  background-color: white;
-  border: solid var(--box-border);
-  border-width: 1px 1px 0 1px;
-  color: var(--main-color);
+	background-color: white;
+	border: solid var(--box-border);
+	border-width: 1px 1px 0 1px;
+	color: var(--main-color);
 }
 
 .tab-content {
-  background-color: white;
-  height: 100%;
-  width: 100%;
-  border: solid var(--box-border);
-  border-width: 0 1px 1px 1px;
+	background-color: white;
+	height: 100%;
+	width: 100%;
+	border: solid var(--box-border);
+	border-width: 0 1px 1px 1px;
 }
 
 .table1 {
-  margin: 0 2rem 2rem 2rem;
+	margin: 0 2rem 2rem 2rem;
 }
 
 .myEvents1 {
-  float: left;
-  max-width: 49%;
-  vertical-align: top;
-  line-height: 1;
+	float: left;
+	max-width: 49%;
+	vertical-align: top;
+	line-height: 1;
 }
 
 .myEvents2 {
-  float: right;
-  max-width: 49%;
-  vertical-align: top;
+	float: right;
+	max-width: 49%;
+	vertical-align: top;
 }
 
 .myEventsHead {
-  height: 150px
+	height: 150px;
 }
 
 #designBoard {
-  min-height: 568px;
-  min-width: 320px;
-  background-color: white;
-  border-style: solid;
-  border-width: 1px;
-  border: #F1F1F2;
-  box-shadow: 0px 3px 16px rgba(0, 0, 0, .3);
-  width: 100%;
-  padding: 0px;
-  margin: 0 auto;
-  overflow: auto;
+	min-height: 568px;
+	min-width: 320px;
+	background-color: white;
+	border-style: solid;
+	border-width: 1px;
+	border: #f1f1f2;
+	box-shadow: 0px 3px 16px rgba(0, 0, 0, 0.3);
+	width: 100%;
+	padding: 0px;
+	margin: 0 auto;
+	overflow: auto;
 }
 
 .container-width {
-  width: 96%;
-  margin: 0 auto;
-  box-sizing: border-box;
+	width: 96%;
+	margin: 0 auto;
+	box-sizing: border-box;
+}
+
+/* Web page designer */
+
+.addSection {
+	background-color: var(--main-color);
+	color: white;
+	height: 30px;
+	width: 100%;
+	border: 0px;
+	cursor: pointer;
+}
+
+.addSection:hover {
 }

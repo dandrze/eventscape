@@ -1,9 +1,11 @@
-const regModel = `
+const banner = `
 <div style="margin: 20px; display: block">
     <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 10%;" class="fr-fic fr-dib fr-fil">
 </div>
+`;
+const hero = `
 <div style="position: relative; text-align: center">
-    <img src="https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg" style="width: 100%;" class="fr-fic fr-dib"></p><p><br></p>
+    <img src="https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg" style="width: 100%;" class="fr-fic fr-dib">
     <div style="position: absolute;
     top: 50%;
     left: 50%;
@@ -13,7 +15,9 @@ const regModel = `
     <span style="color: white; font-size: 3vw; line-height: 1;">Event Subtitle</span>
     </div>
 </div>
+`;
 
+const body = `
 <section class="container">
     <div class="one">
         <p><strong><span style="font-size: 30px; text-align: left;">February 8, 2021 7:00 PM - 9:00 PM</span></strong></p>
@@ -73,7 +77,6 @@ const regModel = `
 }
 </style>
 
-`
+`;
 
-export default regModel;
-
+export { banner, hero, body };
