@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 
 import "./regPageEditor.css";
 import * as actions from "../actions";
-import RegPageSectionEditor from "./RegPageSectionEditor";
+import RegPageSectionEditor from "./regPageSectionEditor";
 import { banner, hero, body } from "./regModel";
 
 class RegPageEditor extends Component {
@@ -36,7 +36,7 @@ class RegPageEditor extends Component {
 					<ul>
 						{this.props.model.map(function (sectionModel) {
 							return (
-								<li key={sectionModel}>
+								<li key={sectionModel.index}>
 									<RegPageSectionEditor sectionModel={sectionModel} />
 								</li>
 							);
