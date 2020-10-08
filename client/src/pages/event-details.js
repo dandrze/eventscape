@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
@@ -19,8 +20,9 @@ import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
+import * as actions from "../actions";
 
-export default class Event_Details extends React.Component {
+class Event_Details extends React.Component {
 	render() {
 		return (
 			<div>
@@ -38,7 +40,9 @@ export default class Event_Details extends React.Component {
 					<EventColor />
 					<br></br>
 					<Link to="/Design">
-						<button className="Button1">Create My Event</button>
+						<button className="Button1" onClick={this.props.createModel}>
+							Create My Event
+						</button>
 					</Link>
 				</div>
 			</div>
@@ -219,3 +223,5 @@ const EventColor = () => {
 		</div>
 	);
 };
+
+export default connect(null, actions)(Event_Details);

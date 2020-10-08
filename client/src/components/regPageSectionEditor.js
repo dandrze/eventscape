@@ -5,10 +5,11 @@ import * as actions from "../actions";
 import NewSectionButton from "./newSectionButton";
 
 const RegPageSectionEditor = (props) => {
+	console.log(props.sectionModel);
 	return (
 		<div>
 			<Froala key={props.sectionModel} sectionModel={props.sectionModel} />
-			<NewSectionButton />
+			<NewSectionButton prevIndex={props.index} />
 		</div>
 	);
 };

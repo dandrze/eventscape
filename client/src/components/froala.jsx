@@ -36,10 +36,6 @@ class Froala extends Component {
 		super(props);
 
 		this.handleModelChange = this.handleModelChange.bind(this);
-
-		this.state = {
-			model: props.sectionModel.model,
-		};
 	}
 
 	handleModelChange(model) {
@@ -127,7 +123,7 @@ class Froala extends Component {
 			<div>
 				<FroalaEditor
 					config={config}
-					model={this.state.model}
+					model={this.props.sectionModel}
 					onModelChange={this.handleModelChange}
 				/>
 			</div>
