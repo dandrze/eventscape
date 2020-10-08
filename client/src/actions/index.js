@@ -21,12 +21,12 @@ export const fetchEvents = () => {
 	//return { type: FETCH_EVENT, payload: data };
 };
 
-export const createModel = () => {
+export const createModel = (eventTitle) => {
 	// call the api and return the model in json
 	console.log("create model");
 	const data = [
 		{ id: Math.random(), html: banner() },
-		{ id: Math.random(), html: hero("my event") },
+		{ id: Math.random(), html: hero("Event Title prop") },
 		{ id: Math.random(), html: body() },
 	];
 
