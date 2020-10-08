@@ -15,7 +15,6 @@ export const fetchUser = () => async (dispatch) => {
 };
 
 export const fetchEvents = () => {
-	console.log("fetch events called");
 	// call the api and return the event in json
 	const data = [
 		{ name: "event name 1", date: "event date 1" },
@@ -26,11 +25,11 @@ export const fetchEvents = () => {
 };
 
 export const fetchRegModel = () => {
-	console.log("fetch reg model called");
 	// call the api and return the event in json
+	// we're using Math.random() for now for a unique id. Once we hook up the db, we'll use the db id instead
 	const data = [
-		{ index: 0, model: banner },
-		{ index: 1, model: hero },
+		{ id: Math.random(), model: banner },
+		{ id: Math.random(), model: hero },
 	];
 	return { type: FETCH_REG_MODEL, payload: data };
 };
@@ -41,9 +40,7 @@ export const updateSection = (sectionModel) => {
 };
 
 export const addSection = (previouIndex) => {
-	console.log("add section action");
 	// call the api and return the event in json
-	// TODO need to figure out how to determine the index
-	const data = { model: banner };
+	const data = { id: Math.random(), model: banner };
 	return { type: ADD_SECTION, payload: data };
 };
