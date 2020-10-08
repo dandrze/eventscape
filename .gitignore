@@ -7,5 +7,7 @@
 
 # testing
 /coverage
+.DS_Store
+/.DS_Store
 
 node_modules

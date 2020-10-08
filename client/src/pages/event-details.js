@@ -30,9 +30,9 @@ export default class Event_Details extends React.Component {
 					<EventCatSelect />
 					<DateTimePickers />
 					<br></br>
-					<label for="event-color">Event Color</label>
+					<label for="primary-color">Primary Color</label>
 					<br></br>
-					<label for="event-color">
+					<label for="primary-color">
 						Tip: picking a darker color will help buttons stand out.
 					</label>
 					<EventColor />

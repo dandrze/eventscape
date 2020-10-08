@@ -334,7 +334,9 @@ export default function NavBar3(props) {
 							<MenuItem onClick={handleCloseDesign}>Registration Page</MenuItem>
 						</Link>
 						<MenuItem onClick={handleCloseDesign}>Event Page</MenuItem>
-						<MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
+						<Link to="./WebsiteSettings">
+							<MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
+						</Link>
 					</Menu>
 				</Drawer>
 			)}

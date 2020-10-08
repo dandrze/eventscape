@@ -24,7 +24,17 @@
 
 #publish {
     align-self: flex-end;
-    margin-left: 0px !important;
+    margin-left: 1rem !important;
     margin-right: 0px;
 }
 
+#cancelBar {
+    height: 70px;
+    display: flex;
+}
+
+#cancelIcon {
+    align-self: flex-end;
+    margin-right: 1.5%;
+    margin-left: auto !important;
+}

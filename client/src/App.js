@@ -15,6 +15,7 @@ import EmailEditor from "./pages/emailEditor";
 import Registrations from "./pages/registrations";
 import Analytics from "./pages/analytics";
 import * as actions from "./actions";
+import WebsiteSettings from "./pages/websiteSettings";
 
 function App() {
 	return (
@@ -26,6 +27,7 @@ function App() {
 				<Route exact path="/Event_Details" component={Event_Details} />
 				<Route exact path="/My_Events" component={My_Events} />
 				<Route exact path="/Design" component={Design} />
+				<Route exact path="/WebsiteSettings" component={WebsiteSettings} />
 				<Route exact path="/Communication" component={Communication} />
 				<Route exact path="/CommunicationEditor" component={EmailEditor} />
 				<Route exact path="/Registrations" component={Registrations} />
