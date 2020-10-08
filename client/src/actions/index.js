@@ -8,7 +8,7 @@ import {
 	UPDATE_SECTION,
 	CREATE_EVENT,
 } from "./types";
-import { hero, banner } from "../components/regModel";
+import { hero, body, banner } from "../components/regModel";
 
 export const fetchUser = () => async (dispatch) => {
 	//const res = await axios.get("/api/current_user");
@@ -23,9 +23,11 @@ export const fetchEvents = () => {
 
 export const createModel = () => {
 	// call the api and return the model in json
+	console.log("create model");
 	const data = [
-		{ id: Math.random(), html: banner },
-		{ id: Math.random(), html: hero },
+		{ id: Math.random(), html: banner() },
+		{ id: Math.random(), html: hero("my event") },
+		{ id: Math.random(), html: body() },
 	];
 
 	return { type: CREATE_PAGE_MODEL, payload: data };
@@ -46,7 +48,7 @@ export const addSection = (prevIndex) => {
 	// call the api and return the event in json
 	const data = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), html: banner },
+		model: { id: Math.random(), html: banner() },
 	};
 
 	return { type: ADD_SECTION, payload: data };
