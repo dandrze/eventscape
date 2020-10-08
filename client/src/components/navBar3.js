@@ -274,35 +274,26 @@ export default function NavBar3(props) {
 							</Tooltip>
 							<ListItemText primary="Design" />
 						</ListItem>
-
-						<ListItem
-							button
-							key="communicate"
-							component="a"
-							href="/Communication"
-						>
-							<Tooltip title="Communicate">
-								<ListItemIcon>
-									<img src={EnvelopeIcon} height="20px"></img>
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary="Communicate" />
-						</ListItem>
-
-						<ListItem
-							button
-							key="registrations"
-							component="a"
-							href="/Registrations"
-						>
-							<Tooltip title="Registrations">
-								<ListItemIcon>
-									<img src={NotepadIcon} height="20px"></img>
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary="Registrations" />
-						</ListItem>
-
+						<Link to="/Communication">
+							<ListItem button key="communicate">
+								<Tooltip title="Communicate">
+									<ListItemIcon>
+										<img src={EnvelopeIcon} height="20px"></img>
+									</ListItemIcon>
+								</Tooltip>
+								<ListItemText primary="Communicate" />
+							</ListItem>
+						</Link>
+						<Link to="/Registrations">
+							<ListItem button key="registrations">
+								<Tooltip title="Registrations">
+									<ListItemIcon>
+										<img src={NotepadIcon} height="20px"></img>
+									</ListItemIcon>
+								</Tooltip>
+								<ListItemText primary="Registrations" />
+							</ListItem>
+						</Link>
 						<Link to="./Analytics">
 							<ListItem button key="analytics">
 								<Tooltip title="Analytics">

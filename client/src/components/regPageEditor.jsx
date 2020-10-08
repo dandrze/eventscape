@@ -17,7 +17,8 @@ class RegPageEditor extends Component {
 	}
 
 	componentDidMount() {
-		this.props.fetchRegModel();
+		this.props.fetchPageModel();
+		console.log(this.props.model);
 	}
 
 	render() {

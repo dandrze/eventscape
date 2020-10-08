@@ -1,19 +1,27 @@
 import {
-	UPDATE_REG_MODEL,
-	FETCH_REG_MODEL,
+	UPDATE_PAGE_MODEL,
+	FETCH_PAGE_MODEL,
+	CREATE_PAGE_MODEL,
 	ADD_SECTION,
+	UPDATE_SECTION,
 } from "../actions/types";
 
-export default function (state = [""], action) {
+export default function (state = [], action) {
 	switch (action.type) {
-		case UPDATE_REG_MODEL:
-			return action.payload;
-		case ADD_SECTION:
-			return [...state, action.payload];
-		case FETCH_REG_MODEL:
+		case CREATE_PAGE_MODEL:
 			console.log(action.payload);
 			return action.payload;
+		case UPDATE_SECTION:
+			return action.payload;
+		case ADD_SECTION:
+			return insertItem(state, action.payload.model, action.payload.index);
+		case FETCH_PAGE_MODEL:
+			return state;
 		default:
 			return state;
 	}
 }
+
+const insertItem = (array, item, index) => {
+	return [...array.slice(0, index), item, ...array.slice(index)];
+};

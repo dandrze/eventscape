@@ -2,11 +2,13 @@ import axios from "axios";
 import {
 	FETCH_USER,
 	FETCH_EVENT,
-	FETCH_REG_MODEL,
+	FETCH_PAGE_MODEL,
+	CREATE_PAGE_MODEL,
 	ADD_SECTION,
 	UPDATE_SECTION,
+	CREATE_EVENT,
 } from "./types";
-import { hero, banner } from "../components/regModel";
+import { hero, body, banner } from "../components/regModel";
 
 export const fetchUser = () => async (dispatch) => {
 	//const res = await axios.get("/api/current_user");
@@ -15,24 +17,26 @@ export const fetchUser = () => async (dispatch) => {
 };
 
 export const fetchEvents = () => {
-	console.log("fetch events called");
 	// call the api and return the event in json
-	const data = [
-		{ name: "event name 1", date: "event date 1" },
-		{ name: "event name 2", date: "event date 2" },
-		{ name: "event name 3", date: "event date 3" },
-	];
-	return { type: FETCH_EVENT, payload: data };
+	//return { type: FETCH_EVENT, payload: data };
 };
 
-export const fetchRegModel = () => {
-	console.log("fetch reg model called");
-	// call the api and return the event in json
+export const createModel = (eventTitle) => {
+	// call the api and return the model in json
+	console.log("create model");
 	const data = [
-		{ index: 0, model: banner },
-		{ index: 1, model: hero },
+		{ id: Math.random(), html: banner() },
+		{ id: Math.random(), html: hero("Event Title prop") },
+		{ id: Math.random(), html: body() },
 	];
-	return { type: FETCH_REG_MODEL, payload: data };
+
+	return { type: CREATE_PAGE_MODEL, payload: data };
+};
+
+export const fetchPageModel = () => {
+	// call the api and return the event in json
+	// we're using Math.random() for now for a unique id. Once we hook up the db, we'll use the db id instead
+	return { type: FETCH_PAGE_MODEL, payload: "" };
 };
 
 export const updateSection = (sectionModel) => {
@@ -40,10 +44,12 @@ export const updateSection = (sectionModel) => {
 	return { type: UPDATE_SECTION, payload: sectionModel };
 };
 
-export const addSection = (previouIndex) => {
-	console.log("add section action");
+export const addSection = (prevIndex) => {
 	// call the api and return the event in json
-	// TODO need to figure out how to determine the index
-	const data = { model: banner };
+	const data = {
+		index: prevIndex + 1,
+		model: { id: Math.random(), html: banner() },
+	};
+
 	return { type: ADD_SECTION, payload: data };
 };
