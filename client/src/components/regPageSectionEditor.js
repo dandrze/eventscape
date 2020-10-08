@@ -9,7 +9,7 @@ const RegPageSectionEditor = (props) => {
 	return (
 		<div>
 			<Froala key={props.sectionModel} sectionModel={props.sectionModel} />
-			<NewSectionButton />
+			<NewSectionButton prevIndex={props.index} />
 		</div>
 	);
 };
