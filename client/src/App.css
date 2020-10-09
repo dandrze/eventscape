@@ -341,7 +341,7 @@ label {
 	width: 100%;
 	padding: 0px;
 	margin: 0 auto;
-	overflow: auto;
+	overflow: visible;
 }
 
 .container-width {
@@ -353,13 +353,36 @@ label {
 /* Web page designer */
 
 .addSection {
-	background-color: var(--main-color);
-	color: white;
-	height: 30px;
-	width: 100%;
 	border: 0px;
-	cursor: pointer;
+	background-color: transparent;
+	margin: 0;
+	padding: 0;
+	position: relative;
+	float: left;
+	transition: all .2s ease-in-out;
 }
 
 .addSection:hover {
+	transform: scale(1.15);
+	cursor: pointer;
+}
+
+#plusDropIcon {
+	position: absolute;
+	right: 0px;
+	top: -20px;
+	transform: rotate(90deg);
+	float: left;
+}
+
+#designBlockThumbnail {
+	width: 100%;
+	border: 1px solid rgba(0, 0, 0, 0.05);
+	box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.20);
+	transition: all .2s ease-in-out;
+}
+
+#designBlockThumbnail:hover {
+	transform: scale(1.05);
+	cursor: pointer;
 }
