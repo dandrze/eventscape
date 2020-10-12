@@ -44,13 +44,17 @@ class Froala extends Component {
 
 		this.state = {
 			model: props.model[props.sectionIndex].html,
+			index: props.sectionIndex
 		};
 	}
 
 	handleModelChange(model) {
 		this.setState({
 			model: model,
+			index: this.state.index
 		});
+
+		this.props.updateSection(this.state.index, model);
 	}
 
 	render() {

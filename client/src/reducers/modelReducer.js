@@ -12,7 +12,10 @@ export default function (state = [], action) {
 			console.log(action.payload);
 			return action.payload;
 		case UPDATE_SECTION:
-			return action.payload;
+			console.log(action.payload.html)
+			state[action.payload.index].html = action.payload.html;
+			console.log(state);
+			return state;
 		case ADD_SECTION:
 			return insertItem(state, action.payload.model, action.payload.index);
 		case FETCH_PAGE_MODEL:

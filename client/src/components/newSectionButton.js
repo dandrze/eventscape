@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import logoHeader from './designBlockThumbnails/logoHeader.png';
 import heroBanner from './designBlockThumbnails/heroBanner.png';
 import descriptionRegistration from './designBlockThumbnails/descriptionRegistration.png';
+import {hero, body, banner } from './regModel'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -36,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const NewSectionButton = (props) => {
 	const classes = useStyles();
-  	const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = React.useState(false);
+	const [selection, setSelection] = React.useState("");
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -48,7 +50,8 @@ const NewSectionButton = (props) => {
 
 	const handleSelect = () => {
 		setOpen(false);
-		props.addSection(props.prevIndex);
+		console.log(selection)
+		props.addSection(props.prevIndex, "");
 		/*insert actions here*/
 	}
 	

@@ -39,19 +39,23 @@ export const fetchPageModel = () => {
 	return { type: FETCH_PAGE_MODEL, payload: "" };
 };
 
-export const updateSection = (sectionModel) => {
+export const updateSection = (index, html) => {
 	// call the api and return the event in json
-	return { type: UPDATE_SECTION, payload: sectionModel };
+	const payload = {
+		index, html
+	}
+	return { type: UPDATE_SECTION, payload };
 };
 
-export const addSection = (prevIndex) => {
+export const addSection = (prevIndex, html) => {
 	// call the api and return the event in json
 	console.log("add section")
-	console.log(prevIndex);
-	const data = {
+	console.log(html);
+	
+	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), html: banner(), name: "banner" },
+		model: { id: Math.random(), html, name: "banner" },
 	};
 
-	return { type: ADD_SECTION, payload: data };
+	return { type: ADD_SECTION, payload };
 };
