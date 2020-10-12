@@ -18,7 +18,6 @@ class RegPageEditor extends Component {
 
 	componentDidMount() {
 		this.props.fetchPageModel();
-		console.log(this.props.model);
 	}
 
 	render() {
@@ -44,10 +43,11 @@ class RegPageEditor extends Component {
 					</div>
 					<div id="designBoard">
 						<ul>
-							{this.props.model.map(function (sectionModel) {
+							{this.props.model.map(function (sectionModel,  index) {
+								console.log(index)
 								return (
-									<li key={sectionModel.index}>
-										<RegPageSectionEditor sectionModel={sectionModel} />
+									<li key={index}>
+										<RegPageSectionEditor sectionIndex={index} />
 									</li>
 								);
 							})}

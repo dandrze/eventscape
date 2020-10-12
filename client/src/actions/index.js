@@ -25,9 +25,9 @@ export const createModel = (eventTitle) => {
 	// call the api and return the model in json
 	console.log("create model");
 	const data = [
-		{ id: Math.random(), html: banner() },
-		{ id: Math.random(), html: hero("Event Title prop") },
-		{ id: Math.random(), html: body() },
+		{ id: Math.random(), html: banner(), name:"banner" },
+		{ id: Math.random(), html: hero("Event Title prop"), name:"hero" },
+		{ id: Math.random(), html: body(), name:"body" },
 	];
 
 	return { type: CREATE_PAGE_MODEL, payload: data };
@@ -46,9 +46,11 @@ export const updateSection = (sectionModel) => {
 
 export const addSection = (prevIndex) => {
 	// call the api and return the event in json
+	console.log("add section")
+	console.log(prevIndex);
 	const data = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), html: banner() },
+		model: { id: Math.random(), html: banner(), name: "banner" },
 	};
 
 	return { type: ADD_SECTION, payload: data };

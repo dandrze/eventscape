@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import {connect} from 'react-redux'
 
 import FroalaEditor from "react-froala-wysiwyg";
 
@@ -30,6 +31,7 @@ import "froala-editor/css/plugins/file.min.css";
 import "froala-editor/css/plugins/code_view.min.css";
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/third_party/image_tui.min.css";
+import * as actions from '../actions'
 
 class Froala extends Component {
 	constructor(props) {
@@ -37,8 +39,11 @@ class Froala extends Component {
 
 		this.handleModelChange = this.handleModelChange.bind(this);
 
+		console.log(props.model)
+		console.log(props.sectionIndex)
+
 		this.state = {
-			model: props.sectionModel.html,
+			model: props.model[props.sectionIndex].html,
 		};
 	}
 
@@ -134,5 +139,8 @@ class Froala extends Component {
 		);
 	}
 }
+const mapStateToProps = (state) => {
+	return { model: state.model };
+};
 
-export default Froala;
+export default connect(mapStateToProps, actions)(Froala)
