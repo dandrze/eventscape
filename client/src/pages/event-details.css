@@ -5,6 +5,10 @@
     padding-right: 6px;
 }
 
+#event-type-select {
+  text-align: left;
+}
+
 #primary-color {
     margin: 0 auto;
     min-width: 100%;
@@ -20,19 +24,23 @@
 .react-colorful {
     height: 300px;
     min-width: 100%;
-  }
-  .react-colorful__saturation {
+}
+
+.react-colorful__saturation {
     border-radius: 3px 3px 0 0;
-  }
-  .react-colorful__hue {
+}
+
+.react-colorful__hue {
     height: 30px;
     border-radius: 0 0 3px 3px;
-  }
-  .react-colorful__saturation-pointer {
+}
+
+.react-colorful__saturation-pointer {
     border-radius: 5px;
-  }
-  .react-colorful__hue-pointer {
+}
+
+.react-colorful__hue-pointer {
     border-radius: 2px;
     width: 15px;
     height: inherit;
-  }
+}

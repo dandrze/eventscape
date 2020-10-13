@@ -18,20 +18,22 @@ import "froala-editor/js/plugins/lists.min.js";
 import "froala-editor/js/plugins/align.min.js";
 import "froala-editor/js/plugins/link.min.js";
 import "froala-editor/js/plugins/file.min.js";
-import "froala-editor/js/plugins/code_view.min.js";
+//import "froala-editor/js/plugins/code_view.min.js";
 import "froala-editor/js/plugins/code_beautifier.min.js";
 import "froala-editor/js/plugins/image.min.js";
-import "froala-editor/js/third_party/image_tui.min.js";
+//import "froala-editor/js/third_party/image_tui.min.js";
+import "froala-editor/js/plugins/forms.min.js";
+
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
 import "froala-editor/css/plugins/colors.min.css";
-import "froala-editor/css/plugins/emoticons.min.css";
+//import "froala-editor/css/plugins/emoticons.min.css";
 import "froala-editor/css/plugins/file.min.css";
-import "froala-editor/css/plugins/code_view.min.css";
+//import "froala-editor/css/plugins/code_view.min.css";
 import "froala-editor/css/plugins/image.min.css";
-import "froala-editor/css/third_party/image_tui.min.css";
-import * as actions from '../actions'
+//import "froala-editor/css/third_party/image_tui.min.css";
+
 
 class Froala extends Component {
 	constructor(props) {
@@ -66,32 +68,31 @@ class Froala extends Component {
 						"insertVideo",
 						"insertLink",
 						"insertFile",
-						"emoticons",
-						"html",
+						/*"emoticons",*/
+						/*"html",*/
 						"image",
 					],
 					buttonsVisible: 7,
 				},
 				moreText: {
 					buttons: [
+						"fontFamily",
+						"fontSize",
 						"bold",
 						"italic",
 						"underline",
 						"strikeThrough",
 						"subscript",
 						"superscript",
-						"fontFamily",
-						"fontSize",
 						"textColor",
 						"backgroundColor",
 						"inlineClass",
 						"inlineStyle",
-						"clearFormatting",
 						"alignLeft",
 						"alignCenter",
-						"formatOLSimple",
 						"alignRight",
 						"alignJustify",
+						"formatOLSimple",
 						"formatOL",
 						"formatUL",
 						"paragraphFormat",
@@ -100,6 +101,7 @@ class Froala extends Component {
 						"outdent",
 						"indent",
 						"quote",
+						"clearFormatting",
 					],
 					buttonsVisible: 0,
 				},
@@ -109,14 +111,14 @@ class Froala extends Component {
 			toolbarVisibleWithoutSelection: true,
 			//heightMin: "568px",
 			placeholderText: "Type something \n or click inside me",
-			charCounterCount: true,
+			charCounterCount: false,
 			keepFormatOnDelete: true,
 			attribution: false,
 			width: "100%",
 			imageEditButtons: [
 				"imageReplace",
 				"imageAlign",
-				"imageCaption",
+				//"imageCaption",
 				"imageRemove",
 				"",
 				"|",

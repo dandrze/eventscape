@@ -25,9 +25,15 @@ export const createModel = (eventTitle) => {
 	// call the api and return the model in json
 	console.log(eventTitle);
 	const data = [
+<<<<<<< HEAD
 		{ id: Math.random(), sectionHtml: logoHeaderModel(), name:"banner" },
 		{ id: Math.random(), sectionHtml: heroBannerModel(eventTitle), name:"heroBanner" },
 		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(), name:"body" },
+=======
+		{ id: Math.random(), html: banner() },
+		{ id: Math.random(), html: hero("Event Title") },
+		{ id: Math.random(), html: body() },
+>>>>>>> kevin4
 	];
 
 	return { type: CREATE_PAGE_MODEL, payload: data };

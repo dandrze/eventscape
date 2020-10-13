@@ -22,6 +22,7 @@ import FroalaEmail from "../components/froalaEmail";
 import { Link } from "react-router-dom";
 import Tooltip from "@material-ui/core/Tooltip";
 import Cancel from "../icons/cancel.svg";
+import { Hidden } from "@material-ui/core";
 
 export default class EmailEditor extends React.Component {
 	render() {
@@ -59,54 +60,57 @@ class Content extends Component {
 						</button>
 					</div>
 
+					
 					<div id="designBoard">
-						<div id="emailInputs">
-							<div className="inputDiv">
-								<label htmlFor="toSelect" id="emailLabel">
-									To:{" "}
-								</label>
-								<div id="toSelect">
-									<ToSelect />
+						<div style={{overflow: 'hidden'}}>
+							<div id="emailInputs">
+								<div className="inputDiv">
+									<label htmlFor="toSelect" id="emailLabel">
+										To:{" "}
+									</label>
+									<div id="toSelect">
+										<ToSelect />
+									</div>
+								</div>
+
+								<div className="inputDiv">
+									<label htmlFor="from" id="emailLabel">
+										From:{" "}
+									</label>
+									<input
+										type="text"
+										id="emailInput"
+										name="from"
+										placeholder=""
+									></input>
+									<br></br>
+								</div>
+
+								<div className="inputDiv">
+									<label htmlFor="subject" id="emailLabel">
+										Subject:{" "}
+									</label>
+									<input
+										type="text"
+										id="emailInput"
+										name="subject"
+										placeholder=""
+										value="Thank You for Registering for {Event_Name}"
+									></input>
+								</div>
+
+								<div className="inputDiv">
+									<label htmlFor="sendTime" id="emailLabel">
+										Scheduled Send Time:{" "}
+									</label>
+									<br></br>
+									<DateTimePickers />
 								</div>
 							</div>
 
-							<div className="inputDiv">
-								<label htmlFor="from" id="emailLabel">
-									From:{" "}
-								</label>
-								<input
-									type="text"
-									id="emailInput"
-									name="from"
-									placeholder=""
-								></input>
-								<br></br>
+							<div style={{ margin: "3%" }}>
+								<FroalaEmail />
 							</div>
-
-							<div className="inputDiv">
-								<label htmlFor="subject" id="emailLabel">
-									Subject:{" "}
-								</label>
-								<input
-									type="text"
-									id="emailInput"
-									name="subject"
-									placeholder=""
-									value="Thank You for Registering for {Event_Name}"
-								></input>
-							</div>
-
-							<div className="inputDiv">
-								<label htmlFor="sendTime" id="emailLabel">
-									Scheduled Send Time:{" "}
-								</label>
-								<br></br>
-								<DateTimePickers />
-							</div>
-						</div>
-
-						<div style={{ margin: "3%" }}>
-							<FroalaEmail />
 						</div>
 					</div>
 					<div style={{ color: "#F8F8F8" }}>
