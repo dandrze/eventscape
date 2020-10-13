@@ -26,7 +26,7 @@ export const createModel = (eventTitle) => {
 	console.log("create model");
 	const data = [
 		{ id: Math.random(), html: banner() },
-		{ id: Math.random(), html: hero("Event Title prop") },
+		{ id: Math.random(), html: hero("Event Title") },
 		{ id: Math.random(), html: body() },
 	];
 
