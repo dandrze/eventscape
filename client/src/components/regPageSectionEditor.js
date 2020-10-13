@@ -5,13 +5,15 @@ import * as actions from "../actions";
 import NewSectionButton from "./newSectionButton";
 
 const RegPageSectionEditor = (props) => {
-	console.log(props.sectionModel);
 	return (
 		<div>
-			<Froala key={props.sectionModel} sectionModel={props.sectionModel} />
-			<NewSectionButton prevIndex={props.index} />
+			<Froala key={props.model} sectionIndex={props.sectionIndex} />
+			<NewSectionButton prevIndex={props.sectionIndex} />
 		</div>
 	);
 };
+const mapStateToProps = (state) => {
+	return { model: state.model };
+};
 
-export default connect(null, actions)(RegPageSectionEditor);
+export default connect(mapStateToProps, actions)(RegPageSectionEditor);

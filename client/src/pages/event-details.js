@@ -21,8 +21,16 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
+import EventReduxForm from '../components/EventReduxForm'
 
 class Event_Details extends React.Component {
+	/*
+	submitForm = values => {
+		console.log(values)
+		console.log()
+	  };
+	*/
+
 	render() {
 		return (
 			<div>
@@ -40,11 +48,17 @@ class Event_Details extends React.Component {
 					<EventColor />
 					<br></br>
 					<Link to="/Design">
-						<button className="Button1" onClick={this.props.createModel}>
+						<button className="Button1" onClick={() => {console.log(this.props);
+							this.props.createModel("test")}}>
 							Create My Event
 						</button>
 					</Link>
 				</div>
+				{/* 
+				<div>
+					<EventReduxForm onSubmit={this.submitForm} />
+				</div>
+				*/}
 			</div>
 		);
 	}

@@ -8,7 +8,7 @@ import {
 	UPDATE_SECTION,
 	CREATE_EVENT,
 } from "./types";
-import { hero, body, banner } from "../components/regModel";
+import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from '../components/regModel'
 
 export const fetchUser = () => async (dispatch) => {
 	//const res = await axios.get("/api/current_user");
@@ -23,11 +23,11 @@ export const fetchEvents = () => {
 
 export const createModel = (eventTitle) => {
 	// call the api and return the model in json
-	console.log("create model");
+	console.log(eventTitle);
 	const data = [
-		{ id: Math.random(), html: banner() },
-		{ id: Math.random(), html: hero("Event Title prop") },
-		{ id: Math.random(), html: body() },
+		{ id: Math.random(), sectionHtml: logoHeaderModel(), name:"banner" },
+		{ id: Math.random(), sectionHtml: heroBannerModel(eventTitle), name:"heroBanner" },
+		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(), name:"body" },
 	];
 
 	return { type: CREATE_PAGE_MODEL, payload: data };
@@ -39,17 +39,23 @@ export const fetchPageModel = () => {
 	return { type: FETCH_PAGE_MODEL, payload: "" };
 };
 
-export const updateSection = (sectionModel) => {
+export const updateSection = (index, sectionHtml) => {
 	// call the api and return the event in json
-	return { type: UPDATE_SECTION, payload: sectionModel };
+	const payload = {
+		index, sectionHtml
+	}
+	return { type: UPDATE_SECTION, payload };
 };
 
-export const addSection = (prevIndex) => {
+export const addSection = (prevIndex, sectionHtml, sectionName) => {
 	// call the api and return the event in json
-	const data = {
+	console.log("add section")
+	console.log(sectionHtml);
+	
+	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), html: banner() },
+		model: { id: Math.random(), sectionHtml, sectionName},
 	};
 
-	return { type: ADD_SECTION, payload: data };
+	return { type: ADD_SECTION, payload };
 };

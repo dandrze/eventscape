@@ -14,6 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import logoHeader from './designBlockThumbnails/logoHeader.png';
 import heroBanner from './designBlockThumbnails/heroBanner.png';
 import descriptionRegistration from './designBlockThumbnails/descriptionRegistration.png';
+import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from './regModel'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -36,7 +37,8 @@ const useStyles = makeStyles((theme) => ({
 
 const NewSectionButton = (props) => {
 	const classes = useStyles();
-  	const [open, setOpen] = React.useState(false);
+	const [open, setOpen] = React.useState(false);
+	const [selection, setSelection] = React.useState("");
 
 	const handleOpen = () => {
 		setOpen(true);
@@ -46,9 +48,9 @@ const NewSectionButton = (props) => {
 		setOpen(false);
 	};
 
-	const handleSelect = () => {
+	const handleSelect = (sectionHtml, sectionName) => {
 		setOpen(false);
-		props.addSection(props.prevIndex);
+		props.addSection(props.prevIndex, sectionHtml, sectionName);
 		/*insert actions here*/
 	}
 	
@@ -88,21 +90,21 @@ const NewSectionButton = (props) => {
 										<img 
 											src={logoHeader} 
 											id="designBlockThumbnail" 
-											onClick={handleSelect}
+											onClick={() => handleSelect(logoHeaderModel(), "logoHeader")}
 										/>
 									</Grid>
 									<Grid item xs={12}>
 										<img 
 											src={heroBanner} 
 											id="designBlockThumbnail" 
-											onClick={handleSelect}
+											onClick={() => handleSelect(heroBannerModel(), "heroBanner")}
 										/>
 									</Grid>
 									<Grid item xs={12}>
 										<img 
 											src={descriptionRegistration} 
 											id="designBlockThumbnail" 
-											onClick={handleSelect}
+											onClick={() => handleSelect(descriptionRegistrationModel(), "descriptionRegistration")}
 										/>
 									</Grid>
 								</Grid>
