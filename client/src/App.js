@@ -14,6 +14,7 @@ import Communication from "./pages/communication";
 import EmailEditor from "./pages/emailEditor";
 import Registrations from "./pages/registrations";
 import Analytics from "./pages/analytics";
+import Preview from "./pages/preview"
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 
@@ -32,6 +33,7 @@ function App() {
 				<Route exact path="/CommunicationEditor" component={EmailEditor} />
 				<Route exact path="/Registrations" component={Registrations} />
 				<Route exact path="/Analytics" component={Analytics} />
+				<Route exact path="/Preview" component={Preview} />
 			</header>
 		</div>
 	);

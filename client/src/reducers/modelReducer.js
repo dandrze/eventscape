@@ -12,8 +12,7 @@ export default function (state = [], action) {
 			console.log(action.payload);
 			return action.payload;
 		case UPDATE_SECTION:
-			console.log(action.payload.html)
-			state[action.payload.index].html = action.payload.html;
+			state[action.payload.index].sectionHtml = action.payload.sectionHtml;
 			console.log(state);
 			return state;
 		case ADD_SECTION:
