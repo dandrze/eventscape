@@ -1,4 +1,4 @@
-export const hero = (eventTitle = "default") => {
+export const heroBannerModel = (eventTitle = "default") => {
 	return `
 <div style="position: relative; text-align: center">
     <img src="https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg" style="width: 100%;" class="fr-fic fr-dib">
@@ -14,7 +14,7 @@ export const hero = (eventTitle = "default") => {
 `;
 };
 
-export const banner = () => {
+export const logoHeaderModel = () => {
 	return `
     <div style="margin: 20px; display: block">
         <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 10%;" class="fr-fic fr-dib fr-fil">
@@ -22,7 +22,7 @@ export const banner = () => {
     `;
 };
 
-export const body = () => {
+export const descriptionRegistrationModel = () => {
 	return `
     <section class="container">
         <div class="one">
