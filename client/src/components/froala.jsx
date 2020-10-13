@@ -34,6 +34,8 @@ import "froala-editor/css/plugins/file.min.css";
 import "froala-editor/css/plugins/image.min.css";
 //import "froala-editor/css/third_party/image_tui.min.css";
 
+import * as actions from "../actions"
+
 
 class Froala extends Component {
 	constructor(props) {
