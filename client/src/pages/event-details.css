@@ -1,12 +1,16 @@
-#event-type {
+#event-cat, #event-time-zone {
     /* fixing flawed material UI CSS */
     background-color: white;
     padding-left: 6px;
     padding-right: 6px;
 }
 
-#event-type-select {
+#event-cat-select, #event-time-zone-select{
   text-align: left;
+}
+
+#date-time-container {
+    margin-bottom: 10px;
 }
 
 #primary-color {
