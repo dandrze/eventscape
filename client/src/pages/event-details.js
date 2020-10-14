@@ -21,7 +21,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
-import EventReduxForm from '../components/EventReduxForm'
 import momentTZ from 'moment-timezone';
 
 const useStyles = makeStyles((theme) => ({
@@ -34,17 +33,13 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Event_Details() {
-	/*
-	submitForm = values => {
-		console.log(values)
-		console.log()
-	  };
-	*/
+function Event_Details(props) {
 	const classes = useStyles();
 	const defaultTimeZone = momentTZ.tz.guess();
 
 	const [eventCat, setEventCat] = React.useState("");
+	const [eventTitle, setEventTitle] = React.useState("");
+	const [eventLink, setEventLink] = React.useState("");
 	const [selectedStartDate, setSelectedStartDate] = React.useState(new Date("2020-11-18T19:00:00"));
 	const [selectedEndDate, setSelectedEndDate] = React.useState(new Date("2020-11-18T21:00:00"));
 	const [eventTimeZone, setEventTimeZone] = React.useState(defaultTimeZone);
@@ -52,6 +47,12 @@ function Event_Details() {
 	
 	const handleChangeEventCat = (event) => {
 		setEventCat(event.target.value);
+	};
+	const handleChangeEventTitle = (event) => {
+		setEventTitle(event.target.value);
+	};
+	const handleChangeEventLink = (event) => {
+		setEventLink(event.target.value);
 	};
 	const handleStartDateChange = (date) => {
 		setSelectedStartDate(date);
@@ -67,6 +68,21 @@ function Event_Details() {
 		console.log('event start time in UTC: ');
 		console.log(momentTZ.tz(new Date(selectedStartDate), 'UTC').format('YYYYMMDD HH:mm z'));
 	};
+
+	const handleSubmit = () => {
+		console.log(eventCat);
+		console.log(eventTitle);
+		console.log(eventLink);
+		console.log(selectedStartDate);
+		console.log(selectedEndDate);
+		console.log(color);
+
+		props.createModel(eventTitle, color, selectedStartDate)
+		
+
+		//props.createEvent(eventTitle, eventLink, eventCat, selectedStartDate, selectedEndDate, color, regPageModel)
+
+	}
 	
 	return (
 		<div>
@@ -75,7 +91,8 @@ function Event_Details() {
 				<FormControl variant="outlined" className={classes.formControl}>
 
 					{/* Event Title */}
-					<TextField id="title" label="Event Title" variant="outlined" />
+					<TextField id="title" label="Event Title" variant="outlined" value={eventTitle}
+						onChange={handleChangeEventTitle}/>
 					<br></br>
 
 					{/* Event Link */}
@@ -83,6 +100,8 @@ function Event_Details() {
 						id="event-link"
 						label="Event Link"
 						variant="outlined"
+						value={eventLink}
+						onChange={handleChangeEventLink}
 						InputProps={{
 							endAdornment: (
 								<InputAdornment position="end">.eventscape.io</InputAdornment>
@@ -235,9 +254,9 @@ function Event_Details() {
 				<br></br>
 
 				{/* Primary Color */}
-				<label for="primary-color">Primary Color</label>
+				<label htmlFor="primary-color">Primary Color</label>
 				<br></br>
-				<label for="primary-color">Tip: picking a darker color will help buttons stand out.</label>
+				<label htmlFor="primary-color">Tip: picking a darker color will help buttons stand out.</label>
 				<HexColorPicker color={color} onChange={setColor} id="event-color" />
 				<HexColorInput color={color} onChange={setColor} id="hex-input" />
 				<br></br>
@@ -246,18 +265,11 @@ function Event_Details() {
 				{/* Submit */}
 				{/* remove link and replace with onSubmit */}
 				<Link to="/Design">
-					<button className="Button1" onClick={() => {console.log(this.props);
-						this.props.createModel("test")}}>
+					<button className="Button1" onClick={handleSubmit}>
 						Create My Event
 					</button>
 				</Link>
 			</div>
-
-			{/* 
-			<div>
-				<EventReduxForm onSubmit={this.submitForm} />
-			</div>
-			*/}
 		</div>
 	);
 }

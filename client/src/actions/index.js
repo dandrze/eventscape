@@ -1,7 +1,7 @@
 import axios from "axios";
 import {
-	FETCH_USER,
-	FETCH_EVENT,
+	SIGNIN_USER,
+	FETCH_EVENTS,
 	FETCH_PAGE_MODEL,
 	CREATE_PAGE_MODEL,
 	ADD_SECTION,
@@ -10,24 +10,61 @@ import {
 } from "./types";
 import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from '../components/regModel'
 
-export const fetchUser = () => async (dispatch) => {
+// USER ACTIONS
+
+export const signinUser = () => async (dispatch) => {
 	//const res = await axios.get("/api/current_user");
 
-	dispatch({ type: FETCH_USER, payload: "res.data" });
+	const data = {
+		id: 1,
+		name: "Demo User",
+		email: "demo@demo.com"
+	}
+
+	dispatch({ type: SIGNIN_USER, payload: "res.data" });
 };
+
+// EVENT ACTIONS
+
+export const createEvent = (title, link, category, startDate, endDate, timeZone, primaryColor) => {
+
+	const regPageModel = [
+		{ id: Math.random(), sectionHtml: logoHeaderModel(), name:"banner" },
+		{ id: Math.random(), sectionHtml: heroBannerModel(title), name:"heroBanner" },
+		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(startDate), name:"body" },
+	];
+
+	const id = Math.random();
+
+	return {type: CREATE_EVENT, payload: {
+		id, title, link, category, startDate, endDate, timeZone, primaryColor, regPageModel
+	}}
+}
 
 export const fetchEvents = () => {
 	// call the api and return the event in json
-	//return { type: FETCH_EVENT, payload: data };
+
+	const events = false;
+
+	// if there are events, go to design page
+	if (events) {
+	return { type: FETCH_EVENTS, payload: events };
+	} else {
+		// if no events then go to create event page
+		return null
+	}
 };
 
-export const createModel = (eventTitle) => {
+
+// MODEL ACTIONS
+
+export const createModel = (eventTitle, color, eventStartDate) => {
 	// call the api and return the model in json
 	console.log(eventTitle);
 	const data = [
 		{ id: Math.random(), sectionHtml: logoHeaderModel(), name:"banner" },
 		{ id: Math.random(), sectionHtml: heroBannerModel(eventTitle), name:"heroBanner" },
-		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(), name:"body" },
+		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(eventStartDate), name:"body" },
 	];
 
 	return { type: CREATE_PAGE_MODEL, payload: data };
@@ -39,10 +76,10 @@ export const fetchPageModel = () => {
 	return { type: FETCH_PAGE_MODEL, payload: "" };
 };
 
-export const updateSection = (index, sectionHtml) => {
+export const updateSection = (eventId, index, sectionHtml) => {
 	// call the api and return the event in json
 	const payload = {
-		index, sectionHtml
+		index, sectionHtml, eventId
 	}
 	return { type: UPDATE_SECTION, payload };
 };
