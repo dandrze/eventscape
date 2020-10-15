@@ -27,6 +27,8 @@ event = [
 export default function (state = [], action) {
 	switch (action.type) {
 		case CREATE_EVENT:
+			console.log(state);
+
 			return [...state, action.payload];
 		case FETCH_EVENTS:
 			return action.payload;

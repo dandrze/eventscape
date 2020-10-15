@@ -3,14 +3,14 @@ import { connect } from "react-redux";
 
 import "./pageEditorContainer.css";
 import * as actions from "../actions";
-import RegPageSectionEditor from "./regPageSectionEditor";
+import PageSectionEditor from "./pageSectionEditor";
 import { banner, hero, body } from "./regModel";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
 import PageEditor from "./PageEditor"
 
-class pageEditorContainer extends Component {
+class PageEditorContainer extends Component {
 	constructor(props) {
 		super(props);
 
@@ -45,7 +45,16 @@ class pageEditorContainer extends Component {
 						<br></br>
 					</div>
 					<div id="designBoard">
-						<PageEditor model={this.props.event.regPageModel} />
+					<ul>
+						{this.props.model.map(function (sectionModel,  index) {
+							console.log(index)
+							return (
+								<li key={index}>
+									<PageSectionEditor sectionIndex={index} />
+								</li>
+							);
+						})}
+					</ul>
 					</div>
 					<div style={{ color: "#F8F8F8" }}>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -63,4 +72,4 @@ const mapStateToProps = (state) => {
 	return { model: state.model };
 };
 
-export default connect(mapStateToProps, actions)(pageEditorContainer);
+export default connect(mapStateToProps, actions)(PageEditorContainer);

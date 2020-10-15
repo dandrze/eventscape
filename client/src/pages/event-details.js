@@ -75,10 +75,7 @@ function Event_Details(props) {
 		console.log(eventLink);
 		console.log(selectedStartDate);
 		console.log(selectedEndDate);
-		console.log(color);
-
-		props.createModel(eventTitle, color, selectedStartDate);
-		
+		console.log(color);		
 
 		props.createEvent(eventTitle, eventLink, eventCat, selectedStartDate, selectedEndDate, color);
 

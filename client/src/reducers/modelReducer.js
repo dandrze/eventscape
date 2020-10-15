@@ -13,17 +13,25 @@ export default function (state = [], action) {
 			return action.payload;
 		case UPDATE_SECTION:
 			console.log(state);
+			console.log(action.payload.index);
 
 			return state.map((section, index) => {
-				if(index === action.payload.index) {
-					return {...section, sectionHtml: action.payload.sectionHtml}
+				console.log(section);
+				console.log(index);
+				if (index === action.payload.index) {
+					return { ...section, sectionHtml: action.payload.sectionHtml };
 				}
 				return section;
-			})
+			});
 		case ADD_SECTION:
-			return [...state.slice(0, action.payload.index), action.payload.model, ...state.slice(action.payload.index)]
+			return [
+				...state.slice(0, action.payload.index),
+				action.payload.model,
+				...state.slice(action.payload.index),
+			];
 		case FETCH_PAGE_MODEL:
-			return state;
+			console.log("FETCHED");
+			return action.payload;
 		default:
 			return state;
 	}

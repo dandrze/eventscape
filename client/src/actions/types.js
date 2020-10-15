@@ -11,3 +11,5 @@ export const ADD_SECTION_REG_PAGE = "ADD_SECTION_REG_PAGE"
 
 export const ADD_SECTION = "add_section";
 export const UPDATE_SECTION = "update_section";
+
+export const CHANGE_PAGE_EDITOR = "CHANGE_PAGE_EDITOR"

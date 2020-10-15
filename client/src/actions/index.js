@@ -7,8 +7,13 @@ import {
 	ADD_SECTION,
 	UPDATE_SECTION,
 	CREATE_EVENT,
+	CHANGE_PAGE_EDITOR,
 } from "./types";
-import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from '../components/regModel'
+import {
+	logoHeaderModel,
+	heroBannerModel,
+	descriptionRegistrationModel,
+} from "../components/regModel";
 
 // USER ACTIONS
 
@@ -18,28 +23,64 @@ export const signinUser = () => async (dispatch) => {
 	const data = {
 		id: 1,
 		name: "Demo User",
-		email: "demo@demo.com"
-	}
+		email: "demo@demo.com",
+	};
 
 	dispatch({ type: SIGNIN_USER, payload: "res.data" });
 };
 
 // EVENT ACTIONS
 
-export const createEvent = (title, link, category, startDate, endDate, timeZone, primaryColor) => {
-
+export const createEvent = (
+	title,
+	link,
+	category,
+	startDate,
+	endDate,
+	timeZone,
+	primaryColor
+) => {
 	const regPageModel = [
-		{ id: Math.random(), sectionHtml: logoHeaderModel(), name:"banner" },
-		{ id: Math.random(), sectionHtml: heroBannerModel(title), name:"heroBanner" },
-		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(startDate), name:"body" },
+		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
+		{
+			id: Math.random(),
+			sectionHtml: heroBannerModel(title),
+			name: "heroBanner",
+		},
+		{
+			id: Math.random(),
+			sectionHtml: descriptionRegistrationModel(startDate),
+			name: "body",
+		},
+	];
+
+	const eventPageModel = [
+		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
+		{
+			id: Math.random(),
+			sectionHtml: heroBannerModel(title),
+			name: "heroBanner",
+		},
 	];
 
 	const id = Math.random();
 
-	return {type: CREATE_EVENT, payload: {
-		id, title, link, category, startDate, endDate, timeZone, primaryColor, regPageModel
-	}}
-}
+	return {
+		type: CREATE_EVENT,
+		payload: {
+			id,
+			title,
+			link,
+			category,
+			startDate,
+			endDate,
+			timeZone,
+			primaryColor,
+			regPageModel,
+			eventPageModel,
+		},
+	};
+};
 
 export const fetchEvents = () => {
 	// call the api and return the event in json
@@ -48,51 +89,76 @@ export const fetchEvents = () => {
 
 	// if there are events, go to design page
 	if (events) {
-	return { type: FETCH_EVENTS, payload: events };
+		return { type: FETCH_EVENTS, payload: events };
 	} else {
 		// if no events then go to create event page
-		return null
+		return null;
 	}
 };
-
 
 // MODEL ACTIONS
 
 export const createModel = (eventTitle, color, eventStartDate) => {
 	// call the api and return the model in json
-	console.log(eventTitle);
 	const data = [
-		{ id: Math.random(), sectionHtml: logoHeaderModel(), name:"banner" },
-		{ id: Math.random(), sectionHtml: heroBannerModel(eventTitle), name:"heroBanner" },
-		{ id: Math.random(), sectionHtml: descriptionRegistrationModel(eventStartDate), name:"body" },
+		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
+		{
+			id: Math.random(),
+			sectionHtml: heroBannerModel(eventTitle),
+			name: "heroBanner",
+		},
+		{
+			id: Math.random(),
+			sectionHtml: descriptionRegistrationModel(eventStartDate),
+			name: "body",
+		},
 	];
 
 	return { type: CREATE_PAGE_MODEL, payload: data };
 };
 
-export const fetchPageModel = () => {
-	// call the api and return the event in json
-	// we're using Math.random() for now for a unique id. Once we hook up the db, we'll use the db id instead
-	return { type: FETCH_PAGE_MODEL, payload: "" };
+export const fetchPageModel = () => (dispatch, getState) => {
+	let model = [];
+
+	try {
+		switch (getState().settings.nowEditingPage) {
+			case "registration":
+				model = getState().event[0].regPageModel;
+				break;
+			case "event":
+				model = getState().event[0].eventPageModel;
+				break;
+		}
+	} catch {
+		console.log("event is empty");
+	}
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: model });
 };
 
-export const updateSection = (eventId, index, sectionHtml) => {
+export const updateSection = (index, sectionHtml) => {
 	// call the api and return the event in json
 	const payload = {
-		index, sectionHtml, eventId
-	}
+		index,
+		sectionHtml,
+	};
 	return { type: UPDATE_SECTION, payload };
 };
 
 export const addSection = (prevIndex, sectionHtml, sectionName) => {
 	// call the api and return the event in json
-	console.log("add section")
-	console.log(sectionHtml);
-	
+
 	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), sectionHtml, sectionName},
+		model: { id: Math.random(), sectionHtml, sectionName },
 	};
 
 	return { type: ADD_SECTION, payload };
+};
+
+// SETTINGS ACTIONS
+
+export const changePageEditor = (pageName) => {
+	console.log("changed");
+	return { type: CHANGE_PAGE_EDITOR, payload: pageName };
 };

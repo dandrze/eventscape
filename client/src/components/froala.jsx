@@ -43,8 +43,6 @@ class Froala extends Component {
 
 		this.handleModelChange = this.handleModelChange.bind(this);
 
-		console.log(props.model)
-		console.log(props.sectionIndex)
 
 		this.state = {
 			model: props.model[props.sectionIndex].sectionHtml,
@@ -148,7 +146,7 @@ class Froala extends Component {
 	}
 }
 const mapStateToProps = (state) => {
-	return { model: state.model };
+	return { model: state.model, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(Froala)
