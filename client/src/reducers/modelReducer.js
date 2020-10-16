@@ -9,16 +9,22 @@ import {
 export default function (state = [], action) {
 	switch (action.type) {
 		case CREATE_PAGE_MODEL:
-			console.log(action.payload);
 			return action.payload;
 		case UPDATE_SECTION:
-			state[action.payload.index].sectionHtml = action.payload.sectionHtml;
-			console.log(state);
-			return state;
+			return state.map((section, index) => {
+				if (index === action.payload.index) {
+					return { ...section, sectionHtml: action.payload.sectionHtml };
+				}
+				return section;
+			});
 		case ADD_SECTION:
-			return insertItem(state, action.payload.model, action.payload.index);
+			return [
+				...state.slice(0, action.payload.index),
+				action.payload.model,
+				...state.slice(action.payload.index),
+			];
 		case FETCH_PAGE_MODEL:
-			return state;
+			return action.payload;
 		default:
 			return state;
 	}

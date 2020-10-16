@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
@@ -31,6 +32,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
+
+import * as actions from "../actions";
 
 /*color palette*/
 const MenuText = "#EAEAEA";
@@ -115,13 +118,18 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-export default function NavBar3(props) {
+function NavBar3(props) {
 	const displaySideNav = props.displaySideNav;
 	const content = props.content;
 
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
+
+	const changePageEditor = (pageName) => {
+		props.changePageEditor(pageName);
+		props.fetchPageModel();
+	};
 
 	const handleDrawerOpen = () => {
 		setOpen(true);
@@ -322,9 +330,25 @@ export default function NavBar3(props) {
 						onClose={handleCloseDesign}
 					>
 						<Link to="./Design">
-							<MenuItem onClick={handleCloseDesign}>Registration Page</MenuItem>
+							<MenuItem
+								onClick={() => {
+									handleCloseDesign();
+									changePageEditor("registration");
+								}}
+							>
+								Registration Page
+							</MenuItem>
 						</Link>
-						<MenuItem onClick={handleCloseDesign}>Event Page</MenuItem>
+						<Link to="./Design">
+							<MenuItem
+								onClick={() => {
+									handleCloseDesign();
+									changePageEditor("event");
+								}}
+							>
+								Event Page
+							</MenuItem>
+						</Link>
 						<Link to="./WebsiteSettings">
 							<MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
 						</Link>
@@ -338,3 +362,5 @@ export default function NavBar3(props) {
 		</div>
 	);
 }
+
+export default connect(null, actions)(NavBar3);
