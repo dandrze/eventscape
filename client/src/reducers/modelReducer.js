@@ -9,15 +9,9 @@ import {
 export default function (state = [], action) {
 	switch (action.type) {
 		case CREATE_PAGE_MODEL:
-			console.log(action.payload);
 			return action.payload;
 		case UPDATE_SECTION:
-			console.log(state);
-			console.log(action.payload.index);
-
 			return state.map((section, index) => {
-				console.log(section);
-				console.log(index);
 				if (index === action.payload.index) {
 					return { ...section, sectionHtml: action.payload.sectionHtml };
 				}
@@ -30,7 +24,6 @@ export default function (state = [], action) {
 				...state.slice(action.payload.index),
 			];
 		case FETCH_PAGE_MODEL:
-			console.log("FETCHED");
 			return action.payload;
 		default:
 			return state;

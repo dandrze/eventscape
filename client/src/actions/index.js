@@ -159,6 +159,5 @@ export const addSection = (prevIndex, sectionHtml, sectionName) => {
 // SETTINGS ACTIONS
 
 export const changePageEditor = (pageName) => {
-	console.log("changed");
 	return { type: CHANGE_PAGE_EDITOR, payload: pageName };
 };
