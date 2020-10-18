@@ -11,9 +11,12 @@ import {
 } from "./types";
 import {
 	logoHeaderModel,
+	logoHeaderRightModel,
 	heroBannerModel,
 	descriptionRegistrationModel,
-} from "../components/regModel";
+	titleTimeModel,
+	streamChatModel,
+} from "../components/designBlockModels";
 
 // USER ACTIONS
 
@@ -55,11 +58,21 @@ export const createEvent = (
 	];
 
 	const eventPageModel = [
-		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
+		{ id: Math.random(), sectionHtml: logoHeaderRightModel(), name: "bannerRight" },
+		/*{
+			id: Math.random(),
+			sectionHtml: titleTimeModel(title, startDate, endDate),
+			name: "titleTime",
+		},*/
 		{
 			id: Math.random(),
-			sectionHtml: heroBannerModel(title),
-			name: "heroBanner",
+			sectionHtml: titleTimeModel(title, startDate, endDate),
+			name: "titleTime",
+		},
+		{
+			id: Math.random(),
+			sectionHtml: streamChatModel(),
+			name: "streamChat",
 		},
 	];
 

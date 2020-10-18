@@ -14,7 +14,7 @@ import Grid from '@material-ui/core/Grid';
 import logoHeader from './designBlockThumbnails/logoHeader.png';
 import heroBanner from './designBlockThumbnails/heroBanner.png';
 import descriptionRegistration from './designBlockThumbnails/descriptionRegistration.png';
-import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from './regModel'
+import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from './designBlockModels'
 
 const useStyles = makeStyles((theme) => ({
 	root: {

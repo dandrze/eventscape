@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import "./pageEditor.css";
 import * as actions from "../actions";
 import PageSectionEditor from "./pageSectionEditor";
-import { banner, hero, body } from "./regModel";
+import { banner, hero, body } from "./designBlockModels";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
