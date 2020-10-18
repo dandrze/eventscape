@@ -3,13 +3,21 @@ const bodyParser = require("body-parser");
 const authRoutes = require("./routes/authRoutes");
 
 const app = express();
+const router = express.Router();
 
 // routes
 app.use(bodyParser.json());
-app.use(authRoutes);
+//app.use(authRoutes);
 
-app.listen(3000, () => {
-	console.log("listening on port 3000");
+app.get("/", (req, res) => {
+	var domain = req.get("host").match(/\w+/);
+
+	console.log(domain);
+	res.send("hello");
+
+	/*if (domain)
+       var subdomain = domain[0]; // Use "subdomain"
+    */
 });
 
 if (process.env.NODE_ENV == "production") {
@@ -26,4 +34,6 @@ if (process.env.NODE_ENV == "production") {
 }
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT);
+app.listen(PORT, () => {
+	console.log("listening on port " + PORT);
+});

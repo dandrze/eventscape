@@ -47,8 +47,8 @@ class PageEditor extends Component {
 					<ul>
 						{this.props.model.map(function (sectionModel,  index) {
 							return (
-								<li key={index}>
-									<PageSectionEditor sectionIndex={index} />
+								<li key={sectionModel.id}>
+									<PageSectionEditor model={sectionModel} sectionIndex={index} />
 								</li>
 							);
 						})}

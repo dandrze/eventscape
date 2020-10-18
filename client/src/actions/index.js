@@ -58,7 +58,11 @@ export const createEvent = (
 	];
 
 	const eventPageModel = [
-		{ id: Math.random(), sectionHtml: logoHeaderRightModel(), name: "bannerRight" },
+		{
+			id: Math.random(),
+			sectionHtml: logoHeaderRightModel(),
+			name: "bannerRight",
+		},
 		/*{
 			id: Math.random(),
 			sectionHtml: titleTimeModel(title, startDate, endDate),
