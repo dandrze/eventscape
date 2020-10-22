@@ -34,6 +34,7 @@ export default function (state = [], action) {
 		case CREATE_EVENT:
 			return [...state, action.payload];
 		case FETCH_EVENTS:
+			console.log(action.payload);
 			return action.payload;
 		case UPDATE_REG_PAGE_MODEL:
 			return state.map((event, index) => {

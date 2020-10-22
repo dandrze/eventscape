@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 const modelSchema = require("./Model");
 
 const eventSchema = new mongoose.Schema({
+	user: String,
 	title: String,
 	link: String,
 	category: String,
@@ -9,8 +10,8 @@ const eventSchema = new mongoose.Schema({
 	endDate: String,
 	timeZone: String,
 	primaryColor: String,
-	eventPageModel: modelSchema,
-	regPageModel: modelSchema,
+	eventPageModel: [modelSchema],
+	regPageModel: [modelSchema],
 });
 
 mongoose.model("events", eventSchema);

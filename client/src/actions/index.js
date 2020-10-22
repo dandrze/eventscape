@@ -39,7 +39,7 @@ export const createEvent = (
 	endDate,
 	timeZone,
 	primaryColor
-) => {
+) => async (dispatch) => {
 	const regPageModel = [
 		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
 		{
@@ -65,33 +65,42 @@ export const createEvent = (
 
 	const id = Math.random();
 
-	return {
-		type: CREATE_EVENT,
-		payload: {
-			id,
-			title,
-			link,
-			category,
-			startDate,
-			endDate,
-			timeZone,
-			primaryColor,
-			regPageModel,
-			eventPageModel,
-		},
+	const event = {
+		id,
+		title,
+		link,
+		category,
+		startDate,
+		endDate,
+		timeZone,
+		primaryColor,
+		regPageModel,
+		eventPageModel,
 	};
+
+	const res = await axios.post("/api/events", event);
+
+	console.log(res);
+
+	dispatch({
+		type: CREATE_EVENT,
+		payload: event,
+	});
 };
 
-export const fetchEvents = () => {
+export const fetchEvents = () => async (dispatch) => {
 	// call the api and return the event in json
 
-	const events = false;
+	console.log("fetch events called");
+
+	const events = await axios.get("/api/events");
 
 	// if there are events, go to design page
 	if (events) {
-		return { type: FETCH_EVENTS, payload: events };
+		dispatch({ type: FETCH_EVENTS, payload: events.data });
 	} else {
 		// if no events then go to create event page
+		console.log("no events");
 		return null;
 	}
 };
@@ -119,6 +128,8 @@ export const createModel = (eventTitle, color, eventStartDate) => {
 
 export const fetchPageModel = () => (dispatch, getState) => {
 	let model = [];
+
+	console.log(getState().event);
 
 	try {
 		switch (getState().settings.nowEditingPage) {

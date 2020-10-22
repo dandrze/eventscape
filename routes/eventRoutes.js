@@ -13,21 +13,51 @@ router.post("/api/events", async (req, res) => {
 		endDate,
 		timeZone,
 		primaryColor,
+		regPageModel,
+		eventPageModel,
 	} = req.body;
 
-	const event = new Event({
-		title,
-		link,
-		category,
-		startDate,
-		endDate,
-		timeZone,
-		primaryColor,
-	});
+	const existingEvent = await Event.findOne({ user: "tester" });
 
-	event.save();
+	if (existingEvent) {
+		existingEvent.overwrite({
+			user: "tester",
+			title,
+			link,
+			category,
+			startDate,
+			endDate,
+			timeZone,
+			primaryColor,
+			regPageModel,
+			eventPageModel,
+		});
+
+		existingEvent.save();
+	} else {
+		const newEvents = new Event({
+			user: "tester",
+			title,
+			link,
+			category,
+			startDate,
+			endDate,
+			timeZone,
+			primaryColor,
+			regPageModel,
+			eventPageModel,
+		});
+
+		newEvents.save();
+	}
+
+	res.status(200).send();
 });
 
-router.get("/api/events", async (req, res) => {});
+router.get("/api/events", async (req, res) => {
+	const events = await Event.find({ user: "tester" });
+
+	res.send(events);
+});
 
 module.exports = router;
