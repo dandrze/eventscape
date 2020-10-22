@@ -11,7 +11,7 @@ class RegPageSectionEditor extends React.Component {
 		this.handleMouseEnter = this.handleMouseEnter.bind(this);
 		this.handleMouseLeave = this.handleMouseLeave.bind(this);
 		this.state = {
-		  isHovering: false,
+			isHovering: false,
 		};
 	}
 
@@ -19,33 +19,38 @@ class RegPageSectionEditor extends React.Component {
 		this.setState({
 			isHovering: true,
 		});
-	}
+	};
 
 	handleMouseLeave = () => {
 		this.setState({
 			isHovering: false,
 		});
-	}
+	};
 
 	render() {
-		return(
+		return (
 			<div>
 				<div
-          			onMouseEnter={this.handleMouseEnter}
-          			onMouseLeave={this.handleMouseLeave}
-        		>
-					{this.state.isHovering && 
-						<DesignBlockToolbar 
+					onMouseEnter={this.handleMouseEnter}
+					onMouseLeave={this.handleMouseLeave}
+				>
+					{this.state.isHovering && (
+						<DesignBlockToolbar
 							showStreamSettings="true"
+							sectionIndex={this.props.sectionIndex}
+							maxIndex={this.props.model.length}
 						/>
-					}
-					<Froala key={this.props.model} sectionIndex={this.props.sectionIndex} />
+					)}
+					<Froala
+						key={this.props.model}
+						sectionIndex={this.props.sectionIndex}
+					/>
 				</div>
 				<NewSectionButton prevIndex={this.props.sectionIndex} />
 			</div>
 		);
-	};
-};
+	}
+}
 
 const mapStateToProps = (state) => {
 	return { model: state.model };

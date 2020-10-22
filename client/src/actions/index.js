@@ -8,6 +8,7 @@ import {
 	UPDATE_SECTION,
 	CREATE_EVENT,
 	CHANGE_PAGE_EDITOR,
+	MOVE_SECTION,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -172,6 +173,10 @@ export const addSection = (prevIndex, sectionHtml, sectionName) => {
 	};
 
 	return { type: ADD_SECTION, payload };
+};
+
+export const moveSection = (index, offset) => {
+	return { type: MOVE_SECTION, payload: { index, offset } };
 };
 
 // SETTINGS ACTIONS
