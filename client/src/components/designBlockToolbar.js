@@ -65,6 +65,11 @@ function DesignBlockToolbar(props) {
 		setDeleteConfirmOpen(false);
 	};
 
+	const handleConfirmDelete = () => {
+		console.log(props.sectionIndex);
+		props.deleteSection(props.sectionIndex);
+	};
+
 	// Stream Settings:
 	const handleOpenStreamSettings = () => {
 		setOpenStreamSettings(true);
@@ -118,13 +123,13 @@ function DesignBlockToolbar(props) {
 						<DeleteOutlined />
 					</div>
 				</Tooltip>
-				{showStreamSettings === "true" && (
+				{showStreamSettings ? (
 					<Tooltip title="Stream Settings">
 						<div className="toolbar_button" onClick={handleOpenStreamSettings}>
 							<SettingsIcon />
 						</div>
 					</Tooltip>
-				)}
+				) : null}
 			</div>
 
 			{/* Confirm Delete */}
@@ -141,7 +146,14 @@ function DesignBlockToolbar(props) {
 					<Button onClick={handleCloseDelete} color="primary">
 						Cancel
 					</Button>
-					<Button onClick={handleCloseDelete} color="primary" autoFocus>
+					<Button
+						onClick={() => {
+							handleCloseDelete();
+							handleConfirmDelete();
+						}}
+						color="primary"
+						autoFocus
+					>
 						Delete
 					</Button>
 				</DialogActions>

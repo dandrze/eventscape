@@ -9,6 +9,7 @@ import {
 	CREATE_EVENT,
 	CHANGE_PAGE_EDITOR,
 	MOVE_SECTION,
+	DELETE_SECTION,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -51,11 +52,13 @@ export const createEvent = (
 			id: Math.random(),
 			sectionHtml: heroBannerModel(title, primaryColor),
 			name: "heroBanner",
+			showStreamSettings: false,
 		},
 		{
 			id: Math.random(),
 			sectionHtml: descriptionRegistrationModel(startDate, endDate),
 			name: "body",
+			showStreamSettings: false,
 		},
 	];
 
@@ -64,21 +67,25 @@ export const createEvent = (
 			id: Math.random(),
 			sectionHtml: logoHeaderRightModel(),
 			name: "bannerRight",
+			showStreamSettings: false,
 		},
 		{
 			id: Math.random(),
 			sectionHtml: titleTimeModel(title, startDate, endDate),
 			name: "titleTime",
+			showStreamSettings: false,
 		},
 		{
 			id: Math.random(),
 			sectionHtml: streamChatModel(),
 			name: "streamChat",
+			showStreamSettings: true,
 		},
 		{
 			id: Math.random(),
 			sectionHtml: blankModel(),
 			name: "blankModel",
+			showStreamSettings: false,
 		},
 	];
 
@@ -173,6 +180,11 @@ export const addSection = (prevIndex, sectionHtml, sectionName) => {
 	};
 
 	return { type: ADD_SECTION, payload };
+};
+
+export const deleteSection = (index) => {
+	console.log(index);
+	return { type: DELETE_SECTION, payload: { index } };
 };
 
 export const moveSection = (index, offset) => {

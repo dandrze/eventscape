@@ -9,6 +9,7 @@ export const UPDATE_PAGE_MODEL = "update_page_model";
 export const UPDATE_REG_PAGE_MODEL = "update_reg_page_model";
 export const ADD_SECTION_REG_PAGE = "ADD_SECTION_REG_PAGE";
 export const MOVE_SECTION = "MOVE_SECTION";
+export const DELETE_SECTION = "DELETE_SECTION";
 
 export const ADD_SECTION = "add_section";
 export const UPDATE_SECTION = "update_section";
