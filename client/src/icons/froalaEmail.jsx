@@ -50,7 +50,6 @@ class FroalaEmail extends Component {
         this.setState({
           model: model,
         });
-        console.log(model);
       }
     
   

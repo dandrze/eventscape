@@ -66,7 +66,6 @@ function DesignBlockToolbar(props) {
 	};
 
 	const handleConfirmDelete = () => {
-		console.log(props.sectionIndex);
 		props.deleteSection(props.sectionIndex);
 	};
 
