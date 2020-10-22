@@ -16,6 +16,7 @@ import {
 	descriptionRegistrationModel,
 	titleTimeModel,
 	streamChatModel,
+	blankModel,
 } from "../components/designBlockModels";
 
 // USER ACTIONS
@@ -47,12 +48,12 @@ export const createEvent = (
 		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
 		{
 			id: Math.random(),
-			sectionHtml: heroBannerModel(title),
+			sectionHtml: heroBannerModel(title, primaryColor),
 			name: "heroBanner",
 		},
 		{
 			id: Math.random(),
-			sectionHtml: descriptionRegistrationModel(startDate),
+			sectionHtml: descriptionRegistrationModel(startDate, endDate),
 			name: "body",
 		},
 	];
@@ -63,11 +64,6 @@ export const createEvent = (
 			sectionHtml: logoHeaderRightModel(),
 			name: "bannerRight",
 		},
-		/*{
-			id: Math.random(),
-			sectionHtml: titleTimeModel(title, startDate, endDate),
-			name: "titleTime",
-		},*/
 		{
 			id: Math.random(),
 			sectionHtml: titleTimeModel(title, startDate, endDate),
@@ -77,6 +73,11 @@ export const createEvent = (
 			id: Math.random(),
 			sectionHtml: streamChatModel(),
 			name: "streamChat",
+		},
+		{
+			id: Math.random(),
+			sectionHtml: blankModel(),
+			name: "blankModel",
 		},
 	];
 

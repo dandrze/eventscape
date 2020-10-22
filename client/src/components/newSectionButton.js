@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import PlusDropIcon from "../icons/plus-drop.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from '@material-ui/core/styles';

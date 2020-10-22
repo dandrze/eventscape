@@ -2,21 +2,90 @@ import { format } from 'date-fns-tz';
 import { isSameDay } from 'date-fns';
 
 
-export const heroBannerModel = (eventTitle = "default") => {
+/*export const heroBannerModelV1 = (eventTitle = "default") => {
     return `
     <div contenteditable="false">
-        <div style="position: relative; text-align: center; overflow: hidden;">
+        <div contenteditable="true" style="position: relative; text-align: center; overflow: hidden;">
             <img src="https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg" style="width: 100%; margin: 0; padding: 0;" class="fr-fic fr-dib">
             <div style="position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);"
             >
-            <div contenteditable="false">
-                <span style="color: white; font-size: 8vw; line-height: 1;">${eventTitle}</span>
+            <div>
+                <span contenteditable="true" style="color: white; font-size: 8vw; line-height: 1;">${eventTitle}</span>
             </div>
         </div>
     </div>
+`;
+};*/
+
+/*export const heroBannerModelV2 = (eventTitle = "default", primaryColor) => {
+    console.log('primary color: ' + primaryColor)
+
+    function hexToRGBA(hex, alpha) {
+        var r = parseInt(hex.slice(1, 3), 16),
+            g = parseInt(hex.slice(3, 5), 16),
+            b = parseInt(hex.slice(5, 7), 16);
+    
+        if (alpha) {
+            return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
+        } else {
+            return "rgb(" + r + ", " + g + ", " + b + ")";
+        }
+    }    
+    
+    return `
+    <div contenteditable="false">
+            <div class="hero-image">
+                <span contenteditable="true" style="color: white; font-size: 8vw; line-height: 1; margin: 300px auto 300px auto" >${eventTitle}</span>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        .hero-image {
+            background-image: 
+                linear-gradient(
+                    ${hexToRGBA('#521256', 0.45)}, 
+                    ${hexToRGBA('#521256', 0.45)}
+                ),
+                url("https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg");
+            background-color: #cccccc; /* Used if the image is unavailable */
+            /*background-position: center;
+            background-repeat: no-repeat;
+            background-size: cover;
+            width: 100%;
+            padding-top: 8vw;
+            padding-bottom: 8vw;
+            padding-right: 3%;
+            padding-left: 3%;
+        }
+    </style>
+`;
+};*/
+
+export const heroBannerModel = (eventTitle = "default", primaryColor) => {
+    console.log('primary color: ' + primaryColor)
+    
+    return `
+    <div style="overflow: hidden;" contenteditable="false">
+        <div class="title" >${eventTitle}</div>
+    </div>
+
+    <style>
+        .title {
+            color: #B0281C;
+            padding: 0;
+            font-size: 6vw;
+            line-height: 1;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 3%;
+            margin-bottom: 3%;
+            text-align: center;
+        }
+    </style>
 `;
 };
 
@@ -40,17 +109,20 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
-export const descriptionRegistrationModel = () => {
+export const descriptionRegistrationModel = (startTime, endTime) => {
+    const endDifferentDay = (isSameDay(startTime, endTime)) ? '' : format(endTime, 'MMMM dd, yyyy ');
+    const timeFormatted = format(startTime, 'MMMM dd, yyyy h:mm a - ') + endDifferentDay + format(endTime, 'h:mm a zzz');
+
 	return `
-    <div style="overflow: hidden;">
+    <div style="overflow: hidden;" contenteditable="false">
         <section class="container">
             <div class="one">
-                <p><strong><span style="font-size: 30px; text-align: left;">February 8, 2021 7:00 PM - 9:00 PM</span></strong></p>
-                <p style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">${timeFormatted}</span></strong></p>
+                <p contenteditable="true" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
             <div class="two">
                 <span>Register Now</span>
-                <form contenteditable="true">
+                <form>
                     <br>
                     <label for="fname">First name:</label>
                     <input type="text" id="fname" name="fname"><br>
@@ -114,16 +186,15 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
 
 	return `
         <div style="overflow: hidden;" contenteditable="false">
-            <div style="margin: 0 2% 0 2%;">
+            <div style="margin: 0 1rem 0 1rem;">
                 <div class="title">${eventTitle}</div>
-                <div class="time">${timeFormatted}</div>
             </div>
         </div>
         
         <style>
             .title {
                 font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
-                font-size: 4vw;
+                font-size: 3vw;
                 color: black;
                 text-align: left;
                 line-height: 1.5;
@@ -239,6 +310,16 @@ export const streamChatModel = () => {
             }
         </style>
 
+    `;
+};
+
+export const blankModel = () => {
+	return `
+    <div style="overflow: hidden;" contenteditable="false">
+        <div style="margin: 1rem; display: block;">
+            <div contenteditable="true" style="text-align: left;"></div>
+        </div>
+    </div>
     `;
 };
 
