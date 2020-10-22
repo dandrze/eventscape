@@ -183,7 +183,8 @@ export const addSection = (prevIndex, sectionHtml, sectionName) => {
 };
 
 export const deleteSection = (index) => {
-	return { type: DELETE_SECTION, payload: index };
+	console.log(index);
+	return { type: DELETE_SECTION, payload: { index } };
 };
 
 export const moveSection = (index, offset) => {
