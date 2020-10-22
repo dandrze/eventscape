@@ -5,6 +5,7 @@ import {
 	ADD_SECTION,
 	UPDATE_SECTION,
 	MOVE_SECTION,
+	DELETE_SECTION,
 } from "../actions/types";
 
 export default function (state = [], action) {
@@ -24,6 +25,8 @@ export default function (state = [], action) {
 				action.payload.model,
 				...state.slice(action.payload.index),
 			];
+		case DELETE_SECTION:
+			return state.filter((item, index) => index !== action.payload.index);
 		case MOVE_SECTION:
 			const newState = state.slice();
 			newState[action.payload.index] =

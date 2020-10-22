@@ -118,13 +118,13 @@ function DesignBlockToolbar(props) {
 						<DeleteOutlined />
 					</div>
 				</Tooltip>
-				{showStreamSettings === "true" && (
+				{showStreamSettings ? (
 					<Tooltip title="Stream Settings">
 						<div className="toolbar_button" onClick={handleOpenStreamSettings}>
 							<SettingsIcon />
 						</div>
 					</Tooltip>
-				)}
+				) : null}
 			</div>
 
 			{/* Confirm Delete */}
