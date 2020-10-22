@@ -1,7 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import AddCircleIcon from "@material-ui/icons/AddCircle";
 import PlusDropIcon from "../icons/plus-drop.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,7 +13,7 @@ import Grid from '@material-ui/core/Grid';
 import logoHeader from './designBlockThumbnails/logoHeader.png';
 import heroBanner from './designBlockThumbnails/heroBanner.png';
 import descriptionRegistration from './designBlockThumbnails/descriptionRegistration.png';
-import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from './regModel'
+import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from './designBlockModels'
 
 const useStyles = makeStyles((theme) => ({
 	root: {
