@@ -1,6 +1,27 @@
 const express = require("express");
 const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+const passport = require("passport");
+
+require("./models/Event.js");
+
 const authRoutes = require("./routes/authRoutes");
+const eventRoutes = require("./routes/eventRoutes");
+
+// mongoDB
+const mongoUri =
+	"mongodb+srv://admin:Shaw2020@cluster0.9wjqj.mongodb.net/dev?retryWrites=true&w=majority";
+mongoose.connect(mongoUri, {
+	useNewUrlParser: true,
+	useCreateIndex: true,
+});
+mongoose.connection.on("connected", () => {
+	console.log("connected to mongo instance");
+});
+
+mongoose.connection.on("error", (err) => {
+	console.error("Error connecting to mongo", err);
+});
 
 const app = express();
 
@@ -18,7 +39,10 @@ const checkSubDomain = (req, res, next) => {
 
 // routes
 app.use(bodyParser.json());
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(authRoutes);
+app.use(eventRoutes);
 
 if (process.env.NODE_ENV == "production") {
 	// if we don't recognize the route, look into the client/build folder
@@ -34,6 +58,7 @@ if (process.env.NODE_ENV == "production") {
 			// render home page
 			res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 		} else {
+			// there is a subdomain, so point to the event page
 			res.send(req.subdomain);
 		}
 	});
