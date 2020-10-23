@@ -3,11 +3,12 @@ import {
 	SIGNIN_USER,
 	FETCH_EVENTS,
 	FETCH_PAGE_MODEL,
-	CREATE_PAGE_MODEL,
 	ADD_SECTION,
 	UPDATE_SECTION,
 	CREATE_EVENT,
 	CHANGE_PAGE_EDITOR,
+	SAVE_REG_MODEL,
+	SAVE_EVENT_MODEL,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -146,6 +147,33 @@ export const addSection = (prevIndex, sectionHtml, sectionName) => {
 	};
 
 	return { type: ADD_SECTION, payload };
+};
+
+export const saveModel = () => async (dispatch, getState) => {
+	// copy the model over to the event object
+	await dispatch(localSaveModel());
+
+	// call the new event object
+	const event = getState().event;
+
+	// save the new event object to database
+	const res = await axios.post("/api/events", event);
+
+	console.log(res);
+};
+
+export const localSaveModel = () => (dispatch, getState) => {
+	const currentPage = getState().settings.nowEditingPage;
+	const currentModel = getState().model;
+
+	switch (currentPage) {
+		case "registration":
+			dispatch({ type: SAVE_REG_MODEL, payload: currentModel });
+			break;
+		case "event":
+			dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
+			break;
+	}
 };
 
 // SETTINGS ACTIONS
