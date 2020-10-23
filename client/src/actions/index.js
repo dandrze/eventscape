@@ -107,25 +107,6 @@ export const fetchEvents = () => async (dispatch) => {
 
 // MODEL ACTIONS
 
-export const createModel = (eventTitle, color, eventStartDate) => {
-	// call the api and return the model in json
-	const data = [
-		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
-		{
-			id: Math.random(),
-			sectionHtml: heroBannerModel(eventTitle),
-			name: "heroBanner",
-		},
-		{
-			id: Math.random(),
-			sectionHtml: descriptionRegistrationModel(eventStartDate),
-			name: "body",
-		},
-	];
-
-	return { type: CREATE_PAGE_MODEL, payload: data };
-};
-
 export const fetchPageModel = () => (dispatch, getState) => {
 	let model = [];
 

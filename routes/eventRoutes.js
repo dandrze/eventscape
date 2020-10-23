@@ -57,6 +57,8 @@ router.post("/api/events", async (req, res) => {
 router.get("/api/events", async (req, res) => {
 	const events = await Event.find({ user: "tester" });
 
+	console.log("api called");
+
 	res.send(events);
 });
 

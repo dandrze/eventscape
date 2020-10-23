@@ -18,6 +18,7 @@ class PageEditor extends Component {
 
 	componentDidMount() {
 		this.props.fetchPageModel();
+		console.log(this.props.key);
 	}
 
 	render() {
