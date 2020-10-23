@@ -3,6 +3,8 @@ import {
 	CREATE_EVENT,
 	UPDATE_REG_PAGE_MODEL,
 	ADD_SECTION_REG_PAGE,
+	SAVE_REG_MODEL,
+	SAVE_EVENT_MODEL,
 } from "../actions/types";
 
 /*
@@ -32,43 +34,31 @@ event = [
 export default function (state = [], action) {
 	switch (action.type) {
 		case CREATE_EVENT:
-			return [...state, action.payload];
+			// commented out for now as we only have one event
+			//return [...state, action.payload];
+			return [action.payload];
 		case FETCH_EVENTS:
 			return action.payload;
-		case UPDATE_REG_PAGE_MODEL:
+		case SAVE_REG_MODEL:
 			return state.map((event, index) => {
-				if (event.id === action.payload.eventId) {
+				// the index search will be used to save the model to relevant event
+				if (index === 0) {
 					return {
 						...event,
-						regPageModel: event.regPageModel.map((section, index) => {
-							if (index === action.payload.index) {
-								return { ...section, sectionHtml: action.payload.sectionHtml };
-							}
-							return section;
-						}),
+						regPageModel: action.payload,
 					};
 				}
-				return event;
 			});
-		case ADD_SECTION_REG_PAGE:
+		case SAVE_EVENT_MODEL:
 			return state.map((event, index) => {
-				if (event.id === action.payload.eventId) {
+				// the index search will be used to save the model to relevant event
+				if (index === 0) {
 					return {
 						...event,
-						regPageModel: [
-							...event.regPageModel.slice(0, action.payload.index),
-							action.payload.model,
-							...event.regPageModel.slice(action.payload.index),
-						],
+						eventPageModel: action.payload,
 					};
 				}
-				return event;
 			});
-			return [
-				...state.slice(0, action.payload.index),
-				action.payload.model,
-				...state.slice(action.payload.index),
-			];
 		default:
 			return state;
 	}

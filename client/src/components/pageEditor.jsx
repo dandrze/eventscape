@@ -18,6 +18,7 @@ class PageEditor extends Component {
 
 	componentDidMount() {
 		this.props.fetchPageModel();
+		console.log(this.props.key);
 	}
 
 	render() {
@@ -35,7 +36,7 @@ class PageEditor extends Component {
 								Preview Page As Guest
 							</button>
 						</Link>
-						<button className="Button1" id="save">
+						<button className="Button1" id="save" onClick={this.props.saveModel}>
 							Save
 						</button>
 						<button className="Button1" id="publish">
