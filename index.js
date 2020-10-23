@@ -41,25 +41,10 @@ const checkSubDomain = (req, res, next) => {
 
 // routes
 app.use(bodyParser.json());
-<<<<<<< HEAD
-//app.use(authRoutes);
-
-app.get("/", (req, res) => {
-	var domain = req.get("host").match(/\w+/);
-
-	console.log(domain);
-	res.send("hello");
-
-	/*if (domain)
-       var subdomain = domain[0]; // Use "subdomain"
-    */
-});
-=======
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(authRoutes);
 app.use(eventRoutes);
->>>>>>> subdomain
 
 if (process.env.NODE_ENV == "production") {
 	// if we don't recognize the route, look into the client/build folder
