@@ -181,6 +181,8 @@ export const deleteSection = (index) => {
 
 export const moveSection = (index, offset) => {
 	return { type: MOVE_SECTION, payload: { index, offset } };
+};
+
 export const saveModel = () => async (dispatch, getState) => {
 	// copy the model over to the event object
 	await dispatch(localSaveModel());
