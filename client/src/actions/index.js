@@ -61,6 +61,12 @@ export const createEvent = (
 			name: "body",
 			showStreamSettings: false,
 		},
+		{
+			id: Math.random(),
+			sectionHtml: streamChatModel(),
+			name: "streamChat",
+			showStreamSettings: true,
+		},
 	];
 
 	const eventPageModel = [

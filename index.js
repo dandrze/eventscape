@@ -3,6 +3,10 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
 
+//Socket.io:
+const http = require('http').createServer(express);
+const io = require('socket.io')(http);
+
 require("./models/Event.js");
 
 const authRoutes = require("./routes/authRoutes");
@@ -69,4 +73,18 @@ if (process.env.NODE_ENV == "production") {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log("listening on port " + PORT);
+});
+
+// Socket.io
+
+app.get('/', (req, res) => {
+	res.sendFile(__dirname + '/chatTest.html');
+  });
+
+io.on('connection', (socket) => {
+	console.log('a user connected');
+  });
+
+http.listen(3001, () => {
+	console.log('listening on *:3001');
 });
