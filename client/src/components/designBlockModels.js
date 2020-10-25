@@ -227,7 +227,7 @@ export const streamChatModel = () => {
                             <ul id="messages">
                                 <li id="message">
                                     <span class="username">Kevin</span>
-                                    <span class="messageBody">Test message</span>
+                                    <span class="messageBody">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
                                     <span class="sendTime">2:51 pm</span>
                                 </li>
                                 <li id="message">
@@ -302,7 +302,9 @@ export const streamChatModel = () => {
                                 </li>
                             </ul>
                         </div>
-                        <input class="inputMessage" placeholder="Type here..."/>
+                        <div class="inputMessageContainer">
+                            <input class="inputMessage" placeholder="Type a message..."/>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -334,7 +336,7 @@ export const streamChatModel = () => {
                 flex: 1 0 240px;
                 max-width: 100%;
                 overflow: hidden;
-
+                max-height: 500px;
             }
 
             .video-responsive{
@@ -366,13 +368,13 @@ export const streamChatModel = () => {
 
             .chatArea {
                 height: 100%;
-                padding-bottom: 60px;
+                padding-bottom: 54px;
             }
 
             #messages { 
                 margin: 0;
-                height: 100vh;
-                overflow-y: scroll;
+                height: 100%;
+                overflow-y: scroll; 
                 padding: 10px 20px 10px 20px;
                 flex-wrap: nowrap;
                 flex-direction: column;
@@ -380,19 +382,18 @@ export const streamChatModel = () => {
             }
 
             #message {
-                margin-top: 2px;
+                margin-top: 0px;
                 flex-wrap: wrap;
                 flex-direction: column;
                 display: flex;
                 margin-right: auto;
-
             }
 
             .messageBody {
                 border-radius: 17px;
-                padding: 10px 10px;
+                padding: 8px;
                 position: relative;
-                background-color: #e6e5eb;
+                background-color: #EFEFEF;
                 font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
                 font-size: 14px;
                 white-space: normal;
@@ -420,16 +421,29 @@ export const streamChatModel = () => {
                 padding: 10px; 
             }
 
-            .inputMessage {
-                border: 10px solid #000;
-                bottom: 0;
-                height: 60px;
-                outline: none;
-                padding-left: 10px;
+            .inputMessageContainer {
+                background-color: #EFEFEF;
                 position: absolute;
                 left: 0;
                 right: 0;
+                bottom: 0;
+                padding: 10px 10px 10px 10px;
+                flex-wrap: wrap;
+                flex-direction: column;
+                display: flex;
+            }
+
+            .inputMessage {
+                border: none;
+                border-radius: 17px;
+                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-size: 14px;
+                padding: 10px;
+                width: 100%;
+                white-space: normal;
                 margin: 0;
+                position: relative;
+                text-align: left;
             }
 
             .message.typing .messageBody {
@@ -457,6 +471,12 @@ export const streamChatModel = () => {
             }
               
         </style>
+
+        <script>
+            var divHeight = $('.one').height(); 
+            console.log('divheight: ' + divHeight);
+            $('.style_left_side_content').css('max-height', divHeight+'0px');
+        </script>
 
     `;
 };
