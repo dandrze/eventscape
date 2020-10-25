@@ -1,0 +1,44 @@
+.videoBackground {
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+}
+
+.videoBackgroundOverlay::after {
+    object-fit: cover;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    content: '';
+
+    /* Any overlay color that you want, here I use black with 25% opacity */
+    background-color: rgba(50,50,50,0.85);
+}
+
+.viewportHeader {
+    position: relative;
+    height: 100vh;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.landingHeader {
+    font-size: 50px;
+    color: white;
+    line-height: 1;
+    margin-right: 5px;
+    margin-left: 5px;
+}
+
+.CTAButton {
+    transform: scale(1.25);
+    margin: 40px;
+}

@@ -222,12 +222,90 @@ export const streamChatModel = () => {
                     </div>
                 </div>
                 <div class="two" contenteditable="false">
-                    <ul>
-                        <li class="messages-li">message 1</li><br></br>
-                        <div class="name">Dan Hernden</div><br></br>
-                        <li class="messages-li">message 2</li><br></br>
-                        <li class="messages-li">message 3</li><br></br>
-                    </ul>
+                    <div class="chat"> 
+                        <div class="chatArea">
+                            <ul id="messages">
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                                <li id="message">
+                                    <span class="username">Kevin</span>
+                                    <span class="messageBody">Test message</span>
+                                    <span class="sendTime">2:51 pm</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="inputMessageContainer">
+                            <input class="inputMessage" placeholder="Type a message..."/>
+                        </div>
+                    </div>
                 </div>
             </section>
 
@@ -258,17 +336,8 @@ export const streamChatModel = () => {
                 flex: 1 0 240px;
                 max-width: 100%;
                 overflow: hidden;
+                max-height: 500px;
             }
-
-            /*@media (min-width: 600px) {
-                .container { 
-                    grid-template-columns: repeat(3, 1fr); 
-                }
-
-                .one {
-                    grid-column: auto / span 2;
-                }
-            }*/
 
             .video-responsive{
                 overflow:hidden;
@@ -276,6 +345,7 @@ export const streamChatModel = () => {
                 position:relative;
                 height:0;
             }
+
             #video-responsive-iframe{
                 left:0;
                 top:0;
@@ -283,32 +353,130 @@ export const streamChatModel = () => {
                 width:100%;
                 position:absolute;
             }
-            .name {
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
-                font-size: 10px;
-                color: grey;
-                display: inline-block;
-                padding: 0px 0px;
-                position: relative;
-                margin: 0 10px;
-                max-width: 80%;
-                float: left;
+
+            ul {
+                list-style: none;
+                word-wrap: break-word;
             }
-            .messages-li {
-                border-radius: 17px;
-                background-color: blue;
-                display: inline-block;
-                padding: 10px 10px;
+
+            .chat {
                 position: relative;
-                margin: 10px;
-                max-width: 80%;
-                background-color: #e6e5eb;
-                float: left;
+                width: 100%;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            .chatArea {
+                height: 100%;
+                padding-bottom: 54px;
+            }
+
+            #messages { 
+                margin: 0;
+                height: 100%;
+                overflow-y: scroll; 
+                padding: 10px 20px 10px 20px;
+                flex-wrap: nowrap;
+                flex-direction: column;
+                display: flex;
+            }
+
+            #message {
+                margin-top: 0px;
+                flex-wrap: wrap;
+                flex-direction: column;
+                display: flex;
+                margin-right: auto;
+            }
+
+            .messageBody {
+                border-radius: 17px;
+                padding: 8px;
+                position: relative;
+                background-color: #EFEFEF;
                 font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
                 font-size: 14px;
                 white-space: normal;
+                text-align: left;
             }
+
+            form {
+                background: #000; 
+                padding: 3px; 
+                bottom: 0; 
+                width: 100%; 
+            }
+
+            form input { 
+                border: 0; 
+                padding: 10px; 
+                width: 90%; 
+                margin-right: 0.5%; 
+            }
+
+            form button { 
+                width: 9%; 
+                background: rgb(130, 224, 255); 
+                border: none; 
+                padding: 10px; 
+            }
+
+            .inputMessageContainer {
+                background-color: #EFEFEF;
+                position: absolute;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                padding: 10px 10px 10px 10px;
+                flex-wrap: wrap;
+                flex-direction: column;
+                display: flex;
+            }
+
+            .inputMessage {
+                border: none;
+                border-radius: 17px;
+                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-size: 14px;
+                padding: 10px;
+                width: 100%;
+                white-space: normal;
+                margin: 0;
+                position: relative;
+                text-align: left;
+            }
+
+            .message.typing .messageBody {
+                color: gray;
+            }
+              
+            .username {
+                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-size: 10px;
+                color: grey;
+                padding: 0 0 1px 0;
+                position: relative;
+                margin: 0 0;
+                text-align: left;
+            }
+
+            .sendTime {
+                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-size: 10px;
+                color: grey;
+                padding: 0 0 1px 0;
+                position: relative;
+                margin: 0 0;
+                text-align: right;
+            }
+              
         </style>
+
+        <script>
+            var divHeight = $('.one').height(); 
+            console.log('divheight: ' + divHeight);
+            $('.style_left_side_content').css('max-height', divHeight+'0px');
+        </script>
 
     `;
 };
