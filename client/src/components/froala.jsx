@@ -45,7 +45,7 @@ class Froala extends Component {
 
 
 		this.state = {
-			model: props.model[props.sectionIndex].sectionHtml,
+			model: props.model.sections[props.sectionIndex].sectionHtml,
 			index: props.sectionIndex
 		};
 	}

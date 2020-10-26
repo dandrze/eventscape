@@ -1,4 +1,6 @@
 import axios from "axios";
+import { toast } from "react-toastify";
+
 import {
 	SIGNIN_USER,
 	FETCH_EVENTS,
@@ -11,6 +13,7 @@ import {
 	DELETE_SECTION,
 	SAVE_REG_MODEL,
 	SAVE_EVENT_MODEL,
+	MODEL_ISSAVED,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -196,24 +199,29 @@ export const saveModel = () => async (dispatch, getState) => {
 	// call the new event object
 	// call the first event for now
 	const event = getState().event[0];
-	console.log(event);
 
 	// save the new event object to database
 	const res = await axios.post("/api/events", event);
 
-	console.log(res);
+	if (res.status === 200) {
+		toast.success("Page successfully saved");
+	} else {
+		toast.error("Error when saving: " + res.statusText);
+	}
 };
 
 export const localSaveModel = () => (dispatch, getState) => {
 	const currentPage = getState().settings.nowEditingPage;
-	const currentModel = getState().model;
+	const currentModel = getState().model.sections;
 
 	switch (currentPage) {
 		case "registration":
 			dispatch({ type: SAVE_REG_MODEL, payload: currentModel });
+			dispatch({ type: MODEL_ISSAVED });
 			break;
 		case "event":
 			dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
+			dispatch({ type: MODEL_ISSAVED });
 			break;
 	}
 };

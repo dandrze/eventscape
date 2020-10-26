@@ -37,14 +37,15 @@ class RegPageSectionEditor extends React.Component {
 					{this.state.isHovering && (
 						<DesignBlockToolbar
 							showStreamSettings={
-								this.props.model[this.props.sectionIndex].showStreamSettings
+								this.props.model.sections[this.props.sectionIndex]
+									.showStreamSettings
 							}
 							sectionIndex={this.props.sectionIndex}
-							maxIndex={this.props.model.length}
+							maxIndex={this.props.model.sections.length}
 						/>
 					)}
 					<Froala
-						key={this.props.model}
+						key={this.props.model.sections}
 						sectionIndex={this.props.sectionIndex}
 					/>
 				</div>

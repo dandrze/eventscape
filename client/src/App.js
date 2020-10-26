@@ -1,5 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -14,13 +16,14 @@ import Communication from "./pages/communication";
 import EmailEditor from "./pages/emailEditor";
 import Registrations from "./pages/registrations";
 import Analytics from "./pages/analytics";
-import Preview from "./pages/preview"
+import Preview from "./pages/preview";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 
 function App() {
 	return (
 		<div className="App">
+			<ToastContainer position="top-right" autoClose={3000} />
 			<header className="App-header">
 				<Route exact path="/" component={Landing} />
 				<Route exact path="/Dashboard" component={Dashboard} />
