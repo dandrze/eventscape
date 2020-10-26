@@ -30,6 +30,7 @@
     "react-froala-wysiwyg": "^3.2.2-1",
     "react-html-parser": "^2.0.2",
     "react-jvectormap": "0.0.16",
+    "react-popup": "^0.10.0",
     "react-redux": "^7.2.1",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",

@@ -1,41 +1,53 @@
 import {
 	UPDATE_PAGE_MODEL,
 	FETCH_PAGE_MODEL,
-	CREATE_PAGE_MODEL,
 	ADD_SECTION,
 	UPDATE_SECTION,
 	MOVE_SECTION,
 	DELETE_SECTION,
+	MODEL_ISSAVED,
 } from "../actions/types";
 
-export default function (state = [], action) {
+export default function (state = { isUnsaved: false, sections: [] }, action) {
 	switch (action.type) {
-		case CREATE_PAGE_MODEL:
-			return action.payload;
 		case UPDATE_SECTION:
-			return state.map((section, index) => {
-				if (index === action.payload.index) {
-					return { ...section, sectionHtml: action.payload.sectionHtml };
-				}
-				return section;
-			});
+			return {
+				...state,
+				isUnsaved: true,
+				sections: state.sections.map((section, index) => {
+					if (index === action.payload.index) {
+						return { ...section, sectionHtml: action.payload.sectionHtml };
+					}
+					return section;
+				}),
+			};
 		case ADD_SECTION:
-			return [
-				...state.slice(0, action.payload.index),
-				action.payload.model,
-				...state.slice(action.payload.index),
-			];
+			return {
+				...state,
+				isUnsaved: true,
+				sections: [
+					...state.sections.slice(0, action.payload.index),
+					action.payload.model,
+					...state.sections.slice(action.payload.index),
+				],
+			};
 		case DELETE_SECTION:
-			return state.filter((item, index) => index !== action.payload.index);
+			return {
+				...state,
+				isUnsaved: true,
+				sections: state.filter((item, index) => index !== action.payload.index),
+			};
 		case MOVE_SECTION:
-			const newState = state.slice();
-			newState[action.payload.index] =
-				state[action.payload.index + action.payload.offset];
-			newState[action.payload.index + action.payload.offset] =
-				state[action.payload.index];
-			return newState;
+			const newSections = state.sections.slice();
+			newSections[action.payload.index] =
+				state.sections[action.payload.index + action.payload.offset];
+			newSections[action.payload.index + action.payload.offset] =
+				state.sections[action.payload.index];
+			return { isUnsaved: true, sections: newSections };
 		case FETCH_PAGE_MODEL:
-			return action.payload;
+			return { isUnsaved: false, sections: action.payload };
+		case MODEL_ISSAVED:
+			return { ...state, isUnsaved: false };
 		default:
 			return state;
 	}

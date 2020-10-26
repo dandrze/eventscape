@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
+import { Prompt } from 'react-router'
 
 import "./pageEditor.css";
 import * as actions from "../actions";
@@ -21,9 +22,14 @@ class PageEditor extends Component {
 		console.log(this.props.key);
 	}
 
+
 	render() {
 		return (
 			<div>
+				<Prompt
+				when={this.props.model.isUnsaved}
+				message='You have unsaved changes, are you sure you want to leave?'
+				/>
 				<Link to="./Design" id="cancelBar">
 					<Tooltip title="Close Editor">
 						<img src={Cancel} id="cancelIcon" height="24px"></img>
@@ -46,7 +52,7 @@ class PageEditor extends Component {
 					</div>
 					<div id="designBoard">
 					<ul>
-						{this.props.model.map(function (sectionModel,  index) {
+						{this.props.model.sections.map(function (sectionModel,  index) {
 							return (
 								<li key={sectionModel.id}>
 									<PageSectionEditor model={sectionModel} sectionIndex={index} />

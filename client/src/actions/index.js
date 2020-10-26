@@ -11,6 +11,7 @@ import {
 	DELETE_SECTION,
 	SAVE_REG_MODEL,
 	SAVE_EVENT_MODEL,
+	MODEL_ISSAVED,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -211,9 +212,11 @@ export const localSaveModel = () => (dispatch, getState) => {
 	switch (currentPage) {
 		case "registration":
 			dispatch({ type: SAVE_REG_MODEL, payload: currentModel });
+			dispatch({ type: MODEL_ISSAVED, payload: currentModel });
 			break;
 		case "event":
 			dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
+			dispatch({ type: MODEL_ISSAVED, payload: currentModel });
 			break;
 	}
 };
