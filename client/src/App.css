@@ -136,7 +136,7 @@ label {
 
 .Button1:hover {
 	color: var(--main-color);
-	background-color: white;
+	background-color: transparent;
 }
 
 .Button1:focus,
