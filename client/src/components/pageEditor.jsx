@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Prompt } from 'react-router'
+import { ToastContainer} from 'react-toastify';
 
 import "./pageEditor.css";
 import * as actions from "../actions";
@@ -69,6 +70,7 @@ class PageEditor extends Component {
 					</div>
 				</div>
 			</div>
+			
 		);
 	}
 }
