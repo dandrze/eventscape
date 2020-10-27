@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const Event = mongoose.model("events");
 const router = express.Router();
 
-router.post("/api/events", async (req, res) => {
+router.post("/api/event", async (req, res) => {
 	const {
 		title,
 		link,
@@ -54,8 +54,8 @@ router.post("/api/events", async (req, res) => {
 	res.status(200).send();
 });
 
-router.get("/api/events", async (req, res) => {
-	const events = await Event.find({ user: "tester" });
+router.get("/api/event", async (req, res) => {
+	const events = await Event.findOne({ user: "tester" });
 
 	console.log("api called");
 

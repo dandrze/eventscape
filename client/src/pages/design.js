@@ -7,9 +7,9 @@ import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
 
 class Design extends React.Component {
-	componentWillMount() {
-		if (this.props.event.length == 0) {
-			this.props.fetchEvents();
+	componentDidMount() {
+		if (this.props.event.loaded === false) {
+			this.props.fetchEvent();
 		}
 	}
 
@@ -19,10 +19,10 @@ class Design extends React.Component {
 				<NavBar3
 					displaySideNav="true"
 					content={
-						this.props.event.length === 0 ? (
-							<CircularProgress />
-						) : (
+						this.props.event.loaded ? (
 							<PageEditor key={this.props.event} />
+						) : (
+							<CircularProgress />
 						)
 					}
 				/>

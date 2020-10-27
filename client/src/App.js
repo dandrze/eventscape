@@ -17,10 +17,25 @@ import EmailEditor from "./pages/emailEditor";
 import Registrations from "./pages/registrations";
 import Analytics from "./pages/analytics";
 import Preview from "./pages/preview";
+import Published from "./pages/published";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 
 function App() {
+	const path = window.location.host.split(".");
+
+	console.log(path[0]);
+
+	if (path.length === 2 && path[0] !== "www") {
+		return (
+			<div className="App">
+				<header className="App-header">
+					<Published subdomain={path[0]} />
+				</header>
+			</div>
+		);
+	}
+
 	return (
 		<div className="App">
 			<ToastContainer position="top-right" autoClose={3000} />

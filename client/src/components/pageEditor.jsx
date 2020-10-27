@@ -76,7 +76,7 @@ class PageEditor extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return { model: state.model };
+	return { model: state.model, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(PageEditor);
