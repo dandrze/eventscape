@@ -27,18 +27,6 @@ mongoose.connection.on("error", (err) => {
 const app = express();
 const router = express.Router();
 
-// middleware to catch subdomain
-const checkSubDomain = (req, res, next) => {
-	if (!req.subdomains.length || req.subdomains.slice(-1)[0] === "www")
-		return next();
-	// otherwise we have subdomain here
-	var subdomain = req.subdomains.slice(-1)[0];
-	// keep it
-	req.subdomain = subdomain;
-	console.log(subdomain);
-	next();
-};
-
 // routes
 app.use(bodyParser.json());
 app.use(passport.initialize());
@@ -61,14 +49,7 @@ if (process.env.NODE_ENV == "production") {
 	// if we don't regonize the route, serve the html document
 	const path = require("path");
 	app.get("*", checkSubDomain, (req, res) => {
-		// no subdomain
-		if (!req.subdomain) {
-			// render home page
-			res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-		} else {
-			// there is a subdomain, so point to the event page
-			res.send(req.subdomain);
-		}
+		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 	});
 }
 

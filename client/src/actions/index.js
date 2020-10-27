@@ -3,7 +3,7 @@ import { toast } from "react-toastify";
 
 import {
 	SIGNIN_USER,
-	FETCH_EVENTS,
+	FETCH_EVENT,
 	FETCH_PAGE_MODEL,
 	ADD_SECTION,
 	UPDATE_SECTION,
@@ -114,7 +114,7 @@ export const createEvent = (
 		eventPageModel,
 	};
 
-	const res = await axios.post("/api/events", event);
+	const res = await axios.post("/api/event", event);
 
 	console.log(res);
 
@@ -124,16 +124,19 @@ export const createEvent = (
 	});
 };
 
-export const fetchEvents = () => async (dispatch) => {
+export const fetchEvent = () => async (dispatch) => {
 	// call the api and return the event in json
 
 	console.log("fetch events called");
 
-	const events = await axios.get("/api/events");
+	const event = await axios.get("/api/event");
+
+	console.log(event);
 
 	// if there are events, go to design page
-	if (events) {
-		dispatch({ type: FETCH_EVENTS, payload: events.data });
+	if (event) {
+		dispatch({ type: FETCH_EVENT, payload: event.data });
+		return event;
 	} else {
 		// if no events then go to create event page
 		console.log("no events");
@@ -151,10 +154,10 @@ export const fetchPageModel = () => (dispatch, getState) => {
 	try {
 		switch (getState().settings.nowEditingPage) {
 			case "registration":
-				model = getState().event[0].regPageModel;
+				model = getState().event.regPageModel;
 				break;
 			case "event":
-				model = getState().event[0].eventPageModel;
+				model = getState().event.eventPageModel;
 				break;
 		}
 	} catch {
@@ -201,7 +204,7 @@ export const saveModel = () => async (dispatch, getState) => {
 	const event = getState().event[0];
 
 	// save the new event object to database
-	const res = await axios.post("/api/events", event);
+	const res = await axios.post("/api/event", event);
 
 	if (res.status === 200) {
 		toast.success("Page successfully saved");

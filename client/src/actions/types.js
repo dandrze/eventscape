@@ -1,6 +1,6 @@
 export const SIGNIN_USER = "signin_user";
 
-export const FETCH_EVENTS = "fetch_event";
+export const FETCH_EVENT = "fetch_event";
 export const CREATE_EVENT = "create_event";
 export const SAVE_REG_MODEL = "SAVE_REG_MODEL";
 export const SAVE_EVENT_MODEL = "SAVE_EVENT_MODEL";
