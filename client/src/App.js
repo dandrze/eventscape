@@ -56,7 +56,6 @@ function App() {
 				<Route exact path="/Analytics" component={Analytics} />
 				<Route exact path="/Preview" component={Preview} />
 				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
-
 			</header>
 		</div>
 	);
