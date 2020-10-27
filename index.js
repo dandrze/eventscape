@@ -48,7 +48,7 @@ if (process.env.NODE_ENV == "production") {
 	// if there is no route in the client/build folder then:
 	// if we don't regonize the route, serve the html document
 	const path = require("path");
-	app.get("*", checkSubDomain, (req, res) => {
+	app.get("*", (req, res) => {
 		res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
 	});
 }
