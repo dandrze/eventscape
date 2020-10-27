@@ -55,11 +55,22 @@ router.post("/api/event", async (req, res) => {
 });
 
 router.get("/api/event", async (req, res) => {
-	const events = await Event.findOne({ user: "tester" });
+	const event = await Event.findOne({ user: "tester" });
 
 	console.log("api called");
 
-	res.send(events);
+	res.send(event);
+});
+
+router.get("/api/page", async (req, res) => {
+	const link = req.query.link;
+	console.log(link);
+
+	const event = await Event.findOne({ link: link });
+
+	console.log(event);
+
+	res.send(event);
 });
 
 module.exports = router;
