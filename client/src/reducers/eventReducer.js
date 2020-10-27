@@ -5,6 +5,7 @@ import {
 	ADD_SECTION_REG_PAGE,
 	SAVE_REG_MODEL,
 	SAVE_EVENT_MODEL,
+	FETCH_PUBLISHED_PAGE,
 } from "../actions/types";
 
 /*

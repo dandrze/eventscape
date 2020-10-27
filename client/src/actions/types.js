@@ -11,5 +11,6 @@ export const DELETE_SECTION = "DELETE_SECTION";
 export const MODEL_ISSAVED = "MODEL_ISSAVED";
 export const ADD_SECTION = "add_section";
 export const UPDATE_SECTION = "update_section";
+export const FETCH_PUBLISHED_PAGE = "FETCH_PUBLISHED_PAGE";
 
 export const CHANGE_PAGE_EDITOR = "CHANGE_PAGE_EDITOR";

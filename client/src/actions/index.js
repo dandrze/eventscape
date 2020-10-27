@@ -14,6 +14,7 @@ import {
 	SAVE_REG_MODEL,
 	SAVE_EVENT_MODEL,
 	MODEL_ISSAVED,
+	FETCH_PUBLISHED_PAGE,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -140,6 +141,17 @@ export const fetchEvent = () => async (dispatch) => {
 	} else {
 		// if no events then go to create event page
 		console.log("no events");
+		return null;
+	}
+};
+
+export const fetchPublishedPage = (pageLink) => async (dispatch) => {
+	const event = await axios.get("/api/page?link=" + pageLink);
+	console.log(event.data);
+	if (event) {
+		dispatch({ type: FETCH_EVENT, payload: event.data });
+		return event;
+	} else {
 		return null;
 	}
 };
