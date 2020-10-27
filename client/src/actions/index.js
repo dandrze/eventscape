@@ -213,7 +213,7 @@ export const saveModel = () => async (dispatch, getState) => {
 
 	// call the new event object
 	// call the first event for now
-	const event = getState().event[0];
+	const event = getState().event;
 
 	// save the new event object to database
 	const res = await axios.post("/api/event", event);

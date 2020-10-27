@@ -35,7 +35,9 @@ export default function (state = { isUnsaved: false, sections: [] }, action) {
 			return {
 				...state,
 				isUnsaved: true,
-				sections: state.filter((item, index) => index !== action.payload.index),
+				sections: state.sections.filter(
+					(item, index) => index !== action.payload.index
+				),
 			};
 		case MOVE_SECTION:
 			const newSections = state.sections.slice();
