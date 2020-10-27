@@ -132,11 +132,14 @@ label {
 	border-color: var(--main-color);
 	border-style: solid;
 	height: min-content;
+	transition: all .1s ease-in-out;
 }
 
 .Button1:hover {
 	color: var(--main-color);
 	background-color: transparent;
+	cursor: pointer;
+
 }
 
 .Button1:focus,
@@ -157,6 +160,7 @@ label {
 	border-color: var(--main-color);
 	border-style: solid;
 	height: min-content;
+	transition: all .1s ease-in-out;
 }
 
 .Button2:hover {
