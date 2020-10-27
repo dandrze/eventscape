@@ -24,9 +24,11 @@ import WebsiteSettings from "./pages/websiteSettings";
 function App() {
 	const path = window.location.host.split(".");
 
-	console.log(path[0]);
-
-	if (path.length === 2 && path[0] !== "www") {
+	if (
+		path[0] !== "localhost:3000" &&
+		path[0] !== "eventscape" &&
+		path[0] !== "www"
+	) {
 		return (
 			<div className="App">
 				<header className="App-header">
