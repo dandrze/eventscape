@@ -46,10 +46,6 @@ app.use(passport.session());
 app.use(authRoutes);
 app.use(eventRoutes);
 
-router.get("/loaderio-770148bdcbe788892fafba4a049219a4/", async (req, res) => {
-	res.send("loaderio-770148bdcbe788892fafba4a049219a4");
-});
-
 router.get(
 	"/loaderio-770148bdcbe788892fafba4a049219a4.txt",
 	async (req, res) => {
