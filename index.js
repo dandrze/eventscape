@@ -46,6 +46,52 @@ app.use(passport.session());
 app.use(authRoutes);
 app.use(eventRoutes);
 
+router.get("/loaderio-770148bdcbe788892fafba4a049219a4/", async (req, res) => {
+	res.send("loaderio-770148bdcbe788892fafba4a049219a4");
+});
+
+router.get(
+	"/loaderio-770148bdcbe788892fafba4a049219a4.txt",
+	async (req, res) => {
+		var text = "loaderio-770148bdcbe788892fafba4a049219a4";
+
+		res.setHeader("Content-type", "application/octet-stream");
+
+		res.setHeader(
+			"Content-disposition",
+			"attachment; filename=770148bdcbe788892fafba4a049219a4.txt"
+		);
+
+		res.send(text);
+	}
+);
+
+router.get("/loaderio-770148bdcbe788892fafba4a049219a4/", async (req, res) => {
+	var text = "loaderio-770148bdcbe788892fafba4a049219a4";
+
+	res.setHeader("Content-type", "application/octet-stream");
+
+	res.setHeader(
+		"Content-disposition",
+		"attachment; filename=770148bdcbe788892fafba4a049219a4.txt"
+	);
+
+	res.send(text);
+});
+
+router.get("/", async (req, res) => {
+	var text = "loaderio-770148bdcbe788892fafba4a049219a4";
+
+	res.setHeader("Content-type", "application/octet-stream");
+
+	res.setHeader(
+		"Content-disposition",
+		"attachment; filename=770148bdcbe788892fafba4a049219a4.txt"
+	);
+
+	res.send(text);
+});
+
 if (process.env.NODE_ENV == "production") {
 	// if we don't recognize the route, look into the client/build folder
 	// will catch things like main.js and main.css
