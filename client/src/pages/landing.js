@@ -21,9 +21,10 @@ export default class Landing extends React.Component {
 				<header className="viewportHeader">
 					<h2 className="landingHeader">Build a stunning livestream event website.</h2>
 					<h2 className="landingHeader">Get started in seconds.</h2>
-					<Link to="/Create_Account">
+					<p className="coming">Coming Winter 2021</p>
+					{/*<Link to="/Create_Account">
 						<button className="Button1 CTAButton">Create Event Website</button>
-					</Link>
+					</Link>*/}
 				</header>
 			</div>
 		);

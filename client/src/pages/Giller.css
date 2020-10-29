@@ -1,0 +1,74 @@
+
+
+.headerContainer {
+    width: 100%;
+    background-color: white;
+    display: inline-block;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+.logo {
+    height: 100px;
+    margin: 15px;
+    float: left;
+}
+
+.mainContainer {
+    background-color: #cccccc;
+    background-image: url("../Giller/2020-SGP-Longlist-Announcement-3-scaled.jpg");
+    background-size: cover;
+    background-position: center;
+    width: 100vw;
+    height: 100%;
+    background-repeat: no-repeat;
+    display: inline-block;
+    padding: 0;
+    margin: 0;
+}
+
+.videoContainer {
+    margin: 100px 10%;
+}
+
+.video-responsive{
+    overflow:hidden;
+    padding-bottom:56.25%;
+    position:relative;
+    height:0;
+}
+
+#video-responsive-iframe{
+    left:0;
+    top:0;
+    height:100%;
+    width:100%;
+    position:absolute;
+}
+
+.selectContainer {
+    position: relative;
+    float: left;
+    margin-top: 50px;
+    margin-bottom: 10px;
+}
+
+#caption-select {
+    text-align: left;
+    color: white;
+}
+
+#caption-label {
+    /* fixing flawed material UI CSS */
+    padding-left: 6px;
+    padding-right: 6px;
+    color: white;
+}
+
+.paragraph {
+    display: inline-block;
+    color: white;
+    text-align: justify;
+}
+
