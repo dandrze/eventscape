@@ -363,7 +363,7 @@ label {
 	padding: 0;
 	position: relative;
 	float: left;
-	transition: all .2s ease-in-out;
+	transition: all 0.2s ease-in-out;
 }
 
 .addSection:hover {
@@ -382,11 +382,26 @@ label {
 #designBlockThumbnail {
 	width: 100%;
 	border: 1px solid rgba(0, 0, 0, 0.05);
-	box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.20);
-	transition: all .2s ease-in-out;
+	box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.2);
+	transition: all 0.2s ease-in-out;
 }
 
 #designBlockThumbnail:hover {
 	transform: scale(1.05);
 	cursor: pointer;
+}
+
+.Toastify__toast--success {
+	background-color: #def2d5;
+	color: #5e7256;
+	border: 2px solid #bbd3b1;
+	border-radius: 3px;
+}
+
+.Toastify__close-button--success {
+	color: #5e7256;
+}
+
+.Toastify__progress-bar--success {
+	background-color: #5e7256;
 }

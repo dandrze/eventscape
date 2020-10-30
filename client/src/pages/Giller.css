@@ -3,33 +3,34 @@
 .headerContainer {
     width: 100%;
     background-color: white;
-    display: inline-block;
     overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
     margin: 0;
     padding: 0;
 }
 
 .logo {
-    height: 100px;
-    margin: 15px;
+    height: 90px;
+    margin: 10px 25px;
     float: left;
 }
 
 .mainContainer {
-    background-color: #cccccc;
-    background-image: url("../Giller/2020-SGP-Longlist-Announcement-3-scaled.jpg");
-    background-size: cover;
-    background-position: center;
-    width: 100vw;
-    height: 100%;
-    background-repeat: no-repeat;
-    display: inline-block;
+    background-color: #000000;
+    width: 100%;
     padding: 0;
     margin: 0;
+    display: flex;
+    flex: 1 1 auto;
+    position: absolute;
+    top: 110px;
+    left: 0;
 }
 
 .videoContainer {
-    margin: 100px 10%;
+    margin: 70px 10% 20px 10%;
 }
 
 .video-responsive{
@@ -50,7 +51,7 @@
 .selectContainer {
     position: relative;
     float: left;
-    margin-top: 50px;
+    margin-top: 10px;
     margin-bottom: 10px;
 }
 
@@ -64,11 +65,20 @@
     padding-left: 6px;
     padding-right: 6px;
     color: white;
+    background-color: #000000;
 }
 
-.paragraph {
+#paragraph {
     display: inline-block;
     color: white;
     text-align: justify;
+    font-family: PTSansRegular, Arial, Helvetica, sans-serif;
+    font-size: 18px;
 }
 
+.scotia-logo {
+    width: 90%;
+    max-width: 350px;
+    float: left;
+    margin-bottom: 150px;
+}

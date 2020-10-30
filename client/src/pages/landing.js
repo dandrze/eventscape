@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import "./landing.css";
+import BGVideo from "./led-wall-background-small.mp4";
 
 export default class Landing extends React.Component {
 	render() {
@@ -14,8 +15,7 @@ export default class Landing extends React.Component {
 						muted 
 						className="videoBackground"
 					>
-						<source src="https://ak.picdn.net/shutterstock/videos/19772026/preview/stock-footage-bright-colored-led-smd-video-wall-with-high-saturated-patterns-close-up-video.mp4" type="video/mp4"></source>
-						<source src="https://ak.picdn.net/shutterstock/videos/19772026/preview/stock-footage-bright-colored-led-smd-video-wall-with-high-saturated-patterns-close-up-video.webm" type="video/webm"></source>
+						<source src={BGVideo} type="video/mp4"></source>
 					</video>
 				</div>
 				<header className="viewportHeader">
