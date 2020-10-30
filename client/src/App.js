@@ -19,6 +19,7 @@ import Analytics from "./pages/analytics";
 import Preview from "./pages/preview";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
+import Giller from "./pages/Giller";
 
 function App() {
 	return (
@@ -37,6 +38,8 @@ function App() {
 				<Route exact path="/Registrations" component={Registrations} />
 				<Route exact path="/Analytics" component={Analytics} />
 				<Route exact path="/Preview" component={Preview} />
+				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
+
 			</header>
 		</div>
 	);
