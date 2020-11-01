@@ -51,7 +51,7 @@ function Giller(props) {
 				<div className="videoContainer">
 					<div className="video-responsive">
 						{captions === "off" ? (
-							<iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/SIYdaGHPTtQ?modestbranding=1;showinfo=0;rel=0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+							<iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/VvWReS1X7OI?modestbranding=1;showinfo=0;rel=0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
 						) : null}
 						{captions === "english" ? (
 							<iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/9f-8JKBGgr0?modestbranding=1;showinfo=0;rel=0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
@@ -92,3 +92,10 @@ function Giller(props) {
 }
 
 export default Giller;
+
+// no captions YT: 
+// <iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/SIYdaGHPTtQ?modestbranding=1;showinfo=0;rel=0" frameBorder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowFullScreen></iframe>
+
+// no captions Wowza backup:
+// <div id='wowza_player'></div>
+// <script id='player_embed' src='//player.cloud.wowza.com/hosted/xbbclnnk/wowza.js' type='text/javascript'></script>
