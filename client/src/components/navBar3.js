@@ -160,6 +160,10 @@ function NavBar3(props) {
 		setAnchorElDesign(null);
 	};
 
+	const handleGoToLiveSite = () => {
+		window.open(`https://${props.event.link}.eventscape.io`);
+	};
+
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
@@ -186,7 +190,7 @@ function NavBar3(props) {
 						</Tooltip>
 					)}
 					<Tooltip title="View Live Website">
-						<Button href="/">
+						<Button onClick={handleGoToLiveSite}>
 							<img
 								className="profile"
 								src={Internet_icon}
@@ -363,4 +367,8 @@ function NavBar3(props) {
 	);
 }
 
-export default connect(null, actions)(NavBar3);
+const mapStateToProps = (state) => {
+	return { event: state.event, settings: state.settings };
+};
+
+export default connect(mapStateToProps, actions)(NavBar3);
