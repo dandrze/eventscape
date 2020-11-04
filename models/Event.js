@@ -10,8 +10,14 @@ const eventSchema = new mongoose.Schema({
 	endDate: String,
 	timeZone: String,
 	primaryColor: String,
-	eventPageModel: [modelSchema],
-	regPageModel: [modelSchema],
+	savedPageModel: {
+		eventPageModel: [modelSchema],
+		regPageModel: [modelSchema],
+	},
+	livePageModel: {
+		eventPageModel: [modelSchema],
+		regPageModel: [modelSchema],
+	},
 });
 
 mongoose.model("events", eventSchema);
