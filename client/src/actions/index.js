@@ -249,7 +249,9 @@ export const localSaveModel = () => (dispatch, getState) => {
 };
 
 export const publishModel = () => async (dispatch, getState) => {
-	// copy the model over to the event object
+	// save the saved model locally
+	await dispatch(localSaveModel());
+	// save the live model locally
 	await dispatch(localPublishModel());
 
 	// call the new event object
