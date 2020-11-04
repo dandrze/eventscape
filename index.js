@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
+const secure = require("express-force-https");
 
 require("./models/Event.js");
 
@@ -26,6 +27,9 @@ mongoose.connection.on("error", (err) => {
 
 const app = express();
 const router = express.Router();
+
+// Force HTTPS
+app.use(secure);
 
 // routes
 app.use(bodyParser.json());
