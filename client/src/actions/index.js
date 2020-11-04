@@ -13,8 +13,9 @@ import {
 	DELETE_SECTION,
 	SAVE_REG_MODEL,
 	SAVE_EVENT_MODEL,
+	PUBLISH_REG_MODEL,
+	PUBLISH_EVENT_MODEL,
 	MODEL_ISSAVED,
-	FETCH_PUBLISHED_PAGE,
 } from "./types";
 import {
 	logoHeaderModel,
@@ -111,8 +112,14 @@ export const createEvent = (
 		endDate,
 		timeZone,
 		primaryColor,
-		regPageModel,
-		eventPageModel,
+		livePageModel: {
+			regPageModel,
+			eventPageModel,
+		},
+		savedPageModel: {
+			regPageModel,
+			eventPageModel,
+		},
 	};
 
 	const res = await axios.post("/api/event", event);
@@ -166,10 +173,10 @@ export const fetchPageModel = () => (dispatch, getState) => {
 	try {
 		switch (getState().settings.nowEditingPage) {
 			case "registration":
-				model = getState().event.regPageModel;
+				model = getState().event.savedPageModel.regPageModel;
 				break;
 			case "event":
-				model = getState().event.eventPageModel;
+				model = getState().event.savedPageModel.eventPageModel;
 				break;
 		}
 	} catch {
@@ -236,6 +243,40 @@ export const localSaveModel = () => (dispatch, getState) => {
 			break;
 		case "event":
 			dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
+			dispatch({ type: MODEL_ISSAVED });
+			break;
+	}
+};
+
+export const publishModel = () => async (dispatch, getState) => {
+	// copy the model over to the event object
+	await dispatch(localPublishModel());
+
+	// call the new event object
+	// call the first event for now
+	const event = getState().event;
+
+	// save the new event object to database
+	const res = await axios.post("/api/event", event);
+
+	if (res.status === 200) {
+		toast.success("Page successfully published");
+	} else {
+		toast.error("Error when saving: " + res.statusText);
+	}
+};
+
+export const localPublishModel = () => (dispatch, getState) => {
+	const currentPage = getState().settings.nowEditingPage;
+	const currentModel = getState().model.sections;
+
+	switch (currentPage) {
+		case "registration":
+			dispatch({ type: PUBLISH_REG_MODEL, payload: currentModel });
+			dispatch({ type: MODEL_ISSAVED });
+			break;
+		case "event":
+			dispatch({ type: PUBLISH_EVENT_MODEL, payload: currentModel });
 			dispatch({ type: MODEL_ISSAVED });
 			break;
 	}

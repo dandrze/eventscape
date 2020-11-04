@@ -13,8 +13,8 @@ router.post("/api/event", async (req, res) => {
 		endDate,
 		timeZone,
 		primaryColor,
-		regPageModel,
-		eventPageModel,
+		savedPageModel,
+		livePageModel,
 	} = req.body;
 
 	const existingEvent = await Event.findOne({ user: "tester" });
@@ -29,8 +29,8 @@ router.post("/api/event", async (req, res) => {
 			endDate,
 			timeZone,
 			primaryColor,
-			regPageModel,
-			eventPageModel,
+			savedPageModel,
+			livePageModel,
 		});
 
 		existingEvent.save();
@@ -44,8 +44,8 @@ router.post("/api/event", async (req, res) => {
 			endDate,
 			timeZone,
 			primaryColor,
-			regPageModel,
-			eventPageModel,
+			savedPageModel,
+			livePageModel,
 		});
 
 		newEvents.save();

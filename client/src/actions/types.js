@@ -4,6 +4,8 @@ export const FETCH_EVENT = "fetch_event";
 export const CREATE_EVENT = "create_event";
 export const SAVE_REG_MODEL = "SAVE_REG_MODEL";
 export const SAVE_EVENT_MODEL = "SAVE_EVENT_MODEL";
+export const PUBLISH_REG_MODEL = "PUBLISH_REG_MODEL";
+export const PUBLISH_EVENT_MODEL = "PUBLISH_EVENT_MODEL";
 
 export const FETCH_PAGE_MODEL = "fetch_page_model";
 export const MOVE_SECTION = "MOVE_SECTION";
