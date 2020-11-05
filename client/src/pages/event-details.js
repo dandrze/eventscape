@@ -86,12 +86,22 @@ function Event_Details(props) {
 	};
 
 	const handleSubmit = () => {
+		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
+		const startDate =
+			typeof selectedStartDate === "string"
+				? new Date(selectedStartDate)
+				: selectedStartDate;
+		const endDate =
+			typeof selectedEndDate === "string"
+				? new Date(selectedEndDate)
+				: selectedEndDate;
+
 		props.createEvent(
 			eventTitle,
 			eventLink,
 			eventCat,
-			selectedStartDate,
-			selectedEndDate,
+			startDate,
+			endDate,
 			eventTimeZone,
 			color
 		);
@@ -1002,9 +1012,15 @@ function Event_Details(props) {
 				{/* Submit */}
 				{/* remove link and replace with onSubmit */}
 				<Link to="/Design">
-					<button className="Button1" onClick={handleSubmit}>
-						Create My Event
-					</button>
+					{props.isEventUpdate ? (
+						<button className="Button1" onClick={handleSubmit}>
+							Update My Event
+						</button>
+					) : (
+						<button className="Button1" onClick={handleSubmit}>
+							Create My Event
+						</button>
+					)}
 				</Link>
 			</div>
 		</div>
