@@ -37,17 +37,29 @@ function Event_Details(props) {
 	const classes = useStyles();
 	const defaultTimeZone = momentTZ.tz.guess();
 
-	const [eventCat, setEventCat] = React.useState("");
-	const [eventTitle, setEventTitle] = React.useState("");
-	const [eventLink, setEventLink] = React.useState("");
+	const [eventCat, setEventCat] = React.useState(
+		props.eventCat ? props.eventCat : ""
+	);
+	const [eventTitle, setEventTitle] = React.useState(
+		props.eventTitle ? props.eventTitle : ""
+	);
+	const [eventLink, setEventLink] = React.useState(
+		props.eventLink ? props.eventLink : ""
+	);
 	const [selectedStartDate, setSelectedStartDate] = React.useState(
-		new Date("2020-11-18T19:00:00")
+		props.selectedStartDate
+			? props.selectedStartDate
+			: new Date("2020-11-18T19:00:00")
 	);
 	const [selectedEndDate, setSelectedEndDate] = React.useState(
-		new Date("2020-11-18T21:00:00")
+		props.selectedEndDate
+			? props.selectedEndDate
+			: new Date("2020-11-18T21:00:00")
 	);
-	const [eventTimeZone, setEventTimeZone] = React.useState(defaultTimeZone);
-	const [color, setColor] = useState("#B0281C");
+	const [eventTimeZone, setEventTimeZone] = React.useState(
+		props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
+	);
+	const [color, setColor] = useState(props.color ? props.color : "#B0281C");
 
 	const handleChangeEventCat = (event) => {
 		setEventCat(event.target.value);
@@ -74,19 +86,13 @@ function Event_Details(props) {
 	};
 
 	const handleSubmit = () => {
-		console.log(eventCat);
-		console.log(eventTitle);
-		console.log(eventLink);
-		console.log(selectedStartDate);
-		console.log(selectedEndDate);
-		console.log(color);
-
 		props.createEvent(
 			eventTitle,
 			eventLink,
 			eventCat,
 			selectedStartDate,
 			selectedEndDate,
+			eventTimeZone,
 			color
 		);
 	};
