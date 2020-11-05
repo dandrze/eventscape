@@ -109,10 +109,6 @@ export const logoHeaderRightModel = () => {
 };
 
 export const descriptionRegistrationModel = (startTime, endTime) => {
-	console.log(startTime);
-	console.log(endTime);
-	console.log(isSameDay(startTime, endTime));
-	console.log(format(endTime, "MMMM dd, yyyy "));
 	const endDifferentDay = isSameDay(startTime, endTime)
 		? ""
 		: format(endTime, "MMMM dd, yyyy ");
