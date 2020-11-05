@@ -1,6 +1,5 @@
-import { format } from 'date-fns-tz';
-import { isSameDay } from 'date-fns';
-
+import { format } from "date-fns-tz";
+import { isSameDay } from "date-fns";
 
 /*export const heroBannerModelV1 = (eventTitle = "default") => {
     return `
@@ -52,7 +51,7 @@ import { isSameDay } from 'date-fns';
                 ),
                 url("https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg");
             background-color: #cccccc; /* Used if the image is unavailable */
-            /*background-position: center;
+/*background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
             width: 100%;
@@ -66,9 +65,9 @@ import { isSameDay } from 'date-fns';
 };*/
 
 export const heroBannerModel = (eventTitle = "default", primaryColor) => {
-    console.log('primary color: ' + primaryColor)
-    
-    return `
+	console.log("primary color: " + primaryColor);
+
+	return `
     <div style="overflow: hidden;" contenteditable="false">
         <div class="title" >${eventTitle}</div>
     </div>
@@ -110,8 +109,17 @@ export const logoHeaderRightModel = () => {
 };
 
 export const descriptionRegistrationModel = (startTime, endTime) => {
-    const endDifferentDay = (isSameDay(startTime, endTime)) ? '' : format(endTime, 'MMMM dd, yyyy ');
-    const timeFormatted = format(startTime, 'MMMM dd, yyyy h:mm a - ') + endDifferentDay + format(endTime, 'h:mm a zzz');
+	console.log(startTime);
+	console.log(endTime);
+	console.log(isSameDay(startTime, endTime));
+	console.log(format(endTime, "MMMM dd, yyyy "));
+	const endDifferentDay = isSameDay(startTime, endTime)
+		? ""
+		: format(endTime, "MMMM dd, yyyy ");
+	const timeFormatted =
+		format(startTime, "MMMM dd, yyyy h:mm a - ") +
+		endDifferentDay +
+		format(endTime, "h:mm a zzz");
 
 	return `
     <div style="overflow: hidden;" contenteditable="false">
@@ -181,8 +189,13 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
 };
 
 export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
-    const endDifferentDay = (isSameDay(startTime, endTime)) ? '' : format(endTime, 'MMMM dd, yyyy ');
-    const timeFormatted = format(startTime, 'MMMM dd, yyyy h:mm a - ') + endDifferentDay + format(endTime, 'h:mm a zzz');
+	const endDifferentDay = isSameDay(startTime, endTime)
+		? ""
+		: format(endTime, "MMMM dd, yyyy ");
+	const timeFormatted =
+		format(startTime, "MMMM dd, yyyy h:mm a - ") +
+		endDifferentDay +
+		format(endTime, "h:mm a zzz");
 
 	return `
         <div style="overflow: hidden;" contenteditable="false">
@@ -500,9 +513,6 @@ allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
 allowfullscreen
 >
 </iframe>*/
-
-
-
 
 /*<div style="overflow: hidden;">
             <section class="container">
