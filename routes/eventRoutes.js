@@ -17,8 +17,15 @@ router.post("/api/event/", async (req, res) => {
 	} = req.body;
 
 	await db.query(
-		`INSERT INTO event VALUES ('$1','$2','$3','$4','$5','$6','$7','$1','$1')`,
-		[title, link, category, startDate, endDate, timeZone, primaryColor]
+		"INSERT INTO event (title, link, category, startDate, endDate, timeZone, primaryColor) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		[title, link, category, startDate, endDate, timeZone, primaryColor],
+		(error, results) => {
+			if (error) {
+				throw error;
+			}
+
+			console.log("success");
+		}
 	);
 
 	/*
