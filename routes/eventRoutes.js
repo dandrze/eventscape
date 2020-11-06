@@ -16,17 +16,27 @@ router.post("/api/event/", async (req, res) => {
 		livePageModel,
 	} = req.body;
 
+	/*
 	await db.query(
-		"INSERT INTO event (title, link, category, startDate, endDate, timeZone, primaryColor) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+		"INSERT INTO event (title, link, category, start_date, end_date, time_zone, primary_color) VALUES ($1, $2, $3, $4, $5, $6, $7)",
 		[title, link, category, startDate, endDate, timeZone, primaryColor],
 		(error, results) => {
 			if (error) {
-				throw error;
+				throw res.status(500).send(error);
 			}
 
-			console.log("success");
+			res.status(200).send();
 		}
 	);
+	*/
+
+	await db.query("SELECT * FROM event", (err, res) => {
+		if (err) {
+			throw res.status(500).send(err);
+		}
+		console.log(res);
+		//res.status(200).send(res);
+	});
 
 	/*
 	const existingEvent = await Event.findOne({ user: "tester" });
@@ -62,8 +72,6 @@ router.post("/api/event/", async (req, res) => {
 
 		newEvents.save();
 	}*/
-
-	res.status(200).send();
 });
 
 router.get("/api/event", async (req, res) => {

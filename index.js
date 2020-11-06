@@ -4,6 +4,7 @@ const passport = require("passport");
 const secure = require("express-force-https");
 
 require("./models/Event.js");
+const db = require("./db");
 
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
@@ -12,6 +13,22 @@ const eventRoutes = require("./routes/eventRoutes");
 
 const app = express();
 const router = express.Router();
+
+const test = async () => {
+	db.query("SELECT * FROM event", (err, res) => {
+		if (err) {
+			throw res.status(500).send(err);
+		}
+		//console.log(res);
+		//res.status(200).send(res);
+	});
+
+	const result = await db.query("SELECT * FROM event");
+
+	console.log(result.rows);
+};
+
+test();
 
 // Force HTTPS
 app.use(secure);
@@ -36,7 +53,9 @@ if (process.env.NODE_ENV == "production") {
 	});
 }
 
+/*
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log("listening on port " + PORT);
 });
+*/
