@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
@@ -85,7 +85,7 @@ function Event_Details(props) {
 		);
 	};
 
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
 		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
 		const startDate =
 			typeof selectedStartDate === "string"
@@ -96,7 +96,7 @@ function Event_Details(props) {
 				? new Date(selectedEndDate)
 				: selectedEndDate;
 
-		props.createEvent(
+		await props.createEvent(
 			eventTitle,
 			eventLink,
 			eventCat,
@@ -105,6 +105,8 @@ function Event_Details(props) {
 			eventTimeZone,
 			color
 		);
+
+		props.history.push("/Design");
 	};
 
 	return (
@@ -1011,23 +1013,21 @@ function Event_Details(props) {
 
 				{/* Submit */}
 				{/* remove link and replace with onSubmit */}
-				<Link to="/Design">
-					{props.isEventUpdate ? (
-						<button className="Button1" onClick={handleSubmit}>
-							Update My Event
-						</button>
-					) : (
-						<button className="Button1" onClick={handleSubmit}>
-							Create My Event
-						</button>
-					)}
-				</Link>
+				{props.isEventUpdate ? (
+					<button className="Button1" onClick={handleSubmit}>
+						Update My Event
+					</button>
+				) : (
+					<button className="Button1" onClick={handleSubmit}>
+						Create My Event
+					</button>
+				)}
 			</div>
 		</div>
 	);
 }
 
-export default connect(null, actions)(Event_Details);
+export default connect(null, actions)(withRouter(Event_Details));
 
 // Below used to produce time zone list
 // Has Canadian cities listed under America by default "ie. America/Toronto". Export, then correct.
