@@ -1,29 +1,25 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const passport = require("passport");
 const secure = require("express-force-https");
+const { Client } = require("pg");
 
 require("./models/Event.js");
 
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 
-// mongoDB
-const mongoUri =
-	"mongodb+srv://admin:Shaw2020@cluster0.9wjqj.mongodb.net/dev?retryWrites=true&w=majority";
-mongoose.connect(mongoUri, {
-	useNewUrlParser: true,
-	useCreateIndex: true,
-	useUnifiedTopology: true,
-});
-mongoose.connection.on("connected", () => {
-	console.log("connected to mongo instance");
+//console.log(process.env.DATABASE_URL);
+
+// Connect to Postgres
+const client = new Client({
+	connectionString: process.env.DATABASE_URL,
+	ssl: {
+		rejectUnauthorized: false,
+	},
 });
 
-mongoose.connection.on("error", (err) => {
-	console.error("Error connecting to mongo", err);
-});
+client.connect();
 
 const app = express();
 const router = express.Router();
@@ -58,6 +54,6 @@ if (process.env.NODE_ENV == "production") {
 }
 
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+/*app.listen(PORT, () => {
 	console.log("listening on port " + PORT);
-});
+});*/

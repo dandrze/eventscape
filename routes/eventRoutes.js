@@ -1,10 +1,9 @@
 const express = require("express");
-const mongoose = require("mongoose");
-
-const Event = mongoose.model("events");
 const router = express.Router();
 
-router.post("/api/event", async (req, res) => {
+const db = require("../db");
+
+router.post("/api/event/", async (req, res) => {
 	const {
 		title,
 		link,
@@ -17,6 +16,12 @@ router.post("/api/event", async (req, res) => {
 		livePageModel,
 	} = req.body;
 
+	await db.query(
+		`INSERT INTO event VALUES ('$1','$2','$3','$4','$5','$6','$7','$1','$1')`,
+		[title, link, category, startDate, endDate, timeZone, primaryColor]
+	);
+
+	/*
 	const existingEvent = await Event.findOne({ user: "tester" });
 
 	if (existingEvent) {
@@ -49,7 +54,7 @@ router.post("/api/event", async (req, res) => {
 		});
 
 		newEvents.save();
-	}
+	}*/
 
 	res.status(200).send();
 });
