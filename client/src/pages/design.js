@@ -8,7 +8,9 @@ import PageEditor from "../components/pageEditor";
 
 class Design extends React.Component {
 	componentDidMount() {
+		console.log(this.props.event.loaded);
 		if (this.props.event.loaded === false) {
+			console.log("fetched");
 			this.props.fetchEvent();
 		}
 	}

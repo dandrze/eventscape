@@ -124,12 +124,12 @@ export const createEvent = (
 
 	const res = await axios.post("/api/event", event);
 
-	console.log(res);
-
-	dispatch({
+	await dispatch({
 		type: CREATE_EVENT,
 		payload: event,
 	});
+
+	await dispatch(fetchPageModel());
 };
 
 export const fetchEvent = () => async (dispatch) => {

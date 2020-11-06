@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
@@ -37,17 +37,29 @@ function Event_Details(props) {
 	const classes = useStyles();
 	const defaultTimeZone = momentTZ.tz.guess();
 
-	const [eventCat, setEventCat] = React.useState("");
-	const [eventTitle, setEventTitle] = React.useState("");
-	const [eventLink, setEventLink] = React.useState("");
+	const [eventCat, setEventCat] = React.useState(
+		props.eventCat ? props.eventCat : ""
+	);
+	const [eventTitle, setEventTitle] = React.useState(
+		props.eventTitle ? props.eventTitle : ""
+	);
+	const [eventLink, setEventLink] = React.useState(
+		props.eventLink ? props.eventLink : ""
+	);
 	const [selectedStartDate, setSelectedStartDate] = React.useState(
-		new Date("2020-11-18T19:00:00")
+		props.selectedStartDate
+			? props.selectedStartDate
+			: new Date("2020-11-18T19:00:00")
 	);
 	const [selectedEndDate, setSelectedEndDate] = React.useState(
-		new Date("2020-11-18T21:00:00")
+		props.selectedEndDate
+			? props.selectedEndDate
+			: new Date("2020-11-18T21:00:00")
 	);
-	const [eventTimeZone, setEventTimeZone] = React.useState(defaultTimeZone);
-	const [color, setColor] = useState("#B0281C");
+	const [eventTimeZone, setEventTimeZone] = React.useState(
+		props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
+	);
+	const [color, setColor] = useState(props.color ? props.color : "#B0281C");
 
 	const handleChangeEventCat = (event) => {
 		setEventCat(event.target.value);
@@ -73,22 +85,28 @@ function Event_Details(props) {
 		);
 	};
 
-	const handleSubmit = () => {
-		console.log(eventCat);
-		console.log(eventTitle);
-		console.log(eventLink);
-		console.log(selectedStartDate);
-		console.log(selectedEndDate);
-		console.log(color);
+	const handleSubmit = async () => {
+		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
+		const startDate =
+			typeof selectedStartDate === "string"
+				? new Date(selectedStartDate)
+				: selectedStartDate;
+		const endDate =
+			typeof selectedEndDate === "string"
+				? new Date(selectedEndDate)
+				: selectedEndDate;
 
-		props.createEvent(
+		await props.createEvent(
 			eventTitle,
 			eventLink,
 			eventCat,
-			selectedStartDate,
-			selectedEndDate,
+			startDate,
+			endDate,
+			eventTimeZone,
 			color
 		);
+
+		props.history.push("/Design");
 	};
 
 	return (
@@ -995,17 +1013,21 @@ function Event_Details(props) {
 
 				{/* Submit */}
 				{/* remove link and replace with onSubmit */}
-				<Link to="/Design">
+				{props.isEventUpdate ? (
+					<button className="Button1" onClick={handleSubmit}>
+						Update My Event
+					</button>
+				) : (
 					<button className="Button1" onClick={handleSubmit}>
 						Create My Event
 					</button>
-				</Link>
+				)}
 			</div>
 		</div>
 	);
 }
 
-export default connect(null, actions)(Event_Details);
+export default connect(null, actions)(withRouter(Event_Details));
 
 // Below used to produce time zone list
 // Has Canadian cities listed under America by default "ie. America/Toronto". Export, then correct.
