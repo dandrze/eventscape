@@ -137,13 +137,13 @@ export const fetchEvent = () => async (dispatch) => {
 
 	console.log("fetch events called");
 
-	const event = await axios.get("/api/event");
+	const events = await axios.get("/api/events");
 
 	console.log(event);
 
 	// if there are events, go to design page
 	if (event) {
-		dispatch({ type: FETCH_EVENT, payload: event.data });
+		dispatch({ type: FETCH_EVENT, payload: events.data });
 		return event;
 	} else {
 		// if no events then go to create event page

@@ -15,17 +15,17 @@ const app = express();
 const router = express.Router();
 
 const test = async () => {
-	db.query("SELECT * FROM event", (err, res) => {
-		if (err) {
-			throw res.status(500).send(err);
+	const existingEvent = await db.query(
+		"SELECT * FROM event WHERE user_id=$1 AND is_current=TRUE",
+		[1],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
 		}
-		//console.log(res);
-		//res.status(200).send(res);
-	});
+	);
 
-	const result = await db.query("SELECT * FROM event");
-
-	console.log(result.rows);
+	console.log(existingEvent.rows);
 };
 
 test();

@@ -3,7 +3,7 @@ const router = express.Router();
 
 const db = require("../db");
 
-router.post("/api/event/", async (req, res) => {
+router.post("/api/events/current", async (req, res) => {
 	const {
 		title,
 		link,
@@ -15,6 +15,9 @@ router.post("/api/event/", async (req, res) => {
 		savedPageModel,
 		livePageModel,
 	} = req.body;
+
+	// hard coded userId. Will eventualy pull from request params.
+	const userId = 1;
 
 	/*
 	await db.query(
@@ -30,13 +33,17 @@ router.post("/api/event/", async (req, res) => {
 	);
 	*/
 
-	await db.query("SELECT * FROM event", (err, res) => {
-		if (err) {
-			throw res.status(500).send(err);
+	const existingEvent = await db.query(
+		"SELECT * FROM event WHERE user_id=$1 AND is_current=TRUE",
+		[userId],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
 		}
-		console.log(res);
-		//res.status(200).send(res);
-	});
+	);
+
+	console.log(existingEvent);
 
 	/*
 	const existingEvent = await Event.findOne({ user: "tester" });
@@ -74,12 +81,19 @@ router.post("/api/event/", async (req, res) => {
 	}*/
 });
 
-router.get("/api/event", async (req, res) => {
-	const event = await Event.findOne({ user: "tester" });
+router.get("/api/events", async (req, res) => {
+	const userId = 1;
+	const events = await db.query(
+		"SELECT * FROM event WHERE user_id=$1",
+		[userId],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
 
-	console.log("api called");
-
-	res.send(event);
+	res.send(events.rows);
 });
 
 router.get("/api/page", async (req, res) => {

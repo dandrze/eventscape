@@ -8,10 +8,13 @@ import {
 } from "../actions/types";
 
 export default function (
-	state = {
-		savedPageModel: { regPageModel: [], eventPageModel: [] },
-		loaded: false,
-	},
+	state = [
+		{
+			savedPageModel: { regPageModel: [], eventPageModel: [] },
+			loaded: false,
+			isCurrent: false,
+		},
+	],
 	action
 ) {
 	switch (action.type) {
