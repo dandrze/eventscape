@@ -3,7 +3,7 @@ const router = express.Router();
 
 const db = require("../db");
 
-router.post("/api/events/current", async (req, res) => {
+router.post("/api/events", async (req, res) => {
 	const {
 		title,
 		link,
@@ -12,29 +12,20 @@ router.post("/api/events/current", async (req, res) => {
 		endDate,
 		timeZone,
 		primaryColor,
-		savedPageModel,
-		livePageModel,
+		regPageModel,
+		eventPageModel,
+		regPageLive,
+		eventPageLive,
 	} = req.body;
 
 	// hard coded userId. Will eventualy pull from request params.
 	const userId = 1;
 
-	/*
+	// set all other events is_current to false so we can make our new event current
 	await db.query(
-		"INSERT INTO event (title, link, category, start_date, end_date, time_zone, primary_color) VALUES ($1, $2, $3, $4, $5, $6, $7)",
-		[title, link, category, startDate, endDate, timeZone, primaryColor],
-		(error, results) => {
-			if (error) {
-				throw res.status(500).send(error);
-			}
-
-			res.status(200).send();
-		}
-	);
-	*/
-
-	const existingEvent = await db.query(
-		"SELECT * FROM event WHERE user_id=$1 AND is_current=TRUE",
+		`UPDATE event 
+		SET is_current = false
+		WHERE user_id = $1`,
 		[userId],
 		(err, res) => {
 			if (err) {
@@ -43,14 +34,63 @@ router.post("/api/events/current", async (req, res) => {
 		}
 	);
 
-	console.log(existingEvent);
+	// Store a new model in the model table for the registration page
+	const pgRegModel = await db.query(
+		`INSERT INTO model 
+				(type)
+			VALUES ($1)
+			RETURNING id`,
+		["model"],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(Error);
+			}
+		}
+	);
 
-	/*
-	const existingEvent = await Event.findOne({ user: "tester" });
+	// Store the section HTML for the model above
+	for (i = 0; i < regPageModel.length; i++) {
+		await db.query(
+			`INSERT INTO section_html
+					(model, index, html)
+					VALUES
+					($1, $2, $3)`,
+			[pgRegModel.rows[0].id, i, regPageModel[i].sectionHtml]
+		);
+	}
 
-	if (existingEvent) {
-		existingEvent.overwrite({
-			user: "tester",
+	// Store a new model in the model table for the event page
+	const pgEventModel = await db.query(
+		`INSERT INTO model 
+				(type)
+			VALUES ($1)
+			RETURNING id`,
+		["model"],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(Error);
+			}
+		}
+	);
+
+	// Store the section HTML for the model above
+	for (i = 0; i < eventPageModel.length; i++) {
+		await db.query(
+			`INSERT INTO section_html
+					(model, index, html)
+					VALUES
+					($1, $2, $3)`,
+			[pgEventModel.rows[0].id, i, eventPageModel[i].sectionHtml]
+		);
+	}
+
+	// add the event to the event table. Make it the current event
+	const newEvent = await db.query(
+		`INSERT INTO event 
+			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, reg_page_is_live, event_page_is_live, reg_page_model, event_page_model) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+		RETURNING *`,
+		[
 			title,
 			link,
 			category,
@@ -58,33 +98,27 @@ router.post("/api/events/current", async (req, res) => {
 			endDate,
 			timeZone,
 			primaryColor,
-			savedPageModel,
-			livePageModel,
-		});
+			true,
+			userId,
+			regPageLive,
+			eventPageLive,
+			pgRegModel.rows[0].id,
+			pgEventModel.rows[0].id,
+		],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(Error);
+			}
+		}
+	);
 
-		existingEvent.save();
-	} else {
-		const newEvents = new Event({
-			user: "tester",
-			title,
-			link,
-			category,
-			startDate,
-			endDate,
-			timeZone,
-			primaryColor,
-			savedPageModel,
-			livePageModel,
-		});
-
-		newEvents.save();
-	}*/
+	res.status(200).send(newEvent.rows[0]);
 });
 
-router.get("/api/events", async (req, res) => {
+router.get("/api/events/current", async (req, res) => {
 	const userId = 1;
 	const events = await db.query(
-		"SELECT * FROM event WHERE user_id=$1",
+		"SELECT * FROM event WHERE user_id=$1 AND is_current=true",
 		[userId],
 		(err, res) => {
 			if (err) {
@@ -93,18 +127,7 @@ router.get("/api/events", async (req, res) => {
 		}
 	);
 
-	res.send(events.rows);
-});
-
-router.get("/api/page", async (req, res) => {
-	const link = req.query.link;
-	console.log(link);
-
-	const event = await Event.findOne({ link: link });
-
-	console.log(event);
-
-	res.send(event);
+	res.send(events.rows[0]);
 });
 
 module.exports = router;

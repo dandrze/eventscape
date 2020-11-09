@@ -8,55 +8,49 @@ import {
 } from "../actions/types";
 
 export default function (
-	state = [
-		{
-			savedPageModel: { regPageModel: [], eventPageModel: [] },
-			loaded: false,
-			isCurrent: false,
-		},
-	],
+	state = {
+		regPageModel: [],
+		eventPageModel: [],
+		loaded: false,
+		regPageLive: false,
+		eventPageLive: false,
+	},
 	action
 ) {
 	switch (action.type) {
 		case CREATE_EVENT:
 			// commented out for now as we only have one event
 			//return [...state, action.payload];
-			return { ...action.payload, loaded: true };
+			return {
+				...action.payload,
+				loaded: true,
+			};
 		case FETCH_EVENT:
-			return { ...action.payload, loaded: true };
+			return {
+				...action.payload,
+				loaded: true,
+			};
 		case SAVE_REG_MODEL:
 			return {
 				...state,
-				savedPageModel: {
-					...state.savedPageModel,
-					regPageModel: action.payload,
-				},
+				regPageModel: action.payload,
 			};
 
 		case SAVE_EVENT_MODEL:
 			return {
 				...state,
-				savedPageModel: {
-					...state.savedPageModel,
-					eventPageModel: action.payload,
-				},
+				eventPageModel: action.payload,
 			};
 		case PUBLISH_REG_MODEL:
 			return {
 				...state,
-				livePageModel: {
-					...state.livePageModel,
-					regPageModel: action.payload,
-				},
+				regPageLive: true,
 			};
 
 		case PUBLISH_EVENT_MODEL:
 			return {
 				...state,
-				livePageModel: {
-					...state.livePageModel,
-					eventPageModel: action.payload,
-				},
+				eventPageLive: true,
 			};
 		default:
 			return state;

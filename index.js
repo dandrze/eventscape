@@ -8,6 +8,7 @@ const db = require("./db");
 
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const modelRoutes = require("./routes/modelRoutes");
 
 //console.log(process.env.DATABASE_URL);
 
@@ -16,7 +17,7 @@ const router = express.Router();
 
 const test = async () => {
 	const existingEvent = await db.query(
-		"SELECT * FROM event WHERE user_id=$1 AND is_current=TRUE",
+		"INSERT INTO event WHERE user_id=$1 AND is_current=TRUE",
 		[1],
 		(err, res) => {
 			if (err) {
@@ -28,7 +29,7 @@ const test = async () => {
 	console.log(existingEvent.rows);
 };
 
-test();
+//test();
 
 // Force HTTPS
 app.use(secure);
@@ -39,6 +40,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(authRoutes);
 app.use(eventRoutes);
+app.use(modelRoutes);
 
 if (process.env.NODE_ENV == "production") {
 	// if we don't recognize the route, look into the client/build folder
@@ -53,9 +55,7 @@ if (process.env.NODE_ENV == "production") {
 	});
 }
 
-/*
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
 	console.log("listening on port " + PORT);
 });
-*/

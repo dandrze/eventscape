@@ -27,9 +27,7 @@ class Published extends React.Component {
 			case "eventFound":
 				return (
 					<ul>
-						{this.props.event.livePageModel.regPageModel.map(function (
-							sectionModel
-						) {
+						{this.props.event.regPageModel.map(function (sectionModel) {
 							return ReactHtmlParser(sectionModel.sectionHtml);
 						})}
 					</ul>
