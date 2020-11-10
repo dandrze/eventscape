@@ -11,29 +11,23 @@ class Published extends React.Component {
 		this.state = { status: "loading" };
 	}
 	async componentDidMount() {
-		// #TODO set up a new action creator that finds the event based on the subdomain name
-		const event = await this.props.fetchPublishedPage(this.props.subdomain);
-		if (event.data) {
-			this.setState({ status: "eventFound" });
-		} else {
-			this.setState({ status: "eventNotFound" });
-		}
+		this.props.fetchPublishedPage(this.props.subdomain);
 	}
 
 	renderPage() {
-		switch (this.state.status) {
-			case "eventNotFound":
-				return <p>No Event Found</p>;
-			case "eventFound":
-				return (
-					<ul>
-						{this.props.event.regPageModel.map(function (sectionModel) {
-							return ReactHtmlParser(sectionModel.html);
-						})}
-					</ul>
-				);
-			default:
-				return <CircularProgress />;
+		console.log(this.props.model.sections.length ? "true" : false);
+		if (this.props.model.loaded && this.props.model.sections.length) {
+			return (
+				<ul>
+					{this.props.model.sections.map(function (section) {
+						return ReactHtmlParser(section.html);
+					})}
+				</ul>
+			);
+		} else if (this.props.model.loaded) {
+			return <p>No Event Found</p>;
+		} else {
+			return <CircularProgress />;
 		}
 	}
 
@@ -43,7 +37,7 @@ class Published extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event };
+	return { model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(Published);

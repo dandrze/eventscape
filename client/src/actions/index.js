@@ -109,7 +109,7 @@ export const createEvent = (
 		eventPageLive: false,
 	};
 
-	const res = await axios.post("/api/events", event);
+	const res = await axios.post("/api/event", event);
 
 	if (res.status === 201) {
 		await dispatch({
@@ -127,24 +127,28 @@ export const updateEvent = (
 	title,
 	link,
 	category,
-	start_date,
-	end_date,
-	time_zone,
-	primary_color
+	startDate,
+	endDate,
+	timeZone,
+	primaryColor
 ) => async (dispatch, getState) => {
 	const updatedEvent = {
 		title,
 		link,
 		category,
-		start_date,
-		end_date,
-		time_zone,
-		primary_color,
-		reg_page_is_live: getState().event.reg_page_is_live,
-		event_page_is_live: getState().event.event_page_is_live,
+		startDate,
+		endDate,
+		timeZone,
+		primaryColor,
+		regPageIsLive: getState().event.reg_page_is_live,
+		eventPageIsLive: getState().event.event_page_is_live,
 	};
 
+	console.log(updatedEvent);
+
 	const res = await axios.put("/api/event", updatedEvent);
+
+	console.log(res);
 
 	if (res.status === 200) {
 		await dispatch({
@@ -158,13 +162,14 @@ export const updateEvent = (
 
 export const fetchEvent = () => async (dispatch) => {
 	// call the api and return the event in json
-	const event = await axios.get("/api/events/current");
+	const event = await axios.get("/api/event/current");
 
 	console.log(event);
 
 	// if there are events, go to design page
 	if (event) {
 		dispatch({ type: FETCH_EVENT, payload: event.data });
+		dispatch(fetchPageModel());
 		return event;
 	} else {
 		// if no events then go to create event page
@@ -174,14 +179,9 @@ export const fetchEvent = () => async (dispatch) => {
 };
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
-	const event = await axios.get("/api/page?link=" + pageLink);
-	console.log(event.data);
-	if (event) {
-		dispatch({ type: FETCH_EVENT, payload: event.data });
-		return event;
-	} else {
-		return null;
-	}
+	const model = await axios.get("/api/page", { params: { link: pageLink } });
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
 
 // MODEL ACTIONS
@@ -197,8 +197,6 @@ export const fetchPageModel = () => async (dispatch, getState) => {
 				modelId = getState().event.event_page_model;
 				break;
 		}
-
-		console.log(modelId);
 
 		const model = await axios.get("/api/model", { params: { id: modelId } });
 

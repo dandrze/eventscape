@@ -3,7 +3,7 @@ const router = express.Router();
 
 const db = require("../db");
 
-router.post("/api/events", async (req, res) => {
+router.post("/api/event", async (req, res) => {
 	const {
 		title,
 		link,
@@ -115,7 +115,7 @@ router.post("/api/events", async (req, res) => {
 	res.status(201).send(newEvent.rows[0]);
 });
 
-router.get("/api/events/current", async (req, res) => {
+router.get("/api/event/current", async (req, res) => {
 	const userId = 1;
 	const events = await db.query(
 		"SELECT * FROM event WHERE user_id=$1 AND is_current=true",
@@ -130,6 +130,21 @@ router.get("/api/events/current", async (req, res) => {
 	res.send(events.rows[0]);
 });
 
+router.get("/api/event/all", async (req, res) => {
+	const userId = 1;
+	const events = await db.query(
+		"SELECT * FROM event WHERE user_id=$1",
+		[userId],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	res.send(events.rows);
+});
+
 router.put("/api/event", async (req, res) => {
 	const userId = 1;
 
@@ -137,12 +152,12 @@ router.put("/api/event", async (req, res) => {
 		title,
 		link,
 		category,
-		start_date,
-		end_date,
-		time_zone,
-		primary_color,
-		reg_page_is_live,
-		event_page_is_live,
+		startDate,
+		endDate,
+		timeZone,
+		primaryColor,
+		regPageIsLive,
+		eventPageIsLive,
 	} = req.body;
 
 	const events = await db.query(
@@ -164,12 +179,12 @@ router.put("/api/event", async (req, res) => {
 			title,
 			link,
 			category,
-			start_date,
-			end_date,
-			time_zone,
-			primary_color,
-			reg_page_is_live,
-			event_page_is_live,
+			startDate,
+			endDate,
+			timeZone,
+			primaryColor,
+			regPageIsLive,
+			eventPageIsLive,
 			userId,
 		],
 		(err, res) => {
