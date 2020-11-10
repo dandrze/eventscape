@@ -1,5 +1,5 @@
-import axios from "axios";
 import { toast } from "react-toastify";
+import api from "../api/server";
 
 import {
 	SIGNIN_USER,
@@ -31,7 +31,7 @@ import {
 // USER ACTIONS
 
 export const signinUser = () => async (dispatch) => {
-	//const res = await axios.get("/api/current_user");
+	//const res = await api.get("/api/current_user");
 
 	const data = {
 		id: 1,
@@ -109,7 +109,7 @@ export const createEvent = (
 		eventPageLive: false,
 	};
 
-	const res = await axios.post("/api/event", event);
+	const res = await api.post("/api/event", event);
 
 	if (res.status === 201) {
 		await dispatch({
@@ -146,7 +146,7 @@ export const updateEvent = (
 
 	console.log(updatedEvent);
 
-	const res = await axios.put("/api/event", updatedEvent);
+	const res = await api.put("/api/event", updatedEvent);
 
 	console.log(res);
 
@@ -162,7 +162,7 @@ export const updateEvent = (
 
 export const fetchEvent = () => async (dispatch) => {
 	// call the api and return the event in json
-	const event = await axios.get("/api/event/current");
+	const event = await api.get("/api/event/current");
 
 	console.log(event);
 
@@ -179,7 +179,7 @@ export const fetchEvent = () => async (dispatch) => {
 };
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
-	const model = await axios.get("/api/page", { params: { link: pageLink } });
+	const model = await api.get("/api/page", { params: { link: pageLink } });
 
 	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
@@ -198,7 +198,7 @@ export const fetchPageModel = () => async (dispatch, getState) => {
 				break;
 		}
 
-		const model = await axios.get("/api/model", { params: { id: modelId } });
+		const model = await api.get("/api/model", { params: { id: modelId } });
 
 		dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 	} catch {
@@ -243,7 +243,7 @@ export const saveModel = () => async (dispatch, getState) => {
 	console.log(model);
 
 	// save the new model
-	const res = await axios.put("/api/model", { model });
+	const res = await api.put("/api/model", { model });
 
 	if (res.status === 200) {
 		toast.success("Page successfully saved");
@@ -285,7 +285,7 @@ export const publishPage = () => async (dispatch, getState) => {
 			break;
 	}
 
-	const res = await axios.put("/api/event", newEvent);
+	const res = await api.put("/api/event", newEvent);
 
 	if (res.status === 200) {
 		await dispatch({
