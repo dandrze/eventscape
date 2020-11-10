@@ -16,7 +16,7 @@ export default function (state = { isUnsaved: false, sections: [] }, action) {
 				isUnsaved: true,
 				sections: state.sections.map((section, index) => {
 					if (index === action.payload.index) {
-						return { ...section, sectionHtml: action.payload.sectionHtml };
+						return { ...section, html: action.payload.html };
 					}
 					return section;
 				}),

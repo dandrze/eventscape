@@ -28,7 +28,7 @@ class Published extends React.Component {
 				return (
 					<ul>
 						{this.props.event.regPageModel.map(function (sectionModel) {
-							return ReactHtmlParser(sectionModel.sectionHtml);
+							return ReactHtmlParser(sectionModel.html);
 						})}
 					</ul>
 				);

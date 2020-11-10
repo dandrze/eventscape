@@ -8,6 +8,7 @@ import {
 	ADD_SECTION,
 	UPDATE_SECTION,
 	CREATE_EVENT,
+	UPDATE_EVENT,
 	CHANGE_PAGE_EDITOR,
 	MOVE_SECTION,
 	DELETE_SECTION,
@@ -53,19 +54,19 @@ export const createEvent = (
 	primaryColor
 ) => async (dispatch) => {
 	const regPageModel = [
-		{ sectionHtml: logoHeaderModel(), name: "banner" },
+		{ html: logoHeaderModel(), name: "banner" },
 		{
-			sectionHtml: heroBannerModel(title, primaryColor),
+			html: heroBannerModel(title, primaryColor),
 			name: "heroBanner",
 			showStreamSettings: false,
 		},
 		{
-			sectionHtml: descriptionRegistrationModel(startDate, endDate),
+			html: descriptionRegistrationModel(startDate, endDate),
 			name: "body",
 			showStreamSettings: false,
 		},
 		{
-			sectionHtml: streamChatModel(),
+			html: streamChatModel(),
 			name: "streamChat",
 			showStreamSettings: true,
 		},
@@ -73,22 +74,22 @@ export const createEvent = (
 
 	const eventPageModel = [
 		{
-			sectionHtml: logoHeaderRightModel(),
+			html: logoHeaderRightModel(),
 			name: "bannerRight",
 			showStreamSettings: false,
 		},
 		{
-			sectionHtml: titleTimeModel(title, startDate, endDate),
+			html: titleTimeModel(title, startDate, endDate),
 			name: "titleTime",
 			showStreamSettings: false,
 		},
 		{
-			sectionHtml: streamChatModel(),
+			html: streamChatModel(),
 			name: "streamChat",
 			showStreamSettings: true,
 		},
 		{
-			sectionHtml: blankModel(),
+			html: blankModel(),
 			name: "blankModel",
 			showStreamSettings: false,
 		},
@@ -110,13 +111,46 @@ export const createEvent = (
 
 	const res = await axios.post("/api/events", event);
 
-	if (res.status === 200) {
+	if (res.status === 201) {
 		await dispatch({
 			type: CREATE_EVENT,
 			payload: res.data,
 		});
 
 		await dispatch(fetchPageModel());
+	} else {
+		toast.error("Error when saving: " + res.statusText);
+	}
+};
+
+export const updateEvent = (
+	title,
+	link,
+	category,
+	start_date,
+	end_date,
+	time_zone,
+	primary_color
+) => async (dispatch, getState) => {
+	const updatedEvent = {
+		title,
+		link,
+		category,
+		start_date,
+		end_date,
+		time_zone,
+		primary_color,
+		reg_page_is_live: getState().event.reg_page_is_live,
+		event_page_is_live: getState().event.event_page_is_live,
+	};
+
+	const res = await axios.put("/api/event", updatedEvent);
+
+	if (res.status === 200) {
+		await dispatch({
+			type: UPDATE_EVENT,
+			payload: res.data,
+		});
 	} else {
 		toast.error("Error when saving: " + res.statusText);
 	}
@@ -174,21 +208,21 @@ export const fetchPageModel = () => async (dispatch, getState) => {
 	}
 };
 
-export const updateSection = (index, sectionHtml) => {
+export const updateSection = (index, html) => {
 	// call the api and return the event in json
 	const payload = {
 		index,
-		sectionHtml,
+		html,
 	};
 	return { type: UPDATE_SECTION, payload };
 };
 
-export const addSection = (prevIndex, sectionHtml, sectionName) => {
+export const addSection = (prevIndex, html, sectionName) => {
 	// call the api and return the event in json
 
 	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), sectionHtml, sectionName },
+		model: { id: Math.random(), html, sectionName },
 	};
 
 	return { type: ADD_SECTION, payload };
@@ -206,12 +240,12 @@ export const saveModel = () => async (dispatch, getState) => {
 	// copy the model over to the event object
 	await dispatch(localSaveModel());
 
-	// call the new event object
-	// call the first event for now
-	const event = getState().event;
+	const model = getState().model.sections;
 
-	// save the new event object to database
-	const res = await axios.post("/api/events", event);
+	console.log(model);
+
+	// save the new model
+	const res = await axios.put("/api/model", { model });
 
 	if (res.status === 200) {
 		toast.success("Page successfully saved");
@@ -236,19 +270,33 @@ export const localSaveModel = () => (dispatch, getState) => {
 	}
 };
 
-export const publishModel = () => async (dispatch, getState) => {
+export const publishPage = () => async (dispatch, getState) => {
 	const currentPage = getState().settings.nowEditingPage;
 
-	// save the saved model
+	// save the model
 	await dispatch(saveModel());
+
+	var newEvent = {};
 
 	switch (currentPage) {
 		case "registration":
-			dispatch({ type: PUBLISH_REG_MODEL });
+			newEvent = { ...getState().event, reg_page_is_live: true };
 			break;
 		case "event":
-			dispatch({ type: PUBLISH_EVENT_MODEL });
+			newEvent = { ...getState().event, event_page_is_live: true };
 			break;
+	}
+
+	const res = await axios.put("/api/event", newEvent);
+
+	if (res.status === 200) {
+		await dispatch({
+			type: UPDATE_EVENT,
+			payload: res.data,
+		});
+		toast.success("Page successfully published");
+	} else {
+		toast.error("Error when saving: " + res.statusText);
 	}
 };
 

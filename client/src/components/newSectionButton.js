@@ -3,36 +3,40 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import PlusDropIcon from "../icons/plus-drop.svg";
 import Tooltip from "@material-ui/core/Tooltip";
-import { makeStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import Backdrop from '@material-ui/core/Backdrop';
-import Fade from '@material-ui/core/Fade';
-import Grid from '@material-ui/core/Grid';
+import { makeStyles } from "@material-ui/core/styles";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import Fade from "@material-ui/core/Fade";
+import Grid from "@material-ui/core/Grid";
 
 /* Design Block Thumbnails: */
-import logoHeader from './designBlockThumbnails/logoHeader.png';
-import heroBanner from './designBlockThumbnails/heroBanner.png';
-import descriptionRegistration from './designBlockThumbnails/descriptionRegistration.png';
-import {logoHeaderModel, heroBannerModel, descriptionRegistrationModel } from './designBlockModels'
+import logoHeader from "./designBlockThumbnails/logoHeader.png";
+import heroBanner from "./designBlockThumbnails/heroBanner.png";
+import descriptionRegistration from "./designBlockThumbnails/descriptionRegistration.png";
+import {
+	logoHeaderModel,
+	heroBannerModel,
+	descriptionRegistrationModel,
+} from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
 		flexGrow: 1,
-		width: '400px',
+		width: "400px",
 	},
 	modal: {
-		display: 'flex',
-		alignItems: 'center',
-		justifyContent: 'center',
-		outline: 'none',
+		display: "flex",
+		alignItems: "center",
+		justifyContent: "center",
+		outline: "none",
 	},
 	paper: {
-	  backgroundColor: theme.palette.background.paper,
-	  border: '2px solid #000',
-	  boxShadow: theme.shadows[5],
-	  padding: '0px',
+		backgroundColor: theme.palette.background.paper,
+		border: "2px solid #000",
+		boxShadow: theme.shadows[5],
+		padding: "0px",
 	},
-  }));
+}));
 
 const NewSectionButton = (props) => {
 	const classes = useStyles();
@@ -47,18 +51,18 @@ const NewSectionButton = (props) => {
 		setOpen(false);
 	};
 
-	const handleSelect = (sectionHtml, sectionName) => {
+	const handleSelect = (html, sectionName) => {
 		setOpen(false);
-		props.addSection(props.prevIndex, sectionHtml, sectionName);
+		props.addSection(props.prevIndex, html, sectionName);
 		/*insert actions here*/
-	}
-	
+	};
+
 	return (
 		<div>
 			<button
 				className="addSection"
 				onClick={() => {
-					handleOpen()
+					handleOpen();
 				}}
 			>
 				<Tooltip title="Add Design Block">
@@ -75,7 +79,7 @@ const NewSectionButton = (props) => {
 				closeAfterTransition
 				BackdropComponent={Backdrop}
 				BackdropProps={{
-				timeout: 500,
+					timeout: 500,
 				}}
 				disableAutoFocus={true}
 			>
@@ -84,26 +88,35 @@ const NewSectionButton = (props) => {
 						<div id="testEmailModal">
 							<h3>Choose a Design Block Template</h3>
 							<div className={classes.root}>
-								<Grid container spacing={3} >
+								<Grid container spacing={3}>
 									<Grid item xs={12}>
-										<img 
-											src={logoHeader} 
-											id="designBlockThumbnail" 
-											onClick={() => handleSelect(logoHeaderModel(), "logoHeader")}
+										<img
+											src={logoHeader}
+											id="designBlockThumbnail"
+											onClick={() =>
+												handleSelect(logoHeaderModel(), "logoHeader")
+											}
 										/>
 									</Grid>
 									<Grid item xs={12}>
-										<img 
-											src={heroBanner} 
-											id="designBlockThumbnail" 
-											onClick={() => handleSelect(heroBannerModel(), "heroBanner")}
+										<img
+											src={heroBanner}
+											id="designBlockThumbnail"
+											onClick={() =>
+												handleSelect(heroBannerModel(), "heroBanner")
+											}
 										/>
 									</Grid>
 									<Grid item xs={12}>
-										<img 
-											src={descriptionRegistration} 
-											id="designBlockThumbnail" 
-											onClick={() => handleSelect(descriptionRegistrationModel(), "descriptionRegistration")}
+										<img
+											src={descriptionRegistration}
+											id="designBlockThumbnail"
+											onClick={() =>
+												handleSelect(
+													descriptionRegistrationModel(),
+													"descriptionRegistration"
+												)
+											}
 										/>
 									</Grid>
 								</Grid>
@@ -112,7 +125,7 @@ const NewSectionButton = (props) => {
 					</div>
 				</Fade>
 			</Modal>
-	  </div>
+		</div>
 	);
 };
 

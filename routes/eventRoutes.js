@@ -55,7 +55,7 @@ router.post("/api/events", async (req, res) => {
 					(model, index, html)
 					VALUES
 					($1, $2, $3)`,
-			[pgRegModel.rows[0].id, i, regPageModel[i].sectionHtml]
+			[pgRegModel.rows[0].id, i, regPageModel[i].html]
 		);
 	}
 
@@ -80,7 +80,7 @@ router.post("/api/events", async (req, res) => {
 					(model, index, html)
 					VALUES
 					($1, $2, $3)`,
-			[pgEventModel.rows[0].id, i, eventPageModel[i].sectionHtml]
+			[pgEventModel.rows[0].id, i, eventPageModel[i].html]
 		);
 	}
 
@@ -112,7 +112,7 @@ router.post("/api/events", async (req, res) => {
 		}
 	);
 
-	res.status(200).send(newEvent.rows[0]);
+	res.status(201).send(newEvent.rows[0]);
 });
 
 router.get("/api/events/current", async (req, res) => {
@@ -120,6 +120,58 @@ router.get("/api/events/current", async (req, res) => {
 	const events = await db.query(
 		"SELECT * FROM event WHERE user_id=$1 AND is_current=true",
 		[userId],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	res.send(events.rows[0]);
+});
+
+router.put("/api/event", async (req, res) => {
+	const userId = 1;
+
+	const {
+		title,
+		link,
+		category,
+		start_date,
+		end_date,
+		time_zone,
+		primary_color,
+		reg_page_is_live,
+		event_page_is_live,
+	} = req.body;
+
+	const events = await db.query(
+		`UPDATE event 
+		SET 
+		  title = $1, 
+		  link = $2, 
+		  category = $3,
+		  start_date = $4,
+		  end_date = $5, 
+		  time_zone = $6,
+		  primary_color = $7,
+		  reg_page_is_live = $8,
+		  event_page_is_live = $9
+		WHERE 
+		  user_id=$10 AND is_current=true
+		RETURNING *`,
+		[
+			title,
+			link,
+			category,
+			start_date,
+			end_date,
+			time_zone,
+			primary_color,
+			reg_page_is_live,
+			event_page_is_live,
+			userId,
+		],
 		(err, res) => {
 			if (err) {
 				throw res.status(500).send(err);

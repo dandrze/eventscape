@@ -46,7 +46,7 @@ class PageEditor extends Component {
 						<button className="Button1" id="save" onClick={this.props.saveModel}>
 							Save
 						</button>
-						<button className="Button1" id="publish" onClick={this.props.publishModel}>
+						<button className="Button1" id="publish" onClick={this.props.publishPage}>
 							Publish
 						</button>
 						<br></br>
