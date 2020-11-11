@@ -67,11 +67,10 @@ class Froala extends Component {
 						"insertVideo",
 						"insertLink",
 						"insertFile",
-						/*"emoticons",*/
-						/*"html",*/
+						"emoticons",
 						"image",
 					],
-					buttonsVisible: 7,
+					buttonsVisible: 5,
 				},
 				moreText: {
 					buttons: [
@@ -105,7 +104,6 @@ class Froala extends Component {
 					buttonsVisible: 0,
 				},
 			},
-			autofocus: true,
 			toolbarInline: true,
 			toolbarVisibleWithoutSelection: true,
 			//heightMin: "568px",

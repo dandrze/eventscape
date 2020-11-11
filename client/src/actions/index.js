@@ -65,11 +65,6 @@ export const createEvent = (
 			name: "body",
 			showStreamSettings: false,
 		},
-		{
-			html: streamChatModel(),
-			name: "streamChat",
-			showStreamSettings: true,
-		},
 	];
 
 	const eventPageModel = [
