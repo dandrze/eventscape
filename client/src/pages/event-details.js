@@ -85,7 +85,7 @@ function Event_Details(props) {
 		);
 	};
 
-	const handleSubmit = async () => {
+	const handleCreate = async () => {
 		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
 		const startDate =
 			typeof selectedStartDate === "string"
@@ -97,6 +97,30 @@ function Event_Details(props) {
 				: selectedEndDate;
 
 		await props.createEvent(
+			eventTitle,
+			eventLink,
+			eventCat,
+			startDate,
+			endDate,
+			eventTimeZone,
+			color
+		);
+
+		props.history.push("/Design");
+	};
+
+	const handleUpdate = async () => {
+		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
+		const startDate =
+			typeof selectedStartDate === "string"
+				? new Date(selectedStartDate)
+				: selectedStartDate;
+		const endDate =
+			typeof selectedEndDate === "string"
+				? new Date(selectedEndDate)
+				: selectedEndDate;
+
+		await props.updateEvent(
 			eventTitle,
 			eventLink,
 			eventCat,
@@ -1014,11 +1038,11 @@ function Event_Details(props) {
 				{/* Submit */}
 				{/* remove link and replace with onSubmit */}
 				{props.isEventUpdate ? (
-					<button className="Button1" onClick={handleSubmit}>
+					<button className="Button1" onClick={handleUpdate}>
 						Update My Event
 					</button>
 				) : (
-					<button className="Button1" onClick={handleSubmit}>
+					<button className="Button1" onClick={handleCreate}>
 						Create My Event
 					</button>
 				)}

@@ -1,59 +1,20 @@
-import {
-	FETCH_EVENT,
-	CREATE_EVENT,
-	SAVE_REG_MODEL,
-	SAVE_EVENT_MODEL,
-	PUBLISH_REG_MODEL,
-	PUBLISH_EVENT_MODEL,
-} from "../actions/types";
+import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "../actions/types";
 
-export default function (
-	state = {
-		savedPageModel: { regPageModel: [], eventPageModel: [] },
-		loaded: false,
-	},
-	action
-) {
+export default function (state = {}, action) {
 	switch (action.type) {
 		case CREATE_EVENT:
 			// commented out for now as we only have one event
 			//return [...state, action.payload];
-			return { ...action.payload, loaded: true };
+			return {
+				...action.payload,
+			};
 		case FETCH_EVENT:
-			return { ...action.payload, loaded: true };
-		case SAVE_REG_MODEL:
 			return {
-				...state,
-				savedPageModel: {
-					...state.savedPageModel,
-					regPageModel: action.payload,
-				},
+				...action.payload,
 			};
-
-		case SAVE_EVENT_MODEL:
+		case UPDATE_EVENT:
 			return {
-				...state,
-				savedPageModel: {
-					...state.savedPageModel,
-					eventPageModel: action.payload,
-				},
-			};
-		case PUBLISH_REG_MODEL:
-			return {
-				...state,
-				livePageModel: {
-					...state.livePageModel,
-					regPageModel: action.payload,
-				},
-			};
-
-		case PUBLISH_EVENT_MODEL:
-			return {
-				...state,
-				livePageModel: {
-					...state.livePageModel,
-					eventPageModel: action.payload,
-				},
+				...action.payload,
 			};
 		default:
 			return state;

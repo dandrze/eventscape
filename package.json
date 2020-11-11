@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"start": "node index.js",
-		"server": "nodemon index.js",
+		"server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL) nodemon index.js",
 		"client": "npm run start --prefix client",
 		"heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
 	},
@@ -19,6 +19,8 @@
 	},
 	"dependencies": {
 		"concurrently": "^5.3.0",
+		"cross-env": "^7.0.2",
+		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"express-force-https": "^1.0.0",
 		"mongoose": "^5.10.9",

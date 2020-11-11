@@ -9,7 +9,7 @@ class Preview extends React.Component {
 			<div>
 				<ul>
 					{this.props.model.sections.map(function (sectionModel) {
-						return ReactHtmlParser(sectionModel.sectionHtml);
+						return ReactHtmlParser(sectionModel.html);
 					})}
 				</ul>
 			</div>
