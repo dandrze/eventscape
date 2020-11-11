@@ -53,7 +53,11 @@ export const createEvent = (
 	primaryColor
 ) => async (dispatch) => {
 	const regPageModel = [
-		{ id: Math.random(), sectionHtml: logoHeaderModel(), name: "banner" },
+		{ 
+			id: Math.random(), 
+			sectionHtml: logoHeaderModel(), 
+			name: "banner" 
+		},
 		{
 			id: Math.random(),
 			sectionHtml: heroBannerModel(title, primaryColor),
@@ -65,12 +69,6 @@ export const createEvent = (
 			sectionHtml: descriptionRegistrationModel(startDate, endDate),
 			name: "body",
 			showStreamSettings: false,
-		},
-		{
-			id: Math.random(),
-			sectionHtml: streamChatModel(),
-			name: "streamChat",
-			showStreamSettings: true,
 		},
 	];
 

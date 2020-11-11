@@ -68,7 +68,7 @@ export const heroBannerModel = (eventTitle = "default", primaryColor) => {
 	console.log("primary color: " + primaryColor);
 
 	return `
-    <div style="overflow: hidden;" contenteditable="false">
+    <div style="overflow: hidden;">
         <div class="title" >${eventTitle}</div>
     </div>
 
@@ -120,9 +120,9 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
 	return `
     <div style="overflow: hidden;" contenteditable="false">
         <section class="container">
-            <div class="one">
+            <div class="one" contenteditable="true">
                 <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">${timeFormatted}</span></strong></p>
-                <p contenteditable="true" style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                <p style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
             <div class="two">
                 <span>Register Now</span>
@@ -223,14 +223,14 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
 export const streamChatModel = () => {
 	return `
         <div style="overflow: hidden;">
-            <section class="container">
-                <div class="one">
+            <section class="container2">
+                <div class="one2">
                     <div class="video-responsive">
                         <!--Adding ?modestbranding=1;showinfo=0;rel=0 at the end of the link removes the YouTube logo and suggested videos-->
-                        <iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/MnrJzXM7a6o?modestbranding=1;showinfo=0;rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/X9llog6QNVM??rel=0;&modestbranding=1&showinfo=0&autoplay=1&mute=1&loop=1” frameborder=“0" allowfullscreen include></iframe>
                     </div>
                 </div>
-                <div class="two" contenteditable="false">
+                <div class="two2" contenteditable="false">
                     <div class="chat"> 
                         <div class="chatArea">
                             <ul id="messages">
@@ -321,7 +321,7 @@ export const streamChatModel = () => {
         </div>
 
         <style>
-            .container {
+            .container2 {
                 padding: .5rem;
                 margin: 0rem;
                 display: flex;
@@ -330,7 +330,7 @@ export const streamChatModel = () => {
                 box-sizing: border-box;
             }
 
-            .one {
+            .one2 {
                 margin: .5rem;
                 text-align: justify;
                 flex: 3 0 320px;
@@ -338,7 +338,7 @@ export const streamChatModel = () => {
                 overflow: hidden;
             }
 
-            .two {
+            .two2 {
                 margin: .5rem;
                 border: 1px solid #EFEFEF;
                 min-height: 200px;
@@ -407,27 +407,6 @@ export const streamChatModel = () => {
                 font-size: 14px;
                 white-space: normal;
                 text-align: left;
-            }
-
-            form {
-                background: #000; 
-                padding: 3px; 
-                bottom: 0; 
-                width: 100%; 
-            }
-
-            form input { 
-                border: 0; 
-                padding: 10px; 
-                width: 90%; 
-                margin-right: 0.5%; 
-            }
-
-            form button { 
-                width: 9%; 
-                background: rgb(130, 224, 255); 
-                border: none; 
-                padding: 10px; 
             }
 
             .inputMessageContainer {
