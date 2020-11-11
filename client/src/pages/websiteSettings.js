@@ -18,10 +18,10 @@ class WebsiteSettings extends React.Component {
 								eventTitle={this.props.event.title}
 								eventCat={this.props.event.category}
 								eventLink={this.props.event.link}
-								selectedStartDate={this.props.event.startDate}
-								selectedEndDate={this.props.event.endDate}
-								color={this.props.event.primaryColor}
-								eventTimeZone={this.props.event.timeZone}
+								selectedStartDate={this.props.event.start_date}
+								selectedEndDate={this.props.event.end_date}
+								color={this.props.event.primary_color}
+								eventTimeZone={this.props.event.time_zone}
 							/>
 						</div>
 					}

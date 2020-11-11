@@ -1,32 +1,35 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
 const passport = require("passport");
 const secure = require("express-force-https");
 
 require("./models/Event.js");
+const db = require("./db");
 
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
+const modelRoutes = require("./routes/modelRoutes");
 
-// mongoDB
-const mongoUri =
-	"mongodb+srv://admin:Shaw2020@cluster0.9wjqj.mongodb.net/dev?retryWrites=true&w=majority";
-mongoose.connect(mongoUri, {
-	useNewUrlParser: true,
-	useCreateIndex: true,
-	useUnifiedTopology: true,
-});
-mongoose.connection.on("connected", () => {
-	console.log("connected to mongo instance");
-});
-
-mongoose.connection.on("error", (err) => {
-	console.error("Error connecting to mongo", err);
-});
+//console.log(process.env.DATABASE_URL);
 
 const app = express();
 const router = express.Router();
+
+const test = async () => {
+	const existingEvent = await db.query(
+		"INSERT INTO event WHERE user_id=$1 AND is_current=TRUE",
+		[1],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	console.log(existingEvent.rows);
+};
+
+//test();
 
 // Force HTTPS
 app.use(secure);
@@ -37,12 +40,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(authRoutes);
 app.use(eventRoutes);
-
-app.get("/loaderio-770148bdcbe788892fafba4a049219a4/", async (req, res) => {
-	file = `${__dirname}/public/loaderio-770148bdcbe788892fafba4a049219a4.txt`;
-
-	res.download(file);
-});
+app.use(modelRoutes);
 
 if (process.env.NODE_ENV == "production") {
 	// if we don't recognize the route, look into the client/build folder

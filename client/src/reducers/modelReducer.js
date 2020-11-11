@@ -8,7 +8,10 @@ import {
 	MODEL_ISSAVED,
 } from "../actions/types";
 
-export default function (state = { isUnsaved: false, sections: [] }, action) {
+export default function (
+	state = { isUnsaved: false, loaded: false, sections: [] },
+	action
+) {
 	switch (action.type) {
 		case UPDATE_SECTION:
 			return {
@@ -16,7 +19,7 @@ export default function (state = { isUnsaved: false, sections: [] }, action) {
 				isUnsaved: true,
 				sections: state.sections.map((section, index) => {
 					if (index === action.payload.index) {
-						return { ...section, sectionHtml: action.payload.sectionHtml };
+						return { ...section, html: action.payload.html };
 					}
 					return section;
 				}),
@@ -47,7 +50,7 @@ export default function (state = { isUnsaved: false, sections: [] }, action) {
 				state.sections[action.payload.index];
 			return { isUnsaved: true, sections: newSections };
 		case FETCH_PAGE_MODEL:
-			return { isUnsaved: false, sections: action.payload };
+			return { isUnsaved: false, loaded: true, sections: action.payload };
 		case MODEL_ISSAVED:
 			return { ...state, isUnsaved: false };
 		default:

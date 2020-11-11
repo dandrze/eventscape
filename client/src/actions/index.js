@@ -1,5 +1,5 @@
-import axios from "axios";
 import { toast } from "react-toastify";
+import api from "../api/server";
 
 import {
 	SIGNIN_USER,
@@ -8,6 +8,7 @@ import {
 	ADD_SECTION,
 	UPDATE_SECTION,
 	CREATE_EVENT,
+	UPDATE_EVENT,
 	CHANGE_PAGE_EDITOR,
 	MOVE_SECTION,
 	DELETE_SECTION,
@@ -30,7 +31,7 @@ import {
 // USER ACTIONS
 
 export const signinUser = () => async (dispatch) => {
-	//const res = await axios.get("/api/current_user");
+	//const res = await api.get("/api/current_user");
 
 	const data = {
 		id: 1,
@@ -53,20 +54,14 @@ export const createEvent = (
 	primaryColor
 ) => async (dispatch) => {
 	const regPageModel = [
-		{ 
-			id: Math.random(), 
-			sectionHtml: logoHeaderModel(), 
-			name: "banner" 
-		},
+		{ html: logoHeaderModel(), name: "banner" },
 		{
-			id: Math.random(),
-			sectionHtml: heroBannerModel(title, primaryColor),
+			html: heroBannerModel(title, primaryColor),
 			name: "heroBanner",
 			showStreamSettings: false,
 		},
 		{
-			id: Math.random(),
-			sectionHtml: descriptionRegistrationModel(startDate, endDate),
+			html: descriptionRegistrationModel(startDate, endDate),
 			name: "body",
 			showStreamSettings: false,
 		},
@@ -74,35 +69,28 @@ export const createEvent = (
 
 	const eventPageModel = [
 		{
-			id: Math.random(),
-			sectionHtml: logoHeaderRightModel(),
+			html: logoHeaderRightModel(),
 			name: "bannerRight",
 			showStreamSettings: false,
 		},
 		{
-			id: Math.random(),
-			sectionHtml: titleTimeModel(title, startDate, endDate),
+			html: titleTimeModel(title, startDate, endDate),
 			name: "titleTime",
 			showStreamSettings: false,
 		},
 		{
-			id: Math.random(),
-			sectionHtml: streamChatModel(),
+			html: streamChatModel(),
 			name: "streamChat",
 			showStreamSettings: true,
 		},
 		{
-			id: Math.random(),
-			sectionHtml: blankModel(),
+			html: blankModel(),
 			name: "blankModel",
 			showStreamSettings: false,
 		},
 	];
 
-	const id = Math.random();
-
 	const event = {
-		id,
 		title,
 		link,
 		category,
@@ -110,38 +98,73 @@ export const createEvent = (
 		endDate,
 		timeZone,
 		primaryColor,
-		livePageModel: {
-			regPageModel,
-			eventPageModel,
-		},
-		savedPageModel: {
-			regPageModel,
-			eventPageModel,
-		},
+		regPageModel,
+		eventPageModel,
+		regPageLive: false,
+		eventPageLive: false,
 	};
 
-	const res = await axios.post("/api/event", event);
+	const res = await api.post("/api/event", event);
 
-	await dispatch({
-		type: CREATE_EVENT,
-		payload: event,
-	});
+	if (res.status === 201) {
+		await dispatch({
+			type: CREATE_EVENT,
+			payload: res.data,
+		});
 
-	await dispatch(fetchPageModel());
+		await dispatch(fetchPageModel());
+	} else {
+		toast.error("Error when saving: " + res.statusText);
+	}
+};
+
+export const updateEvent = (
+	title,
+	link,
+	category,
+	startDate,
+	endDate,
+	timeZone,
+	primaryColor
+) => async (dispatch, getState) => {
+	const updatedEvent = {
+		title,
+		link,
+		category,
+		startDate,
+		endDate,
+		timeZone,
+		primaryColor,
+		regPageIsLive: getState().event.reg_page_is_live,
+		eventPageIsLive: getState().event.event_page_is_live,
+	};
+
+	console.log(updatedEvent);
+
+	const res = await api.put("/api/event", updatedEvent);
+
+	console.log(res);
+
+	if (res.status === 200) {
+		await dispatch({
+			type: UPDATE_EVENT,
+			payload: res.data,
+		});
+	} else {
+		toast.error("Error when saving: " + res.statusText);
+	}
 };
 
 export const fetchEvent = () => async (dispatch) => {
 	// call the api and return the event in json
-
-	console.log("fetch events called");
-
-	const event = await axios.get("/api/event");
+	const event = await api.get("/api/event/current");
 
 	console.log(event);
 
 	// if there are events, go to design page
 	if (event) {
 		dispatch({ type: FETCH_EVENT, payload: event.data });
+		dispatch(fetchPageModel());
 		return event;
 	} else {
 		// if no events then go to create event page
@@ -151,54 +174,48 @@ export const fetchEvent = () => async (dispatch) => {
 };
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
-	const event = await axios.get("/api/page?link=" + pageLink);
-	console.log(event.data);
-	if (event) {
-		dispatch({ type: FETCH_EVENT, payload: event.data });
-		return event;
-	} else {
-		return null;
-	}
+	const model = await api.get("/api/page", { params: { link: pageLink } });
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
 
 // MODEL ACTIONS
 
-export const fetchPageModel = () => (dispatch, getState) => {
-	let model = [];
-
-	console.log(getState().event);
-
+export const fetchPageModel = () => async (dispatch, getState) => {
+	var modelId;
 	try {
 		switch (getState().settings.nowEditingPage) {
 			case "registration":
-				model = getState().event.savedPageModel.regPageModel;
+				modelId = getState().event.reg_page_model;
 				break;
 			case "event":
-				model = getState().event.savedPageModel.eventPageModel;
+				modelId = getState().event.event_page_model;
 				break;
 		}
+
+		const model = await api.get("/api/model", { params: { id: modelId } });
+
+		dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 	} catch {
 		console.log("event is empty");
 	}
-
-	dispatch({ type: FETCH_PAGE_MODEL, payload: model });
 };
 
-export const updateSection = (index, sectionHtml) => {
+export const updateSection = (index, html) => {
 	// call the api and return the event in json
 	const payload = {
 		index,
-		sectionHtml,
+		html,
 	};
 	return { type: UPDATE_SECTION, payload };
 };
 
-export const addSection = (prevIndex, sectionHtml, sectionName) => {
+export const addSection = (prevIndex, html, sectionName) => {
 	// call the api and return the event in json
 
 	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), sectionHtml, sectionName },
+		model: { id: Math.random(), html, sectionName },
 	};
 
 	return { type: ADD_SECTION, payload };
@@ -216,12 +233,12 @@ export const saveModel = () => async (dispatch, getState) => {
 	// copy the model over to the event object
 	await dispatch(localSaveModel());
 
-	// call the new event object
-	// call the first event for now
-	const event = getState().event;
+	const model = getState().model.sections;
 
-	// save the new event object to database
-	const res = await axios.post("/api/event", event);
+	console.log(model);
+
+	// save the new model
+	const res = await api.put("/api/model", { model });
 
 	if (res.status === 200) {
 		toast.success("Page successfully saved");
@@ -246,39 +263,33 @@ export const localSaveModel = () => (dispatch, getState) => {
 	}
 };
 
-export const publishModel = () => async (dispatch, getState) => {
-	// save the saved model locally
-	await dispatch(localSaveModel());
-	// save the live model locally
-	await dispatch(localPublishModel());
-
-	// call the new event object
-	// call the first event for now
-	const event = getState().event;
-
-	// save the new event object to database
-	const res = await axios.post("/api/event", event);
-
-	if (res.status === 200) {
-		toast.success("Page successfully published");
-	} else {
-		toast.error("Error when saving: " + res.statusText);
-	}
-};
-
-export const localPublishModel = () => (dispatch, getState) => {
+export const publishPage = () => async (dispatch, getState) => {
 	const currentPage = getState().settings.nowEditingPage;
-	const currentModel = getState().model.sections;
+
+	// save the model
+	await dispatch(saveModel());
+
+	var newEvent = {};
 
 	switch (currentPage) {
 		case "registration":
-			dispatch({ type: PUBLISH_REG_MODEL, payload: currentModel });
-			dispatch({ type: MODEL_ISSAVED });
+			newEvent = { ...getState().event, reg_page_is_live: true };
 			break;
 		case "event":
-			dispatch({ type: PUBLISH_EVENT_MODEL, payload: currentModel });
-			dispatch({ type: MODEL_ISSAVED });
+			newEvent = { ...getState().event, event_page_is_live: true };
 			break;
+	}
+
+	const res = await api.put("/api/event", newEvent);
+
+	if (res.status === 200) {
+		await dispatch({
+			type: UPDATE_EVENT,
+			payload: res.data,
+		});
+		toast.success("Page successfully published");
+	} else {
+		toast.error("Error when saving: " + res.statusText);
 	}
 };
 

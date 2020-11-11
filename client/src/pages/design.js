@@ -8,9 +8,7 @@ import PageEditor from "../components/pageEditor";
 
 class Design extends React.Component {
 	componentDidMount() {
-		console.log(this.props.event.loaded);
-		if (this.props.event.loaded === false) {
-			console.log("fetched");
+		if (this.props.model.loaded === false) {
 			this.props.fetchEvent();
 		}
 	}
@@ -21,8 +19,8 @@ class Design extends React.Component {
 				<NavBar3
 					displaySideNav="true"
 					content={
-						this.props.event.loaded ? (
-							<PageEditor key={this.props.event} />
+						this.props.model.loaded ? (
+							<PageEditor key={this.props.model} />
 						) : (
 							<CircularProgress />
 						)
@@ -34,7 +32,7 @@ class Design extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event };
+	return { event: state.event, model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(Design);
