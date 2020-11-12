@@ -18,6 +18,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+
 import PenIcon from "../icons/pen.svg";
 import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
@@ -34,6 +39,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
 import * as actions from "../actions";
+import AlertDialog from "./AlertDialog";
 
 /*color palette*/
 const MenuText = "#EAEAEA";
@@ -125,8 +131,24 @@ function NavBar3(props) {
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
+	const [navAlertOpen, setNavAlertOpen] = React.useState(false);
+	const [target, setTarget] = React.useState("");
+
+	const handlePageChange = (pageName) => {
+		if (props.model.isUnsaved) {
+			setTarget(pageName);
+			setNavAlertOpen(true);
+		} else {
+			changePageEditor(pageName);
+		}
+	};
+
+	const handleNavAlertClose = () => {
+		setNavAlertOpen(false);
+	};
 
 	const changePageEditor = (pageName) => {
+		console.log(pageName);
 		props.changePageEditor(pageName);
 		props.fetchModelFromState();
 	};
@@ -167,6 +189,14 @@ function NavBar3(props) {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
+			<AlertDialog
+				open={navAlertOpen}
+				onClose={handleNavAlertClose}
+				onContinue={() => {
+					handleNavAlertClose();
+					changePageEditor(target);
+				}}
+			/>
 			<AppBar
 				position="fixed"
 				className={clsx(classes.appBar, {
@@ -333,26 +363,22 @@ function NavBar3(props) {
 						open={Boolean(anchorElDesign)}
 						onClose={handleCloseDesign}
 					>
-						<Link to="./Design">
-							<MenuItem
-								onClick={() => {
-									handleCloseDesign();
-									changePageEditor("registration");
-								}}
-							>
-								Registration Page
-							</MenuItem>
-						</Link>
-						<Link to="./Design">
-							<MenuItem
-								onClick={() => {
-									handleCloseDesign();
-									changePageEditor("event");
-								}}
-							>
-								Event Page
-							</MenuItem>
-						</Link>
+						<MenuItem
+							onClick={() => {
+								handleCloseDesign();
+								handlePageChange("registration");
+							}}
+						>
+							Registration Page
+						</MenuItem>
+						<MenuItem
+							onClick={() => {
+								handleCloseDesign();
+								handlePageChange("event");
+							}}
+						>
+							Event Page
+						</MenuItem>
 						<Link to="./WebsiteSettings">
 							<MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
 						</Link>
@@ -368,7 +394,7 @@ function NavBar3(props) {
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event, settings: state.settings };
+	return { event: state.event, model: state.model, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(NavBar3);
