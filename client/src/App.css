@@ -14,7 +14,7 @@
 
 body {
 	/* Colour Pallete */
-	--main-bg-color: #f8f8f8;
+	--main-bg-color: #ffffff;
 	--main-color: #b0281c;
 	--menu-bg: #2f2f2f;
 	--menu-text: #eaeaea;
@@ -132,14 +132,13 @@ label {
 	border-color: var(--main-color);
 	border-style: solid;
 	height: min-content;
-	transition: all .1s ease-in-out;
+	transition: all 0.1s ease-in-out;
 }
 
 .Button1:hover {
 	color: var(--main-color);
 	background-color: transparent;
 	cursor: pointer;
-
 }
 
 .Button1:focus,
@@ -160,7 +159,7 @@ label {
 	border-color: var(--main-color);
 	border-style: solid;
 	height: min-content;
-	transition: all .1s ease-in-out;
+	transition: all 0.1s ease-in-out;
 }
 
 .Button2:hover {
