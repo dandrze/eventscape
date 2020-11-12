@@ -54,7 +54,7 @@ function App() {
 				<Route exact path="/CommunicationEditor" component={EmailEditor} />
 				<Route exact path="/Registrations" component={Registrations} />
 				<Route exact path="/Analytics" component={Analytics} />
-				<Route exact path="/Preview" component={Preview} />
+				<Route exact path="/Preview/:id" component={Preview} />
 				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
 			</header>
 		</div>

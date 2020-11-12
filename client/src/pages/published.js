@@ -11,11 +11,10 @@ class Published extends React.Component {
 		this.state = { status: "loading" };
 	}
 	async componentDidMount() {
-		this.props.fetchPublishedPage(this.props.subdomain);
+		this.props.fetchModelFromLink(this.props.subdomain);
 	}
 
 	renderPage() {
-		console.log(this.props.model.sections.length ? "true" : false);
 		if (this.props.model.loaded && this.props.model.sections.length) {
 			return (
 				<ul>

@@ -19,7 +19,7 @@ class PageEditor extends Component {
 	}
 
 	componentDidMount() {
-		this.props.fetchPageModel();
+		this.props.fetchModelFromState();
 		console.log(this.props.key);
 	}
 
@@ -38,7 +38,7 @@ class PageEditor extends Component {
 				</Link>
 				<div className="design">
 					<div id="topButtons">
-						<Link to="/Preview" id="preview">
+						<Link to={() => "/Preview/" + (this.props.settings.nowEditingPage == "registration" ? this.props.event.reg_page_model : this.props.event.event_page_model)} target="_blank" id="preview" >
 							<button className="Button1">
 								Preview Page As Guest
 							</button>
@@ -76,7 +76,7 @@ class PageEditor extends Component {
 }
 
 const mapStateToProps = (state) => {
-	return { model: state.model, event: state.event };
+	return { model: state.model, event: state.event, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(PageEditor);

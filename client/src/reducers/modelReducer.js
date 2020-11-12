@@ -9,7 +9,7 @@ import {
 } from "../actions/types";
 
 export default function (
-	state = { isUnsaved: false, loaded: false, sections: [] },
+	state = { isUnsaved: false, loaded: false, isLIve: false, sections: [] },
 	action
 ) {
 	switch (action.type) {
@@ -50,7 +50,11 @@ export default function (
 				state.sections[action.payload.index];
 			return { isUnsaved: true, sections: newSections };
 		case FETCH_PAGE_MODEL:
-			return { isUnsaved: false, loaded: true, sections: action.payload };
+			return {
+				isUnsaved: false,
+				loaded: true,
+				sections: action.payload,
+			};
 		case MODEL_ISSAVED:
 			return { ...state, isUnsaved: false };
 		default:

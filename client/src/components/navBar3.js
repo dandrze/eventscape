@@ -128,7 +128,7 @@ function NavBar3(props) {
 
 	const changePageEditor = (pageName) => {
 		props.changePageEditor(pageName);
-		props.fetchPageModel();
+		props.fetchModelFromState();
 	};
 
 	const handleDrawerOpen = () => {
