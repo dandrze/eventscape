@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -128,6 +128,8 @@ function NavBar3(props) {
 	const displaySideNav = props.displaySideNav;
 	const content = props.content;
 
+	let history = useHistory();
+
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
@@ -135,11 +137,13 @@ function NavBar3(props) {
 	const [target, setTarget] = React.useState("");
 
 	const handlePageChange = (pageName) => {
-		if (props.model.isUnsaved) {
+		// if the user is currently on the design page, and they want to navigate to the other page editor with unsaved changes, display the confirmation alert
+		if (history.location.pathname == "/design" && props.model.isUnsaved) {
 			setTarget(pageName);
 			setNavAlertOpen(true);
 		} else {
 			changePageEditor(pageName);
+			history.push("/design");
 		}
 	};
 
@@ -148,7 +152,6 @@ function NavBar3(props) {
 	};
 
 	const changePageEditor = (pageName) => {
-		console.log(pageName);
 		props.changePageEditor(pageName);
 		props.fetchModelFromState();
 	};
@@ -231,7 +234,7 @@ function NavBar3(props) {
 					</Tooltip>
 
 					<Tooltip title="Change Event">
-						<Link to="/My_Events">
+						<Link to="/my-events">
 							<Typography className={classes.currentEvent} variant="h6" noWrap>
 								Current Event
 							</Typography>
@@ -316,7 +319,7 @@ function NavBar3(props) {
 							</Tooltip>
 							<ListItemText primary="Design" />
 						</ListItem>
-						<Link to="/Communication">
+						<Link to="/communication">
 							<ListItem button key="communicate">
 								<Tooltip title="Communicate">
 									<ListItemIcon>
@@ -326,7 +329,7 @@ function NavBar3(props) {
 								<ListItemText primary="Communicate" />
 							</ListItem>
 						</Link>
-						<Link to="/Registrations">
+						<Link to="/registrations">
 							<ListItem button key="registrations">
 								<Tooltip title="Registrations">
 									<ListItemIcon>
@@ -336,7 +339,7 @@ function NavBar3(props) {
 								<ListItemText primary="Registrations" />
 							</ListItem>
 						</Link>
-						<Link to="./Analytics">
+						<Link to="./analytics">
 							<ListItem button key="analytics">
 								<Tooltip title="Analytics">
 									<ListItemIcon>
@@ -379,7 +382,7 @@ function NavBar3(props) {
 						>
 							Event Page
 						</MenuItem>
-						<Link to="./WebsiteSettings">
+						<Link to="./website-settings">
 							<MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
 						</Link>
 					</Menu>

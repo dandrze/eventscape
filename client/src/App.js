@@ -44,18 +44,18 @@ function App() {
 			<ToastContainer position="top-right" autoClose={3000} />
 			<header className="App-header">
 				<Route exact path="/" component={Landing} />
-				<Route exact path="/Dashboard" component={Dashboard} />
-				<Route exact path="/Create_Account" component={Create_Account} />
-				<Route exact path="/Event_Details" component={Event_Details} />
-				<Route exact path="/My_Events" component={My_Events} />
-				<Route exact path="/Design" component={Design} />
-				<Route exact path="/WebsiteSettings" component={WebsiteSettings} />
-				<Route exact path="/Communication" component={Communication} />
-				<Route exact path="/CommunicationEditor" component={EmailEditor} />
-				<Route exact path="/Registrations" component={Registrations} />
-				<Route exact path="/Analytics" component={Analytics} />
-				<Route exact path="/Preview/:id" component={Preview} />
-				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
+				<Route exact path="/dashboard" component={Dashboard} />
+				<Route exact path="/create-account" component={Create_Account} />
+				<Route exact path="/event-details" component={Event_Details} />
+				<Route exact path="/my-events" component={My_Events} />
+				<Route exact path="/design" component={Design} />
+				<Route exact path="/website-settings" component={WebsiteSettings} />
+				<Route exact path="/communication" component={Communication} />
+				<Route exact path="/communication-editor" component={EmailEditor} />
+				<Route exact path="/registrations" component={Registrations} />
+				<Route exact path="/analytics" component={Analytics} />
+				<Route exact path="/preview/:id" component={Preview} />
+				<Route exact path="/scotiabank-giller-prize" component={Giller} />
 			</header>
 		</div>
 	);

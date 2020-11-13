@@ -13,7 +13,7 @@ export default class My_Events extends React.Component {
 					<div className="myEventsHead">
 						<h1 className="myEvents1">My Events</h1>
 						<br></br>
-						<Link to="/Event_Details">
+						<Link to="/event-details">
 							<button className="Button1 myEvents2">Create New Event</button>
 						</Link>
 					</div>

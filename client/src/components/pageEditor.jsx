@@ -8,20 +8,58 @@ import * as actions from "../actions";
 import PageSectionEditor from "./pageSectionEditor";
 import { banner, hero, body } from "./designBlockModels";
 import Tooltip from "@material-ui/core/Tooltip";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
+import AlertDialog from "./AlertDialog";
+
 
 class PageEditor extends Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {};
+		this.state = {open : false, location: null, confirmedNavigation: false,};
+
+		this.showNavAlert = this.showNavAlert.bind(this)
+		this.handleNavAlertClose = this.handleNavAlertClose.bind(this)
 	}
 
 	componentDidMount() {
 		this.props.fetchModelFromState();
-		console.log(this.props.key);
 	}
+
+	showNavAlert(location) {
+		this.setState({open: true, location})
+	};
+
+	handleBlockedNavigation = (nextLocation) => {
+		const {model} = this.props;
+		const {confirmedNavigation} = this.state
+		if (!confirmedNavigation && this.props.model.isUnsaved){
+			this.showNavAlert(nextLocation)
+			return false
+		}
+		return true
+	  }
+
+	handleNavAlertClose() {
+		this.setState({open: false})
+	};
+
+	handleNavAlertConfirm = () => {
+		const {history} = this.props
+		const {location} = this.state
+
+		this.handleNavAlertClose();
+
+		if (location) {
+			this.setState({
+				confirmedNavigation: true
+			 }, () => {
+				// Navigate to the previously blocked location now that the user confirmed     
+				history.push(location.pathname)
+			 })
+		}
+	  }
 
 
 	render() {
@@ -29,16 +67,24 @@ class PageEditor extends Component {
 			<div>
 				<Prompt
 				when={this.props.model.isUnsaved}
-				message='You have unsaved changes, are you sure you want to leave?'
+				message={this.handleBlockedNavigation}
 				/>
-				<Link to="./Design" id="cancelBar">
+				<AlertDialog
+					open={this.state.open}
+					onClose={this.handleNavAlertClose}
+					onContinue={() => {
+						this.handleNavAlertConfirm();
+					}}
+				/>
+
+				<Link to="./design" id="cancelBar">
 					<Tooltip title="Close Editor">
 						<img src={Cancel} id="cancelIcon" height="24px"></img>
 					</Tooltip>
 				</Link>
 				<div className="design">
 					<div id="topButtons">
-						<Link to={() => "/Preview/" + (this.props.settings.nowEditingPage == "registration" ? this.props.event.reg_page_model : this.props.event.event_page_model)} target="_blank" id="preview" >
+						<Link to={() => "/preview/" + (this.props.settings.nowEditingPage == "registration" ? this.props.event.reg_page_model : this.props.event.event_page_model)} target="_blank" id="preview" >
 							<button className="Button1">
 								Preview Page As Guest
 							</button>
@@ -79,4 +125,4 @@ const mapStateToProps = (state) => {
 	return { model: state.model, event: state.event, settings: state.settings };
 };
 
-export default connect(mapStateToProps, actions)(PageEditor);
+export default connect(mapStateToProps, actions)(withRouter(PageEditor));
