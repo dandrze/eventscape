@@ -8,14 +8,13 @@ router.post("/api/event", async (req, res) => {
 		title,
 		link,
 		category,
-		startDate,
-		endDate,
-		timeZone,
-		primaryColor,
-		regPageModel,
-		eventPageModel,
-		regPageLive,
-		eventPageLive,
+		start_date,
+		end_date,
+		time_zone,
+		primary_color,
+		reg_page_model,
+		event_page_model,
+		is_live,
 	} = req.body;
 
 	// hard coded userId. Will eventualy pull from request params.
@@ -49,13 +48,13 @@ router.post("/api/event", async (req, res) => {
 	);
 
 	// Store the section HTML for the model above
-	for (i = 0; i < regPageModel.length; i++) {
+	for (i = 0; i < reg_page_model.length; i++) {
 		await db.query(
 			`INSERT INTO section_html
 					(model, index, html)
 					VALUES
 					($1, $2, $3)`,
-			[pgRegModel.rows[0].id, i, regPageModel[i].html]
+			[pgRegModel.rows[0].id, i, reg_page_model[i].html]
 		);
 	}
 
@@ -74,34 +73,33 @@ router.post("/api/event", async (req, res) => {
 	);
 
 	// Store the section HTML for the model above
-	for (i = 0; i < eventPageModel.length; i++) {
+	for (i = 0; i < event_page_model.length; i++) {
 		await db.query(
 			`INSERT INTO section_html
 					(model, index, html)
 					VALUES
 					($1, $2, $3)`,
-			[pgEventModel.rows[0].id, i, eventPageModel[i].html]
+			[pgEventModel.rows[0].id, i, event_page_model[i].html]
 		);
 	}
 
 	// add the event to the event table. Make it the current event
 	const newEvent = await db.query(
 		`INSERT INTO event 
-			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, reg_page_is_live, event_page_is_live, reg_page_model, event_page_model) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, is_live, reg_page_model, event_page_model) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 		RETURNING *`,
 		[
 			title,
 			link,
 			category,
-			startDate,
-			endDate,
-			timeZone,
-			primaryColor,
+			start_date,
+			end_date,
+			time_zone,
+			primary_color,
 			true,
 			userId,
-			regPageLive,
-			eventPageLive,
+			is_live,
 			pgRegModel.rows[0].id,
 			pgEventModel.rows[0].id,
 		],
@@ -152,12 +150,11 @@ router.put("/api/event", async (req, res) => {
 		title,
 		link,
 		category,
-		startDate,
-		endDate,
-		timeZone,
-		primaryColor,
-		regPageIsLive,
-		eventPageIsLive,
+		start_date,
+		end_date,
+		time_zone,
+		primary_color,
+		is_live,
 	} = req.body;
 
 	const events = await db.query(
@@ -170,21 +167,19 @@ router.put("/api/event", async (req, res) => {
 		  end_date = $5, 
 		  time_zone = $6,
 		  primary_color = $7,
-		  reg_page_is_live = $8,
-		  event_page_is_live = $9
+		  is_live = $8
 		WHERE 
-		  user_id=$10 AND is_current=true
+		  user_id=$9 AND is_current=true
 		RETURNING *`,
 		[
 			title,
 			link,
 			category,
-			startDate,
-			endDate,
-			timeZone,
-			primaryColor,
-			regPageIsLive,
-			eventPageIsLive,
+			start_date,
+			end_date,
+			time_zone,
+			primary_color,
+			is_live,
 			userId,
 		],
 		(err, res) => {

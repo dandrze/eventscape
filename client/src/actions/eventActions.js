@@ -16,33 +16,33 @@ export const createEvent = (
 	title,
 	link,
 	category,
-	startDate,
-	endDate,
-	timeZone,
-	primaryColor
+	start_date,
+	end_date,
+	time_zone,
+	primary_color
 ) => async (dispatch) => {
-	const regPageModel = [
+	const reg_page_model = [
 		{ html: logoHeaderModel(), name: "banner" },
 		{
-			html: heroBannerModel(title, primaryColor),
+			html: heroBannerModel(title, primary_color),
 			name: "heroBanner",
 			showStreamSettings: false,
 		},
 		{
-			html: descriptionRegistrationModel(startDate, endDate),
+			html: descriptionRegistrationModel(start_date, end_date),
 			name: "body",
 			showStreamSettings: false,
 		},
 	];
 
-	const eventPageModel = [
+	const event_page_model = [
 		{
 			html: logoHeaderRightModel(),
 			name: "bannerRight",
 			showStreamSettings: false,
 		},
 		{
-			html: titleTimeModel(title, startDate, endDate),
+			html: titleTimeModel(title, start_date, end_date),
 			name: "titleTime",
 			showStreamSettings: false,
 		},
@@ -62,14 +62,13 @@ export const createEvent = (
 		title,
 		link,
 		category,
-		startDate,
-		endDate,
-		timeZone,
-		primaryColor,
-		regPageModel,
-		eventPageModel,
-		regPageLive: false,
-		eventPageLive: false,
+		start_date,
+		end_date,
+		time_zone,
+		primary_color,
+		reg_page_model,
+		event_page_model,
+		isLive: false,
 	};
 
 	const res = await api.post("/api/event", event);
@@ -90,21 +89,20 @@ export const updateEvent = (
 	title,
 	link,
 	category,
-	startDate,
-	endDate,
-	timeZone,
-	primaryColor
+	start_date,
+	end_date,
+	time_zone,
+	primary_color
 ) => async (dispatch, getState) => {
 	const updatedEvent = {
 		title,
 		link,
 		category,
-		startDate,
-		endDate,
-		timeZone,
-		primaryColor,
-		regPageIsLive: getState().event.reg_page_is_live,
-		eventPageIsLive: getState().event.event_page_is_live,
+		start_date,
+		end_date,
+		time_zone,
+		primary_color,
+		isLive: getState().event.is_live,
 	};
 
 	console.log(updatedEvent);
@@ -142,21 +140,10 @@ export const fetchEvent = () => async (dispatch) => {
 };
 
 export const publishPage = () => async (dispatch, getState) => {
-	const currentPage = getState().settings.nowEditingPage;
-
 	// save the model
 	await dispatch(saveModel());
 
-	var newEvent = {};
-
-	switch (currentPage) {
-		case "registration":
-			newEvent = { ...getState().event, reg_page_is_live: true };
-			break;
-		case "event":
-			newEvent = { ...getState().event, event_page_is_live: true };
-			break;
-	}
+	const newEvent = { ...getState().event, is_live: true };
 
 	const res = await api.put("/api/event", newEvent);
 

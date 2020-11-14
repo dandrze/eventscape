@@ -56,7 +56,7 @@ const Table = (props) => {
 		return {
 			eventName: event.title,
 			eventDate: event.start_date,
-			status: "placeholder",
+			status: event.is_live ? "Live" : "Draft",
 		};
 	});
 
@@ -111,6 +111,7 @@ const Table = (props) => {
 		const [anchorEl, setAnchorEl] = React.useState(null);
 
 		const handleClick = (event) => {
+			console.log(event.currentTarget);
 			setAnchorEl(event.currentTarget);
 		};
 
