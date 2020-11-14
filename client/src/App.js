@@ -57,7 +57,7 @@ function App() {
 				<Route exact path="/registrations" component={Registrations} />
 				<Route exact path="/analytics" component={Analytics} />
 				<Route exact path="/preview/:id" component={Preview} />
-				<Route exact path="/scotiabank-giller-prize" component={Giller} />
+				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
 			</header>
 		</div>
 	);
