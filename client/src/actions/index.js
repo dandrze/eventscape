@@ -112,7 +112,7 @@ export const createEvent = (
 			payload: res.data,
 		});
 
-		await dispatch(fetchPageModel());
+		await dispatch(fetchModelFromState());
 	} else {
 		toast.error("Error when saving: " + res.statusText);
 	}
@@ -164,7 +164,7 @@ export const fetchEvent = () => async (dispatch) => {
 	// if there are events, go to design page
 	if (event) {
 		dispatch({ type: FETCH_EVENT, payload: event.data });
-		dispatch(fetchPageModel());
+		dispatch(fetchModelFromState());
 		return event;
 	} else {
 		// if no events then go to create event page
@@ -173,27 +173,34 @@ export const fetchEvent = () => async (dispatch) => {
 	}
 };
 
-export const fetchPublishedPage = (pageLink) => async (dispatch) => {
-	const model = await api.get("/api/page", { params: { link: pageLink } });
+export const fetchModelFromLink = (link) => async (dispatch) => {
+	const model = await api.get("/api/model/link", { params: { link } });
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+};
+
+export const fetchModelFromId = (id) => async (dispatch) => {
+	const model = await api.get("/api/model/id", { params: { id } });
 
 	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
 
 // MODEL ACTIONS
 
-export const fetchPageModel = () => async (dispatch, getState) => {
-	var modelId;
+export const fetchModelFromState = () => async (dispatch, getState) => {
 	try {
+		let id = null;
+
 		switch (getState().settings.nowEditingPage) {
 			case "registration":
-				modelId = getState().event.reg_page_model;
+				id = getState().event.reg_page_model;
 				break;
 			case "event":
-				modelId = getState().event.event_page_model;
+				id = getState().event.event_page_model;
 				break;
 		}
 
-		const model = await api.get("/api/model", { params: { id: modelId } });
+		const model = await api.get("/api/model/id", { params: { id } });
 
 		dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 	} catch {

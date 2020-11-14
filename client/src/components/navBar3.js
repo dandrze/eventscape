@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
 import { makeStyles, useTheme } from "@material-ui/core/styles";
@@ -18,6 +18,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+
 import PenIcon from "../icons/pen.svg";
 import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
@@ -34,6 +39,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
 import * as actions from "../actions";
+import AlertDialog from "./AlertDialog";
 
 /*color palette*/
 const MenuText = "#EAEAEA";
@@ -122,13 +128,32 @@ function NavBar3(props) {
 	const displaySideNav = props.displaySideNav;
 	const content = props.content;
 
+	let history = useHistory();
+
 	const classes = useStyles();
 	const theme = useTheme();
 	const [open, setOpen] = React.useState(true);
+	const [navAlertOpen, setNavAlertOpen] = React.useState(false);
+	const [target, setTarget] = React.useState("");
+
+	const handlePageChange = (pageName) => {
+		// if the user is currently on the design page, and they want to navigate to the other page editor with unsaved changes, display the confirmation alert
+		if (history.location.pathname == "/design" && props.model.isUnsaved) {
+			setTarget(pageName);
+			setNavAlertOpen(true);
+		} else {
+			changePageEditor(pageName);
+			history.push("/design");
+		}
+	};
+
+	const handleNavAlertClose = () => {
+		setNavAlertOpen(false);
+	};
 
 	const changePageEditor = (pageName) => {
 		props.changePageEditor(pageName);
-		props.fetchPageModel();
+		props.fetchModelFromState();
 	};
 
 	const handleDrawerOpen = () => {
@@ -167,6 +192,14 @@ function NavBar3(props) {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
+			<AlertDialog
+				open={navAlertOpen}
+				onClose={handleNavAlertClose}
+				onContinue={() => {
+					handleNavAlertClose();
+					changePageEditor(target);
+				}}
+			/>
 			<AppBar
 				position="fixed"
 				className={clsx(classes.appBar, {
@@ -201,7 +234,7 @@ function NavBar3(props) {
 					</Tooltip>
 
 					<Tooltip title="Change Event">
-						<Link to="/My_Events">
+						<Link to="/my-events">
 							<Typography className={classes.currentEvent} variant="h6" noWrap>
 								Current Event
 							</Typography>
@@ -286,7 +319,7 @@ function NavBar3(props) {
 							</Tooltip>
 							<ListItemText primary="Design" />
 						</ListItem>
-						<Link to="/Communication">
+						<Link to="/communication">
 							<ListItem button key="communicate">
 								<Tooltip title="Communicate">
 									<ListItemIcon>
@@ -296,7 +329,7 @@ function NavBar3(props) {
 								<ListItemText primary="Communicate" />
 							</ListItem>
 						</Link>
-						<Link to="/Registrations">
+						<Link to="/registrations">
 							<ListItem button key="registrations">
 								<Tooltip title="Registrations">
 									<ListItemIcon>
@@ -306,7 +339,7 @@ function NavBar3(props) {
 								<ListItemText primary="Registrations" />
 							</ListItem>
 						</Link>
-						<Link to="./Analytics">
+						<Link to="./analytics">
 							<ListItem button key="analytics">
 								<Tooltip title="Analytics">
 									<ListItemIcon>
@@ -333,27 +366,23 @@ function NavBar3(props) {
 						open={Boolean(anchorElDesign)}
 						onClose={handleCloseDesign}
 					>
-						<Link to="./Design">
-							<MenuItem
-								onClick={() => {
-									handleCloseDesign();
-									changePageEditor("registration");
-								}}
-							>
-								Registration Page
-							</MenuItem>
-						</Link>
-						<Link to="./Design">
-							<MenuItem
-								onClick={() => {
-									handleCloseDesign();
-									changePageEditor("event");
-								}}
-							>
-								Event Page
-							</MenuItem>
-						</Link>
-						<Link to="./WebsiteSettings">
+						<MenuItem
+							onClick={() => {
+								handleCloseDesign();
+								handlePageChange("registration");
+							}}
+						>
+							Registration Page
+						</MenuItem>
+						<MenuItem
+							onClick={() => {
+								handleCloseDesign();
+								handlePageChange("event");
+							}}
+						>
+							Event Page
+						</MenuItem>
+						<Link to="./website-settings">
 							<MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
 						</Link>
 					</Menu>
@@ -368,7 +397,7 @@ function NavBar3(props) {
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event, settings: state.settings };
+	return { event: state.event, model: state.model, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(NavBar3);

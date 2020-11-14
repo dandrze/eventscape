@@ -1,21 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import ReactHtmlParser from "react-html-parser";
+import { useParams } from "react-router-dom";
+import "froala-editor/css/froala_style.min.css";
 
-class Preview extends React.Component {
-	render() {
-		return (
-			<div>
-				<ul>
-					{this.props.model.sections.map(function (sectionModel) {
-						return ReactHtmlParser(sectionModel.html);
-					})}
-				</ul>
-			</div>
-		);
-	}
-}
+const Preview = (props) => {
+	const { id } = useParams();
+	useEffect(() => {
+		props.fetchModelFromId(id);
+	}, []);
+
+	return (
+		<div class="fr-view">
+			<ul>
+				{props.model.sections.map(function (section) {
+					console.log(section.html);
+					return ReactHtmlParser(section.html);
+				})}
+			</ul>
+		</div>
+	);
+};
 
 const mapStateToProps = (state) => {
 	return { model: state.model };

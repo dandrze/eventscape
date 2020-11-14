@@ -13,7 +13,7 @@ export default class Create_Account extends React.Component {
 				</h1>
 				<EmailPassword />
 				<br></br>
-				<Link to="/Event_Details">
+				<Link to="/event-details">
 					<button className="Button1" type="submit">
 						Create My Account
 					</button>

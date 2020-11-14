@@ -44,7 +44,7 @@ class Content extends Component {
 	render() {
 		return (
 			<div>
-				<Link to="./Communication" id="cancelBar">
+				<Link to="./communication" id="cancelBar">
 					<Tooltip title="Close Editor">
 						<img src={Cancel} id="cancelIcon" height="24px"></img>
 					</Tooltip>
@@ -60,9 +60,8 @@ class Content extends Component {
 						</button>
 					</div>
 
-					
 					<div id="designBoard">
-						<div style={{overflow: 'hidden'}}>
+						<div style={{ overflow: "hidden" }}>
 							<div id="emailInputs">
 								<div className="inputDiv">
 									<label htmlFor="toSelect" id="emailLabel">
