@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
 import { Paper } from "@material-ui/core";
@@ -6,6 +7,7 @@ import Button from "@material-ui/core/Button";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import MenuIcon from "../icons/menu.svg";
+import { format } from "date-fns-tz";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -48,27 +50,15 @@ const tableIcons = {
 	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const Table = () => {
-	const data = [
-		{
-			eventName: "TEDx",
-			eventDate: "October 20, 2020",
-			status: "Draft",
-			edit: "",
-		},
-		{
-			eventName: "International Film Festival",
-			eventDate: "November 15, 2020",
-			status: "Live",
-			edit: "",
-		},
-		{
-			eventName: "Fundraising Gala",
-			eventDate: "November 23, 2020",
-			status: "Live",
-			edit: "",
-		},
-	];
+const Table = (props) => {
+	const data = props.eventList.map((event) => {
+		console.log(typeof event.start_date);
+		return {
+			eventName: event.title,
+			eventDate: event.start_date,
+			status: "placeholder",
+		};
+	});
 
 	const columns = [
 		{
@@ -167,4 +157,8 @@ const Table = () => {
 	);
 };
 
-export default Table;
+const mapStateToProps = (state) => {
+	return { eventList: state.eventList };
+};
+
+export default connect(mapStateToProps)(Table);
