@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import ReactHtmlParser from "react-html-parser";
 import { useParams } from "react-router-dom";
+import "froala-editor/css/froala_style.min.css";
 
 const Preview = (props) => {
 	const { id } = useParams();
@@ -11,9 +12,10 @@ const Preview = (props) => {
 	}, []);
 
 	return (
-		<div>
+		<div class="fr-view">
 			<ul>
 				{props.model.sections.map(function (section) {
+					console.log(section.html);
 					return ReactHtmlParser(section.html);
 				})}
 			</ul>

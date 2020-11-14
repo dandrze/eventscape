@@ -24,8 +24,7 @@ class PageEditor extends Component {
 	}
 
 	componentDidMount() {
-		this.props.fetchModelFromState();
-	}
+		this.props.fetchModelFromState();	}
 
 	showNavAlert(location) {
 		this.setState({open: true, location})

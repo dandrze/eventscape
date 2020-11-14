@@ -22,6 +22,8 @@ import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
 
+//import "froala-editor/css/froala_style.min.css";
+
 function App() {
 	const path = window.location.host.split(".");
 

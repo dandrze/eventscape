@@ -17,11 +17,13 @@ class Published extends React.Component {
 	renderPage() {
 		if (this.props.model.loaded && this.props.model.sections.length) {
 			return (
-				<ul>
-					{this.props.model.sections.map(function (section) {
-						return ReactHtmlParser(section.html);
-					})}
-				</ul>
+				<div class="fr-view">
+					<ul>
+						{this.props.model.sections.map(function (section) {
+							return ReactHtmlParser(section.html);
+						})}
+					</ul>
+				</div>
 			);
 		} else if (this.props.model.loaded) {
 			return <p>No Event Found</p>;
