@@ -5,6 +5,7 @@ import "react-toastify/dist/ReactToastify.css";
 
 import logo from "./logo.svg";
 import "./App.css";
+import "./components/fonts.css";
 import { Route, Link } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Landing from "./pages/landing";
