@@ -58,6 +58,8 @@ export const createEvent = (
 		},
 	];
 
+	console.log(typeof start_date);
+
 	const event = {
 		title,
 		link,
@@ -127,13 +129,11 @@ export const fetchEvent = () => async (dispatch) => {
 
 	console.log(event);
 
-	// if there are events, go to design page
 	if (event) {
 		dispatch({ type: FETCH_EVENT, payload: event.data });
 		dispatch(fetchPageModel());
 		return event;
 	} else {
-		// if no events then go to create event page
 		console.log("no events");
 		return null;
 	}

@@ -1,13 +1,10 @@
-import React from "react";
+import React, { forwardRef, useState } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
-import { forwardRef } from "react";
+import { withRouter } from "react-router-dom";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import { Paper } from "@material-ui/core";
-import Button from "@material-ui/core/Button";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import MenuIcon from "../icons/menu.svg";
-import { format } from "date-fns-tz";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -25,6 +22,9 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
+import LibraryAdd from "@material-ui/icons/LibraryAdd";
+
+import * as actions from "../actions";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,23 +51,35 @@ const tableIcons = {
 };
 
 const Table = (props) => {
-	const data = props.eventList.map((event) => {
-		console.log(typeof event.start_date);
-		return {
-			eventName: event.title,
-			eventDate: event.start_date,
-			status: event.is_live ? "Live" : "Draft",
-		};
-	});
+	const data = props.eventList
+		.filter((event) => {
+			const startDate = new Date(event.start_date);
+			const today = new Date();
+			if (
+				(startDate >= today && props.isUpcoming) ||
+				(startDate < today && !props.isUpcoming)
+			) {
+				return true;
+			}
+		})
+		.map((event) => {
+			const eventDate = new Date(event.start_date);
+			return {
+				id: event.id,
+				name: event.title,
+				date: eventDate.toLocaleString(),
+				status: event.is_live ? "Live" : "Draft",
+			};
+		});
 
 	const columns = [
 		{
 			title: "Event Name",
-			field: "eventName",
+			field: "name",
 		},
 		{
 			title: "Event Date",
-			field: "eventDate",
+			field: "date",
 		},
 		{
 			title: "Status",
@@ -103,63 +115,63 @@ const Table = (props) => {
 
 	const actions = [
 		{
-			icon: () => <HandleEdit />,
+			icon: Edit,
+			tooltip: "Edit Event",
+			onClick: async (event, rowData) => {
+				// Set this event as the current event
+				const res = await props.setCurrentEvent(rowData.id);
+
+				// fetch the new event
+				await props.fetchEvent();
+
+				props.history.push("/design");
+			},
+		},
+		{
+			icon: LibraryAdd,
+			tooltip: "Duplicate Event",
+			onClick: async (event, rowData) => {
+				await props.duplicateEvent(rowData.id);
+				props.fetchEventList();
+				//add stuff here
+			},
+		},
+		{
+			icon: DeleteOutline,
+			tooltip: "Delete Event",
+			onClick: async (event, rowData) => {
+				await props.deleteEvent(rowData.id);
+				props.fetchEventList();
+				//add stuff here
+			},
 		},
 	];
-
-	const HandleEdit = (event) => {
-		const [anchorEl, setAnchorEl] = React.useState(null);
-
-		const handleClick = (event) => {
-			console.log(event.currentTarget);
-			setAnchorEl(event.currentTarget);
-		};
-
-		const handleClose = () => {
-			setAnchorEl(null);
-		};
-
+	if (data.length > 0) {
 		return (
-			<div>
-				<Button
-					aria-controls="simple-menu"
-					aria-haspopup="true"
-					onClick={handleClick}
-				>
-					<img src={MenuIcon} height="22px"></img>
-				</Button>
-				<Menu
-					id="simple-menu"
-					anchorEl={anchorEl}
-					keepMounted
-					open={Boolean(anchorEl)}
-					onClose={handleClose}
-				>
-					<MenuItem onClick={handleClose}>Dashboard</MenuItem>
-					<MenuItem onClick={handleClose}>Duplicate</MenuItem>
-					<MenuItem onClick={handleClose}>Delete</MenuItem>
-				</Menu>
+			<MaterialTable
+				title="Employee Details"
+				data={data}
+				columns={columns}
+				options={options}
+				icons={tableIcons}
+				actions={actions}
+				components={{
+					Container: (props) => <Paper {...props} elevation={0} />,
+				}}
+				key={props.eventList}
+			/>
+		);
+	} else {
+		return (
+			<div style={{ width: "630px", padding: "50px" }}>
+				<CircularProgress />
 			</div>
 		);
-	};
-
-	return (
-		<MaterialTable
-			title="Employee Details"
-			data={data}
-			columns={columns}
-			options={options}
-			icons={tableIcons}
-			actions={actions}
-			components={{
-				Container: (props) => <Paper {...props} elevation={0} />,
-			}}
-		/>
-	);
+	}
 };
 
 const mapStateToProps = (state) => {
 	return { eventList: state.eventList };
 };
 
-export default connect(mapStateToProps)(Table);
+export default connect(mapStateToProps, actions)(withRouter(Table));

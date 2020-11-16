@@ -11,7 +11,6 @@ class My_Events extends React.Component {
 	componentDidMount() {
 		this.props.fetchEventList();
 		this.props.fetchEvent();
-		console.log(this.props.eventList);
 	}
 
 	render() {
@@ -29,12 +28,12 @@ class My_Events extends React.Component {
 					<Tabs>
 						<div label="Upcoming Events">
 							<div className="table1">
-								<Table></Table>
+								<Table isUpcoming={true}></Table>
 							</div>
 						</div>
 						<div label="Past Events">
 							<div className="table1">
-								<Table></Table>
+								<Table isUpcoming={false}></Table>
 							</div>
 						</div>
 					</Tabs>

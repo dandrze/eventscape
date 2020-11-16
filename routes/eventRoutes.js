@@ -83,6 +83,7 @@ router.post("/api/event", async (req, res) => {
 		);
 	}
 
+	console.log(typeof start_date);
 	// add the event to the event table. Make it the current event
 	const newEvent = await db.query(
 		`INSERT INTO event 
@@ -128,6 +129,33 @@ router.get("/api/event/current", async (req, res) => {
 	res.send(events.rows[0]);
 });
 
+router.put("/api/event/id/make-current", async (req, res) => {
+	const userId = 1;
+	const { id } = req.body;
+
+	await db.query(
+		"UPDATE event SET is_current=false WHERE user_id=$1",
+		[userId],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	await db.query(
+		"UPDATE event SET is_current=true WHERE id=$1",
+		[id],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	res.status(200).send();
+});
+
 router.get("/api/event/all", async (req, res) => {
 	const userId = 1;
 	const events = await db.query(
@@ -141,6 +169,36 @@ router.get("/api/event/all", async (req, res) => {
 	);
 
 	res.send(events.rows);
+});
+
+router.get("/api/event/id", async (req, res) => {
+	const { id } = req.query;
+	const events = await db.query(
+		"SELECT * FROM event WHERE id=$1",
+		[id],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	res.send(events.rows[0]);
+});
+
+router.delete("/api/event/id", async (req, res) => {
+	const { id } = req.query;
+	const response = await db.query(
+		"DELETE FROM event WHERE id=$1",
+		[id],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	res.send(response);
 });
 
 router.put("/api/event", async (req, res) => {
