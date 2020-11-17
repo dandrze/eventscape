@@ -74,6 +74,9 @@ class PageEditor extends Component {
 					onContinue={() => {
 						this.handleNavAlertConfirm();
 					}}
+					text="You have unsaved changes, are you sure you want to proceed?"
+					closeText="Go back"
+					continueText="Continue"
 				/>
 
 				<Link to="./design" id="cancelBar">

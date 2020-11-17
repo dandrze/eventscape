@@ -6,7 +6,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 
 export default function AlertDialog(props) {
-	const { onClose, onContinue, open } = props;
+	const { onClose, onContinue, open, text, closeText, continueText } = props;
 
 	const handleClose = () => {
 		onClose();
@@ -26,15 +26,15 @@ export default function AlertDialog(props) {
 			>
 				<DialogContent>
 					<DialogContentText id="alert-dialog-description">
-						You have unsaved changes, are you sure you want to proceed?
+						{text}
 					</DialogContentText>
 				</DialogContent>
 				<DialogActions>
 					<Button onClick={handleClose} color="primary">
-						Go Back
+						{closeText}
 					</Button>
 					<Button onClick={handleContinue} color="primary" autoFocus>
-						Continue
+						{continueText}
 					</Button>
 				</DialogActions>
 			</Dialog>
