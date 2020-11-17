@@ -5,6 +5,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
+import '../components/fonts.css';
 
 class Design extends React.Component {
 	componentDidMount() {
