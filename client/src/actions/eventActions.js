@@ -10,7 +10,7 @@ import {
 	blankModel,
 } from "../components/designBlockModels";
 import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "./types";
-import { fetchPageModel, saveModel } from "./modelActions";
+import { fetchModelFromState, saveModel } from "./modelActions";
 
 export const createEvent = (
 	title,
@@ -81,7 +81,7 @@ export const createEvent = (
 			payload: res.data,
 		});
 
-		await dispatch(fetchPageModel());
+		await dispatch(fetchModelFromState());
 	} else {
 		toast.error("Error when saving: " + res.statusText);
 	}
@@ -131,7 +131,7 @@ export const fetchEvent = () => async (dispatch) => {
 
 	if (event) {
 		dispatch({ type: FETCH_EVENT, payload: event.data });
-		dispatch(fetchPageModel());
+		dispatch(fetchModelFromState());
 		return event;
 	} else {
 		console.log("no events");

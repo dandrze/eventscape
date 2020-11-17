@@ -18,7 +18,7 @@ export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
 
-export const fetchPageModel = () => async (dispatch, getState) => {
+export const fetchModelFromState = () => async (dispatch, getState) => {
 	var modelId;
 	try {
 		switch (getState().settings.nowEditingPage) {
@@ -30,12 +30,24 @@ export const fetchPageModel = () => async (dispatch, getState) => {
 				break;
 		}
 
-		const model = await api.get("/api/model", { params: { id: modelId } });
+		const model = await api.get("/api/model/id", { params: { id: modelId } });
 
 		dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 	} catch {
 		console.log("event is empty");
 	}
+};
+
+export const fetchModelFromId = (id) => async (dispatch) => {
+	const model = await api.get("/api/model/id", { params: { id } });
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+};
+
+export const fetchModelFromLink = (link) => async (dispatch) => {
+	const model = await api.get("/api/model/link", { params: { link } });
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
 
 export const updateSection = (index, html) => {
