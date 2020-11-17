@@ -10,7 +10,7 @@ import { banner, hero, body } from "./designBlockModels";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
-import AlertDialog from "./AlertDialog";
+import AlertModal from "./AlertModal";
 
 
 class PageEditor extends Component {
@@ -68,7 +68,7 @@ class PageEditor extends Component {
 				when={this.props.model.isUnsaved}
 				message={this.handleBlockedNavigation}
 				/>
-				<AlertDialog
+				<AlertModal
 					open={this.state.open}
 					onClose={this.handleNavAlertClose}
 					onContinue={() => {

@@ -23,7 +23,7 @@ import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
 import momentTZ from "moment-timezone";
-import AlertDialog from "../components/AlertDialog";
+import AlertModal from "../components/AlertModal";
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -178,7 +178,7 @@ function Event_Details(props) {
 
 	return (
 		<div>
-			<AlertDialog
+			<AlertModal
 				open={openModal}
 				onClose={closeModal}
 				onContinue={closeModal}

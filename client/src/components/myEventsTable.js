@@ -25,7 +25,7 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
 
 import * as actions from "../actions";
-import AlertDialog from "./AlertDialog";
+import AlertModal from "./AlertModal";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -163,7 +163,7 @@ const Table = (props) => {
 	if (data.length > 0) {
 		return (
 			<div>
-				<AlertDialog
+				<AlertModal
 					open={openModal}
 					onClose={closeModal}
 					onContinue={() => {

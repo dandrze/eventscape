@@ -39,7 +39,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
 import * as actions from "../actions";
-import AlertDialog from "./AlertDialog";
+import AlertModal from "./AlertModal";
 
 /*color palette*/
 const MenuText = "#EAEAEA";
@@ -192,7 +192,7 @@ function NavBar3(props) {
 	return (
 		<div className={classes.root}>
 			<CssBaseline />
-			<AlertDialog
+			<AlertModal
 				open={navAlertOpen}
 				onClose={handleNavAlertClose}
 				onContinue={() => {
