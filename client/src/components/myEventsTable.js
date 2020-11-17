@@ -25,6 +25,7 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
 
 import * as actions from "../actions";
+import AlertModal from "./AlertModal";
 
 const tableIcons = {
 	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,6 +52,9 @@ const tableIcons = {
 };
 
 const Table = (props) => {
+	const [openModal, setOpenModal] = useState(false);
+	const [modalText, setModalText] = useState("");
+	const [rowDeleteId, setRowDeleteId] = useState(null);
 	const data = props.eventList
 		.filter((event) => {
 			const startDate = new Date(event.start_date);
@@ -140,26 +144,49 @@ const Table = (props) => {
 			icon: DeleteOutline,
 			tooltip: "Delete Event",
 			onClick: async (event, rowData) => {
-				await props.deleteEvent(rowData.id);
-				props.fetchEventList();
-				//add stuff here
+				setRowDeleteId(rowData.id);
+				setModalText("Are you sure you want to delete this event?");
+				setOpenModal(true);
 			},
 		},
 	];
+
+	const closeModal = () => {
+		setOpenModal(false);
+	};
+
+	const deleteRow = async () => {
+		await props.deleteEvent(rowDeleteId);
+		props.fetchEventList();
+	};
+
 	if (data.length > 0) {
 		return (
-			<MaterialTable
-				title="Employee Details"
-				data={data}
-				columns={columns}
-				options={options}
-				icons={tableIcons}
-				actions={actions}
-				components={{
-					Container: (props) => <Paper {...props} elevation={0} />,
-				}}
-				key={props.eventList}
-			/>
+			<div>
+				<AlertModal
+					open={openModal}
+					onClose={closeModal}
+					onContinue={() => {
+						deleteRow();
+						closeModal();
+					}}
+					text={modalText}
+					closeText="Cancel"
+					continueText="Continue"
+				/>
+				<MaterialTable
+					title="Employee Details"
+					data={data}
+					columns={columns}
+					options={options}
+					icons={tableIcons}
+					actions={actions}
+					components={{
+						Container: (props) => <Paper {...props} elevation={0} />,
+					}}
+					key={props.eventList}
+				/>
+			</div>
 		);
 	} else {
 		return (

@@ -18,10 +18,12 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
 import momentTZ from "moment-timezone";
+import AlertModal from "../components/AlertModal";
 
 const useStyles = makeStyles((theme) => ({
 	formControl: {
@@ -37,6 +39,9 @@ function Event_Details(props) {
 	const classes = useStyles();
 	const defaultTimeZone = momentTZ.tz.guess();
 
+	const [openModal, setOpenModal] = useState(false);
+	const [modalText, setModalText] = useState("");
+
 	const [eventCat, setEventCat] = React.useState(
 		props.eventCat ? props.eventCat : ""
 	);
@@ -46,6 +51,11 @@ function Event_Details(props) {
 	const [eventLink, setEventLink] = React.useState(
 		props.eventLink ? props.eventLink : ""
 	);
+
+	const [linkUnavailable, setLinkUnavailable] = React.useState(false);
+
+	const [linkHelperText, setLinkHelperText] = React.useState("");
+
 	const [selectedStartDate, setSelectedStartDate] = React.useState(
 		props.selectedStartDate
 			? props.selectedStartDate
@@ -61,6 +71,8 @@ function Event_Details(props) {
 	);
 	const [color, setColor] = useState(props.color ? props.color : "#B0281C");
 
+	const closeModal = () => setOpenModal(false);
+
 	const handleChangeEventCat = (event) => {
 		setEventCat(event.target.value);
 	};
@@ -68,8 +80,29 @@ function Event_Details(props) {
 		setEventTitle(event.target.value);
 	};
 	const handleChangeEventLink = (event) => {
-		setEventLink(event.target.value);
+		setEventLink(
+			event.target.value
+				.toLowerCase()
+				.trim()
+				.replace(/[\[\](){}?*+\^\/$\\.|]/g, "")
+		);
 	};
+
+	const handleChangeEventLinkBlur = async (event) => {
+		const res = await props.isLinkAvailable(eventLink);
+
+		console.log(res);
+		if (res) {
+			setLinkUnavailable(false);
+			setLinkHelperText("");
+		} else {
+			setLinkUnavailable(true);
+			setLinkHelperText(
+				"This link is already in use. Please choose another one."
+			);
+		}
+	};
+
 	const handleStartDateChange = (date) => {
 		setSelectedStartDate(date);
 	};
@@ -85,7 +118,29 @@ function Event_Details(props) {
 		);
 	};
 
-	const handleCreate = async () => {
+	const handleSubmit = async () => {
+		if (linkUnavailable) {
+			setModalText(
+				"The link you've chosen is currently in use. Please choose another one."
+			);
+			setOpenModal(true);
+			return null;
+		}
+		if (!eventTitle) {
+			setModalText("Please enter a title.");
+			setOpenModal(true);
+			return null;
+		}
+		if (!eventLink) {
+			setModalText("Please enter a link name.");
+			setOpenModal(true);
+			return null;
+		}
+		if (!eventCat) {
+			setModalText("Please select a category.");
+			setOpenModal(true);
+			return null;
+		}
 		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
 		const startDate =
 			typeof selectedStartDate === "string"
@@ -96,47 +151,41 @@ function Event_Details(props) {
 				? new Date(selectedEndDate)
 				: selectedEndDate;
 
-		console.log(typeof startDate);
-
-		await props.createEvent(
-			eventTitle,
-			eventLink,
-			eventCat,
-			startDate,
-			endDate,
-			eventTimeZone,
-			color
-		);
-
-		props.history.push("/Design");
-	};
-
-	const handleUpdate = async () => {
-		// If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
-		const startDate =
-			typeof selectedStartDate === "string"
-				? new Date(selectedStartDate)
-				: selectedStartDate;
-		const endDate =
-			typeof selectedEndDate === "string"
-				? new Date(selectedEndDate)
-				: selectedEndDate;
-
-		await props.updateEvent(
-			eventTitle,
-			eventLink,
-			eventCat,
-			startDate,
-			endDate,
-			eventTimeZone,
-			color
-		);
+		if (props.isEventUpdate) {
+			await props.createEvent(
+				eventTitle,
+				eventLink,
+				eventCat,
+				startDate,
+				endDate,
+				eventTimeZone,
+				color
+			);
+		} else {
+			await props.updateEvent(
+				eventTitle,
+				eventLink,
+				eventCat,
+				startDate,
+				endDate,
+				eventTimeZone,
+				color
+			);
+		}
 
 		props.history.push("/Design");
 	};
 
 	return (
 		<div>
+			<AlertModal
+				open={openModal}
+				onClose={closeModal}
+				onContinue={closeModal}
+				text={modalText}
+				closeText="Cancel"
+				continueText="OK"
+			/>
 			<h1>My Event Details</h1>
 			<div className="form-box shadow-border">
 				<FormControl variant="outlined" className={classes.formControl}>
@@ -157,11 +206,14 @@ function Event_Details(props) {
 						variant="outlined"
 						value={eventLink}
 						onChange={handleChangeEventLink}
+						onBlur={handleChangeEventLinkBlur}
 						InputProps={{
 							endAdornment: (
 								<InputAdornment position="end">.eventscape.io</InputAdornment>
 							),
 						}}
+						error={linkUnavailable}
+						helperText={linkHelperText}
 					/>
 				</FormControl>
 
@@ -1039,15 +1091,9 @@ function Event_Details(props) {
 
 				{/* Submit */}
 				{/* remove link and replace with onSubmit */}
-				{props.isEventUpdate ? (
-					<button className="Button1" onClick={handleUpdate}>
-						Update My Event
-					</button>
-				) : (
-					<button className="Button1" onClick={handleCreate}>
-						Create My Event
-					</button>
-				)}
+				<button className="Button1" onClick={handleSubmit}>
+					{props.isEventUpdate ? "Update Event" : "Create Event"}
+				</button>
 			</div>
 		</div>
 	);
