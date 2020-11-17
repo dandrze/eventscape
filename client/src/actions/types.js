@@ -17,3 +17,7 @@ export const UPDATE_SECTION = "update_section";
 export const FETCH_PUBLISHED_PAGE = "FETCH_PUBLISHED_PAGE";
 
 export const CHANGE_PAGE_EDITOR = "CHANGE_PAGE_EDITOR";
+
+export const FETCH_EVENT_LIST = "FETCH_EVENT_LIST";
+export const DELETE_EVENT = "DELETE_EVENT";
+export const DUPLICATE_EVENT = "DUPLICATE_EVENT";

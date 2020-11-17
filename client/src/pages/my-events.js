@@ -1,10 +1,18 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { connect } from "react-redux";
+
 import NavBar3 from "../components/navBar3.js";
 import Tabs from "../components/Tabs";
 import Table from "../components/myEventsTable.js";
+import * as actions from "../actions";
 
-export default class My_Events extends React.Component {
+class My_Events extends React.Component {
+	componentDidMount() {
+		this.props.fetchEventList();
+		this.props.fetchEvent();
+	}
+
 	render() {
 		return (
 			<div>
@@ -20,12 +28,12 @@ export default class My_Events extends React.Component {
 					<Tabs>
 						<div label="Upcoming Events">
 							<div className="table1">
-								<Table></Table>
+								<Table isUpcoming={true}></Table>
 							</div>
 						</div>
 						<div label="Past Events">
 							<div className="table1">
-								<Table></Table>
+								<Table isUpcoming={false}></Table>
 							</div>
 						</div>
 					</Tabs>
@@ -34,3 +42,9 @@ export default class My_Events extends React.Component {
 		);
 	}
 }
+
+const mapStateToProps = (state) => {
+	return { eventList: state.eventList, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(My_Events);

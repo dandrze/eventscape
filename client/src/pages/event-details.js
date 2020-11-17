@@ -96,6 +96,8 @@ function Event_Details(props) {
 				? new Date(selectedEndDate)
 				: selectedEndDate;
 
+		console.log(typeof startDate);
+
 		await props.createEvent(
 			eventTitle,
 			eventLink,

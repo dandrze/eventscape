@@ -3,7 +3,8 @@ import { reducer as formReducer } from "redux-form";
 import userReducer from "./userReducer";
 import eventReducer from "./eventReducer";
 import modelReducer from "./modelReducer";
-import settingsReducer from "./settingsReducer"
+import settingsReducer from "./settingsReducer";
+import eventListReducer from "./eventListReducer";
 
 export default combineReducers({
 	user: userReducer,
@@ -11,4 +12,5 @@ export default combineReducers({
 	event: eventReducer,
 	model: modelReducer,
 	settings: settingsReducer,
+	eventList: eventListReducer,
 });

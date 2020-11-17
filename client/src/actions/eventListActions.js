@@ -1,0 +1,33 @@
+import { toast } from "react-toastify";
+import api from "../api/server";
+import { FETCH_EVENT_LIST } from "./types";
+
+export const fetchEventList = () => async (dispatch) => {
+	// call the api and return the event in json
+	const eventList = await api.get("/api/event/all");
+
+	// if there are events
+	if (eventList) {
+		dispatch({ type: FETCH_EVENT_LIST, payload: eventList.data });
+	}
+};
+
+export const duplicateEvent = (id) => async (dispatch) => {
+	const res1 = await api.get("/api/event/id", { params: { id } });
+	const res2 = await api.post("/api/event", res1.data);
+	toast.success("Event successfully duplicated");
+	return true;
+};
+
+export const deleteEvent = (id) => async (dispatch) => {
+	const res = await api.delete("/api/event/id", { params: { id } });
+	console.log(res);
+	toast.success("Event successfully deleted");
+	return true;
+};
+
+export const setCurrentEvent = (id) => async (dispatch) => {
+	const res = await api.put("/api/event/id/make-current", { id });
+
+	return true;
+};
