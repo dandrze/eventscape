@@ -11,18 +11,19 @@ class Published extends React.Component {
 		this.state = { status: "loading" };
 	}
 	async componentDidMount() {
-		this.props.fetchPublishedPage(this.props.subdomain);
+		this.props.fetchModelFromLink(this.props.subdomain);
 	}
 
 	renderPage() {
-		console.log(this.props.model.sections.length ? "true" : false);
 		if (this.props.model.loaded && this.props.model.sections.length) {
 			return (
-				<ul>
-					{this.props.model.sections.map(function (section) {
-						return ReactHtmlParser(section.html);
-					})}
-				</ul>
+				<div class="fr-view">
+					<ul>
+						{this.props.model.sections.map(function (section) {
+							return ReactHtmlParser(section.html);
+						})}
+					</ul>
+				</div>
 			);
 		} else if (this.props.model.loaded) {
 			return <p>No Event Found</p>;
