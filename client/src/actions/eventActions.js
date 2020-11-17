@@ -157,3 +157,13 @@ export const publishPage = () => async (dispatch, getState) => {
 		toast.error("Error when saving: " + res.statusText);
 	}
 };
+
+export const isLinkAvailable = (link) => async (dispatch) => {
+	const res = await api.get("/api/model/link", { params: { link } });
+
+	if (res.data.length == 0) {
+		return true;
+	} else {
+		return false;
+	}
+};

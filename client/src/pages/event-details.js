@@ -46,6 +46,11 @@ function Event_Details(props) {
 	const [eventLink, setEventLink] = React.useState(
 		props.eventLink ? props.eventLink : ""
 	);
+
+	const [linkUnavailable, setLinkUnavailable] = React.useState(false);
+
+	const [linkHelperText, setLinkHelperText] = React.useState("");
+
 	const [selectedStartDate, setSelectedStartDate] = React.useState(
 		props.selectedStartDate
 			? props.selectedStartDate
@@ -68,8 +73,29 @@ function Event_Details(props) {
 		setEventTitle(event.target.value);
 	};
 	const handleChangeEventLink = (event) => {
-		setEventLink(event.target.value);
+		setEventLink(
+			event.target.value
+				.toLowerCase()
+				.trim()
+				.replace(/[\[\](){}?*+\^\/$\\.|]/g, "")
+		);
 	};
+
+	const handleChangeEventLinkBlur = async (event) => {
+		const res = await props.isLinkAvailable(eventLink);
+
+		console.log(res);
+		if (res) {
+			setLinkUnavailable(false);
+			setLinkHelperText("");
+		} else {
+			setLinkUnavailable(true);
+			setLinkHelperText(
+				"This link is already in use. Please choose another one."
+			);
+		}
+	};
+
 	const handleStartDateChange = (date) => {
 		setSelectedStartDate(date);
 	};
@@ -157,11 +183,14 @@ function Event_Details(props) {
 						variant="outlined"
 						value={eventLink}
 						onChange={handleChangeEventLink}
+						onBlur={handleChangeEventLinkBlur}
 						InputProps={{
 							endAdornment: (
 								<InputAdornment position="end">.eventscape.io</InputAdornment>
 							),
 						}}
+						error={linkUnavailable}
+						helperText={linkHelperText}
 					/>
 				</FormControl>
 
