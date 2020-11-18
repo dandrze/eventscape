@@ -10,6 +10,8 @@ import {
 	SAVE_REG_MODEL,
 	SAVE_EVENT_MODEL,
 	MODEL_ISSAVED,
+	LOAD_STARTED,
+	LOAD_FINISHED,
 } from "./types";
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
@@ -40,12 +42,6 @@ export const fetchModelFromState = () => async (dispatch, getState) => {
 
 export const fetchModelFromId = (id) => async (dispatch) => {
 	const model = await api.get("/api/model/id", { params: { id } });
-
-	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
-};
-
-export const fetchModelFromLink = (link) => async (dispatch) => {
-	const model = await api.get("/api/model/link", { params: { link } });
 
 	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
 };
@@ -109,5 +105,21 @@ export const localSaveModel = () => (dispatch, getState) => {
 			dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
 			dispatch({ type: MODEL_ISSAVED });
 			break;
+	}
+};
+
+export const fetchLivePage = (link) => async (dispatch) => {
+	dispatch({ type: LOAD_STARTED });
+	const event = await api.get("/api/event/link", { params: { link } });
+	dispatch({ type: LOAD_FINISHED });
+
+	if (event.data.status === 1) {
+		// if the event status is 1, it's live so fetch the live event page model
+		dispatch(fetchModelFromId(event.data.event_page_model));
+	} else if (event.data.status === 0) {
+		// if the status is 0, it's a draft so fetch the registration page model
+		dispatch(fetchModelFromId(event.data.reg_page_model));
+	} else {
+		dispatch(fetchModelFromId(null));
 	}
 };

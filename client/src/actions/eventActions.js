@@ -9,8 +9,19 @@ import {
 	streamChatModel,
 	blankModel,
 } from "../components/designBlockModels";
-import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "./types";
-import { fetchModelFromState, saveModel } from "./modelActions";
+import {
+	FETCH_EVENT,
+	CREATE_EVENT,
+	UPDATE_EVENT,
+	LOAD_STARTED,
+	LOAD_FINISHED,
+} from "./types";
+import {
+	fetchModelFromId,
+	fetchModelFromState,
+	saveModel,
+} from "./modelActions";
+import { model } from "mongoose";
 
 export const createEvent = (
 	title,
@@ -26,12 +37,12 @@ export const createEvent = (
 		{
 			html: heroBannerModel(title, primary_color),
 			name: "heroBanner",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 		{
 			html: descriptionRegistrationModel(start_date, end_date),
 			name: "body",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 	];
 
@@ -39,22 +50,22 @@ export const createEvent = (
 		{
 			html: logoHeaderRightModel(),
 			name: "bannerRight",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 		{
 			html: titleTimeModel(title, start_date, end_date),
 			name: "titleTime",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 		{
 			html: streamChatModel(),
 			name: "streamChat",
-			showStreamSettings: true,
+			is_stream: true,
 		},
 		{
 			html: blankModel(),
 			name: "blankModel",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 	];
 
@@ -70,7 +81,7 @@ export const createEvent = (
 		primary_color,
 		reg_page_model,
 		event_page_model,
-		isLive: false,
+		status: 0,
 	};
 
 	const res = await api.post("/api/event", event);
@@ -104,7 +115,7 @@ export const updateEvent = (
 		end_date,
 		time_zone,
 		primary_color,
-		isLive: getState().event.is_live,
+		status: getState().event.status,
 	};
 
 	console.log(updatedEvent);
@@ -125,9 +136,9 @@ export const updateEvent = (
 
 export const fetchEvent = () => async (dispatch) => {
 	// call the api and return the event in json
+	dispatch({ type: LOAD_STARTED });
 	const event = await api.get("/api/event/current");
-
-	console.log(event);
+	dispatch({ type: LOAD_FINISHED });
 
 	if (event) {
 		dispatch({ type: FETCH_EVENT, payload: event.data });
@@ -143,7 +154,7 @@ export const publishPage = () => async (dispatch, getState) => {
 	// save the model
 	await dispatch(saveModel());
 
-	const newEvent = { ...getState().event, is_live: true };
+	const newEvent = { ...getState().event, status: 1 };
 
 	const res = await api.put("/api/event", newEvent);
 

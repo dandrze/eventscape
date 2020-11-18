@@ -28,17 +28,17 @@ class My_Events extends React.Component {
 					<Tabs>
 						<div label="Upcoming">
 							<div className="table1">
-								<Table isUpcoming={true}></Table>
+								<Table tab="upcoming"></Table>
 							</div>
 						</div>
 						<div label="Past">
 							<div className="table1">
-								<Table isUpcoming={false}></Table>
+								<Table tab="past"></Table>
 							</div>
 						</div>
 						<div label="Deleted">
 							<div className="table1">
-								<Table isUpcoming={false}></Table>
+								<Table tab="deleted"></Table>
 							</div>
 						</div>
 					</Tabs>

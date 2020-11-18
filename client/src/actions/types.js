@@ -17,6 +17,9 @@ export const UPDATE_SECTION = "update_section";
 export const FETCH_PUBLISHED_PAGE = "FETCH_PUBLISHED_PAGE";
 
 export const CHANGE_PAGE_EDITOR = "CHANGE_PAGE_EDITOR";
+export const LOAD_STARTED = "LOAD_STARTED";
+export const LOAD_FINISHED = "LOAD_FINISHED";
+export const SET_SIDE_DRAWER_OPEN = "SET_SIDE_DRAWER_OPEN";
 
 export const FETCH_EVENT_LIST = "FETCH_EVENT_LIST";
 export const DELETE_EVENT = "DELETE_EVENT";

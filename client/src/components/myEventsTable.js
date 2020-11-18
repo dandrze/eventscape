@@ -23,6 +23,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
+import RestorePage from "@material-ui/icons/RestorePage";
 
 import * as actions from "../actions";
 import AlertModal from "./AlertModal";
@@ -62,11 +63,14 @@ const Table = (props) => {
 		.filter((event) => {
 			const startDate = new Date(event.start_date);
 			const today = new Date();
-			if (
-				(startDate >= today && props.isUpcoming) ||
-				(startDate < today && !props.isUpcoming)
-			) {
+			if (event.status === -1 && props.tab === "deleted") {
 				return true;
+			} else if (startDate >= today && props.tab === "upcoming") {
+				return true;
+			} else if (startDate < today && props.tab === "past") {
+				return true;
+			} else {
+				return false;
 			}
 		})
 		.map((event) => {
@@ -75,7 +79,14 @@ const Table = (props) => {
 				id: event.id,
 				name: event.title,
 				date: eventDate.toLocaleString(),
-				status: event.is_live ? "Live" : "Draft",
+				status:
+					event.status === -1
+						? "Deleted"
+						: event.status === 0
+						? "Draft"
+						: event.status === 1
+						? "Live"
+						: null,
 			};
 		});
 
@@ -120,7 +131,7 @@ const Table = (props) => {
 		},
 	};
 
-	const actions = [
+	const tableActions = [
 		{
 			icon: Edit,
 			tooltip: "Edit Event",
@@ -160,6 +171,17 @@ const Table = (props) => {
 		},
 	];
 
+	const deletedActions = [
+		{
+			icon: RestorePage,
+			tooltip: "Restore Event",
+			onClick: async (event, rowData) => {
+				await props.restoreEvent(rowData.id);
+				await props.fetchEventList();
+			},
+		},
+	];
+
 	const closeModal = () => {
 		setOpenModal(false);
 	};
@@ -189,7 +211,7 @@ const Table = (props) => {
 		props.fetchEventList();
 	};
 
-	if (data.length > 0) {
+	if (props.settings.loaded) {
 		return (
 			<div>
 				<AlertModal
@@ -207,7 +229,7 @@ const Table = (props) => {
 					columns={columns}
 					options={options}
 					icons={tableIcons}
-					actions={actions}
+					actions={props.tab === "deleted" ? deletedActions : tableActions}
 					components={{
 						Container: (props) => <Paper {...props} elevation={0} />,
 					}}
@@ -225,7 +247,7 @@ const Table = (props) => {
 };
 
 const mapStateToProps = (state) => {
-	return { eventList: state.eventList };
+	return { eventList: state.eventList, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(withRouter(Table));
