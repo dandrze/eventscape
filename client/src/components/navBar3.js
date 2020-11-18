@@ -241,8 +241,12 @@ function NavBar3(props) {
 					<Tooltip title="Change Event">
 						<Link to="/my-events">
 							<div className="current_event_container">
-								<Typography className={classes.currentEvent} variant="h6" noWrap>
-									Current Event
+								<Typography
+									className={classes.currentEvent}
+									variant="h6"
+									noWrap
+								>
+									{props.event.title}
 								</Typography>
 								<img
 									className="file_icon"

@@ -5,7 +5,7 @@ import {
 } from "../actions/types";
 
 export default function (
-	state = { nowEditingPage: "registration", loaded: false },
+	state = { nowEditingPage: "event", loaded: false },
 	action
 ) {
 	switch (action.type) {
