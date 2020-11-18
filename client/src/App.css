@@ -14,7 +14,7 @@
 
 body {
 	/* Colour Pallete */
-	--main-bg-color: #ffffff;
+	--main-bg-color: #f8f8f8;
 	--main-color: #b0281c;
 	--menu-bg: #2f2f2f;
 	--menu-text: #eaeaea;
@@ -403,4 +403,8 @@ label {
 
 .Toastify__progress-bar--success {
 	background-color: #5e7256;
+}
+
+.fr-view {
+	background-color: #fff;
 }
