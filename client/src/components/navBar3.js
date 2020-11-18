@@ -17,6 +17,7 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import "./navBar3.css";
 
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
@@ -31,6 +32,7 @@ import ChatIcon from "../icons/chat.svg";
 
 import logo from "../icons/triangular-logo.svg";
 import Internet_icon from "../icons/internet.svg";
+import file_icon from "../icons/file.svg";
 import plus_icon from "../icons/plus.svg";
 import user_icon from "../icons/user.svg";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -238,9 +240,17 @@ function NavBar3(props) {
 
 					<Tooltip title="Change Event">
 						<Link to="/my-events">
-							<Typography className={classes.currentEvent} variant="h6" noWrap>
-								Current Event
-							</Typography>
+							<div className="current_event_container">
+								<Typography className={classes.currentEvent} variant="h6" noWrap>
+									Current Event
+								</Typography>
+								<img
+									className="file_icon"
+									src={file_icon}
+									alt="file_icon"
+									height="30px"
+								></img>
+							</div>
 						</Link>
 					</Tooltip>
 

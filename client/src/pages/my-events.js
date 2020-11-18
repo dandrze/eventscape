@@ -26,12 +26,17 @@ class My_Events extends React.Component {
 						</Link>
 					</div>
 					<Tabs>
-						<div label="Upcoming Events">
+						<div label="Upcoming">
 							<div className="table1">
 								<Table isUpcoming={true}></Table>
 							</div>
 						</div>
-						<div label="Past Events">
+						<div label="Past">
+							<div className="table1">
+								<Table isUpcoming={false}></Table>
+							</div>
+						</div>
+						<div label="Deleted">
 							<div className="table1">
 								<Table isUpcoming={false}></Table>
 							</div>
