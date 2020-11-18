@@ -23,6 +23,7 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
+import RestorePage from "@material-ui/icons/RestorePage";
 
 import * as actions from "../actions";
 import AlertModal from "./AlertModal";
@@ -130,7 +131,7 @@ const Table = (props) => {
 		},
 	};
 
-	const actions = [
+	const tableActions = [
 		{
 			icon: Edit,
 			tooltip: "Edit Event",
@@ -166,6 +167,17 @@ const Table = (props) => {
 				setTextInputLabel("");
 				setOnContinueAction("delete");
 				setOpenModal(true);
+			},
+		},
+	];
+
+	const deletedActions = [
+		{
+			icon: RestorePage,
+			tooltip: "Restore Event",
+			onClick: async (event, rowData) => {
+				await props.restoreEvent(rowData.id);
+				await props.fetchEventList();
 			},
 		},
 	];
@@ -217,7 +229,7 @@ const Table = (props) => {
 					columns={columns}
 					options={options}
 					icons={tableIcons}
-					actions={actions}
+					actions={props.tab === "deleted" ? deletedActions : tableActions}
 					components={{
 						Container: (props) => <Paper {...props} elevation={0} />,
 					}}
