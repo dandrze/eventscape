@@ -54,7 +54,10 @@ const tableIcons = {
 const Table = (props) => {
 	const [openModal, setOpenModal] = useState(false);
 	const [modalText, setModalText] = useState("");
-	const [rowDeleteId, setRowDeleteId] = useState(null);
+	const [actionRowId, setActionRowId] = useState(null);
+	const [textInputLabel, setTextInputLabel] = useState("");
+	const [onContinueAction, setOnContinueAction] = useState("");
+
 	const data = props.eventList
 		.filter((event) => {
 			const startDate = new Date(event.start_date);
@@ -135,17 +138,23 @@ const Table = (props) => {
 			icon: LibraryAdd,
 			tooltip: "Duplicate Event",
 			onClick: async (event, rowData) => {
-				await props.duplicateEvent(rowData.id);
-				props.fetchEventList();
-				//add stuff here
+				setActionRowId(rowData.id);
+				setModalText(
+					"Please enter a new unique subdomain link for this event. Please use only lower case letters, numbers and dashes (-)"
+				);
+				setTextInputLabel("New Link");
+				setOnContinueAction("duplicate");
+				setOpenModal(true);
 			},
 		},
 		{
 			icon: DeleteOutline,
 			tooltip: "Delete Event",
 			onClick: async (event, rowData) => {
-				setRowDeleteId(rowData.id);
+				setActionRowId(rowData.id);
 				setModalText("Are you sure you want to delete this event?");
+				setTextInputLabel("");
+				setOnContinueAction("delete");
 				setOpenModal(true);
 			},
 		},
@@ -155,8 +164,28 @@ const Table = (props) => {
 		setOpenModal(false);
 	};
 
-	const deleteRow = async () => {
-		await props.deleteEvent(rowDeleteId);
+	const onContinue = async (input) => {
+		closeModal();
+
+		if (onContinueAction == "delete") {
+			await props.deleteEvent(actionRowId);
+		}
+		if (onContinueAction == "duplicate") {
+			const res = await props.isLinkAvailable(input);
+			console.log(res);
+			if (res) {
+				await props.duplicateEvent(actionRowId, input);
+			} else {
+				setModalText(
+					"This subdomain link is not available. Please select a different link. Please use only lower case letters, numbers and dashes (-)"
+				);
+				setTextInputLabel("link");
+				setOnContinueAction("duplicate");
+				setOpenModal(true);
+
+				return null;
+			}
+		}
 		props.fetchEventList();
 	};
 
@@ -166,13 +195,11 @@ const Table = (props) => {
 				<AlertModal
 					open={openModal}
 					onClose={closeModal}
-					onContinue={() => {
-						deleteRow();
-						closeModal();
-					}}
+					onContinue={onContinue}
 					text={modalText}
 					closeText="Cancel"
 					continueText="Continue"
+					textInputLabel={textInputLabel}
 				/>
 				<MaterialTable
 					title="Employee Details"

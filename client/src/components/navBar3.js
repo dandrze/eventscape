@@ -199,6 +199,9 @@ function NavBar3(props) {
 					handleNavAlertClose();
 					changePageEditor(target);
 				}}
+				text="You have unsaved changes, are you sure you want to proceed?"
+				closeText="Go back"
+				continueText="Continue"
 			/>
 			<AppBar
 				position="fixed"
@@ -242,7 +245,7 @@ function NavBar3(props) {
 					</Tooltip>
 
 					<Tooltip title="Create a new event">
-						<Button className={classes.addEvent} href="/Event_Details">
+						<Button className={classes.addEvent} href="/event-details">
 							<img
 								className="profile"
 								src={plus_icon}
