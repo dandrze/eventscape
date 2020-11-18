@@ -129,12 +129,12 @@ const useStyles = makeStyles((theme) => ({
 function NavBar3(props) {
 	const displaySideNav = props.displaySideNav;
 	const content = props.content;
+	const open = props.settings.sideDrawerOpen;
 
 	let history = useHistory();
 
 	const classes = useStyles();
 	const theme = useTheme();
-	const [open, setOpen] = React.useState(true);
 	const [navAlertOpen, setNavAlertOpen] = React.useState(false);
 	const [target, setTarget] = React.useState("");
 
@@ -159,11 +159,11 @@ function NavBar3(props) {
 	};
 
 	const handleDrawerOpen = () => {
-		setOpen(true);
+		props.setSideDrawerOpen(true);
 	};
 
 	const handleDrawerClose = () => {
-		setOpen(false);
+		props.setSideDrawerOpen(false);
 	};
 
 	const [anchorEl, setAnchorEl] = React.useState(null);
