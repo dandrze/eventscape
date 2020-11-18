@@ -65,9 +65,17 @@ const Table = (props) => {
 			const today = new Date();
 			if (event.status === -1 && props.tab === "deleted") {
 				return true;
-			} else if (startDate >= today && props.tab === "upcoming") {
+			} else if (
+				event.status != -1 &&
+				startDate >= today &&
+				props.tab === "upcoming"
+			) {
 				return true;
-			} else if (startDate < today && props.tab === "past") {
+			} else if (
+				event.status != -1 &&
+				startDate < today &&
+				props.tab === "past"
+			) {
 				return true;
 			} else {
 				return false;
