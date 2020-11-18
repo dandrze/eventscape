@@ -199,6 +199,9 @@ function NavBar3(props) {
 					handleNavAlertClose();
 					changePageEditor(target);
 				}}
+				text="You have unsaved changes, are you sure you want to proceed?"
+				closeText="Go back"
+				continueText="Continue"
 			/>
 			<AppBar
 				position="fixed"

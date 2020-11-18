@@ -33,6 +33,7 @@ class PageEditor extends Component {
 	handleBlockedNavigation = (nextLocation) => {
 		const {model} = this.props;
 		const {confirmedNavigation} = this.state
+
 		if (!confirmedNavigation && this.props.model.isUnsaved){
 			this.showNavAlert(nextLocation)
 			return false
