@@ -242,7 +242,7 @@ function NavBar3(props) {
 					</Tooltip>
 
 					<Tooltip title="Create a new event">
-						<Button className={classes.addEvent} href="/Event_Details">
+						<Button className={classes.addEvent} href="/event-details">
 							<img
 								className="profile"
 								src={plus_icon}

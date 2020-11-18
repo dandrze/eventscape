@@ -152,7 +152,7 @@ function Event_Details(props) {
 				: selectedEndDate;
 
 		if (props.isEventUpdate) {
-			await props.createEvent(
+			await props.updateEvent(
 				eventTitle,
 				eventLink,
 				eventCat,
@@ -162,7 +162,7 @@ function Event_Details(props) {
 				color
 			);
 		} else {
-			await props.updateEvent(
+			await props.createEvent(
 				eventTitle,
 				eventLink,
 				eventCat,
