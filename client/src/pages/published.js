@@ -8,14 +8,13 @@ import * as actions from "../actions";
 class Published extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { status: "loading" };
 	}
 	async componentDidMount() {
-		this.props.fetchModelFromLink(this.props.subdomain);
+		this.props.fetchLivePage(this.props.subdomain);
 	}
 
 	renderPage() {
-		if (this.props.model.loaded && this.props.model.sections.length) {
+		if (this.props.settings.loaded && this.props.model.sections.length) {
 			return (
 				<div class="fr-view">
 					<ul>
@@ -25,7 +24,7 @@ class Published extends React.Component {
 					</ul>
 				</div>
 			);
-		} else if (this.props.model.loaded) {
+		} else if (this.props.settings.loaded) {
 			return <p>No Event Found</p>;
 		} else {
 			return <CircularProgress />;
@@ -38,7 +37,7 @@ class Published extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	return { model: state.model };
+	return { model: state.model, event: state.event, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(Published);

@@ -14,7 +14,7 @@ router.post("/api/event", async (req, res) => {
 		primary_color,
 		reg_page_model,
 		event_page_model,
-		is_live,
+		status,
 	} = req.body;
 
 	// hard coded userId. Will eventualy pull from request params.
@@ -87,7 +87,7 @@ router.post("/api/event", async (req, res) => {
 	// add the event to the event table. Make it the current event
 	const newEvent = await db.query(
 		`INSERT INTO event 
-			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, is_live, reg_page_model, event_page_model) 
+			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, status, reg_page_model, event_page_model) 
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
 		RETURNING *`,
 		[
@@ -100,7 +100,7 @@ router.post("/api/event", async (req, res) => {
 			primary_color,
 			true,
 			userId,
-			is_live,
+			status,
 			pgRegModel.rows[0].id,
 			pgEventModel.rows[0].id,
 		],
@@ -186,6 +186,21 @@ router.get("/api/event/id", async (req, res) => {
 	res.send(events.rows[0]);
 });
 
+router.get("/api/event/link", async (req, res) => {
+	const { link } = req.query;
+	const events = await db.query(
+		"SELECT * FROM event WHERE link=$1",
+		[link],
+		(err, res) => {
+			if (err) {
+				throw res.status(500).send(err);
+			}
+		}
+	);
+
+	res.send(events.rows[0]);
+});
+
 router.delete("/api/event/id", async (req, res) => {
 	const { id } = req.query;
 	const response = await db.query(
@@ -212,7 +227,7 @@ router.put("/api/event", async (req, res) => {
 		end_date,
 		time_zone,
 		primary_color,
-		is_live,
+		status,
 	} = req.body;
 
 	const events = await db.query(
@@ -225,7 +240,7 @@ router.put("/api/event", async (req, res) => {
 		  end_date = $5, 
 		  time_zone = $6,
 		  primary_color = $7,
-		  is_live = $8
+		  status = $8
 		WHERE 
 		  user_id=$9 AND is_current=true
 		RETURNING *`,
@@ -237,7 +252,7 @@ router.put("/api/event", async (req, res) => {
 			end_date,
 			time_zone,
 			primary_color,
-			is_live,
+			status,
 			userId,
 		],
 		(err, res) => {

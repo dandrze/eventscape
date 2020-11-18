@@ -62,11 +62,14 @@ const Table = (props) => {
 		.filter((event) => {
 			const startDate = new Date(event.start_date);
 			const today = new Date();
-			if (
-				(startDate >= today && props.isUpcoming) ||
-				(startDate < today && !props.isUpcoming)
-			) {
+			if (event.status === -1 && props.tab === "deleted") {
 				return true;
+			} else if (startDate >= today && props.tab === "upcoming") {
+				return true;
+			} else if (startDate < today && props.tab === "past") {
+				return true;
+			} else {
+				return false;
 			}
 		})
 		.map((event) => {
@@ -75,7 +78,14 @@ const Table = (props) => {
 				id: event.id,
 				name: event.title,
 				date: eventDate.toLocaleString(),
-				status: event.is_live ? "Live" : "Draft",
+				status:
+					event.status === -1
+						? "Deleted"
+						: event.status === 0
+						? "Draft"
+						: event.status === 1
+						? "Live"
+						: null,
 			};
 		});
 
@@ -189,7 +199,7 @@ const Table = (props) => {
 		props.fetchEventList();
 	};
 
-	if (data.length > 0) {
+	if (props.settings.loaded) {
 		return (
 			<div>
 				<AlertModal
@@ -225,7 +235,7 @@ const Table = (props) => {
 };
 
 const mapStateToProps = (state) => {
-	return { eventList: state.eventList };
+	return { eventList: state.eventList, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(withRouter(Table));

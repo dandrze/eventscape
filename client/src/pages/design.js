@@ -5,13 +5,11 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
-import '../components/fonts.css';
+import "../components/fonts.css";
 
 class Design extends React.Component {
 	componentDidMount() {
-		if (this.props.model.loaded === false) {
-			this.props.fetchEvent();
-		}
+		this.props.fetchEvent();
 	}
 
 	render() {
@@ -20,7 +18,7 @@ class Design extends React.Component {
 				<NavBar3
 					displaySideNav="true"
 					content={
-						this.props.model.loaded ? (
+						this.props.settings.loaded ? (
 							<PageEditor key={this.props.model} />
 						) : (
 							<CircularProgress />
@@ -33,7 +31,7 @@ class Design extends React.Component {
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event, model: state.model };
+	return { event: state.event, model: state.model, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(Design);
