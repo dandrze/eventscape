@@ -37,8 +37,7 @@ class RegPageSectionEditor extends React.Component {
 					{this.state.isHovering && (
 						<DesignBlockToolbar
 							showStreamSettings={
-								this.props.model.sections[this.props.sectionIndex]
-									.showStreamSettings
+								this.props.model.sections[this.props.sectionIndex].is_stream
 							}
 							sectionIndex={this.props.sectionIndex}
 							maxIndex={this.props.model.sections.length}

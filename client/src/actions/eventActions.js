@@ -37,12 +37,12 @@ export const createEvent = (
 		{
 			html: heroBannerModel(title, primary_color),
 			name: "heroBanner",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 		{
 			html: descriptionRegistrationModel(start_date, end_date),
 			name: "body",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 	];
 
@@ -50,22 +50,22 @@ export const createEvent = (
 		{
 			html: logoHeaderRightModel(),
 			name: "bannerRight",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 		{
 			html: titleTimeModel(title, start_date, end_date),
 			name: "titleTime",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 		{
 			html: streamChatModel(),
 			name: "streamChat",
-			showStreamSettings: true,
+			is_stream: true,
 		},
 		{
 			html: blankModel(),
 			name: "blankModel",
-			showStreamSettings: false,
+			is_stream: false,
 		},
 	];
 

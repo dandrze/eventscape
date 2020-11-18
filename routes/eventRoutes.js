@@ -51,10 +51,15 @@ router.post("/api/event", async (req, res) => {
 	for (i = 0; i < reg_page_model.length; i++) {
 		await db.query(
 			`INSERT INTO section_html
-					(model, index, html)
+					(model, index, html, is_stream)
 					VALUES
-					($1, $2, $3)`,
-			[pgRegModel.rows[0].id, i, reg_page_model[i].html]
+					($1, $2, $3, $4)`,
+			[
+				pgRegModel.rows[0].id,
+				i,
+				reg_page_model[i].html,
+				reg_page_model[i].is_stream,
+			]
 		);
 	}
 
@@ -76,14 +81,18 @@ router.post("/api/event", async (req, res) => {
 	for (i = 0; i < event_page_model.length; i++) {
 		await db.query(
 			`INSERT INTO section_html
-					(model, index, html)
+					(model, index, html, is_stream)
 					VALUES
-					($1, $2, $3)`,
-			[pgEventModel.rows[0].id, i, event_page_model[i].html]
+					($1, $2, $3, $4)`,
+			[
+				pgEventModel.rows[0].id,
+				i,
+				event_page_model[i].html,
+				event_page_model[i].is_stream,
+			]
 		);
 	}
 
-	console.log(typeof start_date);
 	// add the event to the event table. Make it the current event
 	const newEvent = await db.query(
 		`INSERT INTO event 
