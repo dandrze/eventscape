@@ -76,7 +76,7 @@ export const heroBannerModel = (eventTitle = "default", primaryColor) => {
         .title {
             color: #B0281C;
             padding: 0;
-            font-size: 6vw;
+            font-size: 96px;
             line-height: 1;
             margin-left: 5%;
             margin-right: 5%;
@@ -92,7 +92,7 @@ export const logoHeaderModel = () => {
 	return `
     <div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
-            <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 10%;" class="fr-fic fr-dib fr-fil">
+            <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
     </div>
     `;
@@ -102,7 +102,7 @@ export const logoHeaderRightModel = () => {
 	return `
     <div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
-            <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 10%;" class="fr-fic fr-dib fr-fir">
+            <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
         </div>
     </div>
     `;
@@ -203,7 +203,7 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
         <style>
             .title {
                 font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
-                font-size: 3vw;
+                font-size: 36px;
                 color: black;
                 text-align: left;
                 line-height: 1.5;

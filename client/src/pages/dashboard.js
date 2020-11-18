@@ -1,5 +1,4 @@
 import React from "react";
-import NavBarSide from "../components/navbarside.js";
 import NavBar3 from "../components/navBar3.js";
 
 export default class Dashboard extends React.Component {

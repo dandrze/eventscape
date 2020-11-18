@@ -1,0 +1,9 @@
+#topButtons {
+    display: flex;
+    margin-bottom: 3rem;
+    margin-top: 3rem;
+}
+
+.edit-form {
+    margin-left: auto;
+}

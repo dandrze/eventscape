@@ -1,7 +1,6 @@
 import React from 'react';
 
 import NavBar3 from '../components/navBar3.js';
-import Tabs from "../components/Tabs"; 
 import ScheduledEmails from "../components/ScheduledEmails.js"
 
 export default class Communication extends React.Component {

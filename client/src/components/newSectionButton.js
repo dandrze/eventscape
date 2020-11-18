@@ -13,10 +13,16 @@ import Grid from "@material-ui/core/Grid";
 import logoHeader from "./designBlockThumbnails/logoHeader.png";
 import heroBanner from "./designBlockThumbnails/heroBanner.png";
 import descriptionRegistration from "./designBlockThumbnails/descriptionRegistration.png";
+import titleThumb from "./designBlockThumbnails/title.png";
+import streamChatThumb from "./designBlockThumbnails/streamChat.png";
+import blankThumb from "./designBlockThumbnails/blank.png";
 import {
 	logoHeaderModel,
 	heroBannerModel,
 	descriptionRegistrationModel,
+	titleTimeModel,
+	streamChatModel,
+	blankModel
 } from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -110,6 +116,42 @@ const NewSectionButton = (props) => {
 									<Grid item xs={12}>
 										<img
 											src={descriptionRegistration}
+											id="designBlockThumbnail"
+											onClick={() =>
+												handleSelect(
+													descriptionRegistrationModel(),
+													"descriptionRegistration"
+												)
+											}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<img
+											src={titleThumb}
+											id="designBlockThumbnail"
+											onClick={() =>
+												handleSelect(
+													titleTimeModel(),
+													"titleTime"
+												)
+											}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<img
+											src={streamChatThumb}
+											id="designBlockThumbnail"
+											onClick={() =>
+												handleSelect(
+													descriptionRegistrationModel(),
+													"descriptionRegistration"
+												)
+											}
+										/>
+									</Grid>
+									<Grid item xs={12}>
+										<img
+											src={blankThumb}
 											id="designBlockThumbnail"
 											onClick={() =>
 												handleSelect(
