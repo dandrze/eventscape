@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -48,13 +48,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function DesignBlockToolbar(props) {
+	console.log(props);
 	const classes = useStyles();
-	const showStreamSettings = props.showStreamSettings;
+	const showStreamSettings = props.section.is_stream;
 	const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
 	const [openStreamSettings, setOpenStreamSettings] = React.useState(false);
-	const [content, setContent] = React.useState("youtube-live");
+	const [content, setContent] = React.useState("youtube-embed");
 	const [youtubeLink, setYoutubeLink] = React.useState("");
 	const [customHTML, setCustomHTML] = React.useState("");
+
+	// Updating the settings based on props
+	// UseEffect mimicks OnComponentDidMount
+	useEffect(() => {
+		if (props.section.react_component) {
+			setContent(props.section.react_component.props.content);
+			setYoutubeLink(props.section.react_component.props.link);
+			setCustomHTML(props.section.react_component.props.html);
+		}
+	}, []);
 
 	const handleClickDelete = () => {
 		setDeleteConfirmOpen(true);
@@ -79,7 +90,12 @@ function DesignBlockToolbar(props) {
 
 	const handleSaveStreamSettings = () => {
 		setOpenStreamSettings(false);
-		props.saveStreamSettings(props.sectionIndex, { link: youtubeLink });
+		console.log(content);
+		props.saveStreamSettings(props.sectionIndex, {
+			content,
+			link: youtubeLink,
+			html: customHTML,
+		});
 	};
 
 	const handleChangeContent = (event) => {

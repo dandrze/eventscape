@@ -160,7 +160,9 @@ export const saveStreamSettings = (index, settings) => async (
 	getState
 ) => {
 	const reactComponent = getState().model.sections[index].react_component;
+	reactComponent.props.content = settings.content;
 	reactComponent.props.link = settings.link;
+	reactComponent.props.html = settings.html;
 
 	dispatch({
 		type: UPDATE_REACT_COMPONENT,

@@ -26,9 +26,7 @@ const RegPageSectionEditor = (props) => {
 			<div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
 				{isHovering && (
 					<DesignBlockToolbar
-						showStreamSettings={
-							props.model.sections[props.sectionIndex].is_stream
-						}
+						section={props.model.sections[props.sectionIndex]}
 						sectionIndex={props.sectionIndex}
 						maxIndex={props.model.sections.length}
 					/>

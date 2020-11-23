@@ -23,7 +23,6 @@ import Published from "./pages/published";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
-import StreamChat from "./pages/stream-chat";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -62,7 +61,6 @@ function App() {
 				<Route exact path="/messaging" component={Messaging} />
 				<Route exact path="/preview/:id" component={Preview} />
 				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
-				<Route exact path="/stream-chat" component={StreamChat} />
 			</header>
 		</div>
 	);
