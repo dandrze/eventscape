@@ -15,15 +15,6 @@ import {
 	UPDATE_REACT_COMPONENT,
 } from "./types";
 
-const fillModel = (model) => {
-	console.log(model);
-	const completeSections = model.map((section) => {
-		return { ...section, html: section.html.replace(/Kevin/g, "Bob") };
-	});
-
-	return completeSections;
-};
-
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 	const model = await api.get("/api/page", { params: { link: pageLink } });
 
@@ -54,13 +45,9 @@ export const fetchModelFromState = () => async (dispatch, getState) => {
 };
 
 export const fetchModelFromId = (id) => async (dispatch) => {
-	const emptyModel = await api.get("/api/model/id", { params: { id } });
+	const model = await api.get("/api/model/id", { params: { id } });
 
-	const filledModel = fillModel(emptyModel.data);
-
-	console.log(filledModel);
-
-	dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: filledModel } });
+	dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
 };
 
 export const updateSection = (index, html) => {
