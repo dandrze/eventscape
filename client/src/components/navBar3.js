@@ -33,6 +33,7 @@ import ChatIcon from "../icons/chat.svg";
 import logo from "../icons/triangular-logo.svg";
 import Internet_icon from "../icons/internet.svg";
 import file_icon from "../icons/file.svg";
+import swap_icon from "../icons/swap.svg";
 import plus_icon from "../icons/plus.svg";
 import user_icon from "../icons/user.svg";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -249,9 +250,9 @@ function NavBar3(props) {
 									{props.event.title}
 								</Typography>
 								<img
-									className="file_icon"
-									src={file_icon}
-									alt="file_icon"
+									className="swap_icon"
+									src={swap_icon}
+									alt="swap_icon"
 									height="30px"
 								></img>
 							</div>
@@ -366,15 +367,16 @@ function NavBar3(props) {
 								<ListItemText primary="Analytics" />
 							</ListItem>
 						</Link>
-
-						<ListItem button key="messaging">
-							<Tooltip title="Messaging">
-								<ListItemIcon>
-									<img src={ChatIcon} height="20px"></img>
-								</ListItemIcon>
-							</Tooltip>
-							<ListItemText primary="Messaging" />
-						</ListItem>
+						<Link to="./messaging">
+							<ListItem button key="messaging">
+								<Tooltip title="Messaging">
+									<ListItemIcon>
+										<img src={ChatIcon} height="20px"></img>
+									</ListItemIcon>
+								</Tooltip>
+								<ListItemText primary="Messaging" />
+							</ListItem>
+						</Link>
 					</List>
 					<Menu
 						id="simple-menu"

@@ -1,0 +1,20 @@
+.mainWrapper {
+    padding: 2%;
+    display: inline-block;
+}
+
+#chat {
+    margin-bottom: 4%;
+    display: flex;
+}
+
+.chat-container {
+    height: 500px;
+    width: 50%;
+    min-width: 350px;
+}
+
+.chat-options {
+    margin: 20px;
+    text-align: left;
+}
