@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import NewSectionButton from "./newSectionButton";
 import DesignBlockToolbar from "./designBlockToolbar";
-import StreamChat from "../components/stream-chat.js";
+import StreamChat from "../components/pageReactSections/stream-chat";
 
 const RegPageSectionEditor = (props) => {
 	const [isHovering, setIsHovering] = useState(false);
@@ -35,7 +35,8 @@ const RegPageSectionEditor = (props) => {
 				)}
 				{props.section.is_react ? (
 					createElement(
-						mapReactComponent[props.section.react_component.component]
+						mapReactComponent[props.section.react_component.name],
+						props.section.react_component.props
 					)
 				) : (
 					<Froala

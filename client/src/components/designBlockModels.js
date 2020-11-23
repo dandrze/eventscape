@@ -480,7 +480,10 @@ export const blankModel = () => {
 };
 
 export const streamChatReact = {
-	component: "StreamChat",
+	name: "StreamChat",
+	props: {
+		link: "https://www.youtube.com/embed/X9llog6QNVM",
+	},
 };
 
 /*<iframe 

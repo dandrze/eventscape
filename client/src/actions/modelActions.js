@@ -12,6 +12,7 @@ import {
 	MODEL_ISSAVED,
 	LOAD_STARTED,
 	LOAD_FINISHED,
+	UPDATE_REACT_COMPONENT,
 } from "./types";
 
 const fillModel = (model) => {
@@ -83,7 +84,6 @@ export const addSection = (
 	const payload = {
 		index: prevIndex + 1,
 		model: {
-			index: prevIndex + 1,
 			model,
 			html,
 			is_react,
@@ -153,4 +153,17 @@ export const fetchLivePage = (link) => async (dispatch) => {
 	} else {
 		dispatch(fetchModelFromId(null));
 	}
+};
+
+export const saveStreamSettings = (index, settings) => async (
+	dispatch,
+	getState
+) => {
+	const reactComponent = getState().model.sections[index].react_component;
+	reactComponent.props.link = settings.link;
+
+	dispatch({
+		type: UPDATE_REACT_COMPONENT,
+		payload: { index, react_component: reactComponent },
+	});
 };

@@ -77,6 +77,11 @@ function DesignBlockToolbar(props) {
 		setOpenStreamSettings(false);
 	};
 
+	const handleSaveStreamSettings = () => {
+		setOpenStreamSettings(false);
+		props.saveStreamSettings(props.sectionIndex, { link: youtubeLink });
+	};
+
 	const handleChangeContent = (event) => {
 		setContent(event.target.value);
 	};
@@ -240,7 +245,7 @@ function DesignBlockToolbar(props) {
 									<Grid item xs={12} id="save-button">
 										<button
 											className="Button1"
-											onClick={handleCloseStreamSettings}
+											onClick={handleSaveStreamSettings}
 										>
 											Save
 										</button>
