@@ -52,8 +52,7 @@ function DesignBlockToolbar(props) {
 	const showStreamSettings = props.showStreamSettings;
 	const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
 	const [openStreamSettings, setOpenStreamSettings] = React.useState(false);
-	const [content, setContent] = React.useState("wowza");
-	const [wowzaLink, setWowzaLink] = React.useState("");
+	const [content, setContent] = React.useState("youtube-live");
 	const [youtubeLink, setYoutubeLink] = React.useState("");
 	const [customHTML, setCustomHTML] = React.useState("");
 
@@ -80,10 +79,6 @@ function DesignBlockToolbar(props) {
 
 	const handleChangeContent = (event) => {
 		setContent(event.target.value);
-	};
-
-	const handleChangeWowzaLink = (event) => {
-		setWowzaLink(event.target.value);
 	};
 
 	const handleChangeYoutubeLink = (event) => {
@@ -192,7 +187,6 @@ function DesignBlockToolbar(props) {
 												value={content}
 												onChange={handleChangeContent}
 											>
-												<MenuItem value={"wowza"}>Wowza</MenuItem>
 												<MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
 												<MenuItem value={"custom-embed"}>
 													Custom HTML Embed (Advanced)
@@ -201,27 +195,6 @@ function DesignBlockToolbar(props) {
 										</FormControl>
 									</Grid>
 									<Grid item xs={12}>
-										{content === "wowza" && (
-											<div>
-												<FormControl
-													variant="outlined"
-													className={classes.formControl}
-												>
-													<TextField
-														id="wowza-link"
-														label="Wowza Link"
-														variant="outlined"
-														value={wowzaLink}
-														onChange={handleChangeWowzaLink}
-														placeholder="http://www.wowza.com"
-													/>
-												</FormControl>
-												<p>
-													Need help? Click here for instructions on setting up a
-													Wowza Live stream.
-												</p>
-											</div>
-										)}
 										{content === "youtube-live" && (
 											<div>
 												<FormControl

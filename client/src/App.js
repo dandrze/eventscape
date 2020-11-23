@@ -17,11 +17,13 @@ import Communication from "./pages/communication";
 import EmailEditor from "./pages/emailEditor";
 import Registrations from "./pages/registrations";
 import Analytics from "./pages/analytics";
+import Messaging from "./pages/messaging";
 import Preview from "./pages/preview";
 import Published from "./pages/published";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
+import StreamChat from "./pages/stream-chat";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -57,8 +59,10 @@ function App() {
 				<Route exact path="/communication-editor" component={EmailEditor} />
 				<Route exact path="/registrations" component={Registrations} />
 				<Route exact path="/analytics" component={Analytics} />
+				<Route exact path="/messaging" component={Messaging} />
 				<Route exact path="/preview/:id" component={Preview} />
 				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
+				<Route exact path="/stream-chat" component={StreamChat} />
 			</header>
 		</div>
 	);
