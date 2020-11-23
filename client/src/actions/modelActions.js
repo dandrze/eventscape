@@ -94,7 +94,7 @@ export const addSection = (
 
 	console.log(payload);
 
-	return { type: ADD_SECTION, payload };
+	dispatch({ type: ADD_SECTION, payload });
 };
 
 export const deleteSection = (index) => {
