@@ -22,7 +22,8 @@ import {
 	descriptionRegistrationModel,
 	titleTimeModel,
 	streamChatModel,
-	blankModel
+	blankModel,
+	streamChatReact,
 } from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -57,9 +58,20 @@ const NewSectionButton = (props) => {
 		setOpen(false);
 	};
 
-	const handleSelect = (html, sectionName) => {
+	const handleSelect = (
+		html,
+		is_react = false,
+		react_component = null,
+		is_stream = false
+	) => {
 		setOpen(false);
-		props.addSection(props.prevIndex, html, sectionName);
+		props.addSection(
+			props.prevIndex,
+			html,
+			is_react,
+			react_component,
+			is_stream
+		);
 		/*insert actions here*/
 	};
 
@@ -99,18 +111,14 @@ const NewSectionButton = (props) => {
 										<img
 											src={logoHeader}
 											id="designBlockThumbnail"
-											onClick={() =>
-												handleSelect(logoHeaderModel(), "logoHeader")
-											}
+											onClick={() => handleSelect(logoHeaderModel())}
 										/>
 									</Grid>
 									<Grid item xs={12}>
 										<img
 											src={heroBanner}
 											id="designBlockThumbnail"
-											onClick={() =>
-												handleSelect(heroBannerModel(), "heroBanner")
-											}
+											onClick={() => handleSelect(heroBannerModel())}
 										/>
 									</Grid>
 									<Grid item xs={12}>
@@ -118,10 +126,7 @@ const NewSectionButton = (props) => {
 											src={descriptionRegistration}
 											id="designBlockThumbnail"
 											onClick={() =>
-												handleSelect(
-													descriptionRegistrationModel(),
-													"descriptionRegistration"
-												)
+												handleSelect(descriptionRegistrationModel())
 											}
 										/>
 									</Grid>
@@ -129,12 +134,7 @@ const NewSectionButton = (props) => {
 										<img
 											src={titleThumb}
 											id="designBlockThumbnail"
-											onClick={() =>
-												handleSelect(
-													titleTimeModel(),
-													"titleTime"
-												)
-											}
+											onClick={() => handleSelect(titleTimeModel())}
 										/>
 									</Grid>
 									<Grid item xs={12}>
@@ -142,10 +142,7 @@ const NewSectionButton = (props) => {
 											src={streamChatThumb}
 											id="designBlockThumbnail"
 											onClick={() =>
-												handleSelect(
-													descriptionRegistrationModel(),
-													"descriptionRegistration"
-												)
+												handleSelect(null, true, streamChatReact, true)
 											}
 										/>
 									</Grid>
@@ -154,10 +151,7 @@ const NewSectionButton = (props) => {
 											src={blankThumb}
 											id="designBlockThumbnail"
 											onClick={() =>
-												handleSelect(
-													descriptionRegistrationModel(),
-													"descriptionRegistration"
-												)
+												handleSelect(descriptionRegistrationModel())
 											}
 										/>
 									</Grid>

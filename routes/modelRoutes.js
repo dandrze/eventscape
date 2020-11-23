@@ -57,8 +57,15 @@ router.put("/api/model", async (req, res) => {
 	// then write the newly updated model
 	for (const section of model) {
 		await db.query(
-			"INSERT INTO section_html (model, index, html) VALUES ($1,$2,$3)",
-			[section.model, section.index, section.html],
+			"INSERT INTO section_html (model, index, html, is_stream, is_react, react_component) VALUES ($1,$2,$3,$4,$5,$6)",
+			[
+				section.model,
+				section.index,
+				section.html,
+				section.is_stream,
+				section.is_react,
+				section.react_component,
+			],
 			(err, res) => {
 				if (err) {
 					throw res.status(500).send(err);

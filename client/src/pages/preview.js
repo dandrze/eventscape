@@ -12,7 +12,7 @@ const Preview = (props) => {
 	}, []);
 
 	return (
-		<div class="fr-view">
+		<div className="fr-view">
 			<ul>
 				{props.model.sections.map(function (section) {
 					console.log(section.html);

@@ -52,7 +52,8 @@ export default function (
 		case FETCH_PAGE_MODEL:
 			return {
 				isUnsaved: false,
-				sections: action.payload,
+				id: action.payload.id,
+				sections: action.payload.sections,
 			};
 		case MODEL_ISSAVED:
 			return { ...state, isUnsaved: false };

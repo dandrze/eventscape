@@ -24,7 +24,8 @@ class PageEditor extends Component {
 	}
 
 	componentDidMount() {
-		this.props.fetchModelFromState();	}
+		this.props.fetchModelFromState();	
+	}
 
 	showNavAlert(location) {
 		this.setState({open: true, location})
@@ -102,10 +103,10 @@ class PageEditor extends Component {
 					</div>
 					<div id="designBoard">
 					<ul>
-						{this.props.model.sections.map(function (sectionModel,  index) {
+						{this.props.model.sections.map(function (section,  index) {
 							return (
-								<li key={sectionModel.id}>
-									<PageSectionEditor model={sectionModel} sectionIndex={index} />
+								<li key={section.id}>
+									<PageSectionEditor section={section} sectionIndex={index} />
 								</li>
 							);
 						})}

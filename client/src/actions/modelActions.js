@@ -14,36 +14,52 @@ import {
 	LOAD_FINISHED,
 } from "./types";
 
+const fillModel = (model) => {
+	console.log(model);
+	const completeSections = model.map((section) => {
+		return { ...section, html: section.html.replace(/Kevin/g, "Bob") };
+	});
+
+	return completeSections;
+};
+
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 	const model = await api.get("/api/page", { params: { link: pageLink } });
 
-	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+	dispatch({
+		type: FETCH_PAGE_MODEL,
+		payload: { id: model.data[0].id, sections: model.data },
+	});
 };
 
 export const fetchModelFromState = () => async (dispatch, getState) => {
-	var modelId;
+	var id;
 	try {
 		switch (getState().settings.nowEditingPage) {
 			case "registration":
-				modelId = getState().event.reg_page_model;
+				id = getState().event.reg_page_model;
 				break;
 			case "event":
-				modelId = getState().event.event_page_model;
+				id = getState().event.event_page_model;
 				break;
 		}
 
-		const model = await api.get("/api/model/id", { params: { id: modelId } });
+		const model = await api.get("/api/model/id", { params: { id } });
 
-		dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+		dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
 	} catch {
 		console.log("event is empty");
 	}
 };
 
 export const fetchModelFromId = (id) => async (dispatch) => {
-	const model = await api.get("/api/model/id", { params: { id } });
+	const emptyModel = await api.get("/api/model/id", { params: { id } });
 
-	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+	const filledModel = fillModel(emptyModel.data);
+
+	console.log(filledModel);
+
+	dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: filledModel } });
 };
 
 export const updateSection = (index, html) => {
@@ -55,13 +71,28 @@ export const updateSection = (index, html) => {
 	return { type: UPDATE_SECTION, payload };
 };
 
-export const addSection = (prevIndex, html, sectionName) => {
-	// call the api and return the event in json
+export const addSection = (
+	prevIndex,
+	html,
+	is_react = false,
+	react_component = null,
+	is_stream = false
+) => async (dispatch, getState) => {
+	const model = getState().model.id;
 
 	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), html, sectionName },
+		model: {
+			index: prevIndex + 1,
+			model,
+			html,
+			is_react,
+			react_component,
+			is_stream,
+		},
 	};
+
+	console.log(payload);
 
 	return { type: ADD_SECTION, payload };
 };

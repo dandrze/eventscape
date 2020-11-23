@@ -479,6 +479,10 @@ export const blankModel = () => {
     `;
 };
 
+export const streamChatReact = {
+	component: "StreamChat",
+};
+
 /*<iframe 
 width="100%" 
 height= 640px; 
