@@ -51,14 +51,23 @@ router.get("/api/model/link", async (req, res) => {
 router.put("/api/model", async (req, res) => {
 	const { model } = req.body;
 
+	console.log(model);
+
 	// first delete the old model
 	await db.query("DELETE FROM section_html WHERE model=$1", [model[0].model]);
 
 	// then write the newly updated model
-	for (const section of model) {
+	for (const [index, section] of model.entries()) {
 		await db.query(
-			"INSERT INTO section_html (model, index, html) VALUES ($1,$2,$3)",
-			[section.model, section.index, section.html],
+			"INSERT INTO section_html (model, index, html, is_stream, is_react, react_component) VALUES ($1,$2,$3,$4,$5,$6)",
+			[
+				section.model,
+				index,
+				section.html,
+				section.is_stream,
+				section.is_react,
+				section.react_component,
+			],
 			(err, res) => {
 				if (err) {
 					throw res.status(500).send(err);

@@ -1,58 +1,52 @@
-import React, { Component } from "react";
+import React, { useState, createElement } from "react";
 import Froala from "./froala";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import NewSectionButton from "./newSectionButton";
 import DesignBlockToolbar from "./designBlockToolbar";
+import StreamChat from "../components/pageReactSections/stream-chat";
 
-class RegPageSectionEditor extends React.Component {
-	constructor(props) {
-		super(props);
-		this.handleMouseEnter = this.handleMouseEnter.bind(this);
-		this.handleMouseLeave = this.handleMouseLeave.bind(this);
-		this.state = {
-			isHovering: false,
-		};
-	}
+const RegPageSectionEditor = (props) => {
+	const [isHovering, setIsHovering] = useState(false);
 
-	handleMouseEnter = () => {
-		this.setState({
-			isHovering: true,
-		});
+	const handleMouseEnter = () => {
+		setIsHovering(true);
 	};
 
-	handleMouseLeave = () => {
-		this.setState({
-			isHovering: false,
-		});
+	const handleMouseLeave = () => {
+		setIsHovering(false);
 	};
 
-	render() {
-		return (
-			<div>
-				<div
-					onMouseEnter={this.handleMouseEnter}
-					onMouseLeave={this.handleMouseLeave}
-				>
-					{this.state.isHovering && (
-						<DesignBlockToolbar
-							showStreamSettings={
-								this.props.model.sections[this.props.sectionIndex].is_stream
-							}
-							sectionIndex={this.props.sectionIndex}
-							maxIndex={this.props.model.sections.length}
-						/>
-					)}
-					<Froala
-						key={this.props.model.sections}
-						sectionIndex={this.props.sectionIndex}
+	const mapReactComponent = {
+		StreamChat: StreamChat,
+	};
+
+	return (
+		<div>
+			<div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+				{isHovering && (
+					<DesignBlockToolbar
+						section={props.model.sections[props.sectionIndex]}
+						sectionIndex={props.sectionIndex}
+						maxIndex={props.model.sections.length}
 					/>
-				</div>
-				<NewSectionButton prevIndex={this.props.sectionIndex} />
+				)}
+				{props.section.is_react ? (
+					createElement(
+						mapReactComponent[props.section.react_component.name],
+						props.section.react_component.props
+					)
+				) : (
+					<Froala
+						key={props.model.sections}
+						sectionIndex={props.sectionIndex}
+					/>
+				)}
 			</div>
-		);
-	}
-}
+			<NewSectionButton prevIndex={props.sectionIndex} />
+		</div>
+	);
+};
 
 const mapStateToProps = (state) => {
 	return { model: state.model };

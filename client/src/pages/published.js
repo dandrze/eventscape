@@ -1,40 +1,45 @@
-import React from "react";
+import React, { createElement, useEffect } from "react";
 import { connect } from "react-redux";
 import ReactHtmlParser from "react-html-parser";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
+import StreamChat from "../components/pageReactSections/stream-chat";
 
-class Published extends React.Component {
-	constructor(props) {
-		super(props);
-	}
-	async componentDidMount() {
-		this.props.fetchLivePage(this.props.subdomain);
-	}
+const Published = (props) => {
+	useEffect(() => {
+		props.fetchLivePage(props.subdomain);
+	}, []);
 
-	renderPage() {
-		if (this.props.settings.loaded && this.props.model.sections.length) {
+	const mapReactComponent = {
+		StreamChat: StreamChat,
+	};
+
+	const renderPage = () => {
+		if (props.settings.loaded && props.model.sections.length) {
 			return (
 				<div class="fr-view">
 					<ul>
-						{this.props.model.sections.map(function (section) {
-							return ReactHtmlParser(section.html);
+						{props.model.sections.map(function (section) {
+							return section.is_react
+								? createElement(
+										mapReactComponent[section.react_component.name],
+										section.react_component.props
+								  )
+								: ReactHtmlParser(section.html);
 						})}
 					</ul>
 				</div>
 			);
-		} else if (this.props.settings.loaded) {
+		} else if (props.settings.loaded) {
 			return <p>No Event Found</p>;
 		} else {
 			return <CircularProgress />;
 		}
-	}
+	};
 
-	render() {
-		return <div>{this.renderPage()}</div>;
-	}
-}
+	return <div>{renderPage()}</div>;
+};
 
 const mapStateToProps = (state) => {
 	return { model: state.model, event: state.event, settings: state.settings };

@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, createElement } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import ReactHtmlParser from "react-html-parser";
 import { useParams } from "react-router-dom";
 import "froala-editor/css/froala_style.min.css";
+import StreamChat from "../components/pageReactSections/stream-chat";
 
 const Preview = (props) => {
 	const { id } = useParams();
@@ -11,12 +12,20 @@ const Preview = (props) => {
 		props.fetchModelFromId(id);
 	}, []);
 
+	const mapReactComponent = {
+		StreamChat: StreamChat,
+	};
+
 	return (
-		<div class="fr-view">
+		<div className="fr-view">
 			<ul>
 				{props.model.sections.map(function (section) {
-					console.log(section.html);
-					return ReactHtmlParser(section.html);
+					return section.is_react
+						? createElement(
+								mapReactComponent[section.react_component.name],
+								section.react_component.props
+						  )
+						: ReactHtmlParser(section.html);
 				})}
 			</ul>
 		</div>

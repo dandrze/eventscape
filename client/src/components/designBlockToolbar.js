@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
@@ -49,12 +49,22 @@ const useStyles = makeStyles((theme) => ({
 
 function DesignBlockToolbar(props) {
 	const classes = useStyles();
-	const showStreamSettings = props.showStreamSettings;
+	const showStreamSettings = props.section.is_stream;
 	const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
 	const [openStreamSettings, setOpenStreamSettings] = React.useState(false);
-	const [content, setContent] = React.useState("youtube-live");
+	const [content, setContent] = React.useState("youtube-embed");
 	const [youtubeLink, setYoutubeLink] = React.useState("");
 	const [customHTML, setCustomHTML] = React.useState("");
+
+	// Updating the settings based on props
+	// UseEffect mimicks OnComponentDidMount
+	useEffect(() => {
+		if (props.section.react_component) {
+			setContent(props.section.react_component.props.content);
+			setYoutubeLink(props.section.react_component.props.link);
+			setCustomHTML(props.section.react_component.props.html);
+		}
+	}, []);
 
 	const handleClickDelete = () => {
 		setDeleteConfirmOpen(true);
@@ -75,6 +85,16 @@ function DesignBlockToolbar(props) {
 
 	const handleCloseStreamSettings = () => {
 		setOpenStreamSettings(false);
+	};
+
+	const handleSaveStreamSettings = () => {
+		setOpenStreamSettings(false);
+		console.log(content);
+		props.saveStreamSettings(props.sectionIndex, {
+			content,
+			link: youtubeLink,
+			html: customHTML,
+		});
 	};
 
 	const handleChangeContent = (event) => {
@@ -167,89 +187,87 @@ function DesignBlockToolbar(props) {
 				}}
 				disableAutoFocus={true}
 			>
-				<Fade in={openStreamSettings}>
-					<div className={classes.paper}>
-						<div id="testEmailModal">
-							<h3>Stream Settings</h3>
-							<div className={classes.root}>
-								<Grid container spacing={3}>
-									<Grid item xs={12}>
-										<FormControl
-											variant="outlined"
-											className={classes.formControl}
+				<div className={classes.paper}>
+					<div id="testEmailModal">
+						<h3>Stream Settings</h3>
+						<div className={classes.root}>
+							<Grid container spacing={3}>
+								<Grid item xs={12}>
+									<FormControl
+										variant="outlined"
+										className={classes.formControl}
+									>
+										{/* Category */}
+										<InputLabel id="content">Content</InputLabel>
+										<Select
+											labelId="content"
+											id="content-select"
+											required="true"
+											value={content}
+											onChange={handleChangeContent}
 										>
-											{/* Category */}
-											<InputLabel id="content">Content</InputLabel>
-											<Select
-												labelId="content"
-												id="content-select"
-												required="true"
-												value={content}
-												onChange={handleChangeContent}
-											>
-												<MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
-												<MenuItem value={"custom-embed"}>
-													Custom HTML Embed (Advanced)
-												</MenuItem>
-											</Select>
-										</FormControl>
-									</Grid>
-									<Grid item xs={12}>
-										{content === "youtube-live" && (
-											<div>
-												<FormControl
-													variant="outlined"
-													className={classes.formControl}
-												>
-													<TextField
-														id="youtube-link"
-														label="Youtube Link"
-														variant="outlined"
-														value={youtubeLink}
-														onChange={handleChangeYoutubeLink}
-														placeholder="http://www.youtube.com"
-													/>
-												</FormControl>
-												<p>
-													Need help? Click here for instructions on setting up a
-													YouTube Live stream.
-												</p>
-												<p>
-													Heads up! YouTube may take down any streams containing
-													copyrighted music.
-												</p>
-											</div>
-										)}
-										{content === "custom-embed" && (
+											<MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
+											<MenuItem value={"custom-embed"}>
+												Custom HTML Embed (Advanced)
+											</MenuItem>
+										</Select>
+									</FormControl>
+								</Grid>
+								<Grid item xs={12}>
+									{content === "youtube-live" && (
+										<div>
 											<FormControl
 												variant="outlined"
 												className={classes.formControl}
 											>
 												<TextField
-													id="custom-HTML"
-													label="Custom HTML"
+													id="youtube-link"
+													label="Youtube Link"
 													variant="outlined"
-													multiline
-													rows={12}
-													value={customHTML}
-													onChange={handleChangeCustomHTML}
+													value={youtubeLink}
+													onChange={handleChangeYoutubeLink}
+													placeholder="http://www.youtube.com"
 												/>
 											</FormControl>
-										)}
-									</Grid>
-									<Grid item xs={12} id="save-button">
-										<button
-											className="Button1"
-											onClick={handleCloseStreamSettings}
+											<p>
+												Need help? Click here for instructions on setting up a
+												YouTube Live stream.
+											</p>
+											<p>
+												Heads up! YouTube may take down any streams containing
+												copyrighted music.
+											</p>
+										</div>
+									)}
+									{content === "custom-embed" && (
+										<FormControl
+											variant="outlined"
+											className={classes.formControl}
 										>
-											Save
-										</button>
-									</Grid>
+											<TextField
+												id="custom-HTML"
+												label="Custom HTML"
+												variant="outlined"
+												multiline
+												rows={12}
+												value={customHTML}
+												onChange={handleChangeCustomHTML}
+											/>
+										</FormControl>
+									)}
 								</Grid>
-							</div>
+								<Grid item xs={12} id="save-button">
+									<button
+										className="Button1"
+										onClick={handleSaveStreamSettings}
+									>
+										Save
+									</button>
+								</Grid>
+							</Grid>
 						</div>
 					</div>
-				</Fade>
+				</div>
 			</Modal>
 		</div>
 	);

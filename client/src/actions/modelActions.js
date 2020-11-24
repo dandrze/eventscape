@@ -12,29 +12,33 @@ import {
 	MODEL_ISSAVED,
 	LOAD_STARTED,
 	LOAD_FINISHED,
+	UPDATE_REACT_COMPONENT,
 } from "./types";
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 	const model = await api.get("/api/page", { params: { link: pageLink } });
 
-	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+	dispatch({
+		type: FETCH_PAGE_MODEL,
+		payload: { id: model.data[0].id, sections: model.data },
+	});
 };
 
 export const fetchModelFromState = () => async (dispatch, getState) => {
-	var modelId;
+	var id;
 	try {
 		switch (getState().settings.nowEditingPage) {
 			case "registration":
-				modelId = getState().event.reg_page_model;
+				id = getState().event.reg_page_model;
 				break;
 			case "event":
-				modelId = getState().event.event_page_model;
+				id = getState().event.event_page_model;
 				break;
 		}
 
-		const model = await api.get("/api/model/id", { params: { id: modelId } });
+		const model = await api.get("/api/model/id", { params: { id } });
 
-		dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+		dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
 	} catch {
 		console.log("event is empty");
 	}
@@ -43,7 +47,7 @@ export const fetchModelFromState = () => async (dispatch, getState) => {
 export const fetchModelFromId = (id) => async (dispatch) => {
 	const model = await api.get("/api/model/id", { params: { id } });
 
-	dispatch({ type: FETCH_PAGE_MODEL, payload: model.data });
+	dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
 };
 
 export const updateSection = (index, html) => {
@@ -55,15 +59,29 @@ export const updateSection = (index, html) => {
 	return { type: UPDATE_SECTION, payload };
 };
 
-export const addSection = (prevIndex, html, sectionName) => {
-	// call the api and return the event in json
+export const addSection = (
+	prevIndex,
+	html,
+	is_react = false,
+	react_component = null,
+	is_stream = false
+) => async (dispatch, getState) => {
+	const model = getState().model.id;
 
 	const payload = {
 		index: prevIndex + 1,
-		model: { id: Math.random(), html, sectionName },
+		model: {
+			model,
+			html,
+			is_react,
+			react_component,
+			is_stream,
+		},
 	};
 
-	return { type: ADD_SECTION, payload };
+	console.log(payload);
+
+	dispatch({ type: ADD_SECTION, payload });
 };
 
 export const deleteSection = (index) => {
@@ -122,4 +140,19 @@ export const fetchLivePage = (link) => async (dispatch) => {
 	} else {
 		dispatch(fetchModelFromId(null));
 	}
+};
+
+export const saveStreamSettings = (index, settings) => async (
+	dispatch,
+	getState
+) => {
+	const reactComponent = getState().model.sections[index].react_component;
+	reactComponent.props.content = settings.content;
+	reactComponent.props.link = settings.link;
+	reactComponent.props.html = settings.html;
+
+	dispatch({
+		type: UPDATE_REACT_COMPONENT,
+		payload: { index, react_component: reactComponent },
+	});
 };

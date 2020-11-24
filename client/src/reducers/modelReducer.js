@@ -6,6 +6,7 @@ import {
 	MOVE_SECTION,
 	DELETE_SECTION,
 	MODEL_ISSAVED,
+	UPDATE_REACT_COMPONENT,
 } from "../actions/types";
 
 export default function (
@@ -52,10 +53,25 @@ export default function (
 		case FETCH_PAGE_MODEL:
 			return {
 				isUnsaved: false,
-				sections: action.payload,
+				id: action.payload.id,
+				sections: action.payload.sections,
 			};
 		case MODEL_ISSAVED:
 			return { ...state, isUnsaved: false };
+		case UPDATE_REACT_COMPONENT:
+			return {
+				...state,
+				isUnsaved: true,
+				sections: state.sections.map((section, index) => {
+					if (index === action.payload.index) {
+						return {
+							...section,
+							react_component: action.payload.react_component,
+						};
+					}
+					return section;
+				}),
+			};
 		default:
 			return state;
 	}
