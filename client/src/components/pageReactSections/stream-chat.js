@@ -32,24 +32,14 @@ const StreamChat = (props) => {
 	};
 	return (
 		<div>
-			<div className="design">
-				<div id="designBoard">
-					<section class="container2">
-						<div class="one2">
-							<div className="video-responsive">{displayStream()}</div>
-						</div>
-						<div class="two2">
-							<Chat />
-						</div>
-					</section>
+			<section class="container2">
+				<div class="one2">
+					<div className="video-responsive">{displayStream()}</div>
 				</div>
-				<div style={{ color: "#F8F8F8" }}>
-					Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-					eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-					minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-					aliquip ex ea commodo consequat.
+				<div class="two2">
+					<Chat />
 				</div>
-			</div>
+			</section>
 		</div>
 	);
 };
