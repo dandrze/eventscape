@@ -23,6 +23,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
+import ArrowSketchIcon from "../icons/left-arrow-sketch.svg";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -121,30 +122,49 @@ function DesignBlockToolbar(props) {
 	return (
 		<div>
 			{/* Toolbar */}
-			<div className="toolbar_container">
-				<Tooltip title="Move Up">
-					<div className="toolbar_button" onClick={() => handleClickMove(-1)}>
-						<KeyboardArrowUpIcon />
-					</div>
-				</Tooltip>
-				<Tooltip title="Move Down">
-					<div className="toolbar_button" onClick={() => handleClickMove(1)}>
-						<KeyboardArrowDownIcon />
-					</div>
-				</Tooltip>
-				<Tooltip title="Delete Design Block">
-					<div className="toolbar_button" onClick={handleClickDelete}>
-						<DeleteOutlined />
-					</div>
-				</Tooltip>
-				{showStreamSettings ? (
-					<Tooltip title="Stream Settings">
-						<div className="toolbar_button" onClick={handleOpenStreamSettings}>
-							<SettingsIcon />
+			{(
+				props.displayToolbar === true & 
+				openStreamSettings === false & 
+				deleteConfirmOpen === false
+			) ? (
+				<div className="toolbar_container">
+					<Tooltip title="Move Up">
+						<div className="toolbar_button" onClick={() => handleClickMove(-1)}>
+							<KeyboardArrowUpIcon />
 						</div>
 					</Tooltip>
-				) : null}
-			</div>
+					<Tooltip title="Move Down">
+						<div className="toolbar_button" onClick={() => handleClickMove(1)}>
+							<KeyboardArrowDownIcon />
+						</div>
+					</Tooltip>
+					<Tooltip title="Delete Design Block">
+						<div className="toolbar_button" onClick={handleClickDelete}>
+							<DeleteOutlined />
+						</div>
+					</Tooltip>
+					{showStreamSettings ? (
+						<>
+							<Tooltip title="Stream Settings">
+								<div className="toolbar_button" onClick={handleOpenStreamSettings}>
+									<SettingsIcon />
+								</div>
+							</Tooltip>
+							<div className="stream-setting-tip-container">
+								<div className="stream-settings-tip">
+									<img
+										className="arrow-sketch"
+										src={ArrowSketchIcon}
+										alt="left arrow"
+										height="30px"
+									></img>
+									<div className="stream-settings-tip-text">Click here to add your stream</div>
+								</div>
+							</div>
+						</>
+					) : null}
+				</div>
+			) : null}
 
 			{/* Confirm Delete */}
 			<Dialog
@@ -185,7 +205,6 @@ function DesignBlockToolbar(props) {
 				BackdropProps={{
 					timeout: 500,
 				}}
-				disableAutoFocus={true}
 			>
 				<div className={classes.paper}>
 					<div id="testEmailModal">
