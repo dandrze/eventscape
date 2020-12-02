@@ -24,13 +24,12 @@ const RegPageSectionEditor = (props) => {
 	return (
 		<div>
 			<div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-				{isHovering && (
 					<DesignBlockToolbar
+						displayToolbar={isHovering}
 						section={props.model.sections[props.sectionIndex]}
 						sectionIndex={props.sectionIndex}
 						maxIndex={props.model.sections.length}
 					/>
-				)}
 				{props.section.is_react ? (
 					createElement(
 						mapReactComponent[props.section.react_component.name],
