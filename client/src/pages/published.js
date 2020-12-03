@@ -1,6 +1,7 @@
 import React, { createElement, useEffect } from "react";
 import { connect } from "react-redux";
 import ReactHtmlParser from "react-html-parser";
+import { Helmet } from 'react-helmet'
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
@@ -18,6 +19,10 @@ const Published = (props) => {
 	const renderPage = () => {
 		if (props.settings.loaded && props.model.sections.length) {
 			return (
+				<div>
+				<Helmet>
+					<title>{props.event.title}</title>
+				</Helmet>
 				<div class="fr-view">
 					<ul>
 						{props.model.sections.map(function (section) {
@@ -29,6 +34,7 @@ const Published = (props) => {
 								: ReactHtmlParser(section.html);
 						})}
 					</ul>
+				</div>
 				</div>
 			);
 		} else if (props.settings.loaded) {

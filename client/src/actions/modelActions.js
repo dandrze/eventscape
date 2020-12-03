@@ -13,6 +13,7 @@ import {
 	LOAD_STARTED,
 	LOAD_FINISHED,
 	UPDATE_REACT_COMPONENT,
+	FETCH_EVENT
 } from "./types";
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
@@ -129,6 +130,7 @@ export const localSaveModel = () => (dispatch, getState) => {
 export const fetchLivePage = (link) => async (dispatch) => {
 	dispatch({ type: LOAD_STARTED });
 	const event = await api.get("/api/event/link", { params: { link } });
+	dispatch({ type: FETCH_EVENT, payload: event.data });
 	dispatch({ type: LOAD_FINISHED });
 
 	if (event.data.status === 1) {
