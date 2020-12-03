@@ -109,13 +109,16 @@ export const logoHeaderRightModel = () => {
 };
 
 export const descriptionRegistrationModel = (startTime, endTime) => {
-	const endDifferentDay = isSameDay(startTime, endTime)
+    const startTimeParsed = Date.parse(startTime)
+    const endTimeParsed = Date.parse(endTime)
+
+	const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
 		? ""
-		: format(endTime, "MMMM dd, yyyy ");
+		: format(endTimeParsed, "MMMM dd, yyyy ");
 	const timeFormatted =
-		format(startTime, "MMMM dd, yyyy h:mm a - ") +
+		format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
 		endDifferentDay +
-		format(endTime, "h:mm a zzz");
+		format(endTimeParsed, "h:mm a zzz");
 
 	return `
     <div style="overflow: hidden;" contenteditable="false">
@@ -184,14 +187,17 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
     `;
 };
 
-export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
-	const endDifferentDay = isSameDay(startTime, endTime)
-		? ""
-		: format(endTime, "MMMM dd, yyyy ");
-	const timeFormatted =
-		format(startTime, "MMMM dd, yyyy h:mm a - ") +
-		endDifferentDay +
-		format(endTime, "h:mm a zzz");
+export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {        
+    const startTimeParsed = Date.parse(startTime)
+    const endTimeParsed = Date.parse(endTime)
+
+    const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
+        ? ""
+        : format(endTimeParsed, "MMMM dd, yyyy ");
+    const timeFormatted =
+        format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
+        endDifferentDay +
+        format(endTimeParsed, "h:mm a zzz");
 
 	return `
         <div style="overflow: hidden;" contenteditable="false">

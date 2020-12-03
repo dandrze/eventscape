@@ -126,7 +126,7 @@ const NewSectionButton = (props) => {
 											src={descriptionRegistration}
 											id="designBlockThumbnail"
 											onClick={() =>
-												handleSelect(descriptionRegistrationModel())
+												handleSelect(descriptionRegistrationModel(props.event.start_date, props.event.end_date))
 											}
 										/>
 									</Grid>
@@ -134,7 +134,7 @@ const NewSectionButton = (props) => {
 										<img
 											src={titleThumb}
 											id="designBlockThumbnail"
-											onClick={() => handleSelect(titleTimeModel())}
+											onClick={() => handleSelect(titleTimeModel(props.event.title, props.event.start_date, props.event.end_date))}
 										/>
 									</Grid>
 									<Grid item xs={12}>
@@ -151,7 +151,7 @@ const NewSectionButton = (props) => {
 											src={blankThumb}
 											id="designBlockThumbnail"
 											onClick={() =>
-												handleSelect(descriptionRegistrationModel())
+												handleSelect('')
 											}
 										/>
 									</Grid>
@@ -165,4 +165,8 @@ const NewSectionButton = (props) => {
 	);
 };
 
-export default connect(null, actions)(NewSectionButton);
+const mapStateToProps = (state) => {
+	return { event: state.event};
+};
+
+export default connect(mapStateToProps, actions)(NewSectionButton);
