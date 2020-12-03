@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {useEffect} from 'react';
+import { connect } from "react-redux";
 import FormGroup from '@material-ui/core/FormGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Switch1 from "../components/switch";
@@ -8,8 +9,17 @@ import "./registrations.css";
 
 import NavBar3 from '../components/navBar3.js';
 import RegistrationTable2 from "../components/RegistrationTable2.js"
+import * as actions from "../actions";
 
-export default function Design() {
+
+const Registrations = (props) =>  {
+    // UseEffect mimicks OnComponentDidMount
+    // get the list of registrations
+    useEffect(async () => {
+        const event = await props.fetchEvent();
+        props.fetchRegistrations(event.data.id); 
+    }, []);
+    
     const [regOn, setRegOn] = React.useState({
         checked: true,
     });
@@ -42,3 +52,9 @@ export default function Design() {
         </div>
     )
 }
+
+const mapStateToProps = (state) => {
+	return { eventList: state.eventList, settings: state.settings, event: state.event };
+};
+
+export default connect(mapStateToProps,actions)(Registrations)
