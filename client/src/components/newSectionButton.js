@@ -126,7 +126,7 @@ const NewSectionButton = (props) => {
 											src={descriptionRegistration}
 											id="designBlockThumbnail"
 											onClick={() =>
-												handleSelect(descriptionRegistrationModel(props.event.start_date, props.event.end_date))
+												handleSelect(descriptionRegistrationModel(props.event.start_date, props.event.end_date, props.event.primary_color))
 											}
 										/>
 									</Grid>

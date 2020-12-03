@@ -108,9 +108,11 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
-export const descriptionRegistrationModel = (startTime, endTime) => {
+export const descriptionRegistrationModel = (startTime, endTime, color) => {
     const startTimeParsed = Date.parse(startTime)
     const endTimeParsed = Date.parse(endTime)
+
+    console.log(color)
 
 	const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
 		? ""
@@ -170,16 +172,16 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
         font-weight: bold;
         font-size: 20;
         color: white;
-        background-color: #B0281C;
+        background-color: ${color};
         padding: 16px;
         border-width: 2px;
         border-radius: 6px;
-        border-color: #B0281C;
+        border-color: ${color};
         border-style: solid;
     }
     
     #button3:hover {
-        color: #B0281C;
+        color: ${color};
         background-color: white;
     }
     </style>

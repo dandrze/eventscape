@@ -40,7 +40,7 @@ export const createEvent = (
 			is_stream: false,
 		},
 		{
-			html: descriptionRegistrationModel(start_date, end_date),
+			html: descriptionRegistrationModel(start_date, end_date, primary_color),
 			name: "body",
 			is_stream: false,
 		},
