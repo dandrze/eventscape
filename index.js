@@ -9,6 +9,7 @@ const db = require("./db");
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const modelRoutes = require("./routes/modelRoutes");
+const registrationRoutes = require("./routes/registrationRoutes");
 
 //console.log(process.env.DATABASE_URL);
 
@@ -41,6 +42,7 @@ app.use(passport.session());
 app.use(authRoutes);
 app.use(eventRoutes);
 app.use(modelRoutes);
+app.use(registrationRoutes);
 
 if (process.env.NODE_ENV == "production") {
 	// if we don't recognize the route, look into the client/build folder
