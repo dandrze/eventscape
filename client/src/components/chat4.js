@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import ScrollToBottom from 'react-scroll-to-bottom';
-import ReactEmoji from 'react-emoji';
-import SendIcon from '@material-ui/icons/Send';
+import { connect } from "react-redux";
+import ScrollToBottom from "react-scroll-to-bottom";
+import ReactEmoji from "react-emoji";
+import SendIcon from "@material-ui/icons/Send";
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
@@ -14,18 +15,89 @@ https://github.com/adrianhajdin/project_chat_application
 // import Messages from '../Messages/Messages';
 // import Input from '../Input/Input';
 
-import './chat4.css';
+import "./chat4.css";
 
 // const ENDPOINT = 'https://project-chat-application.herokuapp.com/';
 
 // let socket;
 
-const Chat = ({ location }) => {
-  const [name, setName] = useState('');
-  const [room, setRoom] = useState('');
-  const [users, setUsers] = useState('');
-  const [message, setMessage] = useState('');
+const InfoBar = ({ theme }) => (
+  <div className="infoBar" style={theme}>
+    <div className="leftInnerContainer">
+      <h3 id="chatText">Chat</h3>
+    </div>
+    <div className="rightInnerContainer"></div>
+  </div>
+);
+
+const Messages = ({ messages, name }) => (
+  <ScrollToBottom className="messages">
+    {messages.map((message, i) => (
+      <div key={i}>
+        <Message message={message} name={name} />
+      </div>
+    ))}
+  </ScrollToBottom>
+);
+
+const Message = ({ message: { text, user }, name }) => {
+  let isSentByCurrentUser = false;
+
+  const trimmedName = name.trim().toLowerCase();
+
+  if (user === trimmedName) {
+    isSentByCurrentUser = true;
+  }
+
+  return isSentByCurrentUser ? (
+    <div className="messageContainer justifyEnd">
+      <p className="sentText pr-10">{trimmedName}</p>
+      <div className="messageBox backgroundBlue">
+        <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
+      </div>
+    </div>
+  ) : (
+    <div className="messageContainer justifyStart">
+      <div className="messageBox backgroundLight">
+        <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
+      </div>
+      <p className="sentText pl-10 ">{user}</p>
+    </div>
+  );
+};
+
+const Input = ({ setMessage, sendMessage, message, theme }) => (
+  <form className="form">
+    <input
+      className="input"
+      type="text"
+      placeholder="Type a message..."
+      value={message}
+      onChange={({ target: { value } }) => setMessage(value)}
+      onKeyPress={(event) =>
+        event.key === "Enter" ? sendMessage(event) : null
+      }
+    />
+    <button
+      className="sendButton"
+      style={theme}
+      onClick={(e) => sendMessage(e)}
+    >
+      <SendIcon />
+    </button>
+  </form>
+);
+
+const Chat = (props, { location }) => {
+  const [name, setName] = useState("");
+  const [room, setRoom] = useState("");
+  const [users, setUsers] = useState("");
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+
+  const theme = {
+    backgroundColor: props.event ? props.event.primary_color : "#b0281c",
+  };
 
   /*useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -55,80 +127,29 @@ const Chat = ({ location }) => {
   const sendMessage = (event) => {
     event.preventDefault();
 
-    if(message) {
+    if (message) {
       //socket.emit('sendMessage', message, () => setMessage(''));
     }
-  }
+  };
 
   return (
     <div className="outerContainer">
       <div className="container">
-          <InfoBar />
-          <Messages messages={messages} name={name} />
-          <Input message={message} setMessage={setMessage} sendMessage={sendMessage} />
-      </div>
-    </div>
-  );
-}
-
-export default Chat;
-
-const InfoBar = () => (
-    <div className="infoBar">
-      <div className="leftInnerContainer">
-        <h3 id="chatText">Chat</h3>
-      </div>
-      <div className="rightInnerContainer">
-      </div>
-    </div>
-  );
-
-const Messages = ({ messages, name }) => (
-    <ScrollToBottom className="messages">
-        {messages.map((message, i) => <div key={i}><Message message={message} name={name}/></div>)}
-    </ScrollToBottom>
-);
-
-const Message = ({ message: { text, user }, name }) => {
-    let isSentByCurrentUser = false;
-  
-    const trimmedName = name.trim().toLowerCase();
-  
-    if(user === trimmedName) {
-      isSentByCurrentUser = true;
-    }
-  
-    return (
-      isSentByCurrentUser
-        ?   (
-            <div className="messageContainer justifyEnd">
-                <p className="sentText pr-10">{trimmedName}</p>
-                <div className="messageBox backgroundBlue">
-                <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
-                </div>
-            </div>
-            )
-            : (
-                <div className="messageContainer justifyStart">
-                <div className="messageBox backgroundLight">
-                    <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-                </div>
-                <p className="sentText pl-10 ">{user}</p>
-                </div>
-            )
-    );
-}
-
-const Input = ({ setMessage, sendMessage, message }) => (
-    <form className="form">
-        <input
-            className="input"
-            type="text"
-            placeholder="Type a message..."
-            value={message}
-            onChange={({ target: { value } }) => setMessage(value)}
-            onKeyPress={event => event.key === 'Enter' ? sendMessage(event) : null}
+        <InfoBar theme={theme} />
+        <Messages messages={messages} name={name} />
+        <Input
+          message={message}
+          setMessage={setMessage}
+          sendMessage={sendMessage}
+          theme={theme}
         />
-        <button className="sendButton" onClick={e => sendMessage(e)}><SendIcon /></button>
-    </form>
-)
+      </div>
+    </div>
+  );
+};
+
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps)(Chat);
