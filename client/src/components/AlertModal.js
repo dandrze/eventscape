@@ -7,65 +7,64 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 
 export default function AlertModal(props) {
-	const [input, setInput] = useState("");
+  const [input, setInput] = useState("");
 
-	const handleChangeInput = (event) => {
-		setInput(event.target.value);
-	};
-	const {
-		onClose,
-		onContinue,
-		open,
-		text,
-		closeText,
-		continueText,
-		textInputLabel,
-	} = props;
+  const handleChangeInput = (event) => {
+    setInput(event.target.value);
+  };
+  const {
+    onClose,
+    onContinue,
+    open,
+    text,
+    closeText,
+    continueText,
+    textInputLabel,
+  } = props;
 
-	const handleClose = () => {
-		onClose();
-	};
+  const handleClose = () => {
+    onClose();
+  };
 
-	const handleContinue = () => {
-		console.log(input);
-		onContinue(input);
-	};
+  const handleContinue = () => {
+    onContinue(input);
+  };
 
-	return (
-		<div>
-			<Dialog
-				open={open}
-				onClose={handleClose}
-				aria-labelledby="alert-dialog-title"
-				aria-describedby="alert-dialog-description"
-			>
-				<DialogContent>
-					<DialogContentText id="alert-dialog-description">
-						{text}
-					</DialogContentText>
-				</DialogContent>
-				{textInputLabel ? (
-					<TextField
-						autoFocus
-						margin="dense"
-						id="input"
-						label={textInputLabel}
-						type="standard"
-						value={input}
-						onChange={handleChangeInput}
-						variant="outlined"
-						style={{ margin: "0px 30px" }}
-					/>
-				) : null}
-				<DialogActions>
-					<Button onClick={handleClose} color="primary">
-						{closeText}
-					</Button>
-					<Button onClick={handleContinue} color="primary" autoFocus>
-						{continueText}
-					</Button>
-				</DialogActions>
-			</Dialog>
-		</div>
-	);
+  return (
+    <div>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            {text}
+          </DialogContentText>
+        </DialogContent>
+        {textInputLabel ? (
+          <TextField
+            autoFocus
+            margin="dense"
+            id="input"
+            label={textInputLabel}
+            type="standard"
+            value={input}
+            onChange={handleChangeInput}
+            variant="outlined"
+            style={{ margin: "0px 30px" }}
+          />
+        ) : null}
+        <DialogActions>
+          <Button onClick={handleClose} color="primary">
+            {closeText}
+          </Button>
+          <Button onClick={handleContinue} color="primary" autoFocus>
+            {continueText}
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }

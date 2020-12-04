@@ -7,7 +7,6 @@ import "./stream-chat.css";
 import Chat from "../chat4.js";
 
 const StreamChat = (props) => {
-  console.log(props);
   const displayStream = () => {
     const youtubeSrc =
       props.link +

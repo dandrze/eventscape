@@ -20,7 +20,6 @@ import { isSameDay } from "date-fns";
 };*/
 
 /*export const heroBannerModelV2 = (eventTitle = "default", primaryColor) => {
-    console.log('primary color: ' + primaryColor)
 
     function hexToRGBA(hex, alpha) {
         var r = parseInt(hex.slice(1, 3), 16),
@@ -65,7 +64,7 @@ import { isSameDay } from "date-fns";
 };*/
 
 export const heroBannerModel = (eventTitle = "default", primaryColor) => {
-	return `
+  return `
     <div style="overflow: hidden;">
         <div class="title" >${eventTitle}</div>
     </div>
@@ -87,7 +86,7 @@ export const heroBannerModel = (eventTitle = "default", primaryColor) => {
 };
 
 export const logoHeaderModel = () => {
-	return `
+  return `
     <div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
             <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
@@ -97,7 +96,7 @@ export const logoHeaderModel = () => {
 };
 
 export const logoHeaderRightModel = () => {
-	return `
+  return `
     <div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
             <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
@@ -106,20 +105,23 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
-export const descriptionRegistrationModel = (startTime, endTime, primaryColor) => {
-    const startTimeParsed = Date.parse(startTime)
-    const endTimeParsed = Date.parse(endTime)
+export const descriptionRegistrationModel = (
+  startTime,
+  endTime,
+  primaryColor
+) => {
+  const startTimeParsed = Date.parse(startTime);
+  const endTimeParsed = Date.parse(endTime);
 
+  const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
+    ? ""
+    : format(endTimeParsed, "MMMM dd, yyyy ");
+  const timeFormatted =
+    format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
+    endDifferentDay +
+    format(endTimeParsed, "h:mm a zzz");
 
-	const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
-		? ""
-		: format(endTimeParsed, "MMMM dd, yyyy ");
-	const timeFormatted =
-		format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
-		endDifferentDay +
-		format(endTimeParsed, "h:mm a zzz");
-
-	return `
+  return `
     <div style="overflow: hidden;" contenteditable="false">
         <section class="container">
             <div class="one" contenteditable="true">
@@ -186,19 +188,19 @@ export const descriptionRegistrationModel = (startTime, endTime, primaryColor) =
     `;
 };
 
-export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {        
-    const startTimeParsed = Date.parse(startTime)
-    const endTimeParsed = Date.parse(endTime)
+export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
+  const startTimeParsed = Date.parse(startTime);
+  const endTimeParsed = Date.parse(endTime);
 
-    const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
-        ? ""
-        : format(endTimeParsed, "MMMM dd, yyyy ");
-    const timeFormatted =
-        format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
-        endDifferentDay +
-        format(endTimeParsed, "h:mm a zzz");
+  const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
+    ? ""
+    : format(endTimeParsed, "MMMM dd, yyyy ");
+  const timeFormatted =
+    format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
+    endDifferentDay +
+    format(endTimeParsed, "h:mm a zzz");
 
-	return `
+  return `
         <div style="overflow: hidden;" contenteditable="false">
             <div style="margin: 0 1rem 0 1rem;">
                 <div class="title">${eventTitle}</div>
@@ -226,7 +228,7 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
 };
 
 export const streamChatModel = () => {
-	return `
+  return `
         <div style="overflow: hidden;">
             <section class="container2">
                 <div class="one2">
@@ -475,7 +477,7 @@ export const streamChatModel = () => {
 };
 
 export const blankModel = () => {
-	return `
+  return `
     <div style="overflow: hidden;" contenteditable="false">
         <div style="margin: 1rem; display: block;">
             <div contenteditable="true" style="text-align: left;"></div>
@@ -485,12 +487,12 @@ export const blankModel = () => {
 };
 
 export const streamChatReact = {
-	name: "StreamChat",
-	props: {
-		content: "youtube-live",
-		link: "https://www.youtube.com/embed/X9llog6QNVM",
-		html: "",
-	},
+  name: "StreamChat",
+  props: {
+    content: "youtube-live",
+    link: "https://www.youtube.com/embed/X9llog6QNVM",
+    html: "",
+  },
 };
 
 /*<iframe 

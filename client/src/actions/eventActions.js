@@ -69,8 +69,6 @@ export const createEvent = (
     },
   ];
 
-  console.log(typeof start_date);
-
   const event = {
     title,
     link,
@@ -118,11 +116,7 @@ export const updateEvent = (
     status: getState().event.status,
   };
 
-  console.log(updatedEvent);
-
   const res = await api.put("/api/event", updatedEvent);
-
-  console.log(res);
 
   if (res.status === 200) {
     await dispatch({
@@ -151,13 +145,10 @@ export const fetchEvent = () => async (dispatch) => {
 };
 
 export const fetchEventFromId = (id) => async (dispatch) => {
-  console.log(id);
   // call the api and return the event in json
   dispatch({ type: LOAD_STARTED });
   const event = await api.get("/api/event/id", { params: { id } });
   dispatch({ type: LOAD_FINISHED });
-
-  console.log(event);
 
   if (event) {
     dispatch({ type: FETCH_EVENT, payload: event.data });
