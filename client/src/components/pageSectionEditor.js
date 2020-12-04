@@ -21,16 +21,19 @@ const RegPageSectionEditor = (props) => {
     StreamChat: StreamChat,
   };
   const theme = `
-  .fr-view button:hover { 
-		color: ${props.event.primary_color};
-		background-color: white;
-	} 
  	.fr-view button { 
-		background-color: ${props.event.primary_color} !important;
+		background: ${props.event.primary_color} !important;
 		border-color: ${props.event.primary_color} !important;
 	 } 
 	 .fr-view h1 {
 		 color: ${props.event.primary_color};
+	 }
+	 .infoBar {
+		background: ${props.event.primary_color};
+	 }
+
+	 .sendButton {
+		background:${props.event.primary_color};
 	 }
 	
   `;

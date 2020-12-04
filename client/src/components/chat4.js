@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import SendIcon from "@material-ui/icons/Send";
@@ -21,9 +20,9 @@ import "./chat4.css";
 
 // let socket;
 
-const InfoBar = ({ theme }) => (
-  <div className="infoBar" style={theme}>
-    <div className="leftInnerContainer">
+const InfoBar = () => (
+  <div className="infoBar">
+    <div className="leftInnerContainer box-header">
       <h3 id="chatText">Chat</h3>
     </div>
     <div className="rightInnerContainer"></div>
@@ -88,16 +87,12 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const Chat = (props, { location }) => {
+const Chat = ({ location }) => {
   const [name, setName] = useState("");
   const [room, setRoom] = useState("");
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-
-  const theme = {
-    backgroundColor: props.event ? props.event.primary_color : "#b0281c",
-  };
 
   /*useEffect(() => {
     const { name, room } = queryString.parse(location.search);
@@ -135,21 +130,16 @@ const Chat = (props, { location }) => {
   return (
     <div className="outerContainer">
       <div className="container">
-        <InfoBar theme={theme} />
+        <InfoBar />
         <Messages messages={messages} name={name} />
         <Input
           message={message}
           setMessage={setMessage}
           sendMessage={sendMessage}
-          theme={theme}
         />
       </div>
     </div>
   );
 };
 
-const mapStateToProps = (state) => {
-  return { event: state.event };
-};
-
-export default connect(mapStateToProps)(Chat);
+export default Chat;

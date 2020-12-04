@@ -36,7 +36,7 @@ const StreamChat = (props) => {
           <div className="video-responsive">{displayStream()}</div>
         </div>
         <div class="two2">
-          <Chat props={props} />
+          <Chat />
         </div>
       </section>
     </div>

@@ -6,7 +6,7 @@ import {
   heroBannerModel,
   descriptionRegistrationModel,
   titleTimeModel,
-  streamChatModel,
+  streamChatReact,
   blankModel,
 } from "../components/designBlockModels";
 import {
@@ -58,9 +58,11 @@ export const createEvent = (
       is_stream: false,
     },
     {
-      html: streamChatModel(),
+      html: null,
       name: "streamChat",
       is_stream: true,
+      is_react: true,
+      react_component: streamChatReact,
     },
     {
       html: blankModel(),

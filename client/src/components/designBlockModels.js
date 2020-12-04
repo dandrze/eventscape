@@ -171,6 +171,10 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
         border-radius: 6px;
         border-style: solid;
     }
+
+    .button3:hover {
+        opacity: 0.8;
+    }
     
    
     </style>
