@@ -118,7 +118,7 @@ const NewSectionButton = (props) => {
 										<img
 											src={heroBanner}
 											id="designBlockThumbnail"
-											onClick={() => handleSelect(heroBannerModel())}
+											onClick={() => handleSelect(heroBannerModel(props.event.title, props.event.primary_color))}
 										/>
 									</Grid>
 									<Grid item xs={12}>

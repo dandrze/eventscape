@@ -65,8 +65,6 @@ import { isSameDay } from "date-fns";
 };*/
 
 export const heroBannerModel = (eventTitle = "default", primaryColor) => {
-	console.log("primary color: " + primaryColor);
-
 	return `
     <div style="overflow: hidden;">
         <div class="title" >${eventTitle}</div>
@@ -74,7 +72,7 @@ export const heroBannerModel = (eventTitle = "default", primaryColor) => {
 
     <style>
         .title {
-            color: #B0281C;
+            color: ${primaryColor};
             padding: 0;
             font-size: 96px;
             line-height: 1;
@@ -108,11 +106,10 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
-export const descriptionRegistrationModel = (startTime, endTime, color) => {
+export const descriptionRegistrationModel = (startTime, endTime, primaryColor) => {
     const startTimeParsed = Date.parse(startTime)
     const endTimeParsed = Date.parse(endTime)
 
-    console.log(color)
 
 	const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
 		? ""
@@ -172,16 +169,16 @@ export const descriptionRegistrationModel = (startTime, endTime, color) => {
         font-weight: bold;
         font-size: 20;
         color: white;
-        background-color: ${color};
+        background-color: ${primaryColor};
         padding: 16px;
         border-width: 2px;
         border-radius: 6px;
-        border-color: ${color};
+        border-color: ${primaryColor};
         border-style: solid;
     }
     
     #button3:hover {
-        color: ${color};
+        color: ${primaryColor};
         background-color: white;
     }
     </style>
