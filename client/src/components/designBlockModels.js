@@ -63,15 +63,14 @@ import { isSameDay } from "date-fns";
 `;
 };*/
 
-export const heroBannerModel = (eventTitle = "default", primaryColor) => {
+export const heroBannerModel = (eventTitle = "default") => {
   return `
     <div style="overflow: hidden;">
-        <div class="title" >${eventTitle}</div>
+        <h1 class="title" >${eventTitle}</h1>
     </div>
 
     <style>
         .title {
-            color: ${primaryColor};
             padding: 0;
             font-size: 96px;
             line-height: 1;
@@ -105,11 +104,7 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
-export const descriptionRegistrationModel = (
-  startTime,
-  endTime,
-  primaryColor
-) => {
+export const descriptionRegistrationModel = (startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
   const endTimeParsed = Date.parse(endTime);
 
@@ -139,7 +134,7 @@ export const descriptionRegistrationModel = (
                     <label for="email">Email:</label>
                     <input type="text" id="email" name="email">
                     <br></br>
-                    <button id="button3">Register Now</button>
+                    <button class="button3 primary-color-background">Register Now</button>
                 </form>
             </div>
         </section>
@@ -166,23 +161,18 @@ export const descriptionRegistrationModel = (
         background-color: #EFEFEF;
     }
     
-    #button3 {
+    .button3 {
         font-family: Helvetica, Arial, sans-serif;
         font-weight: bold;
         font-size: 20;
         color: white;
-        background-color: ${primaryColor};
         padding: 16px;
         border-width: 2px;
         border-radius: 6px;
-        border-color: ${primaryColor};
         border-style: solid;
     }
     
-    #button3:hover {
-        color: ${primaryColor};
-        background-color: white;
-    }
+   
     </style>
     
     `;
@@ -203,12 +193,12 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
   return `
         <div style="overflow: hidden;" contenteditable="false">
             <div style="margin: 0 1rem 0 1rem;">
-                <div class="title">${eventTitle}</div>
+                <div class="title1">${eventTitle}</div>
             </div>
         </div>
         
         <style>
-            .title {
+            .title1 {
                 font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
                 font-size: 36px;
                 color: black;

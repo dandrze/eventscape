@@ -35,12 +35,12 @@ export const createEvent = (
   const reg_page_model = [
     { html: logoHeaderModel(), name: "banner" },
     {
-      html: heroBannerModel(title, primary_color),
+      html: heroBannerModel(title),
       name: "heroBanner",
       is_stream: false,
     },
     {
-      html: descriptionRegistrationModel(start_date, end_date, primary_color),
+      html: descriptionRegistrationModel(start_date, end_date),
       name: "body",
       is_stream: false,
     },

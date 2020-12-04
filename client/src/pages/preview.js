@@ -17,8 +17,24 @@ const Preview = (props) => {
     StreamChat: StreamChat,
   };
 
+  const theme = `
+  .fr-view button:hover { 
+		color: ${props.event.primary_color};
+		background-color: white !important;
+	} 
+ 	.fr-view button { 
+		background-color: ${props.event.primary_color} !important;
+		border-color: ${props.event.primary_color} !important;
+	 } 
+	 .fr-view h1 {
+		 color: ${props.event.primary_color};
+	 }
+	
+  `;
+
   return (
     <div className="fr-view">
+      <style>{theme}</style>
       <ul>
         {props.model.sections.map(function (section) {
           return section.is_react
@@ -34,7 +50,7 @@ const Preview = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { model: state.model };
+  return { model: state.model, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(Preview);
