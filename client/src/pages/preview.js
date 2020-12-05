@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import "froala-editor/css/froala_style.min.css";
 import StreamChat from "../components/pageReactSections/stream-chat";
 
+import RegistrationForm from "../components/pageReactSections/RegistrationForm";
+
 const Preview = (props) => {
   const { event, model } = useParams();
   useEffect(() => {
