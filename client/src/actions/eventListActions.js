@@ -17,7 +17,7 @@ export const fetchEventList = () => async (dispatch) => {
 
 export const duplicateEvent = (id, link) => async (dispatch) => {
 	const res1 = await api.get("/api/event/id", { params: { id } });
-	const newEvent = { ...res1.data, link: link };
+	const newEvent = { ...res1.data, link: link, title: res1.data.title + " copy" };
 	const res2 = await api.post("/api/event", newEvent);
 	toast.success("Event successfully duplicated");
 	return true;

@@ -202,7 +202,6 @@ const Table = (props) => {
 		}
 		if (onContinueAction == "duplicate") {
 			const res = await props.isLinkAvailable(input);
-			console.log(res);
 			if (res) {
 				await props.duplicateEvent(actionRowId, input);
 			} else {

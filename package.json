@@ -6,7 +6,7 @@
 	"scripts": {
 		"dev": "concurrently \"npm run server\" \"npm run client\"",
 		"start": "node index.js",
-		"server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL) nodemon index.js",
+		"server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscapeio) nodemon index.js",
 		"client": "npm run start --prefix client",
 		"heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
 	},
@@ -23,12 +23,14 @@
 		"dotenv": "^8.2.0",
 		"express": "^4.17.1",
 		"express-force-https": "^1.0.0",
+		"heroku": "^7.47.4",
+		"heroku-cli": "^7.0.9",
 		"mongoose": "^5.10.9",
-		"nodemon": "2.0.4",
+		"nodemon": "^2.0.4",
 		"passport": "^0.4.1",
 		"passport-local": "^1.0.0",
 		"pg": "^8.4.2",
-		"react-favicon": "0.0.18",
+		"react-favicon": "^0.0.18",
 		"react-helmet": "^6.1.0",
 		"socket.io": "^2.3.0"
 	}

@@ -1,163 +1,165 @@
 .outerContainer {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100%; /* previously 100vh */
-    background-color: #1A1A1D;
-    border: 1px solid #EFEFEF;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* previously 100vh */
+  background-color: #1a1a1d;
+  border: 1px solid #efefef;
 }
-  
+
 .container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    background: #FFFFFF;
-    border-radius: 8px;
-    height: 100%;
-    width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: #ffffff;
+  border-radius: 8px;
+  height: 100%;
+  width: 100%;
 }
 
 /* Info Bar */
 
 .infoBar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    background: #b0281c;
-    border-radius: 4px 4px 0 0;
-    height: 60px;
-    width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #b0281c;
+  border-radius: 4px 4px 0 0;
+  height: 60px;
+  width: 100%;
 }
-  
+
 .leftInnerContainer {
-    flex: 0.5;
-    display: flex;
-    align-items: center;
-    margin-left: 5%;
-    color: white;
+  flex: 0.5;
+  display: flex;
+  align-items: center;
+  margin-left: 5%;
+  color: white;
 }
-  
+
 .rightInnerContainer {
-    display: flex;
-    flex: 0.5;
-    justify-content: flex-end;
-    margin-right: 5%;
+  display: flex;
+  flex: 0.5;
+  justify-content: flex-end;
+  margin-right: 5%;
 }
 
 #chatText {
-    color: white;
-    font-family: Roboto,sans-serif;
+  color: white;
+  font-family: Roboto, sans-serif;
 }
-  
+
 .onlineIcon {
-    margin-right: 5%;
+  margin-right: 5%;
 }
 
 /* Messages */
 
 .messages {
-    padding: 0; /* was 5% 0 */
-    overflow: auto;
-    flex: auto;
+  padding: 0; /* was 5% 0 */
+  overflow: auto;
+  flex: auto;
 }
 
 /* Message */
 
 .messageBox {
-    background: #F3F3F3;
-    border-radius: 20px;
-    padding: 5px 20px;
-    color: white;
-    display: inline-block;
-    max-width: 80%;
+  background: #f3f3f3;
+  border-radius: 20px;
+  padding: 5px 20px;
+  color: white;
+  display: inline-block;
+  max-width: 80%;
 }
-  
+
 .messageText {
-    width: 100%;
-    letter-spacing: 0;
-    float: left;
-    font-size: 1.1em;
-    word-wrap: break-word;
+  width: 100%;
+  letter-spacing: 0;
+  float: left;
+  font-size: 1.1em;
+  word-wrap: break-word;
 }
-  
+
 .messageText img {
-    vertical-align: middle;
+  vertical-align: middle;
 }
-  
+
 .messageContainer {
-    display: flex;
-    justify-content: flex-end;
-    padding: 0 5%;
-    margin-top: 3px;
+  display: flex;
+  justify-content: flex-end;
+  padding: 0 5%;
+  margin-top: 3px;
 }
-  
+
 .sentText {
-    display: flex;
-    align-items: center;
-    font-family: Helvetica;
-    color: #828282;
-    letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  font-family: Helvetica;
+  color: #828282;
+  letter-spacing: 0.3px;
 }
-  
+
 .pl-10 {
-    padding-left: 10px;
+  padding-left: 10px;
 }
-  
+
 .pr-10 {
-    padding-right: 10px;
+  padding-right: 10px;
 }
-  
+
 .justifyStart {
-    justify-content: flex-start;
+  justify-content: flex-start;
 }
-  
+
 .justifyEnd {
-    justify-content: flex-end;
+  justify-content: flex-end;
 }
-  
+
 .colorWhite {
-    color: white;
+  color: white;
 }
-  
+
 .colorDark {
-    color: #353535;
+  color: #353535;
 }
-  
+
 .backgroundBlue {
-    background: #2979FF;
+  background: #2979ff;
 }
-  
+
 .backgroundLight {
-    background: #F3F3F3;
+  background: #f3f3f3;
 }
 
 /* Input */
 
 .form {
-    display: flex;
-    border-top: 2px solid #D3D3D3;
+  display: flex;
+  border-top: 2px solid #d3d3d3;
 }
-  
+
 .input {
-    border: none;
-    border-radius: 0;
-    padding: 16px 0 16px 16px; /* was 5% */
-    width: 80%;
-    margin: 0;
-    font-family: Roboto,sans-serif;
-    font-size: 18px;
+  border: none;
+  border-radius: 0;
+  padding: 16px 0 16px 16px; /* was 5% */
+  width: 80%;
+  margin: 0;
+  font-family: Roboto, sans-serif;
+  font-size: 18px;
 }
-  
-input:focus, textarea:focus, select:focus{
-    outline: none;
+
+input:focus,
+textarea:focus,
+select:focus {
+  outline: none;
 }
-  
+
 .sendButton {
-    color: #fff !important;
-    text-decoration: none;
-    background: #b0281c;
-    padding: 16px; /* was 20px */
-    display: inline-block;
-    border: none;
-    width: 20%;
+  color: #fff !important;
+  text-decoration: none;
+  background: #b0281c;
+  padding: 16px; /* was 20px */
+  display: inline-block;
+  border: none;
+  width: 20%;
 }

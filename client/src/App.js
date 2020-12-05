@@ -27,43 +27,43 @@ import Giller from "./pages/Giller";
 //import "froala-editor/css/froala_style.min.css";
 
 function App() {
-	const path = window.location.host.split(".");
+  const path = window.location.host.split(".");
 
-	if (
-		path[0] !== "localhost:3000" &&
-		path[0] !== "eventscape" &&
-		path[0] !== "www"
-	) {
-		return (
-			<div className="App">
-				<header className="App-header">
-					<Published subdomain={path[0]} />
-				</header>
-			</div>
-		);
-	}
+  if (
+    path[0] !== "localhost:3000" &&
+    path[0] !== "eventscape" &&
+    path[0] !== "www"
+  ) {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <Published subdomain={path[0]} />
+        </header>
+      </div>
+    );
+  }
 
-	return (
-		<div className="App">
-			<ToastContainer position="top-right" autoClose={3000} />
-			<header className="App-header">
-				<Route exact path="/" component={Landing} />
-				<Route exact path="/dashboard" component={Dashboard} />
-				<Route exact path="/create-account" component={Create_Account} />
-				<Route exact path="/event-details" component={Event_Details} />
-				<Route exact path="/my-events" component={My_Events} />
-				<Route exact path="/design" component={Design} />
-				<Route exact path="/website-settings" component={WebsiteSettings} />
-				<Route exact path="/communication" component={Communication} />
-				<Route exact path="/communication-editor" component={EmailEditor} />
-				<Route exact path="/registrations" component={Registrations} />
-				<Route exact path="/analytics" component={Analytics} />
-				<Route exact path="/messaging" component={Messaging} />
-				<Route exact path="/preview/:id" component={Preview} />
-				<Route exact path="/ScotiabankGillerPrize" component={Giller} />
-			</header>
-		</div>
-	);
+  return (
+    <div className="App">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <header className="App-header">
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/dashboard" component={Dashboard} />
+        <Route exact path="/create-account" component={Create_Account} />
+        <Route exact path="/event-details" component={Event_Details} />
+        <Route exact path="/my-events" component={My_Events} />
+        <Route exact path="/design" component={Design} />
+        <Route exact path="/website-settings" component={WebsiteSettings} />
+        <Route exact path="/communication" component={Communication} />
+        <Route exact path="/communication-editor" component={EmailEditor} />
+        <Route exact path="/registrations" component={Registrations} />
+        <Route exact path="/analytics" component={Analytics} />
+        <Route exact path="/messaging" component={Messaging} />
+        <Route exact path="/preview/:event/:model" component={Preview} />
+        <Route exact path="/ScotiabankGillerPrize" component={Giller} />
+      </header>
+    </div>
+  );
 }
 
 export default connect(null, actions)(App);

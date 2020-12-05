@@ -7,48 +7,66 @@ import DesignBlockToolbar from "./designBlockToolbar";
 import StreamChat from "../components/pageReactSections/stream-chat";
 
 const RegPageSectionEditor = (props) => {
-	const [isHovering, setIsHovering] = useState(false);
+  const [isHovering, setIsHovering] = useState(false);
 
-	const handleMouseEnter = () => {
-		setIsHovering(true);
-	};
+  const handleMouseEnter = () => {
+    setIsHovering(true);
+  };
 
-	const handleMouseLeave = () => {
-		setIsHovering(false);
-	};
+  const handleMouseLeave = () => {
+    setIsHovering(false);
+  };
 
-	const mapReactComponent = {
-		StreamChat: StreamChat,
-	};
+  const mapReactComponent = {
+    StreamChat: StreamChat,
+  };
+  const theme = `
+ 	.fr-view button { 
+		background: ${props.event.primary_color} !important;
+		border-color: ${props.event.primary_color} !important;
+	 } 
+	 .fr-view h1 {
+		 color: ${props.event.primary_color};
+	 }
+	 .infoBar {
+		background: ${props.event.primary_color};
+	 }
 
-	return (
-		<div>
-			<div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
-					<DesignBlockToolbar
-						displayToolbar={isHovering}
-						section={props.model.sections[props.sectionIndex]}
-						sectionIndex={props.sectionIndex}
-						maxIndex={props.model.sections.length}
-					/>
-				{props.section.is_react ? (
-					createElement(
-						mapReactComponent[props.section.react_component.name],
-						props.section.react_component.props
-					)
-				) : (
-					<Froala
-						key={props.model.sections}
-						sectionIndex={props.sectionIndex}
-					/>
-				)}
-			</div>
-			<NewSectionButton prevIndex={props.sectionIndex} />
-		</div>
-	);
+	 .sendButton {
+		background:${props.event.primary_color};
+	 }
+	
+  `;
+
+  return (
+    <div>
+      <style>{theme}</style>
+      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+        <DesignBlockToolbar
+          displayToolbar={isHovering}
+          section={props.model.sections[props.sectionIndex]}
+          sectionIndex={props.sectionIndex}
+          maxIndex={props.model.sections.length}
+        />
+        {props.section.is_react ? (
+          createElement(
+            mapReactComponent[props.section.react_component.name],
+            props.section.react_component.props
+          )
+        ) : (
+          <Froala
+            key={props.model.sections}
+            sectionIndex={props.sectionIndex}
+          />
+        )}
+      </div>
+      <NewSectionButton prevIndex={props.sectionIndex} />
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {
-	return { model: state.model };
+  return { model: state.model, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(RegPageSectionEditor);
