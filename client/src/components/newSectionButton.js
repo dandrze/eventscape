@@ -26,6 +26,7 @@ import {
   blankModel,
   streamChatReact,
   registrationFormHeader,
+  registrationFormReact,
 } from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -175,6 +176,15 @@ const NewSectionButton = (props) => {
                       src={registrationHeaderThumb}
                       id="designBlockThumbnail"
                       onClick={() => handleSelect(registrationFormHeader())}
+                    />
+                  </Grid>
+                  <Grid item xs={14}>
+                    <img
+                      src={registrationHeaderThumb}
+                      id="designBlockThumbnail"
+                      onClick={() =>
+                        handleSelect(null, true, registrationFormReact, false)
+                      }
                     />
                   </Grid>
                 </Grid>

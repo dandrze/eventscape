@@ -13,6 +13,7 @@
     "date-fns": "^2.16.1",
     "date-fns-tz": "^1.0.12",
     "font-awesome": "^4.7.0",
+    "formik": "^2.2.5",
     "froala-pages": "^1.1.0",
     "html-to-react": "^1.4.4",
     "http-proxy-middleware": "^1.0.6",

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import * as actions from "../actions";
 import NewSectionButton from "./newSectionButton";
 import DesignBlockToolbar from "./designBlockToolbar";
-import StreamChat from "../components/pageReactSections/stream-chat";
+import mapReactComponent from "./mapReactComponent";
 
 const RegPageSectionEditor = (props) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -17,9 +17,6 @@ const RegPageSectionEditor = (props) => {
     setIsHovering(false);
   };
 
-  const mapReactComponent = {
-    StreamChat: StreamChat,
-  };
   const theme = `
  	.fr-view button { 
 		background: ${props.event.primary_color} !important;
@@ -32,7 +29,7 @@ const RegPageSectionEditor = (props) => {
 		background: ${props.event.primary_color};
 	 }
 
-	 .sendButton {
+	 .themeButton {
 		background:${props.event.primary_color};
 	 }
 	

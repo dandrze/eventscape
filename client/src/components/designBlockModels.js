@@ -522,6 +522,11 @@ export const streamChatReact = {
   },
 };
 
+export const registrationFormReact = {
+  name: "RegistrationForm",
+  props: {},
+};
+
 /*<iframe 
 width="100%" 
 height= 640px; 

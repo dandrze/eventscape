@@ -1,10 +1,33 @@
 import React, { useState } from "react";
+import { Formik, Field, Form } from "formik";
 import { connect } from "react-redux";
 import AlertModal from "../AlertModal";
 import "./RegistrationForm.css";
 
 function RegistrationForm(props) {
-  const { formData } = props;
+  const formData = [
+    {
+      label: "First Name",
+      type: "text",
+      name: "firstname",
+    },
+    {
+      label: "Last Name",
+      type: "text",
+      name: "lastname",
+    },
+    {
+      label: "Email",
+      type: "email",
+      name: "email",
+    },
+    {
+      label: "Organization",
+      type: "text",
+      name: "organization",
+    },
+  ];
+
   return (
     <div>
       {/*<AlertModal
@@ -15,22 +38,29 @@ function RegistrationForm(props) {
         closeText="Cancel"
         continueText="OK"
       />*/}
-      <h1>My Event Details</h1>
-      <form action="/login" method="post">
-        <ul>
-          {formData.map((field) => {
-            return (
-              <div>
-                <label>{field.label}</label>
-                <input type={field.type} name={field.name} />
-              </div>
-            );
-          })}
-        </ul>
-        <div>
-          <input type="submit" value="Register Now" />
-        </div>
-      </form>
+      <Formik
+        initialValues={{ name: "", email: "" }}
+        onSubmit={async (values) => {
+          await new Promise((resolve) => setTimeout(resolve, 500));
+          alert(JSON.stringify(values, null, 2));
+        }}
+      >
+        <Form className="reg-form">
+          <ul>
+            {formData.map((field) => {
+              return (
+                <div>
+                  <label>{field.label}</label>
+                  <Field name={field.name} type={field.type} />
+                </div>
+              );
+            })}
+          </ul>
+          <button type="submit" className="submitButton themeButton">
+            Submit
+          </button>
+        </Form>
+      </Formik>
     </div>
   );
 }
