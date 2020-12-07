@@ -293,4 +293,24 @@ router.put("/api/event", async (req, res) => {
   res.send(events.rows[0]);
 });
 
+router.put("/api/event/set-registration", async (req, res) => {
+  const { registrationEnabled, event } = req.body;
+
+  const updatedEvent = await db.query(
+    `
+  UPDATE event
+  SET registration = $1
+  WHERE id = $2
+  RETURNING *`,
+    [registrationEnabled, event],
+    (err, res) => {
+      if (errDb) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(updatedEvent.rows[0]);
+});
+
 module.exports = router;

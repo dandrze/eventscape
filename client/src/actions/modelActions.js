@@ -132,14 +132,12 @@ export const fetchLivePage = (link) => async (dispatch) => {
   dispatch({ type: FETCH_EVENT, payload: event.data });
   dispatch({ type: LOAD_FINISHED });
 
-  if (event.data.status === 1) {
-    // if the event status is 1, it's live so fetch the live event page model
-    dispatch(fetchModelFromId(event.data.event_page_model));
-  } else if (event.data.status === 0) {
-    // if the status is 0, it's a draft so fetch the registration page model
+  if (event.data.registration) {
+    // if the events registration flag is true, show the registration page.
     dispatch(fetchModelFromId(event.data.reg_page_model));
   } else {
-    dispatch(fetchModelFromId(null));
+    // if the events registration flag is false, show the event page
+    dispatch(fetchModelFromId(event.data.event_page_model));
   }
 };
 

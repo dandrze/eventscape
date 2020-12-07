@@ -189,3 +189,20 @@ export const isLinkAvailable = (link) => async (dispatch) => {
     return false;
   }
 };
+
+export const setEventRegistration = (registrationEnabled, event) => async (
+  dispatch
+) => {
+  try {
+    const res = await api.put("/api/event/set-registration", {
+      registrationEnabled,
+      event,
+    });
+    console.log(res);
+    toast.success("Registration successfuly changed");
+    return true;
+  } catch (err) {
+    toast.error("Error when setting Registration: " + err.toString());
+    return false;
+  }
+};
