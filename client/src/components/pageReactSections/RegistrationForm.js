@@ -54,7 +54,7 @@ function RegistrationForm(props) {
         initialValues={{ name: "", email: "" }}
         onSubmit={async (values) => {
           try {
-            const res = await api.post("/api/registration3", {
+            const res = await api.post("/api/registration", {
               ...values,
               event: props.event.id,
             });
