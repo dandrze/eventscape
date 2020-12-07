@@ -61,13 +61,12 @@ const NewSectionButton = (props) => {
     setOpen(false);
   };
 
-  const handleSelect = (
+  const handleAddSection = async (
     html,
     is_react = false,
     react_component = null,
     is_stream = false
   ) => {
-    setOpen(false);
     props.addSection(
       props.prevIndex,
       html,
@@ -75,7 +74,6 @@ const NewSectionButton = (props) => {
       react_component,
       is_stream
     );
-    /*insert actions here*/
   };
 
   return (
@@ -114,77 +112,87 @@ const NewSectionButton = (props) => {
                     <img
                       src={logoHeader}
                       id="designBlockThumbnail"
-                      onClick={() => handleSelect(logoHeaderModel())}
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(logoHeaderModel());
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={heroBanner}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(heroBannerModel(props.event.title))
-                      }
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(heroBannerModel(props.event.title));
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={descriptionRegistration}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(
                           descriptionRegistrationModel(
                             props.event.start_date,
                             props.event.end_date
                           )
-                        )
-                      }
+                        );
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={titleThumb}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(
                           titleTimeModel(
                             props.event.title,
                             props.event.start_date,
                             props.event.end_date
                           )
-                        )
-                      }
+                        );
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={streamChatThumb}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(null, true, streamChatReact, true)
-                      }
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(null, true, streamChatReact, true);
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={blankThumb}
                       id="designBlockThumbnail"
-                      onClick={() => handleSelect("")}
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection("");
+                      }}
                     />
                   </Grid>
-                  <Grid item xs={13}>
+                  <Grid item xs={12}>
                     <img
                       src={registrationHeaderThumb}
                       id="designBlockThumbnail"
-                      onClick={() => handleSelect(registrationFormHeader())}
-                    />
-                  </Grid>
-                  <Grid item xs={14}>
-                    <img
-                      src={registrationHeaderThumb}
-                      id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(null, true, registrationFormReact, false)
-                      }
+                      onClick={async () => {
+                        handleClose();
+                        await handleAddSection(
+                          null,
+                          true,
+                          registrationFormReact,
+                          false
+                        );
+                        await handleAddSection(registrationFormHeader());
+                      }}
                     />
                   </Grid>
                 </Grid>

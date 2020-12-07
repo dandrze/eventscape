@@ -81,6 +81,9 @@ export const addSection = (
   };
 
   dispatch({ type: ADD_SECTION, payload });
+
+  //signals to the caller that the process is complete. Needed for async await.
+  return true;
 };
 
 export const deleteSection = (index) => {
