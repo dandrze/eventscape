@@ -12,6 +12,8 @@ import RegistrationTable2 from "../components/RegistrationTable2.js";
 import * as actions from "../actions";
 
 const Registrations = (props) => {
+  const [regOn, setRegOn] = React.useState(false);
+
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
   useEffect(() => {
@@ -22,15 +24,12 @@ const Registrations = (props) => {
   const fetchRegistrations = async () => {
     const event = await props.fetchEvent();
     props.fetchRegistrations(event.data.id);
+    setRegOn(event.data.registration);
   };
-
-  const [regOn, setRegOn] = React.useState({
-    checked: true,
-  });
 
   const handleChange = (event) => {
     if (props.setEventRegistration(event.target.checked, props.event.id)) {
-      setRegOn({ ...regOn, [event.target.name]: event.target.checked });
+      setRegOn(event.target.checked);
     }
   };
 
@@ -46,7 +45,7 @@ const Registrations = (props) => {
                   <FormControlLabel
                     control={
                       <Switch1
-                        checked={regOn.checked}
+                        checked={regOn}
                         onChange={handleChange}
                         name="checked"
                       />
