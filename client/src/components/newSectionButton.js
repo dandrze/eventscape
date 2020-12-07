@@ -16,6 +16,7 @@ import descriptionRegistration from "./designBlockThumbnails/descriptionRegistra
 import titleThumb from "./designBlockThumbnails/title.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
+import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
 import {
   logoHeaderModel,
   heroBannerModel,
@@ -24,6 +25,7 @@ import {
   streamChatModel,
   blankModel,
   streamChatReact,
+  registrationFormHeader,
 } from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -166,6 +168,13 @@ const NewSectionButton = (props) => {
                       src={blankThumb}
                       id="designBlockThumbnail"
                       onClick={() => handleSelect("")}
+                    />
+                  </Grid>
+                  <Grid item xs={13}>
+                    <img
+                      src={registrationHeaderThumb}
+                      id="designBlockThumbnail"
+                      onClick={() => handleSelect(registrationFormHeader())}
                     />
                   </Grid>
                 </Grid>

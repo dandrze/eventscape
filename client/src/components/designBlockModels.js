@@ -104,6 +104,39 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
+export const registrationFormHeader = () => {
+  return `
+      <div style="overflow: hidden;">
+          <p class="registration-title">Sign Up Today</p>
+          <p class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+      </div>
+  
+      <style>
+          .registration-title {
+              padding: 0;
+              font-size: 50px;
+              line-height: 1;
+              margin-left: 5%;
+              margin-right: 5%;
+              margin-top: 3%;
+              margin-bottom: 3%;
+              text-align: center;
+          }
+          .registration-subtitle {
+            padding: 0;
+            font-size: 20px;
+            line-height: 1;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 3%;
+            margin-bottom: 3%;
+            text-align: center;
+            font-style: italic;
+        }
+      </style>
+  `;
+};
+
 export const descriptionRegistrationModel = (startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
   const endTimeParsed = Date.parse(endTime);

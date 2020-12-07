@@ -37,9 +37,23 @@ const Preview = (props) => {
 	
   `;
 
+  const formData = [
+    {
+      label: "First Name",
+      type: "text",
+      name: "firstname",
+    },
+    {
+      label: "Last Name",
+      type: "text",
+      name: "lastname",
+    },
+  ];
+
   return (
     <div className="fr-view">
       <style>{theme}</style>
+      <RegistrationForm formData={formData} />
       <ul>
         {props.model.sections.map(function (section) {
           return section.is_react
