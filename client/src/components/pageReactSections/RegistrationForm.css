@@ -1,5 +1,7 @@
 .reg-form {
   padding: 25px;
+  width: 500px;
+  margin: auto;
 }
 
 .submitButton {

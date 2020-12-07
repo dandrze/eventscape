@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import { Formik, Field, Form } from "formik";
 import { connect } from "react-redux";
+import { Formik, Field, Form } from "formik";
 import AlertModal from "../AlertModal";
 import "./RegistrationForm.css";
+import api from "../../api/server";
 
 function RegistrationForm(props) {
+  const [open, setOpen] = useState(false);
+  const [modalText, setModalText] = useState(false);
+
   const formData = [
     {
       label: "First Name",
       type: "text",
-      name: "firstname",
+      name: "firstName",
     },
     {
       label: "Last Name",
       type: "text",
-      name: "lastname",
+      name: "lastName",
     },
     {
       label: "Email",
@@ -28,21 +32,40 @@ function RegistrationForm(props) {
     },
   ];
 
+  const closeModal = () => {
+    setOpen(false);
+  };
+
+  const openModal = () => {
+    setOpen(true);
+  };
+
   return (
     <div>
-      {/*<AlertModal
-        open={openModal}
+      <AlertModal
+        open={open}
         onClose={closeModal}
         onContinue={closeModal}
         text={modalText}
         closeText="Cancel"
         continueText="OK"
-      />*/}
+      />
       <Formik
         initialValues={{ name: "", email: "" }}
         onSubmit={async (values) => {
-          await new Promise((resolve) => setTimeout(resolve, 500));
-          alert(JSON.stringify(values, null, 2));
+          try {
+            const res = await api.post("/api/registration3", {
+              ...values,
+              event: props.event.id,
+            });
+            setModalText("Thank you for registering for " + props.event.title);
+            openModal();
+          } catch (err) {
+            setModalText(err.toString());
+            openModal();
+          }
+
+          openModal();
         }}
       >
         <Form className="reg-form">
@@ -65,4 +88,8 @@ function RegistrationForm(props) {
   );
 }
 
-export default RegistrationForm;
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps)(RegistrationForm);
