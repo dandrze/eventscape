@@ -49,6 +49,8 @@ export const fetchModelFromId = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
 
   dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
+
+  return true;
 };
 
 export const updateSection = (index, html) => {
@@ -130,15 +132,16 @@ export const fetchLivePage = (link) => async (dispatch) => {
   dispatch({ type: LOAD_STARTED });
   const event = await api.get("/api/event/link", { params: { link } });
   dispatch({ type: FETCH_EVENT, payload: event.data });
-  dispatch({ type: LOAD_FINISHED });
 
   if (event.data.registration) {
     // if the events registration flag is true, show the registration page.
-    dispatch(fetchModelFromId(event.data.reg_page_model));
+    await dispatch(fetchModelFromId(event.data.reg_page_model));
   } else {
     // if the events registration flag is false, show the event page
-    dispatch(fetchModelFromId(event.data.event_page_model));
+    await dispatch(fetchModelFromId(event.data.event_page_model));
   }
+
+  dispatch({ type: LOAD_FINISHED });
 };
 
 export const saveStreamSettings = (index, settings) => async (
