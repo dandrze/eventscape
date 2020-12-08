@@ -23,8 +23,10 @@ const Registrations = (props) => {
   //Separated function because useEffect should not be an async function
   const fetchRegistrations = async () => {
     const event = await props.fetchEvent();
-    props.fetchRegistrations(event.data.id);
-    setRegOn(event.data.registration);
+    if (event) {
+      props.fetchRegistrations(event.data.id);
+      setRegOn(event.data.registration);
+    }
   };
 
   const handleChange = (event) => {

@@ -130,17 +130,25 @@ const RegistrationTable2 = (props) => {
             }),
           onRowUpdate: (newData, oldData) =>
             new Promise((resolve) => {
-              setTimeout(() => {
+              setTimeout(async () => {
+                const res = await props.updateRegistration(
+                  newData.first_name,
+                  newData.last_name,
+                  newData.email,
+                  props.event.id,
+                  newData.organization,
+                  newData.id
+                );
+                await props.fetchRegistrations(props.event.id);
                 resolve();
-                console.log(newData);
-                console.log(oldData);
               }, 600);
             }),
           onRowDelete: (oldData) =>
             new Promise((resolve) => {
-              setTimeout(() => {
+              setTimeout(async () => {
+                const res = await props.deleteRegistration(oldData.id);
+                await props.fetchRegistrations(props.event.id);
                 resolve();
-                console.log(oldData);
               }, 600);
             }),
         }}

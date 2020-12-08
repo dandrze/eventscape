@@ -124,7 +124,7 @@ router.post("/api/event", async (req, res) => {
     }
   );
 
-  res.status(201).send(newEvent.rows[0]);
+  res.status(200).send(newEvent.rows[0]);
 });
 
 router.get("/api/event/current", async (req, res) => {

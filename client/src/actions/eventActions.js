@@ -86,7 +86,7 @@ export const createEvent = (
 
   const res = await api.post("/api/event", event);
 
-  if (res.status === 201) {
+  if (res.status === 200) {
     await dispatch({
       type: CREATE_EVENT,
       payload: res.data,
@@ -132,17 +132,21 @@ export const updateEvent = (
 
 export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
-  dispatch({ type: LOAD_STARTED });
-  const event = await api.get("/api/event/current");
-  dispatch({ type: LOAD_FINISHED });
-
-  if (event) {
-    dispatch({ type: FETCH_EVENT, payload: event.data });
-    dispatch(fetchModelFromState());
-    return event;
-  } else {
-    console.log("no events");
-    return null;
+  try {
+    dispatch({ type: LOAD_STARTED });
+    const event = await api.get("/api/event/current");
+    dispatch({ type: LOAD_FINISHED });
+    if (event) {
+      dispatch({ type: FETCH_EVENT, payload: event.data });
+      dispatch(fetchModelFromState());
+      return event;
+    } else {
+      console.log("no events");
+      return null;
+    }
+  } catch (err) {
+    toast.error("Error when fetching events: " + err.toString());
+    return false;
   }
 };
 

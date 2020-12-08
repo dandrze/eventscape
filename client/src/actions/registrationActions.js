@@ -6,11 +6,15 @@ export const fetchRegistrations = (event) => async (dispatch) => {
   // call the api and return the registrations in json
 
   dispatch({ type: LOAD_STARTED });
-  const res = await api.get("/api/registration", { params: { event } });
-  console.log(res);
-  dispatch({ type: LOAD_FINISHED });
-
-  dispatch({ type: FETCH_REGISTRATION, payload: res.data });
+  try {
+    const res = await api.get("/api/registration", { params: { event } });
+    dispatch({ type: LOAD_FINISHED });
+    dispatch({ type: FETCH_REGISTRATION, payload: res.data });
+    return true;
+  } catch (err) {
+    toast.error("Error when fetching registrations: " + err.toString());
+    return false;
+  }
 };
 
 export const addRegistration = (
@@ -31,7 +35,43 @@ export const addRegistration = (
     toast.success("Registration successfuly added");
     return true;
   } catch (err) {
-    toast.error("Error when adding Registration: " + err.toString());
+    toast.error("Error when adding registration: " + err.toString());
+    return false;
+  }
+};
+
+export const updateRegistration = (
+  firstName,
+  lastName,
+  email,
+  event,
+  organization,
+  id
+) => async (dispatch) => {
+  try {
+    const res = await api.put("/api/registration", {
+      firstName,
+      lastName,
+      email,
+      event,
+      organization,
+      id,
+    });
+    toast.success("Registration successfuly modified");
+    return true;
+  } catch (err) {
+    toast.error("Error when modifying registration: " + err.toString());
+    return false;
+  }
+};
+
+export const deleteRegistration = (id) => async (dispatch) => {
+  try {
+    const res = await api.delete("/api/registration/id", { params: { id } });
+    toast.success("Registration successfuly deleted");
+    return true;
+  } catch (err) {
+    toast.error("Error when deleting registration: " + err.toString());
     return false;
   }
 };
