@@ -30,6 +30,21 @@ function RegistrationForm(props) {
       type: "text",
       name: "organization",
     },
+    {
+      label: "check label",
+      type: "checkbox",
+      name: "optin",
+    },
+    {
+      label: "radio label 1",
+      type: "radio",
+      name: "radio1",
+    },
+    {
+      label: "radio label 2",
+      type: "radio",
+      name: "radio2",
+    },
   ];
 
   const closeModal = () => {
@@ -53,7 +68,8 @@ function RegistrationForm(props) {
       <Formik
         initialValues={{ name: "", email: "" }}
         onSubmit={async (values) => {
-          try {
+          alert(JSON.stringify(values, null, 2));
+          /*try {
             const res = await api.post("/api/registration", {
               ...values,
               event: props.event.id,
@@ -64,8 +80,7 @@ function RegistrationForm(props) {
             setModalText(err.toString());
             openModal();
           }
-
-          openModal();
+          */
         }}
       >
         <Form className="reg-form">
