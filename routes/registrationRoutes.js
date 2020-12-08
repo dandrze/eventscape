@@ -49,7 +49,7 @@ router.get("/api/registration", async (req, res) => {
 
   console.log(registrations);
 
-  res.status(201).send(registrations.rows[0]);
+  res.status(201).send(registrations.rows);
 });
 
 module.exports = router;
