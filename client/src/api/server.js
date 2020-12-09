@@ -9,7 +9,6 @@ instance.interceptors.response.use(
   (res) => res,
   (err) => {
     console.log(err);
-    toast.error("Error when calling server: " + err);
     return Promise.reject(err);
   }
 );

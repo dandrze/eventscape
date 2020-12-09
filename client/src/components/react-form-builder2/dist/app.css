@@ -2692,15 +2692,7 @@
 .public-DraftStyleDefault-depth4.public-DraftStyleDefault-reset {
   counter-reset: ol4;
 }
-.react-form-builder .react-form-builder-preview {
-  position: relative;
-  width: 70%;
-  border: 1px solid #ddd;
-  background: #fafafa;
-  padding: 10px;
-  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
-  min-height: 750px;
-}
+
 .react-form-builder .react-form-builder-preview .preview-page-break {
   padding: 5px 0;
   border-top: 2px dotted #ccc;
@@ -3044,10 +3036,6 @@
   box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
   left: 0;
   transition: 0.5s;
-}
-.react-form-builder .react-form-builder-toolbar {
-  width: 250px;
-  background: #fff;
 }
 .react-form-builder .react-form-builder-toolbar h4 {
   margin-top: 0;

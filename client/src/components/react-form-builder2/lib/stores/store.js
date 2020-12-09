@@ -1,7 +1,7 @@
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
-  value: true
+  value: true,
 });
 exports["default"] = void 0;
 
@@ -9,7 +9,9 @@ var _beedle = _interopRequireDefault(require("beedle"));
 
 var _requests = require("./requests");
 
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+function _interopRequireDefault(obj) {
+  return obj && obj.__esModule ? obj : { default: obj };
+}
 
 var _saveUrl;
 
@@ -20,15 +22,15 @@ var _onLoad;
 var store = new _beedle["default"]({
   actions: {
     setData: function setData(context, data, saveData) {
-      context.commit('setData', data);
+      context.commit("setData", data);
       if (saveData) this.save(data);
     },
     load: function load(context, _ref) {
       var _this = this;
 
       var loadUrl = _ref.loadUrl,
-          saveUrl = _ref.saveUrl,
-          data = _ref.data;
+        saveUrl = _ref.saveUrl,
+        data = _ref.data;
       _saveUrl = saveUrl;
 
       if (_onLoad) {
@@ -54,7 +56,7 @@ var store = new _beedle["default"]({
       data.push(element);
       this.setData(context, data, true);
     },
-    "delete": function _delete(context, element) {
+    delete: function _delete(context, element) {
       var data = context.state.data;
       data.splice(data.indexOf(element), 1);
       this.setData(context, data, true);
@@ -65,25 +67,25 @@ var store = new _beedle["default"]({
     save: function save(data) {
       if (_onPost) {
         _onPost({
-          task_data: data
+          task_data: data,
         });
       } else if (_saveUrl) {
         (0, _requests.post)(_saveUrl, {
-          task_data: data
+          task_data: data,
         });
       }
-    }
+    },
   },
   mutations: {
     setData: function setData(state, payload) {
       // eslint-disable-next-line no-param-reassign
       state.data = payload;
       return state;
-    }
+    },
   },
   initialState: {
-    data: []
-  }
+    data: [],
+  },
 });
 
 store.setExternalHandler = function (onLoad, onPost) {

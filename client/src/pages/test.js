@@ -1,11 +1,16 @@
-import React, { useEffect, createElement } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import { ReactFormBuilder } from "react-form-builder2";
-import "react-form-builder2/dist/app.css";
+import { ReactFormGenerator } from "../components/react-form-builder2/lib";
 import "./test.css";
+import api from "../api/server";
 
 const Test = (props) => {
+  const [formData, setFormData] = useState([]);
+
+  useEffect(() => {
+    fetchFormData();
+  }, []);
   const items = [
     {
       key: "Header",
@@ -23,7 +28,21 @@ const Test = (props) => {
     },
   ];
 
-  return <ReactFormBuilder saveUrl="/api" style={{ height: "300px" }} />;
+  const fetchFormData = async () => {
+    const formData = await api.get("/api/form", {
+      params: { event: 136 },
+    });
+
+    setFormData(formData.data.data);
+  };
+
+  return (
+    <ReactFormGenerator
+      form_action="/api/registration"
+      form_method="POST"
+      data={formData}
+    />
+  );
 };
 
 const mapStateToProps = (state) => {

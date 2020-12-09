@@ -12,18 +12,49 @@
 }
 
 .react-form-builder .react-form-builder-preview {
-  width: 68% !important;
-  height: calc(100vh - 40px);
+  position: relative;
+  width: 540px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  padding: 10px;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 110px) !important;
   margin: 20px 0px;
   overflow: scroll;
 }
 
 .react-form-builder .react-form-builder-toolbar {
-  width: 30% !important;
-  height: calc(100vh - 40px);
+  width: 240px !important;
+  height: calc(100vh - 110px);
   margin: 20px 0px !important;
+  background: #fff;
 }
 
 .react-form-builder {
   min-width: 600px;
+}
+
+.form-builder-navbar {
+  width: 800px;
+  border: 1px solid #ddd;
+  background: #fafafa;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  margin: 20px auto 0px;
+  height: 48px;
+  text-align: right;
+}
+
+.form-builder-navbar * {
+  display: inline-block;
+}
+
+#close-form-builder {
+  cursor: pointer;
+  margin: 0px 20px;
+  line-height: 48px;
+}
+
+#form-builder-status {
+  margin: 0px 20px;
+  line-height: 48px;
 }

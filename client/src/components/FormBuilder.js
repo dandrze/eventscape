@@ -1,9 +1,13 @@
 import React, { useEffect, createElement } from "react";
 import { connect } from "react-redux";
+import Tooltip from "@material-ui/core/Tooltip";
+
 import * as actions from "../actions";
 import { ReactFormBuilder } from "./react-form-builder2/lib";
 import "./react-form-builder2/dist/app.css";
 import "./FormBuilder.css";
+import Cancel from "../icons/cancel.svg";
+import api from "../api/server";
 
 const FormBuilder = (props) => {
   const items = [
@@ -100,15 +104,35 @@ const FormBuilder = (props) => {
     },
   ];
 
+  const onPost = (data) => {
+    api.post("/api/form", { data: data.task_data, event: props.event.id });
+  };
+
+  const onLoad = async () => {
+    const res = await api.get("/api/form", {
+      params: { event: props.event.id },
+    });
+
+    return res.data.data;
+  };
+
   return (
     <div className="form-builder-container">
-      <ReactFormBuilder saveUrl="/api/form" toolbarItems={items} />
+      <div className="form-builder-navbar">
+        <div id="form-builder-status">
+          Status: <span style={{ color: "green" }}>Saved</span>
+        </div>
+        <Tooltip title="Close Editor">
+          <img src={Cancel} id="close-form-builder" height="24px"></img>
+        </Tooltip>
+      </div>
+      <ReactFormBuilder onPost={onPost} onLoad={onLoad} toolbarItems={items} />
     </div>
   );
 };
 
 const mapStateToProps = (state) => {
-  return { model: state.model, event: state.event };
+  return { model: state.model, event: state.event, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(FormBuilder);

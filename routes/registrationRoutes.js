@@ -4,6 +4,9 @@ const router = express.Router();
 const db = require("../db");
 
 router.post("/api/registration", async (req, res) => {
+  console.log(req.body);
+  res.status(200).send();
+  /*
   const { firstName, lastName, email, event, organization } = req.body;
 
   // Add the registered user
@@ -21,6 +24,7 @@ router.post("/api/registration", async (req, res) => {
   );
 
   res.status(200).send(newRegistration.rows[0]);
+  */
 });
 
 router.put("/api/registration", async (req, res) => {
