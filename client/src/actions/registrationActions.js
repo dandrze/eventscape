@@ -1,6 +1,11 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_REGISTRATION, LOAD_STARTED, LOAD_FINISHED } from "./types";
+import {
+  FETCH_REGISTRATION,
+  LOAD_STARTED,
+  LOAD_FINISHED,
+  FETCH_FORM,
+} from "./types";
 
 export const fetchRegistrations = (event) => async (dispatch) => {
   // call the api and return the registrations in json
@@ -13,6 +18,23 @@ export const fetchRegistrations = (event) => async (dispatch) => {
     return true;
   } catch (err) {
     toast.error("Error when fetching registrations: " + err.toString());
+    return false;
+  }
+};
+
+export const fetchRegistrationForm = (event) => async (dispatch) => {
+  // call the api and return the registrations in json
+
+  dispatch({ type: LOAD_STARTED });
+  try {
+    const res = await api.get("/api/form", { params: { event } });
+    dispatch({ type: LOAD_FINISHED });
+    dispatch({ type: FETCH_FORM, payload: res.data });
+    return true;
+  } catch (err) {
+    toast.error(
+      "Error when fetching registration form columns: " + err.toString()
+    );
     return false;
   }
 };

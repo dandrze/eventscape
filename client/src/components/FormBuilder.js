@@ -113,7 +113,7 @@ const FormBuilder = (props) => {
       params: { event: props.event.id },
     });
 
-    return res.data.data;
+    return res.data;
   };
 
   return (

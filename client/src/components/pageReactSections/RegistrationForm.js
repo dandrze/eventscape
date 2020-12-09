@@ -27,7 +27,7 @@ function RegistrationForm(props) {
       params: { event: 136 },
     });
 
-    setFormData(formData.data.data);
+    setFormData(formData.data);
   };
 
   const handleSubmit = async (values) => {

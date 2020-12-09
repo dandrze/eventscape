@@ -93,4 +93,59 @@ router.delete("/api/registration/id", async (req, res) => {
   res.send(response);
 });
 
+router.post("/api/form", async (req, res) => {
+  const { event, data } = req.body;
+
+  console.log(req.body);
+
+  const existingForm = await db.query(
+    "SELECT * FROM registration_form WHERE event=$1",
+    [event]
+  );
+
+  console.log(existingForm);
+
+  if (existingForm.rowCount == 0) {
+    const entry = await db.query(
+      "INSERT INTO registration_form (event, data) VALUES ($1,$2)",
+      [event, JSON.stringify(data)],
+      (err, res) => {
+        if (err) {
+          throw res.status(500).send(err);
+        }
+      }
+    );
+  } else {
+    const entry = await db.query(
+      "UPDATE registration_form SET data=$2 WHERE event=$1",
+      [event, JSON.stringify(data)],
+      (err, res) => {
+        if (err) {
+          throw res.status(500).send(err);
+        }
+      }
+    );
+  }
+
+  res.status(200).send();
+});
+
+router.get("/api/form", async (req, res) => {
+  const { event } = req.query;
+
+  console.log(req);
+
+  const data = await db.query(
+    "SELECT data FROM registration_form WHERE event=$1",
+    [event],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(data.rows[0].data);
+});
+
 module.exports = router;

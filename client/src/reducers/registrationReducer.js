@@ -1,14 +1,14 @@
-import {
-	FETCH_REGISTRATION
-} from "../actions/types";
+import { FETCH_REGISTRATION, FETCH_FORM } from "../actions/types";
 
-export default function (state = [], action) {
-	switch (action.type) {
-		case FETCH_REGISTRATION:
-			console.log(state);
-			console.log(action.payload);
-			return action.payload;
-		default:
-			return state;
-	}
+export default function (state = { data: [], columns: [] }, action) {
+  switch (action.type) {
+    case FETCH_REGISTRATION:
+      console.log(state);
+      console.log(action.payload);
+      return { ...state, data: action.payload };
+    case FETCH_FORM:
+      return { ...state, columns: action.payload };
+    default:
+      return state;
+  }
 }

@@ -29,6 +29,7 @@ const Registrations = (props) => {
     const event = await props.fetchEvent();
     if (event) {
       props.fetchRegistrations(event.data.id);
+      props.fetchRegistrationForm(event.data.id);
       setRegOn(event.data.registration);
     }
   };

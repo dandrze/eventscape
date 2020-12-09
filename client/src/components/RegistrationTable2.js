@@ -48,7 +48,7 @@ const tableIcons = {
 };
 
 const RegistrationTable2 = (props) => {
-  const [state, setState] = useState({
+  /*const [state, setState] = useState({
     columns: [
       {
         title: "First Name",
@@ -73,10 +73,24 @@ const RegistrationTable2 = (props) => {
     ],
     data: [],
   });
+  */
+
+  const [state, setState] = useState({
+    columns: [
+      {
+        title: "First Name",
+        field: "first_name",
+      },
+    ],
+    data: [],
+  });
 
   // loads the registration data into the state
   useEffect(() => {
-    setState({ ...state, data: props.registration });
+    const columns = props.registration.columns.map((column) => {
+      return { title: column.label, field: column.field_name };
+    });
+    setState({ ...state, columns, data: props.registration.data });
   }, [props.registration]);
 
   const options = {
