@@ -41,6 +41,7 @@ const Registrations = (props) => {
   };
 
   const handleClose = () => {
+    fetchRegistrations();
     setOpen(false);
   };
 

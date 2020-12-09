@@ -76,12 +76,7 @@ const RegistrationTable2 = (props) => {
   */
 
   const [state, setState] = useState({
-    columns: [
-      {
-        title: "First Name",
-        field: "first_name",
-      },
-    ],
+    columns: [],
     data: [],
   });
 
@@ -90,7 +85,21 @@ const RegistrationTable2 = (props) => {
     const columns = props.registration.columns.map((column) => {
       return { title: column.label, field: column.field_name };
     });
-    setState({ ...state, columns, data: props.registration.data });
+
+    // empty data list to be populated in the loop below
+    const data = [];
+
+    // for each row in registration data, create a new dictionary which has the column.name as the key and column.value as the value
+    for (var row of props.registration.data) {
+      var rowObject = {};
+      for (var column of row.values) {
+        rowObject = { ...rowObject, [column.name]: column.value };
+      }
+      // add this new row object to the data list
+      data.push(rowObject);
+    }
+
+    setState({ columns, data });
   }, [props.registration]);
 
   const options = {

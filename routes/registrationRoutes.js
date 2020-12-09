@@ -5,17 +5,16 @@ const db = require("../db");
 
 router.post("/api/registration", async (req, res) => {
   console.log(req.body);
-  res.status(200).send();
-  /*
-  const { firstName, lastName, email, event, organization } = req.body;
+
+  const { event, values } = req.body;
 
   // Add the registered user
   const newRegistration = await db.query(
     `INSERT INTO registration 
-				(first_name, last_name, email, event, organization)
-			VALUES ($1, $2, $3, $4, $5)
+				(event, values)
+			VALUES ($1, $2)
 			RETURNING *`,
-    [firstName, lastName, email, event, organization],
+    [event, JSON.stringify(values)],
     (err, res) => {
       if (err) {
         throw res.status(500).send(Error);
@@ -24,7 +23,6 @@ router.post("/api/registration", async (req, res) => {
   );
 
   res.status(200).send(newRegistration.rows[0]);
-  */
 });
 
 router.put("/api/registration", async (req, res) => {

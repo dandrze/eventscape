@@ -31,10 +31,10 @@ function RegistrationForm(props) {
   };
 
   const handleSubmit = async (values) => {
-    alert(JSON.stringify(values, null, 2));
-    /*try {
+    //alert(JSON.stringify(values, null, 2));
+    try {
       const res = await api.post("/api/registration", {
-        ...values,
+        values,
         event: props.event.id,
       });
       setModalText("Thank you for registering for " + props.event.title);
@@ -43,7 +43,6 @@ function RegistrationForm(props) {
       setModalText(err.toString());
       openModal();
     }
-    */
   };
 
   return (
