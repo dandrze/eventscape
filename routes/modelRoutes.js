@@ -77,4 +77,9 @@ router.put("/api/model", async (req, res) => {
   res.status(200).send();
 });
 
+router.post("/api/form", (req, res) => {
+  console.log(req.body);
+  res.status(200).send("all good");
+});
+
 module.exports = router;

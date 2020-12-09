@@ -128,21 +128,17 @@ const RegistrationTable2 = (props) => {
                 resolve();
               }, 600);
             }),
-          onRowUpdate: (newData, oldData) =>
-            new Promise((resolve) => {
-              setTimeout(async () => {
-                const res = await props.updateRegistration(
-                  newData.first_name,
-                  newData.last_name,
-                  newData.email,
-                  props.event.id,
-                  newData.organization,
-                  newData.id
-                );
-                await props.fetchRegistrations(props.event.id);
-                resolve();
-              }, 600);
-            }),
+          onRowUpdate: async (newData, oldData) => {
+            const res = await props.updateRegistration(
+              newData.first_name,
+              newData.last_name,
+              newData.email,
+              props.event.id,
+              newData.organization,
+              newData.id
+            );
+            await props.fetchRegistrations(props.event.id);
+          },
           onRowDelete: (oldData) =>
             new Promise((resolve) => {
               setTimeout(async () => {

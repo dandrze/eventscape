@@ -60,7 +60,7 @@ export default function AlertModal(props) {
           <Button onClick={handleClose} color="primary">
             {closeText}
           </Button>
-          <Button onClick={handleContinue} color="primary" autoFocus>
+          <Button onClick={handleContinue} color="primary">
             {continueText}
           </Button>
         </DialogActions>

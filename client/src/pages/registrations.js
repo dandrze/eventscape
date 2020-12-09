@@ -2,17 +2,21 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch1 from "../components/switch";
 import Tooltip from "@material-ui/core/Tooltip";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
 
 import "./registrations.css";
 
 import NavBar3 from "../components/navBar3.js";
 import RegistrationTable2 from "../components/RegistrationTable2.js";
 import * as actions from "../actions";
+import FormBuilder from "../components/FormBuilder";
+import Switch1 from "../components/switch";
 
 const Registrations = (props) => {
   const [regOn, setRegOn] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
@@ -35,8 +39,30 @@ const Registrations = (props) => {
     }
   };
 
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   return (
     <div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={open}
+        onClose={handleClose}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        disableAutoFocus={true}
+      >
+        <FormBuilder />
+      </Modal>
       <NavBar3
         displaySideNav="true"
         content={
@@ -56,7 +82,7 @@ const Registrations = (props) => {
                   />
                 </FormGroup>
               </Tooltip>
-              <button className="Button1 edit-form">
+              <button className="Button1 edit-form" onClick={handleOpen}>
                 Edit Registration Form
               </button>
             </div>

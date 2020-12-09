@@ -1,0 +1,19 @@
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.react-form-builder .react-form-builder-preview {
+  width: 65% !important;
+}
+
+.react-form-builder .react-form-builder-toolbar {
+  width: 30% !important;
+}
+
+.react-form-builder {
+  min-width: 600px;
+}

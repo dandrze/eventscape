@@ -102,7 +102,6 @@ label {
   font-family: "San Francisco", Helvetica, Ariel, sans-serif;
   font-size: 16px;
   font-weight: 400;
-  float: left;
 }
 
 .App {
@@ -123,7 +122,7 @@ label {
 .Button1 {
   font-family: "San Francisco", Helvetica, Arial, sans-serif;
   font-weight: bold;
-  font-size: 20;
+  font-size: 14px;
   color: white;
   background-color: var(--main-color);
   padding: 16px;
@@ -133,6 +132,7 @@ label {
   border-style: solid;
   height: min-content;
   transition: all 0.1s ease-in-out;
+  line-height: initial;
 }
 
 .Button1:hover {
@@ -163,7 +163,7 @@ label {
 .Button2 {
   font-family: "San Francisco", Helvetica, Arial, sans-serif;
   font-weight: bold;
-  font-size: 20;
+  font-size: 14px;
   color: var(--main-color);
   background-color: white;
   padding: 5px;
