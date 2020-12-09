@@ -1,7 +1,7 @@
 import React, { useEffect, createElement } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import { ReactFormBuilder } from "./react-form-builder2";
+import { ReactFormBuilder } from "./react-form-builder2/lib";
 import "./react-form-builder2/dist/app.css";
 import "./FormBuilder.css";
 
