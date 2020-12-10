@@ -53,12 +53,25 @@ const RegistrationTable2 = (props) => {
     data: [],
   });
 
+  const inputElements = [
+    "Dropdown",
+    "Checkboxes",
+    "RadioButtons",
+    "TextInput",
+    "NumberInput",
+    "DatePicker",
+  ];
+
   // loads the registration data into the state
   useEffect(() => {
     // map the column data from the react-form-builder2 format to the material format
-    const columns = props.registration.columns.map((column) => {
-      return { title: column.label, field: column.field_name };
-    });
+    const columns = props.registration.columns
+      .map((column) => {
+        if (inputElements.includes(column.element)) {
+          return { title: column.label, field: column.field_name };
+        }
+      })
+      .filter(Boolean);
 
     // empty data list to be populated in the loop below
     const data = [];
@@ -90,6 +103,7 @@ const RegistrationTable2 = (props) => {
           // material table format is { [column field_name]: [value]}
           rowObject = { ...rowObject, [value.name]: mappedValue };
         } else {
+          // for all other field types, we can just read the value directly
           // material table format is { [column field_name]: [value]}
           rowObject = { ...rowObject, [value.name]: value.value };
         }
