@@ -48,33 +48,6 @@ const tableIcons = {
 };
 
 const RegistrationTable2 = (props) => {
-  /*const [state, setState] = useState({
-    columns: [
-      {
-        title: "First Name",
-        field: "first_name",
-      },
-      {
-        title: "Last Name",
-        field: "last_name",
-      },
-      {
-        title: "Email",
-        field: "email",
-      },
-      {
-        title: "Registration Date",
-        field: "reg_date",
-      },
-      {
-        title: "Organization",
-        field: "organization",
-      },
-    ],
-    data: [],
-  });
-  */
-
   const [state, setState] = useState({
     columns: [],
     data: [],
@@ -82,6 +55,7 @@ const RegistrationTable2 = (props) => {
 
   // loads the registration data into the state
   useEffect(() => {
+    // map the column data from the react-form-builder2 format to the material format
     const columns = props.registration.columns.map((column) => {
       return { title: column.label, field: column.field_name };
     });
@@ -89,11 +63,37 @@ const RegistrationTable2 = (props) => {
     // empty data list to be populated in the loop below
     const data = [];
 
-    // for each row in registration data, create a new dictionary which has the column.name as the key and column.value as the value
+    // map the registration data from the react-form-builder2 format to the material format
     for (var row of props.registration.data) {
       var rowObject = {};
-      for (var column of row.values) {
-        rowObject = { ...rowObject, [column.name]: column.value };
+      for (var value of row.values) {
+        var columnType = value.name.split("_")[0];
+
+        if (columnType == "checkboxes") {
+          var valueMap;
+          for (var column of props.registration.columns) {
+            if (column.field_name === value.name) {
+              valueMap = column.options;
+            }
+          }
+
+          //value.value.map((v) => valueMap.find((map) => map.key == v).text);
+          if (valueMap) {
+            var mappedValue = value.value.map((v) => {
+              for (var i = 0; i < valueMap.length; i++) {
+                if (valueMap[i].key == v) {
+                  return valueMap[i].text;
+                }
+              }
+            });
+          }
+
+          // material table format is { [column field_name]: [value]}
+          rowObject = { ...rowObject, [value.name]: mappedValue };
+        } else {
+          // material table format is { [column field_name]: [value]}
+          rowObject = { ...rowObject, [value.name]: value.value };
+        }
       }
       // add this new row object to the data list
       data.push(rowObject);

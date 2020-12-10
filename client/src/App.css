@@ -12,6 +12,16 @@
   src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff");
 }
 
+/*Overwrite some bootstrap css properties that break our styling*/
+a:hover {
+  color: initial;
+  text-decoration: none;
+}
+
+button:focus {
+  outline: 1px dotted;
+}
+
 body {
   /* Colour Pallete */
   --main-bg-color: #f8f8f8;
@@ -34,11 +44,6 @@ a {
   text-decoration: inherit;
   line-height: 0px;
 }
-
-:focus {
-  outline: #b0281c;
-}
-
 ul {
   list-style: none;
   margin: 0;
