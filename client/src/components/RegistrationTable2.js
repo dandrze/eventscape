@@ -69,15 +69,14 @@ const RegistrationTable2 = (props) => {
       for (var value of row.values) {
         var columnType = value.name.split("_")[0];
 
-        if (columnType == "checkboxes") {
+        if (columnType == "checkboxes" || columnType == "radiobuttons") {
           var valueMap;
+          //populate the valueMap which we use to "translate" the checkbox and radio button values from the form ids to the users text
           for (var column of props.registration.columns) {
             if (column.field_name === value.name) {
               valueMap = column.options;
             }
           }
-
-          //value.value.map((v) => valueMap.find((map) => map.key == v).text);
           if (valueMap) {
             var mappedValue = value.value.map((v) => {
               for (var i = 0; i < valueMap.length; i++) {
