@@ -142,7 +142,7 @@ router.get("/api/form", async (req, res) => {
   if (data.rowCount != 0) {
     res.status(200).send(data.rows[0].data);
   } else {
-    res.status(204).send();
+    res.status(204).send([]);
   }
 });
 
