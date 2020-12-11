@@ -117,7 +117,7 @@ const Registrations = (props) => {
         toast.success("Registration successfuly added");
       }
     }
-
+    fetchRegistrations();
     setEdittingRowId(null);
     setEdittingValues([]);
     setOpenReg(false);
