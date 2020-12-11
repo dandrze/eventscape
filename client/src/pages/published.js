@@ -44,7 +44,10 @@ const Published = (props) => {
                 return section.is_react
                   ? createElement(
                       mapReactComponent[section.react_component.name],
-                      section.react_component.props
+                      {
+                        ...section.react_component.props,
+                        sectionIndex: section.index,
+                      }
                     )
                   : ReactHtmlParser(section.html);
               })}

@@ -36,11 +36,12 @@ const Preview = (props) => {
       <style>{theme}</style>
       <ul>
         {props.model.sections.map(function (section) {
+          console.log(section);
           return section.is_react
-            ? createElement(
-                mapReactComponent[section.react_component.name],
-                section.react_component.props
-              )
+            ? createElement(mapReactComponent[section.react_component.name], {
+                ...section.react_component.props,
+                sectionIndex: section.index,
+              })
             : ReactHtmlParser(section.html);
         })}
       </ul>
