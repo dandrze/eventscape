@@ -34,11 +34,14 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: "50px",
     width: "600px",
+    overflow: "scroll",
+    height: "calc(100vh - 50px)",
   },
   formBuilderBackground: {
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: "20px",
+    height: "calc(100vh - 50px)",
   },
   formControl: {
     margin: "20px 0px",
@@ -197,7 +200,7 @@ const Registrations = (props) => {
                   />
                 </FormGroup>
               </Tooltip>
-              <button className="Button1 edit-form" onClick={handleEditReg}>
+              <button className="Button1 edit-form" onClick={handleOpenForm}>
                 Edit Registration Form
               </button>
               <button className="Button1 edit-form" onClick={handleAddReg}>

@@ -4,6 +4,7 @@ import { ReactFormGenerator } from "../react-form-builder2/lib";
 import AlertModal from "../AlertModal";
 import "./RegistrationForm.css";
 import api from "../../api/server";
+import * as actions from "../../actions";
 
 function RegistrationForm(props) {
   const [open, setOpen] = useState(false);
@@ -68,4 +69,4 @@ const mapStateToProps = (state) => {
   return { event: state.event };
 };
 
-export default connect(mapStateToProps)(RegistrationForm);
+export default connect(mapStateToProps, actions)(RegistrationForm);
