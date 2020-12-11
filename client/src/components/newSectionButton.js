@@ -27,6 +27,7 @@ import {
   streamChatReact,
   registrationFormHeader,
   registrationFormReact,
+  registrationFormDescription,
 } from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -194,7 +195,7 @@ const NewSectionButton = (props) => {
                       onClick={async () => {
                         handleClose();
                         await handleAddSection(
-                          null,
+                          registrationFormDescription(),
                           true,
                           registrationFormReact,
                           false,

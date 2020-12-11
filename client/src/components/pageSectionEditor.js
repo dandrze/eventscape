@@ -46,10 +46,10 @@ const RegPageSectionEditor = (props) => {
           maxIndex={props.model.sections.length}
         />
         {props.section.is_react ? (
-          createElement(
-            mapReactComponent[props.section.react_component.name],
-            props.section.react_component.props
-          )
+          createElement(mapReactComponent[props.section.react_component.name], {
+            ...props.section.react_component.props,
+            sectionIndex: props.sectionIndex,
+          })
         ) : (
           <Froala
             key={props.model.sections}
