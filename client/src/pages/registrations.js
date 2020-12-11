@@ -123,6 +123,11 @@ const Registrations = (props) => {
     setOpenReg(false);
   };
 
+  const handleDeleteReg = async (id) => {
+    props.deleteRegistration(id);
+    fetchRegistrations();
+  };
+
   return (
     <div>
       <Modal
@@ -202,6 +207,7 @@ const Registrations = (props) => {
             <RegistrationTable2
               handleAddReg={handleAddReg}
               handleEditReg={handleEditReg}
+              handleDeleteReg={handleDeleteReg}
             />
             <div style={{ color: "#F8F8F8" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

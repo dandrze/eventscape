@@ -171,6 +171,13 @@ const RegistrationTable2 = (props) => {
           Container: (props) => <Paper {...props} elevation={0} />,
         }}
         actions={tableActions}
+        editable={{
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              props.handleDeleteReg(oldData.id);
+              resolve();
+            }),
+        }}
       />
     </div>
   );
