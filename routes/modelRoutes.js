@@ -22,7 +22,7 @@ router.get("/api/model/link", async (req, res) => {
   const link = req.query.link;
 
   const event = await db.query(
-    "SELECT reg_page_model FROM event WHERE link=$1",
+    "SELECT reg_page_model FROM event WHERE link=$1 AND status!= -1",
     [link],
     (err, res) => {
       if (err) {
@@ -57,15 +57,13 @@ router.put("/api/model", async (req, res) => {
   // then write the newly updated model
   for (const [index, section] of model.entries()) {
     await db.query(
-      "INSERT INTO section_html (model, index, html, is_stream, is_react, react_component, tooltip) VALUES ($1,$2,$3,$4,$5,$6,$7)",
+      "INSERT INTO section_html (model, index, html, is_react, react_component) VALUES ($1,$2,$3,$4,$5)",
       [
         section.model,
         index,
         section.html,
-        section.is_stream,
         section.is_react,
         section.react_component,
-        section.tooltip,
       ],
       (err, res) => {
         if (err) {

@@ -4,10 +4,11 @@ import {
   logoHeaderModel,
   logoHeaderRightModel,
   heroBannerModel,
-  descriptionRegistrationModel,
+  registrationFormDescription,
   titleTimeModel,
   streamChatReact,
   blankModel,
+  registrationFormReact,
 } from "../components/designBlockModels";
 import {
   FETCH_EVENT,
@@ -37,12 +38,12 @@ export const createEvent = (
     {
       html: heroBannerModel(title),
       name: "heroBanner",
-      is_stream: false,
     },
     {
-      html: descriptionRegistrationModel(start_date, end_date),
-      name: "body",
-      is_stream: false,
+      html: registrationFormDescription(),
+      name: "registration",
+      is_react: true,
+      react_component: registrationFormReact,
     },
   ];
 
@@ -50,24 +51,20 @@ export const createEvent = (
     {
       html: logoHeaderRightModel(),
       name: "bannerRight",
-      is_stream: false,
     },
     {
       html: titleTimeModel(title, start_date, end_date),
       name: "titleTime",
-      is_stream: false,
     },
     {
       html: null,
       name: "streamChat",
-      is_stream: true,
       is_react: true,
       react_component: streamChatReact,
     },
     {
       html: blankModel(),
       name: "blankModel",
-      is_stream: false,
     },
   ];
 

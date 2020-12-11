@@ -65,18 +65,9 @@ const NewSectionButton = (props) => {
   const handleAddSection = async (
     html,
     is_react = false,
-    react_component = null,
-    is_stream = false,
-    tooltip = ""
+    react_component = null
   ) => {
-    props.addSection(
-      props.prevIndex,
-      html,
-      is_react,
-      react_component,
-      is_stream,
-      tooltip
-    );
+    props.addSection(props.prevIndex, html, is_react, react_component);
   };
 
   return (
@@ -168,13 +159,7 @@ const NewSectionButton = (props) => {
                       id="designBlockThumbnail"
                       onClick={() => {
                         handleClose();
-                        handleAddSection(
-                          null,
-                          true,
-                          streamChatReact,
-                          true,
-                          "Click gear icon to add your stream"
-                        );
+                        handleAddSection(null, true, streamChatReact);
                       }}
                     />
                   </Grid>
@@ -197,9 +182,7 @@ const NewSectionButton = (props) => {
                         await handleAddSection(
                           registrationFormDescription(),
                           true,
-                          registrationFormReact,
-                          false,
-                          "Go to registration tab to edit the registration form"
+                          registrationFormReact
                         );
                         await handleAddSection(registrationFormHeader());
                       }}

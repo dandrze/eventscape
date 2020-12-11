@@ -66,9 +66,7 @@ export const addSection = (
   prevIndex,
   html,
   is_react = false,
-  react_component = null,
-  is_stream = false,
-  tooltip = ""
+  react_component = null
 ) => async (dispatch, getState) => {
   const model = getState().model.id;
 
@@ -79,8 +77,6 @@ export const addSection = (
       html,
       is_react,
       react_component,
-      is_stream,
-      tooltip,
     },
   };
 

@@ -61,12 +61,16 @@ const useStyles = makeStyles((theme) => ({
 
 function DesignBlockToolbar(props) {
   const classes = useStyles();
-  const showStreamSettings = props.section.is_stream;
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const [openStreamSettings, setOpenStreamSettings] = React.useState(false);
   const [content, setContent] = React.useState("youtube-embed");
   const [youtubeLink, setYoutubeLink] = React.useState("");
   const [customHTML, setCustomHTML] = React.useState("");
+  const [sectionTooltip, setSectionTooltip] = React.useState("");
+
+  const showStreamSettings =
+    props.section.is_react &&
+    props.section.react_component.name == "StreamChat";
 
   // Updating the settings based on props
   // UseEffect mimicks OnComponentDidMount
@@ -75,6 +79,20 @@ function DesignBlockToolbar(props) {
       setContent(props.section.react_component.props.content);
       setYoutubeLink(props.section.react_component.props.link);
       setCustomHTML(props.section.react_component.props.html);
+
+      // set the section tooltip if it's a section that requires one
+      if (props.section.is_react) {
+        switch (props.section.react_component.name) {
+          case "StreamChat":
+            setSectionTooltip("Click the gears icon to add your stream");
+            break;
+          case "RegistrationForm":
+            setSectionTooltip(
+              "Go to registration tab to edit the registration form"
+            );
+            break;
+        }
+      }
     }
   }, []);
 
@@ -176,10 +194,8 @@ function DesignBlockToolbar(props) {
               </div>
             </>
           ) : null}
-          {props.section.tooltip ? (
-            <div className={classes.sectionTooltip}>
-              {props.section.tooltip}
-            </div>
+          {sectionTooltip ? (
+            <div className={classes.sectionTooltip}>{sectionTooltip}</div>
           ) : null}
         </div>
       ) : null}
