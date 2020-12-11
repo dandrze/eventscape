@@ -83,6 +83,7 @@ const RegistrationTable2 = (props) => {
 
   // loads the registration data into the state
   useEffect(() => {
+    console.log(props.registration.columns);
     // map the column data from the react-form-builder2 format to the material format
     const columns = props.registration.columns
       .map((column) => {

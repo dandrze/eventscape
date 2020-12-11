@@ -21,8 +21,7 @@ router.post("/api/registration", async (req, res) => {
       }
     }
   );
-
-  res.status(200).send(newRegistration.rows[0]);
+  if (newRegistration.rows) res.status(200).send(newRegistration.rows[0]);
 });
 
 router.put("/api/registration", async (req, res) => {
@@ -140,7 +139,11 @@ router.get("/api/form", async (req, res) => {
     }
   );
 
-  res.status(200).send(data.rows[0].data);
+  if (data.rowCount != 0) {
+    res.status(200).send(data.rows[0].data);
+  } else {
+    res.status(204).send();
+  }
 });
 
 module.exports = router;

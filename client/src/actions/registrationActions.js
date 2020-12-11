@@ -28,8 +28,11 @@ export const fetchRegistrationForm = (event) => async (dispatch) => {
   dispatch({ type: LOAD_STARTED });
   try {
     const res = await api.get("/api/form", { params: { event } });
+    if (res.status == 200) {
+      dispatch({ type: FETCH_FORM, payload: res.data });
+    }
     dispatch({ type: LOAD_FINISHED });
-    dispatch({ type: FETCH_FORM, payload: res.data });
+
     return true;
   } catch (err) {
     toast.error(

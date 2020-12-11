@@ -17,3 +17,7 @@
 .submitButton:hover {
   opacity: 0.8;
 }
+
+.btn {
+  margin: auto;
+}
