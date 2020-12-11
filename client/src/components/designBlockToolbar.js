@@ -46,6 +46,17 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px 0px",
     minWidth: "100%",
   },
+  sectionTooltip: {
+    position: "absolute",
+    top: "-30px",
+    background: "#7b7b7b",
+    border: "1px solid #777777",
+    padding: "8px",
+    fontSize: "12px",
+    color: "#ffffff",
+    borderRadius: "5px",
+    opacity: "0.85",
+  },
 }));
 
 function DesignBlockToolbar(props) {
@@ -164,6 +175,11 @@ function DesignBlockToolbar(props) {
                 </div>
               </div>
             </>
+          ) : null}
+          {props.section.tooltip ? (
+            <div className={classes.sectionTooltip}>
+              {props.section.tooltip}
+            </div>
           ) : null}
         </div>
       ) : null}

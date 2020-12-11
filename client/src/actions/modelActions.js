@@ -67,7 +67,8 @@ export const addSection = (
   html,
   is_react = false,
   react_component = null,
-  is_stream = false
+  is_stream = false,
+  tooltip = ""
 ) => async (dispatch, getState) => {
   const model = getState().model.id;
 
@@ -79,8 +80,11 @@ export const addSection = (
       is_react,
       react_component,
       is_stream,
+      tooltip,
     },
   };
+
+  console.log(payload);
 
   dispatch({ type: ADD_SECTION, payload });
 
