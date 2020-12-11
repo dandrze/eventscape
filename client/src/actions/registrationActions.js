@@ -39,22 +39,12 @@ export const fetchRegistrationForm = (event) => async (dispatch) => {
   }
 };
 
-export const addRegistration = (
-  firstName,
-  lastName,
-  email,
-  event,
-  organization
-) => async (dispatch) => {
+export const addRegistration = (event, values) => async (dispatch) => {
   try {
     const res = await api.post("/api/registration", {
-      firstName,
-      lastName,
-      email,
       event,
-      organization,
+      values,
     });
-    toast.success("Registration successfuly added");
     return true;
   } catch (err) {
     toast.error("Error when adding registration: " + err.toString());
@@ -62,22 +52,11 @@ export const addRegistration = (
   }
 };
 
-export const updateRegistration = (
-  firstName,
-  lastName,
-  email,
-  event,
-  organization,
-  id
-) => async (dispatch) => {
+export const updateRegistration = (id, values) => async (dispatch) => {
   try {
     const res = await api.put("/api/registration", {
-      firstName,
-      lastName,
-      email,
-      event,
-      organization,
       id,
+      values: JSON.stringify(values),
     });
     toast.success("Registration successfuly modified");
     return true;
@@ -96,4 +75,13 @@ export const deleteRegistration = (id) => async (dispatch) => {
     toast.error("Error when deleting registration: " + err.toString());
     return false;
   }
+};
+
+const mapMaterialToFormBuilder = (values) => {
+  var mappedValues = [];
+  for (var key in values) {
+    mappedValues.push({ name: key, value: values[key] });
+  }
+
+  return mappedValues;
 };

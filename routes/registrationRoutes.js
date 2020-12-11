@@ -26,20 +26,17 @@ router.post("/api/registration", async (req, res) => {
 });
 
 router.put("/api/registration", async (req, res) => {
-  const { firstName, lastName, email, event, organization, id } = req.body;
+  const { id, values } = req.body;
 
   // Add the registered user
   const newRegistration = await db.query(
     `UPDATE registration 
     SET 
-      first_name = $1, 
-      last_name = $2, 
-      email = $3, 
-      organization = $4
+      values = $1
     WHERE
-      id = $5
-		RETURNING id`,
-    [firstName, lastName, email, organization, id],
+      id = $2
+		RETURNING *`,
+    [values, id],
     (err, res) => {
       if (err) {
         throw res.status(500).send(Error);

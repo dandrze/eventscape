@@ -5,7 +5,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import * as actions from "../actions";
 import { ReactFormBuilder } from "./react-form-builder2/lib";
 import "./react-form-builder2/dist/app.css";
-import "./FormBuilder.css";
 import Cancel from "../icons/cancel.svg";
 import api from "../api/server";
 
@@ -43,7 +42,7 @@ const FormBuilder = (props) => {
       canHaveAnswer: true,
       name: "Dropdown",
       icon: "far fa-caret-square-down",
-      label: "Placeholder Label",
+      label: "Dropdown label",
       field_name: "dropdown_",
       options: [],
     },
@@ -52,7 +51,7 @@ const FormBuilder = (props) => {
       canHaveAnswer: true,
       name: "Checkboxes",
       icon: "far fa-check-square",
-      label: "Placeholder Label",
+      label: "Checkboxes Label",
       field_name: "checkboxes_",
       options: [],
     },
@@ -61,7 +60,7 @@ const FormBuilder = (props) => {
       canHaveAnswer: true,
       name: "Multiple Choice",
       icon: "far fa-dot-circle",
-      label: "Placeholder Label",
+      label: "Multiple Choice Label",
       field_name: "radiobuttons_",
       options: [],
     },
@@ -69,7 +68,7 @@ const FormBuilder = (props) => {
       key: "TextInput",
       canHaveAnswer: true,
       name: "Text Input",
-      label: "Placeholder Label",
+      label: "Text Input Label",
       icon: "fas fa-font",
       field_name: "text_input_",
     },
@@ -77,7 +76,7 @@ const FormBuilder = (props) => {
       key: "NumberInput",
       canHaveAnswer: true,
       name: "Number Input",
-      label: "Placeholder Label",
+      label: "Number Input Label",
       icon: "fas fa-plus",
       field_name: "number_input_",
     },
@@ -99,7 +98,7 @@ const FormBuilder = (props) => {
       showTimeSelectOnly: false,
       name: "Date",
       icon: "far fa-calendar-alt",
-      label: "Placeholder Label",
+      label: "Datepicker Label",
       field_name: "date_picker_",
     },
   ];
@@ -118,12 +117,17 @@ const FormBuilder = (props) => {
 
   return (
     <div className="form-builder-container">
-      <div className="form-builder-navbar">
+      <div className="registration-modal-navbar">
         <div id="form-builder-status">
           Status: <span style={{ color: "green" }}>Saved</span>
         </div>
         <Tooltip title="Close Editor">
-          <img src={Cancel} id="close-form-builder" height="24px"></img>
+          <img
+            src={Cancel}
+            id="close-form-builder"
+            height="24px"
+            onClick={props.handleClose}
+          ></img>
         </Tooltip>
       </div>
       <ReactFormBuilder onPost={onPost} onLoad={onLoad} toolbarItems={items} />

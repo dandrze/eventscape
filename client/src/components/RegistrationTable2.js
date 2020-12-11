@@ -53,6 +53,25 @@ const RegistrationTable2 = (props) => {
     data: [],
   });
 
+  const tableActions = [
+    {
+      icon: Edit,
+      tooltip: "Edit Event",
+      onClick: async (event, rowData) => {
+        const rowId = rowData.id;
+        var values;
+
+        for (var row of props.registration.data) {
+          if (row.id == rowId) {
+            values = row.values;
+          }
+        }
+
+        props.handleEditReg(values, rowId);
+      },
+    },
+  ];
+
   const inputElements = [
     "Dropdown",
     "Checkboxes",
@@ -78,8 +97,10 @@ const RegistrationTable2 = (props) => {
 
     // map the registration data from the react-form-builder2 format to the material format
     for (var row of props.registration.data) {
-      var rowObject = {};
+      var rowObject = { event: props.event.id, id: row.id };
+
       for (var value of row.values) {
+        //formbuilder prefixes the name with the field type, so we'll extract this out to determine what type it is
         var columnType = value.name.split("_")[0];
 
         if (columnType == "checkboxes" || columnType == "radiobuttons") {
@@ -94,7 +115,7 @@ const RegistrationTable2 = (props) => {
             var mappedValue = value.value.map((v) => {
               for (var i = 0; i < valueMap.length; i++) {
                 if (valueMap[i].key == v) {
-                  return valueMap[i].text;
+                  return valueMap[i].text + "; ";
                 }
               }
             });
@@ -149,41 +170,7 @@ const RegistrationTable2 = (props) => {
         components={{
           Container: (props) => <Paper {...props} elevation={0} />,
         }}
-        editable={{
-          onRowAdd: (newData) =>
-            new Promise((resolve) => {
-              setTimeout(async () => {
-                const res = await props.addRegistration(
-                  newData.first_name,
-                  newData.last_name,
-                  newData.email,
-                  props.event.id,
-                  newData.organization
-                );
-                await props.fetchRegistrations(props.event.id);
-                resolve();
-              }, 600);
-            }),
-          onRowUpdate: async (newData, oldData) => {
-            const res = await props.updateRegistration(
-              newData.first_name,
-              newData.last_name,
-              newData.email,
-              props.event.id,
-              newData.organization,
-              newData.id
-            );
-            await props.fetchRegistrations(props.event.id);
-          },
-          onRowDelete: (oldData) =>
-            new Promise((resolve) => {
-              setTimeout(async () => {
-                const res = await props.deleteRegistration(oldData.id);
-                await props.fetchRegistrations(props.event.id);
-                resolve();
-              }, 600);
-            }),
-        }}
+        actions={tableActions}
       />
     </div>
   );

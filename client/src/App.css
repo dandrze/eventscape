@@ -80,7 +80,6 @@ input {
   margin-bottom: 20px;
   margin-left: 0px;
   margin-right: 0px;
-  width: 100%;
   box-sizing: border-box;
 }
 
@@ -152,16 +151,16 @@ label {
   outline: none;
 }
 
-.themeButton {
+.theme-button {
   color: #fff !important;
   text-decoration: none;
   padding: 16px; /* was 20px */
   display: inline-block;
   border: none;
-  width: 20%;
+  background: #b0281c;
 }
 
-.themeButton:hover {
+.theme-button:hover {
   opacity: 0.7;
 }
 

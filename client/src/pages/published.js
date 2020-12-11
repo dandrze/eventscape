@@ -24,8 +24,8 @@ const Published = (props) => {
 		background: ${props.event.primary_color};
 	 }
 
-	 .themeButton {
-		background:${props.event.primary_color};
+	 .theme-button {
+		background:${props.event.primary_color} !important;
 	 }
 	
   `;

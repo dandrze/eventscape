@@ -31,17 +31,16 @@ function RegistrationForm(props) {
   };
 
   const handleSubmit = async (values) => {
-    //alert(JSON.stringify(values, null, 2));
-    try {
-      const res = await api.post("/api/registration", {
-        values,
-        event: props.event.id,
-      });
-      setModalText("Thank you for registering for " + props.event.title);
-      openModal();
-    } catch (err) {
-      setModalText(err.toString());
-      openModal();
+    // If there is a custom callback (i.e. editting a registration) use that
+    if (props.onSubmitCallback) {
+      props.onSubmitCallback(values);
+    } else {
+      // else use the default workflow
+      const res = await props.addRegistration(props.event.id, values);
+      if (res) {
+        setModalText("Thank you for registering for " + props.event.title);
+        openModal();
+      }
     }
   };
 
@@ -56,9 +55,10 @@ function RegistrationForm(props) {
         continueText="OK"
       />
       <ReactFormGenerator
-        action_name="Register now"
+        action_name={props.registerText || "Register now"}
         onSubmit={handleSubmit}
         data={formData}
+        answer_data={props.prePopulatedValues}
       />
     </div>
   );

@@ -1,9 +1,71 @@
 #topButtons {
-    display: flex;
-    margin-bottom: 3rem;
-    margin-top: 3rem;
+  display: flex;
+  margin-bottom: 3rem;
+  margin-top: 3rem;
 }
 
 .edit-form {
-    margin-left: auto;
+  margin-left: auto;
+}
+
+.float-right {
+  float: right;
+}
+
+.float-left {
+  float: left;
+}
+
+.form-builder-container {
+  width: 800px;
+  margin: auto;
+}
+
+.react-form-builder .react-form-builder-preview {
+  position: relative;
+  width: 540px !important;
+  padding: 10px;
+  box-shadow: 0 0 2px 1px rgba(0, 0, 0, 0.1);
+  min-height: calc(100vh - 110px) !important;
+  max-height: calc(100vh - 110px) !important;
+  margin: 20px 0px;
+  overflow: scroll;
+}
+
+.toolbar-header-buttons .btn {
+  cursor: pointer !important;
+}
+
+.react-form-builder .react-form-builder-toolbar {
+  width: 240px !important;
+  height: calc(100vh - 110px);
+  margin: 20px 0px !important;
+  background: #fff;
+}
+
+.react-form-builder {
+  min-width: 600px;
+}
+
+.registration-modal-navbar {
+  text-align: right;
+}
+
+.registration-modal-navbar * {
+  display: inline-block;
+}
+
+#close-form-builder {
+  cursor: pointer;
+  margin: 0px 20px;
+  line-height: 48px;
+}
+
+#form-builder-status {
+  margin: 0px 20px;
+  line-height: 48px;
+}
+
+.btn {
+  margin: auto;
 }
