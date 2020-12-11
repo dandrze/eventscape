@@ -111,7 +111,6 @@ const FormBuilder = (props) => {
     const res = await api.get("/api/form", {
       params: { event: props.event.id },
     });
-    console.log(res);
     return res.data ? res.data : [];
   };
 

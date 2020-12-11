@@ -25,10 +25,11 @@ function RegistrationForm(props) {
 
   const fetchFormData = async () => {
     const formData = await api.get("/api/form", {
-      params: { event: 136 },
+      params: { event: props.event.id },
     });
-
-    setFormData(formData.data);
+    if (formData.data) {
+      setFormData(formData.data);
+    }
   };
 
   const handleSubmit = async (values) => {

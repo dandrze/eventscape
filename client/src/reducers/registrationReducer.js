@@ -3,8 +3,6 @@ import { FETCH_REGISTRATION, FETCH_FORM } from "../actions/types";
 export default function (state = { data: [], columns: [] }, action) {
   switch (action.type) {
     case FETCH_REGISTRATION:
-      console.log(state);
-      console.log(action.payload);
       return { ...state, data: action.payload };
     case FETCH_FORM:
       return { ...state, columns: action.payload };
