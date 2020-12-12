@@ -24,7 +24,6 @@
     "express": "^4.17.1",
     "express-force-https": "^1.0.0",
     "heroku": "^7.47.4",
-    "heroku-cli": "^7.0.9",
     "mongoose": "^5.10.9",
     "node-sass": "^5.0.0",
     "nodemon": "^2.0.4",
