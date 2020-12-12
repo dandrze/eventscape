@@ -12,6 +12,16 @@
   src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff");
 }
 
+/*Overwrite some bootstrap css properties that break our styling*/
+a:hover {
+  color: initial;
+  text-decoration: none;
+}
+
+button:focus {
+  outline: 1px dotted;
+}
+
 body {
   /* Colour Pallete */
   --main-bg-color: #f8f8f8;
@@ -34,11 +44,6 @@ a {
   text-decoration: inherit;
   line-height: 0px;
 }
-
-:focus {
-  outline: #b0281c;
-}
-
 ul {
   list-style: none;
   margin: 0;
@@ -75,7 +80,6 @@ input {
   margin-bottom: 20px;
   margin-left: 0px;
   margin-right: 0px;
-  width: 100%;
   box-sizing: border-box;
 }
 
@@ -102,7 +106,6 @@ label {
   font-family: "San Francisco", Helvetica, Ariel, sans-serif;
   font-size: 16px;
   font-weight: 400;
-  float: left;
 }
 
 .App {
@@ -123,7 +126,7 @@ label {
 .Button1 {
   font-family: "San Francisco", Helvetica, Arial, sans-serif;
   font-weight: bold;
-  font-size: 20;
+  font-size: 14px;
   color: white;
   background-color: var(--main-color);
   padding: 16px;
@@ -133,6 +136,7 @@ label {
   border-style: solid;
   height: min-content;
   transition: all 0.1s ease-in-out;
+  line-height: initial;
 }
 
 .Button1:hover {
@@ -147,10 +151,23 @@ label {
   outline: none;
 }
 
+.theme-button {
+  color: #fff !important;
+  text-decoration: none;
+  padding: 16px; /* was 20px */
+  display: inline-block;
+  border: none;
+  background: #b0281c;
+}
+
+.theme-button:hover {
+  opacity: 0.7;
+}
+
 .Button2 {
   font-family: "San Francisco", Helvetica, Arial, sans-serif;
   font-weight: bold;
-  font-size: 20;
+  font-size: 14px;
   color: var(--main-color);
   background-color: white;
   padding: 5px;

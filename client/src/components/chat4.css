@@ -154,12 +154,6 @@ select:focus {
   outline: none;
 }
 
-.sendButton {
-  color: #fff !important;
-  text-decoration: none;
-  background: #b0281c;
-  padding: 16px; /* was 20px */
-  display: inline-block;
-  border: none;
+.send-button {
   width: 20%;
 }

@@ -4,10 +4,11 @@ import {
   logoHeaderModel,
   logoHeaderRightModel,
   heroBannerModel,
-  descriptionRegistrationModel,
+  registrationFormDescription,
   titleTimeModel,
   streamChatReact,
   blankModel,
+  registrationFormReact,
 } from "../components/designBlockModels";
 import {
   FETCH_EVENT,
@@ -37,12 +38,12 @@ export const createEvent = (
     {
       html: heroBannerModel(title),
       name: "heroBanner",
-      is_stream: false,
     },
     {
-      html: descriptionRegistrationModel(start_date, end_date),
-      name: "body",
-      is_stream: false,
+      html: registrationFormDescription(),
+      name: "registration",
+      is_react: true,
+      react_component: registrationFormReact,
     },
   ];
 
@@ -50,24 +51,20 @@ export const createEvent = (
     {
       html: logoHeaderRightModel(),
       name: "bannerRight",
-      is_stream: false,
     },
     {
       html: titleTimeModel(title, start_date, end_date),
       name: "titleTime",
-      is_stream: false,
     },
     {
       html: null,
       name: "streamChat",
-      is_stream: true,
       is_react: true,
       react_component: streamChatReact,
     },
     {
       html: blankModel(),
       name: "blankModel",
-      is_stream: false,
     },
   ];
 
@@ -86,7 +83,7 @@ export const createEvent = (
 
   const res = await api.post("/api/event", event);
 
-  if (res.status === 201) {
+  if (res.status === 200) {
     await dispatch({
       type: CREATE_EVENT,
       payload: res.data,
@@ -132,17 +129,21 @@ export const updateEvent = (
 
 export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
-  dispatch({ type: LOAD_STARTED });
-  const event = await api.get("/api/event/current");
-  dispatch({ type: LOAD_FINISHED });
-
-  if (event) {
-    dispatch({ type: FETCH_EVENT, payload: event.data });
-    dispatch(fetchModelFromState());
-    return event;
-  } else {
-    console.log("no events");
-    return null;
+  try {
+    dispatch({ type: LOAD_STARTED });
+    const event = await api.get("/api/event/current");
+    dispatch({ type: LOAD_FINISHED });
+    if (event) {
+      dispatch({ type: FETCH_EVENT, payload: event.data });
+      dispatch(fetchModelFromState());
+      return event;
+    } else {
+      console.log("no events");
+      return null;
+    }
+  } catch (err) {
+    toast.error("Error when fetching events: " + err.toString());
+    return false;
   }
 };
 
@@ -186,6 +187,23 @@ export const isLinkAvailable = (link) => async (dispatch) => {
   if (res.data.length == 0) {
     return true;
   } else {
+    return false;
+  }
+};
+
+export const setEventRegistration = (registrationEnabled, event) => async (
+  dispatch
+) => {
+  try {
+    const res = await api.put("/api/event/set-registration", {
+      registrationEnabled,
+      event,
+    });
+    console.log(res);
+    toast.success("Registration successfuly changed");
+    return true;
+  } catch (err) {
+    toast.error("Error when setting Registration: " + err.toString());
     return false;
   }
 };

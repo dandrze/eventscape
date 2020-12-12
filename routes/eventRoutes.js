@@ -51,14 +51,13 @@ router.post("/api/event", async (req, res) => {
   for (i = 0; i < reg_page_model.length; i++) {
     await db.query(
       `INSERT INTO section_html
-					(model, index, html, is_stream, is_react, react_component)
+					(model, index, html, is_react, react_component)
 					VALUES
-					($1, $2, $3, $4, $5, $6)`,
+					($1, $2, $3, $4, $5)`,
       [
         pgRegModel.rows[0].id,
         i,
         reg_page_model[i].html,
-        reg_page_model[i].is_stream,
         reg_page_model[i].is_react,
         reg_page_model[i].react_component,
       ]
@@ -83,14 +82,13 @@ router.post("/api/event", async (req, res) => {
   for (i = 0; i < event_page_model.length; i++) {
     await db.query(
       `INSERT INTO section_html
-					(model, index, html, is_stream, is_react, react_component)
+					(model, index, html, is_react, react_component)
 					VALUES
-					($1, $2, $3, $4, $5, $6)`,
+					($1, $2, $3, $4, $5)`,
       [
         pgEventModel.rows[0].id,
         i,
         event_page_model[i].html,
-        event_page_model[i].is_stream,
         event_page_model[i].is_react,
         event_page_model[i].react_component,
       ]
@@ -124,7 +122,7 @@ router.post("/api/event", async (req, res) => {
     }
   );
 
-  res.status(201).send(newEvent.rows[0]);
+  res.status(200).send(newEvent.rows[0]);
 });
 
 router.get("/api/event/current", async (req, res) => {
@@ -291,6 +289,26 @@ router.put("/api/event", async (req, res) => {
   );
 
   res.send(events.rows[0]);
+});
+
+router.put("/api/event/set-registration", async (req, res) => {
+  const { registrationEnabled, event } = req.body;
+
+  const updatedEvent = await db.query(
+    `
+  UPDATE event
+  SET registration = $1
+  WHERE id = $2
+  RETURNING *`,
+    [registrationEnabled, event],
+    (err, res) => {
+      if (errDb) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(updatedEvent.rows[0]);
 });
 
 module.exports = router;

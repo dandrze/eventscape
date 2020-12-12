@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -23,6 +23,7 @@ import Published from "./pages/published";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
+import Test from "./pages/test";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -61,6 +62,7 @@ function App() {
         <Route exact path="/messaging" component={Messaging} />
         <Route exact path="/preview/:event/:model" component={Preview} />
         <Route exact path="/ScotiabankGillerPrize" component={Giller} />
+        <Route exact path="/test" component={Test} />
       </header>
     </div>
   );

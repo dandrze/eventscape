@@ -16,6 +16,7 @@ import descriptionRegistration from "./designBlockThumbnails/descriptionRegistra
 import titleThumb from "./designBlockThumbnails/title.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
+import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
 import {
   logoHeaderModel,
   heroBannerModel,
@@ -24,6 +25,9 @@ import {
   streamChatModel,
   blankModel,
   streamChatReact,
+  registrationFormHeader,
+  registrationFormReact,
+  registrationFormDescription,
 } from "./designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -58,21 +62,12 @@ const NewSectionButton = (props) => {
     setOpen(false);
   };
 
-  const handleSelect = (
+  const handleAddSection = async (
     html,
     is_react = false,
-    react_component = null,
-    is_stream = false
+    react_component = null
   ) => {
-    setOpen(false);
-    props.addSection(
-      props.prevIndex,
-      html,
-      is_react,
-      react_component,
-      is_stream
-    );
-    /*insert actions here*/
+    props.addSection(props.prevIndex, html, is_react, react_component);
   };
 
   return (
@@ -111,61 +106,86 @@ const NewSectionButton = (props) => {
                     <img
                       src={logoHeader}
                       id="designBlockThumbnail"
-                      onClick={() => handleSelect(logoHeaderModel())}
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(logoHeaderModel());
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={heroBanner}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(heroBannerModel(props.event.title))
-                      }
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(heroBannerModel(props.event.title));
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={descriptionRegistration}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(
                           descriptionRegistrationModel(
                             props.event.start_date,
                             props.event.end_date
                           )
-                        )
-                      }
+                        );
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={titleThumb}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(
                           titleTimeModel(
                             props.event.title,
                             props.event.start_date,
                             props.event.end_date
                           )
-                        )
-                      }
+                        );
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={streamChatThumb}
                       id="designBlockThumbnail"
-                      onClick={() =>
-                        handleSelect(null, true, streamChatReact, true)
-                      }
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection(null, true, streamChatReact);
+                      }}
                     />
                   </Grid>
                   <Grid item xs={12}>
                     <img
                       src={blankThumb}
                       id="designBlockThumbnail"
-                      onClick={() => handleSelect("")}
+                      onClick={() => {
+                        handleClose();
+                        handleAddSection("");
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <img
+                      src={registrationHeaderThumb}
+                      id="designBlockThumbnail"
+                      onClick={async () => {
+                        handleClose();
+                        await handleAddSection(
+                          registrationFormDescription(),
+                          true,
+                          registrationFormReact
+                        );
+                        await handleAddSection(registrationFormHeader());
+                      }}
                     />
                   </Grid>
                 </Grid>

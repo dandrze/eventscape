@@ -4,7 +4,7 @@ import * as actions from "../actions";
 import ReactHtmlParser from "react-html-parser";
 import { useParams } from "react-router-dom";
 import "froala-editor/css/froala_style.min.css";
-import StreamChat from "../components/pageReactSections/stream-chat";
+import mapReactComponent from "../components/mapReactComponent";
 
 const Preview = (props) => {
   const { event, model } = useParams();
@@ -12,10 +12,6 @@ const Preview = (props) => {
     props.fetchEventFromId(event);
     props.fetchModelFromId(model);
   }, []);
-
-  const mapReactComponent = {
-    StreamChat: StreamChat,
-  };
 
   const theme = `
  	.fr-view button { 
@@ -29,8 +25,8 @@ const Preview = (props) => {
 		background: ${props.event.primary_color};
 	 }
 
-	 .sendButton {
-		background:${props.event.primary_color};
+	 .theme-button {
+		background:${props.event.primary_color} !important;
 	 }
 	
   `;
@@ -40,11 +36,12 @@ const Preview = (props) => {
       <style>{theme}</style>
       <ul>
         {props.model.sections.map(function (section) {
+          console.log(section);
           return section.is_react
-            ? createElement(
-                mapReactComponent[section.react_component.name],
-                section.react_component.props
-              )
+            ? createElement(mapReactComponent[section.react_component.name], {
+                ...section.react_component.props,
+                sectionIndex: section.index,
+              })
             : ReactHtmlParser(section.html);
         })}
       </ul>

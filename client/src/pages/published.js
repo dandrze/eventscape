@@ -5,16 +5,12 @@ import { Helmet } from "react-helmet";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
-import StreamChat from "../components/pageReactSections/stream-chat";
+import mapReactComponent from "../components/mapReactComponent";
 
 const Published = (props) => {
   useEffect(() => {
     props.fetchLivePage(props.subdomain);
   }, []);
-
-  const mapReactComponent = {
-    StreamChat: StreamChat,
-  };
 
   const theme = `
  	.fr-view button { 
@@ -28,8 +24,8 @@ const Published = (props) => {
 		background: ${props.event.primary_color};
 	 }
 
-	 .sendButton {
-		background:${props.event.primary_color};
+	 .theme-button {
+		background:${props.event.primary_color} !important;
 	 }
 	
   `;
@@ -48,7 +44,10 @@ const Published = (props) => {
                 return section.is_react
                   ? createElement(
                       mapReactComponent[section.react_component.name],
-                      section.react_component.props
+                      {
+                        ...section.react_component.props,
+                        sectionIndex: section.index,
+                      }
                     )
                   : ReactHtmlParser(section.html);
               })}

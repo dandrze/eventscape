@@ -104,6 +104,39 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
+export const registrationFormHeader = () => {
+  return `
+      <div style="overflow: hidden;">
+          <p class="registration-title">Sign Up Today</p>
+          <p class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
+      </div>
+  
+      <style>
+          .registration-title {
+              padding: 0;
+              font-size: 50px;
+              line-height: 1;
+              margin-left: 5%;
+              margin-right: 5%;
+              margin-top: 3%;
+              margin-bottom: 3%;
+              text-align: center;
+          }
+          .registration-subtitle {
+            padding: 0;
+            font-size: 20px;
+            line-height: 1;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 3%;
+            margin-bottom: 3%;
+            text-align: center;
+            font-style: italic;
+        }
+      </style>
+  `;
+};
+
 export const descriptionRegistrationModel = (startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
   const endTimeParsed = Date.parse(endTime);
@@ -180,6 +213,13 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
     </style>
     
     `;
+};
+
+export const registrationFormDescription = () => {
+  return `<div class="one" contenteditable="true">
+    <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
+    <p style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  </div>`;
 };
 
 export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
@@ -487,6 +527,11 @@ export const streamChatReact = {
     link: "https://www.youtube.com/embed/X9llog6QNVM",
     html: "",
   },
+};
+
+export const registrationFormReact = {
+  name: "RegistrationForm",
+  props: {},
 };
 
 /*<iframe 

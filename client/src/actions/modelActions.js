@@ -49,6 +49,8 @@ export const fetchModelFromId = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
 
   dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
+
+  return true;
 };
 
 export const updateSection = (index, html) => {
@@ -64,8 +66,7 @@ export const addSection = (
   prevIndex,
   html,
   is_react = false,
-  react_component = null,
-  is_stream = false
+  react_component = null
 ) => async (dispatch, getState) => {
   const model = getState().model.id;
 
@@ -76,11 +77,15 @@ export const addSection = (
       html,
       is_react,
       react_component,
-      is_stream,
     },
   };
 
+  console.log(payload);
+
   dispatch({ type: ADD_SECTION, payload });
+
+  //signals to the caller that the process is complete. Needed for async await.
+  return true;
 };
 
 export const deleteSection = (index) => {
@@ -127,17 +132,16 @@ export const fetchLivePage = (link) => async (dispatch) => {
   dispatch({ type: LOAD_STARTED });
   const event = await api.get("/api/event/link", { params: { link } });
   dispatch({ type: FETCH_EVENT, payload: event.data });
-  dispatch({ type: LOAD_FINISHED });
 
-  if (event.data.status === 1) {
-    // if the event status is 1, it's live so fetch the live event page model
-    dispatch(fetchModelFromId(event.data.event_page_model));
-  } else if (event.data.status === 0) {
-    // if the status is 0, it's a draft so fetch the registration page model
-    dispatch(fetchModelFromId(event.data.reg_page_model));
+  if (event.data.registration) {
+    // if the events registration flag is true, show the registration page.
+    await dispatch(fetchModelFromId(event.data.reg_page_model));
   } else {
-    dispatch(fetchModelFromId(null));
+    // if the events registration flag is false, show the event page
+    await dispatch(fetchModelFromId(event.data.event_page_model));
   }
+
+  dispatch({ type: LOAD_FINISHED });
 };
 
 export const saveStreamSettings = (index, settings) => async (

@@ -78,7 +78,7 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
       }
     />
     <button
-      className="sendButton"
+      className="theme-button send-button"
       style={theme}
       onClick={(e) => sendMessage(e)}
     >
