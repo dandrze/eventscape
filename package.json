@@ -8,7 +8,7 @@
     "start": "node index.js",
     "server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscapeio) nodemon index.js",
     "client": "npm run start --prefix client",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client && npm run build --prefix client/src/components/react-form-builder2"
+    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
   },
   "keywords": [],
   "author": "",
