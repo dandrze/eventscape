@@ -81,19 +81,5 @@
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.11.0"
   },
-  "scripts": {
-    "build": "webpack -p --config webpack.production.config.js",
-    "build:dev": "webpack --mode development",
-    "build:umd": "webpack --mode development --config webpack.production.config.js",
-    "build:style": "node-sass ./scss/application.scss dist/app.css --output-style compressed",
-    "build:lib": "npm run transpile && npm run build:style",
-    "build:dist": "npm run build && npm run copy:dist",
-    "copy:dist": "copyfiles -f \"./dist/*\" \"./public/dist\"",
-    "prepublish": "npm run build:lib && npm run build",
-    "watch": "webpack --watch",
-    "start": "webpack-dev-server --hot --inline --mode development",
-    "serve:api": "node server/index.js",
-    "pretranspile": "rimraf lib",
-    "transpile": "babel --out-dir lib src --copy-files"
-  }
+  "scripts": {}
 }
