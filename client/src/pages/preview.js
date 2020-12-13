@@ -32,7 +32,7 @@ const Preview = (props) => {
   `;
 
   return (
-    <div className="fr-view">
+    <div className="fr-view live-page-container">
       <style>{theme}</style>
       <ul>
         {props.model.sections.map(function (section) {

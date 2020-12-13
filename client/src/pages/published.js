@@ -33,7 +33,7 @@ const Published = (props) => {
   const renderPage = () => {
     if (props.settings.loaded && props.model.sections.length) {
       return (
-        <div class="fr-view">
+        <div class="fr-view live-page-container">
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
