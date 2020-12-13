@@ -215,7 +215,7 @@ router.get("/api/event/link", async (req, res) => {
 router.delete("/api/event/id", async (req, res) => {
   const { id } = req.query;
   const response = await db.query(
-    "UPDATE event SET status=-1 WHERE id=$1",
+    "UPDATE event SET status='deleted' WHERE id=$1",
     [id],
     (err, res) => {
       if (err) {

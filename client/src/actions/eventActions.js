@@ -78,7 +78,6 @@ export const createEvent = (
     primary_color,
     reg_page_model,
     event_page_model,
-    status: 0,
   };
 
   const res = await api.post("/api/event", event);
@@ -166,7 +165,7 @@ export const publishPage = () => async (dispatch, getState) => {
   // save the model
   await dispatch(saveModel());
 
-  const newEvent = { ...getState().event, status: 1 };
+  const newEvent = { ...getState().event, status: "active" };
 
   const res = await api.put("/api/event", newEvent);
 
