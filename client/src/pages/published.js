@@ -33,11 +33,11 @@ const Published = (props) => {
   const renderPage = () => {
     if (props.settings.loaded && props.model.sections.length) {
       return (
-        <div>
+        <div class="fr-view">
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
-          <div class="fr-view">
+          <div>
             <style>{theme}</style>
             <ul>
               {props.model.sections.map(function (section) {
