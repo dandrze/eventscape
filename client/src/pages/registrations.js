@@ -178,6 +178,7 @@ const Registrations = (props) => {
             registerText={regButtonText}
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}
+            isEditForm={true}
           />
         </div>
       </Modal>

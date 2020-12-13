@@ -84,20 +84,30 @@ function RegistrationForm(props) {
         closeText="Cancel"
         continueText="OK"
       />
-      <div className="container">
-        <div className="form-editor-froala">
-          <Froala sectionIndex={props.sectionIndex} />
+      {props.isEditForm ? (
+        <ReactFormGenerator
+          action_name={props.registerText || "Register now"}
+          onSubmit={handleSubmit}
+          data={formData}
+          answer_data={props.prePopulatedValues}
+          className="form-editor-react"
+        />
+      ) : (
+        <div className="container">
+          <div className="form-editor-froala">
+            <Froala sectionIndex={props.sectionIndex} />
+          </div>
+          <div className="form-editor-react">
+            <ReactFormGenerator
+              action_name={props.registerText || "Register now"}
+              onSubmit={handleSubmit}
+              data={formData}
+              answer_data={props.prePopulatedValues}
+              className="form-editor-react"
+            />
+          </div>
         </div>
-        <div className="form-editor-react">
-          <ReactFormGenerator
-            action_name={props.registerText || "Register now"}
-            onSubmit={handleSubmit}
-            data={formData}
-            answer_data={props.prePopulatedValues}
-            className="form-editor-react"
-          />
-        </div>
-      </div>
+      )}
     </div>
   );
 }
