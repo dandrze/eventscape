@@ -230,7 +230,7 @@ router.delete("/api/event/id", async (req, res) => {
 router.put("/api/event/id/restore", async (req, res) => {
   const { id } = req.body;
   const response = await db.query(
-    "UPDATE event SET status=0 WHERE id=$1",
+    "UPDATE event SET status='draft' WHERE id=$1",
     [id],
     (err, res) => {
       if (err) {
