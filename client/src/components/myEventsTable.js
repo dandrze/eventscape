@@ -29,232 +29,225 @@ import * as actions from "../actions";
 import AlertModal from "./AlertModal";
 
 const tableIcons = {
-	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-	Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-	Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-	DetailPanel: forwardRef((props, ref) => (
-		<ChevronRight {...props} ref={ref} />
-	)),
-	Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-	Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-	Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-	FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-	LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-	NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-	PreviousPage: forwardRef((props, ref) => (
-		<ChevronLeft {...props} ref={ref} />
-	)),
-	ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-	SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-	ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
 const Table = (props) => {
-	const [openModal, setOpenModal] = useState(false);
-	const [modalText, setModalText] = useState("");
-	const [actionRowId, setActionRowId] = useState(null);
-	const [textInputLabel, setTextInputLabel] = useState("");
-	const [onContinueAction, setOnContinueAction] = useState("");
+  const [openModal, setOpenModal] = useState(false);
+  const [modalText, setModalText] = useState("");
+  const [actionRowId, setActionRowId] = useState(null);
+  const [textInputLabel, setTextInputLabel] = useState("");
+  const [onContinueAction, setOnContinueAction] = useState("");
 
-	const data = props.eventList
-		.filter((event) => {
-			const startDate = new Date(event.start_date);
-			const today = new Date();
-			if (event.status === -1 && props.tab === "deleted") {
-				return true;
-			} else if (
-				event.status != -1 &&
-				startDate >= today &&
-				props.tab === "upcoming"
-			) {
-				return true;
-			} else if (
-				event.status != -1 &&
-				startDate < today &&
-				props.tab === "past"
-			) {
-				return true;
-			} else {
-				return false;
-			}
-		})
-		.map((event) => {
-			const eventDate = new Date(event.start_date);
-			return {
-				id: event.id,
-				name: event.title,
-				date: eventDate.toLocaleString(),
-				status:
-					event.status === -1
-						? "Deleted"
-						: event.status === 0
-						? "Draft"
-						: event.status === 1
-						? "Live"
-						: null,
-			};
-		});
+  const data = props.eventList
+    .filter((event) => {
+      const startDate = new Date(event.start_date);
+      const today = new Date();
+      if (event.status === "deleted" && props.tab === "deleted") {
+        return true;
+      } else if (
+        event.status != "deleted" &&
+        startDate >= today &&
+        props.tab === "upcoming"
+      ) {
+        return true;
+      } else if (
+        event.status != "deleted" &&
+        startDate < today &&
+        props.tab === "past"
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    })
+    .map((event) => {
+      const eventDate = new Date(event.start_date);
+      return {
+        id: event.id,
+        name: event.title,
+        date: eventDate.toLocaleString(),
+        status: event.status.charAt(0).toUpperCase() + event.status.slice(1),
+      };
+    });
 
-	const columns = [
-		{
-			title: "Event Name",
-			field: "name",
-		},
-		{
-			title: "Event Date",
-			field: "date",
-		},
-		{
-			title: "Status",
-			field: "status",
-		},
-		{
-			title: "",
-			field: "edit",
-		},
-	];
+  const columns = [
+    {
+      title: "Event Name",
+      field: "name",
+    },
+    {
+      title: "Event Date",
+      field: "date",
+    },
+    {
+      title: "Status",
+      field: "status",
+    },
+    {
+      title: "",
+      field: "edit",
+    },
+  ];
 
-	const options = {
-		showTitle: false,
-		actionsColumnIndex: -1,
+  const options = {
+    showTitle: false,
+    actionsColumnIndex: -1,
 
-		headerStyle: {
-			backgroundColor: "#F0F1F4",
-			color: "black",
-			fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
-			fontSize: "14px",
-			fontWeight: "bold",
-			margin: "30px",
-		},
+    headerStyle: {
+      backgroundColor: "#F0F1F4",
+      color: "black",
+      fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+      fontSize: "14px",
+      fontWeight: "bold",
+      margin: "30px",
+    },
 
-		cellStyle: {
-			backgroundColor: "white",
-			color: "black",
-			fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
-			fontSize: "14px",
-			fontWeight: "normal",
-		},
-	};
+    cellStyle: {
+      backgroundColor: "white",
+      color: "black",
+      fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+      fontSize: "14px",
+      fontWeight: "normal",
+    },
+  };
 
-	const tableActions = [
-		{
-			icon: Edit,
-			tooltip: "Edit Event",
-			onClick: async (event, rowData) => {
-				// Set this event as the current event
-				const res = await props.setCurrentEvent(rowData.id);
+  const tableActions = [
+    {
+      icon: Edit,
+      tooltip: "Edit Event",
+      onClick: async (event, rowData) => {
+        // Set this event as the current event
+        const res = await props.setCurrentEvent(rowData.id);
 
-				// fetch the new event
-				await props.fetchEvent();
+        // fetch the new event
+        await props.fetchEvent();
 
-				props.history.push("/design");
-			},
-		},
-		{
-			icon: LibraryAdd,
-			tooltip: "Duplicate Event",
-			onClick: async (event, rowData) => {
-				setActionRowId(rowData.id);
-				setModalText(
-					"Please enter a new unique subdomain link for this event. Please use only lower case letters, numbers and dashes (-)"
-				);
-				setTextInputLabel("New Link");
-				setOnContinueAction("duplicate");
-				setOpenModal(true);
-			},
-		},
-		{
-			icon: DeleteOutline,
-			tooltip: "Delete Event",
-			onClick: async (event, rowData) => {
-				setActionRowId(rowData.id);
-				setModalText("Are you sure you want to delete this event?");
-				setTextInputLabel("");
-				setOnContinueAction("delete");
-				setOpenModal(true);
-			},
-		},
-	];
+        props.history.push("/design");
+      },
+    },
+    {
+      icon: LibraryAdd,
+      tooltip: "Duplicate Event",
+      onClick: async (event, rowData) => {
+        setActionRowId(rowData.id);
+        setModalText(
+          "Please enter a new unique subdomain link for this event. Please use only lower case letters, numbers and dashes (-)"
+        );
+        setTextInputLabel("New Link");
+        setOnContinueAction("duplicate");
+        setOpenModal(true);
+      },
+    },
+    {
+      icon: DeleteOutline,
+      tooltip: "Delete Event",
+      onClick: async (event, rowData) => {
+        setActionRowId(rowData.id);
+        setModalText("Are you sure you want to delete this event?");
+        setTextInputLabel("");
+        setOnContinueAction("delete");
+        setOpenModal(true);
+      },
+    },
+  ];
 
-	const deletedActions = [
-		{
-			icon: RestorePage,
-			tooltip: "Restore Event",
-			onClick: async (event, rowData) => {
-				await props.restoreEvent(rowData.id);
-				await props.fetchEventList();
-			},
-		},
-	];
+  const deletedActions = [
+    {
+      icon: RestorePage,
+      tooltip: "Restore Event",
+      onClick: async (event, rowData) => {
+        await props.restoreEvent(rowData.id);
+        await props.fetchEventList();
+      },
+    },
+  ];
 
-	const closeModal = () => {
-		setOpenModal(false);
-	};
+  const closeModal = () => {
+    setOpenModal(false);
+  };
 
-	const onContinue = async (input) => {
-		closeModal();
+  const onContinue = async (input) => {
+    closeModal();
 
-		if (onContinueAction == "delete") {
-			await props.deleteEvent(actionRowId);
-		}
-		if (onContinueAction == "duplicate") {
-			const res = await props.isLinkAvailable(input);
-			if (res) {
-				await props.duplicateEvent(actionRowId, input);
-			} else {
-				setModalText(
-					"This subdomain link is not available. Please select a different link. Please use only lower case letters, numbers and dashes (-)"
-				);
-				setTextInputLabel("link");
-				setOnContinueAction("duplicate");
-				setOpenModal(true);
+    if (onContinueAction == "delete") {
+      await props.deleteEvent(actionRowId);
+    }
+    if (onContinueAction == "duplicate") {
+      const res = await props.isLinkAvailable(input);
+      if (res) {
+        await props.duplicateEvent(actionRowId, input);
+      } else {
+        setModalText(
+          "This subdomain link is not available. Please select a different link. Please use only lower case letters, numbers and dashes (-)"
+        );
+        setTextInputLabel("link");
+        setOnContinueAction("duplicate");
+        setOpenModal(true);
 
-				return null;
-			}
-		}
-		props.fetchEventList();
-	};
+        return null;
+      }
+    }
+    props.fetchEventList();
+  };
 
-	if (props.settings.loaded) {
-		return (
-			<div>
-				<AlertModal
-					open={openModal}
-					onClose={closeModal}
-					onContinue={onContinue}
-					text={modalText}
-					closeText="Cancel"
-					continueText="Continue"
-					textInputLabel={textInputLabel}
-				/>
-				<MaterialTable
-					title="Employee Details"
-					data={data}
-					columns={columns}
-					options={options}
-					icons={tableIcons}
-					actions={props.tab === "deleted" ? deletedActions : tableActions}
-					components={{
-						Container: (props) => <Paper {...props} elevation={0} />,
-					}}
-					key={props.eventList}
-				/>
-			</div>
-		);
-	} else {
-		return (
-			<div style={{ width: "630px", padding: "50px" }}>
-				<CircularProgress />
-			</div>
-		);
-	}
+  if (props.settings.loaded) {
+    return (
+      <div>
+        <AlertModal
+          open={openModal}
+          onClose={closeModal}
+          onContinue={onContinue}
+          text={modalText}
+          closeText="Cancel"
+          continueText="Continue"
+          textInputLabel={textInputLabel}
+        />
+        <MaterialTable
+          title="Employee Details"
+          data={data}
+          columns={columns}
+          options={options}
+          icons={tableIcons}
+          actions={props.tab === "deleted" ? deletedActions : tableActions}
+          components={{
+            Container: (props) => <Paper {...props} elevation={0} />,
+          }}
+          key={props.eventList}
+        />
+      </div>
+    );
+  } else {
+    return (
+      <div style={{ width: "630px", padding: "50px" }}>
+        <CircularProgress />
+      </div>
+    );
+  }
 };
 
 const mapStateToProps = (state) => {
-	return { eventList: state.eventList, settings: state.settings };
+  return { eventList: state.eventList, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(withRouter(Table));

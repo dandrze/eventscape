@@ -22,7 +22,7 @@ router.get("/api/model/link", async (req, res) => {
   const link = req.query.link;
 
   const event = await db.query(
-    "SELECT reg_page_model FROM event WHERE link=$1 AND status!= -1",
+    "SELECT reg_page_model FROM event WHERE link=$1 AND status!= 'deleted'",
     [link],
     (err, res) => {
       if (err) {

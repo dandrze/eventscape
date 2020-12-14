@@ -14,7 +14,6 @@ router.post("/api/event", async (req, res) => {
     primary_color,
     reg_page_model,
     event_page_model,
-    status,
   } = req.body;
 
   // hard coded userId. Will eventualy pull from request params.
@@ -98,8 +97,8 @@ router.post("/api/event", async (req, res) => {
   // add the event to the event table. Make it the current event
   const newEvent = await db.query(
     `INSERT INTO event 
-			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, status, reg_page_model, event_page_model) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, reg_page_model, event_page_model) 
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
 		RETURNING *`,
     [
       title,
@@ -111,7 +110,6 @@ router.post("/api/event", async (req, res) => {
       primary_color,
       true,
       userId,
-      status,
       pgRegModel.rows[0].id,
       pgEventModel.rows[0].id,
     ],
@@ -215,7 +213,7 @@ router.get("/api/event/link", async (req, res) => {
 router.delete("/api/event/id", async (req, res) => {
   const { id } = req.query;
   const response = await db.query(
-    "UPDATE event SET status=-1 WHERE id=$1",
+    "UPDATE event SET status='deleted' WHERE id=$1",
     [id],
     (err, res) => {
       if (err) {
@@ -230,7 +228,7 @@ router.delete("/api/event/id", async (req, res) => {
 router.put("/api/event/id/restore", async (req, res) => {
   const { id } = req.body;
   const response = await db.query(
-    "UPDATE event SET status=0 WHERE id=$1",
+    "UPDATE event SET status='draft' WHERE id=$1",
     [id],
     (err, res) => {
       if (err) {
