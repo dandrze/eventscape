@@ -6,7 +6,6 @@ import { ToastContainer } from "react-toastify";
 import "./pageEditor.css";
 import * as actions from "../actions";
 import PageSectionEditor from "./pageSectionEditor";
-import { banner, hero, body } from "./designBlockModels";
 import Tooltip from "@material-ui/core/Tooltip";
 import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
