@@ -15,6 +15,7 @@ import {
 import {
   regPageModelTemplate,
   eventPageModelTemplate,
+  emaillistTemplate,
 } from "../templates/newEventTemplates";
 
 export const createEvent = (
@@ -35,12 +36,13 @@ export const createEvent = (
     time_zone,
     primary_color,
     reg_page_model: regPageModelTemplate(title),
-    event_page_model: eventPageModelTemplate(title, startDate, endDate),
+    event_page_model: eventPageModelTemplate(title, start_date, end_date),
+    emails: emaillistTemplate(start_date),
   };
 
   const emails = emaillistTemplate(start_date);
 
-  const res = await api.post("/api/event", event, emails);
+  const res = await api.post("/api/event", event);
 
   if (res.status === 200) {
     await dispatch({
@@ -144,6 +146,8 @@ export const publishPage = () => async (dispatch, getState) => {
 
 export const isLinkAvailable = (link) => async (dispatch) => {
   const res = await api.get("/api/model/link", { params: { link } });
+
+  console.log(res);
 
   if (res.data.length == 0) {
     return true;
