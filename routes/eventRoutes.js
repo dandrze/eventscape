@@ -14,6 +14,7 @@ router.post("/api/event", async (req, res) => {
     primary_color,
     reg_page_model,
     event_page_model,
+    emails,
   } = req.body;
 
   // hard coded userId. Will eventualy pull from request params.
@@ -119,6 +120,30 @@ router.post("/api/event", async (req, res) => {
       }
     }
   );
+
+  console.log(newEvent);
+
+  // add the emails for this event
+  for (var email of emails) {
+    await db.query(
+      `INSERT INTO email 
+			(subject, recipients, send_date, html, event) 
+		VALUES ($1, $2, $3, $4, $5)
+		RETURNING *`,
+      [
+        email.subject,
+        email.recipients,
+        email.send_date,
+        email.html,
+        newEvent.rows[0].id,
+      ],
+      (err, res) => {
+        if (err) {
+          throw res.status(500).send(Error);
+        }
+      }
+    );
+  }
 
   res.status(200).send(newEvent.rows[0]);
 });
