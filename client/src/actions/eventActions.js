@@ -1,16 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
 import {
-  logoHeaderModel,
-  logoHeaderRightModel,
-  heroBannerModel,
-  registrationFormDescription,
-  titleTimeModel,
-  streamChatReact,
-  blankModel,
-  registrationFormReact,
-} from "../components/designBlockModels";
-import {
   FETCH_EVENT,
   CREATE_EVENT,
   UPDATE_EVENT,
@@ -22,7 +12,10 @@ import {
   fetchModelFromState,
   saveModel,
 } from "./modelActions";
-import { model } from "mongoose";
+import {
+  regPageModelTemplate,
+  eventPageModelTemplate,
+} from "../templates/newEventTemplates";
 
 export const createEvent = (
   title,
@@ -33,41 +26,6 @@ export const createEvent = (
   time_zone,
   primary_color
 ) => async (dispatch) => {
-  const reg_page_model = [
-    { html: logoHeaderModel(), name: "banner" },
-    {
-      html: heroBannerModel(title),
-      name: "heroBanner",
-    },
-    {
-      html: registrationFormDescription(),
-      name: "registration",
-      is_react: true,
-      react_component: registrationFormReact,
-    },
-  ];
-
-  const event_page_model = [
-    {
-      html: logoHeaderRightModel(),
-      name: "bannerRight",
-    },
-    {
-      html: titleTimeModel(title, start_date, end_date),
-      name: "titleTime",
-    },
-    {
-      html: null,
-      name: "streamChat",
-      is_react: true,
-      react_component: streamChatReact,
-    },
-    {
-      html: blankModel(),
-      name: "blankModel",
-    },
-  ];
-
   const event = {
     title,
     link,
@@ -76,21 +34,24 @@ export const createEvent = (
     end_date,
     time_zone,
     primary_color,
-    reg_page_model,
-    event_page_model,
+    reg_page_model: regPageModelTemplate(title),
+    event_page_model: eventPageModelTemplate(title, startDate, endDate),
   };
 
-  const res = await api.post("/api/event", event);
+  const emails = emaillistTemplate(start_date);
+
+  const res = await api.post("/api/event", event, emails);
 
   if (res.status === 200) {
     await dispatch({
       type: CREATE_EVENT,
       payload: res.data,
     });
+    toast.success("Event successfully created");
 
     await dispatch(fetchModelFromState());
   } else {
-    toast.error("Error when saving: " + res.statusText);
+    toast.error("Error when creating new event: " + res.statusText);
   }
 };
 
@@ -121,6 +82,7 @@ export const updateEvent = (
       type: UPDATE_EVENT,
       payload: res.data,
     });
+    toast.success("Event successfully saved.");
   } else {
     toast.error("Error when saving: " + res.statusText);
   }

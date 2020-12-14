@@ -28,7 +28,7 @@ import {
   registrationFormHeader,
   registrationFormReact,
   registrationFormDescription,
-} from "./designBlockModels";
+} from "../templates/designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
   root: {
