@@ -15,7 +15,6 @@ import Event_Details from "./pages/event-details";
 import My_Events from "./pages/my-events";
 import Design from "./pages/design";
 import Communication from "./pages/communication";
-import EmailEditor from "./pages/emailEditor";
 import Registrations from "./pages/registrations";
 import Analytics from "./pages/analytics";
 import Messaging from "./pages/messaging";
@@ -66,7 +65,6 @@ function App(props) {
         <Route exact path="/design" component={Design} />
         <Route exact path="/website-settings" component={WebsiteSettings} />
         <Route exact path="/communication" component={Communication} />
-        <Route exact path="/communication-editor" component={EmailEditor} />
         <Route exact path="/registrations" component={Registrations} />
         <Route exact path="/analytics" component={Analytics} />
         <Route exact path="/messaging" component={Messaging} />

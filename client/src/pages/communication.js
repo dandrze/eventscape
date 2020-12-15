@@ -1,10 +1,16 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+
 import NavBar3 from "../components/navBar3.js";
 import ScheduledEmails from "../components/ScheduledEmails.js";
+import EmailEditor from "../components/emailEditor";
 import * as actions from "../actions";
 
 const Communication = (props) => {
+  const [openEditor, setOpenEditor] = useState(false);
+
   useEffect(() => {
     fetchData();
   }, []);
@@ -16,13 +22,35 @@ const Communication = (props) => {
     }
   };
 
+  const handleCloseEditor = () => {
+    setOpenEditor(false);
+  };
+
+  const handleOpenEditor = () => {
+    setOpenEditor(true);
+  };
+
   return (
     <div>
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openEditor}
+        onClose={handleCloseEditor}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        disableAutoFocus={true}
+      >
+        <EmailEditor handleClose={handleCloseEditor} />
+      </Modal>
       <NavBar3
         displaySideNav="true"
         content={
           <div>
-            <ScheduledEmails key={props.email} />
+            <ScheduledEmails key={props.email} handleAdd={handleOpenEditor} />
             <div style={{ color: "#F8F8F8" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut

@@ -70,10 +70,11 @@ function ScheduledEmails(props) {
 
   useEffect(() => {
     const formattedEmailList = props.email.map((email) => {
-      const emailDate = new Date(email.send_date);
       return {
         ...email,
-        send_date: emailDate.toLocaleString(),
+        send_date: email.send_date
+          ? new Date(email.send_date).toLocaleString()
+          : "Upon Registration",
         status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
       };
     });
@@ -118,10 +119,22 @@ function ScheduledEmails(props) {
       icon: LibraryAdd,
       tooltip: "Duplicate Email",
       onClick: (event, rowData) => {
-        //add stuff here
+        addEmail(rowData);
+      },
+    },
+    {
+      icon: AddBox,
+      tooltip: "Add Email",
+      isFreeAction: true,
+      onClick: (event) => {
+        props.handleAdd();
       },
     },
   ];
+
+  const addEmail = (email) => {
+    console.log(email);
+  };
 
   return (
     <div className="shadow-border container-width">
@@ -137,26 +150,6 @@ function ScheduledEmails(props) {
             Container: (props) => <Paper {...props} elevation={0} />,
           }}
           editable={{
-            onRowAdd: (newData) =>
-              new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve();
-                }, 600);
-              }),
-            /*onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
-              resolve();
-              if (oldData) {
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),*/
-
             onRowDelete: (oldData) =>
               new Promise((resolve) => {
                 setTimeout(() => {
