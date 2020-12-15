@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import logo from "./logo.svg";
 import "./App.css";
@@ -27,22 +28,31 @@ import Test from "./pages/test";
 
 //import "froala-editor/css/froala_style.min.css";
 
-function App() {
+function App(props) {
   const path = window.location.host.split(".");
+  const [dataFetched, setDataFetched] = useState(false);
 
-  if (
-    path[0] !== "localhost:3000" &&
-    path[0] !== "eventscape" &&
-    path[0] !== "www"
-  ) {
-    return (
-      <div className="App">
-        <header className="App-header">
-          <Published subdomain={path[0]} />
-        </header>
-      </div>
-    );
-  }
+  useEffect(() => {
+    if (
+      path[0] !== "localhost:3000" &&
+      path[0] !== "eventscape" &&
+      path[0] !== "www"
+    ) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <Published subdomain={path[0]} />
+          </header>
+        </div>
+      );
+    } else {
+      fetchDataAsync();
+    }
+  }, []);
+
+  const fetchDataAsync = async () => {
+    setDataFetched(await props.fetchEvent());
+  };
 
   return (
     <div className="App">
