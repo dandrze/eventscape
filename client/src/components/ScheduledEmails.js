@@ -23,6 +23,9 @@ import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import * as actions from "../actions";
+import { recipients } from "../model/enums";
+
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
   Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -54,6 +57,10 @@ function ScheduledEmails(props) {
       field: "subject",
     },
     {
+      title: "From",
+      field: "from_name",
+    },
+    {
       title: "To",
       field: "recipients",
     },
@@ -70,17 +77,20 @@ function ScheduledEmails(props) {
 
   useEffect(() => {
     const formattedEmailList = props.email.map((email) => {
+      // start with the event start date. Then modify if by adding the minutes_from_event
+      const sendDate = new Date(props.event.start_date);
+      sendDate.setMinutes(sendDate.getMinutes() + email.minutes_from_event);
+
       return {
         ...email,
-        send_date: email.send_date
-          ? new Date(email.send_date).toLocaleString()
-          : "Upon Registration",
+        send_date:
+          email.recipients === recipients.NEW_REGISTRANTS
+            ? "Upon Registration"
+            : sendDate.toLocaleString(),
         status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
       };
     });
     setData(formattedEmailList);
-    console.log(formattedEmailList);
-    console.log(props.email);
   }, []);
 
   const options = {
@@ -119,7 +129,7 @@ function ScheduledEmails(props) {
       icon: LibraryAdd,
       tooltip: "Duplicate Email",
       onClick: (event, rowData) => {
-        addEmail(rowData);
+        //addEmail(rowData);
       },
     },
     {
@@ -131,10 +141,6 @@ function ScheduledEmails(props) {
       },
     },
   ];
-
-  const addEmail = (email) => {
-    console.log(email);
-  };
 
   return (
     <div className="shadow-border container-width">
@@ -152,9 +158,8 @@ function ScheduledEmails(props) {
           editable={{
             onRowDelete: (oldData) =>
               new Promise((resolve) => {
-                setTimeout(() => {
-                  resolve();
-                }, 600);
+                props.handleDelete(oldData.id);
+                resolve();
               }),
           }}
         />
@@ -168,7 +173,7 @@ function ScheduledEmails(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { email: state.email, settings: state.settings };
+  return { email: state.email, settings: state.settings, event: state.event };
 };
 
-export default connect(mapStateToProps)(ScheduledEmails);
+export default connect(mapStateToProps, actions)(ScheduledEmails);

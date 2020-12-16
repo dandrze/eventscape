@@ -235,26 +235,11 @@ router.get("/api/event/link", async (req, res) => {
   res.send(events.rows[0]);
 });
 
-router.delete("/api/event/id", async (req, res) => {
-  const { id } = req.query;
+router.put("/api/event/id/status", async (req, res) => {
+  const { id, status } = req.body;
   const response = await db.query(
-    "UPDATE event SET status='deleted' WHERE id=$1",
-    [id],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
-
-  res.send(response);
-});
-
-router.put("/api/event/id/restore", async (req, res) => {
-  const { id } = req.body;
-  const response = await db.query(
-    "UPDATE event SET status='draft' WHERE id=$1",
-    [id],
+    "UPDATE event SET status=$1 WHERE id=$2",
+    [id, status],
     (err, res) => {
       if (err) {
         throw res.status(500).send(err);

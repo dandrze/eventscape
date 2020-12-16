@@ -57,7 +57,7 @@
   align-items: center;
 }
 
-#emailLabel {
+.emailLabel {
   width: auto;
   text-align: left;
   margin-right: 0.5em;

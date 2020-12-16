@@ -8,7 +8,13 @@ import {
   blankModel,
   registrationFormReact,
 } from "./designBlockModels";
-import { registrationConfirmation } from "./emailTemplates";
+import {
+  invitation,
+  registrationConfirmation,
+  reminderOneDay,
+  reminderOneHour,
+  followUp,
+} from "./emailTemplates";
 
 export const regPageModelTemplate = (title) => {
   return [
@@ -51,35 +57,10 @@ export const eventPageModelTemplate = (title, startDate, endDate) => {
 
 export const emaillistTemplate = (eventStartDate) => {
   return [
-    {
-      subject: "You are Invited To {Event_Name}",
-      recipients: "All Registrants",
-      send_date: eventStartDate,
-      html: registrationConfirmation,
-    },
-    {
-      subject: "Thank You for Registering for {Event_Name}",
-      recipients: "New Registrants",
-      send_on_registration: true,
-      html: registrationConfirmation,
-    },
-    {
-      subject: "Reminder: {Event_Name} Tomorrow",
-      recipients: "All Registrants",
-      send_date: eventStartDate,
-      html: registrationConfirmation,
-    },
-    {
-      subject: "Reminder: {Event_Name} in One Hour",
-      recipients: "All Registrants",
-      send_date: eventStartDate,
-      html: registrationConfirmation,
-    },
-    {
-      subject: "Thank You for Attending {Event_Name}",
-      recipients: "All Registrants",
-      send_date: eventStartDate,
-      html: registrationConfirmation,
-    },
+    invitation,
+    registrationConfirmation,
+    reminderOneDay,
+    reminderOneHour,
+    followUp,
   ];
 };

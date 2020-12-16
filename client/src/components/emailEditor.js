@@ -1,4 +1,5 @@
 import React, { Component, useState } from "react";
+import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import "./emailEditor.css";
 import BootstrapInput from "../components/selectInput";
@@ -25,23 +26,33 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Cancel from "../icons/cancel.svg";
 import { Hidden } from "@material-ui/core";
 
+import * as actions from "../actions";
+import { recipients as recipientsEnum } from "../model/enums";
+
 const EmailEditor = (props) => {
   const classes = useStyles();
 
   const [from, setFrom] = useState("Enter From Name");
-  const [subject, setSubject] = useState("Enter Subject");
+  const [subject, setSubject] = useState(
+    "Thank You for Registering for {Event_Name}"
+  );
   const [days, setDays] = useState(0);
   const [hours, setHours] = useState(0);
   const [mins, setMins] = useState(0);
+  const [offset, setOffset] = useState(-1);
   const [
     html,
     setHtml,
   ] = useState(`<p style="text-align: left">Hello {first_name},</p>
   <p style="text-align: left">Thank you for registering for {event_name}.</p>`);
-  const [status, setStatus] = React.useState("draft");
-  const [recipients, setRecipients] = useState("newRegistrants");
+  const [status, setStatus] = useState("draft");
+  const [recipients, setRecipients] = useState(recipientsEnum.NEW_REGISTRANTS);
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
+  };
+
+  const handleChangeStatus = (event) => {
+    setStatus(event.target.value);
   };
 
   const handleChangeFrom = (event) => {
@@ -61,6 +72,27 @@ const EmailEditor = (props) => {
 
   const handleChangeMins = (event) => {
     setMins(forceInRange(event.target.value, 0, 59));
+  };
+
+  const handleChangeOffset = (event) => {
+    setOffset(event.target.value);
+  };
+
+  const handleSave = async () => {
+    const daysInMinutes = Number(days) * 24 * 60;
+    const hoursInMinutes = Number(hours) * 60;
+    const minutesFromEvent =
+      offset * (Number(mins) + hoursInMinutes + daysInMinutes);
+
+    await props.addEmail({
+      recipients,
+      status,
+      from,
+      subject,
+      minutesFromEvent,
+    });
+
+    props.handleSubmit();
   };
 
   const forceInRange = (num, lower, upper) => {
@@ -93,9 +125,22 @@ const EmailEditor = (props) => {
         <div id="topButtons">
           <SendTestEmail />
           <div id="status">
-            <StatusSelect />
+            <FormControl className={classes.margin}>
+              <InputLabel id="demo-customized-select-label">Status</InputLabel>
+              <Select
+                labelId="demo-customized-select-label"
+                id="demo-customized-select"
+                value={status}
+                onChange={handleChangeStatus}
+                input={<BootstrapInput />}
+              >
+                <MenuItem value={"active"}>Active</MenuItem>
+                <MenuItem value={"draft"}>Draft</MenuItem>
+                <MenuItem value={"disabled"}>Disabled</MenuItem>
+              </Select>
+            </FormControl>
           </div>
-          <button className="Button1" id="save">
+          <button className="Button1" id="save" onClick={handleSave}>
             Save
           </button>
         </div>
@@ -104,7 +149,7 @@ const EmailEditor = (props) => {
           <div style={{ overflow: "hidden" }}>
             <div id="emailInputs">
               <div className="inputDiv">
-                <label htmlFor="toSelect" id="emailLabel">
+                <label htmlFor="toSelect" className="emailLabel">
                   To:{" "}
                 </label>
                 <div id="toSelect">
@@ -116,11 +161,13 @@ const EmailEditor = (props) => {
                       onChange={handleChangeRecipients}
                       input={<BootstrapInput />}
                     >
-                      <MenuItem value={"emailList"}>Email List</MenuItem>
-                      <MenuItem value={"newRegistrants"}>
+                      <MenuItem value={recipientsEnum.EMAIL_LIST}>
+                        Email List
+                      </MenuItem>
+                      <MenuItem value={recipientsEnum.NEW_REGISTRANTS}>
                         New Registrants
                       </MenuItem>
-                      <MenuItem value={"allRegistrants"}>
+                      <MenuItem value={recipientsEnum.ALL_REGISTRANTS}>
                         All Registrants
                       </MenuItem>
                     </Select>
@@ -132,7 +179,7 @@ const EmailEditor = (props) => {
               </div>
 
               <div className="inputDiv">
-                <label htmlFor="from" id="emailLabel">
+                <label htmlFor="from" className="emailLabel">
                   From:{" "}
                 </label>
                 <input
@@ -147,7 +194,7 @@ const EmailEditor = (props) => {
               </div>
 
               <div className="inputDiv">
-                <label htmlFor="subject" id="emailLabel">
+                <label htmlFor="subject" className="emailLabel">
                   Subject:{" "}
                 </label>
                 <input
@@ -155,17 +202,18 @@ const EmailEditor = (props) => {
                   className="emailInput"
                   name="subject"
                   placeholder=""
-                  value="Thank You for Registering for {Event_Name}"
+                  value={subject}
+                  onChange={handleChangeSubject}
                 ></input>
               </div>
 
               <div className="inputDiv">
-                <label htmlFor="sendTime" id="emailLabel">
+                <label htmlFor="sendTime" className="emailLabel">
                   Scheduled Send Time:{" "}
                 </label>
                 <br></br>
-                {recipients === "newRegistrants" ? (
-                  <label id="emailLabel">Upon Registration</label>
+                {recipients === recipientsEnum.NEW_REGISTRANTS ? (
+                  <label className="emailLabel">Upon Registration</label>
                 ) : (
                   <>
                     <TextField
@@ -178,7 +226,7 @@ const EmailEditor = (props) => {
                       onChange={handleChangeDays}
                       value={days}
                     />
-                    <label id="emailLabel">days </label>
+                    <label className="emailLabel">days </label>
 
                     <TextField
                       id="number-hours"
@@ -190,7 +238,7 @@ const EmailEditor = (props) => {
                       onChange={handleChangeHours}
                       value={hours}
                     />
-                    <label id="emailLabel">hours </label>
+                    <label className="emailLabel">hours </label>
                     <TextField
                       id="number-mins"
                       type="number"
@@ -201,9 +249,14 @@ const EmailEditor = (props) => {
                       onChange={handleChangeMins}
                       value={mins}
                     />
-                    <label id="emailLabel">minutes </label>
+                    <label className="emailLabel">minutes </label>
 
-                    <label id="emailLabel">before event start time</label>
+                    <Select value={offset} onChange={handleChangeOffset}>
+                      <MenuItem value={-1}>Before</MenuItem>
+                      <MenuItem value={1}>After</MenuItem>
+                    </Select>
+
+                    <label className="emailLabel">{" event start time"}</label>
                   </>
                 )}
               </div>
@@ -232,96 +285,4 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function StatusSelect() {
-  const classes = useStyles();
-  const [status, setStatus] = React.useState("draft");
-  const handleChange = (event) => {
-    setStatus(event.target.value);
-  };
-  return (
-    <div>
-      <FormControl className={classes.margin}>
-        <InputLabel id="demo-customized-select-label">Status</InputLabel>
-        <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
-          value={status}
-          onChange={handleChange}
-          input={<BootstrapInput />}
-        >
-          <MenuItem value={"active"}>Active</MenuItem>
-          <MenuItem value={"draft"}>Draft</MenuItem>
-          <MenuItem value={"disabled"}>Disabled</MenuItem>
-        </Select>
-      </FormControl>
-    </div>
-  );
-}
-
-function ToSelect() {
-  const classes = useStyles();
-  const [to, setTo] = React.useState("newRegistrants");
-  const handleChange = (event) => {
-    setTo(event.target.value);
-  };
-
-  return (
-    <div>
-      <FormControl className={classes.margin}>
-        <Select
-          labelId="demo-customized-select-label"
-          id="demo-customized-select"
-          value={to}
-          onChange={handleChange}
-          input={<BootstrapInput />}
-        >
-          <MenuItem value={"emailList"}>Email List</MenuItem>
-          <MenuItem value={"newRegistrants"}>New Registrants</MenuItem>
-          <MenuItem value={"allRegistrants"}>All Registrants</MenuItem>
-        </Select>
-      </FormControl>
-      <div id="editEmailList">{to === "emailList" ? <EmailList /> : null}</div>
-    </div>
-  );
-}
-
-/*for date time picker*/
-
-function DateTimePickers() {
-  // The first commit of Material-UI
-  const [selectedDate, setSelectedDate] = React.useState(
-    new Date("2014-08-18T21:11:54")
-  );
-
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-  };
-
-  return (
-    <MuiPickersUtilsProvider utils={DateFnsUtils}>
-      <KeyboardDatePicker
-        disableToolbar
-        variant="inline"
-        format="MM/dd/yyyy"
-        margin="normal"
-        id="date-picker-inline"
-        value={selectedDate}
-        onChange={handleDateChange}
-        KeyboardButtonProps={{
-          "aria-label": "change date",
-        }}
-      />
-      <KeyboardTimePicker
-        margin="normal"
-        id="time-picker"
-        value={selectedDate}
-        onChange={handleDateChange}
-        KeyboardButtonProps={{
-          "aria-label": "change time",
-        }}
-      />
-    </MuiPickersUtilsProvider>
-  );
-}
-
-export default EmailEditor;
+export default connect(null, actions)(EmailEditor);

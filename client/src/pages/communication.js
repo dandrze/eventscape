@@ -20,14 +20,25 @@ const Communication = (props) => {
     if (event) {
       props.fetchEmailList(event.data.id);
     }
+    console.log("fetch data called");
   };
 
   const handleCloseEditor = () => {
     setOpenEditor(false);
   };
 
+  const handleSubmitEditor = () => {
+    setOpenEditor(false);
+    fetchData();
+  };
+
   const handleOpenEditor = () => {
     setOpenEditor(true);
+  };
+
+  const handleDeleteEmail = async (id) => {
+    await props.deleteEmail(id);
+    fetchData();
   };
 
   return (
@@ -44,13 +55,20 @@ const Communication = (props) => {
         }}
         disableAutoFocus={true}
       >
-        <EmailEditor handleClose={handleCloseEditor} />
+        <EmailEditor
+          handleClose={handleCloseEditor}
+          handleSubmit={handleSubmitEditor}
+        />
       </Modal>
       <NavBar3
         displaySideNav="true"
         content={
           <div>
-            <ScheduledEmails key={props.email} handleAdd={handleOpenEditor} />
+            <ScheduledEmails
+              key={props.email}
+              handleAdd={handleOpenEditor}
+              handleDelete={handleDeleteEmail}
+            />
             <div style={{ color: "#F8F8F8" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
