@@ -3,13 +3,14 @@ const keys = require("../config/keys");
 
 sgMail.setApiKey(keys.sendGridKey);
 
-const sendEmail = async () => {
+const sendEmail = async (email) => {
+  const { from, subject, html } = email;
   const msg = {
     to: "andrzejewski.d@gmail.com",
     from: "david@homehop.ca",
-    subject: "Sending with Twilio SendGrid is Fun",
-    text: "and easy to do anywhere, even with Node.js",
-    html: "<strong>and easy to do anywhere, even with Node.js</strong>",
+    subject,
+    text: html,
+    html,
   };
 
   try {
