@@ -141,7 +141,9 @@ const Table = (props) => {
         const res = await props.setCurrentEvent(rowData.id);
 
         // fetch the new event
+        props.setLoaded(false);
         await props.fetchEvent();
+        props.setLoaded(true);
 
         props.history.push("/design");
       },
@@ -178,7 +180,9 @@ const Table = (props) => {
       tooltip: "Restore Event",
       onClick: async (event, rowData) => {
         await props.restoreEvent(rowData.id);
+        props.setLoaded(false);
         await props.fetchEventList();
+        props.setLoaded(true);
       },
     },
   ];
@@ -208,7 +212,9 @@ const Table = (props) => {
         return null;
       }
     }
-    props.fetchEventList();
+    props.setLoaded(false);
+    await props.fetchEventList();
+    props.setLoaded(true);
   };
 
   if (props.settings.loaded) {

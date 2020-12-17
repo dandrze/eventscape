@@ -21,8 +21,8 @@ class PageEditor extends Component {
     this.handleNavAlertClose = this.handleNavAlertClose.bind(this);
   }
 
-  componentDidMount() {
-    this.props.fetchModelFromState();
+  async componentDidMount() {
+    await this.props.fetchModelFromState();
   }
 
   showNavAlert(location) {

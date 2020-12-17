@@ -18,20 +18,23 @@ const Communication = (props) => {
   }, []);
 
   const fetchData = async () => {
+    props.setLoaded(false);
     const event = await props.fetchEvent();
+    props.setLoaded(true);
     if (event) {
-      props.fetchEmailList(event.data.id);
+      props.setLoaded(false);
+      await props.fetchEmailList(event.data.id);
+      props.setLoaded(true);
     }
-    console.log("fetch data called");
   };
 
   const handleCloseEditor = () => {
     setOpenEditor(false);
   };
 
-  const handleSubmitEditor = () => {
+  const handleSubmitEditor = async () => {
     setOpenEditor(false);
-    props.fetchEmailList(props.event.id);
+    await props.fetchEmailList(props.event.id);
   };
 
   const handleEditEmail = (data) => {
@@ -46,12 +49,12 @@ const Communication = (props) => {
 
   const handleDeleteEmail = async (id) => {
     await props.deleteEmail(id);
-    props.fetchEmailList(props.event.id);
+    await props.fetchEmailList(props.event.id);
   };
 
   const handleDuplicateEmail = async (data) => {
     await props.addEmail(data);
-    props.fetchEmailList(props.event.id);
+    await props.fetchEmailList(props.event.id);
   };
 
   return (
@@ -79,18 +82,11 @@ const Communication = (props) => {
         content={
           <div>
             <ScheduledEmails
-              key={props.email}
               handleAdd={handleAddEmail}
               handleDelete={handleDeleteEmail}
               handleEdit={handleEditEmail}
               handleDuplicate={handleDuplicateEmail}
             />
-            <div style={{ color: "#F8F8F8" }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo consequat.
-            </div>
           </div>
         }
       />

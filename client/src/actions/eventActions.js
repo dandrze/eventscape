@@ -1,12 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import {
-  FETCH_EVENT,
-  CREATE_EVENT,
-  UPDATE_EVENT,
-  LOAD_STARTED,
-  LOAD_FINISHED,
-} from "./types";
+import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "./types";
 import {
   fetchModelFromId,
   fetchModelFromState,
@@ -93,9 +87,7 @@ export const updateEvent = (
 export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
   try {
-    dispatch({ type: LOAD_STARTED });
     const event = await api.get("/api/event/current");
-    dispatch({ type: LOAD_FINISHED });
     if (event) {
       dispatch({ type: FETCH_EVENT, payload: event.data });
       dispatch(fetchModelFromState());
@@ -112,9 +104,7 @@ export const fetchEvent = () => async (dispatch) => {
 
 export const fetchEventFromId = (id) => async (dispatch) => {
   // call the api and return the event in json
-  dispatch({ type: LOAD_STARTED });
   const event = await api.get("/api/event/id", { params: { id } });
-  dispatch({ type: LOAD_FINISHED });
 
   if (event) {
     dispatch({ type: FETCH_EVENT, payload: event.data });

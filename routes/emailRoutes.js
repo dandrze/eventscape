@@ -21,13 +21,13 @@ router.get("/api/email/all", async (req, res) => {
 
 router.post("/api/email", async (req, res) => {
   const { event, email } = req.body;
-  const { recipients, status, from, subject, minutesFromEvent } = email;
+  const { recipients, status, from, subject, minutesFromEvent, html } = email;
 
   console.log(from);
 
   const newEmail = await db.query(
-    "INSERT INTO email (event, from_name, recipients, status, subject, minutes_from_event) VALUES ($1,$2,$3,$4,$5, $6) RETURNING *",
-    [event, from, recipients, status, subject, minutesFromEvent],
+    "INSERT INTO email (event, from_name, recipients, status, subject, minutes_from_event, html) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+    [event, from, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
         console.log(err);
@@ -56,13 +56,13 @@ router.delete("/api/email", async (req, res) => {
 
 router.put("/api/email", async (req, res) => {
   const { id, email } = req.body;
-  const { recipients, status, from, subject, minutesFromEvent } = email;
+  const { recipients, status, from, subject, minutesFromEvent, html } = email;
 
   console.log(from);
 
   const newEmail = await db.query(
-    "UPDATE email SET from_name=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6 WHERE id=$1 RETURNING *",
-    [id, from, recipients, status, subject, minutesFromEvent],
+    "UPDATE email SET from_name=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6, html=$7 WHERE id=$1 RETURNING *",
+    [id, from, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
         console.log(err);

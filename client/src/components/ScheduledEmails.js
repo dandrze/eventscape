@@ -91,7 +91,8 @@ function ScheduledEmails(props) {
       };
     });
     setData(formattedEmailList);
-  }, []);
+    console.log(formattedEmailList);
+  }, [props.email]);
 
   const options = {
     actionsColumnIndex: -1,
@@ -144,30 +145,33 @@ function ScheduledEmails(props) {
 
   return (
     <div className="shadow-border container-width">
-      {props.settings.loaded ? (
-        <MaterialTable
-          title="Scheduled Emails"
-          columns={columns}
-          data={data}
-          options={options}
-          icons={tableIcons}
-          actions={actions}
-          components={{
-            Container: (props) => <Paper {...props} elevation={0} />,
-          }}
-          editable={{
-            onRowDelete: (oldData) =>
-              new Promise((resolve) => {
-                props.handleDelete(oldData.id);
-                resolve();
-              }),
-          }}
-        />
-      ) : (
-        <div style={{ width: "630px", padding: "50px" }}>
-          <CircularProgress />
-        </div>
-      )}
+      <MaterialTable
+        title="Scheduled Emails"
+        columns={columns}
+        data={data}
+        options={options}
+        icons={tableIcons}
+        actions={actions}
+        components={{
+          Container: (props) => <Paper {...props} elevation={0} />,
+        }}
+        editable={{
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              props.handleDelete(oldData.id);
+              resolve();
+            }),
+        }}
+        localization={{
+          body: {
+            emptyDataSourceMessage: props.settings.loaded ? (
+              "No Emails Found"
+            ) : (
+              <CircularProgress />
+            ),
+          },
+        }}
+      />
     </div>
   );
 }

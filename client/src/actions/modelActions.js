@@ -10,8 +10,6 @@ import {
   SAVE_REG_MODEL,
   SAVE_EVENT_MODEL,
   MODEL_ISSAVED,
-  LOAD_STARTED,
-  LOAD_FINISHED,
   UPDATE_REACT_COMPONENT,
   FETCH_EVENT,
 } from "./types";
@@ -129,7 +127,6 @@ export const localSaveModel = () => (dispatch, getState) => {
 };
 
 export const fetchLivePage = (link) => async (dispatch) => {
-  dispatch({ type: LOAD_STARTED });
   const event = await api.get("/api/event/link", { params: { link } });
   dispatch({ type: FETCH_EVENT, payload: event.data });
 
@@ -140,8 +137,6 @@ export const fetchLivePage = (link) => async (dispatch) => {
     // if the events registration flag is false, show the event page
     await dispatch(fetchModelFromId(event.data.event_page_model));
   }
-
-  dispatch({ type: LOAD_FINISHED });
 };
 
 export const saveStreamSettings = (index, settings) => async (

@@ -101,6 +101,7 @@ const EmailEditor = (props) => {
         from,
         subject,
         minutesFromEvent,
+        html,
       });
     } else {
       await props.addEmail({
@@ -109,10 +110,15 @@ const EmailEditor = (props) => {
         from,
         subject,
         minutesFromEvent,
+        html,
       });
     }
 
     props.handleSubmit();
+  };
+
+  const handleHtmlChange = (updatedHtml) => {
+    setHtml(updatedHtml);
   };
 
   const forceInRange = (num, lower, upper) => {
@@ -123,10 +129,6 @@ const EmailEditor = (props) => {
     } else {
       return num;
     }
-  };
-
-  const buildMenuItems = (start, end) => {
-    return <MenuItem value={1}>1</MenuItem>;
   };
 
   return (
@@ -286,7 +288,7 @@ const EmailEditor = (props) => {
             </div>
 
             <div style={{ margin: "3%" }}>
-              <FroalaEmail />
+              <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
             </div>
           </div>
         </div>
