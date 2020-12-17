@@ -49,6 +49,11 @@ const Communication = (props) => {
     props.fetchEmailList(props.event.id);
   };
 
+  const handleDuplicateEmail = async (data) => {
+    await props.addEmail(data);
+    props.fetchEmailList(props.event.id);
+  };
+
   return (
     <div>
       <Modal
@@ -78,6 +83,7 @@ const Communication = (props) => {
               handleAdd={handleAddEmail}
               handleDelete={handleDeleteEmail}
               handleEdit={handleEditEmail}
+              handleDuplicate={handleDuplicateEmail}
             />
             <div style={{ color: "#F8F8F8" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do

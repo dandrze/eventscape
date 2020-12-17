@@ -129,7 +129,7 @@ function ScheduledEmails(props) {
       icon: LibraryAdd,
       tooltip: "Duplicate Email",
       onClick: (event, rowData) => {
-        //addEmail(rowData);
+        props.handleDuplicate(rowData);
       },
     },
     {
