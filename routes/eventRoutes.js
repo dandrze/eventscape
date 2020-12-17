@@ -237,8 +237,9 @@ router.get("/api/event/link", async (req, res) => {
 
 router.put("/api/event/id/status", async (req, res) => {
   const { id, status } = req.body;
+  console.log(req.body);
   const response = await db.query(
-    "UPDATE event SET status=$1 WHERE id=$2",
+    "UPDATE event SET status=$2 WHERE id=$1 RETURNING *",
     [id, status],
     (err, res) => {
       if (err) {
@@ -246,6 +247,8 @@ router.put("/api/event/id/status", async (req, res) => {
       }
     }
   );
+
+  console.log(response.rows);
 
   res.send(response);
 });

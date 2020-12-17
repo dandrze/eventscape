@@ -5,33 +5,50 @@ import { status as statusEnum } from "../model/enums";
 
 export const fetchEventList = () => async (dispatch) => {
   // call the api and return the event in json
+  try {
+    const eventList = await api.get("/api/event/all");
 
-  const eventList = await api.get("/api/event/all");
+    // if there are events
+    if (eventList) {
+      dispatch({ type: FETCH_EVENT_LIST, payload: eventList.data });
+    }
 
-  // if there are events
-  if (eventList) {
-    dispatch({ type: FETCH_EVENT_LIST, payload: eventList.data });
+    return true;
+  } catch (err) {
+    toast.error("Error fetching event list: " + err.toString());
+    return false;
   }
 };
 
 export const duplicateEvent = (id, link) => async (dispatch) => {
-  const res1 = await api.get("/api/event/id", { params: { id } });
-  const newEvent = {
-    ...res1.data,
-    link: link,
-    title: res1.data.title + " copy",
-  };
-  const res2 = await api.post("/api/event", newEvent);
-  toast.success("Event successfully duplicated");
-  return true;
+  try {
+    const res1 = await api.get("/api/event/id", { params: { id } });
+    const newEvent = {
+      ...res1.data,
+      link: link,
+      title: res1.data.title + " copy",
+    };
+    const res2 = await api.post("/api/event", newEvent);
+    toast.success("Event successfully duplicated");
+    return true;
+  } catch (err) {
+    toast.error("Error duplicating event: " + err.toString());
+    return false;
+  }
 };
 
 export const deleteEvent = (id) => async (dispatch) => {
-  const res = await api.put("/api/event/id/status", {
-    params: { id, status: statusEnum.DELETED },
-  });
-  toast.success("Event successfully deleted");
-  return true;
+  try {
+    const res = await api.put("/api/event/id/status", {
+      id,
+      status: statusEnum.DELETED,
+    });
+    toast.success("Event successfully deleted");
+    return true;
+  } catch (err) {
+    toast.error("Error deleting event: " + err.toString());
+    return false;
+  }
 };
 
 export const setCurrentEvent = (id) => async (dispatch) => {

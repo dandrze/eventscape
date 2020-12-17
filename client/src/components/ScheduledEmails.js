@@ -167,7 +167,9 @@ function ScheduledEmails(props) {
             emptyDataSourceMessage: props.settings.loaded ? (
               "No Emails Found"
             ) : (
-              <CircularProgress />
+              <div style={{ padding: "50px" }}>
+                <CircularProgress />
+              </div>
             ),
           },
         }}

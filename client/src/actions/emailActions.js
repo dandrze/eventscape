@@ -5,12 +5,16 @@ import { FETCH_EMAIL_LIST } from "./types";
 
 export const fetchEmailList = (event) => async (dispatch, getState) => {
   // call the api and return the event in json
+  try {
+    const res = await api.get("/api/email/all", { params: { event } });
 
-  const res = await api.get("/api/email/all", { params: { event } });
+    dispatch({ type: FETCH_EMAIL_LIST, payload: res.data });
 
-  dispatch({ type: FETCH_EMAIL_LIST, payload: res.data });
-
-  return true;
+    return true;
+  } catch (err) {
+    toast.error(`Error when fetching emails: ` + err.toString());
+    return false;
+  }
 };
 
 export const addEmail = (email) => async (dispatch, getState) => {

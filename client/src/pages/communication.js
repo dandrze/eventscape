@@ -34,7 +34,10 @@ const Communication = (props) => {
 
   const handleSubmitEditor = async () => {
     setOpenEditor(false);
-    await props.fetchEmailList(props.event.id);
+    props.setLoaded(false);
+    const res = await props.fetchEmailList(props.event.id);
+    console.log(res);
+    props.setLoaded(true);
   };
 
   const handleEditEmail = (data) => {
@@ -48,8 +51,10 @@ const Communication = (props) => {
   };
 
   const handleDeleteEmail = async (id) => {
+    props.setLoaded(false);
     await props.deleteEmail(id);
     await props.fetchEmailList(props.event.id);
+    props.setLoaded(true);
   };
 
   const handleDuplicateEmail = async (data) => {
