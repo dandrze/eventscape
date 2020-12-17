@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../db");
+const Scheduler = require("../services/Scheduler");
 
 router.get("/api/email/all", async (req, res) => {
   const { event } = req.query;
@@ -36,6 +37,15 @@ router.post("/api/email", async (req, res) => {
     }
   );
 
+  if (status === "Active") {
+    scheduleJob(
+      newEmail.rows[0].id,
+      { from, subject, html },
+      event,
+      minutesFromEvent
+    );
+  }
+
   res.send(newEmail.rows[0]);
 });
 
@@ -58,8 +68,6 @@ router.put("/api/email", async (req, res) => {
   const { id, email } = req.body;
   const { recipients, status, from, subject, minutesFromEvent, html } = email;
 
-  console.log(from);
-
   const newEmail = await db.query(
     "UPDATE email SET from_name=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6, html=$7 WHERE id=$1 RETURNING *",
     [id, from, recipients, status, subject, minutesFromEvent, html],
@@ -71,7 +79,48 @@ router.put("/api/email", async (req, res) => {
     }
   );
 
+  if (status === "Active") {
+    scheduleJob(
+      newEmail.rows[0].id,
+      { from, subject, html },
+      newEmail.rows[0].event,
+      minutesFromEvent
+    );
+  }
+
   res.send(newEmail.rows[0]);
 });
+
+router.post("/api/email/send", async (req, res) => {
+  const subject = "";
+  const recipients = [];
+  const body = "";
+  Scheduler.scheduleSend();
+
+  Scheduler.reschedule("myJob");
+
+  res.status(200).send();
+});
+
+const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
+  const { from, subject, html } = email;
+
+  const event = await db.query(
+    "SELECT * FROM event WHERE id=$1",
+    [eventId],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  console.log(event.rows[0].start_date);
+
+  const sendDate = new Date(event.rows[0].start_date);
+
+  console.log(sendDate);
+  //Scheduler.scheduleSend(jobName, from, subject, html, event, minutesFromEvent);
+};
 
 module.exports = router;
