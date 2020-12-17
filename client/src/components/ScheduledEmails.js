@@ -86,7 +86,11 @@ function ScheduledEmails(props) {
         send_date:
           email.recipients === recipients.NEW_REGISTRANTS
             ? "Upon Registration"
-            : sendDate.toLocaleString(),
+            : sendDate.toLocaleString("en-us", {
+                timeZoneName: "short",
+                timeZone: props.event.time_zone,
+              }),
+
         status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
       };
     });
