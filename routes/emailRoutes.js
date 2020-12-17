@@ -3,6 +3,7 @@ const router = express.Router();
 
 const db = require("../db");
 const Scheduler = require("../services/Scheduler");
+const { getEventFromId } = require("../db/Event");
 
 router.get("/api/email/all", async (req, res) => {
   const { event } = req.query;
@@ -91,36 +92,20 @@ router.put("/api/email", async (req, res) => {
   res.send(newEmail.rows[0]);
 });
 
-router.post("/api/email/send", async (req, res) => {
-  const subject = "";
-  const recipients = [];
-  const body = "";
-  Scheduler.scheduleSend();
-
-  Scheduler.reschedule("myJob");
-
-  res.status(200).send();
+router.get("/api/email/jobs", async (req, res) => {
+  res.send(Scheduler.scheduledJobs());
 });
 
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
   const { from, subject, html } = email;
 
-  const event = await db.query(
-    "SELECT * FROM event WHERE id=$1",
-    [eventId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const event = await getEventFromId(eventId);
 
-  console.log(event.rows[0].start_date);
+  const sendDate = new Date(event.start_date);
 
-  const sendDate = new Date(event.rows[0].start_date);
+  sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
-  console.log(sendDate);
-  //Scheduler.scheduleSend(jobName, from, subject, html, event, minutesFromEvent);
+  Scheduler.scheduleSend(jobName, { from, subject, html }, sendDate);
 };
 
 module.exports = router;
