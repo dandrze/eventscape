@@ -72,7 +72,7 @@ const EmailEditor = (props) => {
   };
 
   const handleChangeDays = (event) => {
-    setDays(forceInRange(event.target.value, 0, 180));
+    setDays(forceInRange(event.target.value, 0, global.emailSendDateMaxDays));
   };
 
   const handleChangeHours = (event) => {

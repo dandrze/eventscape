@@ -10,35 +10,37 @@ import thunk from "redux-thunk";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
 
 import reducers from "./reducers";
+//import global variables
+import "./global";
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
 
 const theme = createMuiTheme({
-	palette: {
-		primary: {
-			main: "#B0281C",
-		},
-		secondary: {
-			main: "#B0281C",
-		},
-	},
-	typography: {
-		fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
-	},
+  palette: {
+    primary: {
+      main: "#B0281C",
+    },
+    secondary: {
+      main: "#B0281C",
+    },
+  },
+  typography: {
+    fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+  },
 });
 
 ReactDOM.render(
-	<React.StrictMode>
-		<BrowserRouter>
-			<MuiThemeProvider theme={theme}>
-				<Provider store={store}>
-					<App />
-				</Provider>
-			</MuiThemeProvider>
-		</BrowserRouter>
-	</React.StrictMode>,
-	document.getElementById("root")
+  <React.StrictMode>
+    <BrowserRouter>
+      <MuiThemeProvider theme={theme}>
+        <Provider store={store}>
+          <App />
+        </Provider>
+      </MuiThemeProvider>
+    </BrowserRouter>
+  </React.StrictMode>,
+  document.getElementById("root")
 );
 
 // If you want your app to work offline and load faster, you can change
