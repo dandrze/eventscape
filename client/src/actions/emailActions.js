@@ -38,3 +38,13 @@ export const deleteEmail = (id) => async (dispatch) => {
     return false;
   }
 };
+
+export const editEmail = (id, email) => async (dispatch, getState) => {
+  try {
+    const res = await api.put("/api/email", { id, email });
+    toast.success("Successfully updated email");
+  } catch (err) {
+    toast.error(`Error when updating email. Error: ` + err.toString());
+    return false;
+  }
+};

@@ -54,4 +54,24 @@ router.delete("/api/email", async (req, res) => {
   res.send(response);
 });
 
+router.put("/api/email", async (req, res) => {
+  const { id, email } = req.body;
+  const { recipients, status, from, subject, minutesFromEvent } = email;
+
+  console.log(from);
+
+  const newEmail = await db.query(
+    "UPDATE email SET from_name=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6 WHERE id=$1 RETURNING *",
+    [id, from, recipients, status, subject, minutesFromEvent],
+    (err, res) => {
+      if (err) {
+        console.log(err);
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.send(newEmail.rows[0]);
+});
+
 module.exports = router;

@@ -27,26 +27,35 @@ import Cancel from "../icons/cancel.svg";
 import { Hidden } from "@material-ui/core";
 
 import * as actions from "../actions";
-import { recipients as recipientsEnum } from "../model/enums";
+import {
+  recipients as recipientsEnum,
+  status as statusEnum,
+} from "../model/enums";
 
 const EmailEditor = (props) => {
   const classes = useStyles();
 
-  const [from, setFrom] = useState("Enter From Name");
-  const [subject, setSubject] = useState(
-    "Thank You for Registering for {Event_Name}"
+  const [from, setFrom] = useState(props.data.from_name || "");
+  const [subject, setSubject] = useState(props.data.subject || "");
+  const [days, setDays] = useState(
+    Math.abs(Math.floor(props.data.minutes_from_event / 1440))
   );
-  const [days, setDays] = useState(0);
-  const [hours, setHours] = useState(0);
-  const [mins, setMins] = useState(0);
-  const [offset, setOffset] = useState(-1);
-  const [
-    html,
-    setHtml,
-  ] = useState(`<p style="text-align: left">Hello {first_name},</p>
-  <p style="text-align: left">Thank you for registering for {event_name}.</p>`);
-  const [status, setStatus] = useState("draft");
-  const [recipients, setRecipients] = useState(recipientsEnum.NEW_REGISTRANTS);
+  const [hours, setHours] = useState(
+    Math.abs(Math.floor((props.data.minutes_from_event % 1440) / 60))
+  );
+  const [mins, setMins] = useState(
+    Math.abs(props.data.minutes_from_event % 60)
+  );
+  const [preposition, setPreposition] = useState(
+    props.data.minutes_from_event <= 0 ? -1 : 1
+  );
+  const [html, setHtml] = useState(
+    props.data.html || "Your email body goes here"
+  );
+  const [status, setStatus] = useState(props.data.status || statusEnum.DRAFT);
+  const [recipients, setRecipients] = useState(
+    props.data.recipients || recipientsEnum.NEW_REGISTRANTS
+  );
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
   };
@@ -74,23 +83,34 @@ const EmailEditor = (props) => {
     setMins(forceInRange(event.target.value, 0, 59));
   };
 
-  const handleChangeOffset = (event) => {
-    setOffset(event.target.value);
+  const handleChangePreposition = (event) => {
+    setPreposition(event.target.value);
   };
 
   const handleSave = async () => {
     const daysInMinutes = Number(days) * 24 * 60;
     const hoursInMinutes = Number(hours) * 60;
     const minutesFromEvent =
-      offset * (Number(mins) + hoursInMinutes + daysInMinutes);
+      preposition * (Number(mins) + hoursInMinutes + daysInMinutes);
 
-    await props.addEmail({
-      recipients,
-      status,
-      from,
-      subject,
-      minutesFromEvent,
-    });
+    // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
+    if (props.data.id) {
+      await props.editEmail(props.data.id, {
+        recipients,
+        status,
+        from,
+        subject,
+        minutesFromEvent,
+      });
+    } else {
+      await props.addEmail({
+        recipients,
+        status,
+        from,
+        subject,
+        minutesFromEvent,
+      });
+    }
 
     props.handleSubmit();
   };
@@ -134,9 +154,9 @@ const EmailEditor = (props) => {
                 onChange={handleChangeStatus}
                 input={<BootstrapInput />}
               >
-                <MenuItem value={"active"}>Active</MenuItem>
-                <MenuItem value={"draft"}>Draft</MenuItem>
-                <MenuItem value={"disabled"}>Disabled</MenuItem>
+                <MenuItem value={statusEnum.ACTIVE}>Active</MenuItem>
+                <MenuItem value={statusEnum.DRAFT}>Draft</MenuItem>
+                <MenuItem value={statusEnum.DISABLED}>Disabled</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -251,7 +271,10 @@ const EmailEditor = (props) => {
                     />
                     <label className="emailLabel">minutes </label>
 
-                    <Select value={offset} onChange={handleChangeOffset}>
+                    <Select
+                      value={preposition}
+                      onChange={handleChangePreposition}
+                    >
                       <MenuItem value={-1}>Before</MenuItem>
                       <MenuItem value={1}>After</MenuItem>
                     </Select>

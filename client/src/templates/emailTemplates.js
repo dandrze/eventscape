@@ -1,5 +1,12 @@
 import { recipients } from "../model/enums";
 
+export const blankEmail = {
+  subject: "Your subject goes here",
+  recipients: recipients.ALL_REGISTRANTS,
+  minutes_from_event: 0,
+  html: `Blank email template goes here. This template is used when a user clicks on the add email button`,
+};
+
 export const invitation = {
   subject: "You are Invited To {Event_Name}",
   recipients: recipients.ALL_REGISTRANTS,

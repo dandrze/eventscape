@@ -7,9 +7,11 @@ import NavBar3 from "../components/navBar3.js";
 import ScheduledEmails from "../components/ScheduledEmails.js";
 import EmailEditor from "../components/emailEditor";
 import * as actions from "../actions";
+import { blankEmail } from "../templates/emailTemplates";
 
 const Communication = (props) => {
   const [openEditor, setOpenEditor] = useState(false);
+  const [data, setData] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -29,16 +31,22 @@ const Communication = (props) => {
 
   const handleSubmitEditor = () => {
     setOpenEditor(false);
-    fetchData();
+    props.fetchEmailList(props.event.id);
   };
 
-  const handleOpenEditor = () => {
+  const handleEditEmail = (data) => {
+    setData(data);
+    setOpenEditor(true);
+  };
+
+  const handleAddEmail = () => {
+    setData(blankEmail);
     setOpenEditor(true);
   };
 
   const handleDeleteEmail = async (id) => {
     await props.deleteEmail(id);
-    fetchData();
+    props.fetchEmailList(props.event.id);
   };
 
   return (
@@ -58,6 +66,7 @@ const Communication = (props) => {
         <EmailEditor
           handleClose={handleCloseEditor}
           handleSubmit={handleSubmitEditor}
+          data={data}
         />
       </Modal>
       <NavBar3
@@ -66,8 +75,9 @@ const Communication = (props) => {
           <div>
             <ScheduledEmails
               key={props.email}
-              handleAdd={handleOpenEditor}
+              handleAdd={handleAddEmail}
               handleDelete={handleDeleteEmail}
+              handleEdit={handleEditEmail}
             />
             <div style={{ color: "#F8F8F8" }}>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
@@ -83,7 +93,7 @@ const Communication = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { email: state.email };
+  return { email: state.email, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(Communication);
