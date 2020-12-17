@@ -88,6 +88,7 @@ export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
   try {
     const event = await api.get("/api/event/current");
+    console.log(event.data);
     if (event) {
       dispatch({ type: FETCH_EVENT, payload: event.data });
       dispatch(fetchModelFromState());
