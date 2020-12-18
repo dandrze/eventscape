@@ -244,7 +244,9 @@ const EmailEditor = (props) => {
                     </Select>
                   </FormControl>
                   <div id="editEmailList">
-                    {recipients === "emailList" ? <EmailList /> : null}
+                    {recipients === recipientsEnum.EMAIL_LIST ? (
+                      <EmailList />
+                    ) : null}
                   </div>
                 </div>
               </div>
