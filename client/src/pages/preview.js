@@ -9,9 +9,15 @@ import mapReactComponent from "../components/mapReactComponent";
 const Preview = (props) => {
   const { event, model } = useParams();
   useEffect(() => {
-    props.fetchEventFromId(event);
-    props.fetchModelFromId(model);
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    props.setLoaded(false);
+    await props.fetchEventFromId(event);
+    await props.fetchModelFromId(model);
+    props.setLoaded(true);
+  };
 
   const theme = `
  	.fr-view button { 

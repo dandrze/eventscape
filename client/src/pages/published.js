@@ -9,8 +9,14 @@ import mapReactComponent from "../components/mapReactComponent";
 
 const Published = (props) => {
   useEffect(() => {
-    props.fetchLivePage(props.subdomain);
+    fetchData();
   }, []);
+
+  const fetchData = async () => {
+    props.setLoaded(false);
+    await props.fetchLivePage(props.subdomain);
+    props.setLoaded(true);
+  };
 
   const theme = `
  	.fr-view button { 

@@ -1,28 +1,16 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import {
-  logoHeaderModel,
-  logoHeaderRightModel,
-  heroBannerModel,
-  registrationFormDescription,
-  titleTimeModel,
-  streamChatReact,
-  blankModel,
-  registrationFormReact,
-} from "../components/designBlockModels";
-import {
-  FETCH_EVENT,
-  CREATE_EVENT,
-  UPDATE_EVENT,
-  LOAD_STARTED,
-  LOAD_FINISHED,
-} from "./types";
+import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "./types";
 import {
   fetchModelFromId,
   fetchModelFromState,
   saveModel,
 } from "./modelActions";
-import { model } from "mongoose";
+import {
+  regPageModelTemplate,
+  eventPageModelTemplate,
+  emaillistTemplate,
+} from "../templates/newEventTemplates";
 
 export const createEvent = (
   title,
@@ -33,41 +21,6 @@ export const createEvent = (
   time_zone,
   primary_color
 ) => async (dispatch) => {
-  const reg_page_model = [
-    { html: logoHeaderModel(), name: "banner" },
-    {
-      html: heroBannerModel(title),
-      name: "heroBanner",
-    },
-    {
-      html: registrationFormDescription(),
-      name: "registration",
-      is_react: true,
-      react_component: registrationFormReact,
-    },
-  ];
-
-  const event_page_model = [
-    {
-      html: logoHeaderRightModel(),
-      name: "bannerRight",
-    },
-    {
-      html: titleTimeModel(title, start_date, end_date),
-      name: "titleTime",
-    },
-    {
-      html: null,
-      name: "streamChat",
-      is_react: true,
-      react_component: streamChatReact,
-    },
-    {
-      html: blankModel(),
-      name: "blankModel",
-    },
-  ];
-
   const event = {
     title,
     link,
@@ -76,9 +29,12 @@ export const createEvent = (
     end_date,
     time_zone,
     primary_color,
-    reg_page_model,
-    event_page_model,
+    reg_page_model: regPageModelTemplate(title),
+    event_page_model: eventPageModelTemplate(title, start_date, end_date),
+    emails: emaillistTemplate(start_date),
   };
+
+  const emails = emaillistTemplate(start_date);
 
   const res = await api.post("/api/event", event);
 
@@ -87,10 +43,11 @@ export const createEvent = (
       type: CREATE_EVENT,
       payload: res.data,
     });
+    toast.success("Event successfully created");
 
     await dispatch(fetchModelFromState());
   } else {
-    toast.error("Error when saving: " + res.statusText);
+    toast.error("Error when creating new event: " + res.statusText);
   }
 };
 
@@ -121,6 +78,7 @@ export const updateEvent = (
       type: UPDATE_EVENT,
       payload: res.data,
     });
+    toast.success("Event successfully saved.");
   } else {
     toast.error("Error when saving: " + res.statusText);
   }
@@ -129,9 +87,7 @@ export const updateEvent = (
 export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
   try {
-    dispatch({ type: LOAD_STARTED });
     const event = await api.get("/api/event/current");
-    dispatch({ type: LOAD_FINISHED });
     if (event) {
       dispatch({ type: FETCH_EVENT, payload: event.data });
       dispatch(fetchModelFromState());
@@ -148,9 +104,7 @@ export const fetchEvent = () => async (dispatch) => {
 
 export const fetchEventFromId = (id) => async (dispatch) => {
   // call the api and return the event in json
-  dispatch({ type: LOAD_STARTED });
   const event = await api.get("/api/event/id", { params: { id } });
-  dispatch({ type: LOAD_FINISHED });
 
   if (event) {
     dispatch({ type: FETCH_EVENT, payload: event.data });
@@ -182,6 +136,8 @@ export const publishPage = () => async (dispatch, getState) => {
 
 export const isLinkAvailable = (link) => async (dispatch) => {
   const res = await api.get("/api/model/link", { params: { link } });
+
+  console.log(res);
 
   if (res.data.length == 0) {
     return true;

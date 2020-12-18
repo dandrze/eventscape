@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
 import { Paper } from "@material-ui/core";
@@ -20,185 +21,169 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
+import * as actions from "../actions";
+import { recipients } from "../model/enums";
 
 const tableIcons = {
-	Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
-	Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
-	Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-	Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
-	DetailPanel: forwardRef((props, ref) => (
-		<ChevronRight {...props} ref={ref} />
-	)),
-	Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-	Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
-	Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
-	FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
-	LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
-	NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
-	PreviousPage: forwardRef((props, ref) => (
-		<ChevronLeft {...props} ref={ref} />
-	)),
-	ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
-	Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
-	SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
-	ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
-	ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
+  Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
+  Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
+  Clear: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Delete: forwardRef((props, ref) => <DeleteOutline {...props} ref={ref} />),
+  DetailPanel: forwardRef((props, ref) => (
+    <ChevronRight {...props} ref={ref} />
+  )),
+  Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
+  FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
+  LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
+  NextPage: forwardRef((props, ref) => <ChevronRight {...props} ref={ref} />),
+  PreviousPage: forwardRef((props, ref) => (
+    <ChevronLeft {...props} ref={ref} />
+  )),
+  ResetSearch: forwardRef((props, ref) => <Clear {...props} ref={ref} />),
+  Search: forwardRef((props, ref) => <Search {...props} ref={ref} />),
+  SortArrow: forwardRef((props, ref) => <ArrowDownward {...props} ref={ref} />),
+  ThirdStateCheck: forwardRef((props, ref) => <Remove {...props} ref={ref} />),
+  ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-export default function ScheduledEmails() {
-	const [state, setState] = React.useState({
-		columns: [
-			{
-				title: "Subject",
-				field: "subject",
-			},
-			{
-				title: "To",
-				field: "to",
-			},
-			{
-				title: "Scheduled Send",
-				field: "scheduledSend",
-			},
-			{
-				title: "Event Start Time Minus",
-				field: "timeMinus",
-			},
-			{
-				title: "Status",
-				field: "status",
-			},
-		],
-		data: [
-			{
-				subject: "You are Invited To {Event_Name}",
-				to: "Email List",
-				scheduledSend: "yyyy-mm-dd hh:mm",
-				timeMinus: "7 Days, 0 Hours",
-				status: "Draft",
-			},
-			{
-				subject: "Thank You for Registering for {Event_Name}",
-				to: "New Registrants",
-				scheduledSend: "Upon Registration",
-				timeMinus: "",
-				status: "Active",
-			},
-			{
-				subject: "Reminder: {Event_Name} Tomorrow",
-				to: "All Registrants",
-				scheduledSend: "yyyy-mm-dd hh:mm",
-				timeMinus: "1 Days, 0 Hours",
-				status: "Draft",
-			},
-			{
-				subject: "Reminder: {Event_Name} in One Hour",
-				to: "All Registrants",
-				scheduledSend: "yyyy-mm-dd hh:mm",
-				timeMinus: "0 Days, 1 Hour",
-				status: "Active",
-			},
-			{
-				subject: "Thank You for Attending {Event_Name}",
-				to: "All Registrants",
-				scheduledSend: "yyyy-mm-dd hh:mm",
-				timeMinus: "-1 Days, 0 Hour",
-				status: "Draft",
-			},
-		],
-	});
-	const options = {
-		actionsColumnIndex: -1,
-		search: false,
-		paging: false,
+function ScheduledEmails(props) {
+  const [columns, setColumns] = React.useState([
+    {
+      title: "Subject",
+      field: "subject",
+    },
+    {
+      title: "From",
+      field: "from_name",
+    },
+    {
+      title: "To",
+      field: "recipients",
+    },
+    {
+      title: "Scheduled Send",
+      field: "send_date",
+    },
+    {
+      title: "Status",
+      field: "status",
+    },
+  ]);
+  const [data, setData] = React.useState([]);
 
-		headerStyle: {
-			backgroundColor: "#F0F1F4",
-			color: "black",
-			fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
-			fontSize: "14px",
-			fontWeight: "bold",
-			margin: "30px",
-		},
+  useEffect(() => {
+    const formattedEmailList = props.email.map((email) => {
+      // start with the event start date. Then modify if by adding the minutes_from_event
+      const sendDate = new Date(props.event.start_date);
+      sendDate.setMinutes(sendDate.getMinutes() + email.minutes_from_event);
 
-		cellStyle: {
-			backgroundColor: "white",
-			color: "black",
-			fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
-			fontSize: "14px",
-			fontWeight: "normal",
-		},
-	};
+      return {
+        ...email,
+        send_date:
+          email.recipients === recipients.NEW_REGISTRANTS
+            ? "Upon Registration"
+            : sendDate.toLocaleString("en-us", {
+                timeZoneName: "short",
+                timeZone: props.event.time_zone,
+              }),
 
-	const actions = [
-		{
-			icon: Edit,
-			tooltip: "Edit Email",
-			onClick: (event, rowData) => {
-				console.log(rowData);
-				//window.open('./CommunicationEditor', "_self");
-			},
-		},
-		{
-			icon: LibraryAdd,
-			tooltip: "Duplicate Email",
-			onClick: (event, rowData) => {
-				//add stuff here
-			},
-		},
-	];
+        status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
+      };
+    });
+    setData(formattedEmailList);
+    console.log(formattedEmailList);
+  }, [props.email]);
 
-	return (
-		<div className="shadow-border container-width">
-			<MaterialTable
-				title="Scheduled Emails"
-				columns={state.columns}
-				data={state.data}
-				options={options}
-				icons={tableIcons}
-				actions={actions}
-				components={{
-					Container: (props) => <Paper {...props} elevation={0} />,
-				}}
-				editable={{
-					onRowAdd: (newData) =>
-						new Promise((resolve) => {
-							setTimeout(() => {
-								resolve();
-								setState((prevState) => {
-									const data = [...prevState.data];
-									data.push(newData);
-									return { ...prevState, data };
-								});
-							}, 600);
-						}),
-					/*onRowUpdate: (newData, oldData) =>
-          new Promise((resolve) => {
-            setTimeout(() => {
+  const options = {
+    actionsColumnIndex: -1,
+    search: false,
+    paging: false,
+
+    headerStyle: {
+      backgroundColor: "#F0F1F4",
+      color: "black",
+      fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+      fontSize: "14px",
+      fontWeight: "bold",
+      margin: "30px",
+    },
+
+    cellStyle: {
+      backgroundColor: "white",
+      color: "black",
+      fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+      fontSize: "14px",
+      fontWeight: "normal",
+    },
+  };
+
+  const actions = [
+    {
+      icon: Edit,
+      tooltip: "Edit Email",
+      onClick: (event, rowData) => {
+        console.log(rowData);
+        props.handleEdit(rowData);
+      },
+    },
+    {
+      icon: LibraryAdd,
+      tooltip: "Duplicate Email",
+      onClick: (event, rowData) => {
+        props.handleDuplicate(rowData);
+      },
+    },
+    {
+      icon: AddBox,
+      tooltip: "Add Email",
+      isFreeAction: true,
+      onClick: (event) => {
+        props.handleAdd();
+      },
+    },
+  ];
+
+  return (
+    <div className="shadow-border container-width">
+      <MaterialTable
+        title="Scheduled Emails"
+        columns={columns}
+        data={data}
+        options={options}
+        icons={tableIcons}
+        actions={actions}
+        components={{
+          Container: (props) => <Paper {...props} elevation={0} />,
+        }}
+        editable={{
+          onRowDelete: (oldData) =>
+            new Promise((resolve) => {
+              props.handleDelete(oldData.id);
               resolve();
-              if (oldData) {
-                setState((prevState) => {
-                  const data = [...prevState.data];
-                  data[data.indexOf(oldData)] = newData;
-                  return { ...prevState, data };
-                });
-              }
-            }, 600);
-          }),*/
-
-					onRowDelete: (oldData) =>
-						new Promise((resolve) => {
-							setTimeout(() => {
-								resolve();
-								setState((prevState) => {
-									const data = [...prevState.data];
-									data.splice(data.indexOf(oldData), 1);
-									return { ...prevState, data };
-								});
-							}, 600);
-						}),
-				}}
-			/>
-		</div>
-	);
+            }),
+        }}
+        localization={{
+          body: {
+            emptyDataSourceMessage: props.settings.loaded ? (
+              "No Emails Found"
+            ) : (
+              <div style={{ padding: "50px" }}>
+                <CircularProgress />
+              </div>
+            ),
+          },
+        }}
+      />
+    </div>
+  );
 }
+
+const mapStateToProps = (state) => {
+  return { email: state.email, settings: state.settings, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(ScheduledEmails);

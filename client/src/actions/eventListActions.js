@@ -1,43 +1,68 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_EVENT_LIST, LOAD_STARTED, LOAD_FINISHED } from "./types";
+import { FETCH_EVENT_LIST } from "./types";
+import { status as statusEnum } from "../model/enums";
 
 export const fetchEventList = () => async (dispatch) => {
-	// call the api and return the event in json
+  // call the api and return the event in json
+  try {
+    const eventList = await api.get("/api/event/all");
 
-	dispatch({ type: LOAD_STARTED });
-	const eventList = await api.get("/api/event/all");
-	dispatch({ type: LOAD_FINISHED });
+    // if there are events
+    if (eventList) {
+      dispatch({ type: FETCH_EVENT_LIST, payload: eventList.data });
+    }
 
-	// if there are events
-	if (eventList) {
-		dispatch({ type: FETCH_EVENT_LIST, payload: eventList.data });
-	}
+    return true;
+  } catch (err) {
+    toast.error("Error fetching event list: " + err.toString());
+    return false;
+  }
 };
 
 export const duplicateEvent = (id, link) => async (dispatch) => {
-	const res1 = await api.get("/api/event/id", { params: { id } });
-	const newEvent = { ...res1.data, link: link, title: res1.data.title + " copy" };
-	const res2 = await api.post("/api/event", newEvent);
-	toast.success("Event successfully duplicated");
-	return true;
+  try {
+    const res1 = await api.get("/api/event/id", { params: { id } });
+    const newEvent = {
+      ...res1.data,
+      link: link,
+      title: res1.data.title + " copy",
+    };
+    const res2 = await api.post("/api/event", newEvent);
+    toast.success("Event successfully duplicated");
+    return true;
+  } catch (err) {
+    toast.error("Error duplicating event: " + err.toString());
+    return false;
+  }
 };
 
 export const deleteEvent = (id) => async (dispatch) => {
-	const res = await api.delete("/api/event/id", { params: { id } });
-	toast.success("Event successfully deleted");
-	return true;
+  try {
+    const res = await api.put("/api/event/id/status", {
+      id,
+      status: statusEnum.DELETED,
+    });
+    toast.success("Event successfully deleted");
+    return true;
+  } catch (err) {
+    toast.error("Error deleting event: " + err.toString());
+    return false;
+  }
 };
 
 export const setCurrentEvent = (id) => async (dispatch) => {
-	const res = await api.put("/api/event/id/make-current", { id });
+  const res = await api.put("/api/event/id/make-current", { id });
 
-	return true;
+  return true;
 };
 
 export const restoreEvent = (id) => async (dispatch) => {
-	const res = await api.put("/api/event/id/restore", { id });
+  const res = await api.put("/api/event/id/status", {
+    id,
+    status: statusEnum.DRAFT,
+  });
 
-	toast.success("Event successfully restored");
-	return true;
+  toast.success("Event successfully restored");
+  return true;
 };

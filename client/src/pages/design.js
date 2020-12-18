@@ -8,30 +8,26 @@ import PageEditor from "../components/pageEditor";
 import "../components/fonts.css";
 
 class Design extends React.Component {
-	componentDidMount() {
-		this.props.fetchEvent();
-	}
-
-	render() {
-		return (
-			<div>
-				<NavBar3
-					displaySideNav="true"
-					content={
-						this.props.settings.loaded ? (
-							<PageEditor key={this.props.model} />
-						) : (
-							<CircularProgress />
-						)
-					}
-				/>
-			</div>
-		);
-	}
+  render() {
+    return (
+      <div>
+        <NavBar3
+          displaySideNav="true"
+          content={
+            this.props.settings.loaded ? (
+              <PageEditor key={this.props.model} />
+            ) : (
+              <CircularProgress />
+            )
+          }
+        />
+      </div>
+    );
+  }
 }
 
 const mapStateToProps = (state) => {
-	return { event: state.event, model: state.model, settings: state.settings };
+  return { event: state.event, model: state.model, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(Design);

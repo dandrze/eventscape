@@ -10,10 +10,8 @@ import {
 export const fetchRegistrations = (event) => async (dispatch) => {
   // call the api and return the registrations in json
 
-  dispatch({ type: LOAD_STARTED });
   try {
     const res = await api.get("/api/registration", { params: { event } });
-    dispatch({ type: LOAD_FINISHED });
     dispatch({ type: FETCH_REGISTRATION, payload: res.data });
     return true;
   } catch (err) {
@@ -25,13 +23,11 @@ export const fetchRegistrations = (event) => async (dispatch) => {
 export const fetchRegistrationForm = (event) => async (dispatch) => {
   // call the api and return the registrations in json
 
-  dispatch({ type: LOAD_STARTED });
   try {
     const res = await api.get("/api/form", { params: { event } });
     if (res.status == 200) {
       dispatch({ type: FETCH_FORM, payload: res.data });
     }
-    dispatch({ type: LOAD_FINISHED });
 
     return true;
   } catch (err) {

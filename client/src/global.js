@@ -1,0 +1,1 @@
+global.emailSendDateMaxDays = 180;

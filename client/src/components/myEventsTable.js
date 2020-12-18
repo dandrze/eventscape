@@ -27,6 +27,7 @@ import RestorePage from "@material-ui/icons/RestorePage";
 
 import * as actions from "../actions";
 import AlertModal from "./AlertModal";
+import { status } from "../model/enums";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -63,16 +64,16 @@ const Table = (props) => {
     .filter((event) => {
       const startDate = new Date(event.start_date);
       const today = new Date();
-      if (event.status === "deleted" && props.tab === "deleted") {
+      if (event.status === status.DELETED && props.tab === "deleted") {
         return true;
       } else if (
-        event.status != "deleted" &&
+        event.status != status.DELETED &&
         startDate >= today &&
         props.tab === "upcoming"
       ) {
         return true;
       } else if (
-        event.status != "deleted" &&
+        event.status != status.DELETED &&
         startDate < today &&
         props.tab === "past"
       ) {
@@ -86,7 +87,10 @@ const Table = (props) => {
       return {
         id: event.id,
         name: event.title,
-        date: eventDate.toLocaleString(),
+        date: eventDate.toLocaleString("en-us", {
+          timeZoneName: "short",
+          timeZone: event.time_zone,
+        }),
         status: event.status.charAt(0).toUpperCase() + event.status.slice(1),
       };
     });
@@ -141,7 +145,9 @@ const Table = (props) => {
         const res = await props.setCurrentEvent(rowData.id);
 
         // fetch the new event
+        props.setLoaded(false);
         await props.fetchEvent();
+        props.setLoaded(true);
 
         props.history.push("/design");
       },
@@ -178,7 +184,9 @@ const Table = (props) => {
       tooltip: "Restore Event",
       onClick: async (event, rowData) => {
         await props.restoreEvent(rowData.id);
+        props.setLoaded(false);
         await props.fetchEventList();
+        props.setLoaded(true);
       },
     },
   ];
@@ -208,7 +216,9 @@ const Table = (props) => {
         return null;
       }
     }
-    props.fetchEventList();
+    props.setLoaded(false);
+    await props.fetchEventList();
+    props.setLoaded(true);
   };
 
   if (props.settings.loaded) {
