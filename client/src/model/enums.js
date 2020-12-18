@@ -4,6 +4,11 @@ export const recipients = {
   ALL_REGISTRANTS: "All Registrants",
 };
 
+export const requiresScheduledSend = [
+  recipients.EMAIL_LIST,
+  recipients.ALL_REGISTRANTS,
+];
+
 export const status = {
   DRAFT: "Draft",
   DELETED: "Deleted",

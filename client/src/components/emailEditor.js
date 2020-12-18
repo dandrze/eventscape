@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import "./emailEditor.css";
@@ -30,11 +30,13 @@ import * as actions from "../actions";
 import {
   recipients as recipientsEnum,
   status as statusEnum,
+  requiresScheduledSend,
 } from "../model/enums";
 
 const EmailEditor = (props) => {
   const classes = useStyles();
 
+  const [timeError, setTimeError] = useState("");
   const [from, setFrom] = useState(props.data.from_name || "");
   const [subject, setSubject] = useState(props.data.subject || "");
   const [days, setDays] = useState(
@@ -56,8 +58,18 @@ const EmailEditor = (props) => {
   const [recipients, setRecipients] = useState(
     props.data.recipients || recipientsEnum.NEW_REGISTRANTS
   );
+
+  useEffect(() => {
+    validateSendTime(days, hours, mins);
+  });
+
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
+    if (event.target.value == recipientsEnum.NEW_REGISTRANTS) {
+      setDays(0);
+      setHours(0);
+      setMins(0);
+    }
   };
 
   const handleChangeStatus = (event) => {
@@ -72,15 +84,22 @@ const EmailEditor = (props) => {
   };
 
   const handleChangeDays = (event) => {
-    setDays(forceInRange(event.target.value, 0, global.emailSendDateMaxDays));
+    const updatedDays = forceInRange(
+      event.target.value,
+      0,
+      global.emailSendDateMaxDays
+    );
+    setDays(updatedDays);
   };
 
   const handleChangeHours = (event) => {
-    setHours(forceInRange(event.target.value, 0, 23));
+    const updatedHours = forceInRange(event.target.value, 0, 23);
+    setHours(updatedHours);
   };
 
   const handleChangeMins = (event) => {
-    setMins(forceInRange(event.target.value, 0, 59));
+    const updatedMins = forceInRange(event.target.value, 0, 59);
+    setMins(updatedMins);
   };
 
   const handleChangePreposition = (event) => {
@@ -93,32 +112,62 @@ const EmailEditor = (props) => {
     const minutesFromEvent =
       preposition * (Number(mins) + hoursInMinutes + daysInMinutes);
 
-    // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
-    if (props.data.id) {
-      await props.editEmail(props.data.id, {
-        recipients,
-        status,
-        from,
-        subject,
-        minutesFromEvent,
-        html,
-      });
-    } else {
-      await props.addEmail({
-        recipients,
-        status,
-        from,
-        subject,
-        minutesFromEvent,
-        html,
-      });
-    }
+    const sendDate = new Date(props.event.start_date);
+    sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
-    props.handleSubmit();
+    if (!timeError) {
+      // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
+      if (props.data.id) {
+        await props.editEmail(props.data.id, {
+          recipients,
+          status,
+          from,
+          subject,
+          minutesFromEvent,
+          html,
+        });
+      } else {
+        await props.addEmail({
+          recipients,
+          status,
+          from,
+          subject,
+          minutesFromEvent,
+          html,
+        });
+      }
+
+      props.handleSubmit();
+    }
   };
 
   const handleHtmlChange = (updatedHtml) => {
     setHtml(updatedHtml);
+  };
+
+  const validateSendTime = (d, h, m) => {
+    // uses direct inputs because it can't wait for the state to update to use the days, hours, mins states. Instead we call in d, h, m
+    const daysInMinutes = Number(d) * 24 * 60;
+    const hoursInMinutes = Number(h) * 60;
+    const minutesFromEvent =
+      preposition * (Number(m) + hoursInMinutes + daysInMinutes);
+
+    const sendDate = new Date(props.event.start_date);
+    sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
+
+    // If the send time is in the past, and this is a scheduled send (not for new registrants), display an error message
+    if (sendDate < new Date() && recipients != recipientsEnum.NEW_REGISTRANTS) {
+      setTimeError(
+        "This send time is in the past: " +
+          sendDate.toLocaleString("en-us", {
+            timeZoneName: "short",
+            timeZone: props.event.time_zone,
+          }) +
+          ". Please set a send time in the future."
+      );
+    } else {
+      setTimeError("");
+    }
   };
 
   const forceInRange = (num, lower, upper) => {
@@ -229,7 +278,7 @@ const EmailEditor = (props) => {
                 ></input>
               </div>
 
-              <div className="inputDiv">
+              <div className="inputDiv" style={{ flexWrap: "wrap" }}>
                 <label htmlFor="sendTime" className="emailLabel">
                   Scheduled Send Time:{" "}
                 </label>
@@ -284,6 +333,7 @@ const EmailEditor = (props) => {
                     <label className="emailLabel">{" event start time"}</label>
                   </>
                 )}
+                <div className="errorMessage">{timeError}</div>
               </div>
             </div>
 
@@ -310,4 +360,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default connect(null, actions)(EmailEditor);
+const mapStateToProps = (state) => {
+  return {
+    event: state.event,
+  };
+};
+
+export default connect(mapStateToProps, actions)(EmailEditor);

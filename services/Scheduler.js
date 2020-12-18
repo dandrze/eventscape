@@ -4,41 +4,40 @@ const Mailer = require("./Mailer");
 const { updateEmailJob } = require("../db/Email");
 
 const scheduleSend = async (emailId, email, sendDate) => {
-  const scheduledSend = schedule.scheduleJob(
+  const newJob = schedule.scheduleJob(
     emailId.toString(),
     sendDate,
     function () {
       //Mailer.sendEmail(email);
+      console.log(email);
       console.log("sent!");
-      // TODO update the database to show that the email has been sent
+      //  update the database to show that the email has been sent
+      updateEmailJob(
+        emailId,
+        schedule.scheduledJobs[emailId.toString()].triggeredJobs(),
+        schedule.scheduledJobs[emailId.toString()].nextInvocation()
+      );
     }
   );
 
-  console.log(scheduledSend.nextInvocation());
+  updateEmailJob(emailId, newJob.triggeredJobs(), newJob.nextInvocation());
+  console.log(schedule.scheduledJobs);
+};
 
-  updateEmailJob(
-    emailId,
-    scheduledSend.triggeredJobs(),
-    scheduledSend.nextInvocation()
-  );
+const cancelSend = (emailId) => {
+  if (emailId in schedule.scheduledJobs) {
+    const job = schedule.scheduledJobs[emailId];
+    job.cancel();
+
+    updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
+  }
+  console.log(schedule.scheduledJobs);
 };
 
 const scheduledJobs = () => {
-  console.log(schedule.scheduledJobs);
-  console.log(schedule.scheduledJobs["75"].triggeredJobs());
-  console.log(typeof schedule.scheduledJobs["75"].nextInvocation());
-  console.log(schedule.scheduledJobs["75"].nextInvocation().CronDate);
-
-  console.log(typeof schedule.scheduledJobs["75"].nextInvocation().CronDate);
-  return schedule.scheduledJobs["75"].nextInvocation();
-};
-
-const reschedule = (jobName) => {
-  var now = new Date();
-  now.setSeconds(now.getSeconds() + 5);
-  //schedule.scheduledJobs[jobName].reschedule(now);
+  return schedule.scheduledJobs;
 };
 
 exports.scheduleSend = scheduleSend;
 exports.scheduledJobs = scheduledJobs;
-exports.reschedule = reschedule;
+exports.cancelSend = cancelSend;

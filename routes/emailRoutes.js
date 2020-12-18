@@ -38,7 +38,7 @@ router.post("/api/email", async (req, res) => {
     }
   );
 
-  if (status === "Active") {
+  if (status === "Active" && recipients != "New Registrants") {
     scheduleJob(
       newEmail.rows[0].id,
       { from, subject, html },
@@ -69,7 +69,19 @@ router.put("/api/email", async (req, res) => {
   const { id, email } = req.body;
   const { recipients, status, from, subject, minutesFromEvent, html } = email;
 
-  const newEmail = await db.query(
+  const originalEmailData = await db.query(
+    "SELECT * FROM email WHERE id=$1",
+    [id],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  const originalEmail = originalEmailData.rows[0];
+
+  const updatedEmail = await db.query(
     "UPDATE email SET from_name=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6, html=$7 WHERE id=$1 RETURNING *",
     [id, from, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
@@ -80,16 +92,25 @@ router.put("/api/email", async (req, res) => {
     }
   );
 
-  if (status === "Active") {
+  if (status === "Active" && recipients != "New Registrants") {
+    // delete the old job because it could have stale data
+    Scheduler.cancelSend(id.toString());
+    // create a new job with fresh data
     scheduleJob(
-      newEmail.rows[0].id,
+      id.toString(),
       { from, subject, html },
-      newEmail.rows[0].event,
+      updatedEmail.rows[0].event,
       minutesFromEvent
     );
+  } else if (
+    originalEmail.status === "Active" ||
+    originalEmail.recipients != "New Registrants"
+  ) {
+    // if either of these two conditions is true, then there might be an existing job we need to cancel
+    Scheduler.cancelSend(id.toString());
   }
 
-  res.send(newEmail.rows[0]);
+  res.send(updatedEmail.rows[0]);
 });
 
 router.get("/api/email/jobs", async (req, res) => {
