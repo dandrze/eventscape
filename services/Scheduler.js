@@ -8,9 +8,8 @@ const scheduleSend = async (emailId, email, sendDate) => {
     emailId.toString(),
     sendDate,
     function () {
-      //Mailer.sendEmail(email);
-      console.log(email);
-      console.log("sent!");
+      //send the email when the job is triggered
+      Mailer.sendEmail(email);
       //  update the database to show that the email has been sent
       updateEmailJob(
         emailId,
