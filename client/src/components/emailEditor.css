@@ -51,10 +51,16 @@
 
 .inputDiv {
   border-bottom: 1px solid rgb(200, 200, 200);
-  height: 50px;
+  padding: 12px 0px;
   display: flex;
   justify-content: left;
   align-items: center;
+}
+
+.errorMessage {
+  margin-top: 10px;
+  color: red;
+  font-size: 0.9em;
 }
 
 .emailLabel {
