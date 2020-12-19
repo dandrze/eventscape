@@ -9,14 +9,15 @@ const scheduleSend = async (emailId, email, sendDate) => {
     emailId.toString(),
     sendDate,
     function () {
+      // asign job to the job within node-schedule
+      const job = schedule.scheduledJobs[emailId.toString()];
       //send the email when the job is triggered
       Mailer.sendEmail(email);
       //  update the database to show that the email has been sent
-      updateEmailJob(
-        emailId,
-        schedule.scheduledJobs[emailId.toString()].triggeredJobs(),
-        schedule.scheduledJobs[emailId.toString()].nextInvocation()
-      );
+      updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
+
+      // We only ever need to run this job once. So remove it from node-schedule to keep things clean and avoid duplicate sends
+      job.cancel();
     }
   );
 

@@ -117,6 +117,12 @@ router.get("/api/email/jobs", async (req, res) => {
   res.send(Scheduler.scheduledJobs());
 });
 
+router.post("api/email/jobs/cancel", async (req, res) => {
+  const { id } = req.body;
+
+  Scheduler.cancelSend(id);
+});
+
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
   const { from, subject, html } = email;
 
