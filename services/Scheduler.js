@@ -4,6 +4,7 @@ const Mailer = require("./Mailer");
 const { updateEmailJob } = require("../db/Email");
 
 const scheduleSend = async (emailId, email, sendDate) => {
+  console.log(sendDate);
   const newJob = schedule.scheduleJob(
     emailId.toString(),
     sendDate,
