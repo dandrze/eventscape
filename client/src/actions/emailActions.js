@@ -8,7 +8,9 @@ export const fetchEmailList = (event) => async (dispatch, getState) => {
   try {
     const res = await api.get("/api/email/all", { params: { event } });
 
+    console.log("api called");
     dispatch({ type: FETCH_EMAIL_LIST, payload: res.data });
+    console.log("reducer dispatched");
 
     return true;
   } catch (err) {

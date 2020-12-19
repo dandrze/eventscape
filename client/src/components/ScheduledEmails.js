@@ -51,29 +51,9 @@ const tableIcons = {
 };
 
 function ScheduledEmails(props) {
-  const [columns, setColumns] = React.useState([
-    {
-      title: "Subject",
-      field: "subject",
-    },
-    {
-      title: "From",
-      field: "from_name",
-    },
-    {
-      title: "To",
-      field: "recipients",
-    },
-    {
-      title: "Scheduled Send",
-      field: "send_date",
-    },
-    {
-      title: "Status",
-      field: "status",
-    },
-  ]);
   const [data, setData] = React.useState([]);
+
+  console.log(props.email);
 
   useEffect(() => {
     const formattedEmailList = props.email.map((email) => {
@@ -97,6 +77,29 @@ function ScheduledEmails(props) {
     setData(formattedEmailList);
     console.log(formattedEmailList);
   }, [props.email]);
+
+  const columns = [
+    {
+      title: "Subject",
+      field: "subject",
+    },
+    {
+      title: "From",
+      field: "from_name",
+    },
+    {
+      title: "To",
+      field: "recipients",
+    },
+    {
+      title: "Scheduled Send",
+      field: "send_date",
+    },
+    {
+      title: "Status",
+      field: "status",
+    },
+  ];
 
   const options = {
     actionsColumnIndex: -1,
