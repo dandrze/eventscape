@@ -82,6 +82,7 @@
 
 .emailInput {
   display: flex;
+  flex-grow: 1;
   background-color: transparent;
   border: 0px solid;
   height: 20px;

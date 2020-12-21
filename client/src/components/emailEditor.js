@@ -83,13 +83,14 @@ const EmailEditor = (props) => {
 
   const handleChangeReplyTo = (event) => {
     setReplyTo(event.target.value);
+    if (isEmailValid(replyTo)) {
+      setReplyToError("");
+    }
   };
 
   const handleReplyToBlur = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
     setReplyToError(
-      re.test(replyTo) ? "" : "Please enter a valid email address"
+      isEmailValid(replyTo) ? "" : "Please enter a valid email address"
     );
   };
 
@@ -120,6 +121,12 @@ const EmailEditor = (props) => {
     setPreposition(event.target.value);
   };
 
+  const isEmailValid = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    return re.test(email);
+  };
+
   const handleSave = async () => {
     const daysInMinutes = Number(days) * 24 * 60;
     const hoursInMinutes = Number(hours) * 60;
@@ -129,7 +136,7 @@ const EmailEditor = (props) => {
     const sendDate = new Date(props.event.start_date);
     sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
-    if (!timeError) {
+    if (!timeError && !replyToError) {
       // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
       if (props.data.id) {
         await props.editEmail(props.data.id, {
