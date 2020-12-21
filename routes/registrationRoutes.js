@@ -32,7 +32,7 @@ router.post("/api/registration", async (req, res) => {
     [event, recipientsOptions.NEW_REGISTRANTS],
     (err, res) => {
       if (err) {
-        res.status(500).json({ message: "Error when adding registration." });
+        res.status(500).json({ message: "Error when sending email" });
         return;
       }
     }
@@ -44,6 +44,7 @@ router.post("/api/registration", async (req, res) => {
         to: "andrzejewski.d@gmail.com",
         subject: email.subject,
         html: email.html,
+        replyTo: email.reply_to,
       });
     } catch (error) {
       res.status(500).json({ message: "Error when sending email." });

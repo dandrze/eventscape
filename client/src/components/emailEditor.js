@@ -37,7 +37,9 @@ const EmailEditor = (props) => {
   const classes = useStyles();
 
   const [timeError, setTimeError] = useState("");
-  const [from, setFrom] = useState(props.data.from_name || "");
+  const [replyTo, setReplyTo] = useState(
+    props.data.reply_to || "no-reply@eventscape.io"
+  );
   const [subject, setSubject] = useState(props.data.subject || "");
   const [days, setDays] = useState(
     Math.abs(Math.floor(props.data.minutes_from_event / 1440))
@@ -78,8 +80,8 @@ const EmailEditor = (props) => {
     setStatus(event.target.value);
   };
 
-  const handleChangeFrom = (event) => {
-    setFrom(event.target.value);
+  const handleChangeReplyTo = (event) => {
+    setReplyTo(event.target.value);
   };
   const handleChangeSubject = (event) => {
     setSubject(event.target.value);
@@ -123,7 +125,7 @@ const EmailEditor = (props) => {
         await props.editEmail(props.data.id, {
           recipients,
           status,
-          from,
+          replyTo,
           subject,
           minutesFromEvent,
           html,
@@ -132,7 +134,7 @@ const EmailEditor = (props) => {
         await props.addEmail({
           recipients,
           status,
-          from,
+          replyTo,
           subject,
           minutesFromEvent,
           html,
@@ -257,16 +259,16 @@ const EmailEditor = (props) => {
               </div>
 
               <div className="inputDiv">
-                <label htmlFor="from" className="emailLabel">
-                  From:{" "}
+                <label htmlFor="replyTo" className="emailLabel">
+                  Reply To:{" "}
                 </label>
                 <input
                   type="text"
                   className="emailInput"
-                  name="from"
+                  name="replyTo"
                   placeholder=""
-                  value={from}
-                  onChange={handleChangeFrom}
+                  value={replyTo}
+                  onChange={handleChangeReplyTo}
                 ></input>
                 <br></br>
               </div>

@@ -10,6 +10,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
 import AlertModal from "./AlertModal";
+import { pageNames } from "../model/enums";
 
 class PageEditor extends Component {
   constructor(props) {
@@ -21,9 +22,7 @@ class PageEditor extends Component {
     this.handleNavAlertClose = this.handleNavAlertClose.bind(this);
   }
 
-  async componentDidMount() {
-    await this.props.fetchModelFromState();
-  }
+  async componentDidMount() {}
 
   showNavAlert(location) {
     this.setState({ open: true, location });
@@ -93,7 +92,7 @@ class PageEditor extends Component {
                 "/preview/" +
                 this.props.event.id +
                 "/" +
-                (this.props.settings.nowEditingPage == "registration"
+                (this.props.settings.nowEditingPage == pageNames.REGISTRATION
                   ? this.props.event.reg_page_model
                   : this.props.event.event_page_model)
               }

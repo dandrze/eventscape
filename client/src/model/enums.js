@@ -16,3 +16,5 @@ export const statusOptions = {
   ACTIVE: "Active",
   DISABLED: "Disabled",
 };
+
+export const pageNames = { REGISTRATION: "registration", EVENT: "event" };
