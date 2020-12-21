@@ -93,6 +93,10 @@ const RegistrationTable2 = (props) => {
       })
       .filter(Boolean);
 
+    columns.unshift({ title: "Email Address", field: "emailAddress" });
+    columns.unshift({ title: "Last Name", field: "lastName" });
+    columns.unshift({ title: "First Name", field: "firstName" });
+
     // empty data list to be populated in the loop below
     const data = [];
 
@@ -130,6 +134,13 @@ const RegistrationTable2 = (props) => {
           rowObject = { ...rowObject, [value.name]: value.value };
         }
       }
+      // add the email (not included in values) to row object
+      rowObject = {
+        ...rowObject,
+        emailAddress: row.email,
+        firstName: row.first_name,
+        lastName: row.last_name,
+      };
       // add this new row object to the data list
       data.push(rowObject);
     }

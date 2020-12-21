@@ -4,6 +4,7 @@ const router = express.Router();
 const db = require("../db");
 const Scheduler = require("../services/Scheduler");
 const { getEventFromId } = require("../db/Event");
+const { recipientsOptions } = require("../model/enums");
 
 router.get("/api/email/all", async (req, res) => {
   const { event } = req.query;
@@ -30,6 +31,7 @@ router.post("/api/email", async (req, res) => {
     subject,
     minutesFromEvent,
     html,
+    emailList,
   } = email;
 
   const newEmail = await db.query(
@@ -43,12 +45,30 @@ router.post("/api/email", async (req, res) => {
     }
   );
 
-  if (status === "Active" && recipients != "New Registrants") {
+  if (status === "Active" && recipients != recipientsOptions.NEW_REGISTRANTS) {
+    const to = [];
+
+    if (recipients === recipientsOptions.ALL_REGISTRANTS) {
+      const emailListResponse = await db.query(
+        "SELECT * FROM registration WHERE event=$1",
+        [event],
+        (err, res) => {
+          if (err) {
+            console.log(err);
+            throw res.status(500).send(err);
+          }
+        }
+      );
+      console.log(emailListResponse.data.rows);
+      //to = emailListResponse.data.rows;
+    } else if (recipients === recipientsOptions.EMAIL_LIST) {
+      to = emailList;
+    }
     scheduleJob(
       newEmail.rows[0].id,
-      { replyTo, subject, html, replyTo },
-      event,
-      minutesFromEvent
+      { to, replyTo, subject, html, replyTo },
+      sendTo,
+      event
     );
   }
 

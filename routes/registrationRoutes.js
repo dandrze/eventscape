@@ -7,17 +7,17 @@ const db = require("../db");
 const { PromiseProvider } = require("mongoose");
 
 router.post("/api/registration", async (req, res) => {
-  console.log(req.body);
-
   const { event, values } = req.body;
+  //extract consistent fields from values
+  const { emailAddress, firstName, lastName } = values;
 
   // Add the registered user
   const newRegistration = await db.query(
     `INSERT INTO registration 
-				(event, values)
-			VALUES ($1, $2)
+				(event, values, email, first_name, last_name)
+			VALUES ($1, $2, $3, $4, $5)
 			RETURNING *`,
-    [event, JSON.stringify(values)],
+    [event, JSON.stringify(values), emailAddress, firstName, lastName],
     (err, res) => {
       if (err) {
         res.status(500).json({ message: "Error when saving to database" });
@@ -122,14 +122,10 @@ router.delete("/api/registration/id", async (req, res) => {
 router.post("/api/form", async (req, res) => {
   const { event, data } = req.body;
 
-  console.log(req.body);
-
   const existingForm = await db.query(
     "SELECT * FROM registration_form WHERE event=$1",
     [event]
   );
-
-  console.log(existingForm);
 
   if (existingForm.rowCount == 0) {
     const entry = await db.query(
@@ -158,8 +154,6 @@ router.post("/api/form", async (req, res) => {
 
 router.get("/api/form", async (req, res) => {
   const { event } = req.query;
-
-  console.log(req);
 
   const data = await db.query(
     "SELECT data FROM registration_form WHERE event=$1",

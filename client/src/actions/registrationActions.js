@@ -38,11 +38,14 @@ export const fetchRegistrationForm = (event) => async (dispatch) => {
   }
 };
 
-export const addRegistration = (event, values) => async (dispatch) => {
+export const addRegistration = (event, values, emailAddress) => async (
+  dispatch
+) => {
   try {
     const res = await api.post("/api/registration", {
       event,
       values,
+      emailAddress,
     });
     return true;
   } catch (err) {

@@ -2954,14 +2954,6 @@
 .react-form-builder
   .react-form-builder-preview
   .Sortable
-  .rfb-item.SortableItem
-  .form-group
-  .label-required {
-  margin-left: 5px;
-}
-.react-form-builder
-  .react-form-builder-preview
-  .Sortable
   .rfb-item.SortableItem.is-dragging {
   position: absolute;
   z-index: 1688;
@@ -3288,6 +3280,6 @@ input[type="date"] {
   font-weight: normal;
   display: block;
 }
-.react-form-builder-form .rfb-item .form-group .label-required {
+.form-group .label-required {
   margin-left: 5px;
 }
