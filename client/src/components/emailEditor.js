@@ -40,6 +40,7 @@ const EmailEditor = (props) => {
   const [replyTo, setReplyTo] = useState(
     props.data.reply_to || "no-reply@eventscape.io"
   );
+  const [replyToError, setReplyToError] = useState("");
   const [subject, setSubject] = useState(props.data.subject || "");
   const [days, setDays] = useState(
     Math.abs(Math.floor(props.data.minutes_from_event / 1440))
@@ -83,6 +84,15 @@ const EmailEditor = (props) => {
   const handleChangeReplyTo = (event) => {
     setReplyTo(event.target.value);
   };
+
+  const handleReplyToBlur = () => {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    setReplyToError(
+      re.test(replyTo) ? "" : "Please enter a valid email address"
+    );
+  };
+
   const handleChangeSubject = (event) => {
     setSubject(event.target.value);
   };
@@ -258,7 +268,7 @@ const EmailEditor = (props) => {
                 </div>
               </div>
 
-              <div className="inputDiv">
+              <div className="inputDiv" style={{ flexWrap: "wrap" }}>
                 <label htmlFor="replyTo" className="emailLabel">
                   Reply To:{" "}
                 </label>
@@ -269,8 +279,10 @@ const EmailEditor = (props) => {
                   placeholder=""
                   value={replyTo}
                   onChange={handleChangeReplyTo}
+                  onBlur={handleReplyToBlur}
                 ></input>
                 <br></br>
+                <div className="errorMessage">{replyToError}</div>
               </div>
 
               <div className="inputDiv">
