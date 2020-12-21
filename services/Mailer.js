@@ -4,9 +4,9 @@ const keys = require("../config/keys");
 sgMail.setApiKey(keys.sendGridKey);
 
 const sendEmail = async (email) => {
-  const { from, subject, html } = email;
+  const { to, subject, html } = email;
   const msg = {
-    to: "andrzejewski.d@gmail.com",
+    to,
     from: "david@homehop.ca",
     subject,
     text: html,
@@ -18,10 +18,7 @@ const sendEmail = async (email) => {
     console.log(response);
   } catch (error) {
     console.error(error);
-
-    if (error.response) {
-      console.error(error.response.body);
-    }
+    throw error;
   }
 };
 

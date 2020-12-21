@@ -46,7 +46,7 @@ export const addRegistration = (event, values) => async (dispatch) => {
     });
     return true;
   } catch (err) {
-    toast.error("Error when adding registration: " + err.toString());
+    toast.error("Error when adding registration: " + err.response.data.message);
     return false;
   }
 };

@@ -4,6 +4,7 @@ const Mailer = require("./Mailer");
 const { updateEmailJob } = require("../db/Email");
 
 const scheduleSend = async (emailId, email, sendDate) => {
+  const { to, subject, html } = email;
   console.log(sendDate);
   const newJob = schedule.scheduleJob(
     emailId.toString(),
@@ -12,7 +13,7 @@ const scheduleSend = async (emailId, email, sendDate) => {
       // asign job to the job within node-schedule
       const job = schedule.scheduledJobs[emailId.toString()];
       //send the email when the job is triggered
-      Mailer.sendEmail(email);
+      Mailer.sendEmail({ to, subject, html });
       //  update the database to show that the email has been sent
       updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
 

@@ -28,8 +28,8 @@ import { Hidden } from "@material-ui/core";
 
 import * as actions from "../actions";
 import {
-  recipients as recipientsEnum,
-  status as statusEnum,
+  recipientsOptions,
+  statusOptions,
   requiresScheduledSend,
 } from "../model/enums";
 
@@ -54,9 +54,11 @@ const EmailEditor = (props) => {
   const [html, setHtml] = useState(
     props.data.html || "Your email body goes here"
   );
-  const [status, setStatus] = useState(props.data.status || statusEnum.DRAFT);
+  const [status, setStatus] = useState(
+    props.data.status || statusOptions.DRAFT
+  );
   const [recipients, setRecipients] = useState(
-    props.data.recipients || recipientsEnum.NEW_REGISTRANTS
+    props.data.recipients || recipientsOptions.NEW_REGISTRANTS
   );
 
   useEffect(() => {
@@ -65,7 +67,7 @@ const EmailEditor = (props) => {
 
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
-    if (event.target.value == recipientsEnum.NEW_REGISTRANTS) {
+    if (event.target.value == recipientsOptions.NEW_REGISTRANTS) {
       setDays(0);
       setHours(0);
       setMins(0);
@@ -156,7 +158,10 @@ const EmailEditor = (props) => {
     sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
     // If the send time is in the past, and this is a scheduled send (not for new registrants), display an error message
-    if (sendDate < new Date() && recipients != recipientsEnum.NEW_REGISTRANTS) {
+    if (
+      sendDate < new Date() &&
+      recipients != recipientsOptions.NEW_REGISTRANTS
+    ) {
       setTimeError(
         "This send time is in the past: " +
           sendDate.toLocaleString("en-us", {
@@ -205,9 +210,9 @@ const EmailEditor = (props) => {
                 onChange={handleChangeStatus}
                 input={<BootstrapInput />}
               >
-                <MenuItem value={statusEnum.ACTIVE}>Active</MenuItem>
-                <MenuItem value={statusEnum.DRAFT}>Draft</MenuItem>
-                <MenuItem value={statusEnum.DISABLED}>Disabled</MenuItem>
+                <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
+                <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
+                <MenuItem value={statusOptions.DISABLED}>Disabled</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -232,19 +237,19 @@ const EmailEditor = (props) => {
                       onChange={handleChangeRecipients}
                       input={<BootstrapInput />}
                     >
-                      <MenuItem value={recipientsEnum.EMAIL_LIST}>
+                      <MenuItem value={recipientsOptions.EMAIL_LIST}>
                         Email List
                       </MenuItem>
-                      <MenuItem value={recipientsEnum.NEW_REGISTRANTS}>
+                      <MenuItem value={recipientsOptions.NEW_REGISTRANTS}>
                         New Registrants
                       </MenuItem>
-                      <MenuItem value={recipientsEnum.ALL_REGISTRANTS}>
+                      <MenuItem value={recipientsOptions.ALL_REGISTRANTS}>
                         All Registrants
                       </MenuItem>
                     </Select>
                   </FormControl>
                   <div id="editEmailList">
-                    {recipients === recipientsEnum.EMAIL_LIST ? (
+                    {recipients === recipientsOptions.EMAIL_LIST ? (
                       <EmailList />
                     ) : null}
                   </div>
@@ -285,7 +290,7 @@ const EmailEditor = (props) => {
                   Scheduled Send Time:{" "}
                 </label>
                 <br></br>
-                {recipients === recipientsEnum.NEW_REGISTRANTS ? (
+                {recipients === recipientsOptions.NEW_REGISTRANTS ? (
                   <label className="emailLabel">Upon Registration</label>
                 ) : (
                   <>

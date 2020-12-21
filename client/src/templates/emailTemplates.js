@@ -1,21 +1,21 @@
-import { recipients } from "../model/enums";
+import { recipientsOptions } from "../model/enums";
 
 export const blankEmail = {
   subject: "Your subject goes here",
-  recipients: recipients.ALL_REGISTRANTS,
+  recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: 0,
   html: `Blank email template goes here. This template is used when a user clicks on the add email button`,
 };
 
 export const invitation = {
   subject: "You are Invited To {Event_Name}",
-  recipients: recipients.ALL_REGISTRANTS,
+  recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -10080, // 7 days
   html: `Invitation email template goes here`,
 };
 export const registrationConfirmation = {
   subject: "Thank You for Registering for {Event_Name}",
-  recipients: recipients.NEW_REGISTRANTS,
+  recipients: recipientsOptions.NEW_REGISTRANTS,
   html: `
   <p style="text-align: left">Hello {first_name},</p>
   <p style="text-align: left">Thank you for registering for {event_name}.</p>
@@ -44,21 +44,21 @@ export const registrationConfirmation = {
 
 export const reminderOneDay = {
   subject: "Reminder: {Event_Name} Tomorrow",
-  recipients: recipients.ALL_REGISTRANTS,
+  recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -1440, // 1 day
   html: `Reminder email template goes here`,
 };
 
 export const reminderOneHour = {
   subject: "Reminder: {Event_Name} in One Hour",
-  recipients: recipients.ALL_REGISTRANTS,
+  recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -60, // 1 hour
   html: `Reminder Email Template Goes Here`,
 };
 
 export const followUp = {
   subject: "Thank You for Attending {Event_Name}",
-  recipients: recipients.ALL_REGISTRANTS,
+  recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: 180, // 6 hours
   html: `Thank you email template goes here`,
 };

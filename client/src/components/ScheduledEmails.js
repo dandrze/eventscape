@@ -24,7 +24,7 @@ import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
-import { recipients } from "../model/enums";
+import { recipientsOptions } from "../model/enums";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -64,7 +64,7 @@ function ScheduledEmails(props) {
       return {
         ...email,
         send_date:
-          email.recipients === recipients.NEW_REGISTRANTS
+          email.recipients === recipientsOptions.NEW_REGISTRANTS
             ? "Upon Registration"
             : sendDate.toLocaleString("en-us", {
                 timeZoneName: "short",

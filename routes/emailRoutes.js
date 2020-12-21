@@ -132,7 +132,11 @@ const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
 
   sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
-  Scheduler.scheduleSend(jobName, { from, subject, html }, sendDate);
+  Scheduler.scheduleSend(
+    jobName,
+    { to: "andrzejewski.d@gmail.com", subject, html },
+    sendDate
+  );
 };
 
 module.exports = router;

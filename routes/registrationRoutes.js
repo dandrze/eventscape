@@ -1,7 +1,10 @@
 const express = require("express");
 const router = express.Router();
+const { recipientsOptions } = require("../model/enums");
+const Mailer = require("../services/Mailer");
 
 const db = require("../db");
+const { PromiseProvider } = require("mongoose");
 
 router.post("/api/registration", async (req, res) => {
   console.log(req.body);
@@ -17,11 +20,39 @@ router.post("/api/registration", async (req, res) => {
     [event, JSON.stringify(values)],
     (err, res) => {
       if (err) {
-        throw res.status(500).send(Error);
+        res.status(500).json({ message: "Error when saving to database" });
+        return;
       }
     }
   );
-  if (newRegistration.rows) res.status(200).send(newRegistration.rows[0]);
+
+  // check to see if any emails need to be fired off
+  const registrationEmails = await db.query(
+    `SELECT * FROM email WHERE event=$1 AND recipients=$2`,
+    [event, recipientsOptions.NEW_REGISTRANTS],
+    (err, res) => {
+      if (err) {
+        res.status(500).json({ message: "Error when adding registration." });
+        return;
+      }
+    }
+  );
+
+  for (var email of registrationEmails.rows) {
+    try {
+      const response = await Mailer.sendEmail({
+        to: "andrzejewski.d@gmail.com",
+        subject: email.subject,
+        html: email.html,
+      });
+    } catch (error) {
+      res.status(500).json({ message: "Error when sending email." });
+      return;
+    }
+  }
+
+  //if no errors were triggered and sent (res.status.(500).send()) then everything worked and send the new regsitration
+  res.status(200).send(newRegistration.rows[0]);
 });
 
 router.put("/api/registration", async (req, res) => {
