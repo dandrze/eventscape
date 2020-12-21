@@ -51,15 +51,16 @@ function RegistrationForm(props) {
   const handleSubmit = async (values) => {
     // If there is a custom callback (i.e. editting a registration) use that
     if (props.onSubmitCallback) {
-      props.onSubmitCallback({ ...values, emailAddress, firstName, lastName });
+      props.onSubmitCallback(values, emailAddress, firstName, lastName);
     } else {
       // else use the default workflow
-      const res = await props.addRegistration(props.event.id, {
-        ...values,
+      const res = await props.addRegistration(
+        props.event.id,
+        values,
         emailAddress,
         firstName,
-        lastName,
-      });
+        lastName
+      );
       if (res) {
         setModalText("Thank you for registering for " + props.event.title);
         openModal();

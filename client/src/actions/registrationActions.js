@@ -38,14 +38,20 @@ export const fetchRegistrationForm = (event) => async (dispatch) => {
   }
 };
 
-export const addRegistration = (event, values, emailAddress) => async (
-  dispatch
-) => {
+export const addRegistration = (
+  event,
+  values,
+  emailAddress,
+  firstName,
+  lastName
+) => async (dispatch) => {
   try {
     const res = await api.post("/api/registration", {
       event,
       values,
       emailAddress,
+      firstName,
+      lastName,
     });
     return true;
   } catch (err) {
@@ -54,11 +60,20 @@ export const addRegistration = (event, values, emailAddress) => async (
   }
 };
 
-export const updateRegistration = (id, values) => async (dispatch) => {
+export const updateRegistration = (
+  id,
+  values,
+  emailAddress,
+  firstName,
+  lastName
+) => async (dispatch) => {
   try {
     const res = await api.put("/api/registration", {
       id,
       values: JSON.stringify(values),
+      emailAddress,
+      firstName,
+      lastName,
     });
     toast.success("Registration successfuly modified");
     return true;

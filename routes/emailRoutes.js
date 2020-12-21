@@ -48,27 +48,11 @@ router.post("/api/email", async (req, res) => {
   if (status === "Active" && recipients != recipientsOptions.NEW_REGISTRANTS) {
     const to = [];
 
-    if (recipients === recipientsOptions.ALL_REGISTRANTS) {
-      const emailListResponse = await db.query(
-        "SELECT * FROM registration WHERE event=$1",
-        [event],
-        (err, res) => {
-          if (err) {
-            console.log(err);
-            throw res.status(500).send(err);
-          }
-        }
-      );
-      console.log(emailListResponse.data.rows);
-      //to = emailListResponse.data.rows;
-    } else if (recipients === recipientsOptions.EMAIL_LIST) {
-      to = emailList;
-    }
     scheduleJob(
       newEmail.rows[0].id,
-      { to, replyTo, subject, html, replyTo },
-      sendTo,
-      event
+      { replyTo, subject, html, replyTo, recipients },
+      event,
+      minutesFromEvent
     );
   }
 
@@ -130,7 +114,7 @@ router.put("/api/email", async (req, res) => {
     // create a new job with fresh data
     scheduleJob(
       id.toString(),
-      { replyTo, subject, html },
+      { replyTo, subject, html, recipients },
       updatedEmail.rows[0].event,
       minutesFromEvent
     );
@@ -156,7 +140,7 @@ router.post("api/email/jobs/cancel", async (req, res) => {
 });
 
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
-  const { replyTo, subject, html } = email;
+  const { replyTo, subject, html, recipients } = email;
 
   const event = await getEventFromId(eventId);
 
@@ -166,8 +150,9 @@ const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
 
   Scheduler.scheduleSend(
     jobName,
-    { to: "andrzejewski.d@gmail.com", subject, html, replyTo },
-    sendDate
+    { to: "andrzejewski.d@gmail.com", subject, html, replyTo, recipients },
+    sendDate,
+    eventId
   );
 };
 

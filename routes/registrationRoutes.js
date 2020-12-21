@@ -7,9 +7,7 @@ const db = require("../db");
 const { PromiseProvider } = require("mongoose");
 
 router.post("/api/registration", async (req, res) => {
-  const { event, values } = req.body;
-  //extract consistent fields from values
-  const { emailAddress, firstName, lastName } = values;
+  const { event, values, emailAddress, firstName, lastName } = req.body;
 
   // Add the registered user
   const newRegistration = await db.query(
@@ -57,7 +55,7 @@ router.post("/api/registration", async (req, res) => {
 });
 
 router.put("/api/registration", async (req, res) => {
-  const { id, values } = req.body;
+  const { id, values, emailAddress, firstName, lastName } = req.body;
 
   // Add the registered user
   const newRegistration = await db.query(
