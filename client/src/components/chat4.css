@@ -1,4 +1,4 @@
-.outerContainer {
+.chatOuterContainer {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -7,12 +7,11 @@
   border: 1px solid #efefef;
 }
 
-.container {
+.chatContainer {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   background: #ffffff;
-  border-radius: 8px;
   height: 100%;
   width: 100%;
 }
@@ -24,7 +23,6 @@
   align-items: center;
   justify-content: space-between;
   background: #b0281c;
-  border-radius: 4px 4px 0 0;
   height: 60px;
   width: 100%;
 }
@@ -47,6 +45,7 @@
 #chatText {
   color: white;
   font-family: Roboto, sans-serif;
+  margin-bottom: 0;
 }
 
 .onlineIcon {
@@ -136,6 +135,7 @@
 .form {
   display: flex;
   border-top: 2px solid #d3d3d3;
+  max-height: 60px;
 }
 
 .input {
@@ -156,4 +156,7 @@ select:focus {
 
 .send-button {
   width: 20%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }

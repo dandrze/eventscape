@@ -71,7 +71,7 @@
 	display: flex;
 	justify-content: flex-end;
 	text-align: left;
-	font-family: "San Francisco", Helvetica, Arial, sans-serif;
+	font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
 	font-size: 20px;
 	color: var(--menu-text);
 	text-decoration: none;
@@ -83,4 +83,8 @@
 
 .navbarside_item:hover {
 	background-color: rgb(100, 100, 100);
+}
+
+.force-width {
+	color: transparent;
 }

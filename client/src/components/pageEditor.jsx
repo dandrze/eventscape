@@ -81,14 +81,15 @@ class PageEditor extends Component {
           continueText="Continue"
         />
 
-        <Link to="./design" id="cancelBar">
-          <Tooltip title="Close Editor">
-            <img src={Cancel} id="cancelIcon" height="24px"></img>
+        <Link to="./design" className="cancel-bar">
+          <Tooltip title="Abandon Unsaved Changes">
+            <img src={Cancel} className="cancel-bar-icon"></img>
           </Tooltip>
         </Link>
         <div className="design">
-          <div id="topButtons">
+          <div className="top-button-bar">
             <Link
+              className="button-bar-left"
               to={() =>
                 "/preview/" +
                 this.props.event.id +
@@ -98,20 +99,17 @@ class PageEditor extends Component {
                   : this.props.event.event_page_model)
               }
               target="_blank"
-              id="preview"
             >
               <button className="Button1">Preview Page As Guest</button>
             </Link>
             <button
-              className="Button1"
-              id="save"
+              className="Button1 button-bar-right"
               onClick={this.props.saveModel}
             >
               Save
             </button>
             <button
-              className="Button1"
-              id="publish"
+              className="Button1 button-bar-right"
               onClick={this.props.publishPage}
             >
               Publish
@@ -128,12 +126,6 @@ class PageEditor extends Component {
                 );
               })}
             </ul>
-          </div>
-          <div style={{ color: "#F8F8F8" }}>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
           </div>
         </div>
       </div>

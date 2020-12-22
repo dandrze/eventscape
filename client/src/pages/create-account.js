@@ -4,39 +4,6 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 
-export default class Create_Account extends React.Component {
-	render() {
-		return (
-			<div className="form-box">
-				<h1>
-					Create your<br></br>free account to<br></br>continue.
-				</h1>
-				<EmailPassword />
-				<br></br>
-				<Link to="/event-details">
-					<button className="Button1" type="submit">
-						Create My Account
-					</button>
-				</Link>
-
-				<form action="/login" method="post">
-					<div>
-						<label>Username:</label>
-						<input type="text" name="username" />
-					</div>
-					<div>
-						<label>Password:</label>
-						<input type="password" name="password" />
-					</div>
-					<div>
-						<input type="submit" value="Log In" />
-					</div>
-				</form>
-			</div>
-		);
-	}
-}
-
 const useStyles = makeStyles((theme) => ({
 	formControl: {
 		margin: "20px 0px",
@@ -47,21 +14,56 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function EmailPassword() {
+function Create_Account() {
 	const classes = useStyles();
 
+	const [email, setEmail] = React.useState("");
+	const [password, setPassword] = React.useState("");
+
+	const handleChangeEmail = (event) => {
+		setEmail(event.target.value);
+	};
+
+	const handleChangePassword = (event) => {
+		setPassword(event.target.value);
+	};
+
 	return (
-		<div>
+		<div className="form-box shadow-border">
+			<h1>
+				Create your<br></br>free account to<br></br>continue.
+			</h1>
 			<FormControl variant="outlined" className={classes.formControl}>
-				<TextField type="email" id="email" label="Email" variant="outlined" />
-				<br></br>
+				<TextField 
+					type="email" 
+					id="email" 
+					label="Email" 
+					variant="outlined" 
+					value={email}
+					onChange={handleChangeEmail}
+				/>
+			</FormControl>
+			<br></br>
+			<FormControl variant="outlined" className={classes.formControl}>
 				<TextField
 					type="password"
 					id="password"
 					label="Password"
 					variant="outlined"
+					value={password}
+					onChange={handleChangePassword}
 				/>
 			</FormControl>
+			<br></br>
+			<br></br>
+			<Link to="/event-details">
+				<button className="Button1" type="submit">
+					Create My Account
+				</button>
+			</Link>
 		</div>
 	);
 }
+
+export default Create_Account;
+

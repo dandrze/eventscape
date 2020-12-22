@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
+import { makeStyles } from '@material-ui/core/styles';
+import Fade from '@material-ui/core/Fade';
 
 import NavBar3 from "../components/navBar3.js";
 import ScheduledEmails from "../components/ScheduledEmails.js";
@@ -9,7 +11,24 @@ import EmailEditor from "../components/emailEditor";
 import * as actions from "../actions";
 import { blankEmail } from "../templates/emailTemplates";
 
+const useStyles = makeStyles((theme) => ({
+  modal: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    outline: 'none',
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: '2px solid #000',
+    boxShadow: theme.shadows[5],
+    padding: '0px',
+  },
+}));
+
 const Communication = (props) => {
+  const classes = useStyles();
+
   const [openEditor, setOpenEditor] = useState(false);
   const [data, setData] = useState({});
 
@@ -67,6 +86,7 @@ const Communication = (props) => {
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
+        className={classes.modal}
         open={openEditor}
         onClose={handleCloseEditor}
         closeAfterTransition
@@ -76,11 +96,15 @@ const Communication = (props) => {
         }}
         disableAutoFocus={true}
       >
-        <EmailEditor
-          handleClose={handleCloseEditor}
-          handleSubmit={handleSubmitEditor}
-          data={data}
-        />
+        <Fade in={openEditor}>
+          <div className={classes.paper}>
+            <EmailEditor
+              handleClose={handleCloseEditor}
+              handleSubmit={handleSubmitEditor}
+              data={data}
+            />
+          </div>
+        </Fade>
       </Modal>
       <NavBar3
         displaySideNav="true"

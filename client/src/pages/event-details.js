@@ -185,8 +185,8 @@ function Event_Details(props) {
         closeText="Cancel"
         continueText="OK"
       />
-      <h1>My Event Details</h1>
-      <div className="form-box shadow-border">
+      <h1 className="title">My Event Details</h1>
+      <div className="form-box shadow-border event-details-box">
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Event Title */}
           <TextField
@@ -197,12 +197,14 @@ function Event_Details(props) {
             onChange={handleChangeEventTitle}
           />
           <br></br>
-
+        </FormControl>
+        <FormControl variant="outlined" className={classes.formControl}>
           {/* Event Link */}
           <TextField
             id="event-link"
             label="Event Link"
             variant="outlined"
+            placeholder="myevent"
             value={eventLink}
             onChange={handleChangeEventLink}
             onBlur={handleChangeEventLinkBlur}
@@ -253,67 +255,83 @@ function Event_Details(props) {
 
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
           {/* Start Date & Time */}
-          <Grid container spacing={2}>
+          <Grid container spacing={0}>
             <Grid item xs={6} id="date-time-container">
-              <KeyboardDatePicker
-                label="Start Date"
-                disableToolbar
-                inputVariant="outlined"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="event-start-date"
-                value={selectedStartDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
+              <div id="date-left">
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <KeyboardDatePicker
+                    label="Start Date"
+                    disableToolbar
+                    inputVariant="outlined"
+                    format="MM/dd/yyyy"
+                    margin="none"
+                    id="event-start-date"
+                    value={selectedStartDate}
+                    onChange={handleStartDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </FormControl>
+              </div>
             </Grid>
             <Grid item xs={6} id="date-time-container">
-              <KeyboardTimePicker
-                label="Start Time"
-                margin="normal"
-                id="event-start-time"
-                inputVariant="outlined"
-                value={selectedStartDate}
-                onChange={handleStartDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-              />
+              <div id="date-right">
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <KeyboardTimePicker
+                    label="Start Time"
+                    margin="none"
+                    id="event-start-time"
+                    inputVariant="outlined"
+                    value={selectedStartDate}
+                    onChange={handleStartDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                  />
+                </FormControl>
+              </div>
             </Grid>
           </Grid>
 
           {/* End Date & Time */}
-          <Grid container spacing={2}>
+          <Grid container spacing={0}>
             <Grid item xs={6} id="date-time-container">
-              <KeyboardDatePicker
-                label="End Date"
-                disableToolbar
-                inputVariant="outlined"
-                variant="inline"
-                format="MM/dd/yyyy"
-                margin="normal"
-                id="event-end-date"
-                value={selectedEndDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change date",
-                }}
-              />
+              <div id="date-left">
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <KeyboardDatePicker
+                    label="End Date"
+                    disableToolbar
+                    inputVariant="outlined"
+                    variant="inline"
+                    format="MM/dd/yyyy"
+                    margin="none"
+                    id="event-end-date"
+                    value={selectedEndDate}
+                    onChange={handleEndDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change date",
+                    }}
+                  />
+                </FormControl>
+              </div>
             </Grid>
             <Grid item xs={6} id="date-time-container">
-              <KeyboardTimePicker
-                label="End Time"
-                margin="normal"
-                id="event-end-time"
-                inputVariant="outlined"
-                value={selectedEndDate}
-                onChange={handleEndDateChange}
-                KeyboardButtonProps={{
-                  "aria-label": "change time",
-                }}
-              />
+              <div id="date-right">
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <KeyboardTimePicker
+                    label="End Time"
+                    margin="none"
+                    id="event-end-time"
+                    inputVariant="outlined"
+                    value={selectedEndDate}
+                    onChange={handleEndDateChange}
+                    KeyboardButtonProps={{
+                      "aria-label": "change time",
+                    }}
+                  />
+                </FormControl>
+              </div>
             </Grid>
           </Grid>
         </MuiPickersUtilsProvider>
@@ -333,7 +351,6 @@ function Event_Details(props) {
             <MenuItem value={"Africa/Addis_Ababa"}>Africa/Addis_Ababa</MenuItem>
             <MenuItem value={"Africa/Algiers"}>Africa/Algiers</MenuItem>
             <MenuItem value={"Africa/Asmara"}>Africa/Asmara</MenuItem>
-            <MenuItem value={"Africa/Asmera"}>Africa/Asmera</MenuItem>
             <MenuItem value={"Africa/Bamako"}>Africa/Bamako</MenuItem>
             <MenuItem value={"Africa/Bangui"}>Africa/Bangui</MenuItem>
             <MenuItem value={"Africa/Banjul"}>Africa/Banjul</MenuItem>
@@ -382,7 +399,6 @@ function Event_Details(props) {
             <MenuItem value={"Africa/Ouagadougou"}>Africa/Ouagadougou</MenuItem>
             <MenuItem value={"Africa/Porto-Novo"}>Africa/Porto-Novo</MenuItem>
             <MenuItem value={"Africa/Sao_Tome"}>Africa/Sao_Tome</MenuItem>
-            <MenuItem value={"Africa/Timbuktu"}>Africa/Timbuktu</MenuItem>
             <MenuItem value={"Africa/Tripoli"}>Africa/Tripoli</MenuItem>
             <MenuItem value={"Africa/Tunis"}>Africa/Tunis</MenuItem>
             <MenuItem value={"Africa/Windhoek"}>Africa/Windhoek</MenuItem>
@@ -391,9 +407,6 @@ function Event_Details(props) {
             <MenuItem value={"America/Anguilla"}>America/Anguilla</MenuItem>
             <MenuItem value={"America/Antigua"}>America/Antigua</MenuItem>
             <MenuItem value={"America/Araguaina"}>America/Araguaina</MenuItem>
-            <MenuItem value={"America/Argentina/Buenos_Aires"}>
-              America/Argentina/Buenos_Aires
-            </MenuItem>
             <MenuItem value={"America/Argentina/Catamarca"}>
               America/Argentina/Catamarca
             </MenuItem>
@@ -432,8 +445,7 @@ function Event_Details(props) {
             </MenuItem>
             <MenuItem value={"America/Aruba"}>America/Aruba</MenuItem>
             <MenuItem value={"America/Asuncion"}>America/Asuncion</MenuItem>
-            <MenuItem value={"America/Atikokan"}>America/Atikokan</MenuItem>
-            <MenuItem value={"America/Atka"}>America/Atka</MenuItem>
+            <MenuItem value={"America/Atikokan"}>Canada/Atikokan</MenuItem>
             <MenuItem value={"America/Bahia"}>America/Bahia</MenuItem>
             <MenuItem value={"America/Bahia_Banderas"}>
               America/Bahia_Banderas
@@ -442,71 +454,57 @@ function Event_Details(props) {
             <MenuItem value={"America/Belem"}>America/Belem</MenuItem>
             <MenuItem value={"America/Belize"}>America/Belize</MenuItem>
             <MenuItem value={"America/Blanc-Sablon"}>
-              America/Blanc-Sablon
+              Canada/Blanc-Sablon
             </MenuItem>
             <MenuItem value={"America/Boa_Vista"}>America/Boa_Vista</MenuItem>
             <MenuItem value={"America/Bogota"}>America/Bogota</MenuItem>
             <MenuItem value={"America/Boise"}>America/Boise</MenuItem>
-            <MenuItem value={"America/Buenos_Aires"}>
-              America/Buenos_Aires
-            </MenuItem>
             <MenuItem value={"America/Cambridge_Bay"}>
-              America/Cambridge_Bay
+              Canada/Cambridge_Bay
             </MenuItem>
             <MenuItem value={"America/Campo_Grande"}>
               America/Campo_Grande
             </MenuItem>
             <MenuItem value={"America/Cancun"}>America/Cancun</MenuItem>
             <MenuItem value={"America/Caracas"}>America/Caracas</MenuItem>
-            <MenuItem value={"America/Catamarca"}>America/Catamarca</MenuItem>
             <MenuItem value={"America/Cayenne"}>America/Cayenne</MenuItem>
             <MenuItem value={"America/Cayman"}>America/Cayman</MenuItem>
             <MenuItem value={"America/Chicago"}>America/Chicago</MenuItem>
             <MenuItem value={"America/Chihuahua"}>America/Chihuahua</MenuItem>
-            <MenuItem value={"America/Coral_Harbour"}>
-              America/Coral_Harbour
-            </MenuItem>
-            <MenuItem value={"America/Cordoba"}>America/Cordoba</MenuItem>
             <MenuItem value={"America/Costa_Rica"}>America/Costa_Rica</MenuItem>
-            <MenuItem value={"America/Creston"}>America/Creston</MenuItem>
+            <MenuItem value={"America/Creston"}>Canada/Creston</MenuItem>
             <MenuItem value={"America/Cuiaba"}>America/Cuiaba</MenuItem>
             <MenuItem value={"America/Curacao"}>America/Curacao</MenuItem>
             <MenuItem value={"America/Danmarkshavn"}>
               America/Danmarkshavn
             </MenuItem>
-            <MenuItem value={"America/Dawson"}>America/Dawson</MenuItem>
+            <MenuItem value={"America/Dawson"}>Canada/Dawson</MenuItem>
             <MenuItem value={"America/Dawson_Creek"}>
-              America/Dawson_Creek
+              Canada/Dawson_Creek
             </MenuItem>
             <MenuItem value={"America/Denver"}>America/Denver</MenuItem>
             <MenuItem value={"America/Detroit"}>America/Detroit</MenuItem>
             <MenuItem value={"America/Dominica"}>America/Dominica</MenuItem>
-            <MenuItem value={"America/Edmonton"}>America/Edmonton</MenuItem>
+            <MenuItem value={"America/Edmonton"}>Canada/Edmonton</MenuItem>
             <MenuItem value={"America/Eirunepe"}>America/Eirunepe</MenuItem>
             <MenuItem value={"America/El_Salvador"}>
               America/El_Salvador
             </MenuItem>
-            <MenuItem value={"America/Ensenada"}>America/Ensenada</MenuItem>
             <MenuItem value={"America/Fort_Nelson"}>
-              America/Fort_Nelson
+              Canada/Fort_Nelson
             </MenuItem>
-            <MenuItem value={"America/Fort_Wayne"}>America/Fort_Wayne</MenuItem>
             <MenuItem value={"America/Fortaleza"}>America/Fortaleza</MenuItem>
-            <MenuItem value={"America/Glace_Bay"}>America/Glace_Bay</MenuItem>
-            <MenuItem value={"America/Godthab"}>America/Godthab</MenuItem>
-            <MenuItem value={"America/Goose_Bay"}>America/Goose_Bay</MenuItem>
+            <MenuItem value={"America/Glace_Bay"}>Canada/Glace_Bay</MenuItem>
+            <MenuItem value={"America/Goose_Bay"}>Canada/Goose_Bay</MenuItem>
             <MenuItem value={"America/Grand_Turk"}>America/Grand_Turk</MenuItem>
             <MenuItem value={"America/Grenada"}>America/Grenada</MenuItem>
             <MenuItem value={"America/Guadeloupe"}>America/Guadeloupe</MenuItem>
             <MenuItem value={"America/Guatemala"}>America/Guatemala</MenuItem>
             <MenuItem value={"America/Guayaquil"}>America/Guayaquil</MenuItem>
             <MenuItem value={"America/Guyana"}>America/Guyana</MenuItem>
-            <MenuItem value={"America/Halifax"}>America/Halifax</MenuItem>
+            <MenuItem value={"America/Halifax"}>Canada/Halifax</MenuItem>
             <MenuItem value={"America/Havana"}>America/Havana</MenuItem>
             <MenuItem value={"America/Hermosillo"}>America/Hermosillo</MenuItem>
-            <MenuItem value={"America/Indiana/Indianapolis"}>
-              America/Indiana/Indianapolis
-            </MenuItem>
             <MenuItem value={"America/Indiana/Knox"}>
               America/Indiana/Knox
             </MenuItem>
@@ -531,10 +529,9 @@ function Event_Details(props) {
             <MenuItem value={"America/Indianapolis"}>
               America/Indianapolis
             </MenuItem>
-            <MenuItem value={"America/Inuvik"}>America/Inuvik</MenuItem>
+            <MenuItem value={"America/Inuvik"}>Canada/Inuvik</MenuItem>
             <MenuItem value={"America/Iqaluit"}>America/Iqaluit</MenuItem>
             <MenuItem value={"America/Jamaica"}>America/Jamaica</MenuItem>
-            <MenuItem value={"America/Jujuy"}>America/Jujuy</MenuItem>
             <MenuItem value={"America/Juneau"}>America/Juneau</MenuItem>
             <MenuItem value={"America/Kentucky/Louisville"}>
               America/Kentucky/Louisville
@@ -542,14 +539,12 @@ function Event_Details(props) {
             <MenuItem value={"America/Kentucky/Monticello"}>
               America/Kentucky/Monticello
             </MenuItem>
-            <MenuItem value={"America/Knox_IN"}>America/Knox_IN</MenuItem>
             <MenuItem value={"America/Kralendijk"}>America/Kralendijk</MenuItem>
             <MenuItem value={"America/La_Paz"}>America/La_Paz</MenuItem>
             <MenuItem value={"America/Lima"}>America/Lima</MenuItem>
             <MenuItem value={"America/Los_Angeles"}>
               America/Los_Angeles
             </MenuItem>
-            <MenuItem value={"America/Louisville"}>America/Louisville</MenuItem>
             <MenuItem value={"America/Lower_Princes"}>
               America/Lower_Princes
             </MenuItem>
@@ -560,7 +555,6 @@ function Event_Details(props) {
             <MenuItem value={"America/Martinique"}>America/Martinique</MenuItem>
             <MenuItem value={"America/Matamoros"}>America/Matamoros</MenuItem>
             <MenuItem value={"America/Mazatlan"}>America/Mazatlan</MenuItem>
-            <MenuItem value={"America/Mendoza"}>America/Mendoza</MenuItem>
             <MenuItem value={"America/Menominee"}>America/Menominee</MenuItem>
             <MenuItem value={"America/Merida"}>America/Merida</MenuItem>
             <MenuItem value={"America/Metlakatla"}>America/Metlakatla</MenuItem>
@@ -568,14 +562,13 @@ function Event_Details(props) {
               America/Mexico_City
             </MenuItem>
             <MenuItem value={"America/Miquelon"}>America/Miquelon</MenuItem>
-            <MenuItem value={"America/Moncton"}>America/Moncton</MenuItem>
+            <MenuItem value={"America/Moncton"}>Canada/Moncton</MenuItem>
             <MenuItem value={"America/Monterrey"}>America/Monterrey</MenuItem>
             <MenuItem value={"America/Montevideo"}>America/Montevideo</MenuItem>
-            <MenuItem value={"America/Montreal"}>America/Montreal</MenuItem>
             <MenuItem value={"America/Montserrat"}>America/Montserrat</MenuItem>
             <MenuItem value={"America/Nassau"}>America/Nassau</MenuItem>
             <MenuItem value={"America/New_York"}>America/New_York</MenuItem>
-            <MenuItem value={"America/Nipigon"}>America/Nipigon</MenuItem>
+            <MenuItem value={"America/Nipigon"}>Canada/Nipigon</MenuItem>
             <MenuItem value={"America/Nome"}>America/Nome</MenuItem>
             <MenuItem value={"America/Noronha"}>America/Noronha</MenuItem>
             <MenuItem value={"America/North_Dakota/Beulah"}>
@@ -591,7 +584,7 @@ function Event_Details(props) {
             <MenuItem value={"America/Ojinaga"}>America/Ojinaga</MenuItem>
             <MenuItem value={"America/Panama"}>America/Panama</MenuItem>
             <MenuItem value={"America/Pangnirtung"}>
-              America/Pangnirtung
+              Canada/Pangnirtung
             </MenuItem>
             <MenuItem value={"America/Paramaribo"}>America/Paramaribo</MenuItem>
             <MenuItem value={"America/Phoenix"}>America/Phoenix</MenuItem>
@@ -601,7 +594,6 @@ function Event_Details(props) {
             <MenuItem value={"America/Port_of_Spain"}>
               America/Port_of_Spain
             </MenuItem>
-            <MenuItem value={"America/Porto_Acre"}>America/Porto_Acre</MenuItem>
             <MenuItem value={"America/Porto_Velho"}>
               America/Porto_Velho
             </MenuItem>
@@ -612,19 +604,15 @@ function Event_Details(props) {
               America/Punta_Arenas
             </MenuItem>
             <MenuItem value={"America/Rainy_River"}>
-              America/Rainy_River
+              Canada/Rainy_River
             </MenuItem>
             <MenuItem value={"America/Rankin_Inlet"}>
-              America/Rankin_Inlet
+              Canada/Rankin_Inlet
             </MenuItem>
             <MenuItem value={"America/Recife"}>America/Recife</MenuItem>
-            <MenuItem value={"America/Regina"}>America/Regina</MenuItem>
-            <MenuItem value={"America/Resolute"}>America/Resolute</MenuItem>
+            <MenuItem value={"America/Regina"}>Canada/Regina</MenuItem>
+            <MenuItem value={"America/Resolute"}>Canada/Resolute</MenuItem>
             <MenuItem value={"America/Rio_Branco"}>America/Rio_Branco</MenuItem>
-            <MenuItem value={"America/Rosario"}>America/Rosario</MenuItem>
-            <MenuItem value={"America/Santa_Isabel"}>
-              America/Santa_Isabel
-            </MenuItem>
             <MenuItem value={"America/Santarem"}>America/Santarem</MenuItem>
             <MenuItem value={"America/Santiago"}>America/Santiago</MenuItem>
             <MenuItem value={"America/Santo_Domingo"}>
@@ -634,31 +622,29 @@ function Event_Details(props) {
             <MenuItem value={"America/Scoresbysund"}>
               America/Scoresbysund
             </MenuItem>
-            <MenuItem value={"America/Shiprock"}>America/Shiprock</MenuItem>
             <MenuItem value={"America/Sitka"}>America/Sitka</MenuItem>
             <MenuItem value={"America/St_Barthelemy"}>
               America/St_Barthelemy
             </MenuItem>
-            <MenuItem value={"America/St_Johns"}>America/St_Johns</MenuItem>
+            <MenuItem value={"America/St_Johns"}>Canada/St_Johns</MenuItem>
             <MenuItem value={"America/St_Kitts"}>America/St_Kitts</MenuItem>
             <MenuItem value={"America/St_Lucia"}>America/St_Lucia</MenuItem>
             <MenuItem value={"America/St_Thomas"}>America/St_Thomas</MenuItem>
             <MenuItem value={"America/St_Vincent"}>America/St_Vincent</MenuItem>
             <MenuItem value={"America/Swift_Current"}>
-              America/Swift_Current
+              Canada/Swift_Current
             </MenuItem>
             <MenuItem value={"America/Tegucigalpa"}>
               America/Tegucigalpa
             </MenuItem>
             <MenuItem value={"America/Thule"}>America/Thule</MenuItem>
             <MenuItem value={"America/Thunder_Bay"}>
-              America/Thunder_Bay
+              Canada/Thunder_Bay
             </MenuItem>
             <MenuItem value={"America/Tijuana"}>America/Tijuana</MenuItem>
             <MenuItem value={"America/Toronto"}>Canada/Toronto</MenuItem>
             <MenuItem value={"America/Tortola"}>America/Tortola</MenuItem>
             <MenuItem value={"America/Vancouver"}>Canada/Vancouver</MenuItem>
-            <MenuItem value={"America/Virgin"}>America/Virgin</MenuItem>
             <MenuItem value={"America/Whitehorse"}>Canada/Whitehorse</MenuItem>
             <MenuItem value={"America/Winnipeg"}>Canada/Winnipeg</MenuItem>
             <MenuItem value={"America/Yakutat"}>America/Yakutat</MenuItem>
@@ -677,9 +663,6 @@ function Event_Details(props) {
             <MenuItem value={"Antarctica/McMurdo"}>Antarctica/McMurdo</MenuItem>
             <MenuItem value={"Antarctica/Palmer"}>Antarctica/Palmer</MenuItem>
             <MenuItem value={"Antarctica/Rothera"}>Antarctica/Rothera</MenuItem>
-            <MenuItem value={"Antarctica/South_Pole"}>
-              Antarctica/South_Pole
-            </MenuItem>
             <MenuItem value={"Antarctica/Syowa"}>Antarctica/Syowa</MenuItem>
             <MenuItem value={"Antarctica/Troll"}>Antarctica/Troll</MenuItem>
             <MenuItem value={"Antarctica/Vostok"}>Antarctica/Vostok</MenuItem>
@@ -693,7 +676,6 @@ function Event_Details(props) {
             <MenuItem value={"Asia/Aqtau"}>Asia/Aqtau</MenuItem>
             <MenuItem value={"Asia/Aqtobe"}>Asia/Aqtobe</MenuItem>
             <MenuItem value={"Asia/Ashgabat"}>Asia/Ashgabat</MenuItem>
-            <MenuItem value={"Asia/Ashkhabad"}>Asia/Ashkhabad</MenuItem>
             <MenuItem value={"Asia/Atyrau"}>Asia/Atyrau</MenuItem>
             <MenuItem value={"Asia/Baghdad"}>Asia/Baghdad</MenuItem>
             <MenuItem value={"Asia/Bahrain"}>Asia/Bahrain</MenuItem>
@@ -703,13 +685,9 @@ function Event_Details(props) {
             <MenuItem value={"Asia/Beirut"}>Asia/Beirut</MenuItem>
             <MenuItem value={"Asia/Bishkek"}>Asia/Bishkek</MenuItem>
             <MenuItem value={"Asia/Brunei"}>Asia/Brunei</MenuItem>
-            <MenuItem value={"Asia/Calcutta"}>Asia/Calcutta</MenuItem>
             <MenuItem value={"Asia/Chita"}>Asia/Chita</MenuItem>
             <MenuItem value={"Asia/Choibalsan"}>Asia/Choibalsan</MenuItem>
-            <MenuItem value={"Asia/Chongqing"}>Asia/Chongqing</MenuItem>
-            <MenuItem value={"Asia/Chungking"}>Asia/Chungking</MenuItem>
             <MenuItem value={"Asia/Colombo"}>Asia/Colombo</MenuItem>
-            <MenuItem value={"Asia/Dacca"}>Asia/Dacca</MenuItem>
             <MenuItem value={"Asia/Damascus"}>Asia/Damascus</MenuItem>
             <MenuItem value={"Asia/Dhaka"}>Asia/Dhaka</MenuItem>
             <MenuItem value={"Asia/Dili"}>Asia/Dili</MenuItem>
@@ -717,7 +695,6 @@ function Event_Details(props) {
             <MenuItem value={"Asia/Dushanbe"}>Asia/Dushanbe</MenuItem>
             <MenuItem value={"Asia/Famagusta"}>Asia/Famagusta</MenuItem>
             <MenuItem value={"Asia/Gaza"}>Asia/Gaza</MenuItem>
-            <MenuItem value={"Asia/Harbin"}>Asia/Harbin</MenuItem>
             <MenuItem value={"Asia/Hebron"}>Asia/Hebron</MenuItem>
             <MenuItem value={"Asia/Ho_Chi_Minh"}>Asia/Ho_Chi_Minh</MenuItem>
             <MenuItem value={"Asia/Hong_Kong"}>Asia/Hong_Kong</MenuItem>
@@ -730,16 +707,13 @@ function Event_Details(props) {
             <MenuItem value={"Asia/Kabul"}>Asia/Kabul</MenuItem>
             <MenuItem value={"Asia/Kamchatka"}>Asia/Kamchatka</MenuItem>
             <MenuItem value={"Asia/Karachi"}>Asia/Karachi</MenuItem>
-            <MenuItem value={"Asia/Kashgar"}>Asia/Kashgar</MenuItem>
             <MenuItem value={"Asia/Kathmandu"}>Asia/Kathmandu</MenuItem>
-            <MenuItem value={"Asia/Katmandu"}>Asia/Katmandu</MenuItem>
             <MenuItem value={"Asia/Khandyga"}>Asia/Khandyga</MenuItem>
             <MenuItem value={"Asia/Kolkata"}>Asia/Kolkata</MenuItem>
             <MenuItem value={"Asia/Krasnoyarsk"}>Asia/Krasnoyarsk</MenuItem>
             <MenuItem value={"Asia/Kuala_Lumpur"}>Asia/Kuala_Lumpur</MenuItem>
             <MenuItem value={"Asia/Kuching"}>Asia/Kuching</MenuItem>
             <MenuItem value={"Asia/Kuwait"}>Asia/Kuwait</MenuItem>
-            <MenuItem value={"Asia/Macao"}>Asia/Macao</MenuItem>
             <MenuItem value={"Asia/Macau"}>Asia/Macau</MenuItem>
             <MenuItem value={"Asia/Magadan"}>Asia/Magadan</MenuItem>
             <MenuItem value={"Asia/Makassar"}>Asia/Makassar</MenuItem>
@@ -756,9 +730,7 @@ function Event_Details(props) {
             <MenuItem value={"Asia/Qatar"}>Asia/Qatar</MenuItem>
             <MenuItem value={"Asia/Qostanay"}>Asia/Qostanay</MenuItem>
             <MenuItem value={"Asia/Qyzylorda"}>Asia/Qyzylorda</MenuItem>
-            <MenuItem value={"Asia/Rangoon"}>Asia/Rangoon</MenuItem>
             <MenuItem value={"Asia/Riyadh"}>Asia/Riyadh</MenuItem>
-            <MenuItem value={"Asia/Saigon"}>Asia/Saigon</MenuItem>
             <MenuItem value={"Asia/Sakhalin"}>Asia/Sakhalin</MenuItem>
             <MenuItem value={"Asia/Samarkand"}>Asia/Samarkand</MenuItem>
             <MenuItem value={"Asia/Seoul"}>Asia/Seoul</MenuItem>
@@ -769,14 +741,10 @@ function Event_Details(props) {
             <MenuItem value={"Asia/Tashkent"}>Asia/Tashkent</MenuItem>
             <MenuItem value={"Asia/Tbilisi"}>Asia/Tbilisi</MenuItem>
             <MenuItem value={"Asia/Tehran"}>Asia/Tehran</MenuItem>
-            <MenuItem value={"Asia/Tel_Aviv"}>Asia/Tel_Aviv</MenuItem>
-            <MenuItem value={"Asia/Thimbu"}>Asia/Thimbu</MenuItem>
             <MenuItem value={"Asia/Thimphu"}>Asia/Thimphu</MenuItem>
             <MenuItem value={"Asia/Tokyo"}>Asia/Tokyo</MenuItem>
             <MenuItem value={"Asia/Tomsk"}>Asia/Tomsk</MenuItem>
-            <MenuItem value={"Asia/Ujung_Pandang"}>Asia/Ujung_Pandang</MenuItem>
             <MenuItem value={"Asia/Ulaanbaatar"}>Asia/Ulaanbaatar</MenuItem>
-            <MenuItem value={"Asia/Ulan_Bator"}>Asia/Ulan_Bator</MenuItem>
             <MenuItem value={"Asia/Urumqi"}>Asia/Urumqi</MenuItem>
             <MenuItem value={"Asia/Ust-Nera"}>Asia/Ust-Nera</MenuItem>
             <MenuItem value={"Asia/Vientiane"}>Asia/Vientiane</MenuItem>
@@ -791,9 +759,7 @@ function Event_Details(props) {
             <MenuItem value={"Atlantic/Cape_Verde"}>
               Atlantic/Cape_Verde
             </MenuItem>
-            <MenuItem value={"Atlantic/Faeroe"}>Atlantic/Faeroe</MenuItem>
             <MenuItem value={"Atlantic/Faroe"}>Atlantic/Faroe</MenuItem>
-            <MenuItem value={"Atlantic/Jan_Mayen"}>Atlantic/Jan_Mayen</MenuItem>
             <MenuItem value={"Atlantic/Madeira"}>Atlantic/Madeira</MenuItem>
             <MenuItem value={"Atlantic/Reykjavik"}>Atlantic/Reykjavik</MenuItem>
             <MenuItem value={"Atlantic/South_Georgia"}>
@@ -801,18 +767,15 @@ function Event_Details(props) {
             </MenuItem>
             <MenuItem value={"Atlantic/St_Helena"}>Atlantic/St_Helena</MenuItem>
             <MenuItem value={"Atlantic/Stanley"}>Atlantic/Stanley</MenuItem>
-            <MenuItem value={"Australia/ACT"}>Australia/ACT</MenuItem>
             <MenuItem value={"Australia/Adelaide"}>Australia/Adelaide</MenuItem>
             <MenuItem value={"Australia/Brisbane"}>Australia/Brisbane</MenuItem>
             <MenuItem value={"Australia/Broken_Hill"}>
               Australia/Broken_Hill
             </MenuItem>
-            <MenuItem value={"Australia/Canberra"}>Australia/Canberra</MenuItem>
             <MenuItem value={"Australia/Currie"}>Australia/Currie</MenuItem>
             <MenuItem value={"Australia/Darwin"}>Australia/Darwin</MenuItem>
             <MenuItem value={"Australia/Eucla"}>Australia/Eucla</MenuItem>
             <MenuItem value={"Australia/Hobart"}>Australia/Hobart</MenuItem>
-            <MenuItem value={"Australia/LHI"}>Australia/LHI</MenuItem>
             <MenuItem value={"Australia/Lindeman"}>Australia/Lindeman</MenuItem>
             <MenuItem value={"Australia/Lord_Howe"}>
               Australia/Lord_Howe
@@ -820,46 +783,8 @@ function Event_Details(props) {
             <MenuItem value={"Australia/Melbourne"}>
               Australia/Melbourne
             </MenuItem>
-            <MenuItem value={"Australia/NSW"}>Australia/NSW</MenuItem>
-            <MenuItem value={"Australia/North"}>Australia/North</MenuItem>
             <MenuItem value={"Australia/Perth"}>Australia/Perth</MenuItem>
-            <MenuItem value={"Australia/Queensland"}>
-              Australia/Queensland
-            </MenuItem>
-            <MenuItem value={"Australia/South"}>Australia/South</MenuItem>
             <MenuItem value={"Australia/Sydney"}>Australia/Sydney</MenuItem>
-            <MenuItem value={"Australia/Tasmania"}>Australia/Tasmania</MenuItem>
-            <MenuItem value={"Australia/Victoria"}>Australia/Victoria</MenuItem>
-            <MenuItem value={"Australia/West"}>Australia/West</MenuItem>
-            <MenuItem value={"Australia/Yancowinna"}>
-              Australia/Yancowinna
-            </MenuItem>
-            <MenuItem value={"Brazil/Acre"}>Brazil/Acre</MenuItem>
-            <MenuItem value={"Brazil/DeNoronha"}>Brazil/DeNoronha</MenuItem>
-            <MenuItem value={"Brazil/East"}>Brazil/East</MenuItem>
-            <MenuItem value={"Brazil/West"}>Brazil/West</MenuItem>
-            <MenuItem value={"CET"}>CET</MenuItem>
-            <MenuItem value={"CST6CDT"}>CST6CDT</MenuItem>
-            <MenuItem value={"Canada/Atlantic"}>Canada/Atlantic</MenuItem>
-            <MenuItem value={"Canada/Central"}>Canada/Central</MenuItem>
-            <MenuItem value={"Canada/Eastern"}>Canada/Eastern</MenuItem>
-            <MenuItem value={"Canada/Mountain"}>Canada/Mountain</MenuItem>
-            <MenuItem value={"Canada/Newfoundland"}>
-              Canada/Newfoundland
-            </MenuItem>
-            <MenuItem value={"Canada/Pacific"}>Canada/Pacific</MenuItem>
-            <MenuItem value={"Canada/Saskatchewan"}>
-              Canada/Saskatchewan
-            </MenuItem>
-            <MenuItem value={"Canada/Yukon"}>Canada/Yukon</MenuItem>
-            <MenuItem value={"Chile/Continental"}>Chile/Continental</MenuItem>
-            <MenuItem value={"Chile/EasterIsland"}>Chile/EasterIsland</MenuItem>
-            <MenuItem value={"Cuba"}>Cuba</MenuItem>
-            <MenuItem value={"EET"}>EET</MenuItem>
-            <MenuItem value={"EST"}>EST</MenuItem>
-            <MenuItem value={"EST5EDT"}>EST5EDT</MenuItem>
-            <MenuItem value={"Egypt"}>Egypt</MenuItem>
-            <MenuItem value={"Eire"}>Eire</MenuItem>
             <MenuItem value={"Etc/GMT"}>Etc/GMT</MenuItem>
             <MenuItem value={"Etc/GMT+0"}>Etc/GMT+0</MenuItem>
             <MenuItem value={"Etc/GMT+1"}>Etc/GMT+1</MenuItem>
@@ -890,16 +815,11 @@ function Event_Details(props) {
             <MenuItem value={"Etc/GMT-8"}>Etc/GMT-8</MenuItem>
             <MenuItem value={"Etc/GMT-9"}>Etc/GMT-9</MenuItem>
             <MenuItem value={"Etc/GMT0"}>Etc/GMT0</MenuItem>
-            <MenuItem value={"Etc/Greenwich"}>Etc/Greenwich</MenuItem>
             <MenuItem value={"Etc/UCT"}>Etc/UCT</MenuItem>
-            <MenuItem value={"Etc/UTC"}>Etc/UTC</MenuItem>
-            <MenuItem value={"Etc/Universal"}>Etc/Universal</MenuItem>
-            <MenuItem value={"Etc/Zulu"}>Etc/Zulu</MenuItem>
             <MenuItem value={"Europe/Amsterdam"}>Europe/Amsterdam</MenuItem>
             <MenuItem value={"Europe/Andorra"}>Europe/Andorra</MenuItem>
             <MenuItem value={"Europe/Astrakhan"}>Europe/Astrakhan</MenuItem>
             <MenuItem value={"Europe/Athens"}>Europe/Athens</MenuItem>
-            <MenuItem value={"Europe/Belfast"}>Europe/Belfast</MenuItem>
             <MenuItem value={"Europe/Belgrade"}>Europe/Belgrade</MenuItem>
             <MenuItem value={"Europe/Berlin"}>Europe/Berlin</MenuItem>
             <MenuItem value={"Europe/Bratislava"}>Europe/Bratislava</MenuItem>
@@ -946,7 +866,6 @@ function Event_Details(props) {
             <MenuItem value={"Europe/Stockholm"}>Europe/Stockholm</MenuItem>
             <MenuItem value={"Europe/Tallinn"}>Europe/Tallinn</MenuItem>
             <MenuItem value={"Europe/Tirane"}>Europe/Tirane</MenuItem>
-            <MenuItem value={"Europe/Tiraspol"}>Europe/Tiraspol</MenuItem>
             <MenuItem value={"Europe/Ulyanovsk"}>Europe/Ulyanovsk</MenuItem>
             <MenuItem value={"Europe/Uzhgorod"}>Europe/Uzhgorod</MenuItem>
             <MenuItem value={"Europe/Vaduz"}>Europe/Vaduz</MenuItem>
@@ -958,16 +877,7 @@ function Event_Details(props) {
             <MenuItem value={"Europe/Zagreb"}>Europe/Zagreb</MenuItem>
             <MenuItem value={"Europe/Zaporozhye"}>Europe/Zaporozhye</MenuItem>
             <MenuItem value={"Europe/Zurich"}>Europe/Zurich</MenuItem>
-            <MenuItem value={"GB"}>GB</MenuItem>
-            <MenuItem value={"GB-Eire"}>GB-Eire</MenuItem>
             <MenuItem value={"GMT"}>GMT</MenuItem>
-            <MenuItem value={"GMT+0"}>GMT+0</MenuItem>
-            <MenuItem value={"GMT-0"}>GMT-0</MenuItem>
-            <MenuItem value={"GMT0"}>GMT0</MenuItem>
-            <MenuItem value={"Greenwich"}>Greenwich</MenuItem>
-            <MenuItem value={"HST"}>HST</MenuItem>
-            <MenuItem value={"Hongkong"}>Hongkong</MenuItem>
-            <MenuItem value={"Iceland"}>Iceland</MenuItem>
             <MenuItem value={"Indian/Antananarivo"}>
               Indian/Antananarivo
             </MenuItem>
@@ -981,23 +891,6 @@ function Event_Details(props) {
             <MenuItem value={"Indian/Mauritius"}>Indian/Mauritius</MenuItem>
             <MenuItem value={"Indian/Mayotte"}>Indian/Mayotte</MenuItem>
             <MenuItem value={"Indian/Reunion"}>Indian/Reunion</MenuItem>
-            <MenuItem value={"Iran"}>Iran</MenuItem>
-            <MenuItem value={"Israel"}>Israel</MenuItem>
-            <MenuItem value={"Jamaica"}>Jamaica</MenuItem>
-            <MenuItem value={"Japan"}>Japan</MenuItem>
-            <MenuItem value={"Kwajalein"}>Kwajalein</MenuItem>
-            <MenuItem value={"Libya"}>Libya</MenuItem>
-            <MenuItem value={"MET"}>MET</MenuItem>
-            <MenuItem value={"MST"}>MST</MenuItem>
-            <MenuItem value={"MST7MDT"}>MST7MDT</MenuItem>
-            <MenuItem value={"Mexico/BajaNorte"}>Mexico/BajaNorte</MenuItem>
-            <MenuItem value={"Mexico/BajaSur"}>Mexico/BajaSur</MenuItem>
-            <MenuItem value={"Mexico/General"}>Mexico/General</MenuItem>
-            <MenuItem value={"NZ"}>NZ</MenuItem>
-            <MenuItem value={"NZ-CHAT"}>NZ-CHAT</MenuItem>
-            <MenuItem value={"Navajo"}>Navajo</MenuItem>
-            <MenuItem value={"PRC"}>PRC</MenuItem>
-            <MenuItem value={"PST8PDT"}>PST8PDT</MenuItem>
             <MenuItem value={"Pacific/Apia"}>Pacific/Apia</MenuItem>
             <MenuItem value={"Pacific/Auckland"}>Pacific/Auckland</MenuItem>
             <MenuItem value={"Pacific/Bougainville"}>
@@ -1018,7 +911,6 @@ function Event_Details(props) {
             </MenuItem>
             <MenuItem value={"Pacific/Guam"}>Pacific/Guam</MenuItem>
             <MenuItem value={"Pacific/Honolulu"}>Pacific/Honolulu</MenuItem>
-            <MenuItem value={"Pacific/Johnston"}>Pacific/Johnston</MenuItem>
             <MenuItem value={"Pacific/Kiritimati"}>Pacific/Kiritimati</MenuItem>
             <MenuItem value={"Pacific/Kosrae"}>Pacific/Kosrae</MenuItem>
             <MenuItem value={"Pacific/Kwajalein"}>Pacific/Kwajalein</MenuItem>
@@ -1033,45 +925,18 @@ function Event_Details(props) {
             <MenuItem value={"Pacific/Palau"}>Pacific/Palau</MenuItem>
             <MenuItem value={"Pacific/Pitcairn"}>Pacific/Pitcairn</MenuItem>
             <MenuItem value={"Pacific/Pohnpei"}>Pacific/Pohnpei</MenuItem>
-            <MenuItem value={"Pacific/Ponape"}>Pacific/Ponape</MenuItem>
             <MenuItem value={"Pacific/Port_Moresby"}>
               Pacific/Port_Moresby
             </MenuItem>
             <MenuItem value={"Pacific/Rarotonga"}>Pacific/Rarotonga</MenuItem>
             <MenuItem value={"Pacific/Saipan"}>Pacific/Saipan</MenuItem>
-            <MenuItem value={"Pacific/Samoa"}>Pacific/Samoa</MenuItem>
             <MenuItem value={"Pacific/Tahiti"}>Pacific/Tahiti</MenuItem>
             <MenuItem value={"Pacific/Tarawa"}>Pacific/Tarawa</MenuItem>
             <MenuItem value={"Pacific/Tongatapu"}>Pacific/Tongatapu</MenuItem>
-            <MenuItem value={"Pacific/Truk"}>Pacific/Truk</MenuItem>
             <MenuItem value={"Pacific/Wake"}>Pacific/Wake</MenuItem>
             <MenuItem value={"Pacific/Wallis"}>Pacific/Wallis</MenuItem>
-            <MenuItem value={"Pacific/Yap"}>Pacific/Yap</MenuItem>
-            <MenuItem value={"Poland"}>Poland</MenuItem>
-            <MenuItem value={"Portugal"}>Portugal</MenuItem>
-            <MenuItem value={"ROC"}>ROC</MenuItem>
-            <MenuItem value={"ROK"}>ROK</MenuItem>
-            <MenuItem value={"Singapore"}>Singapore</MenuItem>
-            <MenuItem value={"Turkey"}>Turkey</MenuItem>
-            <MenuItem value={"UCT"}>UCT</MenuItem>
-            <MenuItem value={"US/Alaska"}>US/Alaska</MenuItem>
-            <MenuItem value={"US/Aleutian"}>US/Aleutian</MenuItem>
-            <MenuItem value={"US/Arizona"}>US/Arizona</MenuItem>
-            <MenuItem value={"US/Central"}>US/Central</MenuItem>
-            <MenuItem value={"US/East-Indiana"}>US/East-Indiana</MenuItem>
-            <MenuItem value={"US/Eastern"}>US/Eastern</MenuItem>
-            <MenuItem value={"US/Hawaii"}>US/Hawaii</MenuItem>
-            <MenuItem value={"US/Indiana-Starke"}>US/Indiana-Starke</MenuItem>
-            <MenuItem value={"US/Michigan"}>US/Michigan</MenuItem>
-            <MenuItem value={"US/Mountain"}>US/Mountain</MenuItem>
-            <MenuItem value={"US/Pacific"}>US/Pacific</MenuItem>
             <MenuItem value={"US/Pacific-New"}>US/Pacific-New</MenuItem>
-            <MenuItem value={"US/Samoa"}>US/Samoa</MenuItem>
             <MenuItem value={"UTC"}>UTC</MenuItem>
-            <MenuItem value={"Universal"}>Universal</MenuItem>
-            <MenuItem value={"W-SU"}>W-SU</MenuItem>
-            <MenuItem value={"WET"}>WET</MenuItem>
-            <MenuItem value={"Zulu"}>Zulu</MenuItem>
           </Select>
         </FormControl>
         <br></br>
