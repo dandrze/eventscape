@@ -27,7 +27,7 @@ import RestorePage from "@material-ui/icons/RestorePage";
 
 import * as actions from "../actions";
 import AlertModal from "./AlertModal";
-import { status } from "../model/enums";
+import { statusOptions } from "../model/enums";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -64,16 +64,16 @@ const Table = (props) => {
     .filter((event) => {
       const startDate = new Date(event.start_date);
       const today = new Date();
-      if (event.status === status.DELETED && props.tab === "deleted") {
+      if (event.status === statusOptions.DELETED && props.tab === "deleted") {
         return true;
       } else if (
-        event.status != status.DELETED &&
+        event.status != statusOptions.DELETED &&
         startDate >= today &&
         props.tab === "upcoming"
       ) {
         return true;
       } else if (
-        event.status != status.DELETED &&
+        event.status != statusOptions.DELETED &&
         startDate < today &&
         props.tab === "past"
       ) {

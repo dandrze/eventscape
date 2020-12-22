@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import "./emailEditor.css";
@@ -28,14 +28,19 @@ import { Hidden } from "@material-ui/core";
 
 import * as actions from "../actions";
 import {
-  recipients as recipientsEnum,
-  status as statusEnum,
+  recipientsOptions,
+  statusOptions,
+  requiresScheduledSend,
 } from "../model/enums";
 
 const EmailEditor = (props) => {
   const classes = useStyles();
 
-  const [from, setFrom] = useState(props.data.from_name || "");
+  const [timeError, setTimeError] = useState("");
+  const [replyTo, setReplyTo] = useState(
+    props.data.reply_to || "no-reply@eventscape.io"
+  );
+  const [replyToError, setReplyToError] = useState("");
   const [subject, setSubject] = useState(props.data.subject || "");
   const [days, setDays] = useState(
     Math.abs(Math.floor(props.data.minutes_from_event / 1440))
@@ -52,39 +57,74 @@ const EmailEditor = (props) => {
   const [html, setHtml] = useState(
     props.data.html || "Your email body goes here"
   );
-  const [status, setStatus] = useState(props.data.status || statusEnum.DRAFT);
-  const [recipients, setRecipients] = useState(
-    props.data.recipients || recipientsEnum.NEW_REGISTRANTS
+  const [status, setStatus] = useState(
+    props.data.status || statusOptions.DRAFT
   );
+  const [recipients, setRecipients] = useState(
+    props.data.recipients || recipientsOptions.NEW_REGISTRANTS
+  );
+
+  useEffect(() => {
+    validateSendTime(days, hours, mins);
+  });
+
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
+    if (event.target.value == recipientsOptions.NEW_REGISTRANTS) {
+      setDays(0);
+      setHours(0);
+      setMins(0);
+    }
   };
 
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);
   };
 
-  const handleChangeFrom = (event) => {
-    setFrom(event.target.value);
+  const handleChangeReplyTo = (event) => {
+    setReplyTo(event.target.value);
+    if (isEmailValid(replyTo)) {
+      setReplyToError("");
+    }
   };
+
+  const handleReplyToBlur = () => {
+    setReplyToError(
+      isEmailValid(replyTo) ? "" : "Please enter a valid email address"
+    );
+  };
+
   const handleChangeSubject = (event) => {
     setSubject(event.target.value);
   };
 
   const handleChangeDays = (event) => {
-    setDays(forceInRange(event.target.value, 0, global.emailSendDateMaxDays));
+    const updatedDays = forceInRange(
+      event.target.value,
+      0,
+      global.emailSendDateMaxDays
+    );
+    setDays(updatedDays);
   };
 
   const handleChangeHours = (event) => {
-    setHours(forceInRange(event.target.value, 0, 23));
+    const updatedHours = forceInRange(event.target.value, 0, 23);
+    setHours(updatedHours);
   };
 
   const handleChangeMins = (event) => {
-    setMins(forceInRange(event.target.value, 0, 59));
+    const updatedMins = forceInRange(event.target.value, 0, 59);
+    setMins(updatedMins);
   };
 
   const handleChangePreposition = (event) => {
     setPreposition(event.target.value);
+  };
+
+  const isEmailValid = (email) => {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    return re.test(email);
   };
 
   const handleSave = async () => {
@@ -93,32 +133,65 @@ const EmailEditor = (props) => {
     const minutesFromEvent =
       preposition * (Number(mins) + hoursInMinutes + daysInMinutes);
 
-    // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
-    if (props.data.id) {
-      await props.editEmail(props.data.id, {
-        recipients,
-        status,
-        from,
-        subject,
-        minutesFromEvent,
-        html,
-      });
-    } else {
-      await props.addEmail({
-        recipients,
-        status,
-        from,
-        subject,
-        minutesFromEvent,
-        html,
-      });
-    }
+    const sendDate = new Date(props.event.start_date);
+    sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
-    props.handleSubmit();
+    if (!timeError && !replyToError) {
+      // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
+      if (props.data.id) {
+        await props.editEmail(props.data.id, {
+          recipients,
+          status,
+          replyTo,
+          subject,
+          minutesFromEvent,
+          html,
+        });
+      } else {
+        await props.addEmail({
+          recipients,
+          status,
+          replyTo,
+          subject,
+          minutesFromEvent,
+          html,
+        });
+      }
+
+      props.handleSubmit();
+    }
   };
 
   const handleHtmlChange = (updatedHtml) => {
     setHtml(updatedHtml);
+  };
+
+  const validateSendTime = (d, h, m) => {
+    // uses direct inputs because it can't wait for the state to update to use the days, hours, mins states. Instead we call in d, h, m
+    const daysInMinutes = Number(d) * 24 * 60;
+    const hoursInMinutes = Number(h) * 60;
+    const minutesFromEvent =
+      preposition * (Number(m) + hoursInMinutes + daysInMinutes);
+
+    const sendDate = new Date(props.event.start_date);
+    sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
+
+    // If the send time is in the past, and this is a scheduled send (not for new registrants), display an error message
+    if (
+      sendDate < new Date() &&
+      recipients != recipientsOptions.NEW_REGISTRANTS
+    ) {
+      setTimeError(
+        "This send time is in the past: " +
+          sendDate.toLocaleString("en-us", {
+            timeZoneName: "short",
+            timeZone: props.event.time_zone,
+          }) +
+          ". Please set a send time in the future."
+      );
+    } else {
+      setTimeError("");
+    }
   };
 
   const forceInRange = (num, lower, upper) => {
@@ -156,9 +229,9 @@ const EmailEditor = (props) => {
                 onChange={handleChangeStatus}
                 input={<BootstrapInput />}
               >
-                <MenuItem value={statusEnum.ACTIVE}>Active</MenuItem>
-                <MenuItem value={statusEnum.DRAFT}>Draft</MenuItem>
-                <MenuItem value={statusEnum.DISABLED}>Disabled</MenuItem>
+                <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
+                <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
+                <MenuItem value={statusOptions.DISABLED}>Disabled</MenuItem>
               </Select>
             </FormControl>
           </div>
@@ -183,36 +256,40 @@ const EmailEditor = (props) => {
                       onChange={handleChangeRecipients}
                       input={<BootstrapInput />}
                     >
-                      <MenuItem value={recipientsEnum.EMAIL_LIST}>
+                      <MenuItem value={recipientsOptions.EMAIL_LIST}>
                         Email List
                       </MenuItem>
-                      <MenuItem value={recipientsEnum.NEW_REGISTRANTS}>
+                      <MenuItem value={recipientsOptions.NEW_REGISTRANTS}>
                         New Registrants
                       </MenuItem>
-                      <MenuItem value={recipientsEnum.ALL_REGISTRANTS}>
+                      <MenuItem value={recipientsOptions.ALL_REGISTRANTS}>
                         All Registrants
                       </MenuItem>
                     </Select>
                   </FormControl>
                   <div id="editEmailList">
-                    {recipients === "emailList" ? <EmailList /> : null}
+                    {recipients === recipientsOptions.EMAIL_LIST ? (
+                      <EmailList />
+                    ) : null}
                   </div>
                 </div>
               </div>
 
-              <div className="inputDiv">
-                <label htmlFor="from" className="emailLabel">
-                  From:{" "}
+              <div className="inputDiv" style={{ flexWrap: "wrap" }}>
+                <label htmlFor="replyTo" className="emailLabel">
+                  Reply To:{" "}
                 </label>
                 <input
                   type="text"
                   className="emailInput"
-                  name="from"
+                  name="replyTo"
                   placeholder=""
-                  value={from}
-                  onChange={handleChangeFrom}
+                  value={replyTo}
+                  onChange={handleChangeReplyTo}
+                  onBlur={handleReplyToBlur}
                 ></input>
                 <br></br>
+                <div className="errorMessage">{replyToError}</div>
               </div>
 
               <div className="inputDiv">
@@ -229,12 +306,12 @@ const EmailEditor = (props) => {
                 ></input>
               </div>
 
-              <div className="inputDiv">
+              <div className="inputDiv" style={{ flexWrap: "wrap" }}>
                 <label htmlFor="sendTime" className="emailLabel">
                   Scheduled Send Time:{" "}
                 </label>
                 <br></br>
-                {recipients === recipientsEnum.NEW_REGISTRANTS ? (
+                {recipients === recipientsOptions.NEW_REGISTRANTS ? (
                   <label className="emailLabel">Upon Registration</label>
                 ) : (
                   <>
@@ -284,6 +361,7 @@ const EmailEditor = (props) => {
                     <label className="emailLabel">{" event start time"}</label>
                   </>
                 )}
+                <div className="errorMessage">{timeError}</div>
               </div>
             </div>
 
@@ -310,4 +388,10 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default connect(null, actions)(EmailEditor);
+const mapStateToProps = (state) => {
+  return {
+    event: state.event,
+  };
+};
+
+export default connect(mapStateToProps, actions)(EmailEditor);

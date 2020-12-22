@@ -15,7 +15,7 @@ const Preview = (props) => {
   const fetchData = async () => {
     props.setLoaded(false);
     await props.fetchEventFromId(event);
-    await props.fetchModelFromId(model);
+    await props.fetchModel(model);
     props.setLoaded(true);
   };
 

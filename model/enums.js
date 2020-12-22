@@ -1,15 +1,15 @@
-export const recipientsOptions = {
+const recipientsOptions = {
   NEW_REGISTRANTS: "New Registrants",
   EMAIL_LIST: "Email List",
   ALL_REGISTRANTS: "All Registrants",
 };
 
-export const requiresScheduledSend = [
+const requiresScheduledSend = [
   recipientsOptions.EMAIL_LIST,
   recipientsOptions.ALL_REGISTRANTS,
 ];
 
-export const statusOptions = {
+const statusOptions = {
   DRAFT: "Draft",
   DELETED: "Deleted",
   LIVE: "Live",
@@ -17,4 +17,5 @@ export const statusOptions = {
   DISABLED: "Disabled",
 };
 
-export const pageNames = { REGISTRATION: "registration", EVENT: "event" };
+exports.recipientsOptions = recipientsOptions;
+exports.statusOptions = statusOptions;

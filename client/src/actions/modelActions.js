@@ -13,6 +13,7 @@ import {
   UPDATE_REACT_COMPONENT,
   FETCH_EVENT,
 } from "./types";
+import { pageNames } from "../model/enums";
 
 export const fetchPublishedPage = (pageLink) => async (dispatch) => {
   const model = await api.get("/api/page", { params: { link: pageLink } });
@@ -23,27 +24,7 @@ export const fetchPublishedPage = (pageLink) => async (dispatch) => {
   });
 };
 
-export const fetchModelFromState = () => async (dispatch, getState) => {
-  var id;
-  try {
-    switch (getState().settings.nowEditingPage) {
-      case "registration":
-        id = getState().event.reg_page_model;
-        break;
-      case "event":
-        id = getState().event.event_page_model;
-        break;
-    }
-
-    const model = await api.get("/api/model/id", { params: { id } });
-
-    dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
-  } catch {
-    console.log("event is empty");
-  }
-};
-
-export const fetchModelFromId = (id) => async (dispatch) => {
+export const fetchModel = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
 
   dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
@@ -115,11 +96,11 @@ export const localSaveModel = () => (dispatch, getState) => {
   const currentModel = getState().model.sections;
 
   switch (currentPage) {
-    case "registration":
+    case pageNames.REGISTRATION:
       dispatch({ type: SAVE_REG_MODEL, payload: currentModel });
       dispatch({ type: MODEL_ISSAVED });
       break;
-    case "event":
+    case pageNames.EVENT:
       dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
       dispatch({ type: MODEL_ISSAVED });
       break;
@@ -132,10 +113,10 @@ export const fetchLivePage = (link) => async (dispatch) => {
 
   if (event.data.registration) {
     // if the events registration flag is true, show the registration page.
-    await dispatch(fetchModelFromId(event.data.reg_page_model));
+    await dispatch(fetchModel(event.data.reg_page_model));
   } else {
     // if the events registration flag is false, show the event page
-    await dispatch(fetchModelFromId(event.data.event_page_model));
+    await dispatch(fetchModel(event.data.event_page_model));
   }
 };
 

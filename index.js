@@ -3,9 +3,8 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const secure = require("express-force-https");
 
-require("./models/Event.js");
 const db = require("./db");
-
+const keys = require("./config/keys");
 const authRoutes = require("./routes/authRoutes");
 const eventRoutes = require("./routes/eventRoutes");
 const modelRoutes = require("./routes/modelRoutes");

@@ -24,7 +24,7 @@ import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
-import { recipients } from "../model/enums";
+import { recipientsOptions } from "../model/enums";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,7 +51,34 @@ const tableIcons = {
 };
 
 function ScheduledEmails(props) {
-  const [columns, setColumns] = React.useState([
+  const [data, setData] = React.useState([]);
+
+  console.log(props.email);
+
+  useEffect(() => {
+    const formattedEmailList = props.email.map((email) => {
+      // start with the event start date. Then modify if by adding the minutes_from_event
+      const sendDate = new Date(props.event.start_date);
+      sendDate.setMinutes(sendDate.getMinutes() + email.minutes_from_event);
+
+      return {
+        ...email,
+        send_date:
+          email.recipients === recipientsOptions.NEW_REGISTRANTS
+            ? "Upon Registration"
+            : sendDate.toLocaleString("en-us", {
+                timeZoneName: "short",
+                timeZone: props.event.time_zone,
+              }),
+
+        status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
+      };
+    });
+    setData(formattedEmailList);
+    console.log(formattedEmailList);
+  }, [props.email]);
+
+  const columns = [
     {
       title: "Subject",
       field: "subject",
@@ -72,31 +99,7 @@ function ScheduledEmails(props) {
       title: "Status",
       field: "status",
     },
-  ]);
-  const [data, setData] = React.useState([]);
-
-  useEffect(() => {
-    const formattedEmailList = props.email.map((email) => {
-      // start with the event start date. Then modify if by adding the minutes_from_event
-      const sendDate = new Date(props.event.start_date);
-      sendDate.setMinutes(sendDate.getMinutes() + email.minutes_from_event);
-
-      return {
-        ...email,
-        send_date:
-          email.recipients === recipients.NEW_REGISTRANTS
-            ? "Upon Registration"
-            : sendDate.toLocaleString("en-us", {
-                timeZoneName: "short",
-                timeZone: props.event.time_zone,
-              }),
-
-        status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
-      };
-    });
-    setData(formattedEmailList);
-    console.log(formattedEmailList);
-  }, [props.email]);
+  ];
 
   const options = {
     actionsColumnIndex: -1,

@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../db");
+const Scheduler = require("../services/Scheduler");
+const { getEventFromId } = require("../db/Event");
+const { recipientsOptions } = require("../model/enums");
 
 router.get("/api/email/all", async (req, res) => {
   const { event } = req.query;
@@ -21,13 +24,19 @@ router.get("/api/email/all", async (req, res) => {
 
 router.post("/api/email", async (req, res) => {
   const { event, email } = req.body;
-  const { recipients, status, from, subject, minutesFromEvent, html } = email;
-
-  console.log(from);
+  const {
+    recipients,
+    status,
+    replyTo,
+    subject,
+    minutesFromEvent,
+    html,
+    emailList,
+  } = email;
 
   const newEmail = await db.query(
-    "INSERT INTO email (event, from_name, recipients, status, subject, minutes_from_event, html) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-    [event, from, recipients, status, subject, minutesFromEvent, html],
+    "INSERT INTO email (event, reply_to, recipients, status, subject, minutes_from_event, html) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
+    [event, replyTo, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
         console.log(err);
@@ -35,6 +44,17 @@ router.post("/api/email", async (req, res) => {
       }
     }
   );
+
+  if (status === "Active" && recipients != recipientsOptions.NEW_REGISTRANTS) {
+    const to = [];
+
+    scheduleJob(
+      newEmail.rows[0].id,
+      { replyTo, subject, html, replyTo, recipients },
+      event,
+      minutesFromEvent
+    );
+  }
 
   res.send(newEmail.rows[0]);
 });
@@ -56,13 +76,30 @@ router.delete("/api/email", async (req, res) => {
 
 router.put("/api/email", async (req, res) => {
   const { id, email } = req.body;
-  const { recipients, status, from, subject, minutesFromEvent, html } = email;
+  const {
+    recipients,
+    status,
+    replyTo,
+    subject,
+    minutesFromEvent,
+    html,
+  } = email;
 
-  console.log(from);
+  const originalEmailData = await db.query(
+    "SELECT * FROM email WHERE id=$1",
+    [id],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
 
-  const newEmail = await db.query(
-    "UPDATE email SET from_name=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6, html=$7 WHERE id=$1 RETURNING *",
-    [id, from, recipients, status, subject, minutesFromEvent, html],
+  const originalEmail = originalEmailData.rows[0];
+
+  const updatedEmail = await db.query(
+    "UPDATE email SET reply_to=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6, html=$7 WHERE id=$1 RETURNING *",
+    [id, replyTo, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
         console.log(err);
@@ -71,7 +108,83 @@ router.put("/api/email", async (req, res) => {
     }
   );
 
-  res.send(newEmail.rows[0]);
+  if (status === "Active" && recipients != "New Registrants") {
+    // delete the old job because it could have stale data
+    Scheduler.cancelSend(id.toString());
+    // create a new job with fresh data
+    scheduleJob(
+      id.toString(),
+      { replyTo, subject, html, recipients },
+      updatedEmail.rows[0].event,
+      minutesFromEvent
+    );
+  } else if (
+    originalEmail.status === "Active" ||
+    originalEmail.recipients != "New Registrants"
+  ) {
+    // if either of these two conditions is true, then there might be an existing job we need to cancel
+    Scheduler.cancelSend(id.toString());
+  }
+
+  res.send(updatedEmail.rows[0]);
 });
+
+router.get("/api/email/jobs", async (req, res) => {
+  res.send(Scheduler.scheduledJobs());
+});
+
+router.post("/api/email/jobs/cancel", async (req, res) => {
+  const { id } = req.body;
+
+  Scheduler.cancelSend(id);
+});
+
+router.get("/api/test", async (req, res) => {
+  const eventId = 159;
+  const registrations = await db.query(
+    "SELECT event.title as $2, registration.last_name FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 ",
+    [eventId, "event_name"]
+  );
+
+  const recipientsList = registrations.rows;
+
+  const subject = "hello {last_name} you are invited to {event_name}";
+
+  // find all variable names in curly braces and put them in an array
+  const subjectVariables = subject.match(/[^{\}]+(?=})/g);
+
+  const emails = [];
+
+  for (const recipient of recipientsList) {
+    // replace each instance of the variable with the value in the recipientsList (list of objects)
+    var updatedSubject = subject;
+    for (var i = 0; i < subject.length; i++) {
+      updatedSubject = updatedSubject.replace(
+        new RegExp("{" + subjectVariables[i] + "}", "gi"),
+        recipient[subjectVariables[i]]
+      );
+    }
+    emails.push(updatedSubject);
+  }
+
+  res.status(200).send(emails);
+});
+
+const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
+  const { replyTo, subject, html, recipients } = email;
+
+  const event = await getEventFromId(eventId);
+
+  const sendDate = new Date(event.start_date);
+
+  sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
+
+  Scheduler.scheduleSend(
+    jobName,
+    { to: "andrzejewski.d@gmail.com", subject, html, replyTo, recipients },
+    sendDate,
+    eventId
+  );
+};
 
 module.exports = router;

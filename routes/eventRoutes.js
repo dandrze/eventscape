@@ -127,13 +127,13 @@ router.post("/api/event", async (req, res) => {
   for (var email of emails) {
     await db.query(
       `INSERT INTO email 
-			(subject, recipients, send_date, html, event) 
+			(subject, recipients, minutes_from_event, html, event) 
 		VALUES ($1, $2, $3, $4, $5)
 		RETURNING *`,
       [
         email.subject,
         email.recipients,
-        email.send_date,
+        email.minutes_from_event,
         email.html,
         newEvent.rows[0].id,
       ],
@@ -237,7 +237,6 @@ router.get("/api/event/link", async (req, res) => {
 
 router.put("/api/event/id/status", async (req, res) => {
   const { id, status } = req.body;
-  console.log(req.body);
   const response = await db.query(
     "UPDATE event SET status=$2 WHERE id=$1 RETURNING *",
     [id, status],

@@ -110,12 +110,24 @@ const Registrations = (props) => {
     setOpenReg(true);
   };
 
-  const handleSubmitReg = async (values) => {
+  const handleSubmitReg = async (values, emailAddress, firstName, lastName) => {
     // if we're editting a row (there is a row id set in state), then update the row
     if (edittingRowId) {
-      props.updateRegistration(edittingRowId, values);
+      props.updateRegistration(
+        edittingRowId,
+        values,
+        emailAddress,
+        firstName,
+        lastName
+      );
     } else {
-      const res = await props.addRegistration(props.event.id, values);
+      const res = await props.addRegistration(
+        props.event.id,
+        values,
+        emailAddress,
+        firstName,
+        lastName
+      );
       if (res) {
         toast.success("Registration successfuly added");
       }

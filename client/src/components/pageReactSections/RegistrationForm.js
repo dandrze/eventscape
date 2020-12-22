@@ -12,6 +12,9 @@ function RegistrationForm(props) {
   const [open, setOpen] = useState(false);
   const [modalText, setModalText] = useState(false);
   const [formData, setFormData] = useState([]);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
 
   useEffect(() => {
     fetchFormData();
@@ -34,24 +37,36 @@ function RegistrationForm(props) {
     }
   };
 
+  const handleEmailChange = (event) => {
+    setEmailAddress(event.target.value);
+  };
+
+  const handleFirstNameChange = (event) => {
+    setFirstName(event.target.value);
+  };
+  const handleLastNameChange = (event) => {
+    setLastName(event.target.value);
+  };
+
   const handleSubmit = async (values) => {
     // If there is a custom callback (i.e. editting a registration) use that
     if (props.onSubmitCallback) {
-      props.onSubmitCallback(values);
+      props.onSubmitCallback(values, emailAddress, firstName, lastName);
     } else {
       // else use the default workflow
-      const res = await props.addRegistration(props.event.id, values);
+      const res = await props.addRegistration(
+        props.event.id,
+        values,
+        emailAddress,
+        firstName,
+        lastName
+      );
       if (res) {
         setModalText("Thank you for registering for " + props.event.title);
         openModal();
       }
     }
   };
-
-  const model = `<div class="one" contenteditable="true">
-  <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
-  <p style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-</div>`;
 
   const theme = `
   .form-editor-froala {
@@ -84,30 +99,57 @@ function RegistrationForm(props) {
         closeText="Cancel"
         continueText="OK"
       />
-      {props.isEditForm ? (
-        <ReactFormGenerator
-          action_name={props.registerText || "Register now"}
-          onSubmit={handleSubmit}
-          data={formData}
-          answer_data={props.prePopulatedValues}
-          className="form-editor-react"
-        />
-      ) : (
-        <div className="container">
+      <div className="container">
+        {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
+        {!props.isEditForm ? (
           <div className="form-editor-froala">
             <Froala sectionIndex={props.sectionIndex} />
           </div>
-          <div className="form-editor-react">
-            <ReactFormGenerator
-              action_name={props.registerText || "Register now"}
-              onSubmit={handleSubmit}
-              data={formData}
-              answer_data={props.prePopulatedValues}
-              className="form-editor-react"
+        ) : null}
+        {/* if we're editing an input, don't add the classname that includes all the styling*/}
+        <div className={!props.isEditForm ? "form-editor-react" : ""}>
+          {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
+          <div className="form-group">
+            <label>
+              <span>Email Address</span>
+              <span class="label-required badge badge-danger">Required</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value={emailAddress}
+              onChange={handleEmailChange}
+            />
+            <label>
+              <span>First Name</span>
+              <span class="label-required badge badge-danger">Required</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value={firstName}
+              onChange={handleFirstNameChange}
+            />
+            <label>
+              <span>Last Name</span>
+              <span class="label-required badge badge-danger">Required</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value={lastName}
+              onChange={handleLastNameChange}
             />
           </div>
+          <ReactFormGenerator
+            action_name={props.registerText || "Register now"}
+            onSubmit={handleSubmit}
+            data={formData}
+            answer_data={props.prePopulatedValues}
+            className="form-editor-react"
+          />
         </div>
-      )}
+      </div>
     </div>
   );
 }

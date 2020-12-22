@@ -1,11 +1,7 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
 import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "./types";
-import {
-  fetchModelFromId,
-  fetchModelFromState,
-  saveModel,
-} from "./modelActions";
+import { saveModel } from "./modelActions";
 import {
   regPageModelTemplate,
   eventPageModelTemplate,
@@ -34,8 +30,6 @@ export const createEvent = (
     emails: emaillistTemplate(start_date),
   };
 
-  const emails = emaillistTemplate(start_date);
-
   const res = await api.post("/api/event", event);
 
   if (res.status === 200) {
@@ -44,8 +38,6 @@ export const createEvent = (
       payload: res.data,
     });
     toast.success("Event successfully created");
-
-    await dispatch(fetchModelFromState());
   } else {
     toast.error("Error when creating new event: " + res.statusText);
   }
@@ -88,9 +80,9 @@ export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
   try {
     const event = await api.get("/api/event/current");
+    console.log(event.data);
     if (event) {
       dispatch({ type: FETCH_EVENT, payload: event.data });
-      dispatch(fetchModelFromState());
       return event;
     } else {
       console.log("no events");

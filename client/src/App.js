@@ -33,18 +33,10 @@ function App(props) {
 
   useEffect(() => {
     if (
-      path[0] !== "localhost:3000" &&
-      path[0] !== "eventscape" &&
+      path[0] !== "localhost:3000" ||
+      path[0] !== "eventscape" ||
       path[0] !== "www"
     ) {
-      return (
-        <div className="App">
-          <header className="App-header">
-            <Published subdomain={path[0]} />
-          </header>
-        </div>
-      );
-    } else {
       fetchDataAsync();
     }
   }, []);
@@ -52,6 +44,20 @@ function App(props) {
   const fetchDataAsync = async () => {
     setDataFetched(await props.fetchEvent());
   };
+
+  if (
+    path[0] !== "localhost:3000" &&
+    path[0] !== "eventscape" &&
+    path[0] !== "www"
+  ) {
+    return (
+      <div className="App">
+        <header className="App-header">
+          <Published subdomain={path[0]} />
+        </header>
+      </div>
+    );
+  }
 
   return (
     <div className="App">
