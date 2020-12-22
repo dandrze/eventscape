@@ -6,35 +6,78 @@ const { recipientsOptions } = require("../model/enums");
 const db = require("../db/index");
 
 const scheduleSend = async (emailId, email, sendDate, eventId) => {
-  const { to, subject, html, replyTo, recipients } = email;
+  const { to, subject, html, replyTo, recipients, emailList } = email;
 
   const newJob = schedule.scheduleJob(
     emailId.toString(),
     sendDate,
     async () => {
+      // asign job to the job within node-schedule
+      const job = schedule.scheduledJobs[emailId.toString()];
+      // commented out all email send code, replaced with a console log instead
+      console.log(email);
+      /*
       var recipientsList = [];
       // get recipients either from the registration list, or use the email list provided
       switch (recipients) {
         case recipientsOptions.ALL_REGISTRANTS:
           const registrations = await db.query(
-            "SELECT * FROM registration WHERE event=$1",
+            "SELECT event.title as event_name, event.time_zone, event.link as event_link, event.start_date, event.end_date FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 ",
             [eventId]
           );
 
-          recipientsList = registrations.rows.map(
-            (registration) => registration.email
-          );
+          recipientsList = registrations.rows;
           break;
         case recipientsOptions.EMAIL_LIST:
-          // TODO fetch the emaillist for this email
+          const emailListRecipients = await db.query(
+            "SELECT * FROM recipient WHERE email_id=$1",
+            [emailId]
+          );
+
+          recipientsList = emailListRecipients.rows.map(
+            (recipient) => recipient.email
+          );
           break;
       }
-      // asign job to the job within node-schedule
-      const job = schedule.scheduledJobs[emailId.toString()];
-      //send the email when the job is triggered
-      for (const to of recipientsList) {
-        Mailer.sendEmail({ to, subject, html, replyTo });
-      }
+
+      // find all variable names in curly braces and put them in an array
+      const subjectVariables = subject.match(/[^{\}]+(?=})/g);
+      const htmlVariables = html.match(/[^{\}]+(?=})/g);
+      //remove duplicates from the variables list
+      subjectVariables = [...new Set(subjectVariables)];
+      htmlVariables = [...new Set(htmlVariables)];
+
+      //Iterate through the recipientsList and send an email to each recipient with variables replaced with database values
+      for (const recipient of recipientsList) {
+        // for each recipient, reset the subject to the original with {variable_names}
+        var updatedSubject = subject;
+        var updatedHtml = html;
+
+        //for each variable in the subjectVariables array, replace it with the value from the database value
+        for (var i = 0; i < subject.length; i++) {
+          updatedSubject = updatedSubject.replace(
+            new RegExp("{" + subjectVariables[i] + "}", "gi"),
+            recipient[subjectVariables[i]]
+          );
+        }
+
+        //for each variable in the htmlVariables array, replace it with the value from the database value
+        for (var i = 0; i < subject.length; i++) {
+          updatedHtml = updatedHtml.replace(
+            new RegExp("{" + htmlVariables[i] + "}", "gi"),
+            recipient[htmlVariables[i]]
+          );
+        }
+
+        console.log({ to, updatedHtml, updatedSubject });
+
+        /*Mailer.sendEmail({
+          to: recipient.email,
+          updatedSubject,
+          updatedHtml,
+          replyTo,
+        });
+        */
       //  update the database to show that the email has been sent
       updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
 
