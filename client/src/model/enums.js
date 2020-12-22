@@ -17,4 +17,15 @@ export const statusOptions = {
   DISABLED: "Disabled",
 };
 
+export const emailVariableNames = [
+  "event_name",
+  "time_zone",
+  "event_link",
+  "start_date",
+  "end_date",
+  "first_name",
+  "last_name",
+  "guest_email",
+];
+
 export const pageNames = { REGISTRATION: "registration", EVENT: "event" };

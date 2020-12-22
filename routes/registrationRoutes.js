@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { recipientsOptions } = require("../model/enums");
+const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 
 const db = require("../db");
-const { PromiseProvider } = require("mongoose");
 
 router.post("/api/registration", async (req, res) => {
   const { event, values, emailAddress, firstName, lastName } = req.body;
@@ -26,8 +25,8 @@ router.post("/api/registration", async (req, res) => {
 
   // check to see if any emails need to be fired off
   const registrationEmails = await db.query(
-    `SELECT * FROM email WHERE event=$1 AND recipients=$2`,
-    [event, recipientsOptions.NEW_REGISTRANTS],
+    `SELECT * FROM email WHERE event=$1 AND recipients=$2 AND status=$3`,
+    [event, recipientsOptions.NEW_REGISTRANTS, statusOptions.ACTIVE],
     (err, res) => {
       if (err) {
         res.status(500).json({ message: "Error when sending email" });

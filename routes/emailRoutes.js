@@ -134,8 +134,18 @@ router.post("/api/email/jobs/cancel", async (req, res) => {
 router.get("/api/test", async (req, res) => {
   const eventId = 159;
   const registrations = await db.query(
-    "SELECT event.title as $2, registration.last_name FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 ",
-    [eventId, "event_name"]
+    `SELECT 
+    event.title as event_name, 
+    event.time_zone, 
+    event.link as event_link, 
+    event.start_date, 
+    event.end_date ,
+    registration.first_name,
+    registration.last_name,
+    registration.email
+    
+    FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 `,
+    [eventId]
   );
 
   const recipientsList = registrations.rows;
@@ -159,7 +169,7 @@ router.get("/api/test", async (req, res) => {
     emails.push(updatedSubject);
   }
 
-  res.status(200).send(emails);
+  res.status(200).send(recipientsList);
 });
 
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
