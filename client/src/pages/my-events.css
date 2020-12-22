@@ -1,0 +1,12 @@
+.my-events-container {
+    max-width: 1300px;
+    margin: 60px auto;
+    padding-left: 60px;
+    padding-right: 60px;
+}
+
+.my-events-title {
+    vertical-align: top;
+    line-height: 1;
+    margin: 0
+}

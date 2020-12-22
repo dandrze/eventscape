@@ -50,29 +50,28 @@ function RegistrationForm(props) {
 
   const model = `<div class="one" contenteditable="true">
   <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
-  <p style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+  <p style="text-align: justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 </div>`;
 
   const theme = `
   .form-editor-froala {
-    margin: 5%;
+    margin: 8%;
     text-align: justify;
-}
+  }
 
-.form-editor-react  {
-    padding: 8%;
-    margin: 5%;
-    background-color: #EFEFEF;
-}
+  .form-editor-react  {
+      margin: 8%;
+      background-color: #FFF; //was #EFEFEF
+  }
+
   .container {
     padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     grid-gap: 1rem;
-
-}
-	
+  }
   `;
+
   return (
     <div>
       <style>{theme}</style>

@@ -106,7 +106,7 @@ function ScheduledEmails(props) {
     headerStyle: {
       backgroundColor: "#F0F1F4",
       color: "black",
-      fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+      fontFamily: "Roboto, Helvetica Neue, Ariel, sans-serif",
       fontSize: "14px",
       fontWeight: "bold",
       margin: "30px",
@@ -115,7 +115,7 @@ function ScheduledEmails(props) {
     cellStyle: {
       backgroundColor: "white",
       color: "black",
-      fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+      fontFamily: "Roboto, Helvetica Neue, Ariel, sans-serif",
       fontSize: "14px",
       fontWeight: "normal",
     },

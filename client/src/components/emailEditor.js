@@ -143,7 +143,6 @@ const EmailEditor = (props) => {
           ></img>
         </Tooltip>
       </div>
-      <div className="design">
         <div id="topButtons">
           <SendTestEmail />
           <div id="status">
@@ -167,7 +166,6 @@ const EmailEditor = (props) => {
           </button>
         </div>
 
-        <div id="designBoard">
           <div style={{ overflow: "hidden" }}>
             <div id="emailInputs">
               <div className="inputDiv">
@@ -229,7 +227,7 @@ const EmailEditor = (props) => {
                 ></input>
               </div>
 
-              <div className="inputDiv">
+              <div className="inputDiv input-send-time">
                 <label htmlFor="sendTime" className="emailLabel">
                   Scheduled Send Time:{" "}
                 </label>
@@ -238,39 +236,46 @@ const EmailEditor = (props) => {
                   <label className="emailLabel">Upon Registration</label>
                 ) : (
                   <>
-                    <TextField
-                      id="number-days"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeDays}
-                      value={days}
-                    />
+                    <div className="send-time-input"> 
+                      <TextField
+                        id="number-days"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        inputProps={{ min: 0, max: 180 }}
+                        onChange={handleChangeDays}
+                        value={days}
+                      />
+                    </div>
                     <label className="emailLabel">days </label>
 
-                    <TextField
-                      id="number-hours"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 23 }}
-                      onChange={handleChangeHours}
-                      value={hours}
-                    />
+                    <div className="send-time-input">
+                      <TextField
+                        id="number-hours"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        inputProps={{ min: 0, max: 23 }}
+                        onChange={handleChangeHours}
+                        value={hours}
+                      />
+                    </div>
                     <label className="emailLabel">hours </label>
-                    <TextField
-                      id="number-mins"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeMins}
-                      value={mins}
-                    />
+
+                    <div className="send-time-input">
+                      <TextField
+                        id="number-mins"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        inputProps={{ min: 0, max: 180 }}
+                        onChange={handleChangeMins}
+                        value={mins}
+                      />
+                    </div>
                     <label className="emailLabel">minutes </label>
 
                     <Select
@@ -287,18 +292,10 @@ const EmailEditor = (props) => {
               </div>
             </div>
 
-            <div style={{ margin: "3%" }}>
+            <div style={{ margin: "3% 0" }}>
               <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
             </div>
-          </div>
         </div>
-        <div style={{ color: "#F8F8F8" }}>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-          eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad
-          minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-          aliquip ex ea commodo consequat.
-        </div>
-      </div>
     </div>
   );
 };

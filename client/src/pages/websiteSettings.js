@@ -12,6 +12,7 @@ class WebsiteSettings extends React.Component {
 					displaySideNav="true"
 					content={
 						<div>
+						<div style={{maxWidth:"700px", margin:"0 auto"}}>
 							<Event_Details
 								isEventUpdate={true}
 								eventTitle={this.props.event.title}
@@ -22,6 +23,7 @@ class WebsiteSettings extends React.Component {
 								color={this.props.event.primary_color}
 								eventTimeZone={this.props.event.time_zone}
 							/>
+						</div>
 						</div>
 					}
 				/>

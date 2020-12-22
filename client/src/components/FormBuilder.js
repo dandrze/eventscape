@@ -73,20 +73,20 @@ const FormBuilder = (props) => {
       field_name: "text_input_",
     },
     {
+      key: "TextArea",
+      canHaveAnswer: true,
+      name: "Text Multi-line Input",
+      label: "Text Multi-line Input Label",
+      icon: "fas fa-text-height",
+      field_name: "text_area_",
+    },
+    {
       key: "NumberInput",
       canHaveAnswer: true,
       name: "Number Input",
       label: "Number Input Label",
       icon: "fas fa-plus",
       field_name: "number_input_",
-    },
-    {
-      key: "Image",
-      name: "Image",
-      label: "",
-      icon: "far fa-image",
-      field_name: "image_",
-      src: "",
     },
     {
       key: "DatePicker",

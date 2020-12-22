@@ -36,6 +36,7 @@
     line-height: 1;
     margin-right: 5px;
     margin-left: 5px;
+    margin-bottom: 3rem;
 }
 
 .CTAButton {
@@ -45,4 +46,5 @@
 
 .coming {
     color: lightgray;
+    font-size: 30px;
 }

@@ -52,14 +52,13 @@ class Content extends Component {
                     <h3>Logins</h3> 
                     <LoginsTable />
                 </div>
-                <div style={{color: "#F8F8F8"}}>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</div>
             </div>
           )
       }
   };
 
 // Chart.js:
-Chart.defaults.global.defaultFontFamily = "San Francisco, Helvetica, Arial, sans-serif";
+Chart.defaults.global.defaultFontFamily = "Roboto, Helvetica Neue, Arial, sans-serif";
 
 // Data generation
 function getRandomArray(numItems) {

@@ -117,7 +117,8 @@ const useStyles = makeStyles((theme) => ({
 		display: "block",
 		color: MenuText,
 		fontSize: "18px",
-		fontFamily: "San Francisco, Helvetica, Arial, sans-serif",
+		fontFamily: "Roboto, 'Helvetica Neue', Arial, sans-serif",
+		fontWeight: "300",
 	},
 	addEvent: {
 		marginLeft: "auto",
@@ -410,6 +411,9 @@ function NavBar3(props) {
 			<main className={classes.content}>
 				<div className={classes.toolbar}></div>
 				{content}
+				<div className="force-width">
+					- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
+				</div>
 			</main>
 		</div>
 	);

@@ -26,7 +26,8 @@ const theme = createMuiTheme({
     },
   },
   typography: {
-    fontFamily: "San Francisco, Helvetica, Ariel, sans-serif",
+    fontFamily: "Roboto, 'Helvetica Neue', Ariel, sans-serif",
+    fontWeight: "300",
   },
 });
 
