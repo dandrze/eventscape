@@ -6,7 +6,7 @@ const { recipientsOptions } = require("../model/enums");
 const db = require("../db/index");
 
 const scheduleSend = async (emailId, email, sendDate, eventId) => {
-  const { to, subject, html, replyTo, recipients, emailList } = email;
+  const { to, subject, html, recipients, emailList } = email;
 
   const newJob = schedule.scheduleJob(
     emailId.toString(),
@@ -75,7 +75,6 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
           to: recipient.email,
           updatedSubject,
           updatedHtml,
-          replyTo,
         });
         */
       //  update the database to show that the email has been sent

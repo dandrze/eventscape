@@ -27,7 +27,6 @@ router.post("/api/email", async (req, res) => {
   const {
     recipients,
     status,
-    replyTo,
     subject,
     minutesFromEvent,
     html,
@@ -35,8 +34,8 @@ router.post("/api/email", async (req, res) => {
   } = email;
 
   const newEmail = await db.query(
-    "INSERT INTO email (event, reply_to, recipients, status, subject, minutes_from_event, html) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *",
-    [event, replyTo, recipients, status, subject, minutesFromEvent, html],
+    "INSERT INTO email (event, recipients, status, subject, minutes_from_event, html) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+    [event, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
         console.log(err);
@@ -50,7 +49,7 @@ router.post("/api/email", async (req, res) => {
 
     scheduleJob(
       newEmail.rows[0].id,
-      { replyTo, subject, html, replyTo, recipients },
+      { subject, html, recipients },
       event,
       minutesFromEvent
     );
@@ -76,14 +75,7 @@ router.delete("/api/email", async (req, res) => {
 
 router.put("/api/email", async (req, res) => {
   const { id, email } = req.body;
-  const {
-    recipients,
-    status,
-    replyTo,
-    subject,
-    minutesFromEvent,
-    html,
-  } = email;
+  const { recipients, status, subject, minutesFromEvent, html } = email;
 
   const originalEmailData = await db.query(
     "SELECT * FROM email WHERE id=$1",
@@ -98,8 +90,8 @@ router.put("/api/email", async (req, res) => {
   const originalEmail = originalEmailData.rows[0];
 
   const updatedEmail = await db.query(
-    "UPDATE email SET reply_to=$2, recipients=$3, status=$4, subject=$5, minutes_from_event=$6, html=$7 WHERE id=$1 RETURNING *",
-    [id, replyTo, recipients, status, subject, minutesFromEvent, html],
+    "UPDATE email SET recipients=$2, status=$3, subject=$4, minutes_from_event=$5, html=$6 WHERE id=$1 RETURNING *",
+    [id, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
         console.log(err);
@@ -114,7 +106,7 @@ router.put("/api/email", async (req, res) => {
     // create a new job with fresh data
     scheduleJob(
       id.toString(),
-      { replyTo, subject, html, recipients },
+      { subject, html, recipients },
       updatedEmail.rows[0].event,
       minutesFromEvent
     );
@@ -171,7 +163,7 @@ router.get("/api/test", async (req, res) => {
 });
 
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
-  const { replyTo, subject, html, recipients } = email;
+  const { subject, html, recipients } = email;
 
   const event = await getEventFromId(eventId);
 
@@ -181,7 +173,7 @@ const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
 
   Scheduler.scheduleSend(
     jobName,
-    { to: "andrzejewski.d@gmail.com", subject, html, replyTo, recipients },
+    { to: "andrzejewski.d@gmail.com", subject, html, recipients },
     sendDate,
     eventId
   );

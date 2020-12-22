@@ -36,13 +36,14 @@ router.post("/api/registration", async (req, res) => {
     }
   );
 
+  console.log(registrationEmails.rows);
+
   for (var email of registrationEmails.rows) {
     try {
       const response = await Mailer.sendEmail({
         to: "andrzejewski.d@gmail.com",
         subject: email.subject,
         html: email.html,
-        replyTo: email.reply_to,
       });
     } catch (error) {
       res.status(500).json({ message: "Error when sending email." });

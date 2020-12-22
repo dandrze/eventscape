@@ -4,11 +4,11 @@ const keys = require("../config/keys");
 sgMail.setApiKey(keys.sendGridKey);
 
 const sendEmail = async (email) => {
-  const { to, subject, html, replyTo } = email;
+  console.log(email);
+  const { to, subject, html } = email;
   const msg = {
     to,
     from: "david@homehop.ca",
-    reply_to: replyTo,
     subject,
     text: html,
     html,
