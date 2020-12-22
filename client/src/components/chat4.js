@@ -128,8 +128,8 @@ const Chat = ({ location }) => {
   };
 
   return (
-    <div className="outerContainer">
-      <div className="container">
+    <div className="chatOuterContainer">
+      <div className="chatContainer">
         <InfoBar />
         <Messages messages={messages} name={name} />
         <Input

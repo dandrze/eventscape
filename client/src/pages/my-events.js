@@ -6,6 +6,7 @@ import NavBar3 from "../components/navBar3.js";
 import Tabs from "../components/Tabs";
 import Table from "../components/myEventsTable.js";
 import * as actions from "../actions";
+import "./my-events.css";
 
 const My_Events = (props) => {
   useEffect(() => {
@@ -20,13 +21,13 @@ const My_Events = (props) => {
 
   return (
     <div>
-      <NavBar3 displaySideNav="false" />
-      <div className="myEventsContainer">
-        <div className="myEventsHead">
-          <h1 className="myEvents1">My Events</h1>
+      <NavBar3 displaySideNav="false" settings="sideDrawerOpen: false"/>
+      <div className="my-events-container">
+        <div className="top-button-bar">
+          <h1 className="button-bar-left my-events-title">My Events</h1>
           <br></br>
           <Link to="/event-details">
-            <button className="Button1 myEvents2">Create New Event</button>
+            <button className="Button1 button-bar-left">Create New Event</button>
           </Link>
         </div>
         <Tabs>

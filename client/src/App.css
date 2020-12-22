@@ -1,16 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Spectral&display=swap");
-
-@font-face {
-  font-family: "San Francisco";
-  font-weight: 400;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-regular-webfont.woff");
-}
-
-@font-face {
-  font-family: "San Francisco";
-  font-weight: bold;
-  src: url("https://applesocial.s3.amazonaws.com/assets/styles/fonts/sanfrancisco/sanfranciscodisplay-bold-webfont.woff");
-}
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
 
 /*Overwrite some bootstrap css properties that break our styling*/
 a:hover {
@@ -28,7 +17,7 @@ body {
   --main-color: #b0281c;
   --menu-bg: #2f2f2f;
   --menu-text: #eaeaea;
-  --input-border: #d2d2d2;
+  --input-border: #bfbfbf;
   --tabs-inactive: #f0f1f4;
   --box-border: #eaecef;
 
@@ -52,23 +41,35 @@ ul {
 
 h1 {
   font-weight: 400;
-  /*font-family: "Spectral", serif;
+  font-family: "Spectral", serif;
 	font-size: 48px;
-	color: black;*/
+  color: black;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 h2 {
-  font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-weight: bold;
   font-size: 28px;
   color: black;
+  margin-top: 1rem;
+  margin-bottom: 2rem;
 }
 
 h3 {
-  font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-weight: 400;
   font-size: 24px;
   color: black;
+}
+
+p {
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-weight: 300;
+  font-size: calc(20px + 0.09vw);
+  color: black;
+  line-height: 1.65;
 }
 
 input {
@@ -81,11 +82,14 @@ input {
   margin-left: 0px;
   margin-right: 0px;
   box-sizing: border-box;
+  font-size: 17px;
+  line-height: 1;
 }
 
 ::placeholder {
   color: var(--input-border);
-  font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-weight: 300;
   font-size: 16px;
 }
 
@@ -103,9 +107,9 @@ select {
 
 label {
   color: grey;
-  font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+  font-family:  Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 300 !important;
 }
 
 .App {
@@ -124,8 +128,8 @@ label {
 }
 
 .Button1 {
-  font-family: "San Francisco", Helvetica, Arial, sans-serif;
-  font-weight: bold;
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
+  font-weight: 600;
   font-size: 14px;
   color: white;
   background-color: var(--main-color);
@@ -158,6 +162,7 @@ label {
   display: inline-block;
   border: none;
   background: #b0281c;
+  transition: all 0.1s ease-in-out;
 }
 
 .theme-button:hover {
@@ -165,7 +170,7 @@ label {
 }
 
 .Button2 {
-  font-family: "San Francisco", Helvetica, Arial, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
   font-weight: bold;
   font-size: 14px;
   color: var(--main-color);
@@ -233,16 +238,22 @@ label {
   padding: 1.3rem 2rem;
   background-color: var(--tabs-inactive);
   margin-right: 5px;
-  font-family: "San Francisco", Helvetica, Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 14px;
   font-weight: bold;
+  transition: all 0.1s ease-in-out;
+}
+
+.tab-list-item:hover {
+  color: var(--main-color);
+  cursor: pointer;
 }
 
 .tab-list-active {
   background-color: white;
   border: solid var(--box-border);
-  border-width: 1px 1px 0 1px;
   color: var(--main-color);
+  border-width: 1px 1px 0 1px;
 }
 
 .tab-content {
@@ -255,23 +266,6 @@ label {
 
 .table1 {
   margin: 0 2rem 2rem 2rem;
-}
-
-.myEvents1 {
-  float: left;
-  max-width: 49%;
-  vertical-align: top;
-  line-height: 1;
-}
-
-.myEvents2 {
-  float: right;
-  max-width: 49%;
-  vertical-align: top;
-}
-
-.myEventsHead {
-  height: 150px;
 }
 
 #designBoard {
@@ -353,4 +347,107 @@ label {
 
 .live-page-container {
   width: 100vw;
+}
+
+/* Form displaying in registration blocks */
+.react-form-builder-form {
+  text-align: left;
+}
+
+.react-datepicker-wrapper {
+  width: 100%;
+}
+
+select {
+  max-width: 100% !important;
+}
+
+.styled-select select {
+  -moz-appearance:none; /* Firefox */
+  -webkit-appearance:none; /* Safari and Chrome */
+  appearance:none;
+  background-color: rebeccapurple;
+}
+
+select {
+
+  /* styling */
+  background-color: white;
+  border: thin solid red;
+  border-radius: 4px;
+  display: inline-block;
+  font: inherit;
+  line-height: 1.5em;
+  padding: 0.5em 3.5em 0.5em 1em;
+
+  /* reset */
+
+  margin: 0;      
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+select {
+  -moz-appearance:none; /* Firefox */
+  -webkit-appearance:none; /* Safari and Chrome */
+  appearance:none;
+  background-image:
+    linear-gradient(45deg, transparent 50%, gray 50%),
+    linear-gradient(135deg, gray 50%, transparent 50%),
+    linear-gradient(to right, #ccc, #ccc);
+  background-position:
+    calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px),
+    calc(100% - 2.5em) 0.5em;
+  background-size:
+    5px 5px,
+    5px 5px,
+    1px 1.5em;
+  background-repeat: no-repeat;
+}
+
+.badge-danger {
+  background-color: #ced4da;
+}
+
+/* Top button bar */
+
+.top-button-bar {
+  display: flex;
+  margin-bottom: 3rem;
+  margin-top: 0;
+}
+
+.button-bar-left {
+  margin-left: 0rem;
+  align-self: flex-end;
+  margin-right: auto !important;
+}
+
+.button-bar-right {
+  margin-left: 1rem;
+  margin-right: 0;
+  align-self: flex-end;
+}
+
+/* Cancel Bar */
+
+.cancel-bar {
+  display: flex;
+  margin-top: 1.5%;
+  margin-right: 1.5%;
+  margin-left: calc(98.5% - 24px);
+  justify-content: left;
+}
+
+.cancel-bar-icon {
+  height: 24px;
+  width: 24px;
+  align-self: flex-end;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
 }

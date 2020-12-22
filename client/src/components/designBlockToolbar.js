@@ -23,7 +23,6 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
-import ArrowSketchIcon from "../icons/left-arrow-sketch.svg";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -179,19 +178,6 @@ function DesignBlockToolbar(props) {
                   <SettingsIcon />
                 </div>
               </Tooltip>
-              <div className="stream-setting-tip-container">
-                <div className="stream-settings-tip">
-                  <img
-                    className="arrow-sketch"
-                    src={ArrowSketchIcon}
-                    alt="left arrow"
-                    height="30px"
-                  ></img>
-                  <div className="stream-settings-tip-text">
-                    Click here to add your stream
-                  </div>
-                </div>
-              </div>
             </>
           ) : null}
           {sectionTooltip ? (

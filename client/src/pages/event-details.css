@@ -1,3 +1,12 @@
+.title {
+    margin-top: 5rem;
+}
+
+.event-details-box {
+    margin-top: 4rem;
+    margin-bottom: 6rem;
+}
+
 #event-cat, #event-time-zone {
     /* fixing flawed material UI CSS */
     background-color: white;
@@ -10,7 +19,7 @@
 }
 
 #date-time-container {
-    margin-bottom: 10px;
+    margin-bottom: 0px;
 }
 
 #primary-color {
@@ -20,9 +29,12 @@
 
 #hex-input {
     width: 25%;
+    min-width: 90px;
     color: grey;
-    font-family: 'San Francisco', Helvetica, Ariel, sans-serif;
+    font-family: Roboto, 'Helvetica Neue', Ariel, sans-serif;
     border-radius: 4px;
+    margin-top: 1rem;
+    text-align: center;
 }
 
 .react-colorful {
@@ -39,12 +51,10 @@
     border-radius: 0 0 3px 3px;
 }
 
-.react-colorful__saturation-pointer {
-    border-radius: 5px;
+#date-left {
+    margin-right: 8px;
 }
 
-.react-colorful__hue-pointer {
-    border-radius: 2px;
-    width: 15px;
-    height: inherit;
+#date-right {
+    margin-left: 8px;
 }

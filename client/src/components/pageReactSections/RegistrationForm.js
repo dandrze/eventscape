@@ -70,24 +70,23 @@ function RegistrationForm(props) {
 
   const theme = `
   .form-editor-froala {
-    margin: 5%;
+    margin: 8%;
     text-align: justify;
-}
+  }
 
-.form-editor-react  {
-    padding: 8%;
-    margin: 5%;
-    background-color: #EFEFEF;
-}
+  .form-editor-react  {
+      margin: 8%;
+      background-color: #FFF; //was #EFEFEF
+  }
+
   .container {
     padding: 0;
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     grid-gap: 1rem;
-
-}
-	
+  }
   `;
+
   return (
     <div>
       <style>{theme}</style>

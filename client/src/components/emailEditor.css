@@ -1,17 +1,19 @@
-.design {
-  margin: 10px 4%;
-}
-
 .email-editor-container {
   background: #fff;
-  margin: 30px 50px;
-  overflow: scroll;
-  height: calc(100vh - 60px);
+  max-width: 1000px;
+  max-height: 100vh;
+  padding: 60px;
+  overflow-y: scroll;
+}
+
+@media only screen and (min-width: 1001px) {
+  .email-editor-container {
+    width: 1000px;
+  }
 }
 
 #topButtons {
   display: flex;
-  margin-bottom: 3rem;
 }
 
 #testEmail {
@@ -46,12 +48,13 @@
 }
 
 #emailInputs {
-  margin: 3%;
+  margin: 0 0 3% 0;
 }
 
 .inputDiv {
   border-bottom: 1px solid rgb(200, 200, 200);
   padding: 12px 0px;
+  min-height: 50px;
   display: flex;
   justify-content: left;
   align-items: center;
@@ -62,6 +65,10 @@
   color: red;
   font-size: 0.9em;
   width: 100%;
+}
+
+.input-send-time {
+  flex-wrap: wrap;
 }
 
 .emailLabel {
@@ -156,4 +163,9 @@ form {
 /*Test Email*/
 #testEmailModal {
   margin: 3rem;
+}
+
+.send-time-input {
+  width: 45px;
+  margin-right: 5px;
 }
