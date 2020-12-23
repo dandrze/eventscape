@@ -213,6 +213,7 @@ const EmailEditor = (props) => {
               <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
               <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
               <MenuItem value={statusOptions.DISABLED}>Disabled</MenuItem>
+              <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
             </Select>
           </FormControl>
         </div>

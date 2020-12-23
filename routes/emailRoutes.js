@@ -131,47 +131,6 @@ router.post("/api/email/jobs/cancel", async (req, res) => {
   Scheduler.cancelSend(id);
 });
 
-router.get("/api/test", async (req, res) => {
-  const eventId = 159;
-  const registrations = await db.query(
-    `SELECT 
-    event.title as event_name, 
-    event.time_zone, 
-    event.link as event_link, 
-    event.start_date, 
-    event.end_date ,
-    registration.first_name,
-    registration.last_name,
-    registration.email
-    
-    FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 `,
-    [eventId]
-  );
-
-  const recipientsList = registrations.rows;
-
-  const subject = "hello {last_name} you are invited to {event_name}";
-
-  // find all variable names in curly braces and put them in an array
-  const subjectVariables = subject.match(/[^{\}]+(?=})/g);
-
-  const emails = [];
-
-  for (const recipient of recipientsList) {
-    // replace each instance of the variable with the value in the recipientsList (list of objects)
-    var updatedSubject = subject;
-    for (var i = 0; i < subject.length; i++) {
-      updatedSubject = updatedSubject.replace(
-        new RegExp("{" + subjectVariables[i] + "}", "gi"),
-        recipient[subjectVariables[i]]
-      );
-    }
-    emails.push(updatedSubject);
-  }
-
-  res.status(200).send(recipientsList);
-});
-
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
   const { subject, html, recipients } = email;
 

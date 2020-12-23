@@ -15,6 +15,7 @@ export const statusOptions = {
   LIVE: "Live",
   ACTIVE: "Active",
   DISABLED: "Disabled",
+  COMPLETE: "Complete",
 };
 
 export const emailVariableNames = [

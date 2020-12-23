@@ -4,6 +4,7 @@ const Mailer = require("./Mailer");
 const { updateEmailJob } = require("../db/Email");
 const { recipientsOptions } = require("../model/enums");
 const db = require("../db/index");
+const { sub } = require("date-fns");
 
 const scheduleSend = async (emailId, email, sendDate, eventId) => {
   const { to, subject, html, recipients, emailList } = email;
@@ -14,8 +15,6 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
     async () => {
       // asign job to the job within node-schedule
       const job = schedule.scheduledJobs[emailId.toString()];
-      // commented out all email send code, replaced with a console log instead
-      console.log(email);
 
       var recipientsList = [];
       // get recipients either from the registration list, or use the email list provided
@@ -35,8 +34,6 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
           [eventId]
         );
 
-        console.log(registrationsList);
-
         recipientsList = registrationsList.rows;
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
         recipientsList = await db.query(
@@ -45,47 +42,23 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
         ).rows;
       }
 
-      console.log(recipientsList);
+      // provide a list of recipient data, a subject and html with {variables} to a function that maps the data to the variables and sends an email to each recipient
 
-      // find all variable names in curly braces and put them in an array
-      const subjectVariables = subject.match(/[^{\}]+(?=})/g);
-      const htmlVariables = html.match(/[^{\}]+(?=})/g);
+      const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+        recipientsList,
+        subject,
+        html
+      );
 
-      //Iterate through the recipientsList and send an email to each recipient with variables replaced with database values
-      for (const recipient of recipientsList) {
-        // for each recipient, reset the subject to the original with {variable_names}
-        var updatedSubject = subject;
-        var updatedHtml = html;
+      console.log({ success, failed });
 
-        //for each variable in the subjectVariables array, replace it with the value from the database value. If the array is empty, skip it
-        if (subjectVariables) {
-          for (var i = 0; i < subject.length; i++) {
-            updatedSubject = updatedSubject.replace(
-              new RegExp("{" + subjectVariables[i] + "}", "gi"),
-              recipient[subjectVariables[i]]
-            );
-          }
-        }
-
-        //for each variable in the htmlVariables array, replace it with the value from the database value. If the the array is empty, skip it
-        if (htmlVariables) {
-          for (var i = 0; i < subject.length; i++) {
-            updatedHtml = updatedHtml.replace(
-              new RegExp("{" + htmlVariables[i] + "}", "gi"),
-              recipient[htmlVariables[i]]
-            );
-          }
-        }
-
-        Mailer.sendEmail({
-          to: recipient.email,
-          subject: updatedSubject,
-          html: updatedHtml,
-        });
-      }
-
-      //  update the database to show that the email has been sent
-      updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
+      updateEmailJob(
+        emailId,
+        job.triggeredJobs(),
+        job.nextInvocation(),
+        success,
+        failed
+      );
 
       // We only ever need to run this job once. So remove it from node-schedule to keep things clean and avoid duplicate sends
       job.cancel();

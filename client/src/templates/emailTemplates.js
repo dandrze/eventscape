@@ -8,13 +8,13 @@ export const blankEmail = {
 };
 
 export const invitation = {
-  subject: "You are Invited To {Event_Name}",
+  subject: "You are Invited To {event_name}",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -10080, // 7 days
   html: `Invitation email template goes here`,
 };
 export const registrationConfirmation = {
-  subject: "Thank You for Registering for {Event_Name}",
+  subject: "Thank You for Registering for {event_name}",
   recipients: recipientsOptions.NEW_REGISTRANTS,
   html: `
   <p style="text-align: left">Hello {first_name},</p>
@@ -43,21 +43,21 @@ export const registrationConfirmation = {
 };
 
 export const reminderOneDay = {
-  subject: "Reminder: {Event_Name} Tomorrow",
+  subject: "Reminder: {event_name} Tomorrow",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -1440, // 1 day
   html: `Reminder email template goes here`,
 };
 
 export const reminderOneHour = {
-  subject: "Reminder: {Event_Name} in One Hour",
+  subject: "Reminder: {event_name} in One Hour",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -60, // 1 hour
   html: `Reminder Email Template Goes Here`,
 };
 
 export const followUp = {
-  subject: "Thank You for Attending {Event_Name}",
+  subject: "Thank You for Attending {event_name}",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: 180, // 6 hours
   html: `Thank you email template goes here`,
