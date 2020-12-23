@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 
 import { ReactFormGenerator } from "../react-form-builder2/lib";
@@ -15,6 +15,7 @@ function RegistrationForm(props) {
   const [emailAddress, setEmailAddress] = useState(
     props.standardFields.email || ""
   );
+  const [emailError, setEmailError] = useState("");
   const [firstName, setFirstName] = useState(
     props.standardFields.firstName || ""
   );
@@ -45,6 +46,14 @@ function RegistrationForm(props) {
     setEmailAddress(event.target.value);
   };
 
+  const handleEmailBlur = () => {
+    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    setEmailError(
+      re.test(emailAddress) ? "" : "Please enter a valid email address"
+    );
+  };
+
   const handleFirstNameChange = (event) => {
     setFirstName(event.target.value);
   };
@@ -53,23 +62,31 @@ function RegistrationForm(props) {
   };
 
   const handleSubmit = async (values) => {
-    // If there is a custom callback (i.e. editting a registration) use that
-    if (props.onSubmitCallback) {
-      props.onSubmitCallback(values, emailAddress, firstName, lastName);
-    } else {
-      // else use the default workflow
-      const res = await props.addRegistration(
-        props.event.id,
-        values,
-        emailAddress,
-        firstName,
-        lastName
-      );
-      if (res) {
-        setModalText("Thank you for registering for " + props.event.title);
-        openModal();
+    // if there is an email error, focus on the email input field
+    if (!emailError) {
+      // If there is a custom callback (i.e. editting a registration) use that
+      if (props.onSubmitCallback) {
+        props.onSubmitCallback(values, emailAddress, firstName, lastName);
+      } else {
+        // else use the default workflow
+        const res = await props.addRegistration(
+          props.event.id,
+          values,
+          emailAddress,
+          firstName,
+          lastName
+        );
+        if (res) {
+          setModalText("Thank you for registering for " + props.event.title);
+          openModal();
+        }
       }
     }
+  };
+
+  const validateEmailFormat = (inputText) => {
+    const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+    return inputText.value.match(mailformat);
   };
 
   const theme = `
@@ -122,7 +139,9 @@ function RegistrationForm(props) {
               class="form-control"
               value={emailAddress}
               onChange={handleEmailChange}
+              onBlur={handleEmailBlur}
             />
+            <div className="errorMessage">{emailError}</div>
             <label>
               <span>First Name</span>
               <span class="label-required badge badge-danger">Required</span>
