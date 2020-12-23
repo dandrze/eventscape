@@ -84,10 +84,6 @@ function ScheduledEmails(props) {
       field: "subject",
     },
     {
-      title: "From",
-      field: "from_name",
-    },
-    {
       title: "To",
       field: "recipients",
     },

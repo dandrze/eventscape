@@ -12,9 +12,13 @@ function RegistrationForm(props) {
   const [open, setOpen] = useState(false);
   const [modalText, setModalText] = useState(false);
   const [formData, setFormData] = useState([]);
-  const [emailAddress, setEmailAddress] = useState("");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const [emailAddress, setEmailAddress] = useState(
+    props.standardFields.email || ""
+  );
+  const [firstName, setFirstName] = useState(
+    props.standardFields.firstName || ""
+  );
+  const [lastName, setLastName] = useState(props.standardFields.lastName || "");
 
   useEffect(() => {
     fetchFormData();
