@@ -63,7 +63,7 @@ const EmailEditor = (props) => {
 
   useEffect(() => {
     validateSendTime(days, hours, mins);
-  });
+  }, [days, hours, mins]);
 
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
@@ -272,71 +272,69 @@ const EmailEditor = (props) => {
             ></input>
           </div>
 
-          <div className="inputDiv" style={{ flexWrap: "wrap" }}>
-            <div className="inputDiv input-send-time">
-              <label htmlFor="sendTime" className="emailLabel">
-                Scheduled Send Time:{" "}
-              </label>
-              <br></br>
-              {recipients === recipientsOptions.NEW_REGISTRANTS ? (
-                <label className="emailLabel">Upon Registration</label>
-              ) : (
-                <>
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-days"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeDays}
-                      value={days}
-                    />
-                  </div>
-                  <label className="emailLabel">days </label>
+          <div
+            className="inputDiv input-send-time"
+            style={{ flexWrap: "wrap" }}
+          >
+            <label htmlFor="sendTime" className="emailLabel">
+              Scheduled Send Time:{" "}
+            </label>
+            <br></br>
+            {recipients === recipientsOptions.NEW_REGISTRANTS ? (
+              <label className="emailLabel">Upon Registration</label>
+            ) : (
+              <>
+                <div className="send-time-input">
+                  <TextField
+                    id="number-days"
+                    type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{ min: 0, max: 180 }}
+                    onChange={handleChangeDays}
+                    value={days}
+                  />
+                </div>
+                <label className="emailLabel">days </label>
 
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-hours"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 23 }}
-                      onChange={handleChangeHours}
-                      value={hours}
-                    />
-                  </div>
-                  <label className="emailLabel">hours </label>
+                <div className="send-time-input">
+                  <TextField
+                    id="number-hours"
+                    type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{ min: 0, max: 23 }}
+                    onChange={handleChangeHours}
+                    value={hours}
+                  />
+                </div>
+                <label className="emailLabel">hours </label>
 
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-mins"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeMins}
-                      value={mins}
-                    />
-                  </div>
-                  <label className="emailLabel">minutes </label>
+                <div className="send-time-input">
+                  <TextField
+                    id="number-mins"
+                    type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{ min: 0, max: 180 }}
+                    onChange={handleChangeMins}
+                    value={mins}
+                  />
+                </div>
+                <label className="emailLabel">minutes </label>
 
-                  <Select
-                    value={preposition}
-                    onChange={handleChangePreposition}
-                  >
-                    <MenuItem value={-1}>Before</MenuItem>
-                    <MenuItem value={1}>After</MenuItem>
-                  </Select>
+                <Select value={preposition} onChange={handleChangePreposition}>
+                  <MenuItem value={-1}>Before</MenuItem>
+                  <MenuItem value={1}>After</MenuItem>
+                </Select>
 
-                  <label className="emailLabel">{" event start time"}</label>
-                </>
-              )}
-              <div className="errorMessage">{timeError}</div>
-            </div>
+                <label className="emailLabel">{" event start time"}</label>
+              </>
+            )}
+            <div className="errorMessage">{timeError}</div>
           </div>
 
           <div style={{ margin: "3% 0" }}>

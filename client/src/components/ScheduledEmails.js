@@ -95,14 +95,6 @@ function ScheduledEmails(props) {
       title: "Status",
       field: "status",
     },
-    {
-      title: "Sent Successfuly",
-      field: "successful_sends",
-    },
-    {
-      title: "Failed",
-      field: "failed_sends",
-    },
   ];
 
   const options = {
