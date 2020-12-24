@@ -1,5 +1,9 @@
 /* Nav Bar Top */
 
+.eventscape-logo {
+	margin-right: 5px;
+}
+
 .current_event_container {
     display: flex;
     margin-left: 0.75rem;

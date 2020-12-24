@@ -29,6 +29,7 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
+import EventscapeLogo from "../icons/eventscape-logo-navbar.png"
 
 import logo from "../icons/triangular-logo.svg";
 import Internet_icon from "../icons/internet.svg";
@@ -229,6 +230,20 @@ function NavBar3(props) {
               </IconButton>
             </Tooltip>
           )}
+
+          <Tooltip title="eventscape Home Page">
+            <Button>
+              <Link to="/">
+                <img
+                  className="eventscape-logo"
+                  src={EventscapeLogo}
+                  alt="eventscape-logo"
+                  height="18px"
+                ></img>
+              </Link>
+            </Button>
+          </Tooltip>
+
           <Tooltip title="View Live Website">
             <Button onClick={handleGoToLiveSite}>
               <img

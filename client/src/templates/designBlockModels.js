@@ -88,7 +88,7 @@ export const logoHeaderModel = () => {
   return `
     <div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
-            <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
+            <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
     </div>
     `;
@@ -98,7 +98,7 @@ export const logoHeaderRightModel = () => {
   return `
     <div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
-            <img src="https://i.ibb.co/vh8fGjZ/your-logo-1.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
+            <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
         </div>
     </div>
     `;
@@ -195,7 +195,7 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
     }
     
     .button3 {
-        font-family: Helvetica, Arial, sans-serif;
+        font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
         font-weight: bold;
         font-size: 20;
         color: white;
@@ -236,21 +236,22 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
 
   return `
         <div style="overflow: hidden;" contenteditable="false">
-            <div style="margin: 0 1rem 0 1rem;">
-                <div class="title1">${eventTitle}</div>
+            <div style="margin: 1rem 1rem 1rem 1rem;">
+                <div class="title1" contenteditable="true">${eventTitle}</div>
             </div>
         </div>
         
         <style>
             .title1 {
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
                 font-size: 36px;
+                font-weight: 300;
                 color: black;
                 text-align: left;
-                line-height: 1.5;
+                line-height: 1;
             }
             .time {
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
                 font-size: 1.25vw;
                 font-weight: bold;
                 color: black;
@@ -444,7 +445,7 @@ export const streamChatModel = () => {
                 padding: 8px;
                 position: relative;
                 background-color: #EFEFEF;
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
                 font-size: 14px;
                 white-space: normal;
                 text-align: left;
@@ -465,7 +466,7 @@ export const streamChatModel = () => {
             .inputMessage {
                 border: none;
                 border-radius: 17px;
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
                 font-size: 14px;
                 padding: 10px;
                 width: 100%;
@@ -480,7 +481,7 @@ export const streamChatModel = () => {
             }
               
             .username {
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
                 font-size: 10px;
                 color: grey;
                 padding: 0 0 1px 0;
@@ -490,7 +491,7 @@ export const streamChatModel = () => {
             }
 
             .sendTime {
-                font-family: "Helvetica Neue", Helvetica, Ariel, sans-serif;
+                font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
                 font-size: 10px;
                 color: grey;
                 padding: 0 0 1px 0;

@@ -2,8 +2,7 @@
   background: #fff;
   max-width: 1000px;
   max-height: 100vh;
-  padding: 60px;
-  overflow-y: scroll;
+  padding: 1.5% 60px 60px 60px;
 }
 
 @media only screen and (min-width: 1001px) {
@@ -12,62 +11,27 @@
   }
 }
 
-#topButtons {
-  display: flex;
-}
-
-#testEmail {
-  margin-left: 0rem;
-  align-self: flex-end;
-  margin-top: auto;
-  margin-bottom: 0;
-}
-
-#status {
-  margin-left: auto !important;
-  margin-right: 1rem;
-  align-self: flex-end;
-}
-
-#save {
-  align-self: flex-end;
-  margin-left: 0px !important;
-  margin-right: 0px !important;
-}
-
-#cancelBar {
-  height: 35px;
-  display: flex;
-}
-
-#cancelIcon {
-  align-self: flex-end;
-  margin-right: 1.5%;
-  margin-left: auto !important;
-  cursor: pointer;
-}
-
 #emailInputs {
   margin: 0 0 3% 0;
 }
 
 .inputDiv {
   border-bottom: 1px solid rgb(200, 200, 200);
-  padding: 12px 0px;
-  min-height: 50px;
+  padding: 10px 0px 8px 0px;
+  min-height: 51px;
   display: flex;
   justify-content: left;
   align-items: center;
 }
 
 .errorMessage {
-  margin-top: 10px;
   color: red;
   font-size: 0.9em;
+  line-height: 2;
   width: 100%;
 }
 
-.input-send-time {
+.send-time-input-container {
   flex-wrap: wrap;
 }
 
@@ -75,14 +39,13 @@
   width: auto;
   text-align: left;
   margin-right: 0.5em;
-  vertical-align: middle;
   margin-top: 0em;
   margin-bottom: 0em;
   display: flex;
   border: 0px solid;
   padding: 0;
   height: 20px;
-  font-family: Helvetica, Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 14px;
   white-space: nowrap;
 }
@@ -94,7 +57,7 @@
   border: 0px solid;
   height: 20px;
   color: black;
-  font-family: Helvetica, Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 14px;
   padding: 0;
   margin-top: 0em;

@@ -350,7 +350,7 @@ label {
 }
 
 /* Form displaying in registration blocks */
-.react-form-builder-form {
+.form-group, .react-form-builder-form {
   text-align: left;
 }
 
@@ -411,6 +411,11 @@ select {
 
 .badge-danger {
   background-color: #ced4da;
+}
+
+/* removes check box blue shadow */
+.custom-control-input:checked ~ .custom-control-label::before {
+  box-shadow: 0 0 0 0rem rgba(255, 0, 162, 0.25) !important; /* was 0.2rem */
 }
 
 /* Top button bar */
