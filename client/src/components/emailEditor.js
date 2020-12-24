@@ -209,11 +209,13 @@ const EmailEditor = (props) => {
               value={status}
               onChange={handleChangeStatus}
               input={<BootstrapInput />}
+              disabled={status === statusOptions.COMPLETE ? true : false}
             >
               <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
               <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
-              <MenuItem value={statusOptions.DISABLED}>Disabled</MenuItem>
-              <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
+              {status === statusOptions.COMPLETE ? (
+                <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
+              ) : null}
             </Select>
           </FormControl>
         </div>

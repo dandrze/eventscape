@@ -13,13 +13,15 @@ function RegistrationForm(props) {
   const [modalText, setModalText] = useState(false);
   const [formData, setFormData] = useState([]);
   const [emailAddress, setEmailAddress] = useState(
-    props.standardFields.email || ""
+    props.standardFields ? props.standardFields.email : ""
   );
   const [emailError, setEmailError] = useState("");
   const [firstName, setFirstName] = useState(
-    props.standardFields.firstName || ""
+    props.standardFields ? props.standardFields.firstName : ""
   );
-  const [lastName, setLastName] = useState(props.standardFields.lastName || "");
+  const [lastName, setLastName] = useState(
+    props.standardFields ? props.standardFields.lastName : ""
+  );
 
   useEffect(() => {
     fetchFormData();
@@ -62,8 +64,17 @@ function RegistrationForm(props) {
   };
 
   const handleSubmit = async (values) => {
-    // if there is an email error, focus on the email input field
-    if (!emailError) {
+    // Check to make sure the standard fields are valid first
+    if (emailError || !emailAddress) {
+      setModalText("Please enter a valid email");
+      openModal();
+    } else if (!firstName) {
+      setModalText("Please enter your first name");
+      openModal();
+    } else if (!lastName) {
+      setModalText("Please enter your last name");
+      openModal();
+    } else {
       // If there is a custom callback (i.e. editting a registration) use that
       if (props.onSubmitCallback) {
         props.onSubmitCallback(values, emailAddress, firstName, lastName);
