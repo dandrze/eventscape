@@ -131,6 +131,58 @@ router.post("/api/email/jobs/cancel", async (req, res) => {
   Scheduler.cancelSend(id);
 });
 
+router.get("/api/email-list", async (req, res) => {
+  const { emailId } = req.query;
+
+  const emailList = await db.query(
+    "SELECT * FROM recipient WHERE email_template_id=$1",
+    [emailId],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(emailList.rows);
+});
+
+router.post("/api/email-list", async (req, res) => {
+  const { recipient, emailId } = req.body;
+
+  const { first_name, last_name, email } = recipient;
+
+  const emailList = await db.query(
+    "INSERT INTO recipient (first_name, last_name, email, email_template_id) VALUES ($1, $2, $3, $4)",
+    [first_name, last_name, email, emailId],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(emailList.rows);
+});
+
+router.delete("/api/email-list", async (req, res) => {
+  const { id } = req.query;
+
+  const response = await db.query(
+    "DELETE FROM recipient WHERE id=$1",
+    [id],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(response.rows);
+});
+
+// HELPER FUNCTIONS
+
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
   const { subject, html, recipients } = email;
 

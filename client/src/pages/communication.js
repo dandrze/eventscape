@@ -43,7 +43,7 @@ const Communication = (props) => {
     props.setLoaded(true);
     if (event) {
       props.setLoaded(false);
-      await props.fetchEmailList(event.data.id);
+      await props.fetchCommunicationList(event.data.id);
       props.setLoaded(true);
     }
   };
@@ -56,7 +56,7 @@ const Communication = (props) => {
     setOpenEditor(false);
     //props.setLoaded(false);
     console.log("closed, now we're going to fetch");
-    const res = await props.fetchEmailList(props.event.id);
+    const res = await props.fetchCommunicationList(props.event.id);
     console.log(res);
     //props.setLoaded(true);
   };
@@ -74,13 +74,13 @@ const Communication = (props) => {
   const handleDeleteEmail = async (id) => {
     //props.setLoaded(false);
     await props.deleteEmail(id);
-    await props.fetchEmailList(props.event.id);
+    await props.fetchCommunicationList(props.event.id);
     //props.setLoaded(true);
   };
 
   const handleDuplicateEmail = async (data) => {
     await props.addEmail({ ...data, status: statusOptions.DRAFT });
-    await props.fetchEmailList(props.event.id);
+    await props.fetchCommunicationList(props.event.id);
   };
 
   return (

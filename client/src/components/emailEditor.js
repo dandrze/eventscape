@@ -252,7 +252,7 @@ const EmailEditor = (props) => {
               </FormControl>
               <div id="editEmailList">
                 {recipients === recipientsOptions.EMAIL_LIST ? (
-                  <EmailList />
+                  <EmailList emailId={props.data.id} />
                 ) : null}
               </div>
             </div>
