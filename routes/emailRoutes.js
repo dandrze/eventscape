@@ -148,9 +148,9 @@ router.get("/api/email-list", async (req, res) => {
 });
 
 router.post("/api/email-list", async (req, res) => {
-  const { recipient, emailId } = req.body;
+  const { data, emailId } = req.body;
 
-  const { first_name, last_name, email } = recipient;
+  const { first_name, last_name, email } = data;
 
   const emailList = await db.query(
     "INSERT INTO recipient (first_name, last_name, email, email_template_id) VALUES ($1, $2, $3, $4)",
@@ -163,6 +163,26 @@ router.post("/api/email-list", async (req, res) => {
   );
 
   res.status(200).send(emailList.rows);
+});
+
+router.put("/api/email-list", async (req, res) => {
+  const { data, id } = req.body;
+
+  console.log(data);
+
+  const { first_name, last_name, email } = data;
+
+  const emailList = await db.query(
+    "UPDATE recipient SET first_name=$1, last_name=$2, email=$3 WHERE id=$4",
+    [first_name, last_name, email, id],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(emailList.rows[0]);
 });
 
 router.delete("/api/email-list", async (req, res) => {

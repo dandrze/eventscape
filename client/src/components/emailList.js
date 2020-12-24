@@ -170,10 +170,10 @@ const EmailList = (props) => {
                     resolve();
                   }),
                 onRowUpdate: (newData, oldData) =>
-                  new Promise((resolve) => {
-                    setTimeout(() => {
-                      resolve();
-                    }, 600);
+                  new Promise(async (resolve) => {
+                    await props.updateFromEmailList(newData, oldData.id);
+                    fetchData();
+                    resolve();
                   }),
                 onRowDelete: (oldData) =>
                   new Promise(async (resolve) => {

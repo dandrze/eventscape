@@ -29,13 +29,10 @@ export const fetchEmailList = (emailId) => async (dispatch, getState) => {
   }
 };
 
-export const addToEmailList = (recipient, emailId) => async (
-  dispatch,
-  getState
-) => {
+export const addToEmailList = (data, emailId) => async (dispatch, getState) => {
   // call the api and return the event in json
   try {
-    const res = await api.post("/api/email-list", { recipient, emailId });
+    const res = await api.post("/api/email-list", { data, emailId });
 
     toast.success("Successfully added recipients");
   } catch (err) {
@@ -48,6 +45,18 @@ export const deleteFromEmailList = (id) => async (dispatch, getState) => {
   // call the api and return the event in json
   try {
     const res = await api.delete("/api/email-list", { params: { id } });
+
+    toast.success("Successfully deleted recipient");
+  } catch (err) {
+    toast.error(`Error when fetching email list: ` + err.toString());
+    return false;
+  }
+};
+
+export const updateFromEmailList = (data, id) => async (dispatch, getState) => {
+  // call the api and return the event in json
+  try {
+    const res = await api.put("/api/email-list", { data, id });
 
     toast.success("Successfully deleted recipient");
   } catch (err) {
