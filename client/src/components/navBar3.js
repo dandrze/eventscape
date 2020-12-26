@@ -2,7 +2,7 @@ import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
-import { makeStyles, useTheme } from "@material-ui/core/styles";
+import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
 import Drawer from "@material-ui/core/Drawer";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -17,6 +17,12 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
+import Avatar from '@material-ui/core/Avatar';
+import { deepOrange, deepPurple } from '@material-ui/core/colors';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
+import SettingsIcon from '@material-ui/icons/Settings';
+
 import "./navBar3.css";
 
 import Dialog from "@material-ui/core/Dialog";
@@ -29,13 +35,11 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
+import EventscapeLogo from "../icons/eventscape-logo-navbar.png"
 
-import logo from "../icons/triangular-logo.svg";
 import Internet_icon from "../icons/internet.svg";
-import file_icon from "../icons/file.svg";
 import swap_icon from "../icons/swap.svg";
 import plus_icon from "../icons/plus.svg";
-import user_icon from "../icons/user.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -127,12 +131,64 @@ const useStyles = makeStyles((theme) => ({
   profile: {
     marginLeft: "0px",
   },
+  small: {
+    width: theme.spacing(3),
+    height: theme.spacing(3),
+    fontSize: "14px",
+  },
+  large: {
+    width: theme.spacing(5),
+    height: theme.spacing(5),
+  },
+  orange: {
+    color: theme.palette.getContrastText(deepOrange[500]),
+    backgroundColor: deepOrange[500],
+  },
+  purple: {
+    color: theme.palette.getContrastText(deepPurple[500]),
+    backgroundColor: deepPurple[500],
+  },
+  highlight: {
+    backgroundColor: "rgba(0, 0, 0, 0.06)",
+  },
 }));
+
+const StyledMenu = withStyles({
+  paper: {
+    border: '1px solid #d3d4d5',
+  },
+})((props) => (
+  <Menu
+    elevation={0}
+    getContentAnchorEl={null}
+    anchorOrigin={{
+      vertical: 'bottom',
+      horizontal: 'center',
+    }}
+    transformOrigin={{
+      vertical: 'top',
+      horizontal: 'center',
+    }}
+    {...props}
+  />
+));
+
+const StyledMenuItem = withStyles((theme) => ({
+  root: {
+    '&:focus': {
+      backgroundColor: theme.palette.primary.main,
+      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+        color: theme.palette.common.white,
+      },
+    },
+  },
+}))(MenuItem);
 
 function NavBar3(props) {
   const displaySideNav = props.displaySideNav;
   const content = props.content;
   const open = props.settings.sideDrawerOpen;
+  const highlight = props.highlight;
 
   let history = useHistory();
 
@@ -229,6 +285,20 @@ function NavBar3(props) {
               </IconButton>
             </Tooltip>
           )}
+
+          <Tooltip title="eventscape Home Page">
+            <Button>
+              <Link to="/">
+                <img
+                  className="eventscape-logo"
+                  src={EventscapeLogo}
+                  alt="eventscape-logo"
+                  height="18px"
+                ></img>
+              </Link>
+            </Button>
+          </Tooltip>
+
           <Tooltip title="View Live Website">
             <Button onClick={handleGoToLiveSite}>
               <img
@@ -278,26 +348,52 @@ function NavBar3(props) {
               aria-haspopup="true"
               onClick={handleClick}
             >
-              <img
-                className="profile"
-                src={user_icon}
-                alt="user"
-                height="30px"
-              ></img>
+              <div className={classes.root}>
+                <Avatar className={`${classes.purple} ${classes.large}`}>TU</Avatar>
+              </div>
             </Button>
           </Tooltip>
 
-          <Menu
-            id="simple-menu"
+          <StyledMenu
+            id="customized-menu"
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <MenuItem onClick={handleClose}>Profile</MenuItem>
-            <MenuItem onClick={handleClose}>My account</MenuItem>
-            <MenuItem onClick={handleClose}>Logout</MenuItem>
-          </Menu>
+            <StyledMenuItem>
+              <ListItemIcon>
+                <div className={classes.root}>
+                  <Avatar className={`${classes.purple} ${classes.large}`}>TU</Avatar>
+                </div>
+              </ListItemIcon>
+              <ListItemText primary="Test User" secondary="test.user@gmail.com"/>
+            </StyledMenuItem>
+
+            <Divider />
+
+            <StyledMenuItem>
+              <ListItemIcon>
+                <SettingsIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Account Settings" />
+            </StyledMenuItem>
+
+            <StyledMenuItem>
+              <ListItemIcon>
+                <SwapHorizIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Switch Account" />
+            </StyledMenuItem>
+
+            <StyledMenuItem>
+              <ListItemIcon>
+                <ExitToAppIcon fontSize="small" />
+              </ListItemIcon>
+              <ListItemText primary="Sign Out" />
+            </StyledMenuItem>
+            
+          </StyledMenu>
         </Toolbar>
       </AppBar>
       {displaySideNav === "true" && (
@@ -330,6 +426,9 @@ function NavBar3(props) {
               key="design"
               component="a"
               onClick={handleClickDesign}
+              className={clsx({
+                [classes.highlight]: highlight === 'design',
+              })}
             >
               <Tooltip title="Design">
                 <ListItemIcon>
@@ -339,7 +438,13 @@ function NavBar3(props) {
               <ListItemText primary="Design" />
             </ListItem>
             <Link to="/communication">
-              <ListItem button key="communicate">
+              <ListItem 
+                button 
+                key="communicate"
+                className={clsx({
+                  [classes.highlight]: highlight === 'communication',
+                })}
+              >
                 <Tooltip title="Communicate">
                   <ListItemIcon>
                     <img src={EnvelopeIcon} height="20px"></img>
@@ -349,7 +454,13 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             <Link to="/registrations">
-              <ListItem button key="registrations">
+              <ListItem 
+                button 
+                key="registrations"
+                className={clsx({
+                  [classes.highlight]: highlight === 'registrations',
+                })}
+              >
                 <Tooltip title="Registrations">
                   <ListItemIcon>
                     <img src={NotepadIcon} height="20px"></img>
@@ -359,7 +470,13 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             <Link to="./analytics">
-              <ListItem button key="analytics">
+              <ListItem 
+                button 
+                key="analytics"
+                className={clsx({
+                  [classes.highlight]: highlight === 'analytics',
+                })}
+              >
                 <Tooltip title="Analytics">
                   <ListItemIcon>
                     <img src={GraphIcon} height="20px"></img>
@@ -369,7 +486,13 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             <Link to="./messaging">
-              <ListItem button key="messaging">
+              <ListItem 
+                button 
+                key="messaging"
+                className={clsx({
+                  [classes.highlight]: highlight === 'messaging',
+                })}
+              >
                 <Tooltip title="Messaging">
                   <ListItemIcon>
                     <img src={ChatIcon} height="20px"></img>

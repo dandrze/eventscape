@@ -36,17 +36,17 @@ const Preview = (props) => {
    }
 
    .form-control:focus {
-    border-color: ${props.event.primary_color} !important;
+    border-color: purple !important;
     box-shadow: 0 0 0 0rem rgba(255, 0, 162, 0.25); /* was 0.2rem */
   }
   
   .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected, .react-datepicker__close-icon::after {
-    background-color: ${props.event.primary_color} !important;
+    background-color: purple !important;
   }
   
   .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: ${props.event.primary_color};
-    border-color: ${props.event.primary_color};
+    background-color: purple;
+    border-color: purple;
   }
 	
   `;

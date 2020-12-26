@@ -154,17 +154,17 @@ function DesignBlockToolbar(props) {
       (deleteConfirmOpen === false) ? (
         <div className="toolbar_container">
           <Tooltip title="Move Up">
-            <div className="toolbar_button" onClick={() => handleClickMove(-1)}>
+            <div className="design-block-toolbar-button" onClick={() => handleClickMove(-1)}>
               <KeyboardArrowUpIcon />
             </div>
           </Tooltip>
           <Tooltip title="Move Down">
-            <div className="toolbar_button" onClick={() => handleClickMove(1)}>
+            <div className="design-block-toolbar-button" onClick={() => handleClickMove(1)}>
               <KeyboardArrowDownIcon />
             </div>
           </Tooltip>
           <Tooltip title="Delete Design Block">
-            <div className="toolbar_button" onClick={handleClickDelete}>
+            <div className="design-block-toolbar-button" onClick={handleClickDelete}>
               <DeleteOutlined />
             </div>
           </Tooltip>
@@ -172,7 +172,7 @@ function DesignBlockToolbar(props) {
             <>
               <Tooltip title="Stream Settings">
                 <div
-                  className="toolbar_button"
+                  className="design-block-toolbar-button"
                   onClick={handleOpenStreamSettings}
                 >
                   <SettingsIcon />

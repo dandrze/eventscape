@@ -32,7 +32,7 @@ const Published = (props) => {
 
 	 .theme-button {
 		background:${props.event.primary_color} !important;
-	 }
+   }
 	
   `;
 

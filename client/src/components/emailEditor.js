@@ -32,6 +32,7 @@ import {
   statusOptions,
   requiresScheduledSend,
 } from "../model/enums";
+import { nominalTypeHack } from "prop-types";
 
 const EmailEditor = (props) => {
   const classes = useStyles();
@@ -187,157 +188,157 @@ const EmailEditor = (props) => {
   };
 
   return (
-    <div className="email-editor-container">
-      <div id="cancelBar">
-        <Tooltip title="Close Editor">
+    <div style={{ overflowY: "scroll", maxHeight: "95vh" }}>
+      <div className="cancel-bar">
+        <Tooltip title="Close Email Editor">
           <img
             src={Cancel}
-            id="cancelIcon"
-            height="24px"
+            className="cancel-bar-icon"
             onClick={props.handleClose}
           ></img>
         </Tooltip>
       </div>
-      <div id="topButtons">
-        <SendTestEmail />
-        <div id="status">
-          <FormControl className={classes.margin}>
-            <InputLabel id="demo-customized-select-label">Status</InputLabel>
-            <Select
-              labelId="demo-customized-select-label"
-              id="demo-customized-select"
-              value={status}
-              onChange={handleChangeStatus}
-              input={<BootstrapInput />}
-            >
-              <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
-              <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
-              <MenuItem value={statusOptions.DISABLED}>Disabled</MenuItem>
-            </Select>
-          </FormControl>
+      <div className="email-editor-container">
+        <div className="top-button-bar">
+          <div className="button-bar-left">
+            <SendTestEmail />
+          </div>
+          <div className="button-bar-right">
+            <FormControl className={classes.margin}>
+              <InputLabel id="demo-customized-select-label">Status</InputLabel>
+              <Select
+                labelId="demo-customized-select-label"
+                id="demo-customized-select"
+                value={status}
+                onChange={handleChangeStatus}
+                input={<BootstrapInput />}
+              >
+                <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
+                <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
+                <MenuItem value={statusOptions.DISABLED}>Disabled</MenuItem>
+              </Select>
+            </FormControl>
+          </div>
+          <button className="Button1 button-bar-right" onClick={handleSave}>
+            Save
+          </button>
         </div>
-        <button className="Button1" id="save" onClick={handleSave}>
-          Save
-        </button>
-      </div>
 
-      <div style={{ overflow: "hidden" }}>
-        <div id="emailInputs">
-          <div className="inputDiv">
-            <label htmlFor="toSelect" className="emailLabel">
-              To:{" "}
-            </label>
-            <div id="toSelect">
-              <FormControl className={classes.margin}>
-                <Select
-                  labelId="demo-customized-select-label"
-                  id="demo-customized-select"
-                  value={recipients}
-                  onChange={handleChangeRecipients}
-                  input={<BootstrapInput />}
-                >
-                  <MenuItem value={recipientsOptions.EMAIL_LIST}>
-                    Email List
-                  </MenuItem>
-                  <MenuItem value={recipientsOptions.NEW_REGISTRANTS}>
-                    New Registrants
-                  </MenuItem>
-                  <MenuItem value={recipientsOptions.ALL_REGISTRANTS}>
-                    All Registrants
-                  </MenuItem>
-                </Select>
-              </FormControl>
-              <div id="editEmailList">
-                {recipients === recipientsOptions.EMAIL_LIST ? (
-                  <EmailList />
-                ) : null}
+        <div style={{ overflow: "hidden" }}>
+          <div id="emailInputs">
+            <div className="inputDiv">
+              <label htmlFor="toSelect" className="emailLabel">
+                To:{" "}
+              </label>
+              <div id="toSelect">
+                <FormControl className={classes.margin}>
+                  <Select
+                    labelId="demo-customized-select-label"
+                    id="demo-customized-select"
+                    value={recipients}
+                    onChange={handleChangeRecipients}
+                    input={<BootstrapInput />}
+                  >
+                    <MenuItem value={recipientsOptions.EMAIL_LIST}>
+                      Email List
+                    </MenuItem>
+                    <MenuItem value={recipientsOptions.NEW_REGISTRANTS}>
+                      New Registrants
+                    </MenuItem>
+                    <MenuItem value={recipientsOptions.ALL_REGISTRANTS}>
+                      All Registrants
+                    </MenuItem>
+                  </Select>
+                </FormControl>
+                <div id="editEmailList">
+                  {recipients === recipientsOptions.EMAIL_LIST ? (
+                    <EmailList />
+                  ) : null}
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="inputDiv">
-            <label htmlFor="subject" className="emailLabel">
-              Subject:{" "}
-            </label>
-            <input
-              type="text"
-              className="emailInput"
-              name="subject"
-              placeholder=""
-              value={subject}
-              onChange={handleChangeSubject}
-            ></input>
-          </div>
-
-          <div className="inputDiv" style={{ flexWrap: "wrap" }}>
-            <div className="inputDiv input-send-time">
-              <label htmlFor="sendTime" className="emailLabel">
-                Scheduled Send Time:{" "}
+            <div className="inputDiv">
+              <label htmlFor="subject" className="emailLabel">
+                Subject:{" "}
               </label>
-              <br></br>
-              {recipients === recipientsOptions.NEW_REGISTRANTS ? (
-                <label className="emailLabel">Upon Registration</label>
-              ) : (
-                <>
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-days"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeDays}
-                      value={days}
-                    />
-                  </div>
-                  <label className="emailLabel">days </label>
-
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-hours"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 23 }}
-                      onChange={handleChangeHours}
-                      value={hours}
-                    />
-                  </div>
-                  <label className="emailLabel">hours </label>
-
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-mins"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeMins}
-                      value={mins}
-                    />
-                  </div>
-                  <label className="emailLabel">minutes </label>
-
-                  <Select
-                    value={preposition}
-                    onChange={handleChangePreposition}
-                  >
-                    <MenuItem value={-1}>Before</MenuItem>
-                    <MenuItem value={1}>After</MenuItem>
-                  </Select>
-
-                  <label className="emailLabel">{" event start time"}</label>
-                </>
-              )}
-              <div className="errorMessage">{timeError}</div>
+              <input
+                type="text"
+                className="emailInput"
+                name="subject"
+                placeholder=""
+                value={subject}
+                onChange={handleChangeSubject}
+              ></input>
             </div>
-          </div>
 
-          <div style={{ margin: "3% 0" }}>
-            <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
+              <div className="inputDiv send-time-input-container">
+                <label htmlFor="sendTime" className="emailLabel">
+                  Scheduled Send Time:{" "}
+                </label>
+                <br></br>
+                {recipients === recipientsOptions.NEW_REGISTRANTS ? (
+                  <label className="emailLabel">Upon Registration</label>
+                ) : (
+                  <>
+                    <div className="send-time-input">
+                      <TextField
+                        id="number-days"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        inputProps={{ min: 0, max: 180 }}
+                        onChange={handleChangeDays}
+                        value={days}
+                      />
+                    </div>
+                    <label className="emailLabel">days </label>
+
+                    <div className="send-time-input">
+                      <TextField
+                        id="number-hours"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        inputProps={{ min: 0, max: 23 }}
+                        onChange={handleChangeHours}
+                        value={hours}
+                      />
+                    </div>
+                    <label className="emailLabel">hours </label>
+
+                    <div className="send-time-input">
+                      <TextField
+                        id="number-mins"
+                        type="number"
+                        InputLabelProps={{
+                          shrink: true,
+                        }}
+                        inputProps={{ min: 0, max: 180 }}
+                        onChange={handleChangeMins}
+                        value={mins}
+                      />
+                    </div>
+                    <label className="emailLabel">minutes </label>
+
+                    <Select
+                      value={preposition}
+                      onChange={handleChangePreposition}
+                    >
+                      <MenuItem value={-1}>Before</MenuItem>
+                      <MenuItem value={1}>After</MenuItem>
+                    </Select>
+
+                    <label className="emailLabel">{" event start time"}</label>
+                  </>
+                )}
+                <div className="errorMessage">{timeError}</div>
+              </div>
+            <div style={{ margin: "3% 0" }}>
+              <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
+            </div>
           </div>
         </div>
       </div>

@@ -21,6 +21,7 @@ const Design = (props) => {
     <div>
       <NavBar3
         displaySideNav="true"
+        highlight="design"
         content={
           props.settings.loaded ? (
             <PageEditor key={props.model} />

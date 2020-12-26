@@ -22,7 +22,7 @@
     padding-right: 1px;
 }
 
-.toolbar_button {
+.design-block-toolbar-button {
     background: transparent;
     color: #333333;
     outline: none;
@@ -30,7 +30,7 @@
     line-height: 1;
     cursor: pointer;
     margin: 4px 2px;
-    padding: 5px;
+    padding: 0px 5px 5px 5px;
     -webkit-transition: all 0.5s;
     border-radius: 4px;
     -moz-border-radius: 4px;
@@ -40,7 +40,7 @@
     display: inline-block;
 }
 
-.toolbar_button:hover {
+.design-block-toolbar-button:hover {
     background-color: rgba(0,0,0,0.07);
 }
 

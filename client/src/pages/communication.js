@@ -109,6 +109,7 @@ const Communication = (props) => {
       </Modal>
       <NavBar3
         displaySideNav="true"
+        highlight="communication"
         content={
           <div>
             <ScheduledEmails
