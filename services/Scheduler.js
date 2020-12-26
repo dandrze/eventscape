@@ -36,10 +36,26 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
 
         recipientsList = registrationsList.rows;
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
-        recipientsList = await db.query(
-          "SELECT * FROM recipient WHERE email_id=$1",
+        const emailList = await db.query(
+          `SELECT 
+          recipient.first_name,
+          recipient.last_name,
+          recipient.email,
+          event.title as event_name, 
+            event.time_zone, 
+            event.link as event_link, 
+            event.start_date, 
+            event.end_date
+          FROM recipient 
+          INNER JOIN email 
+          on recipient.email_template_id = email.id 
+          INNER JOIN event
+          on email.event = event.id 
+          WHERE recipient.email_template_id=$1`,
           [emailId]
-        ).rows;
+        );
+
+        recipientsList = emailList.rows;
       }
 
       // provide a list of recipient data, a subject and html with {variables} to a function that maps the data to the variables and sends an email to each recipient
