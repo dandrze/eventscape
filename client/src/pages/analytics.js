@@ -10,7 +10,11 @@ export default class Analytics extends React.Component {
     render() {
         return(
             <div>
-                <NavBar3 displaySideNav="true" content={<Content />}/>
+                <NavBar3 
+                  displaySideNav="true" 
+                  highlight={"analytics"}
+                  content={<Content />}
+                />
             </div>
         )
     }

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
-import SendIcon from "@material-ui/icons/Send";
+import TelegramIcon from '@material-ui/icons/Telegram';
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
@@ -82,7 +82,7 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
       style={theme}
       onClick={(e) => sendMessage(e)}
     >
-      <SendIcon />
+      <TelegramIcon />
     </button>
   </form>
 );

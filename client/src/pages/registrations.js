@@ -196,6 +196,7 @@ const Registrations = (props) => {
       </Modal>
       <NavBar3
         displaySideNav="true"
+        highlight="registrations"
         content={
           <div className="container-width">
             <div className="top-button-bar">
