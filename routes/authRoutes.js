@@ -22,8 +22,8 @@ router.get("/auth/fail", async (req, res) => {
 });
 
 router.get("/auth/current-user", async (req, res) => {
-  console.log(req.user);
-  res.send(req.user);
+  const { first_name, last_name, email } = req.user;
+  res.send({ first_name, last_name, email });
 });
 
 router.get("/auth/logout", (req, res) => {
