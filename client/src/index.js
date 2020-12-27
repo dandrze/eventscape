@@ -1,3 +1,4 @@
+import './polyfills';
 import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
@@ -8,7 +9,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
-import './polyfills'
+
 
 import reducers from "./reducers";
 //import global variables
