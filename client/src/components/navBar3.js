@@ -350,7 +350,7 @@ function NavBar3(props) {
             >
               <div className={classes.root}>
                 <Avatar className={`${classes.purple} ${classes.large}`}>
-                  TU
+                  {props.user.first_name[0] + " " + props.user.last_name[0]}
                 </Avatar>
               </div>
             </Button>
@@ -367,13 +367,13 @@ function NavBar3(props) {
               <ListItemIcon>
                 <div className={classes.root}>
                   <Avatar className={`${classes.purple} ${classes.large}`}>
-                    TU
+                    {props.user.first_name[0] + " " + props.user.last_name[0]}
                   </Avatar>
                 </div>
               </ListItemIcon>
               <ListItemText
-                primary="Test User"
-                secondary="test.user@gmail.com"
+                primary={props.user.first_name + " " + props.user.last_name}
+                secondary={props.user.email}
               />
             </StyledMenuItem>
 
@@ -392,13 +392,14 @@ function NavBar3(props) {
               </ListItemIcon>
               <ListItemText primary="Switch Account" />
             </StyledMenuItem>
-
-            <StyledMenuItem>
-              <ListItemIcon>
-                <ExitToAppIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Sign Out" />
-            </StyledMenuItem>
+            <a href="/auth/logout">
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <ExitToAppIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Sign Out" />
+              </StyledMenuItem>
+            </a>
           </StyledMenu>
         </Toolbar>
       </AppBar>

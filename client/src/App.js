@@ -24,6 +24,7 @@ import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
 import Test from "./pages/test";
+import Login from "./pages/login";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -45,7 +46,18 @@ function App(props) {
   const fetchDataAsync = async () => {
     await props.fetchUser();
     await props.fetchEvent();
-    //setDataFetched(true);
+    setDataFetched(true);
+  };
+
+  const RedirectToLogin = (props) => {
+    return (
+      <Redirect
+        to={{
+          pathname: "/login",
+          state: { from: props.location },
+        }}
+      />
+    );
   };
 
   if (
@@ -62,55 +74,62 @@ function App(props) {
     );
   }
 
-  console.log(dataFetched);
-  console.log(props.user);
+  // middleware to redirect to the login page if the user is not logged in
+  const requireAuth = (component) => {
+    if (!dataFetched) {
+      // if data is not done fetching during this rerender, don't return anything
+      return null;
+    } else if (!props.user) {
+      // if data fetching is complete and there is no user (from the cookie) redirect to the login
+      return RedirectToLogin;
+    } else {
+      // if the data is fetched and there is a user logged in (from the cookie) display the component
+      return component;
+    }
+  };
 
-  // while we are fetching data, display the spinner
-  if (!dataFetched) {
-    return (
-      <div style={{ textAlign: "center", paddingTop: "150px" }}>
-        <CircularProgress />
-      </div>
-    );
-  } else if (!props.user) {
-    // if there is no user fetched (no cookie present to automatically log the user in), send them to the login page
-    return (
-      <div className="App">
-        <header className="App-header">
-          <Redirect
-            to={{
-              pathname: "/login",
-              state: { from: props.location },
-            }}
-          />
-          <Route exact path="/login" component={Create_Account} />
-        </header>
-      </div>
-    );
-  } else {
-    // else, if the data is fetched and there is a user, render the app
-    // note everything in this block is private and requires authentication
-    return (
-      <div className="App">
-        <ToastContainer position="top-right" autoClose={3000} />
-        <header className="App-header">
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/dashboard" component={Dashboard} />
-          <Route exact path="/event-details" component={Event_Details} />
-          <Route exact path="/my-events" component={My_Events} />
-          <Route exact path="/design" component={Design} />
-          <Route exact path="/website-settings" component={WebsiteSettings} />
-          <Route exact path="/communication" component={Communication} />
-          <Route exact path="/registrations" component={Registrations} />
-          <Route exact path="/analytics" component={Analytics} />
-          <Route exact path="/messaging" component={Messaging} />
-          <Route exact path="/preview/:event/:model" component={Preview} />
-          <Route exact path="/ScotiabankGillerPrize" component={Giller} />
-          <Route exact path="/test" component={Test} />
-        </header>
-      </div>
-    );
-  }
+  return (
+    <div className="App">
+      <ToastContainer position="top-right" autoClose={3000} />
+      <header className="App-header">
+        <Route exact path="/" component={Landing} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/dashboard" component={requireAuth(Dashboard)} />
+        <Route
+          exact
+          path="/event-details"
+          component={requireAuth(Event_Details)}
+        />
+        <Route exact path="/my-events" component={requireAuth(My_Events)} />
+        <Route exact path="/design" component={requireAuth(Design)} />
+        <Route
+          exact
+          path="/website-settings"
+          component={requireAuth(WebsiteSettings)}
+        />
+        <Route
+          exact
+          path="/communication"
+          component={requireAuth(Communication)}
+        />
+        <Route
+          exact
+          path="/registrations"
+          component={requireAuth(Registrations)}
+        />
+        <Route exact path="/analytics" component={requireAuth(Analytics)} />
+        <Route exact path="/messaging" component={requireAuth(Messaging)} />
+        <Route
+          exact
+          path="/preview/:event/:model"
+          component={requireAuth(Preview)}
+        />
+        <Route exact path="/ScotiabankGillerPrize" component={Giller} />
+        <Route exact path="/test" component={Test} />
+      </header>
+    </div>
+  );
+  //}
 }
 
 const mapStateToProps = (state) => {
