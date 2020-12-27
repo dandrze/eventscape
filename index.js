@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const passport = require("passport");
 const secure = require("express-force-https");
 const cookieSession = require("cookie-session");
+const flash = require("connect-flash");
 
 const db = require("./db");
 const keys = require("./config/keys");
@@ -30,6 +31,7 @@ app.use(
 );
 app.use(passport.initialize());
 app.use(passport.session());
+app.use(flash());
 
 // routes
 app.use(authRoutes);

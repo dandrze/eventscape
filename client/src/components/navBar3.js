@@ -17,11 +17,11 @@ import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
-import Avatar from '@material-ui/core/Avatar';
-import { deepOrange, deepPurple } from '@material-ui/core/colors';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import SwapHorizIcon from '@material-ui/icons/SwapHoriz';
-import SettingsIcon from '@material-ui/icons/Settings';
+import Avatar from "@material-ui/core/Avatar";
+import { deepOrange, deepPurple } from "@material-ui/core/colors";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 import "./navBar3.css";
 
@@ -35,7 +35,7 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
-import EventscapeLogo from "../icons/eventscape-logo-navbar.png"
+import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
 
 import Internet_icon from "../icons/internet.svg";
 import swap_icon from "../icons/swap.svg";
@@ -155,19 +155,19 @@ const useStyles = makeStyles((theme) => ({
 
 const StyledMenu = withStyles({
   paper: {
-    border: '1px solid #d3d4d5',
+    border: "1px solid #d3d4d5",
   },
 })((props) => (
   <Menu
     elevation={0}
     getContentAnchorEl={null}
     anchorOrigin={{
-      vertical: 'bottom',
-      horizontal: 'center',
+      vertical: "bottom",
+      horizontal: "center",
     }}
     transformOrigin={{
-      vertical: 'top',
-      horizontal: 'center',
+      vertical: "top",
+      horizontal: "center",
     }}
     {...props}
   />
@@ -175,9 +175,9 @@ const StyledMenu = withStyles({
 
 const StyledMenuItem = withStyles((theme) => ({
   root: {
-    '&:focus': {
+    "&:focus": {
       backgroundColor: theme.palette.primary.main,
-      '& .MuiListItemIcon-root, & .MuiListItemText-primary': {
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
         color: theme.palette.common.white,
       },
     },
@@ -349,7 +349,9 @@ function NavBar3(props) {
               onClick={handleClick}
             >
               <div className={classes.root}>
-                <Avatar className={`${classes.purple} ${classes.large}`}>TU</Avatar>
+                <Avatar className={`${classes.purple} ${classes.large}`}>
+                  TU
+                </Avatar>
               </div>
             </Button>
           </Tooltip>
@@ -364,10 +366,15 @@ function NavBar3(props) {
             <StyledMenuItem>
               <ListItemIcon>
                 <div className={classes.root}>
-                  <Avatar className={`${classes.purple} ${classes.large}`}>TU</Avatar>
+                  <Avatar className={`${classes.purple} ${classes.large}`}>
+                    TU
+                  </Avatar>
                 </div>
               </ListItemIcon>
-              <ListItemText primary="Test User" secondary="test.user@gmail.com"/>
+              <ListItemText
+                primary="Test User"
+                secondary="test.user@gmail.com"
+              />
             </StyledMenuItem>
 
             <Divider />
@@ -392,7 +399,6 @@ function NavBar3(props) {
               </ListItemIcon>
               <ListItemText primary="Sign Out" />
             </StyledMenuItem>
-            
           </StyledMenu>
         </Toolbar>
       </AppBar>
@@ -427,7 +433,7 @@ function NavBar3(props) {
               component="a"
               onClick={handleClickDesign}
               className={clsx({
-                [classes.highlight]: highlight === 'design',
+                [classes.highlight]: highlight === "design",
               })}
             >
               <Tooltip title="Design">
@@ -438,11 +444,11 @@ function NavBar3(props) {
               <ListItemText primary="Design" />
             </ListItem>
             <Link to="/communication">
-              <ListItem 
-                button 
+              <ListItem
+                button
                 key="communicate"
                 className={clsx({
-                  [classes.highlight]: highlight === 'communication',
+                  [classes.highlight]: highlight === "communication",
                 })}
               >
                 <Tooltip title="Communicate">
@@ -454,11 +460,11 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             <Link to="/registrations">
-              <ListItem 
-                button 
+              <ListItem
+                button
                 key="registrations"
                 className={clsx({
-                  [classes.highlight]: highlight === 'registrations',
+                  [classes.highlight]: highlight === "registrations",
                 })}
               >
                 <Tooltip title="Registrations">
@@ -470,11 +476,11 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             <Link to="./analytics">
-              <ListItem 
-                button 
+              <ListItem
+                button
                 key="analytics"
                 className={clsx({
-                  [classes.highlight]: highlight === 'analytics',
+                  [classes.highlight]: highlight === "analytics",
                 })}
               >
                 <Tooltip title="Analytics">
@@ -486,11 +492,11 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             <Link to="./messaging">
-              <ListItem 
-                button 
+              <ListItem
+                button
                 key="messaging"
                 className={clsx({
-                  [classes.highlight]: highlight === 'messaging',
+                  [classes.highlight]: highlight === "messaging",
                 })}
               >
                 <Tooltip title="Messaging">
@@ -548,7 +554,12 @@ function NavBar3(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event, model: state.model, settings: state.settings };
+  return {
+    event: state.event,
+    model: state.model,
+    settings: state.settings,
+    user: state.user,
+  };
 };
 
 export default connect(mapStateToProps, actions)(NavBar3);
