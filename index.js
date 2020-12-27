@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const secure = require("express-force-https");
+const cookieSession = require("cookie-session");
 
 const db = require("./db");
 const keys = require("./config/keys");
@@ -10,35 +11,27 @@ const eventRoutes = require("./routes/eventRoutes");
 const modelRoutes = require("./routes/modelRoutes");
 const registrationRoutes = require("./routes/registrationRoutes");
 const emailRoutes = require("./routes/emailRoutes");
+require("./services/passport");
 
 //console.log(process.env.DATABASE_URL);
 
 const app = express();
-const router = express.Router();
-
-const test = async () => {
-  const existingEvent = await db.query(
-    "INSERT INTO event WHERE user_id=$1 AND is_current=TRUE",
-    [1],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
-
-  console.log(existingEvent.rows);
-};
-
-//test();
 
 // Force HTTPS
 app.use(secure);
 
-// routes
+// passport set up for user auth
 app.use(bodyParser.json());
+app.use(
+  cookieSession({
+    maxAge: 30 * 24 * 60 * 60 * 1000,
+    keys: [keys.cookieKey],
+  })
+);
 app.use(passport.initialize());
 app.use(passport.session());
+
+// routes
 app.use(authRoutes);
 app.use(eventRoutes);
 app.use(modelRoutes);
