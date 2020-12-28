@@ -34,8 +34,6 @@ function Login(props) {
   const handleSubmit = async () => {
     const isAuth = await props.signInLocal(email, password);
 
-    console.log(isAuth);
-
     if (isAuth) {
       props.history.push("/design");
     }

@@ -17,8 +17,6 @@ const Design = (props) => {
           ? props.event.reg_page_model
           : props.event.event_page_model;
 
-      console.log(props.event);
-      console.log(modelId);
       props.fetchModel(modelId);
     }
   }, [props.event, props.settings.nowEditingPage]);

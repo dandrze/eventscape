@@ -25,7 +25,6 @@ export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 };
 
 export const fetchModel = (id) => async (dispatch) => {
-  console.log(id);
   const model = await api.get("/api/model/id", { params: { id } });
 
   await dispatch({
@@ -62,8 +61,6 @@ export const addSection = (
       react_component,
     },
   };
-
-  console.log(payload);
 
   dispatch({ type: ADD_SECTION, payload });
 

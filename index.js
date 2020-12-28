@@ -14,8 +14,6 @@ const registrationRoutes = require("./routes/registrationRoutes");
 const emailRoutes = require("./routes/emailRoutes");
 require("./services/passport");
 
-//console.log(process.env.DATABASE_URL);
-
 const app = express();
 
 // Force HTTPS

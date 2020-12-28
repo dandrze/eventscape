@@ -8,9 +8,7 @@ export const fetchEmailList = (event) => async (dispatch, getState) => {
   try {
     const res = await api.get("/api/email/all", { params: { event } });
 
-    console.log("api called");
     dispatch({ type: FETCH_EMAIL_LIST, payload: res.data });
-    console.log("reducer dispatched");
 
     return true;
   } catch (err) {
@@ -21,8 +19,6 @@ export const fetchEmailList = (event) => async (dispatch, getState) => {
 
 export const addEmail = (email) => async (dispatch, getState) => {
   const event = getState().event.id;
-
-  console.log(email);
 
   try {
     const res = await api.post("/api/email", { email, event });
@@ -50,7 +46,6 @@ export const editEmail = (id, email) => async (dispatch, getState) => {
   try {
     const res = await api.put("/api/email", { id, email });
     toast.success("Successfully updated email");
-    console.log(res.data);
     return true;
   } catch (err) {
     toast.error(`Error when updating email. Error: ` + err.toString());

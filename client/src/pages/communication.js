@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
-import { makeStyles } from '@material-ui/core/styles';
-import Fade from '@material-ui/core/Fade';
+import { makeStyles } from "@material-ui/core/styles";
+import Fade from "@material-ui/core/Fade";
 
 import NavBar3 from "../components/navBar3.js";
 import ScheduledEmails from "../components/ScheduledEmails.js";
@@ -13,16 +13,16 @@ import { blankEmail } from "../templates/emailTemplates";
 
 const useStyles = makeStyles((theme) => ({
   modal: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    outline: 'none',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    outline: "none",
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: '2px solid #000',
+    border: "2px solid #000",
     boxShadow: theme.shadows[5],
-    padding: '0px',
+    padding: "0px",
   },
 }));
 
@@ -54,9 +54,7 @@ const Communication = (props) => {
   const handleSubmitEditor = async () => {
     setOpenEditor(false);
     //props.setLoaded(false);
-    console.log("closed, now we're going to fetch");
     const res = await props.fetchEmailList(props.event.id);
-    console.log(res);
     //props.setLoaded(true);
   };
 

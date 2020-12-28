@@ -12,7 +12,7 @@ export const signInLocal = (username, password) => async (dispatch) => {
   dispatch({ type: FETCH_USER, payload: res.data.user });
 
   if (res.data.error) {
-    toast.error("Error when signing in " + res.data.error[0]);
+    toast.error("Error when signing in: " + res.data.error[0]);
     return false;
   } else {
     return res.data.user;
@@ -20,10 +20,13 @@ export const signInLocal = (username, password) => async (dispatch) => {
 };
 
 export const fetchUser = () => async (dispatch) => {
-  console.log("fetch user called");
-  const res = await api.get("/auth/current-user");
+  try {
+    const res = await api.get("/auth/current-user");
 
-  dispatch({ type: FETCH_USER, payload: res.data });
+    dispatch({ type: FETCH_USER, payload: res.data });
 
-  return res.data;
+    return res.data;
+  } catch (err) {
+    toast.error("Error when fetching user profile: " + err.toString());
+  }
 };

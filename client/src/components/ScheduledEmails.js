@@ -53,8 +53,6 @@ const tableIcons = {
 function ScheduledEmails(props) {
   const [data, setData] = React.useState([]);
 
-  console.log(props.email);
-
   useEffect(() => {
     const formattedEmailList = props.email.map((email) => {
       // start with the event start date. Then modify if by adding the minutes_from_event
@@ -75,7 +73,6 @@ function ScheduledEmails(props) {
       };
     });
     setData(formattedEmailList);
-    console.log(formattedEmailList);
   }, [props.email]);
 
   const columns = [
@@ -129,7 +126,6 @@ function ScheduledEmails(props) {
       icon: Edit,
       tooltip: "Edit Email",
       onClick: (event, rowData) => {
-        console.log(rowData);
         props.handleEdit(rowData);
       },
     },
