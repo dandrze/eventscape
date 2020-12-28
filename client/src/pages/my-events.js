@@ -21,7 +21,10 @@ const My_Events = (props) => {
 
   return (
     <div>
-      <NavBar3 displaySideNav="false" settings="sideDrawerOpen: false"/>
+      <NavBar3 
+        displaySideNav="false" 
+        openBlocked="true"
+      />
       <div className="my-events-container">
         <div className="top-button-bar">
           <h1 className="button-bar-left my-events-title">My Events</h1>

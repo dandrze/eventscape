@@ -17,6 +17,8 @@ const useStyles = makeStyles((theme) => ({
 function Create_Account() {
 	const classes = useStyles();
 
+	const [fName, setFName] = React.useState("");
+	const [lName, setLName] = React.useState("");
 	const [email, setEmail] = React.useState("");
 	const [password, setPassword] = React.useState("");
 
@@ -28,39 +30,85 @@ function Create_Account() {
 		setPassword(event.target.value);
 	};
 
+	const handleChangeFName = (event) => {
+		setFName(event.target.value);
+	};
+
+	const handleChangeLName = (event) => {
+		setLName(event.target.value);
+	};
+
 	return (
-		<div className="form-box shadow-border">
-			<h1>
-				Create your<br></br>free account to<br></br>continue.
-			</h1>
-			<FormControl variant="outlined" className={classes.formControl}>
-				<TextField 
-					type="email" 
-					id="email" 
-					label="Email" 
-					variant="outlined" 
-					value={email}
-					onChange={handleChangeEmail}
-				/>
-			</FormControl>
-			<br></br>
-			<FormControl variant="outlined" className={classes.formControl}>
-				<TextField
-					type="password"
-					id="password"
-					label="Password"
-					variant="outlined"
-					value={password}
-					onChange={handleChangePassword}
-				/>
-			</FormControl>
-			<br></br>
-			<br></br>
-			<Link to="/event-details">
-				<button className="Button1" type="submit">
-					Create My Account
-				</button>
-			</Link>
+		<div>
+			<div 
+				className="form-box shadow-border"
+				style={{ 
+					maxWidth: "550px", 
+					marginTop: "60px"
+				}}
+			>
+				<h1>
+					Create your<br></br>free account to<br></br>continue.
+				</h1>
+				<FormControl variant="outlined" className={classes.formControl}>
+					<TextField 
+						type="text" 
+						id="f-name" 
+						label="First Name" 
+						variant="outlined" 
+						value={fName}
+						onChange={handleChangeFName}
+					/>
+				</FormControl>
+				<br></br>
+				<FormControl variant="outlined" className={classes.formControl}>
+					<TextField 
+						type="text" 
+						id="l-name" 
+						label="Last Name" 
+						variant="outlined" 
+						value={lName}
+						onChange={handleChangeLName}
+					/>
+				</FormControl>
+				<br></br>
+				<FormControl variant="outlined" className={classes.formControl}>
+					<TextField 
+						type="email" 
+						id="email" 
+						label="Email" 
+						variant="outlined" 
+						value={email}
+						onChange={handleChangeEmail}
+					/>
+				</FormControl>
+				<br></br>
+				<FormControl variant="outlined" className={classes.formControl}>
+					<TextField
+						type="password"
+						id="password"
+						label="Password"
+						variant="outlined"
+						value={password}
+						onChange={handleChangePassword}
+					/>
+				</FormControl>
+				<br></br>
+				<br></br>
+				<Link to="/event-details">
+					<button className="Button1" type="submit">
+						Create My Account
+					</button>
+				</Link>
+			</div>
+			<div className="force-width">
+			- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+			-
+			</div>
 		</div>
 	);
 }

@@ -23,7 +23,9 @@ import Published from "./pages/published";
 import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
-import Test from "./pages/test";
+import AccountSettingsContact from "./pages/account-settings-contact";
+import AccountSettingsPassword from "./pages/account-settings-password";
+import AccountSettingsPayments from "./pages/account-settings-payments";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -76,7 +78,9 @@ function App(props) {
         <Route exact path="/messaging" component={Messaging} />
         <Route exact path="/preview/:event/:model" component={Preview} />
         <Route exact path="/ScotiabankGillerPrize" component={Giller} />
-        <Route exact path="/test" component={Test} />
+        <Route exact path="/account-settings-contact" component={AccountSettingsContact} />
+        <Route exact path="/account-settings-password" component={AccountSettingsPassword} />
+        <Route exact path="/account-settings-payments" component={AccountSettingsPayments} />
       </header>
     </div>
   );

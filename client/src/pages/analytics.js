@@ -30,7 +30,7 @@ class Content extends Component {
   
       render(){
           return(
-            <div className="mainWrapper container-width">
+            <div className="boxes-main-container container-width">
                 <div className="UVContainer">
                     <div className="form-box shadow-border currentUV">
                         <h3>Current Unique Viewers</h3>
@@ -47,12 +47,12 @@ class Content extends Component {
                     <UniqueViewersChart />
                 </div>
                 <div className="shadow-border viewerLocation">
-                        <div id="viewerLocationHeader">
-                            <h3>Viewer Location</h3>
-                        </div>
+                    <div id="viewerLocationHeader">
+                        <h3>Viewer Location</h3>
+                    </div>
                     <WorldMap />
                 </div>
-                <div className="form-box shadow-border" id="loginsTable">
+                <div className="form-box shadow-border table-box">
                     <h3>Logins</h3> 
                     <LoginsTable />
                 </div>

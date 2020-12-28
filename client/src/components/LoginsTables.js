@@ -126,7 +126,6 @@ export default function LoginsTable() {
   };
 
   return (
-    <div className="shadow-border">
     <MaterialTable
       title="Logins"
       columns={state.columns}
@@ -137,6 +136,5 @@ export default function LoginsTable() {
         Container: props => <Paper {...props} elevation={0}/>
       }}
     />
-    </div>
   );
 }
