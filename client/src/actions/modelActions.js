@@ -27,7 +27,10 @@ export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 export const fetchModel = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
 
-  dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
+  await dispatch({
+    type: FETCH_PAGE_MODEL,
+    payload: { id, sections: model.data },
+  });
 
   return true;
 };
@@ -58,8 +61,6 @@ export const addSection = (
       react_component,
     },
   };
-
-  console.log(payload);
 
   dispatch({ type: ADD_SECTION, payload });
 

@@ -101,8 +101,7 @@ router.put("/api/registration", async (req, res) => {
 router.get("/api/registration", async (req, res) => {
   const { event } = req.query;
 
-  // hard coded userId. Will eventualy pull from request params.
-  const userId = 1;
+  const userId = req.user.id;
 
   // Get list of all registrations for this event
   const registrations = await db.query(

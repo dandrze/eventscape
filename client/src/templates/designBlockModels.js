@@ -64,10 +64,7 @@ import { isSameDay } from "date-fns";
 };*/
 
 export const heroBannerModel = (eventTitle = "default") => {
-  return `
-    <div style="overflow: hidden;">
-        <h1 class="title" >${eventTitle}</h1>
-    </div>
+  return `<div style="overflow: hidden;"><h1 class="title" >${eventTitle}</h1></div>
 
     <style>
         .title {
@@ -85,8 +82,7 @@ export const heroBannerModel = (eventTitle = "default") => {
 };
 
 export const logoHeaderModel = () => {
-  return `
-    <div style="overflow: hidden;">
+  return `<div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
             <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
@@ -95,8 +91,7 @@ export const logoHeaderModel = () => {
 };
 
 export const logoHeaderRightModel = () => {
-  return `
-    <div style="overflow: hidden;">
+  return `<div style="overflow: hidden;">
         <div style="margin: 20px; display: block;">
             <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
         </div>
@@ -105,8 +100,7 @@ export const logoHeaderRightModel = () => {
 };
 
 export const registrationFormHeader = () => {
-  return `
-      <div style="overflow: hidden;">
+  return `<div style="overflow: hidden;">
           <p class="registration-title">Sign Up Today</p>
           <p class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
       </div>
@@ -149,8 +143,7 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
     endDifferentDay +
     format(endTimeParsed, "h:mm a zzz");
 
-  return `
-    <div style="overflow: hidden;" contenteditable="false">
+  return `<div style="overflow: hidden;" contenteditable="false">
         <section class="container">
             <div class="one" contenteditable="true">
                 <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">${timeFormatted}</span></strong></p>
@@ -234,8 +227,7 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
     endDifferentDay +
     format(endTimeParsed, "h:mm a zzz");
 
-  return `
-        <div style="overflow: hidden;" contenteditable="false">
+  return `<div style="overflow: hidden;" contenteditable="false">
             <div style="margin: 1rem 1rem 1rem 1rem;">
                 <div class="title1" contenteditable="true">${eventTitle}</div>
             </div>
@@ -263,8 +255,7 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
 };
 
 export const streamChatModel = () => {
-  return `
-        <div style="overflow: hidden;">
+  return `<div style="overflow: hidden;">
             <section class="container2">
                 <div class="one2">
                     <div class="video-responsive">
@@ -512,8 +503,7 @@ export const streamChatModel = () => {
 };
 
 export const blankModel = () => {
-  return `
-    <div style="overflow: hidden;" contenteditable="false">
+  return `<div style="overflow: hidden;" contenteditable="false">
         <div style="margin: 1rem; display: block;">
             <div contenteditable="true" style="text-align: left;"></div>
         </div>

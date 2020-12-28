@@ -4,3 +4,4 @@ export * from "./modelActions";
 export * from "./settingsActions";
 export * from "./registrationActions";
 export * from "./emailActions";
+export * from "./userActions";

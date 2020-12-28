@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const db = require("../db");
+const requireAuth = require("../middlewares/requireAuth");
 
 router.post("/api/event", async (req, res) => {
   const {
@@ -17,8 +18,7 @@ router.post("/api/event", async (req, res) => {
     emails,
   } = req.body;
 
-  // hard coded userId. Will eventualy pull from request params.
-  const userId = 1;
+  const userId = req.user.id;
 
   // set all other events is_current to false so we can make our new event current
   await db.query(
@@ -148,8 +148,8 @@ router.post("/api/event", async (req, res) => {
   res.status(200).send(newEvent.rows[0]);
 });
 
-router.get("/api/event/current", async (req, res) => {
-  const userId = 1;
+router.get("/api/event/current", requireAuth, async (req, res) => {
+  const userId = req.user.id;
   const events = await db.query(
     "SELECT * FROM event WHERE user_id=$1 AND is_current=true",
     [userId],
@@ -164,7 +164,7 @@ router.get("/api/event/current", async (req, res) => {
 });
 
 router.put("/api/event/id/make-current", async (req, res) => {
-  const userId = 1;
+  const userId = req.user.id;
   const { id } = req.body;
 
   await db.query(
@@ -191,7 +191,7 @@ router.put("/api/event/id/make-current", async (req, res) => {
 });
 
 router.get("/api/event/all", async (req, res) => {
-  const userId = 1;
+  const userId = req.user.id;
   const events = await db.query(
     "SELECT * FROM event WHERE user_id=$1",
     [userId],
@@ -253,7 +253,7 @@ router.put("/api/event/id/status", async (req, res) => {
 });
 
 router.put("/api/event", async (req, res) => {
-  const userId = 1;
+  const userId = req.user.id;
 
   const {
     title,

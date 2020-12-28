@@ -55,9 +55,13 @@ const Communication = (props) => {
   const handleSubmitEditor = async () => {
     setOpenEditor(false);
     //props.setLoaded(false);
+<<<<<<< HEAD
     console.log("closed, now we're going to fetch");
     const res = await props.fetchCommunicationList(props.event.id);
     console.log(res);
+=======
+    const res = await props.fetchEmailList(props.event.id);
+>>>>>>> user
     //props.setLoaded(true);
   };
 

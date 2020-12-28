@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -7,7 +8,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import logo from "./logo.svg";
 import "./App.css";
 import "./components/fonts.css";
-import { Route, Link } from "react-router-dom";
 import Dashboard from "./pages/dashboard";
 import Landing from "./pages/landing";
 import Create_Account from "./pages/create-account";
@@ -24,12 +24,14 @@ import * as actions from "./actions";
 import WebsiteSettings from "./pages/websiteSettings";
 import Giller from "./pages/Giller";
 import Test from "./pages/test";
+import Login from "./pages/login";
 
 //import "froala-editor/css/froala_style.min.css";
 
 function App(props) {
   const path = window.location.host.split(".");
   const [dataFetched, setDataFetched] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     if (
@@ -42,7 +44,19 @@ function App(props) {
   }, []);
 
   const fetchDataAsync = async () => {
-    setDataFetched(await props.fetchEvent());
+    await props.fetchUser();
+    setDataFetched(true);
+  };
+
+  const RedirectToLogin = (props) => {
+    return (
+      <Redirect
+        to={{
+          pathname: "/login",
+          state: { from: props.location },
+        }}
+      />
+    );
   };
 
   if (
@@ -59,27 +73,66 @@ function App(props) {
     );
   }
 
+  // middleware to redirect to the login page if the user is not logged in
+  const requireAuth = (component) => {
+    if (!dataFetched) {
+      // if data is not done fetching during this rerender, don't return anything
+      return null;
+    } else if (!props.user) {
+      // if data fetching is complete and there is no user (from the cookie) redirect to the login
+      return RedirectToLogin;
+    } else {
+      // if the data is fetched and there is a user logged in (from the cookie) display the component
+      return component;
+    }
+  };
+
   return (
     <div className="App">
       <ToastContainer position="top-right" autoClose={3000} />
       <header className="App-header">
         <Route exact path="/" component={Landing} />
-        <Route exact path="/dashboard" component={Dashboard} />
-        <Route exact path="/create-account" component={Create_Account} />
-        <Route exact path="/event-details" component={Event_Details} />
-        <Route exact path="/my-events" component={My_Events} />
-        <Route exact path="/design" component={Design} />
-        <Route exact path="/website-settings" component={WebsiteSettings} />
-        <Route exact path="/communication" component={Communication} />
-        <Route exact path="/registrations" component={Registrations} />
-        <Route exact path="/analytics" component={Analytics} />
-        <Route exact path="/messaging" component={Messaging} />
-        <Route exact path="/preview/:event/:model" component={Preview} />
+        <Route exact path="/login" component={Login} />
+        <Route exact path="/dashboard" component={requireAuth(Dashboard)} />
+        <Route
+          exact
+          path="/event-details"
+          component={requireAuth(Event_Details)}
+        />
+        <Route exact path="/my-events" component={requireAuth(My_Events)} />
+        <Route exact path="/design" component={requireAuth(Design)} />
+        <Route
+          exact
+          path="/website-settings"
+          component={requireAuth(WebsiteSettings)}
+        />
+        <Route
+          exact
+          path="/communication"
+          component={requireAuth(Communication)}
+        />
+        <Route
+          exact
+          path="/registrations"
+          component={requireAuth(Registrations)}
+        />
+        <Route exact path="/analytics" component={requireAuth(Analytics)} />
+        <Route exact path="/messaging" component={requireAuth(Messaging)} />
+        <Route
+          exact
+          path="/preview/:event/:model"
+          component={requireAuth(Preview)}
+        />
         <Route exact path="/ScotiabankGillerPrize" component={Giller} />
         <Route exact path="/test" component={Test} />
       </header>
     </div>
   );
+  //}
 }
 
-export default connect(null, actions)(App);
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+
+export default connect(mapStateToProps, actions)(App);

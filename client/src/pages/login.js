@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Create_Account(props) {
+function Login(props) {
   const classes = useStyles();
 
   const [email, setEmail] = React.useState("");
@@ -31,15 +31,17 @@ function Create_Account(props) {
     setPassword(event.target.value);
   };
 
-  const handleSubmit = () => {
-    props.signInLocal(email, password);
+  const handleSubmit = async () => {
+    const isAuth = await props.signInLocal(email, password);
+
+    if (isAuth) {
+      props.history.push("/design");
+    }
   };
 
   return (
     <div className="form-box shadow-border">
-      <h1>
-        Create your<br></br>free account to<br></br>continue.
-      </h1>
+      <h1>Sign in to continue.</h1>
       <FormControl variant="outlined" className={classes.formControl}>
         <TextField
           type="email"
@@ -64,10 +66,10 @@ function Create_Account(props) {
       <br></br>
       <br></br>
       <button className="Button1" type="submit" onClick={handleSubmit}>
-        Create My Account
+        Sign In
       </button>
     </div>
   );
 }
 
-export default connect(null, actions)(Create_Account);
+export default connect(null, actions)(Login);

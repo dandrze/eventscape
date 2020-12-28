@@ -80,7 +80,6 @@ export const fetchEvent = () => async (dispatch) => {
   // call the api and return the event in json
   try {
     const event = await api.get("/api/event/current");
-    console.log(event.data);
     if (event) {
       dispatch({ type: FETCH_EVENT, payload: event.data });
       return event;
@@ -129,8 +128,6 @@ export const publishPage = () => async (dispatch, getState) => {
 export const isLinkAvailable = (link) => async (dispatch) => {
   const res = await api.get("/api/model/link", { params: { link } });
 
-  console.log(res);
-
   if (res.data.length == 0) {
     return true;
   } else {
@@ -146,7 +143,6 @@ export const setEventRegistration = (registrationEnabled, event) => async (
       registrationEnabled,
       event,
     });
-    console.log(res);
     toast.success("Registration successfuly changed");
     return true;
   } catch (err) {

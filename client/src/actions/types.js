@@ -1,4 +1,4 @@
-export const SIGNIN_USER = "signin_user";
+export const FETCH_USER = "FETCH_USER";
 
 export const FETCH_EVENT = "fetch_event";
 export const CREATE_EVENT = "create_event";

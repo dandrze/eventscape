@@ -7,6 +7,7 @@ const pool = new Pool({
 });
 
 module.exports = {
+  query: (text, params) => pool.query(text, params),
   async query(text, params) {
     const start = Date.now();
     const res = await pool.query(text, params);
