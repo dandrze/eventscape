@@ -11,14 +11,11 @@ import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
-import MenuIcon from "@material-ui/icons/Menu";
-import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
-import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
-import { deepOrange, deepPurple } from "@material-ui/core/colors";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import SettingsIcon from "@material-ui/icons/Settings";
@@ -30,26 +27,37 @@ import DialogActions from "@material-ui/core/DialogActions";
 import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 
-import PenIcon from "../icons/pen.svg";
-import EnvelopeIcon from "../icons/envelope.svg";
-import NotepadIcon from "../icons/notepad.svg";
-import GraphIcon from "../icons/graph.svg";
-import ChatIcon from "../icons/chat.svg";
-import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
-
-import Internet_icon from "../icons/internet.svg";
-import swap_icon from "../icons/swap.svg";
-import plus_icon from "../icons/plus.svg";
+import * as actions from "../actions";
+import AlertModal from "./AlertModal";
+import { pageNames } from "../model/enums";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
-import * as actions from "../actions";
-import AlertModal from "./AlertModal";
-import { pageNames } from "../model/enums";
+/* Icons top bar */
+import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
+import Internet_icon from "../icons/internet.svg";
+import swap_icon from "../icons/swap.svg";
+import plus_icon from "../icons/plus.svg";
+import MenuIcon from "@material-ui/icons/Menu";
+import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+import ChevronRightIcon from "@material-ui/icons/ChevronRight";
+import ListIcon from "@material-ui/icons/List";
 
-/*color palette*/
+/* Icons side nav */
+import PenIcon from "../icons/pen.svg";
+import EnvelopeIcon from "../icons/envelope.svg";
+import NotepadIcon from "../icons/notepad.svg";
+import GraphIcon from "../icons/graph.svg";
+import ChatIcon from "../icons/chat.svg";
+
+/* Icons side nav account */
+import AccountIcon from "../icons/account.svg";
+import KeyIcon from "../icons/key.svg";
+import CreditCardIcon from "../icons/credit-card.svg";
+
+/* color palette */
 const MenuText = "#EAEAEA";
 const MenuBackground = "#2F2F2F";
 
@@ -184,10 +192,24 @@ const StyledMenuItem = withStyles((theme) => ({
   },
 }))(MenuItem);
 
+const StyledMenuItemNoButton = withStyles((theme) => ({
+  root: {
+    "&:focus": {
+      backgroundColor: "inherit",
+      "& .MuiListItemIcon-root, & .MuiListItemText-primary": {
+        color: "inherit",
+      },
+      cursor: "inherit",
+    },
+  },
+}))(MenuItem);
+
 function NavBar3(props) {
   const displaySideNav = props.displaySideNav;
+  const displaySideNavAccount = props.displaySideNavAccount;
   const content = props.content;
-  const open = props.settings.sideDrawerOpen;
+  const openBlocked = props.openBlocked;
+  const open = props.settings.sideDrawerOpen && !openBlocked;
   const highlight = props.highlight;
 
   let history = useHistory();
@@ -274,7 +296,7 @@ function NavBar3(props) {
         })}
       >
         <Toolbar>
-          {displaySideNav === "true" && (
+          {(displaySideNav === "true" || displaySideNavAccount === "true") && (
             <Tooltip title="Expand Menu">
               <IconButton
                 color="inherit"
@@ -303,36 +325,40 @@ function NavBar3(props) {
             </Button>
           </Tooltip>
 
-          <Tooltip title="View Live Website">
-            <Button onClick={handleGoToLiveSite}>
-              <img
-                className="profile"
-                src={Internet_icon}
-                alt="user"
-                height="30px"
-              ></img>
-            </Button>
-          </Tooltip>
+          {displaySideNav === "true" && (
+            <>
+              <Tooltip title="View Live Website">
+                <Button onClick={handleGoToLiveSite}>
+                  <img
+                    className="profile"
+                    src={Internet_icon}
+                    alt="user"
+                    height="30px"
+                  ></img>
+                </Button>
+              </Tooltip>
 
-          <Tooltip title="Change Event">
-            <Link to="/my-events">
-              <div className="current_event_container">
-                <Typography
-                  className={classes.currentEvent}
-                  variant="h6"
-                  noWrap
-                >
-                  {props.event.title}
-                </Typography>
-                <img
-                  className="swap_icon"
-                  src={swap_icon}
-                  alt="swap_icon"
-                  height="30px"
-                ></img>
-              </div>
-            </Link>
-          </Tooltip>
+              <Tooltip title="Change Event">
+                <Link to="/my-events">
+                  <div className="current_event_container">
+                    <Typography
+                      className={classes.currentEvent}
+                      variant="h6"
+                      noWrap
+                    >
+                      {props.event.title}
+                    </Typography>
+                    <img
+                      className="swap_icon"
+                      src={swap_icon}
+                      alt="swap_icon"
+                      height="30px"
+                    ></img>
+                  </div>
+                </Link>
+              </Tooltip>
+            </>
+          )}
 
           <Tooltip title="Create a new event">
             <Button className={classes.addEvent} href="/event-details">
@@ -345,7 +371,7 @@ function NavBar3(props) {
             </Button>
           </Tooltip>
 
-          <Tooltip title="Profile Settings">
+          <Tooltip title="Account">
             <Button
               className={classes.profile}
               aria-controls="simple-menu"
@@ -367,7 +393,7 @@ function NavBar3(props) {
             open={Boolean(anchorEl)}
             onClose={handleClose}
           >
-            <StyledMenuItem>
+            <StyledMenuItemNoButton>
               <ListItemIcon>
                 <div className={classes.root}>
                   <Avatar className={`${classes.purple} ${classes.large}`}>
@@ -379,16 +405,27 @@ function NavBar3(props) {
                 primary={props.user.first_name + " " + props.user.last_name}
                 secondary={props.user.email}
               />
-            </StyledMenuItem>
+            </StyledMenuItemNoButton>
 
             <Divider />
 
-            <StyledMenuItem>
-              <ListItemIcon>
-                <SettingsIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Account Settings" />
-            </StyledMenuItem>
+            <Link to="./my-events">
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <ListIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="My Events" />
+              </StyledMenuItem>
+            </Link>
+
+            <Link to="./account-settings-contact">
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Account Settings" />
+              </StyledMenuItem>
+            </Link>
 
             <StyledMenuItem>
               <ListItemIcon>
@@ -540,6 +577,93 @@ function NavBar3(props) {
               <MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
             </Link>
           </Menu>
+        </Drawer>
+      )}
+
+      {/* Side Nav for Account Settings */}
+      {displaySideNavAccount === "true" && (
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.drawer, {
+            [classes.drawerOpen]: open,
+            [classes.drawerClose]: !open,
+          })}
+          classes={{
+            paper: clsx({
+              [classes.drawerOpen]: open,
+              [classes.drawerClose]: !open,
+            }),
+          }}
+        >
+          <div className={classes.toolbar}>
+            <IconButton onClick={handleDrawerClose}>
+              {theme.direction === "rtl" ? (
+                <ChevronRightIcon />
+              ) : (
+                <ChevronLeftIcon />
+              )}
+            </IconButton>
+          </div>
+          <Divider />
+          <List>
+            {/* Contact */}
+            <Link to="/account-settings-contact">
+              <ListItem
+                button
+                key="contact"
+                component="a"
+                onClick={handleClickDesign}
+                className={clsx({
+                  [classes.highlight]: highlight === "contact",
+                })}
+              >
+                <Tooltip title="Account">
+                  <ListItemIcon>
+                    <img src={AccountIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Contact" />
+              </ListItem>
+            </Link>
+
+            {/* Password */}
+            <Link to="/account-settings-password">
+              <ListItem
+                button
+                key="password"
+                component="a"
+                onClick={handleClickDesign}
+                className={clsx({
+                  [classes.highlight]: highlight === "password",
+                })}
+              >
+                <Tooltip title="Password">
+                  <ListItemIcon>
+                    <img src={KeyIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Password" />
+              </ListItem>
+            </Link>
+
+            {/* Billing and Payments */}
+            <Link to="/account-settings-payments">
+              <ListItem
+                button
+                key="payments"
+                className={clsx({
+                  [classes.highlight]: highlight === "payments",
+                })}
+              >
+                <Tooltip title="Billing and Payments">
+                  <ListItemIcon>
+                    <img src={CreditCardIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Billing and Payments" />
+              </ListItem>
+            </Link>
+          </List>
         </Drawer>
       )}
       <main className={classes.content}>

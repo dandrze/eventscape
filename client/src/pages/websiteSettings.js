@@ -10,9 +10,10 @@ class WebsiteSettings extends React.Component {
 			<div>
 				<NavBar3
 					displaySideNav="true"
+					highlight="design"
 					content={
 						<div>
-						<div style={{maxWidth:"700px", margin:"0 auto"}}>
+						<div className="form-width">
 							<Event_Details
 								isEventUpdate={true}
 								eventTitle={this.props.event.title}
