@@ -10,11 +10,17 @@ import { pageNames } from "../model/enums";
 
 const Design = (props) => {
   useEffect(() => {
-    const modelId =
-      props.settings.nowEditingPage === pageNames.REGISTRATION
-        ? props.event.reg_page_model
-        : props.event.event_page_model;
-    props.fetchModel(modelId);
+    // only fetch the model if the event data is finished fetching. Otherwise it is an empty obect
+    if (Object.keys(props.event).length != 0) {
+      const modelId =
+        props.settings.nowEditingPage === pageNames.REGISTRATION
+          ? props.event.reg_page_model
+          : props.event.event_page_model;
+
+      console.log(props.event);
+      console.log(modelId);
+      props.fetchModel(modelId);
+    }
   }, [props.event, props.settings.nowEditingPage]);
 
   return (

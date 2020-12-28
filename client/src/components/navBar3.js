@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
@@ -196,6 +196,10 @@ function NavBar3(props) {
   const theme = useTheme();
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
   const [target, setTarget] = React.useState("");
+
+  useEffect(() => {
+    props.fetchEvent();
+  }, []);
 
   const handlePageChange = (pageName) => {
     // if the user is currently on the design page, and they want to navigate to the other page editor with unsaved changes, display the confirmation alert

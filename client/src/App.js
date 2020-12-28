@@ -45,7 +45,6 @@ function App(props) {
 
   const fetchDataAsync = async () => {
     await props.fetchUser();
-    await props.fetchEvent();
     setDataFetched(true);
   };
 

@@ -25,9 +25,13 @@ export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 };
 
 export const fetchModel = (id) => async (dispatch) => {
+  console.log(id);
   const model = await api.get("/api/model/id", { params: { id } });
 
-  dispatch({ type: FETCH_PAGE_MODEL, payload: { id, sections: model.data } });
+  await dispatch({
+    type: FETCH_PAGE_MODEL,
+    payload: { id, sections: model.data },
+  });
 
   return true;
 };
