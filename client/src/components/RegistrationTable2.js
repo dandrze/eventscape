@@ -60,6 +60,9 @@ const RegistrationTable2 = (props) => {
       tooltip: "Edit Event",
       onClick: async (event, rowData) => {
         const rowId = rowData.id;
+        const firstName = rowData.firstName;
+        const lastName = rowData.lastName;
+        const email = rowData.emailAddress;
         var values;
 
         for (var row of props.registration.data) {
@@ -68,7 +71,7 @@ const RegistrationTable2 = (props) => {
           }
         }
 
-        props.handleEditReg(values, rowId);
+        props.handleEditReg(rowId, { firstName, lastName, email }, values);
       },
     },
   ];

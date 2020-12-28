@@ -131,36 +131,77 @@ router.post("/api/email/jobs/cancel", async (req, res) => {
   Scheduler.cancelSend(id);
 });
 
-router.get("/api/test", async (req, res) => {
-  const eventId = 159;
-  const registrations = await db.query(
-    "SELECT event.title as $2, registration.last_name FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 ",
-    [eventId, "event_name"]
+router.get("/api/email-list", async (req, res) => {
+  const { emailId } = req.query;
+
+  const emailList = await db.query(
+    "SELECT * FROM recipient WHERE email_template_id=$1",
+    [emailId],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
   );
 
-  const recipientsList = registrations.rows;
-
-  const subject = "hello {last_name} you are invited to {event_name}";
-
-  // find all variable names in curly braces and put them in an array
-  const subjectVariables = subject.match(/[^{\}]+(?=})/g);
-
-  const emails = [];
-
-  for (const recipient of recipientsList) {
-    // replace each instance of the variable with the value in the recipientsList (list of objects)
-    var updatedSubject = subject;
-    for (var i = 0; i < subject.length; i++) {
-      updatedSubject = updatedSubject.replace(
-        new RegExp("{" + subjectVariables[i] + "}", "gi"),
-        recipient[subjectVariables[i]]
-      );
-    }
-    emails.push(updatedSubject);
-  }
-
-  res.status(200).send(emails);
+  res.status(200).send(emailList.rows);
 });
+
+router.post("/api/email-list", async (req, res) => {
+  const { data, emailId } = req.body;
+
+  const { first_name, last_name, email } = data;
+
+  const emailList = await db.query(
+    "INSERT INTO recipient (first_name, last_name, email, email_template_id) VALUES ($1, $2, $3, $4)",
+    [first_name, last_name, email, emailId],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(emailList.rows);
+});
+
+router.put("/api/email-list", async (req, res) => {
+  const { data, id } = req.body;
+
+  console.log(data);
+
+  const { first_name, last_name, email } = data;
+
+  const emailList = await db.query(
+    "UPDATE recipient SET first_name=$1, last_name=$2, email=$3 WHERE id=$4",
+    [first_name, last_name, email, id],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(emailList.rows[0]);
+});
+
+router.delete("/api/email-list", async (req, res) => {
+  const { id } = req.query;
+
+  const response = await db.query(
+    "DELETE FROM recipient WHERE id=$1",
+    [id],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(err);
+      }
+    }
+  );
+
+  res.status(200).send(response.rows);
+});
+
+// HELPER FUNCTIONS
 
 const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
   const { subject, html, recipients } = email;

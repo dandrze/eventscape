@@ -55,6 +55,11 @@ const Registrations = (props) => {
   const [openReg, setOpenReg] = React.useState(false);
   const [regButtonText, setRegButtonText] = React.useState("Edit Registration");
   const [edittingValues, setEdittingValues] = React.useState([]);
+  const [standardFields, setStandardFields] = React.useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+  });
   const [edittingRowId, setEdittingRowId] = React.useState(null);
   const classes = useStyles();
 
@@ -103,9 +108,10 @@ const Registrations = (props) => {
     setOpenReg(true);
   };
 
-  const handleEditReg = (values, id) => {
+  const handleEditReg = (id, incomingstandardFields, incomingValues) => {
     setRegButtonText("Edit Registration");
-    setEdittingValues(values);
+    setEdittingValues(incomingValues);
+    setStandardFields(incomingstandardFields);
     setEdittingRowId(id);
     setOpenReg(true);
   };
@@ -190,6 +196,7 @@ const Registrations = (props) => {
             registerText={regButtonText}
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}
+            standardFields={standardFields}
             isEditForm={true}
           />
         </div>
@@ -216,10 +223,16 @@ const Registrations = (props) => {
                   </FormGroup>
                 </Tooltip>
               </div>
-              <button className="Button1 button-bar-right" onClick={handleOpenForm}>
+              <button
+                className="Button1 button-bar-right"
+                onClick={handleOpenForm}
+              >
                 Edit Registration Form
               </button>
-              <button className="Button1 button-bar-right" onClick={handleAddReg}>
+              <button
+                className="Button1 button-bar-right"
+                onClick={handleAddReg}
+              >
                 Add Registration
               </button>
             </div>

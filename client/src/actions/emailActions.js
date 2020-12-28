@@ -1,20 +1,66 @@
 import StateContext from "react-scroll-to-bottom/lib/ScrollToBottom/StateContext";
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_EMAIL_LIST } from "./types";
+import { FETCH_COMMUNICATION_LIST, FETCH_EMAIL_LIST } from "./types";
 
-export const fetchEmailList = (event) => async (dispatch, getState) => {
+export const fetchCommunicationList = (event) => async (dispatch, getState) => {
   // call the api and return the event in json
   try {
     const res = await api.get("/api/email/all", { params: { event } });
 
-    console.log("api called");
-    dispatch({ type: FETCH_EMAIL_LIST, payload: res.data });
-    console.log("reducer dispatched");
+    dispatch({ type: FETCH_COMMUNICATION_LIST, payload: res.data });
 
     return true;
   } catch (err) {
     toast.error(`Error when fetching emails: ` + err.toString());
+    return false;
+  }
+};
+
+export const fetchEmailList = (emailId) => async (dispatch, getState) => {
+  // call the api and return the event in json
+  try {
+    const res = await api.get("/api/email-list", { params: { emailId } });
+
+    return res.data;
+  } catch (err) {
+    toast.error(`Error when fetching email list: ` + err.toString());
+    return false;
+  }
+};
+
+export const addToEmailList = (data, emailId) => async (dispatch, getState) => {
+  // call the api and return the event in json
+  try {
+    const res = await api.post("/api/email-list", { data, emailId });
+
+    toast.success("Successfully added recipients");
+  } catch (err) {
+    toast.error(`Error when fetching email list: ` + err.toString());
+    return false;
+  }
+};
+
+export const deleteFromEmailList = (id) => async (dispatch, getState) => {
+  // call the api and return the event in json
+  try {
+    const res = await api.delete("/api/email-list", { params: { id } });
+
+    toast.success("Successfully deleted recipient");
+  } catch (err) {
+    toast.error(`Error when fetching email list: ` + err.toString());
+    return false;
+  }
+};
+
+export const updateFromEmailList = (data, id) => async (dispatch, getState) => {
+  // call the api and return the event in json
+  try {
+    const res = await api.put("/api/email-list", { data, id });
+
+    toast.success("Successfully deleted recipient");
+  } catch (err) {
+    toast.error(`Error when fetching email list: ` + err.toString());
     return false;
   }
 };

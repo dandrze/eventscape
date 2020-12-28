@@ -4,6 +4,7 @@ const Mailer = require("./Mailer");
 const { updateEmailJob } = require("../db/Email");
 const { recipientsOptions } = require("../model/enums");
 const db = require("../db/index");
+const { sub } = require("date-fns");
 
 const scheduleSend = async (emailId, email, sendDate, eventId) => {
   const { to, subject, html, recipients, emailList } = email;
@@ -14,71 +15,66 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
     async () => {
       // asign job to the job within node-schedule
       const job = schedule.scheduledJobs[emailId.toString()];
-      // commented out all email send code, replaced with a console log instead
-      console.log(email);
-      /*
+
       var recipientsList = [];
       // get recipients either from the registration list, or use the email list provided
-      switch (recipients) {
-        case recipientsOptions.ALL_REGISTRANTS:
-          const registrations = await db.query(
-            "SELECT event.title as event_name, event.time_zone, event.link as event_link, event.start_date, event.end_date FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 ",
-            [eventId]
-          );
+      if (recipients === recipientsOptions.ALL_REGISTRANTS) {
+        const registrationsList = await db.query(
+          `SELECT 
+            event.title as event_name, 
+            event.time_zone, 
+            event.link as event_link, 
+            event.start_date, 
+            event.end_date ,
+            registration.first_name,
+            registration.last_name,
+            registration.email
 
-          recipientsList = registrations.rows;
-          break;
-        case recipientsOptions.EMAIL_LIST:
-          const emailListRecipients = await db.query(
-            "SELECT * FROM recipient WHERE email_id=$1",
-            [emailId]
-          );
+            FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 `,
+          [eventId]
+        );
 
-          recipientsList = emailListRecipients.rows.map(
-            (recipient) => recipient.email
-          );
-          break;
+        recipientsList = registrationsList.rows;
+      } else if (recipients === recipientsOptions.EMAIL_LIST) {
+        const emailList = await db.query(
+          `SELECT 
+          recipient.first_name,
+          recipient.last_name,
+          recipient.email,
+          event.title as event_name, 
+            event.time_zone, 
+            event.link as event_link, 
+            event.start_date, 
+            event.end_date
+          FROM recipient 
+          INNER JOIN email 
+          on recipient.email_template_id = email.id 
+          INNER JOIN event
+          on email.event = event.id 
+          WHERE recipient.email_template_id=$1`,
+          [emailId]
+        );
+
+        recipientsList = emailList.rows;
       }
 
-      // find all variable names in curly braces and put them in an array
-      const subjectVariables = subject.match(/[^{\}]+(?=})/g);
-      const htmlVariables = html.match(/[^{\}]+(?=})/g);
-      //remove duplicates from the variables list
-      subjectVariables = [...new Set(subjectVariables)];
-      htmlVariables = [...new Set(htmlVariables)];
+      // provide a list of recipient data, a subject and html with {variables} to a function that maps the data to the variables and sends an email to each recipient
 
-      //Iterate through the recipientsList and send an email to each recipient with variables replaced with database values
-      for (const recipient of recipientsList) {
-        // for each recipient, reset the subject to the original with {variable_names}
-        var updatedSubject = subject;
-        var updatedHtml = html;
+      const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+        recipientsList,
+        subject,
+        html
+      );
 
-        //for each variable in the subjectVariables array, replace it with the value from the database value
-        for (var i = 0; i < subject.length; i++) {
-          updatedSubject = updatedSubject.replace(
-            new RegExp("{" + subjectVariables[i] + "}", "gi"),
-            recipient[subjectVariables[i]]
-          );
-        }
+      console.log({ success, failed });
 
-        //for each variable in the htmlVariables array, replace it with the value from the database value
-        for (var i = 0; i < subject.length; i++) {
-          updatedHtml = updatedHtml.replace(
-            new RegExp("{" + htmlVariables[i] + "}", "gi"),
-            recipient[htmlVariables[i]]
-          );
-        }
-
-        console.log({ to, updatedHtml, updatedSubject });
-
-        /*Mailer.sendEmail({
-          to: recipient.email,
-          updatedSubject,
-          updatedHtml,
-        });
-        */
-      //  update the database to show that the email has been sent
-      updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
+      updateEmailJob(
+        emailId,
+        job.triggeredJobs(),
+        job.nextInvocation(),
+        success,
+        failed
+      );
 
       // We only ever need to run this job once. So remove it from node-schedule to keep things clean and avoid duplicate sends
       job.cancel();

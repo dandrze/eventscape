@@ -15,7 +15,19 @@ const statusOptions = {
   LIVE: "Live",
   ACTIVE: "Active",
   DISABLED: "Disabled",
+  COMPLETE: "Complete",
 };
+
+const emailVariableNames = [
+  "event_name",
+  "time_zone",
+  "event_link",
+  "start_date",
+  "end_date",
+  "first_name",
+  "last_name",
+  "guest_email",
+];
 
 exports.recipientsOptions = recipientsOptions;
 exports.statusOptions = statusOptions;

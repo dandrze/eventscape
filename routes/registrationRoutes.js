@@ -1,10 +1,9 @@
 const express = require("express");
 const router = express.Router();
-const { recipientsOptions } = require("../model/enums");
+const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 
 const db = require("../db");
-const { PromiseProvider } = require("mongoose");
 
 router.post("/api/registration", async (req, res) => {
   const { event, values, emailAddress, firstName, lastName } = req.body;
@@ -24,29 +23,51 @@ router.post("/api/registration", async (req, res) => {
     }
   );
 
+  const newRegistrationId = newRegistration.rows[0].id;
+
   // check to see if any emails need to be fired off
   const registrationEmails = await db.query(
-    `SELECT * FROM email WHERE event=$1 AND recipients=$2`,
-    [event, recipientsOptions.NEW_REGISTRANTS],
+    `SELECT * FROM email WHERE event=$1 AND recipients=$2 AND status=$3`,
+    [event, recipientsOptions.NEW_REGISTRANTS, statusOptions.ACTIVE],
     (err, res) => {
       if (err) {
-        res.status(500).json({ message: "Error when sending email" });
+        res
+          .status(500)
+          .json({ message: "Error when sending confirmation email" });
         return;
       }
     }
   );
 
+  // pull all relevant data to map to variables and put them into a list
+  const registrationData = await db.query(
+    `SELECT 
+      event.title as event_name, 
+      event.time_zone, 
+      event.link as event_link, 
+      event.start_date, 
+      event.end_date ,
+      registration.first_name,
+      registration.last_name,
+      registration.email
+
+      FROM registration INNER JOIN event on registration.event = event.id WHERE registration.id=$1 `,
+    [newRegistrationId]
+  );
+
   console.log(registrationEmails.rows);
 
   for (var email of registrationEmails.rows) {
-    try {
-      const response = await Mailer.sendEmail({
-        to: "andrzejewski.d@gmail.com",
-        subject: email.subject,
-        html: email.html,
-      });
-    } catch (error) {
-      res.status(500).json({ message: "Error when sending email." });
+    const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+      registrationData.rows,
+      email.subject,
+      email.html
+    );
+
+    if (failed > 0) {
+      res
+        .status(500)
+        .json({ message: "Error when sending confirmation email" });
       return;
     }
   }
