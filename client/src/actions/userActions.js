@@ -30,3 +30,22 @@ export const fetchUser = () => async (dispatch) => {
     toast.error("Error when fetching user profile: " + err.toString());
   }
 };
+
+export const updateAccountContact = (userId, contactData) => async (
+  dispatch
+) => {
+  try {
+    const res = await api.put("/api/account", { userId, contactData });
+
+    console.log(res.data);
+
+    if (res.data) {
+      dispatch({ type: FETCH_USER, payload: res.data });
+    }
+    toast.success("Contact details successfully updated!");
+
+    return res.data;
+  } catch (err) {
+    toast.error("Error when updating contact details: " + err.toString());
+  }
+};
