@@ -49,3 +49,24 @@ export const updateAccountContact = (userId, contactData) => async (
     toast.error("Error when updating contact details: " + err.toString());
   }
 };
+
+export const updatePassword = (userId, oldPassword, newPassword) => async (
+  dispatch
+) => {
+  try {
+    const res = await api.put("/api/account/pw", {
+      userId,
+      oldPassword,
+      newPassword,
+    });
+
+    console.log(res.data);
+
+    toast.success("Password successfully updated!");
+
+    return true;
+  } catch (err) {
+    toast.error("Error when updating password: " + err.response.data.error);
+    return false;
+  }
+};
