@@ -8,11 +8,7 @@ export const fetchCommunicationList = (event) => async (dispatch, getState) => {
   try {
     const res = await api.get("/api/email/all", { params: { event } });
 
-<<<<<<< HEAD
     dispatch({ type: FETCH_COMMUNICATION_LIST, payload: res.data });
-=======
-    dispatch({ type: FETCH_EMAIL_LIST, payload: res.data });
->>>>>>> user
 
     return true;
   } catch (err) {
