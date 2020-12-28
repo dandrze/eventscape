@@ -129,17 +129,17 @@ function App(props) {
         <Route
           exact
           path="/account-settings-contact"
-          component={AccountSettingsContact}
+          component={requireAuth(AccountSettingsContact)}
         />
         <Route
           exact
           path="/account-settings-password"
-          component={AccountSettingsPassword}
+          component={requireAuth(AccountSettingsPassword)}
         />
         <Route
           exact
           path="/account-settings-payments"
-          component={AccountSettingsPayments}
+          component={requireAuth(AccountSettingsPayments)}
         />
       </header>
     </div>
