@@ -69,7 +69,11 @@ router.put("/api/account/pw", async (req, res) => {
   );
 
   // if the password doesn't match, return an 401 unauthorized error
-  if (oldPassword != existingUser.rows[0].password) {
+  const match = await bcrypt.compare(
+    oldPassword,
+    existingUser.rows[0].password
+  );
+  if (!match) {
     return res.status(401).send({ error: "Current password is not correct" });
   }
 
