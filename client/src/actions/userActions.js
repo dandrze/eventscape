@@ -31,6 +31,32 @@ export const fetchUser = () => async (dispatch) => {
   }
 };
 
+export const createAccount = (userData) => async (dispatch) => {
+  try {
+    const res = await api.post("/api/account", { userData });
+
+    return res.data;
+  } catch (err) {
+    toast.error("Error when creating new account: " + err.toString());
+  }
+};
+
+export const checkEmailExists = (email) => async (dispatch) => {
+  try {
+    const res = await api.get("/api/account/email", { params: { email } });
+
+    console.log(res.data);
+
+    console.log(Boolean(res.data));
+    // if it's empty, send false, if it exists, send true
+    return Boolean(res.data);
+  } catch (err) {
+    toast.error(
+      "Server error when checking if email exists: " + err.toString()
+    );
+  }
+};
+
 export const updateAccountContact = (userId, contactData) => async (
   dispatch
 ) => {

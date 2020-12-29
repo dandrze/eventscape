@@ -13,9 +13,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const response = await db.query("SELECT * FROM user_account WHERE id=$1", [
-    id,
-  ]);
+  const response = await db.query("SELECT * FROM account WHERE id=$1", [id]);
 
   const user = response.rows[0];
 
@@ -27,10 +25,9 @@ passport.use(
     console.log(username, password);
     console.log("strategy called");
 
-    const response = await db.query(
-      "SELECT * FROM user_account WHERE email = $1",
-      [username]
-    );
+    const response = await db.query("SELECT * FROM account WHERE email = $1", [
+      username,
+    ]);
 
     const user = response.rows[0];
 

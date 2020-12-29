@@ -1,11 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import { toast } from "react-toastify";
 
 import * as actions from "../actions";
+import { checkEmailExists } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,28 +22,82 @@ const useStyles = makeStyles((theme) => ({
 function Create_Account(props) {
   const classes = useStyles();
 
-  const [fName, setFName] = React.useState("");
-  const [lName, setLName] = React.useState("");
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+
+  const [emailErrorText, setEmailErrorText] = useState(false);
+  const [firstNameErrorText, setFirstNameErrorText] = useState("");
+  const [lastNameErrorText, setLastNameErrorText] = useState("");
+  const [passwordErrorText, setPasswordErrorText] = useState("");
+  const [confirmPasswordErrorText, setConfirmPasswordErrorText] = useState("");
 
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
+    setEmailErrorText("");
   };
 
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
+    setPasswordErrorText("");
+    setConfirmPasswordErrorText("");
   };
 
-  const handleSubmit = () => {
-    props.signInLocal(email, password);
-  };
-  const handleChangeFName = (event) => {
-    setFName(event.target.value);
+  const emailExists = async () => {
+    const response = await props.checkEmailExists(email);
+    console.log(response);
+    return response;
   };
 
-  const handleChangeLName = (event) => {
-    setLName(event.target.value);
+  const handleSubmit = async () => {
+    if (!firstName) {
+      setFirstNameErrorText("Please enter a first name");
+    } else if (!lastName) {
+      setLastNameErrorText("Please enter a last name");
+    } else if (!email) {
+      setEmailErrorText("Please enter your email address");
+    } else if (await emailExists()) {
+      setEmailErrorText(
+        "Account already exists with this email address. Please login or contact support."
+      );
+    } else if (!password) {
+      setPasswordErrorText("Please enter a password");
+    } else if (!confirmPassword) {
+      setConfirmPasswordErrorText("Please confirm your password");
+    } else if (password != confirmPassword) {
+      setPassword("");
+      setConfirmPassword("");
+      setConfirmPasswordErrorText("Passwords do not match");
+      setPasswordErrorText("Passwords do not match");
+    } else {
+      const res = await props.createAccount({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
+
+      console.log(res);
+      const auth = await props.signInLocal(email, password);
+      props.history.push("/event-details");
+    }
+  };
+  const handleChangeFirstName = (event) => {
+    setFirstName(event.target.value);
+    setFirstNameErrorText("");
+  };
+
+  const handleChangeLastName = (event) => {
+    setLastName(event.target.value);
+    setLastNameErrorText("");
+  };
+
+  const handleChangeConfirmPassword = (event) => {
+    setConfirmPassword(event.target.value);
+    setPasswordErrorText("");
+    setConfirmPasswordErrorText("");
   };
 
   return (
@@ -62,8 +118,9 @@ function Create_Account(props) {
             id="f-name"
             label="First Name"
             variant="outlined"
-            value={fName}
-            onChange={handleChangeFName}
+            value={firstName}
+            onChange={handleChangeFirstName}
+            helperText={firstNameErrorText}
           />
         </FormControl>
         <br></br>
@@ -73,8 +130,9 @@ function Create_Account(props) {
             id="l-name"
             label="Last Name"
             variant="outlined"
-            value={lName}
-            onChange={handleChangeLName}
+            value={lastName}
+            onChange={handleChangeLastName}
+            helperText={lastNameErrorText}
           />
         </FormControl>
         <br></br>
@@ -86,6 +144,7 @@ function Create_Account(props) {
             variant="outlined"
             value={email}
             onChange={handleChangeEmail}
+            helperText={emailErrorText}
           />
         </FormControl>
         <br></br>
@@ -97,6 +156,18 @@ function Create_Account(props) {
             variant="outlined"
             value={password}
             onChange={handleChangePassword}
+            helperText={passwordErrorText}
+          />
+        </FormControl>
+        <FormControl variant="outlined" className={classes.formControl}>
+          <TextField
+            type="password"
+            id="confirmPassword"
+            label="Confirm Password"
+            variant="outlined"
+            value={confirmPassword}
+            onChange={handleChangeConfirmPassword}
+            helperText={confirmPasswordErrorText}
           />
         </FormControl>
         <br></br>

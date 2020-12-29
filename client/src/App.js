@@ -95,6 +95,7 @@ function App(props) {
       <header className="App-header">
         <Route exact path="/" component={Landing} />
         <Route exact path="/login" component={Login} />
+        <Route exact path="/create-account" component={Create_Account} />
         <Route exact path="/dashboard" component={requireAuth(Dashboard)} />
         <Route
           exact
