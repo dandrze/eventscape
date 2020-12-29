@@ -51,12 +51,13 @@ router.post("/api/registration", async (req, res) => {
     `SELECT 
       event.title as event_name, 
       event.time_zone, 
-      event.link as event_link, 
+      event.link, 
       event.start_date, 
       event.end_date ,
       registration.first_name,
       registration.last_name,
-      registration.email
+      registration.email,
+      hash
 
       FROM registration INNER JOIN event on registration.event = event.id WHERE registration.id=$1 `,
     [newRegistrationId]

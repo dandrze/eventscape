@@ -23,8 +23,6 @@ function RegistrationForm(props) {
     props.standardFields ? props.standardFields.lastName : ""
   );
 
-  console.log(props.sectionIndex);
-
   useEffect(() => {
     fetchFormData();
   }, []);
