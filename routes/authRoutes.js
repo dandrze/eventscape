@@ -12,6 +12,8 @@ router.post(
   })
 );
 
+passport.authenticate();
+
 router.get("/auth/success", async (req, res) => {
   res.json({ user: req.user, error: null });
 });
