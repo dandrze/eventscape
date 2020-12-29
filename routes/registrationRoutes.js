@@ -1,4 +1,6 @@
 const express = require("express");
+const md5 = require("md5");
+
 const router = express.Router();
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
@@ -23,6 +25,11 @@ router.post("/api/registration", async (req, res) => {
     }
   );
 
+  const addHash = await db.query(
+    "UPDATE registration SET hash=$1 WHERE id=$2",
+    [md5(newRegistration.rows[0].id), newRegistration.rows[0].id]
+  );
+
   const newRegistrationId = newRegistration.rows[0].id;
 
   // check to see if any emails need to be fired off
@@ -44,12 +51,13 @@ router.post("/api/registration", async (req, res) => {
     `SELECT 
       event.title as event_name, 
       event.time_zone, 
-      event.link as event_link, 
+      event.link, 
       event.start_date, 
       event.end_date ,
       registration.first_name,
       registration.last_name,
-      registration.email
+      registration.email,
+      hash
 
       FROM registration INNER JOIN event on registration.event = event.id WHERE registration.id=$1 `,
     [newRegistrationId]
@@ -79,8 +87,8 @@ router.post("/api/registration", async (req, res) => {
 router.put("/api/registration", async (req, res) => {
   const { id, values, emailAddress, firstName, lastName } = req.body;
 
-  // Add the registered user
-  const newRegistration = await db.query(
+  // Update the registered user
+  const updatedRegistration = await db.query(
     `UPDATE registration 
     SET 
       values = $1
@@ -95,7 +103,7 @@ router.put("/api/registration", async (req, res) => {
     }
   );
 
-  res.status(200).send(newRegistration.rows[0]);
+  res.status(200).send(updatedRegistration.rows[0]);
 });
 
 router.get("/api/registration", async (req, res) => {

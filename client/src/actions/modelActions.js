@@ -20,7 +20,7 @@ export const fetchPublishedPage = (pageLink) => async (dispatch) => {
 
   dispatch({
     type: FETCH_PAGE_MODEL,
-    payload: { id: model.data[0].id, sections: model.data },
+    payload: model.data,
   });
 };
 
@@ -105,19 +105,6 @@ export const localSaveModel = () => (dispatch, getState) => {
       dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
       dispatch({ type: MODEL_ISSAVED });
       break;
-  }
-};
-
-export const fetchLivePage = (link) => async (dispatch) => {
-  const event = await api.get("/api/event/link", { params: { link } });
-  dispatch({ type: FETCH_EVENT, payload: event.data });
-
-  if (event.data.registration) {
-    // if the events registration flag is true, show the registration page.
-    await dispatch(fetchModel(event.data.reg_page_model));
-  } else {
-    // if the events registration flag is false, show the event page
-    await dispatch(fetchModel(event.data.event_page_model));
   }
 };
 

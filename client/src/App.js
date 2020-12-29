@@ -69,7 +69,15 @@ function App(props) {
     return (
       <div className="App">
         <header className="App-header">
-          <Published subdomain={path[0]} />
+          <Route
+            exact
+            path="/"
+            render={(props) => <Published {...props} subdomain={path[0]} />}
+          />
+          <Route
+            path="/:hash"
+            render={(props) => <Published {...props} subdomain={path[0]} />}
+          />
         </header>
       </div>
     );

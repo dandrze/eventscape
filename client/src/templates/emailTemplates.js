@@ -21,6 +21,7 @@ export const registrationConfirmation = {
   <p style="text-align: left">Thank you for registering for {event_name}.</p>
   <p style="text-align: left">A few minutes before the event begins, please click the following button to join.</p>
   <p style="text-align: left;">
+  <a href="{event_link}">
     <button style="
       font-family: Helvetica, Arial, sans-serif;
       font-weight: bold;
@@ -37,6 +38,7 @@ export const registrationConfirmation = {
     ">
       Join Now
     </button>
+    </a>
   </p>
   
 `,

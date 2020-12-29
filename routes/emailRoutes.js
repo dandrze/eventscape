@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const md5 = require("md5");
 
 const db = require("../db");
 const Scheduler = require("../services/Scheduler");
@@ -152,17 +153,17 @@ router.post("/api/email-list", async (req, res) => {
 
   const { first_name, last_name, email } = data;
 
-  const emailList = await db.query(
-    "INSERT INTO recipient (first_name, last_name, email, email_template_id) VALUES ($1, $2, $3, $4)",
-    [first_name, last_name, email, emailId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
+  const newRecipient = await db.query(
+    "INSERT INTO recipient (first_name, last_name, email, email_template_id) VALUES ($1, $2, $3, $4) returning id",
+    [first_name, last_name, email, emailId]
   );
 
-  res.status(200).send(emailList.rows);
+  const addHash = await db.query("UPDATE recipient SET hash=$1 WHERE id=$2", [
+    md5(newRecipient.rows[0].id),
+    newRecipient.rows[0].id,
+  ]);
+
+  res.status(200).send(newRecipient.rows);
 });
 
 router.put("/api/email-list", async (req, res) => {
