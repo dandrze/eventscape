@@ -36,6 +36,11 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
     // for each recipient, reset the subject to the original with {variable_names}
     var updatedSubject = subject;
     var updatedHtml = html;
+    // the event_link variable is created using the event link and the recipient hash which uniquely identifies the recipient
+    if (recipient.link && recipient.hash) {
+      recipient.event_link =
+        "https://" + recipient.link + ".eventscape.io/" + recipient.hash;
+    }
 
     //for each variable in the subjectVariables array, replace it with the value from the database value. If the array is empty, skip it
     if (subjectVariables) {

@@ -23,12 +23,13 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
           `SELECT 
             event.title as event_name, 
             event.time_zone, 
-            event.link as event_link, 
+            event.link, 
             event.start_date, 
             event.end_date ,
             registration.first_name,
             registration.last_name,
-            registration.email
+            registration.email,
+            registration.hash
 
             FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 `,
           [eventId]
@@ -38,12 +39,13 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
         const emailList = await db.query(
           `SELECT 
-          recipient.first_name,
-          recipient.last_name,
-          recipient.email,
-          event.title as event_name, 
+            recipient.first_name,
+            recipient.last_name,
+            recipient.email,
+            recipient.hash,
+            event.title as event_name, 
             event.time_zone, 
-            event.link as event_link, 
+            event.link, 
             event.start_date, 
             event.end_date
           FROM recipient 

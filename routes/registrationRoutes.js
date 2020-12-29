@@ -1,4 +1,6 @@
 const express = require("express");
+const md5 = require("md5");
+
 const router = express.Router();
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
@@ -21,6 +23,11 @@ router.post("/api/registration", async (req, res) => {
         return;
       }
     }
+  );
+
+  const addHash = await db.query(
+    "UPDATE registration SET hash=$1 WHERE id=$2",
+    [md5(newRegistration.rows[0].id), newRegistration.rows[0].id]
   );
 
   const newRegistrationId = newRegistration.rows[0].id;
@@ -79,8 +86,8 @@ router.post("/api/registration", async (req, res) => {
 router.put("/api/registration", async (req, res) => {
   const { id, values, emailAddress, firstName, lastName } = req.body;
 
-  // Add the registered user
-  const newRegistration = await db.query(
+  // Update the registered user
+  const updatedRegistration = await db.query(
     `UPDATE registration 
     SET 
       values = $1
@@ -95,7 +102,7 @@ router.put("/api/registration", async (req, res) => {
     }
   );
 
-  res.status(200).send(newRegistration.rows[0]);
+  res.status(200).send(updatedRegistration.rows[0]);
 });
 
 router.get("/api/registration", async (req, res) => {
