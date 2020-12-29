@@ -30,3 +30,69 @@ export const fetchUser = () => async (dispatch) => {
     toast.error("Error when fetching user profile: " + err.toString());
   }
 };
+
+export const createAccount = (userData) => async (dispatch) => {
+  try {
+    const res = await api.post("/api/account", { userData });
+
+    return res.data;
+  } catch (err) {
+    toast.error("Error when creating new account: " + err.toString());
+  }
+};
+
+export const checkEmailExists = (email) => async (dispatch) => {
+  try {
+    const res = await api.get("/api/account/email", { params: { email } });
+
+    console.log(res.data);
+
+    console.log(Boolean(res.data));
+    // if it's empty, send false, if it exists, send true
+    return Boolean(res.data);
+  } catch (err) {
+    toast.error(
+      "Server error when checking if email exists: " + err.toString()
+    );
+  }
+};
+
+export const updateAccountContact = (userId, contactData) => async (
+  dispatch
+) => {
+  try {
+    const res = await api.put("/api/account", { userId, contactData });
+
+    console.log(res.data);
+
+    if (res.data) {
+      dispatch({ type: FETCH_USER, payload: res.data });
+    }
+    toast.success("Contact details successfully updated!");
+
+    return res.data;
+  } catch (err) {
+    toast.error("Error when updating contact details: " + err.toString());
+  }
+};
+
+export const updatePassword = (userId, oldPassword, newPassword) => async (
+  dispatch
+) => {
+  try {
+    const res = await api.put("/api/account/pw", {
+      userId,
+      oldPassword,
+      newPassword,
+    });
+
+    console.log(res.data);
+
+    toast.success("Password successfully updated!");
+
+    return true;
+  } catch (err) {
+    toast.error("Error when updating password: " + err.response.data.error);
+    return false;
+  }
+};
