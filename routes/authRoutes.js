@@ -31,8 +31,10 @@ router.get("/auth/current-user", async (req, res) => {
 });
 
 router.get("/auth/logout", (req, res) => {
+  const { target } = req.query;
+
   req.logout();
-  res.redirect("/login");
+  res.redirect("/" + target);
 });
 
 module.exports = router;

@@ -426,14 +426,15 @@ function NavBar3(props) {
                 <ListItemText primary="Account Settings" />
               </StyledMenuItem>
             </Link>
-
-            <StyledMenuItem>
-              <ListItemIcon>
-                <SwapHorizIcon fontSize="small" />
-              </ListItemIcon>
-              <ListItemText primary="Switch Account" />
-            </StyledMenuItem>
-            <a href="/auth/logout">
+            <a href="/auth/logout?target=login">
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <SwapHorizIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Switch Account" />
+              </StyledMenuItem>
+            </a>
+            <a href="/auth/logout?target=">
               <StyledMenuItem>
                 <ListItemIcon>
                   <ExitToAppIcon fontSize="small" />

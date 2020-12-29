@@ -1,5 +1,7 @@
 const express = require("express");
 const db = require("../db");
+const bcrypt = require("bcrypt");
+const saltRounds = 10;
 
 const router = express.Router();
 
@@ -33,9 +35,12 @@ router.put("/api/account/pw", async (req, res) => {
     return res.status(401).send({ error: "Current password is not correct" });
   }
 
+  // has the password so we don't store the plain text password in our database
+  const hashedPassword = await bcrypt.hashSync(newPassword, saltRounds);
+
   const updatedAccount = await db.query(
     "UPDATE user_account SET password=$1 WHERE id=$2 returning id",
-    [newPassword, userId],
+    [hashedPassword, userId],
     (err, res) => {
       if (err) {
         throw res.status(500).send(err);
