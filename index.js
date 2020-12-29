@@ -4,6 +4,8 @@ const passport = require("passport");
 const secure = require("express-force-https");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
+var socketIo = require("socket.io");
+const http = require("http");
 
 const db = require("./db");
 const keys = require("./config/keys");
@@ -55,7 +57,16 @@ if (process.env.NODE_ENV == "production") {
   });
 }
 
+const server = http.createServer(app);
+
+const io = socketIo(server);
+
+io.on("connection", (socket) => {
+  console.log("a user connected");
+});
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+
+server.listen(PORT, () => {
   console.log("listening on port " + PORT);
 });
