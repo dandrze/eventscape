@@ -53,6 +53,7 @@ import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
 
 /* Icons side nav account */
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import AccountIcon from "../icons/account.svg";
 import KeyIcon from "../icons/key.svg";
 import CreditCardIcon from "../icons/credit-card.svg";
@@ -380,7 +381,7 @@ function NavBar3(props) {
             >
               <div className={classes.root}>
                 <Avatar className={`${classes.purple} ${classes.large}`}>
-                  {props.user.first_name[0] + " " + props.user.last_name[0]}
+                  {props.user.first_name[0] + props.user.last_name[0]}
                 </Avatar>
               </div>
             </Button>
@@ -397,7 +398,7 @@ function NavBar3(props) {
               <ListItemIcon>
                 <div className={classes.root}>
                   <Avatar className={`${classes.purple} ${classes.large}`}>
-                    {props.user.first_name[0] + " " + props.user.last_name[0]}
+                    {props.user.first_name[0] + props.user.last_name[0]}
                   </Avatar>
                 </div>
               </ListItemIcon>
@@ -408,6 +409,17 @@ function NavBar3(props) {
             </StyledMenuItemNoButton>
 
             <Divider />
+
+            {displaySideNav === "false" && (
+              <Link to="./design">
+                <StyledMenuItem>
+                  <ListItemIcon>
+                    <ArrowBackIcon fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={"Back to " + props.event.title} />
+                </StyledMenuItem>
+              </Link>
+            )}
 
             <Link to="./my-events">
               <StyledMenuItem>
