@@ -27,6 +27,7 @@ import Login from "./pages/login";
 import AccountSettingsContact from "./pages/account-settings-contact";
 import AccountSettingsPassword from "./pages/account-settings-password";
 import AccountSettingsPayments from "./pages/account-settings-payments";
+import ErrorRegNotFound from "./pages/error-registration-not-found";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -149,6 +150,11 @@ function App(props) {
           exact
           path="/account-settings-payments"
           component={requireAuth(AccountSettingsPayments)}
+        />
+        <Route
+          exact
+          path="/error-reg-not-found"
+          component={ErrorRegNotFound}
         />
       </header>
     </div>
