@@ -84,15 +84,17 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const Chat = ({ location }) => {
+const Chat = ({ room, name }) => {
   //const [name, setName] = useState("");
-  //const [room, setRoom] = useState("");
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  const name = "David";
-  const room = "123";
+  console.log(room);
+
+  if (!name) {
+    name = "Guest";
+  }
 
   useEffect(() => {
     socket = io(ENDPOINT, {

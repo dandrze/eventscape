@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import ReactHtmlParser from "react-html-parser";
-
+import { connect } from "react-redux";
 import "../fonts.css";
 import "../pageEditor.css";
 import "./stream-chat.css";
@@ -31,6 +31,7 @@ const StreamChat = (props) => {
   };
 
   console.log("stream-chat refreshed");
+  console.log(props.event.id);
   return (
     <div>
       <section class="container2">
@@ -38,11 +39,15 @@ const StreamChat = (props) => {
           <div className="video-responsive">{displayStream()}</div>
         </div>
         <div class="two2">
-          <Chat />
+          <Chat room={props.event.id} />
         </div>
       </section>
     </div>
   );
 };
 
-export default StreamChat;
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps)(StreamChat);
