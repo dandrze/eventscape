@@ -21,3 +21,20 @@
 .btn {
   margin: auto;
 }
+
+.form-editor-froala {
+  margin: 8%;
+  text-align: justify;
+}
+
+.form-editor-react {
+  margin: 8%;
+  background-color: #fff;
+}
+
+.container {
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  grid-gap: 1rem;
+}

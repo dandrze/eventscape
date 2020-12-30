@@ -5,6 +5,7 @@ import ReactHtmlParser from "react-html-parser";
 import { useParams } from "react-router-dom";
 import "froala-editor/css/froala_style.min.css";
 import mapReactComponent from "../components/mapReactComponent";
+import theme from "../templates/theme";
 
 const Preview = (props) => {
   const { event, model } = useParams();
@@ -19,41 +20,9 @@ const Preview = (props) => {
     props.setLoaded(true);
   };
 
-  const theme = `
- 	.fr-view button { 
-		background: ${props.event.primary_color} !important;
-		border-color: ${props.event.primary_color} !important;
-	 } 
-	 .fr-view h1 {
-		 color: ${props.event.primary_color};
-	 }
-	 .infoBar {
-		background: ${props.event.primary_color};
-	 }
-
-	 .theme-button {
-		background:${props.event.primary_color} !important;
-   }
-
-   .form-control:focus {
-    border-color: purple !important;
-    box-shadow: 0 0 0 0rem rgba(255, 0, 162, 0.25); /* was 0.2rem */
-  }
-  
-  .react-datepicker__day--selected, .react-datepicker__day--keyboard-selected, .react-datepicker__close-icon::after {
-    background-color: purple !important;
-  }
-  
-  .custom-control-input:checked ~ .custom-control-label::before {
-    background-color: purple;
-    border-color: purple;
-  }
-	
-  `;
-
   return (
     <div className="fr-view live-page-container">
-      <style>{theme}</style>
+      <style>{theme(props.event.primary_color)}</style>
       <ul>
         {props.model.sections.map(function (section) {
           console.log(section);

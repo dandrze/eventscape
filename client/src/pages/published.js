@@ -9,6 +9,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
 import { streamChatModel } from "../templates/designBlockModels";
+import theme from "../templates/theme";
 
 const Published = (props) => {
   const { hash } = useParams();
@@ -35,24 +36,6 @@ const Published = (props) => {
     setIsLoaded(true);
   };
 
-  const theme = `
-  .fr-view button { 
-    background: ${props.event.primary_color} !important;
-    border-color: ${props.event.primary_color} !important;
-  } 
-  .fr-view h1 {
-    color: ${props.event.primary_color};
-  }
-  .infoBar {
-    background: ${props.event.primary_color};
-  }
-
-  .theme-button {
-    background:${props.event.primary_color} !important;
-  }
-  
-  `;
-
   console.log(Boolean(props.event.id));
   console.log(props.model);
 
@@ -72,7 +55,7 @@ const Published = (props) => {
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
-          <style>{theme}</style>
+          <style>{theme(props.event.primary_color)}</style>
           <ul>
             {props.model.sections.map(function (section) {
               console.log(section);
