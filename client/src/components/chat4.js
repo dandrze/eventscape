@@ -85,26 +85,39 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
 );
 
 const Chat = ({ location }) => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
+  //const [name, setName] = useState("");
+  //const [room, setRoom] = useState("");
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
+  const name = "David";
+  const room = "123";
+
   useEffect(() => {
-    const socket = io(ENDPOINT, {
+    socket = io(ENDPOINT, {
       path: "/api/socket",
       transports: ["websocket"],
     });
-    socket.on("FromAPI", (data) => {
-      console.log(data);
-    });
-
     socket.on("connect", () => {
       console.log(socket.id);
     });
     socket.on("connect_error", (error) => {
       console.log(error);
+    });
+
+    socket.on("roomData", ({ users }) => {
+      console.log(users);
+    });
+
+    socket.on("message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
+
+    socket.emit("join", { name, room }, (error) => {
+      if (error) {
+        alert(error);
+      }
     });
   }, []);
 
@@ -112,7 +125,7 @@ const Chat = ({ location }) => {
     event.preventDefault();
 
     if (message) {
-      socket.emit("sendMessage", message, () => setMessage(""));
+      socket.emit("sendMessage", { name, room, message }, () => setMessage(""));
     }
   };
 

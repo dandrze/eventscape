@@ -69,7 +69,28 @@ const io = socketIo(server, {
 
 io.on("connection", (socket) => {
   console.log("New client connected");
-  console.log(socket.handshake);
+
+  socket.on("join", ({ name, room }, callback) => {
+    socket.join(room);
+
+    socket.emit("message", {
+      user: "admin",
+      text: `${name}, welcome to room ${room}.`,
+    });
+    socket.broadcast
+      .to(room)
+      .emit("message", { user: "admin", text: `${name} has joined!` });
+
+    //io.to(room).emit("roomData", { room: room, users: getUsersInRoom(room) });
+
+    socket.on("sendMessage", ({ name, room, message }, callback) => {
+      io.to(room).emit("message", { user: name, text: message });
+
+      callback();
+    });
+
+    callback();
+  });
 
   socket.on("disconnect", (reason) => {
     console.log("Client disconnected: " + reason);
