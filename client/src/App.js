@@ -27,6 +27,7 @@ import Login from "./pages/login";
 import AccountSettingsContact from "./pages/account-settings-contact";
 import AccountSettingsPassword from "./pages/account-settings-password";
 import AccountSettingsPayments from "./pages/account-settings-payments";
+import Test from "./pages/test";
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -150,6 +151,7 @@ function App(props) {
           path="/account-settings-payments"
           component={requireAuth(AccountSettingsPayments)}
         />
+        <Route exact path="/test" component={Test} />
       </header>
     </div>
   );

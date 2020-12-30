@@ -59,10 +59,21 @@ if (process.env.NODE_ENV == "production") {
 
 const server = http.createServer(app);
 
-const io = socketIo(server);
+const io = socketIo(server, {
+  path: "/api/socket",
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+  },
+});
 
 io.on("connection", (socket) => {
-  console.log("a user connected");
+  console.log("New client connected");
+  console.log(socket.handshake);
+
+  socket.on("disconnect", (reason) => {
+    console.log("Client disconnected: " + reason);
+  });
 });
 
 const PORT = process.env.PORT || 5000;

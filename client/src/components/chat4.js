@@ -1,24 +1,21 @@
 import React, { useState, useEffect } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
-import TelegramIcon from '@material-ui/icons/Telegram';
+import TelegramIcon from "@material-ui/icons/Telegram";
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
 https://github.com/adrianhajdin/project_chat_application
 */
 
-// import queryString from 'query-string';
-// import io from "socket.io-client";
-
-// import Messages from '../Messages/Messages';
-// import Input from '../Input/Input';
+import queryString from "query-string";
+import io from "socket.io-client";
 
 import "./chat4.css";
 
-// const ENDPOINT = 'https://project-chat-application.herokuapp.com/';
+const ENDPOINT = "http://localhost:5000/";
 
-// let socket;
+let socket;
 
 const InfoBar = () => (
   <div className="infoBar">
@@ -94,36 +91,28 @@ const Chat = ({ location }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
 
-  /*useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
-
-    socket = io(ENDPOINT);
-
-    setRoom(room);
-    setName(name)
-
-    socket.emit('join', { name, room }, (error) => {
-      if(error) {
-        alert(error);
-      }
-    });
-  }, [ENDPOINT, location.search]);
-  
   useEffect(() => {
-    socket.on('message', message => {
-      setMessages(messages => [ ...messages, message ]);
+    const socket = io(ENDPOINT, {
+      path: "/api/socket",
+      transports: ["websocket"],
     });
-    
-    socket.on("roomData", ({ users }) => {
-      setUsers(users);
+    socket.on("FromAPI", (data) => {
+      console.log(data);
     });
-}, []);*/
+
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+    socket.on("connect_error", (error) => {
+      console.log(error);
+    });
+  }, []);
 
   const sendMessage = (event) => {
     event.preventDefault();
 
     if (message) {
-      //socket.emit('sendMessage', message, () => setMessage(''));
+      socket.emit("sendMessage", message, () => setMessage(""));
     }
   };
 

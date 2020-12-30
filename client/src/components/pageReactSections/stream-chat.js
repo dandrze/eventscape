@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ReactHtmlParser from "react-html-parser";
 
 import "../fonts.css";
@@ -29,6 +29,8 @@ const StreamChat = (props) => {
         return <p>Unknown Error</p>;
     }
   };
+
+  console.log("stream-chat refreshed");
   return (
     <div>
       <section class="container2">
