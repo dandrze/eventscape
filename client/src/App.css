@@ -1,5 +1,5 @@
 @import url("https://fonts.googleapis.com/css2?family=Spectral&display=swap");
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap");
 
 /*Overwrite some bootstrap css properties that break our styling*/
 a:hover {
@@ -43,7 +43,7 @@ ul {
 h1 {
   font-weight: 400;
   font-family: "Spectral", serif;
-	font-size: 48px;
+  font-size: 48px;
   color: black;
   margin-top: 1rem;
   margin-bottom: 2rem;
@@ -108,7 +108,7 @@ select {
 
 label {
   color: grey;
-  font-family:  Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 16px;
   font-weight: 300 !important;
 }
@@ -169,12 +169,6 @@ label {
 .theme-button:hover {
   opacity: 0.7;
 }
-
-.theme-color {
-  color: blue;
-}
-
-
 
 .Button2 {
   font-family: Roboto, "Helvetica Neue", Arial, sans-serif;
@@ -373,7 +367,8 @@ label {
 }
 
 /* Form displaying in registration blocks */
-.form-group, .react-form-builder-form {
+.form-group,
+.react-form-builder-form {
   text-align: left;
 }
 
@@ -386,14 +381,13 @@ select {
 }
 
 .styled-select select {
-  -moz-appearance:none; /* Firefox */
-  -webkit-appearance:none; /* Safari and Chrome */
-  appearance:none;
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
   background-color: rebeccapurple;
 }
 
 select {
-
   /* styling */
   background-color: white;
   border: thin solid red;
@@ -405,7 +399,7 @@ select {
 
   /* reset */
 
-  margin: 0;      
+  margin: 0;
   -webkit-box-sizing: border-box;
   -moz-box-sizing: border-box;
   box-sizing: border-box;
@@ -414,21 +408,15 @@ select {
 }
 
 select {
-  -moz-appearance:none; /* Firefox */
-  -webkit-appearance:none; /* Safari and Chrome */
-  appearance:none;
-  background-image:
-    linear-gradient(45deg, transparent 50%, gray 50%),
+  -moz-appearance: none; /* Firefox */
+  -webkit-appearance: none; /* Safari and Chrome */
+  appearance: none;
+  background-image: linear-gradient(45deg, transparent 50%, gray 50%),
     linear-gradient(135deg, gray 50%, transparent 50%),
     linear-gradient(to right, #ccc, #ccc);
-  background-position:
-    calc(100% - 20px) calc(1em + 2px),
-    calc(100% - 15px) calc(1em + 2px),
-    calc(100% - 2.5em) 0.5em;
-  background-size:
-    5px 5px,
-    5px 5px,
-    1px 1.5em;
+  background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px), calc(100% - 2.5em) 0.5em;
+  background-size: 5px 5px, 5px 5px, 1px 1.5em;
   background-repeat: no-repeat;
 }
 

@@ -5,6 +5,7 @@ import * as actions from "../actions";
 import NewSectionButton from "./newSectionButton";
 import DesignBlockToolbar from "./designBlockToolbar";
 import mapReactComponent from "./mapReactComponent";
+import theme from "../templates/theme";
 
 const RegPageSectionEditor = (props) => {
   const [isHovering, setIsHovering] = useState(false);
@@ -17,27 +18,9 @@ const RegPageSectionEditor = (props) => {
     setIsHovering(false);
   };
 
-  const theme = `
- 	.fr-view button { 
-		background: ${props.event.primary_color} !important;
-		border-color: ${props.event.primary_color} !important;
-	 } 
-	 .fr-view h1 {
-		 color: ${props.event.primary_color};
-	 }
-	 .infoBar {
-		background: ${props.event.primary_color};
-	 }
-
-	 .theme-button {
-		background:${props.event.primary_color} !important;
-	 }
-	
-  `;
-
   return (
     <div>
-      <style>{theme}</style>
+      <style>{theme(props.event.primary_color)}</style>
       <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <DesignBlockToolbar
           displayToolbar={isHovering}

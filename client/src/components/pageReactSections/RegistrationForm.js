@@ -14,8 +14,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Fade from "@material-ui/core/Fade";
 import Cancel from "./cancel.svg";
 
-
-
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
@@ -145,28 +143,8 @@ function RegistrationForm(props) {
     return inputText.value.match(mailformat);
   };
 
-  const theme = `
-  .form-editor-froala {
-    margin: 8%;
-    text-align: justify;
-  }
-
-  .form-editor-react  {
-      margin: 8%;
-      background-color: #FFF; //was #EFEFEF
-  }
-
-  .container {
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    grid-gap: 1rem;
-  }
-  `;
-
   return (
     <div>
-      <style>{theme}</style>
       <AlertModal
         open={open}
         onClose={closeModal}
@@ -228,17 +206,17 @@ function RegistrationForm(props) {
           />
           <label>
             <span>Already registered? Click </span>
-              <span 
-                className="theme-color" 
-                onClick={openReSendLinkModal}
-                style={{
-                  cursor: "pointer",
-                  textDecoration: "underline"
-                }}
-              >
-                here
-              </span>
-              <span> to re-send your event link.</span>
+            <span
+              className="theme-color"
+              onClick={openReSendLinkModal}
+              style={{
+                cursor: "pointer",
+                textDecoration: "underline",
+              }}
+            >
+              here
+            </span>
+            <span> to re-send your event link.</span>
           </label>
         </div>
       </div>
@@ -267,7 +245,7 @@ function RegistrationForm(props) {
                 ></img>
               </Tooltip>
             </div>
-            <div style ={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
+            <div style={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
               <p>Please enter the email address you registered with.</p>
               <input
                 type="text"
@@ -278,7 +256,9 @@ function RegistrationForm(props) {
                 placeholder="email@email.com"
               />
               <div className="btn-toolbar">
-                <button className="btn btn-school btn-big theme-button">Re-Send My Event Link</button>
+                <button className="btn btn-school btn-big theme-button">
+                  Re-Send My Event Link
+                </button>
               </div>
 
               {/* Email found and link sent confirmation message: */}
@@ -286,8 +266,14 @@ function RegistrationForm(props) {
                 <>
                   <br></br>
                   <br></br>
-                  <p>Your link to join the event has been sent to the email address you entered.</p>
-                  <p>Please check your inbox and if it’s not there, try checking your junk mail.</p>
+                  <p>
+                    Your link to join the event has been sent to the email
+                    address you entered.
+                  </p>
+                  <p>
+                    Please check your inbox and if it’s not there, try checking
+                    your junk mail.
+                  </p>
                 </>
               )}
 
@@ -296,7 +282,10 @@ function RegistrationForm(props) {
                 <>
                   <br></br>
                   <br></br>
-                  <p>No registration found for this address. Please close this window and register to attend the event.</p>
+                  <p>
+                    No registration found for this address. Please close this
+                    window and register to attend the event.
+                  </p>
                 </>
               )}
             </div>
