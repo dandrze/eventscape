@@ -7,14 +7,47 @@ import "./RegistrationForm.css";
 import api from "../../api/server";
 import * as actions from "../../actions";
 import Froala from "../froala";
+import Modal from "@material-ui/core/Modal";
+import Backdrop from "@material-ui/core/Backdrop";
+import { makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
+import Fade from "@material-ui/core/Fade";
+import Cancel from "./cancel.svg";
+
+
+
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+    width: "600px",
+  },
+  modal: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    outline: "none",
+  },
+  paper: {
+    backgroundColor: theme.palette.background.paper,
+    border: "2px solid #000",
+    boxShadow: theme.shadows[5],
+    padding: "30px",
+  },
+}));
 
 function RegistrationForm(props) {
+  const classes = useStyles();
+
   const [open, setOpen] = useState(false);
+  const [openReSendLink, setOpenReSendLink] = useState(false);
   const [modalText, setModalText] = useState(false);
   const [formData, setFormData] = useState([]);
   const [emailAddress, setEmailAddress] = useState(
     props.standardFields ? props.standardFields.email : ""
   );
+  const [emailAddressReSend, setEmailAddressReSend] = useState("");
+  const [emailFound, setEmailFound] = useState(false);
+  const [emailNotFound, setEmailNotFound] = useState(true);
   const [emailError, setEmailError] = useState("");
   const [firstName, setFirstName] = useState(
     props.standardFields ? props.standardFields.firstName : ""
@@ -35,6 +68,14 @@ function RegistrationForm(props) {
     setOpen(true);
   };
 
+  const closeReSendLinkModal = () => {
+    setOpenReSendLink(false);
+  };
+
+  const openReSendLinkModal = () => {
+    setOpenReSendLink(true);
+  };
+
   const fetchFormData = async () => {
     const formData = await api.get("/api/form", {
       params: { event: props.event.id },
@@ -46,6 +87,10 @@ function RegistrationForm(props) {
 
   const handleEmailChange = (event) => {
     setEmailAddress(event.target.value);
+  };
+
+  const handleEmailReSendChange = (event) => {
+    setEmailAddressReSend(event.target.value);
   };
 
   const handleEmailBlur = () => {
@@ -142,18 +187,6 @@ function RegistrationForm(props) {
           {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
           <div className="form-group">
             <label>
-              <span>Email Address</span>
-              <span class="label-required badge badge-danger">Required</span>
-            </label>
-            <input
-              type="text"
-              class="form-control"
-              value={emailAddress}
-              onChange={handleEmailChange}
-              onBlur={handleEmailBlur}
-            />
-            <div className="errorMessage">{emailError}</div>
-            <label>
               <span>First Name</span>
               <span class="label-required badge badge-danger">Required</span>
             </label>
@@ -173,6 +206,18 @@ function RegistrationForm(props) {
               value={lastName}
               onChange={handleLastNameChange}
             />
+            <label>
+              <span>Email Address</span>
+              <span class="label-required badge badge-danger">Required</span>
+            </label>
+            <input
+              type="text"
+              class="form-control"
+              value={emailAddress}
+              onChange={handleEmailChange}
+              onBlur={handleEmailBlur}
+            />
+            <div className="errorMessage">{emailError}</div>
           </div>
           <ReactFormGenerator
             action_name={props.registerText || "Register now"}
@@ -181,8 +226,83 @@ function RegistrationForm(props) {
             answer_data={props.prePopulatedValues}
             className="form-editor-react"
           />
+          <label>
+            <span>Already registered? Click </span>
+              <span 
+                className="theme-color" 
+                onClick={openReSendLinkModal}
+                style={{
+                  cursor: "pointer",
+                  textDecoration: "underline"
+                }}
+              >
+                here
+              </span>
+              <span> to re-send your event link.</span>
+          </label>
         </div>
       </div>
+      {/* Re-send event link modal */}
+      <Modal
+        aria-labelledby="transition-modal-title"
+        aria-describedby="transition-modal-description"
+        open={openReSendLink}
+        onClose={closeReSendLinkModal}
+        closeAfterTransition
+        BackdropComponent={Backdrop}
+        BackdropProps={{
+          timeout: 500,
+        }}
+        disableAutoFocus={true}
+        className={classes.modal}
+      >
+        <Fade in={openReSendLink}>
+          <div className={classes.paper}>
+            <div className="cancel-bar">
+              <Tooltip title="Close">
+                <img
+                  src={Cancel}
+                  className="cancel-bar-icon"
+                  onClick={closeReSendLinkModal}
+                ></img>
+              </Tooltip>
+            </div>
+            <div style ={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
+              <p>Please enter the email address you registered with.</p>
+              <input
+                type="text"
+                class="form-control"
+                value={emailAddressReSend}
+                onChange={handleEmailReSendChange}
+                onBlur={handleEmailBlur}
+                placeholder="email@email.com"
+              />
+              <div className="btn-toolbar">
+                <button className="btn btn-school btn-big theme-button">Re-Send My Event Link</button>
+              </div>
+
+              {/* Email found and link sent confirmation message: */}
+              {emailFound === true && (
+                <>
+                  <br></br>
+                  <br></br>
+                  <p>Your link to join the event has been sent to the email address you entered.</p>
+                  <p>Please check your inbox and if it’s not there, try checking your junk mail.</p>
+                </>
+              )}
+
+              {/* Email not found message: */}
+              {emailNotFound === true && (
+                <>
+                  <br></br>
+                  <br></br>
+                  <p>No registration found for this address. Please close this window and register to attend the event.</p>
+                </>
+              )}
+            </div>
+          </div>
+        </Fade>
+      </Modal>
     </div>
   );
 }
