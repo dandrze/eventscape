@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
+import Tooltip from "@material-ui/core/Tooltip";
 import TelegramIcon from "@material-ui/icons/Telegram";
+import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
@@ -26,17 +28,18 @@ const InfoBar = () => (
   </div>
 );
 
-const Messages = ({ messages, name }) => (
+const Messages = ({ messages, name, isModerator }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
-        <Message message={message} name={name} />
+        <Message message={message} name={name} isModerator={isModerator} />
       </div>
     ))}
   </ScrollToBottom>
 );
 
-const Message = ({ message: { text, user }, name }) => {
+const Message = ({ message: { text, user }, name, isModerator }) => {
+
   let isSentByCurrentUser = false;
 
   if (user === name) {
@@ -49,9 +52,25 @@ const Message = ({ message: { text, user }, name }) => {
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
       </div>
+
+      {/* Moderator Controls */}
+      {isModerator === "true" && (
+        <Tooltip title="Delete chat message" className="delete-chat-message">
+          <DeleteOutlineIcon />
+        </Tooltip>
+      )}
+      
     </div>
   ) : (
     <div className="messageContainer justifyStart">
+
+      {/* Moderator Controls */}
+      {isModerator === "true" && (
+        <Tooltip title="Delete chat message" className="delete-chat-message">
+          <DeleteOutlineIcon />
+        </Tooltip>
+      )}
+
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
       </div>
@@ -82,7 +101,7 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const Chat = ({ room, name }) => {
+const Chat = ({ room, name, isModerator }) => {
   //const [name, setName] = useState("");
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
@@ -134,7 +153,11 @@ const Chat = ({ room, name }) => {
     <div className="chatOuterContainer">
       <div className="chatContainer">
         <InfoBar />
-        <Messages messages={messages} name={name} />
+        <Messages 
+          messages={messages} 
+          name={name} 
+          isModerator={isModerator}
+        />
         <Input
           message={message}
           setMessage={setMessage}
