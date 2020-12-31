@@ -4,6 +4,7 @@ import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import clsx from "clsx";
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
@@ -59,7 +60,7 @@ const Message = ({ message: { text, user }, name, isModerator }) => {
           <DeleteOutlineIcon />
         </Tooltip>
       )}
-      
+
     </div>
   ) : (
     <div className="messageContainer justifyStart">
@@ -150,7 +151,12 @@ const Chat = ({ room, name, isModerator }) => {
   };
 
   return (
-    <div className="chatOuterContainer">
+    <div 
+      className={clsx({
+        "chatOuterContainer": true,
+        "display-none": (isModerator === "false" && chatVisible === false),
+      })}
+    >
       <div className="chatContainer">
         <InfoBar />
         <Messages 
