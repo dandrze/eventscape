@@ -30,8 +30,11 @@ const StreamChat = (props) => {
     }
   };
 
-  console.log("stream-chat refreshed");
-  console.log(props.event.id);
+  // if there is an attendee object in redux, show the attendees name, else show Guest1234 (random number)
+  const name = props.attendee.first_name
+    ? props.attendee.first_name + " " + props.attendee.last_name
+    : "Guest" + Math.floor(Math.random() * 1000).toString();
+
   return (
     <div>
       <section class="container2">
@@ -39,7 +42,7 @@ const StreamChat = (props) => {
           <div className="video-responsive">{displayStream()}</div>
         </div>
         <div class="two2">
-          <Chat room={props.event.id} />
+          <Chat room={props.event.id} name={name} />
         </div>
       </section>
     </div>
@@ -47,7 +50,7 @@ const StreamChat = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { event: state.event };
+  return { event: state.event, attendee: state.attendee };
 };
 
 export default connect(mapStateToProps)(StreamChat);

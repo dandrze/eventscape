@@ -7,6 +7,7 @@ import settingsReducer from "./settingsReducer";
 import eventListReducer from "./eventListReducer";
 import registrationReducer from "./registrationReducer";
 import emailReducer from "./emailReducer";
+import attendeeReducer from "./attendeeReducer";
 
 export default combineReducers({
   user: userReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   eventList: eventListReducer,
   registration: registrationReducer,
   email: emailReducer,
+  attendee: attendeeReducer,
 });

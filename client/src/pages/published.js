@@ -13,7 +13,6 @@ import { streamChatModel } from "../templates/designBlockModels";
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
-  const [attendee, setAttendee] = useState({});
 
   useEffect(() => {
     fetchData();
@@ -22,9 +21,7 @@ const Published = (props) => {
   const fetchData = async () => {
     console.log(hash);
     if (hash) {
-      const attendee = await props.fetchAttendeeData(hash);
-      console.log(attendee);
-      setAttendee(attendee);
+      await props.fetchAttendeeData(hash);
     }
 
     const { event, pageModel } = await props.fetchLivePage(
@@ -62,7 +59,7 @@ const Published = (props) => {
       return <CircularProgress />;
     } else if (!props.event.id) {
       return <p>No Event Found</p>;
-    } else if (hash && !attendee) {
+    } else if (hash && !props.attendee) {
       // if there is a hash but no attendee returned
       // We can have a login page instead here in the future
       return <p>The unique link didn't work. Login page goes here</p>;
@@ -96,7 +93,12 @@ const Published = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { model: state.model, event: state.event, settings: state.settings };
+  return {
+    model: state.model,
+    event: state.event,
+    settings: state.settings,
+    attendee: state.attendee,
+  };
 };
 
 export default connect(mapStateToProps, actions)(Published);

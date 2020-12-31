@@ -4,7 +4,6 @@ const passport = require("passport");
 const secure = require("express-force-https");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
-var socketIo = require("socket.io");
 const http = require("http");
 
 const db = require("./db");
@@ -16,6 +15,7 @@ const registrationRoutes = require("./routes/registrationRoutes");
 const emailRoutes = require("./routes/emailRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const liveEventRoutes = require("./routes/liveEventRoutes");
+const socket = require("./services/socket");
 require("./services/passport");
 
 const app = express();
@@ -59,43 +59,7 @@ if (process.env.NODE_ENV == "production") {
 
 const server = http.createServer(app);
 
-const io = socketIo(server, {
-  path: "/api/socket",
-  cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"],
-  },
-});
-
-io.on("connection", (socket) => {
-  console.log("New client connected");
-
-  socket.on("join", ({ name, room }, callback) => {
-    socket.join(room);
-
-    socket.emit("message", {
-      user: "admin",
-      text: `${name}, welcome to room ${room}.`,
-    });
-    socket.broadcast
-      .to(room)
-      .emit("message", { user: "admin", text: `${name} has joined!` });
-
-    //io.to(room).emit("roomData", { room: room, users: getUsersInRoom(room) });
-
-    socket.on("sendMessage", ({ name, room, message }, callback) => {
-      io.to(room).emit("message", { user: name, text: message });
-
-      callback();
-    });
-
-    callback();
-  });
-
-  socket.on("disconnect", (reason) => {
-    console.log("Client disconnected: " + reason);
-  });
-});
+require("./services/socket")(server);
 
 const PORT = process.env.PORT || 5000;
 

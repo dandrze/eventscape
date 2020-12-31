@@ -53,7 +53,7 @@ const Messaging = (props) => {
             <div className="form-box shadow-border" id="chat">
               <div className="chat-container">
                 {props.event.id ? (
-                  <Chat room={props.event.id} name="Admin" />
+                  <Chat room={props.event.id} name={displayName} />
                 ) : null}
               </div>
               <div className="chat-options">

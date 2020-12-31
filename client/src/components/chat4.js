@@ -39,15 +39,13 @@ const Messages = ({ messages, name }) => (
 const Message = ({ message: { text, user }, name }) => {
   let isSentByCurrentUser = false;
 
-  const trimmedName = name.trim().toLowerCase();
-
-  if (user === trimmedName) {
+  if (user === name) {
     isSentByCurrentUser = true;
   }
 
   return isSentByCurrentUser ? (
     <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{trimmedName}</p>
+      <p className="sentText pr-10">{name}</p>
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
       </div>
@@ -89,12 +87,9 @@ const Chat = ({ room, name }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [chatVisible, setChatVisible] = useState(true);
 
   console.log(room);
-
-  if (!name) {
-    name = "Guest";
-  }
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -114,6 +109,10 @@ const Chat = ({ room, name }) => {
 
     socket.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
+    });
+
+    socket.on("setChatVisible", (isVisible) => {
+      setChatVisible(isVisible);
     });
 
     socket.emit("join", { name, room }, (error) => {
