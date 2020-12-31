@@ -1,4 +1,6 @@
 var socketIo = require("socket.io");
+const conn = require("../sequelize").conn;
+const { ChatRoom, ChatUser, ChatMessage } = require("../sequelize").models;
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -12,8 +14,21 @@ module.exports = (server) => {
   io.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("join", ({ name, room }, callback) => {
-      socket.join(room);
+    socket.on("join", async ({ name, room }, callback) => {
+      const user = await ChatUser.findOrCreate({
+        where: {
+          name,
+        },
+      });
+
+      const chatRoom = await ChatRoom.findOrCreate({
+        where: {
+          event: room,
+        },
+      });
+
+      console.log(user);
+      socket.join(chatRoom);
 
       socket.emit("message", {
         user: "host",
@@ -28,6 +43,12 @@ module.exports = (server) => {
         io.to(room).emit("message", { user: name, text: message });
 
         callback();
+      });
+
+      socket.on("setChatHidden", ({ isHidden, room }) => {
+        console.log(isHidden);
+        console.log(room);
+        io.to(room).emit("chatHidden", isHidden);
       });
 
       callback();

@@ -3,7 +3,7 @@ import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
 import TelegramIcon from "@material-ui/icons/Telegram";
-import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import clsx from "clsx";
 
 /* Code based on the following tutorial: 
@@ -40,7 +40,6 @@ const Messages = ({ messages, name, isModerator }) => (
 );
 
 const Message = ({ message: { text, user }, name, isModerator }) => {
-
   let isSentByCurrentUser = false;
 
   if (user === name) {
@@ -55,18 +54,16 @@ const Message = ({ message: { text, user }, name, isModerator }) => {
       </div>
 
       {/* Moderator Controls */}
-      {isModerator === "true" && (
+      {isModerator && (
         <Tooltip title="Delete chat message" className="delete-chat-message">
           <DeleteOutlineIcon />
         </Tooltip>
       )}
-
     </div>
   ) : (
     <div className="messageContainer justifyStart">
-
       {/* Moderator Controls */}
-      {isModerator === "true" && (
+      {isModerator && (
         <Tooltip title="Delete chat message" className="delete-chat-message">
           <DeleteOutlineIcon />
         </Tooltip>
@@ -107,7 +104,7 @@ const Chat = ({ room, name, isModerator }) => {
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
-  const [chatVisible, setChatVisible] = useState(true);
+  const [chatHidden, setChatHidden] = useState(false);
 
   console.log(room);
 
@@ -131,8 +128,9 @@ const Chat = ({ room, name, isModerator }) => {
       setMessages((messages) => [...messages, message]);
     });
 
-    socket.on("setChatVisible", (isVisible) => {
-      setChatVisible(isVisible);
+    socket.on("chatHidden", (isHidden) => {
+      console.log(isHidden);
+      setChatHidden(isHidden);
     });
 
     socket.emit("join", { name, room }, (error) => {
@@ -151,19 +149,15 @@ const Chat = ({ room, name, isModerator }) => {
   };
 
   return (
-    <div 
+    <div
       className={clsx({
-        "chatOuterContainer": true,
-        "display-none": (isModerator === "false" && chatVisible === false),
+        chatOuterContainer: true,
+        "display-none": !isModerator && chatHidden,
       })}
     >
       <div className="chatContainer">
         <InfoBar />
-        <Messages 
-          messages={messages} 
-          name={name} 
-          isModerator={isModerator}
-        />
+        <Messages messages={messages} name={name} isModerator={isModerator} />
         <Input
           message={message}
           setMessage={setMessage}

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useEffect } from "react";
 import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import "./messaging.css";
@@ -11,6 +11,11 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import AlertModal from "../components/AlertModal";
+import io from "socket.io-client";
+
+const ENDPOINT = "http://localhost:5000/";
+
+let socket;
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -25,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
 const Messaging = (props) => {
   const classes = useStyles();
   const [displayName, setDisplayName] = React.useState("Moderator");
-  const [hideOn, setHideOn] = React.useState({
+  const [isHidden, setIsHidden] = React.useState({
     checked: false,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
@@ -33,8 +38,12 @@ const Messaging = (props) => {
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
   };
-  const handleChange = (event) => {
-    setHideOn({ ...hideOn, [event.target.name]: event.target.checked });
+  const handleChangeIsHidden = (event) => {
+    socket.emit("setChatHidden", {
+      isHidden: event.target.checked,
+      room: props.event.id,
+    });
+    setIsHidden({ ...isHidden, [event.target.name]: event.target.checked });
   };
   const handleNavAlertOpen = () => {
     setNavAlertOpen(true);
@@ -42,6 +51,29 @@ const Messaging = (props) => {
   const handleNavAlertClose = () => {
     setNavAlertOpen(false);
   };
+
+  useEffect(() => {
+    socket = io(ENDPOINT, {
+      path: "/api/socket",
+      transports: ["websocket"],
+    });
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+    socket.on("connect_error", (error) => {
+      console.log(error);
+    });
+
+    socket.on("roomData", ({ users }) => {
+      console.log(users);
+    });
+
+    socket.emit("join", { name: "admin", room: props.event.id }, (error) => {
+      if (error) {
+        alert(error);
+      }
+    });
+  }, []);
 
   return (
     <div>
@@ -53,10 +85,10 @@ const Messaging = (props) => {
             <div className="form-box shadow-border" id="chat">
               <div className="chat-container">
                 {props.event.id ? (
-                  <Chat 
-                    room={props.event.id} 
-                    name={displayName} 
-                    isModerator="true"
+                  <Chat
+                    room={props.event.id}
+                    name={displayName}
+                    isModerator={true}
                   />
                 ) : null}
               </div>
@@ -78,8 +110,8 @@ const Messaging = (props) => {
                     <FormControlLabel
                       control={
                         <Switch1
-                          checked={hideOn.checked}
-                          onChange={handleChange}
+                          checked={isHidden.checked}
+                          onChange={handleChangeIsHidden}
                           name="checked"
                         />
                       }
