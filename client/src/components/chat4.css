@@ -56,6 +56,11 @@
   padding-bottom: 16px;
 }
 
+.info-bar-icon {
+  height: 28px;
+  margin-right: 12px;
+}
+
 .onlineIcon {
   margin-right: 5%;
 }
@@ -166,7 +171,8 @@
   width: 80%;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-size: 18px;
+  font-size: 15px;
+  line-height: 18px;
 }
 
 input:focus,

@@ -37,12 +37,16 @@ const StreamChat = (props) => {
 
   return (
     <div>
-      <section class="container2">
-        <div class="one2">
+      <section class="stream-chat-main-container">
+        <div class="container-one-video-window">
           <div className="video-responsive">{displayStream()}</div>
         </div>
-        <div class="two2">
-          <Chat room={props.event.id} name={name} isModerator={false} />
+        <div class="container-two-chat-window">
+          <div className="chat-responsive">
+            <div id="video-responsive-iframe">
+              <Chat room={props.event.id} name={name} isModerator={false} />
+            </div>
+          </div>
         </div>
       </section>
     </div>

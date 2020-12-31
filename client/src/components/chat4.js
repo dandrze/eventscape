@@ -2,9 +2,12 @@ import React, { useState, useEffect } from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
+import clsx from "clsx";
+
+/* Icons */
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import clsx from "clsx";
+import ChatWhiteIcon from "../icons/chat-white.svg";
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
@@ -23,6 +26,7 @@ let socket;
 const InfoBar = () => (
   <div className="infoBar">
     <div className="leftInnerContainer box-header">
+      <img src={ChatWhiteIcon} className="info-bar-icon"></img>
       <h3 id="chatText">Chat</h3>
     </div>
     <div className="rightInnerContainer"></div>
