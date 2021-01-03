@@ -44,7 +44,7 @@ const StreamChat = (props) => {
         <div class="container-two-chat-window">
           <div className="chat-responsive">
             <div id="video-responsive-iframe">
-              <Chat room={props.event.id} name={name} isModerator={false} />
+              <Chat room={props.chatRoom} name={name} isModerator={false} />
             </div>
           </div>
         </div>

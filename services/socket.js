@@ -15,43 +15,43 @@ module.exports = (server) => {
     console.log("New client connected");
 
     socket.on("join", async ({ name, room }, callback) => {
-      const user = await ChatUser.findOrCreate({
+      const [user] = await ChatUser.findOrCreate({
         where: {
           name,
         },
       });
 
-      const chatRoom = await ChatRoom.findOrCreate({
-        where: {
-          event: room,
-        },
-      });
-
-      console.log(user);
-      socket.join(chatRoom);
+      socket.join(room);
 
       socket.emit("message", {
         user: "host",
-        text: `${name}, welcome to room ${room}.`,
+        text: `${user.name}, welcome to room ${room}.`,
       });
 
       socket.broadcast
-        .to(room)
-        .emit("message", { user: "host", text: `${name} has joined!` });
-
-      socket.on("sendMessage", ({ name, room, message }, callback) => {
-        io.to(room).emit("message", { user: name, text: message });
-
-        callback();
-      });
-
-      socket.on("setChatHidden", ({ isHidden, room }) => {
-        console.log(isHidden);
-        console.log(room);
-        io.to(room).emit("chatHidden", isHidden);
-      });
+        .to(user.ChatRoomId)
+        .emit("message", { user: "host", text: `${user.name} has joined!` });
 
       callback();
+    });
+
+    socket.on("sendMessage", async ({ name, room, message }, callback) => {
+      const chatRoom = await ChatRoom.findByPk(room);
+
+      const chatMessage = await ChatMessage.create({
+        ChatRoomId: room,
+        text: message,
+      });
+
+      io.to(room).emit("message", { user: name, text: message });
+
+      callback();
+    });
+
+    socket.on("setChatHidden", ({ isHidden, room }) => {
+      console.log(isHidden);
+      console.log(room);
+      io.to(room).emit("chatHidden", isHidden);
     });
 
     socket.on("disconnect", (reason) => {

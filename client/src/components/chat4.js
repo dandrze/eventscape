@@ -147,6 +147,8 @@ const Chat = ({ room, name, isModerator }) => {
   const sendMessage = (event) => {
     event.preventDefault();
 
+    console.log(name, room, message);
+
     if (message) {
       socket.emit("sendMessage", { name, room, message }, () => setMessage(""));
     }

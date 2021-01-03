@@ -53,7 +53,7 @@ import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
 
 /* Icons side nav account */
-import ArrowBackIcon from '@material-ui/icons/ArrowBack';
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import AccountIcon from "../icons/account.svg";
 import KeyIcon from "../icons/key.svg";
 import CreditCardIcon from "../icons/credit-card.svg";

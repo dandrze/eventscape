@@ -52,29 +52,6 @@ const Messaging = (props) => {
     setNavAlertOpen(false);
   };
 
-  useEffect(() => {
-    socket = io(ENDPOINT, {
-      path: "/api/socket",
-      transports: ["websocket"],
-    });
-    socket.on("connect", () => {
-      console.log(socket.id);
-    });
-    socket.on("connect_error", (error) => {
-      console.log(error);
-    });
-
-    socket.on("roomData", ({ users }) => {
-      console.log(users);
-    });
-
-    socket.emit("join", { name: "admin", room: props.event.id }, (error) => {
-      if (error) {
-        alert(error);
-      }
-    });
-  }, []);
-
   return (
     <div>
       <NavBar3

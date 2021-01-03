@@ -62,6 +62,12 @@ export const addSection = (
     },
   };
 
+  console.log(react_component);
+  if (react_component.name === "StreamChat") {
+    const chatRoom = await api.post("/api/model/chat", getState().event.id);
+    react_component.props.chatRoom = chatRoom.data.id;
+  }
+
   dispatch({ type: ADD_SECTION, payload });
 
   //signals to the caller that the process is complete. Needed for async await.
