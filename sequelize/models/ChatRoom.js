@@ -6,7 +6,7 @@ const ChatRoom = conn.define(
   "ChatRoom",
   {
     event: Sequelize.INTEGER,
-    hidden: Sequelize.BOOLEAN,
+    isHidden: Sequelize.BOOLEAN,
     isDefault: Sequelize.BOOLEAN,
   },
   {

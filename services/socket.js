@@ -15,6 +15,8 @@ module.exports = (server) => {
     console.log("New client connected");
 
     socket.on("join", async ({ name, room }, callback) => {
+      const chatRoom = await ChatRoom.findByPk(room);
+
       const [user] = await ChatUser.findOrCreate({
         where: {
           name,
@@ -22,6 +24,10 @@ module.exports = (server) => {
       });
 
       socket.join(room);
+      // push the hidden state (true or false)
+      console.log(chatRoom.id);
+      console.log(chatRoom.isHidden);
+      io.emit("chatHidden", chatRoom.isHidden);
 
       socket.emit("message", {
         user: "host",
@@ -52,7 +58,12 @@ module.exports = (server) => {
       callback();
     });
 
-    socket.on("setChatHidden", ({ isHidden, room }) => {
+    socket.on("setChatHidden", async ({ isHidden, room }) => {
+      const chatRoom = await ChatRoom.findByPk(room);
+
+      chatRoom.isHidden = isHidden;
+      await chatRoom.save();
+
       console.log(isHidden);
       console.log(room);
       io.to(room).emit("chatHidden", isHidden);

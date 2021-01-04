@@ -152,6 +152,7 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
   const [chatHidden, setChatHidden] = useState(false);
 
   console.log(messages);
+  console.log(chatHidden);
 
   useEffect(() => {
     socket = io(ENDPOINT, {
