@@ -83,6 +83,7 @@ const Messaging = (props) => {
                     />
                   </div>
                   <div className="chat-options">
+                    <p>Room: Main Chat</p>
                     <FormControl
                       variant="outlined"
                       className={classes.formControl}

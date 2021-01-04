@@ -23,6 +23,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
+import Tabs from "../components/Tabs";
+import RoomTable from "./room-table";
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,6 +69,7 @@ function DesignBlockToolbar(props) {
   const [youtubeLink, setYoutubeLink] = React.useState("");
   const [customHTML, setCustomHTML] = React.useState("");
   const [sectionTooltip, setSectionTooltip] = React.useState("");
+  const [room, setRoom] = React.useState("main-chat");
 
   const showStreamSettings =
     props.section.is_react &&
@@ -135,6 +139,10 @@ function DesignBlockToolbar(props) {
 
   const handleChangeCustomHTML = (event) => {
     setCustomHTML(event.target.value);
+  };
+
+  const handleChangeRoom = (event) => {
+    setRoom(event.target.value);
   };
 
   const handleClickMove = (offset) => {
@@ -237,83 +245,122 @@ function DesignBlockToolbar(props) {
       >
         <div className={classes.paper}>
           <div id="testEmailModal">
-            <h3>Stream Settings</h3>
-            <div className={classes.root}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    {/* Category */}
-                    <InputLabel id="content">Content</InputLabel>
-                    <Select
-                      labelId="content"
-                      id="content-select"
-                      required="true"
-                      value={content}
-                      onChange={handleChangeContent}
-                    >
-                      <MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
-                      <MenuItem value={"custom-embed"}>
-                        Custom HTML Embed (Advanced)
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  {content === "youtube-live" && (
-                    <div>
-                      <FormControl
-                        variant="outlined"
-                        className={classes.formControl}
-                      >
-                        <TextField
-                          id="youtube-link"
-                          label="Youtube Link"
+            <h3>Settings</h3>
+            <br></br>
+            <Tabs>
+              <div label="Stream">
+                <div className="settings-container">
+                  <div className={classes.root}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <FormControl
                           variant="outlined"
-                          value={youtubeLink}
-                          onChange={handleChangeYoutubeLink}
-                          placeholder="http://www.youtube.com"
-                        />
-                      </FormControl>
-                      <p>
-                        Need help? Click here for instructions on setting up a
-                        YouTube Live stream.
-                      </p>
-                      <p>
-                        Heads up! YouTube may take down any streams containing
-                        copyrighted music.
-                      </p>
-                    </div>
-                  )}
-                  {content === "custom-embed" && (
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <TextField
-                        id="custom-HTML"
-                        label="Custom HTML"
-                        variant="outlined"
-                        multiline
-                        rows={12}
-                        value={customHTML}
-                        onChange={handleChangeCustomHTML}
-                      />
-                    </FormControl>
-                  )}
-                </Grid>
-                <Grid item xs={12} id="save-button">
-                  <button
-                    className="Button1"
-                    onClick={handleSaveStreamSettings}
-                  >
-                    Save
-                  </button>
-                </Grid>
-              </Grid>
-            </div>
+                          className={classes.formControl}
+                        >
+                          {/* Category */}
+                          <InputLabel id="content" className="fix-mui-select-label">Content</InputLabel>
+                          <Select
+                            labelId="content"
+                            id="content-select"
+                            required="true"
+                            value={content}
+                            onChange={handleChangeContent}
+                          >
+                            <MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
+                            <MenuItem value={"custom-embed"}>
+                              Custom HTML Embed (Advanced)
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
+                        {content === "youtube-live" && (
+                          <div>
+                            <FormControl
+                              variant="outlined"
+                              className={classes.formControl}
+                            >
+                              <TextField
+                                id="youtube-link"
+                                label="Youtube Link"
+                                variant="outlined"
+                                value={youtubeLink}
+                                onChange={handleChangeYoutubeLink}
+                                placeholder="http://www.youtube.com"
+                              />
+                            </FormControl>
+                            <p>
+                              Need help? Click here for instructions on setting up a
+                              YouTube Live stream.
+                            </p>
+                            <p>
+                              Heads up! YouTube may take down any streams containing
+                              copyrighted music.
+                            </p>
+                          </div>
+                        )}
+                        {content === "custom-embed" && (
+                          <FormControl
+                            variant="outlined"
+                            className={classes.formControl}
+                          >
+                            <TextField
+                              id="custom-HTML"
+                              label="Custom HTML"
+                              variant="outlined"
+                              multiline
+                              rows={12}
+                              value={customHTML}
+                              onChange={handleChangeCustomHTML}
+                            />
+                          </FormControl>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} id="save-button">
+                        <button
+                          className="Button1"
+                          onClick={handleSaveStreamSettings}
+                        >
+                          Save
+                        </button>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </div>
+              </div>
+              <div label="Chat">
+                <div className="settings-container">
+                  <div className={classes.root}>
+                    <p>If you would like to have multiple independent chat windows, you can create and assign new rooms below.</p>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          {/* Chat Room */}
+                          <InputLabel id="room" className="fix-mui-select-label">Room Assignment</InputLabel>
+                          <Select
+                            labelId="room"
+                            id="room-select"
+                            required="true"
+                            value={room}
+                            onChange={handleChangeRoom}
+                          >
+                            <MenuItem value={"main-chat"}>
+                              Main Chat (Default)
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <RoomTable />
+                      </Grid>
+                    </Grid>
+                  </div>
+                </div>
+              </div>
+            </Tabs>
           </div>
         </div>
       </Modal>
