@@ -2,21 +2,9 @@ import React, { Component, useEffect } from "react";
 import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import "./messaging.css";
-import Chat from "../components/chat4.js";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch1 from "../components/switch";
-import Tooltip from "@material-ui/core/Tooltip";
-import FormControl from "@material-ui/core/FormControl";
-import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
-import AlertModal from "../components/AlertModal";
-import io from "socket.io-client";
 import * as actions from "../actions";
-
-const ENDPOINT = "http://localhost:5000/";
-
-let socket;
+import ModeratorChat from "../components/ModeratorChat.js";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -29,32 +17,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const Messaging = (props) => {
-  const classes = useStyles();
-  const [displayName, setDisplayName] = React.useState("Moderator");
-  const [isHidden, setIsHidden] = React.useState({
-    checked: false,
-  });
-  const [navAlertOpen, setNavAlertOpen] = React.useState(false);
   const [chatRooms, setChatRooms] = React.useState([]);
-
-  const chatRef = React.useRef();
-
-  const handleChangeDisplayName = (event) => {
-    setDisplayName(event.target.value);
-  };
-  const handleChangeIsHidden = (event) => {
-    socket.emit("setChatHidden", {
-      isHidden: event.target.checked,
-      room: props.event.id,
-    });
-    setIsHidden({ ...isHidden, [event.target.name]: event.target.checked });
-  };
-  const handleNavAlertOpen = () => {
-    setNavAlertOpen(true);
-  };
-  const handleNavAlertClose = () => {
-    setNavAlertOpen(false);
-  };
 
   useEffect(() => {
     fetchData();
@@ -67,11 +30,6 @@ const Messaging = (props) => {
     }
   };
 
-  const handleDeleteAllMessages = () => {
-    chatRef.current.deleteAllMessages();
-    setNavAlertOpen(false);
-  };
-
   return (
     <div>
       <NavBar3
@@ -80,63 +38,7 @@ const Messaging = (props) => {
         content={
           <div className="mainWrapper container-width">
             {chatRooms.map((chatRoom) => {
-              return (
-                <div className="form-box shadow-border" id="chat">
-                  <div className="chat-container">
-                    <Chat
-                      room={chatRoom.id}
-                      name={displayName}
-                      isModerator={true}
-                      ref={chatRef}
-                    />
-                  </div>
-                  <div className="chat-options">
-                    <p>Room: Main Chat</p>
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      {/* Display Name */}
-                      <TextField
-                        id="title"
-                        label="Display Name"
-                        variant="outlined"
-                        value={displayName}
-                        onChange={handleChangeDisplayName}
-                      />
-                      <br></br>
-                      <br></br>
-                    </FormControl>
-                    <Tooltip title="Temporarily hides chat. To permanently remove chat, remove the design block that contains the chat window.">
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Switch1
-                              checked={isHidden.checked}
-                              onChange={handleChangeIsHidden}
-                              name="checked"
-                            />
-                          }
-                          label="Temporarily Hide Chat"
-                        />
-                      </FormGroup>
-                    </Tooltip>
-                    <button className="Button2" onClick={handleNavAlertOpen}>
-                      Delete All Chat Messages
-                    </button>
-                    <AlertModal
-                      open={navAlertOpen}
-                      onClose={handleNavAlertClose}
-                      onContinue={() => {
-                        handleDeleteAllMessages();
-                      }}
-                      text="Are you sure you want to delete all chat messages?"
-                      closeText="Go back"
-                      continueText="Yes, Delete"
-                    />
-                  </div>
-                </div>
-              );
+              return <ModeratorChat room={chatRoom.id} />;
             })}
 
             <div className="form-box shadow-border">

@@ -190,8 +190,11 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
   // code below pulls in functions from messaging for moderator actions
   useImperativeHandle(ref, () => ({
     deleteAllMessages() {
-      console.log("child delete all called");
+      console.log("child delete all called: " + room);
       socket.emit("deleteAllMessages", { room });
+    },
+    setIsHidden(isHidden) {
+      socket.emit("setChatHidden", { isHidden, room });
     },
   }));
 
@@ -218,20 +221,24 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
         "display-none": !isModerator && chatHidden,
       })}
     >
-      <div className="chatContainer">
-        <InfoBar />
-        <Messages
-          messages={messages}
-          name={name}
-          isModerator={isModerator}
-          deleteMessage={deleteMessage}
-        />
-        <Input
-          message={message}
-          setMessage={setMessage}
-          sendMessage={sendMessage}
-        />
-      </div>
+      {isModerator && chatHidden ? (
+        <p>Chat Hidden From Participants</p>
+      ) : (
+        <div className="chatContainer">
+          <InfoBar />
+          <Messages
+            messages={messages}
+            name={name}
+            isModerator={isModerator}
+            deleteMessage={deleteMessage}
+          />
+          <Input
+            message={message}
+            setMessage={setMessage}
+            sendMessage={sendMessage}
+          />
+        </div>
+      )}
     </div>
   );
 });
