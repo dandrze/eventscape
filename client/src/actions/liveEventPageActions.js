@@ -38,3 +38,11 @@ export const fetchAttendeeData = (hash) => async (dispatch) => {
     payload: attendee.data,
   });
 };
+
+export const fetchChatRooms = (event) => async (dispatch) => {
+  const chatRooms = await api.get("/api/event/chatroom/all", {
+    params: { event },
+  });
+
+  return chatRooms;
+};

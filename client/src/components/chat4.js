@@ -33,25 +33,42 @@ const InfoBar = () => (
   </div>
 );
 
-const Messages = ({ messages, name, isModerator }) => (
+const Messages = ({ messages, name, isModerator, deleteMessage }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
-        <Message message={message} name={name} isModerator={isModerator} />
+        <Message
+          message={message}
+          name={name}
+          isModerator={isModerator}
+          deleteMessage={deleteMessage}
+        />
       </div>
     ))}
   </ScrollToBottom>
 );
 
-const Message = ({ message: { text, user }, name, isModerator }) => {
+const Message = ({
+  message: { text, user, id, deleted },
+  name,
+  isModerator,
+  deleteMessage,
+}) => {
   let isSentByCurrentUser = false;
 
   if (user === name) {
     isSentByCurrentUser = true;
   }
 
+  if (deleted && !isModerator) {
+    // if the message is deleted and it is not the moderator, don't show the message
+    return null;
+  }
+
+  const deletedClassName = isModerator && deleted ? "deleted-message" : null;
+
   return isSentByCurrentUser ? (
-    <div className="messageContainer justifyEnd">
+    <div className={"messageContainer justifyEnd " + deletedClassName}>
       <p className="sentText pr-10">{name}</p>
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
@@ -60,16 +77,16 @@ const Message = ({ message: { text, user }, name, isModerator }) => {
       {/* Moderator Controls */}
       {isModerator && (
         <Tooltip title="Delete chat message" className="delete-chat-message">
-          <DeleteOutlineIcon />
+          <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
         </Tooltip>
       )}
     </div>
   ) : (
-    <div className="messageContainer justifyStart">
+    <div className={"messageContainer justifyStart " + deletedClassName}>
       {/* Moderator Controls */}
       {isModerator && (
         <Tooltip title="Delete chat message" className="delete-chat-message">
-          <DeleteOutlineIcon />
+          <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
         </Tooltip>
       )}
 
@@ -110,7 +127,7 @@ const Chat = ({ room, name, isModerator }) => {
   const [messages, setMessages] = useState([]);
   const [chatHidden, setChatHidden] = useState(false);
 
-  console.log(room);
+  console.log(messages);
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -129,7 +146,20 @@ const Chat = ({ room, name, isModerator }) => {
     });
 
     socket.on("message", (message) => {
+      console.log(message);
       setMessages((messages) => [...messages, message]);
+    });
+    socket.on("delete", (id) => {
+      //map through the messages array and add the deleted flag to the message with the target id
+      setMessages((messages) =>
+        messages.map((message) => {
+          if (message.id == id) {
+            return { ...message, deleted: true };
+          } else {
+            return message;
+          }
+        })
+      );
     });
 
     socket.on("chatHidden", (isHidden) => {
@@ -150,8 +180,14 @@ const Chat = ({ room, name, isModerator }) => {
     console.log(name, room, message);
 
     if (message) {
-      socket.emit("sendMessage", { name, room, message }, () => setMessage(""));
+      socket.emit("sendMessage", { name, room, message }, () => {
+        setMessage("");
+      });
     }
+  };
+
+  const deleteMessage = (id) => {
+    socket.emit("deleteMessage", { id, room });
   };
 
   return (
@@ -163,7 +199,12 @@ const Chat = ({ room, name, isModerator }) => {
     >
       <div className="chatContainer">
         <InfoBar />
-        <Messages messages={messages} name={name} isModerator={isModerator} />
+        <Messages
+          messages={messages}
+          name={name}
+          isModerator={isModerator}
+          deleteMessage={deleteMessage}
+        />
         <Input
           message={message}
           setMessage={setMessage}

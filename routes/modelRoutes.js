@@ -3,9 +3,6 @@ const router = express.Router();
 
 const db = require("../db");
 
-const conn = require("../sequelize").conn;
-const { ChatRoom } = require("../sequelize").models;
-
 router.get("/api/model/id", async (req, res) => {
   const id = req.query.id;
   const sectionList = await db.query(
@@ -77,16 +74,6 @@ router.put("/api/model", async (req, res) => {
   }
 
   res.status(200).send();
-});
-
-router.post("/api/model/chat", async (req, res) => {
-  const { eventId } = req.body;
-
-  const newRoom = await ChatRoom.create({ event: eventId });
-
-  console.log(newRoom);
-
-  res.status(200).send({ id: newRoom.id });
 });
 
 module.exports = router;

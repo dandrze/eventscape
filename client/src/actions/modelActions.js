@@ -62,9 +62,10 @@ export const addSection = (
     },
   };
 
-  console.log(react_component);
   if (react_component.name === "StreamChat") {
-    const chatRoom = await api.post("/api/model/chat", getState().event.id);
+    const chatRoom = await api.post("/api/event/chatroom/default", {
+      event: getState().event.id,
+    });
     react_component.props.chatRoom = chatRoom.data.id;
   }
 
@@ -74,8 +75,8 @@ export const addSection = (
   return true;
 };
 
-export const deleteSection = (index) => {
-  return { type: DELETE_SECTION, payload: { index } };
+export const deleteSection = (index, section) => async (dispatch, getState) => {
+  dispatch({ type: DELETE_SECTION, payload: { index } });
 };
 
 export const moveSection = (index, offset) => {

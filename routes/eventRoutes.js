@@ -4,6 +4,9 @@ const router = express.Router();
 const db = require("../db");
 const requireAuth = require("../middlewares/requireAuth");
 
+const conn = require("../sequelize").conn;
+const { ChatRoom } = require("../sequelize").models;
+
 router.post("/api/event", async (req, res) => {
   const {
     title,
@@ -319,6 +322,33 @@ router.put("/api/event/set-registration", async (req, res) => {
   );
 
   res.status(200).send(updatedEvent.rows[0]);
+});
+
+router.post("/api/event/chatroom/default", async (req, res) => {
+  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
+  const { event } = req.body;
+
+  const [newRoom] = await ChatRoom.findOrCreate({
+    where: {
+      event,
+      isDefault: true,
+    },
+  });
+
+  console.log(newRoom);
+
+  res.status(200).send({ id: newRoom.id });
+});
+
+router.get("/api/event/chatroom/all", async (req, res) => {
+  const { event } = req.query;
+  const chatRooms = await ChatRoom.findAll({
+    where: {
+      event,
+    },
+  });
+
+  res.status(200).send(chatRooms);
 });
 
 module.exports = router;

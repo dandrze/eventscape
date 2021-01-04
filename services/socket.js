@@ -43,7 +43,11 @@ module.exports = (server) => {
         text: message,
       });
 
-      io.to(room).emit("message", { user: name, text: message });
+      io.to(room).emit("message", {
+        user: name,
+        text: message,
+        id: chatMessage.id,
+      });
 
       callback();
     });
@@ -52,6 +56,11 @@ module.exports = (server) => {
       console.log(isHidden);
       console.log(room);
       io.to(room).emit("chatHidden", isHidden);
+    });
+
+    socket.on("deleteMessage", ({ id, room }) => {
+      console.log(id, room);
+      io.to(room).emit("delete", id);
     });
 
     socket.on("disconnect", (reason) => {

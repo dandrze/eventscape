@@ -12,6 +12,7 @@ import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import AlertModal from "../components/AlertModal";
 import io from "socket.io-client";
+import * as actions from "../actions";
 
 const ENDPOINT = "http://localhost:5000/";
 
@@ -34,6 +35,7 @@ const Messaging = (props) => {
     checked: false,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
+  const [chatRooms, setChatRooms] = React.useState([]);
 
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
@@ -52,6 +54,17 @@ const Messaging = (props) => {
     setNavAlertOpen(false);
   };
 
+  useEffect(() => {
+    fetchData();
+  }, [props.event.id]);
+
+  const fetchData = async () => {
+    if (props.event.id) {
+      const chatRooms = await props.fetchChatRooms(props.event.id);
+      setChatRooms(chatRooms.data);
+    }
+  };
+
   return (
     <div>
       <NavBar3
@@ -59,58 +72,64 @@ const Messaging = (props) => {
         highlight="messaging"
         content={
           <div className="mainWrapper container-width">
-            <div className="form-box shadow-border" id="chat">
-              <div className="chat-container">
-                {props.event.id ? (
-                  <Chat
-                    room={props.event.id}
-                    name={displayName}
-                    isModerator={true}
-                  />
-                ) : null}
-              </div>
-              <div className="chat-options">
-                <FormControl variant="outlined" className={classes.formControl}>
-                  {/* Display Name */}
-                  <TextField
-                    id="title"
-                    label="Display Name"
-                    variant="outlined"
-                    value={displayName}
-                    onChange={handleChangeDisplayName}
-                  />
-                  <br></br>
-                  <br></br>
-                </FormControl>
-                <Tooltip title="Temporarily hides chat. To permanently remove chat, remove the design block that contains the chat window.">
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch1
-                          checked={isHidden.checked}
-                          onChange={handleChangeIsHidden}
-                          name="checked"
-                        />
-                      }
-                      label="Temporarily Hide Chat"
+            {chatRooms.map((chatRoom) => {
+              return (
+                <div className="form-box shadow-border" id="chat">
+                  <div className="chat-container">
+                    <Chat
+                      room={chatRoom.id}
+                      name={displayName}
+                      isModerator={true}
                     />
-                  </FormGroup>
-                </Tooltip>
-                <button className="Button2" onClick={handleNavAlertOpen}>
-                  Delete All Chat Messages
-                </button>
-                <AlertModal
-                  open={navAlertOpen}
-                  onClose={handleNavAlertClose}
-                  onContinue={() => {
-                    handleNavAlertClose();
-                  }}
-                  text="Are you sure you want to delete all chat messages?"
-                  closeText="Go back"
-                  continueText="Yes, Delete"
-                />
-              </div>
-            </div>
+                  </div>
+                  <div className="chat-options">
+                    <FormControl
+                      variant="outlined"
+                      className={classes.formControl}
+                    >
+                      {/* Display Name */}
+                      <TextField
+                        id="title"
+                        label="Display Name"
+                        variant="outlined"
+                        value={displayName}
+                        onChange={handleChangeDisplayName}
+                      />
+                      <br></br>
+                      <br></br>
+                    </FormControl>
+                    <Tooltip title="Temporarily hides chat. To permanently remove chat, remove the design block that contains the chat window.">
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Switch1
+                              checked={isHidden.checked}
+                              onChange={handleChangeIsHidden}
+                              name="checked"
+                            />
+                          }
+                          label="Temporarily Hide Chat"
+                        />
+                      </FormGroup>
+                    </Tooltip>
+                    <button className="Button2" onClick={handleNavAlertOpen}>
+                      Delete All Chat Messages
+                    </button>
+                    <AlertModal
+                      open={navAlertOpen}
+                      onClose={handleNavAlertClose}
+                      onContinue={() => {
+                        handleNavAlertClose();
+                      }}
+                      text="Are you sure you want to delete all chat messages?"
+                      closeText="Go back"
+                      continueText="Yes, Delete"
+                    />
+                  </div>
+                </div>
+              );
+            })}
+
             <div className="form-box shadow-border">
               <h3>Q&A</h3>
             </div>
@@ -125,4 +144,4 @@ const mapStateToProps = (state) => {
   return { event: state.event };
 };
 
-export default connect(mapStateToProps)(Messaging);
+export default connect(mapStateToProps, actions)(Messaging);
