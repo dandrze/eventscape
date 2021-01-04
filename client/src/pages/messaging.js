@@ -37,6 +37,8 @@ const Messaging = (props) => {
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
   const [chatRooms, setChatRooms] = React.useState([]);
 
+  const chatRef = React.useRef();
+
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
   };
@@ -65,6 +67,11 @@ const Messaging = (props) => {
     }
   };
 
+  const handleDeleteAllMessages = () => {
+    chatRef.current.deleteAllMessages();
+    setNavAlertOpen(false);
+  };
+
   return (
     <div>
       <NavBar3
@@ -80,6 +87,7 @@ const Messaging = (props) => {
                       room={chatRoom.id}
                       name={displayName}
                       isModerator={true}
+                      ref={chatRef}
                     />
                   </div>
                   <div className="chat-options">
@@ -120,7 +128,7 @@ const Messaging = (props) => {
                       open={navAlertOpen}
                       onClose={handleNavAlertClose}
                       onContinue={() => {
-                        handleNavAlertClose();
+                        handleDeleteAllMessages();
                       }}
                       text="Are you sure you want to delete all chat messages?"
                       closeText="Go back"

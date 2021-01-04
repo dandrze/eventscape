@@ -1,4 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -120,7 +125,7 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const Chat = ({ room, name, isModerator }) => {
+const Chat = forwardRef(({ room, name, isModerator }, ref) => {
   //const [name, setName] = useState("");
   const [users, setUsers] = useState("");
   const [message, setMessage] = useState("");
@@ -152,11 +157,11 @@ const Chat = ({ room, name, isModerator }) => {
     socket.on("delete", (id) => {
       //map through the messages array and add the deleted flag to the message with the target id
       setMessages((messages) =>
-        messages.map((message) => {
-          if (message.id == id) {
-            return { ...message, deleted: true };
+        messages.map((msg) => {
+          if (msg.id == id) {
+            return { ...msg, deleted: true };
           } else {
-            return message;
+            return msg;
           }
         })
       );
@@ -167,12 +172,28 @@ const Chat = ({ room, name, isModerator }) => {
       setChatHidden(isHidden);
     });
 
+    socket.on("deleteAll", () => {
+      setMessages((messages) =>
+        messages.map((msg) => {
+          return { ...msg, deleted: true };
+        })
+      );
+    });
+
     socket.emit("join", { name, room }, (error) => {
       if (error) {
         alert(error);
       }
     });
   }, []);
+
+  // code below pulls in functions from messaging for moderator actions
+  useImperativeHandle(ref, () => ({
+    deleteAllMessages() {
+      console.log("child delete all called");
+      socket.emit("deleteAllMessages", { room });
+    },
+  }));
 
   const sendMessage = (event) => {
     event.preventDefault();
@@ -213,6 +234,6 @@ const Chat = ({ room, name, isModerator }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Chat;

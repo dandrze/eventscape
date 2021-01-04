@@ -63,6 +63,10 @@ module.exports = (server) => {
       io.to(room).emit("delete", id);
     });
 
+    socket.on("deleteAllMessages", ({ room }) => {
+      io.to(room).emit("deleteAll");
+    });
+
     socket.on("disconnect", (reason) => {
       console.log("Client disconnected: " + reason);
     });
