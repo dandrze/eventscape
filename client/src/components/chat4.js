@@ -12,6 +12,7 @@ import clsx from "clsx";
 /* Icons */
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import ReplayIcon from "@material-ui/icons/Replay";
 import ChatWhiteIcon from "../icons/chat-white.svg";
 
 /* Code based on the following tutorial: 
@@ -38,7 +39,13 @@ const InfoBar = () => (
   </div>
 );
 
-const Messages = ({ messages, name, isModerator, deleteMessage }) => (
+const Messages = ({
+  messages,
+  name,
+  isModerator,
+  deleteMessage,
+  restoreMessage,
+}) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
@@ -47,6 +54,7 @@ const Messages = ({ messages, name, isModerator, deleteMessage }) => (
           name={name}
           isModerator={isModerator}
           deleteMessage={deleteMessage}
+          restoreMessage={restoreMessage}
         />
       </div>
     ))}
@@ -58,6 +66,7 @@ const Message = ({
   name,
   isModerator,
   deleteMessage,
+  restoreMessage,
 }) => {
   let isSentByCurrentUser = false;
 
@@ -80,20 +89,30 @@ const Message = ({
       </div>
 
       {/* Moderator Controls */}
-      {isModerator && (
-        <Tooltip title="Delete chat message" className="delete-chat-message">
-          <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-        </Tooltip>
-      )}
+      {isModerator &&
+        (deleted ? (
+          <Tooltip title="Restore chat message" className="delete-chat-message">
+            <ReplayIcon onClick={() => restoreMessage(id)} />
+          </Tooltip>
+        ) : (
+          <Tooltip title="Delete chat message" className="delete-chat-message">
+            <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
+          </Tooltip>
+        ))}
     </div>
   ) : (
     <div className={"messageContainer justifyStart " + deletedClassName}>
       {/* Moderator Controls */}
-      {isModerator && (
-        <Tooltip title="Delete chat message" className="delete-chat-message">
-          <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-        </Tooltip>
-      )}
+      {isModerator &&
+        (deleted ? (
+          <Tooltip title="Restore chat message" className="delete-chat-message">
+            <ReplayIcon onClick={() => restoreMessage(id)} />
+          </Tooltip>
+        ) : (
+          <Tooltip title="Delete chat message" className="delete-chat-message">
+            <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
+          </Tooltip>
+        ))}
 
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
@@ -154,12 +173,26 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
       console.log(message);
       setMessages((messages) => [...messages, message]);
     });
+
     socket.on("delete", (id) => {
       //map through the messages array and add the deleted flag to the message with the target id
       setMessages((messages) =>
         messages.map((msg) => {
           if (msg.id == id) {
             return { ...msg, deleted: true };
+          } else {
+            return msg;
+          }
+        })
+      );
+    });
+
+    socket.on("restore", (id) => {
+      //map through the messages array and add the deleted flag to the message with the target id
+      setMessages((messages) =>
+        messages.map((msg) => {
+          if (msg.id == id) {
+            return { ...msg, deleted: false };
           } else {
             return msg;
           }
@@ -214,6 +247,10 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
     socket.emit("deleteMessage", { id, room });
   };
 
+  const restoreMessage = (id) => {
+    socket.emit("restoreMessage", { id, room });
+  };
+
   return (
     <div
       className={clsx({
@@ -231,6 +268,7 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
             name={name}
             isModerator={isModerator}
             deleteMessage={deleteMessage}
+            restoreMessage={restoreMessage}
           />
           <Input
             message={message}

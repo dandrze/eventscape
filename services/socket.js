@@ -59,8 +59,11 @@ module.exports = (server) => {
     });
 
     socket.on("deleteMessage", ({ id, room }) => {
-      console.log(id, room);
       io.to(room).emit("delete", id);
+    });
+
+    socket.on("restoreMessage", ({ id, room }) => {
+      io.to(room).emit("restore", id);
     });
 
     socket.on("deleteAllMessages", ({ room }) => {
