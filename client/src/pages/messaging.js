@@ -31,8 +31,6 @@ const Messaging = (props) => {
     }
   };
 
-  console.log(Boolean(chatRooms.length));
-
   return (
     <div>
       <NavBar3
@@ -42,7 +40,7 @@ const Messaging = (props) => {
           <div className="mainWrapper container-width">
             {chatRooms.length ? (
               chatRooms.map((chatRoom) => {
-                return <ModeratorChat room={chatRoom.id} />;
+                return <ModeratorChat room={chatRoom} />;
               })
             ) : (
               <div className="form-box shadow-border">

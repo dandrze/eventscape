@@ -31,6 +31,10 @@
   width: 100%;
 }
 
+.infoBar.grey {
+  background: #7d7a7a;
+}
+
 .leftInnerContainer {
   flex: 0.5;
   display: flex;
@@ -46,7 +50,7 @@
   margin-right: 5%;
 }
 
-#chatText {
+.chatText {
   color: white;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-weight: 300;

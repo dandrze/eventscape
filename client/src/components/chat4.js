@@ -29,16 +29,6 @@ const ENDPOINT = "http://localhost:5000/";
 
 let socket;
 
-const InfoBar = () => (
-  <div className="infoBar">
-    <div className="leftInnerContainer box-header">
-      <img src={ChatWhiteIcon} className="info-bar-icon"></img>
-      <h3 id="chatText">Chat</h3>
-    </div>
-    <div className="rightInnerContainer"></div>
-  </div>
-);
-
 const Messages = ({
   messages,
   name,
@@ -80,7 +70,6 @@ const Message = ({
   }
 
   if (isNotification) {
-    console.log("is notifiation");
     return <p className="sentText justifyCenter ">{text}</p>;
   }
 
@@ -155,9 +144,6 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
   const [messages, setMessages] = useState([]);
   const [chatHidden, setChatHidden] = useState(false);
 
-  console.log(messages);
-  console.log(chatHidden);
-
   useEffect(() => {
     socket = io(ENDPOINT, {
       path: "/api/socket",
@@ -223,7 +209,6 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
     });
 
     socket.on("chatHidden", (isHidden) => {
-      console.log(isHidden);
       setChatHidden(isHidden);
     });
 
@@ -277,25 +262,29 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
         "display-none": !isModerator && chatHidden,
       })}
     >
-      {isModerator && chatHidden ? (
-        <p>Chat Hidden From Participants</p>
-      ) : (
-        <div className="chatContainer">
-          <InfoBar />
-          <Messages
-            messages={messages}
-            name={name}
-            isModerator={isModerator}
-            deleteMessage={deleteMessage}
-            restoreMessage={restoreMessage}
-          />
-          <Input
-            message={message}
-            setMessage={setMessage}
-            sendMessage={sendMessage}
-          />
+      <div className="chatContainer">
+        <div className={"infoBar" + (chatHidden ? " grey" : "")}>
+          <div className="leftInnerContainer box-header">
+            <img src={ChatWhiteIcon} className="info-bar-icon"></img>
+            <h3 className="chatText">Chat</h3>
+          </div>
+          <div className="rightInnerContainer">
+            {chatHidden ? <h3 className="chatText">(Hidden)</h3> : null}
+          </div>
         </div>
-      )}
+        <Messages
+          messages={messages}
+          name={name}
+          isModerator={isModerator}
+          deleteMessage={deleteMessage}
+          restoreMessage={restoreMessage}
+        />
+        <Input
+          message={message}
+          setMessage={setMessage}
+          sendMessage={sendMessage}
+        />
+      </div>
     </div>
   );
 });

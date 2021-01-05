@@ -28,7 +28,7 @@ const ModeratorChat = ({ room, user }) => {
 
   const [displayName, setDisplayName] = useState("Moderator");
   const [isHidden, setIsHidden] = React.useState({
-    checked: false,
+    checked: room.isHidden,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
 
@@ -58,7 +58,7 @@ const ModeratorChat = ({ room, user }) => {
     <div className="form-box shadow-border" id="chat">
       <div className="chat-container">
         <Chat
-          room={room}
+          room={room.id}
           name={displayName}
           isModerator={true}
           ref={chatRef}
@@ -66,7 +66,7 @@ const ModeratorChat = ({ room, user }) => {
         />
       </div>
       <div className="chat-options">
-        <p>Room: Main Chat</p>
+        <p>Room: {room.name}</p>
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Display Name */}
           <TextField

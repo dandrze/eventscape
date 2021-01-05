@@ -25,7 +25,7 @@ import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
 import Tabs from "../components/Tabs";
 import RoomTable from "./room-table";
-
+import { fetchChatRooms } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -69,7 +69,8 @@ function DesignBlockToolbar(props) {
   const [youtubeLink, setYoutubeLink] = React.useState("");
   const [customHTML, setCustomHTML] = React.useState("");
   const [sectionTooltip, setSectionTooltip] = React.useState("");
-  const [room, setRoom] = React.useState("main-chat");
+  const [room, setRoom] = React.useState();
+  const [rooms, setRooms] = React.useState([]);
 
   const showStreamSettings =
     props.section.is_react &&
@@ -82,12 +83,14 @@ function DesignBlockToolbar(props) {
       setContent(props.section.react_component.props.content);
       setYoutubeLink(props.section.react_component.props.link);
       setCustomHTML(props.section.react_component.props.html);
+      setRoom(props.section.react_component.props.chatRoom);
 
       // set the section tooltip if it's a section that requires one
       if (props.section.is_react) {
         switch (props.section.react_component.name) {
           case "StreamChat":
             setSectionTooltip("Click the gears icon to add your stream");
+            fetchChatRooms();
             break;
           case "RegistrationForm":
             setSectionTooltip(
@@ -98,6 +101,11 @@ function DesignBlockToolbar(props) {
       }
     }
   }, []);
+
+  const fetchChatRooms = async () => {
+    const chatRooms = await props.fetchChatRooms(props.event.id);
+    setRooms(chatRooms.data);
+  };
 
   const handleClickDelete = () => {
     setDeleteConfirmOpen(true);
@@ -129,6 +137,13 @@ function DesignBlockToolbar(props) {
     });
   };
 
+  const handleSaveChatSettings = () => {
+    setOpenStreamSettings(false);
+    props.saveChatSettings(props.sectionIndex, {
+      chatRoom: room,
+    });
+  };
+
   const handleChangeContent = (event) => {
     setContent(event.target.value);
   };
@@ -153,6 +168,8 @@ function DesignBlockToolbar(props) {
       props.moveSection(props.sectionIndex, offset);
     }
   };
+
+  console.log(props);
 
   return (
     <div>
@@ -258,7 +275,12 @@ function DesignBlockToolbar(props) {
                           className={classes.formControl}
                         >
                           {/* Category */}
-                          <InputLabel id="content" className="fix-mui-select-label">Content</InputLabel>
+                          <InputLabel
+                            id="content"
+                            className="fix-mui-select-label"
+                          >
+                            Content
+                          </InputLabel>
                           <Select
                             labelId="content"
                             id="content-select"
@@ -266,7 +288,9 @@ function DesignBlockToolbar(props) {
                             value={content}
                             onChange={handleChangeContent}
                           >
-                            <MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
+                            <MenuItem value={"youtube-live"}>
+                              Youtube Live
+                            </MenuItem>
                             <MenuItem value={"custom-embed"}>
                               Custom HTML Embed (Advanced)
                             </MenuItem>
@@ -290,12 +314,12 @@ function DesignBlockToolbar(props) {
                               />
                             </FormControl>
                             <p>
-                              Need help? Click here for instructions on setting up a
-                              YouTube Live stream.
+                              Need help? Click here for instructions on setting
+                              up a YouTube Live stream.
                             </p>
                             <p>
-                              Heads up! YouTube may take down any streams containing
-                              copyrighted music.
+                              Heads up! YouTube may take down any streams
+                              containing copyrighted music.
                             </p>
                           </div>
                         )}
@@ -331,7 +355,10 @@ function DesignBlockToolbar(props) {
               <div label="Chat">
                 <div className="settings-container">
                   <div className={classes.root}>
-                    <p>If you would like to have multiple independent chat windows, you can create and assign new rooms below.</p>
+                    <p>
+                      If you would like to have multiple independent chat
+                      windows, you can create and assign new rooms below.
+                    </p>
                     <Grid container spacing={3}>
                       <Grid item xs={12}>
                         <FormControl
@@ -339,7 +366,12 @@ function DesignBlockToolbar(props) {
                           className={classes.formControl}
                         >
                           {/* Chat Room */}
-                          <InputLabel id="room" className="fix-mui-select-label">Room Assignment</InputLabel>
+                          <InputLabel
+                            id="room"
+                            className="fix-mui-select-label"
+                          >
+                            Room Assignment
+                          </InputLabel>
                           <Select
                             labelId="room"
                             id="room-select"
@@ -347,15 +379,25 @@ function DesignBlockToolbar(props) {
                             value={room}
                             onChange={handleChangeRoom}
                           >
-                            <MenuItem value={"main-chat"}>
-                              Main Chat (Default)
-                            </MenuItem>
+                            {rooms.map((room) => {
+                              return (
+                                <MenuItem value={room.id}>{room.name}</MenuItem>
+                              );
+                            })}
                           </Select>
                         </FormControl>
                       </Grid>
                       <Grid item xs={12}>
-                        <RoomTable />
+                        <RoomTable rooms={rooms} fetchData={fetchChatRooms} />
                       </Grid>
+                    </Grid>
+                    <Grid item xs={12} id="save-button">
+                      <button
+                        className="Button1"
+                        onClick={handleSaveChatSettings}
+                      >
+                        Save
+                      </button>
                     </Grid>
                   </div>
                 </div>
@@ -368,4 +410,8 @@ function DesignBlockToolbar(props) {
   );
 }
 
-export default connect(null, actions)(DesignBlockToolbar);
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(DesignBlockToolbar);

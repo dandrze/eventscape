@@ -6,6 +6,7 @@ const ChatRoom = conn.define("ChatRoom", {
   event: Sequelize.INTEGER,
   isHidden: Sequelize.BOOLEAN,
   isDefault: Sequelize.BOOLEAN,
+  name: Sequelize.TEXT,
 });
 
 module.exports = ChatRoom;

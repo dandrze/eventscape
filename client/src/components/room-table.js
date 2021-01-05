@@ -5,7 +5,6 @@ import MaterialTable from "material-table";
 import { forwardRef } from "react";
 import { Paper } from "@material-ui/core";
 
-
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -23,7 +22,6 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
-
 
 import * as actions from "../actions";
 
@@ -55,20 +53,15 @@ const RoomTable = (props) => {
   const [data, setData] = useState([]);
 
   useEffect(() => {
-    fetchData();
-  }, []);
+    setData(props.rooms);
+  });
 
   const columns = [
     {
       title: "Room Name",
-      field: "roomname",
+      field: "name",
     },
   ];
-
-  const fetchData = async () => {
-    const res = await props.fetchEmailList(props.emailId);
-    setData(res);
-  };
 
   const options = {
     actionsColumnIndex: -1,
@@ -93,49 +86,45 @@ const RoomTable = (props) => {
     },
   };
 
-  const actions = [
-    {
-      icon: Edit,
-      tooltip: "Edit Room Name",
-      onClick: (event, rowData) => {
-        
-      },
-    },
-    {
-      icon: AddBox,
-      tooltip: "Add Room",
-      isFreeAction: true,
-      onClick: (event) => {
-        
-      },
-    },
-  ];
-
   return (
     <div>
-            <MaterialTable
-              title=""
-              columns={columns}
-              /* data={data} */
-              data={[
-                { roomname: 'Main Chat (Default)' },
-              ]} /* this data for testing. Can delete */
-              options={options}
-              icons={tableIcons}
-              actions={actions}
-              components={{
-                Container: (props) => <Paper {...props} elevation={0} />,
-              }}
-              editable={{
-                onRowDelete: (oldData) =>
-                  new Promise((resolve) => {
-                    props.handleDelete(oldData.id);
-                    resolve();
-                  }),
-              }}
-            />
+      <MaterialTable
+        title=""
+        columns={columns}
+        data={data}
+        options={options}
+        icons={tableIcons}
+        components={{
+          Container: (props) => <Paper {...props} elevation={0} />,
+        }}
+        editable={{
+          onRowAdd: (newData) =>
+            new Promise(async (resolve) => {
+              console.log(newData);
+              await props.addChatRoom(newData, props.event.id);
+              await props.fetchData();
+              resolve();
+            }),
+          onRowUpdate: (newData, oldData) =>
+            new Promise(async (resolve) => {
+              await props.updateChatRoom(newData);
+              await props.fetchData();
+              resolve();
+            }),
+          onRowDelete: (oldData) =>
+            new Promise(async (resolve) => {
+              await props.deleteChatRoom(oldData.id);
+              await props.fetchData();
+              resolve();
+            }),
+        }}
+      />
     </div>
   );
 };
 
-export default connect(null, actions)(RoomTable);
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(RoomTable);

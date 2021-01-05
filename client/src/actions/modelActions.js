@@ -52,6 +52,13 @@ export const addSection = (
 ) => async (dispatch, getState) => {
   const model = getState().model.id;
 
+  if (react_component.name === "StreamChat") {
+    const chatRoom = await api.post("/api/event/chatroom/default", {
+      event: getState().event.id,
+    });
+    react_component.props.chatRoom = chatRoom.data.id;
+  }
+
   const payload = {
     index: prevIndex + 1,
     model: {
@@ -61,13 +68,6 @@ export const addSection = (
       react_component,
     },
   };
-
-  if (react_component.name === "StreamChat") {
-    const chatRoom = await api.post("/api/event/chatroom/default", {
-      event: getState().event.id,
-    });
-    react_component.props.chatRoom = chatRoom.data.id;
-  }
 
   dispatch({ type: ADD_SECTION, payload });
 
@@ -115,14 +115,29 @@ export const localSaveModel = () => (dispatch, getState) => {
   }
 };
 
-export const saveStreamSettings = (index, settings) => async (
+export const saveStreamSettings = (index, updatedProps) => async (
   dispatch,
   getState
 ) => {
   const reactComponent = getState().model.sections[index].react_component;
-  reactComponent.props.content = settings.content;
-  reactComponent.props.link = settings.link;
-  reactComponent.props.html = settings.html;
+  reactComponent.props.content = updatedProps.content;
+  reactComponent.props.link = updatedProps.link;
+  reactComponent.props.html = updatedProps.html;
+  reactComponent.props.chatRoom = updatedProps.chatRoom;
+
+  dispatch({
+    type: UPDATE_REACT_COMPONENT,
+    payload: { index, react_component: reactComponent },
+  });
+};
+
+export const saveChatSettings = (index, chatSettings) => async (
+  dispatch,
+  getState
+) => {
+  const reactComponent = getState().model.sections[index].react_component;
+
+  reactComponent.props.chatRoom = chatSettings.chatRoom;
 
   dispatch({
     type: UPDATE_REACT_COMPONENT,

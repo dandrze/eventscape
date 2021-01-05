@@ -6,3 +6,4 @@ export * from "./registrationActions";
 export * from "./emailActions";
 export * from "./userActions";
 export * from "./liveEventPageActions";
+export * from "./chatRoomActions";

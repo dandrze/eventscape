@@ -22,7 +22,7 @@ module.exports = (server) => {
         include: ChatUser,
       });
 
-      const [user] = await ChatUser.findOrCreate({
+      const [user, created] = await ChatUser.findOrCreate({
         where: {
           name,
           EventscapeId: userId || null,
@@ -34,7 +34,7 @@ module.exports = (server) => {
       if (chatRoom) socket.emit("chatHidden", chatRoom.isHidden);
 
       socket.emit("notification", {
-        text: "You are now connected to the chat",
+        text: "You are now connected to room " + room,
       });
 
       //push the message history
