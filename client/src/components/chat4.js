@@ -62,7 +62,7 @@ const Messages = ({
 );
 
 const Message = ({
-  message: { text, user, id, deleted },
+  message: { text, user, id, deleted, isNotification },
   name,
   isModerator,
   deleteMessage,
@@ -77,6 +77,11 @@ const Message = ({
   if (deleted && !isModerator) {
     // if the message is deleted and it is not the moderator, don't show the message
     return null;
+  }
+
+  if (isNotification) {
+    console.log("is notifiation");
+    return <p className="sentText justifyCenter ">{text}</p>;
   }
 
   const deletedClassName = isModerator && deleted ? "deleted-message" : null;
@@ -162,7 +167,17 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
       console.log(socket.id);
     });
     socket.on("connect_error", (error) => {
-      console.log(error);
+      setMessages((messages) => [
+        ...messages,
+        { text: error, isNotification: true },
+      ]);
+    });
+
+    socket.on("error", (error) => {
+      setMessages((messages) => [
+        ...messages,
+        { text: error, isNotification: true },
+      ]);
     });
 
     socket.on("roomData", ({ users }) => {
@@ -172,6 +187,13 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
     socket.on("message", (message) => {
       console.log(message);
       setMessages((messages) => [...messages, message]);
+    });
+
+    socket.on("notification", (message) => {
+      setMessages((messages) => [
+        ...messages,
+        { ...message, isNotification: true },
+      ]);
     });
 
     socket.on("delete", (id) => {

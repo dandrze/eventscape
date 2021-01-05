@@ -33,9 +33,12 @@ module.exports = (server) => {
       // push the hidden state (true or false)
       socket.emit("chatHidden", chatRoom.isHidden);
 
+      socket.emit("notification", {
+        text: "You are now connected to the chat",
+      });
+
       //push the message history
       messageHistory.forEach((message) => {
-        console.log(message.ChatUser);
         socket.emit("message", {
           user: message.ChatUser.name,
           text: message.text,
