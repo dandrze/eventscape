@@ -9,15 +9,17 @@ const { ChatRoom } = require("../sequelize").models;
 
 router.post("/api/event", async (req, res) => {
   const {
-    title,
-    link,
-    category,
-    start_date,
-    end_date,
-    time_zone,
-    primary_color,
-    reg_page_model,
-    event_page_model,
+    event: {
+      title,
+      link,
+      category,
+      start_date,
+      end_date,
+      time_zone,
+      primary_color,
+      reg_page_model,
+      event_page_model,
+    },
     emails,
   } = req.body;
 
@@ -147,6 +149,11 @@ router.post("/api/event", async (req, res) => {
       }
     );
   }
+
+  const newRoom = await ChatRoom.create({
+    event: newEvent.rows[0].id,
+    isDefault: true,
+  });
 
   res.status(200).send(newEvent.rows[0]);
 });

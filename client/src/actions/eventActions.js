@@ -27,10 +27,12 @@ export const createEvent = (
     primary_color,
     reg_page_model: regPageModelTemplate(title),
     event_page_model: eventPageModelTemplate(title, start_date, end_date),
-    emails: emaillistTemplate(start_date),
   };
 
-  const res = await api.post("/api/event", event);
+  const res = await api.post("/api/event", {
+    event,
+    emails: emaillistTemplate(start_date),
+  });
 
   if (res.status === 200) {
     await dispatch({

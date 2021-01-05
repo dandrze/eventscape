@@ -31,7 +31,7 @@ module.exports = (server) => {
 
       socket.join(room);
       // push the hidden state (true or false)
-      socket.emit("chatHidden", chatRoom.isHidden);
+      if (chatRoom) socket.emit("chatHidden", chatRoom.isHidden);
 
       socket.emit("notification", {
         text: "You are now connected to the chat",

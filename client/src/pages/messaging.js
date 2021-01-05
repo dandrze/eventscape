@@ -5,6 +5,7 @@ import "./messaging.css";
 import { makeStyles } from "@material-ui/core/styles";
 import * as actions from "../actions";
 import ModeratorChat from "../components/ModeratorChat.js";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -30,6 +31,8 @@ const Messaging = (props) => {
     }
   };
 
+  console.log(Boolean(chatRooms.length));
+
   return (
     <div>
       <NavBar3
@@ -37,9 +40,15 @@ const Messaging = (props) => {
         highlight="messaging"
         content={
           <div className="mainWrapper container-width">
-            {chatRooms.map((chatRoom) => {
-              return <ModeratorChat room={chatRoom.id} />;
-            })}
+            {chatRooms.length ? (
+              chatRooms.map((chatRoom) => {
+                return <ModeratorChat room={chatRoom.id} />;
+              })
+            ) : (
+              <div className="form-box shadow-border">
+                <CircularProgress />
+              </div>
+            )}
 
             <div className="form-box shadow-border">
               <h3>Q&A</h3>
