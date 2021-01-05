@@ -144,9 +144,8 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const Chat = forwardRef(({ room, name, isModerator }, ref) => {
-  //const [name, setName] = useState("");
-  const [users, setUsers] = useState("");
+const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
+  const [chatUserId, setChatUserId] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [chatHidden, setChatHidden] = useState(false);
@@ -214,10 +213,8 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
       );
     });
 
-    socket.emit("join", { name, room }, (error) => {
-      if (error) {
-        alert(error);
-      }
+    socket.emit("join", { name, userId, room }, (id) => {
+      setChatUserId(id);
     });
   }, []);
 
@@ -235,16 +232,15 @@ const Chat = forwardRef(({ room, name, isModerator }, ref) => {
   const sendMessage = (event) => {
     event.preventDefault();
 
-    console.log(name, room, message);
-
     if (message) {
-      socket.emit("sendMessage", { name, room, message }, () => {
+      socket.emit("sendMessage", { userId: chatUserId, room, message }, () => {
         setMessage("");
       });
     }
   };
 
   const deleteMessage = (id) => {
+    console.log(id, room);
     socket.emit("deleteMessage", { id, room });
   };
 

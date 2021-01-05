@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModeratorChat = ({ room }) => {
+const ModeratorChat = ({ room, user }) => {
   const classes = useStyles();
 
   const [displayName, setDisplayName] = useState("Moderator");
@@ -57,7 +57,13 @@ const ModeratorChat = ({ room }) => {
   return (
     <div className="form-box shadow-border" id="chat">
       <div className="chat-container">
-        <Chat room={room} name={displayName} isModerator={true} ref={chatRef} />
+        <Chat
+          room={room}
+          name={displayName}
+          isModerator={true}
+          ref={chatRef}
+          userId={user.id}
+        />
       </div>
       <div className="chat-options">
         <p>Room: Main Chat</p>
@@ -106,7 +112,12 @@ const ModeratorChat = ({ room }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { model: state.model, event: state.event, settings: state.settings };
+  return {
+    model: state.model,
+    event: state.event,
+    settings: state.settings,
+    user: state.user,
+  };
 };
 
 export default connect(mapStateToProps, actions)(ModeratorChat);

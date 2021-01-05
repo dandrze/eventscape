@@ -5,6 +5,7 @@ const ChatMessage = conn.define(
   "ChatMessage",
   {
     text: Sequelize.TEXT,
+    deleted: Sequelize.BOOLEAN,
   },
   {
     tableName: "chat_message",

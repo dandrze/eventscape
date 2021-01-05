@@ -14,7 +14,7 @@ module.exports = (server) => {
   io.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("join", async ({ name, room }, callback) => {
+    socket.on("join", async ({ userId, name, room }, callback) => {
       const chatRoom = await ChatRoom.findByPk(room);
 
       const messageHistory = await ChatMessage.findAll({
@@ -25,11 +25,9 @@ module.exports = (server) => {
       const [user] = await ChatUser.findOrCreate({
         where: {
           name,
+          EventscapeId: userId || null,
         },
       });
-
-      // push the user data to the client
-      socket.emit("newUser", user);
 
       socket.join(room);
       // push the hidden state (true or false)
@@ -41,24 +39,16 @@ module.exports = (server) => {
         socket.emit("message", {
           user: message.ChatUser.name,
           text: message.text,
+          id: message.id,
+          deleted: message.deleted,
         });
       });
 
-      socket.emit("message", {
-        user: "host",
-        text: `${user.name}, welcome to room ${room}.`,
-      });
-
-      socket.broadcast
-        .to(user.ChatRoomId)
-        .emit("message", { user: "host", text: `${user.name} has joined!` });
-
-      callback();
+      callback(user.id);
     });
 
-    socket.on("sendMessage", async ({ name, room, message }, callback) => {
-      const chatRoom = await ChatRoom.findByPk(room);
-      const chatUser = await ChatUser.findOne({ where: { name } });
+    socket.on("sendMessage", async ({ userId, room, message }, callback) => {
+      const chatUser = await ChatUser.findOne({ where: { id: userId } });
 
       const chatMessage = await ChatMessage.create({
         ChatRoomId: room,
@@ -67,7 +57,7 @@ module.exports = (server) => {
       });
 
       io.to(room).emit("message", {
-        user: name,
+        user: chatUser.name,
         text: message,
         id: chatMessage.id,
       });
@@ -81,12 +71,14 @@ module.exports = (server) => {
       chatRoom.isHidden = isHidden;
       await chatRoom.save();
 
-      console.log(isHidden);
-      console.log(room);
       io.to(room).emit("chatHidden", isHidden);
     });
 
-    socket.on("deleteMessage", ({ id, room }) => {
+    socket.on("deleteMessage", async ({ id, room }) => {
+      const chatMessage = await ChatMessage.findByPk(id);
+      chatMessage.deleted = true;
+      chatMessage.save();
+
       io.to(room).emit("delete", id);
     });
 
