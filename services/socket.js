@@ -17,17 +17,32 @@ module.exports = (server) => {
     socket.on("join", async ({ name, room }, callback) => {
       const chatRoom = await ChatRoom.findByPk(room);
 
+      const messageHistory = await ChatMessage.findAll({
+        where: { ChatRoomId: room },
+        include: ChatUser,
+      });
+
       const [user] = await ChatUser.findOrCreate({
         where: {
           name,
         },
       });
 
+      // push the user data to the client
+      socket.emit("newUser", user);
+
       socket.join(room);
       // push the hidden state (true or false)
-      console.log(chatRoom.id);
-      console.log(chatRoom.isHidden);
-      io.emit("chatHidden", chatRoom.isHidden);
+      socket.emit("chatHidden", chatRoom.isHidden);
+
+      //push the message history
+      messageHistory.forEach((message) => {
+        console.log(message.ChatUser);
+        socket.emit("message", {
+          user: message.ChatUser.name,
+          text: message.text,
+        });
+      });
 
       socket.emit("message", {
         user: "host",
@@ -43,10 +58,12 @@ module.exports = (server) => {
 
     socket.on("sendMessage", async ({ name, room, message }, callback) => {
       const chatRoom = await ChatRoom.findByPk(room);
+      const chatUser = await ChatUser.findOne({ where: { name } });
 
       const chatMessage = await ChatMessage.create({
         ChatRoomId: room,
         text: message,
+        ChatUserId: chatUser.id,
       });
 
       io.to(room).emit("message", {
