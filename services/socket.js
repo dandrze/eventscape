@@ -89,7 +89,12 @@ module.exports = (server) => {
       io.to(room).emit("restore", id);
     });
 
-    socket.on("deleteAllMessages", ({ room }) => {
+    socket.on("deleteAllMessages", async ({ room }) => {
+      const chatMessage = await ChatMessage.update(
+        { deleted: true },
+        { where: { ChatRoomId: room } }
+      );
+
       io.to(room).emit("deleteAll");
     });
 
