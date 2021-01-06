@@ -25,7 +25,8 @@ import io from "socket.io-client";
 
 import "./chat4.css";
 
-const ENDPOINT = "/";
+const ENDPOINT =
+  window.location.host === "localhost:3000" ? "localhost:5000/" : "/";
 
 let socket;
 
