@@ -4,6 +4,7 @@ import * as actions from "../actions";
 import { ReactFormGenerator } from "../components/react-form-builder2/lib";
 import "./test.css";
 import api from "../api/server";
+import Chat from "../components/chat4";
 
 const Test = (props) => {
   const [formData, setFormData] = useState([]);
@@ -36,13 +37,7 @@ const Test = (props) => {
     setFormData(formData.data.data);
   };
 
-  return (
-    <ReactFormGenerator
-      form_action="/api/registration"
-      form_method="POST"
-      data={formData}
-    />
-  );
+  return <Chat />;
 };
 
 const mapStateToProps = (state) => {

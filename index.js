@@ -4,6 +4,7 @@ const passport = require("passport");
 const secure = require("express-force-https");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
+const http = require("http");
 
 const db = require("./db");
 const keys = require("./config/keys");
@@ -14,6 +15,7 @@ const registrationRoutes = require("./routes/registrationRoutes");
 const emailRoutes = require("./routes/emailRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const liveEventRoutes = require("./routes/liveEventRoutes");
+const socket = require("./services/socket");
 require("./services/passport");
 
 const app = express();
@@ -55,7 +57,12 @@ if (process.env.NODE_ENV == "production") {
   });
 }
 
+const server = http.createServer(app);
+
+require("./services/socket")(server);
+
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
+
+server.listen(PORT, () => {
   console.log("listening on port " + PORT);
 });

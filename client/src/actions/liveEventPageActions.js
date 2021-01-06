@@ -1,5 +1,9 @@
 import api from "../api/server";
-import { FETCH_EVENT, FETCH_PAGE_MODEL } from "../actions/types";
+import {
+  FETCH_ATTENDEE,
+  FETCH_EVENT,
+  FETCH_PAGE_MODEL,
+} from "../actions/types";
 
 export const fetchLivePage = (link, hash) => async (dispatch) => {
   const event = await api.get("/api/event/link", { params: { link } });
@@ -29,5 +33,8 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
 export const fetchAttendeeData = (hash) => async (dispatch) => {
   const attendee = await api.get("/api/attendee/hash", { params: { hash } });
 
-  return attendee.data;
+  await dispatch({
+    type: FETCH_ATTENDEE,
+    payload: attendee.data,
+  });
 };

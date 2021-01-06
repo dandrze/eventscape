@@ -517,6 +517,7 @@ export const streamChatReact = {
     content: "youtube-live",
     link: "https://www.youtube.com/embed/X9llog6QNVM",
     html: "",
+    chatRoom: null,
   },
 };
 

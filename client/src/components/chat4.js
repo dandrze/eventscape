@@ -1,62 +1,113 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
-import TelegramIcon from '@material-ui/icons/Telegram';
+import Tooltip from "@material-ui/core/Tooltip";
+import clsx from "clsx";
+
+/* Icons */
+import TelegramIcon from "@material-ui/icons/Telegram";
+import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
+import ReplayIcon from "@material-ui/icons/Replay";
+import ChatWhiteIcon from "../icons/chat-white.svg";
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
 https://github.com/adrianhajdin/project_chat_application
 */
 
-// import queryString from 'query-string';
-// import io from "socket.io-client";
-
-// import Messages from '../Messages/Messages';
-// import Input from '../Input/Input';
+import queryString from "query-string";
+import io from "socket.io-client";
 
 import "./chat4.css";
 
-// const ENDPOINT = 'https://project-chat-application.herokuapp.com/';
+const ENDPOINT = "http://localhost:5000/";
 
-// let socket;
+let socket;
 
-const InfoBar = () => (
-  <div className="infoBar">
-    <div className="leftInnerContainer box-header">
-      <h3 id="chatText">Chat</h3>
-    </div>
-    <div className="rightInnerContainer"></div>
-  </div>
-);
-
-const Messages = ({ messages, name }) => (
+const Messages = ({
+  messages,
+  name,
+  isModerator,
+  deleteMessage,
+  restoreMessage,
+}) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
-        <Message message={message} name={name} />
+        <Message
+          message={message}
+          name={name}
+          isModerator={isModerator}
+          deleteMessage={deleteMessage}
+          restoreMessage={restoreMessage}
+        />
       </div>
     ))}
   </ScrollToBottom>
 );
 
-const Message = ({ message: { text, user }, name }) => {
+const Message = ({
+  message: { text, user, id, deleted, isNotification },
+  name,
+  isModerator,
+  deleteMessage,
+  restoreMessage,
+}) => {
   let isSentByCurrentUser = false;
 
-  const trimmedName = name.trim().toLowerCase();
-
-  if (user === trimmedName) {
+  if (user === name) {
     isSentByCurrentUser = true;
   }
 
+  if (deleted && !isModerator) {
+    // if the message is deleted and it is not the moderator, don't show the message
+    return null;
+  }
+
+  if (isNotification) {
+    return <p className="sentText justifyCenter ">{text}</p>;
+  }
+
+  const deletedClassName = isModerator && deleted ? "deleted-message" : null;
+
   return isSentByCurrentUser ? (
-    <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{trimmedName}</p>
+    <div className={"messageContainer justifyEnd " + deletedClassName}>
+      <p className="sentText pr-10">{name}</p>
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
       </div>
+
+      {/* Moderator Controls */}
+      {isModerator &&
+        (deleted ? (
+          <Tooltip title="Restore chat message" className="delete-chat-message">
+            <ReplayIcon onClick={() => restoreMessage(id)} />
+          </Tooltip>
+        ) : (
+          <Tooltip title="Delete chat message" className="delete-chat-message">
+            <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
+          </Tooltip>
+        ))}
     </div>
   ) : (
-    <div className="messageContainer justifyStart">
+    <div className={"messageContainer justifyStart " + deletedClassName}>
+      {/* Moderator Controls */}
+      {isModerator &&
+        (deleted ? (
+          <Tooltip title="Restore chat message" className="delete-chat-message">
+            <ReplayIcon onClick={() => restoreMessage(id)} />
+          </Tooltip>
+        ) : (
+          <Tooltip title="Delete chat message" className="delete-chat-message">
+            <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
+          </Tooltip>
+        ))}
+
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
       </div>
@@ -87,51 +138,147 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const Chat = ({ location }) => {
-  const [name, setName] = useState("");
-  const [room, setRoom] = useState("");
-  const [users, setUsers] = useState("");
+const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
+  const [chatUserId, setChatUserId] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [chatHidden, setChatHidden] = useState(false);
 
-  /*useEffect(() => {
-    const { name, room } = queryString.parse(location.search);
-
-    socket = io(ENDPOINT);
-
-    setRoom(room);
-    setName(name)
-
-    socket.emit('join', { name, room }, (error) => {
-      if(error) {
-        alert(error);
-      }
-    });
-  }, [ENDPOINT, location.search]);
-  
   useEffect(() => {
-    socket.on('message', message => {
-      setMessages(messages => [ ...messages, message ]);
+    socket = io(ENDPOINT, {
+      path: "/api/socket",
+      transports: ["websocket"],
     });
-    
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+    socket.on("connect_error", (error) => {
+      setMessages((messages) => [
+        ...messages,
+        { text: error, isNotification: true },
+      ]);
+    });
+
+    socket.on("error", (error) => {
+      setMessages((messages) => [
+        ...messages,
+        { text: error, isNotification: true },
+      ]);
+    });
+
     socket.on("roomData", ({ users }) => {
-      setUsers(users);
+      console.log(users);
     });
-}, []);*/
+
+    socket.on("message", (message) => {
+      console.log(message);
+      setMessages((messages) => [...messages, message]);
+    });
+
+    socket.on("notification", (message) => {
+      setMessages((messages) => [
+        ...messages,
+        { ...message, isNotification: true },
+      ]);
+    });
+
+    socket.on("delete", (id) => {
+      //map through the messages array and add the deleted flag to the message with the target id
+      setMessages((messages) =>
+        messages.map((msg) => {
+          if (msg.id == id) {
+            return { ...msg, deleted: true };
+          } else {
+            return msg;
+          }
+        })
+      );
+    });
+
+    socket.on("restore", (id) => {
+      //map through the messages array and add the deleted flag to the message with the target id
+      setMessages((messages) =>
+        messages.map((msg) => {
+          if (msg.id == id) {
+            return { ...msg, deleted: false };
+          } else {
+            return msg;
+          }
+        })
+      );
+    });
+
+    socket.on("chatHidden", (isHidden) => {
+      setChatHidden(isHidden);
+    });
+
+    socket.on("deleteAll", () => {
+      setMessages((messages) =>
+        messages.map((msg) => {
+          return { ...msg, deleted: true };
+        })
+      );
+    });
+
+    socket.emit("join", { name, userId, room }, (id) => {
+      setChatUserId(id);
+    });
+  }, []);
+
+  // code below pulls in functions from messaging for moderator actions
+  useImperativeHandle(ref, () => ({
+    deleteAllMessages() {
+      console.log("child delete all called: " + room);
+      socket.emit("deleteAllMessages", { room });
+    },
+    setIsHidden(isHidden) {
+      socket.emit("setChatHidden", { isHidden, room });
+    },
+  }));
 
   const sendMessage = (event) => {
     event.preventDefault();
 
     if (message) {
-      //socket.emit('sendMessage', message, () => setMessage(''));
+      socket.emit("sendMessage", { userId: chatUserId, room, message }, () => {
+        setMessage("");
+      });
     }
   };
 
+  const deleteMessage = (id) => {
+    console.log(id, room);
+    socket.emit("deleteMessage", { id, room });
+  };
+
+  const restoreMessage = (id) => {
+    socket.emit("restoreMessage", { id, room });
+  };
+
   return (
-    <div className="chatOuterContainer">
+    <div
+      className={clsx({
+        chatOuterContainer: true,
+        "display-none": !isModerator && chatHidden,
+      })}
+    >
       <div className="chatContainer">
-        <InfoBar />
-        <Messages messages={messages} name={name} />
+        <div className={"infoBar" + (chatHidden ? " grey" : "")}>
+          <div className="leftInnerContainer box-header">
+            <img src={ChatWhiteIcon} className="info-bar-icon"></img>
+            <h3 className="chatText">Chat</h3>
+          </div>
+          <div className="rightInnerContainer">
+            {chatHidden ? <h3 className="chatText">(Hidden)</h3> : null}
+          </div>
+        </div>
+        <Messages
+          messages={messages}
+          name={name}
+          isModerator={isModerator}
+          deleteMessage={deleteMessage}
+          restoreMessage={restoreMessage}
+        />
         <Input
           message={message}
           setMessage={setMessage}
@@ -140,6 +287,6 @@ const Chat = ({ location }) => {
       </div>
     </div>
   );
-};
+});
 
 export default Chat;

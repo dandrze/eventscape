@@ -23,6 +23,9 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
+import Tabs from "../components/Tabs";
+import RoomTable from "./room-table";
+import { fetchChatRooms } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -66,6 +69,8 @@ function DesignBlockToolbar(props) {
   const [youtubeLink, setYoutubeLink] = React.useState("");
   const [customHTML, setCustomHTML] = React.useState("");
   const [sectionTooltip, setSectionTooltip] = React.useState("");
+  const [room, setRoom] = React.useState();
+  const [rooms, setRooms] = React.useState([]);
 
   const showStreamSettings =
     props.section.is_react &&
@@ -78,12 +83,14 @@ function DesignBlockToolbar(props) {
       setContent(props.section.react_component.props.content);
       setYoutubeLink(props.section.react_component.props.link);
       setCustomHTML(props.section.react_component.props.html);
+      setRoom(props.section.react_component.props.chatRoom);
 
       // set the section tooltip if it's a section that requires one
       if (props.section.is_react) {
         switch (props.section.react_component.name) {
           case "StreamChat":
             setSectionTooltip("Click the gears icon to add your stream");
+            fetchChatRooms();
             break;
           case "RegistrationForm":
             setSectionTooltip(
@@ -95,6 +102,11 @@ function DesignBlockToolbar(props) {
     }
   }, []);
 
+  const fetchChatRooms = async () => {
+    const chatRooms = await props.fetchChatRooms(props.event.id);
+    setRooms(chatRooms.data);
+  };
+
   const handleClickDelete = () => {
     setDeleteConfirmOpen(true);
   };
@@ -104,7 +116,7 @@ function DesignBlockToolbar(props) {
   };
 
   const handleConfirmDelete = () => {
-    props.deleteSection(props.sectionIndex);
+    props.deleteSection(props.sectionIndex, props.section);
   };
 
   // Stream Settings:
@@ -125,6 +137,13 @@ function DesignBlockToolbar(props) {
     });
   };
 
+  const handleSaveChatSettings = () => {
+    setOpenStreamSettings(false);
+    props.saveChatSettings(props.sectionIndex, {
+      chatRoom: room,
+    });
+  };
+
   const handleChangeContent = (event) => {
     setContent(event.target.value);
   };
@@ -137,6 +156,10 @@ function DesignBlockToolbar(props) {
     setCustomHTML(event.target.value);
   };
 
+  const handleChangeRoom = (event) => {
+    setRoom(event.target.value);
+  };
+
   const handleClickMove = (offset) => {
     if (
       props.sectionIndex + offset >= 0 &&
@@ -146,6 +169,8 @@ function DesignBlockToolbar(props) {
     }
   };
 
+  console.log(props);
+
   return (
     <div>
       {/* Toolbar */}
@@ -154,17 +179,26 @@ function DesignBlockToolbar(props) {
       (deleteConfirmOpen === false) ? (
         <div className="toolbar_container">
           <Tooltip title="Move Up">
-            <div className="design-block-toolbar-button" onClick={() => handleClickMove(-1)}>
+            <div
+              className="design-block-toolbar-button"
+              onClick={() => handleClickMove(-1)}
+            >
               <KeyboardArrowUpIcon />
             </div>
           </Tooltip>
           <Tooltip title="Move Down">
-            <div className="design-block-toolbar-button" onClick={() => handleClickMove(1)}>
+            <div
+              className="design-block-toolbar-button"
+              onClick={() => handleClickMove(1)}
+            >
               <KeyboardArrowDownIcon />
             </div>
           </Tooltip>
           <Tooltip title="Delete Design Block">
-            <div className="design-block-toolbar-button" onClick={handleClickDelete}>
+            <div
+              className="design-block-toolbar-button"
+              onClick={handleClickDelete}
+            >
               <DeleteOutlined />
             </div>
           </Tooltip>
@@ -228,83 +262,147 @@ function DesignBlockToolbar(props) {
       >
         <div className={classes.paper}>
           <div id="testEmailModal">
-            <h3>Stream Settings</h3>
-            <div className={classes.root}>
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    {/* Category */}
-                    <InputLabel id="content">Content</InputLabel>
-                    <Select
-                      labelId="content"
-                      id="content-select"
-                      required="true"
-                      value={content}
-                      onChange={handleChangeContent}
-                    >
-                      <MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
-                      <MenuItem value={"custom-embed"}>
-                        Custom HTML Embed (Advanced)
-                      </MenuItem>
-                    </Select>
-                  </FormControl>
-                </Grid>
-                <Grid item xs={12}>
-                  {content === "youtube-live" && (
-                    <div>
-                      <FormControl
-                        variant="outlined"
-                        className={classes.formControl}
-                      >
-                        <TextField
-                          id="youtube-link"
-                          label="Youtube Link"
+            <h3>Settings</h3>
+            <br></br>
+            <Tabs>
+              <div label="Stream">
+                <div className="settings-container">
+                  <div className={classes.root}>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <FormControl
                           variant="outlined"
-                          value={youtubeLink}
-                          onChange={handleChangeYoutubeLink}
-                          placeholder="http://www.youtube.com"
-                        />
-                      </FormControl>
-                      <p>
-                        Need help? Click here for instructions on setting up a
-                        YouTube Live stream.
-                      </p>
-                      <p>
-                        Heads up! YouTube may take down any streams containing
-                        copyrighted music.
-                      </p>
-                    </div>
-                  )}
-                  {content === "custom-embed" && (
-                    <FormControl
-                      variant="outlined"
-                      className={classes.formControl}
-                    >
-                      <TextField
-                        id="custom-HTML"
-                        label="Custom HTML"
-                        variant="outlined"
-                        multiline
-                        rows={12}
-                        value={customHTML}
-                        onChange={handleChangeCustomHTML}
-                      />
-                    </FormControl>
-                  )}
-                </Grid>
-                <Grid item xs={12} id="save-button">
-                  <button
-                    className="Button1"
-                    onClick={handleSaveStreamSettings}
-                  >
-                    Save
-                  </button>
-                </Grid>
-              </Grid>
-            </div>
+                          className={classes.formControl}
+                        >
+                          {/* Category */}
+                          <InputLabel
+                            id="content"
+                            className="fix-mui-select-label"
+                          >
+                            Content
+                          </InputLabel>
+                          <Select
+                            labelId="content"
+                            id="content-select"
+                            required="true"
+                            value={content}
+                            onChange={handleChangeContent}
+                          >
+                            <MenuItem value={"youtube-live"}>
+                              Youtube Live
+                            </MenuItem>
+                            <MenuItem value={"custom-embed"}>
+                              Custom HTML Embed (Advanced)
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
+                        {content === "youtube-live" && (
+                          <div>
+                            <FormControl
+                              variant="outlined"
+                              className={classes.formControl}
+                            >
+                              <TextField
+                                id="youtube-link"
+                                label="Youtube Link"
+                                variant="outlined"
+                                value={youtubeLink}
+                                onChange={handleChangeYoutubeLink}
+                                placeholder="http://www.youtube.com"
+                              />
+                            </FormControl>
+                            <p>
+                              Need help? Click here for instructions on setting
+                              up a YouTube Live stream.
+                            </p>
+                            <p>
+                              Heads up! YouTube may take down any streams
+                              containing copyrighted music.
+                            </p>
+                          </div>
+                        )}
+                        {content === "custom-embed" && (
+                          <FormControl
+                            variant="outlined"
+                            className={classes.formControl}
+                          >
+                            <TextField
+                              id="custom-HTML"
+                              label="Custom HTML"
+                              variant="outlined"
+                              multiline
+                              rows={12}
+                              value={customHTML}
+                              onChange={handleChangeCustomHTML}
+                            />
+                          </FormControl>
+                        )}
+                      </Grid>
+                      <Grid item xs={12} id="save-button">
+                        <button
+                          className="Button1"
+                          onClick={handleSaveStreamSettings}
+                        >
+                          Save
+                        </button>
+                      </Grid>
+                    </Grid>
+                  </div>
+                </div>
+              </div>
+              <div label="Chat">
+                <div className="settings-container">
+                  <div className={classes.root}>
+                    <p>
+                      If you would like to have multiple independent chat
+                      windows, you can create and assign new rooms below.
+                    </p>
+                    <Grid container spacing={3}>
+                      <Grid item xs={12}>
+                        <FormControl
+                          variant="outlined"
+                          className={classes.formControl}
+                        >
+                          {/* Chat Room */}
+                          <InputLabel
+                            id="room"
+                            className="fix-mui-select-label"
+                          >
+                            Room Assignment
+                          </InputLabel>
+                          <Select
+                            labelId="room"
+                            id="room-select"
+                            required="true"
+                            value={room}
+                            onChange={handleChangeRoom}
+                          >
+                            {rooms.map((room) => {
+                              return (
+                                <MenuItem value={room.id}>{room.name}</MenuItem>
+                              );
+                            })}
+                          </Select>
+                        </FormControl>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <RoomTable rooms={rooms} fetchData={fetchChatRooms} />
+                      </Grid>
+                    </Grid>
+                    <Grid item xs={12} id="save-button">
+                      <button
+                        className="Button1"
+                        onClick={handleSaveChatSettings}
+                      >
+                        Save
+                      </button>
+                    </Grid>
+                  </div>
+                </div>
+              </div>
+            </Tabs>
           </div>
         </div>
       </Modal>
@@ -312,4 +410,8 @@ function DesignBlockToolbar(props) {
   );
 }
 
-export default connect(null, actions)(DesignBlockToolbar);
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(DesignBlockToolbar);

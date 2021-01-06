@@ -3,7 +3,7 @@
   justify-content: center;
   align-items: center;
   height: 100%; /* previously 100vh */
-  background-color: #1a1a1d;
+  background-color: #efefef;
   border: 1px solid #efefef;
 }
 
@@ -16,6 +16,10 @@
   width: 100%;
 }
 
+.display-none {
+  display: none;
+}
+
 /* Info Bar */
 
 .infoBar {
@@ -25,6 +29,10 @@
   background: #b0281c;
   height: 60px;
   width: 100%;
+}
+
+.infoBar.grey {
+  background: #7d7a7a;
 }
 
 .leftInnerContainer {
@@ -42,10 +50,19 @@
   margin-right: 5%;
 }
 
-#chatText {
+.chatText {
   color: white;
-  font-family: Roboto, sans-serif;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-weight: 300;
+  font-size: 28px;
   margin-bottom: 0;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+
+.info-bar-icon {
+  height: 28px;
+  margin-right: 12px;
 }
 
 .onlineIcon {
@@ -65,7 +82,7 @@
 .messageBox {
   background: #f3f3f3;
   border-radius: 20px;
-  padding: 5px 20px;
+  padding: 7px 11px;
   color: white;
   display: inline-block;
   max-width: 80%;
@@ -75,8 +92,13 @@
   width: 100%;
   letter-spacing: 0;
   float: left;
-  font-size: 1.1em;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-weight: 400;
+  font-size: 15px;
   word-wrap: break-word;
+  margin: 0;
+  padding: 0;
+  line-height: 18px;
 }
 
 .messageText img {
@@ -87,15 +109,19 @@
   display: flex;
   justify-content: flex-end;
   padding: 0 5%;
-  margin-top: 3px;
+  margin-top: 6px;
 }
 
 .sentText {
   display: flex;
   align-items: center;
-  font-family: Helvetica;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 18px;
   color: #828282;
   letter-spacing: 0.3px;
+  margin: 0;
 }
 
 .pl-10 {
@@ -110,6 +136,10 @@
   justify-content: flex-start;
 }
 
+.justifyCenter {
+  justify-content: center;
+}
+
 .justifyEnd {
   justify-content: flex-end;
 }
@@ -119,7 +149,7 @@
 }
 
 .colorDark {
-  color: #353535;
+  color: black; /* was #353535 */
 }
 
 .backgroundBlue {
@@ -128,6 +158,10 @@
 
 .backgroundLight {
   background: #f3f3f3;
+}
+
+.delete-chat-message {
+  cursor: pointer;
 }
 
 /* Input */
@@ -144,8 +178,9 @@
   padding: 16px 0 16px 16px; /* was 5% */
   width: 80%;
   margin: 0;
-  font-family: Roboto, sans-serif;
-  font-size: 18px;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  font-size: 15px;
+  line-height: 18px;
 }
 
 input:focus,
@@ -159,4 +194,8 @@ select:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.deleted-message * {
+  text-decoration: line-through;
 }

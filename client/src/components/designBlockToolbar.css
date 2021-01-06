@@ -44,18 +44,24 @@
     background-color: rgba(0,0,0,0.07);
 }
 
-#content {
+.fix-mui-select-label {
     /* fixing flawed material UI CSS */
     background-color: white;
-    padding-left: 6px;
-    padding-right: 6px;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
 }
 
-#content-select {
+#content-select, #room-select {
     text-align: left;
     width: 100%;
 }
 
 #save-button {
     text-align: center;
+}
+
+.settings-container {
+    padding: 60px;
+    min-width: 720px;
+    min-height: 620px;
 }

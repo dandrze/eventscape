@@ -4,17 +4,22 @@ const router = express.Router();
 const db = require("../db");
 const requireAuth = require("../middlewares/requireAuth");
 
+const conn = require("../sequelize").conn;
+const { ChatRoom } = require("../sequelize").models;
+
 router.post("/api/event", async (req, res) => {
   const {
-    title,
-    link,
-    category,
-    start_date,
-    end_date,
-    time_zone,
-    primary_color,
-    reg_page_model,
-    event_page_model,
+    event: {
+      title,
+      link,
+      category,
+      start_date,
+      end_date,
+      time_zone,
+      primary_color,
+      reg_page_model,
+      event_page_model,
+    },
     emails,
   } = req.body;
 
@@ -144,6 +149,12 @@ router.post("/api/event", async (req, res) => {
       }
     );
   }
+
+  const newRoom = await ChatRoom.create({
+    event: newEvent.rows[0].id,
+    isDefault: true,
+    name: "Main Chat (Default)",
+  });
 
   res.status(200).send(newEvent.rows[0]);
 });
@@ -319,6 +330,86 @@ router.put("/api/event/set-registration", async (req, res) => {
   );
 
   res.status(200).send(updatedEvent.rows[0]);
+});
+
+router.post("/api/event/chatroom/default", async (req, res) => {
+  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
+  const { event } = req.body;
+
+  const [newRoom, created] = await ChatRoom.findOrCreate({
+    where: {
+      event,
+      isDefault: true,
+    },
+  });
+
+  if (created) {
+    newRoom.name = "Main Room (Default)";
+    await newRoom.save();
+  }
+
+  res.status(200).send({ id: newRoom.id });
+});
+
+router.get("/api/event/chatroom/all", async (req, res) => {
+  const { event } = req.query;
+  const chatRooms = await ChatRoom.findAll({
+    where: {
+      event,
+    },
+  });
+
+  res.status(200).send(chatRooms);
+});
+
+router.put("/api/event/chatroom", async (req, res) => {
+  const { room } = req.body;
+  try {
+    const dbRoom = await ChatRoom.findOne({
+      where: {
+        id: room.id,
+      },
+    });
+
+    dbRoom.name = room.name;
+    dbRoom.save();
+
+    res.status(200).send();
+  } catch (err) {
+    res.status(400).send({ message: "Error while updating chatroom" });
+  }
+});
+
+router.delete("/api/event/chatroom", async (req, res) => {
+  const { id } = req.query;
+
+  try {
+    const chatRoom = await ChatRoom.findOne({
+      where: {
+        id,
+      },
+    });
+    if (chatRoom.isDefault)
+      return res
+        .status(400)
+        .send({ message: "You cannot delete the primary chat room." });
+    if (chatRoom) await chatRoom.destroy();
+
+    res.status(200).send();
+  } catch (err) {
+    res.status(400).send({ message: "Error while deleting chat room" });
+  }
+});
+
+router.post("/api/event/chatroom", async (req, res) => {
+  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
+  const { room, event } = req.body;
+
+  console.log(room, event);
+
+  const newRoom = await ChatRoom.create({ name: room.name, event });
+
+  res.status(200).send(newRoom);
 });
 
 module.exports = router;
