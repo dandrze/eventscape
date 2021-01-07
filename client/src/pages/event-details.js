@@ -18,6 +18,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
@@ -198,6 +199,7 @@ function Event_Details(props) {
           />
           <br></br>
         </FormControl>
+        <Tooltip title="Please note. This link can not be changed once it's created.">
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Event Link */}
           <TextField
@@ -217,6 +219,7 @@ function Event_Details(props) {
             helperText={linkHelperText}
           />
         </FormControl>
+        </Tooltip>
 
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Category */}

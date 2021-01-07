@@ -198,4 +198,5 @@ select:focus {
 
 .deleted-message * {
   text-decoration: line-through;
+  color: red;
 }
