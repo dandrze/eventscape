@@ -6,6 +6,7 @@ const db = require("../db");
 const Scheduler = require("../services/Scheduler");
 const { getEventFromId } = require("../db/Event");
 const { recipientsOptions } = require("../model/enums");
+const Mailer = require("../services/Mailer");
 
 router.get("/api/email/all", async (req, res) => {
   const { event } = req.query;
@@ -200,6 +201,46 @@ router.delete("/api/email-list", async (req, res) => {
   );
 
   res.status(200).send(response.rows);
+});
+
+router.post("/api/email/test", async (req, res) => {
+  const {
+    eventId,
+    email: { email, firstName, lastName, subject, html },
+  } = req.body;
+
+  testSender = {
+    first_name: firstName,
+    last_name: lastName,
+    email,
+    hash: "UNIQUE-LINK-GENERATED-FOR-EACH-REGISTRANT",
+  };
+
+  // pull all relevant data to map to variables and put them into a list
+  const eventData = await db.query(
+    `SELECT 
+      title as event_name, 
+      time_zone, 
+      link, 
+      start_date, 
+      end_date 
+      FROM event 
+      WHERE id=$1 `,
+    [eventId]
+  );
+
+  const recipientData = { ...eventData.rows[0], ...testSender };
+
+  const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+    [recipientData],
+    subject,
+    html
+  );
+  if (success) {
+    res.status(200).send();
+  } else {
+    res.status(400).send();
+  }
 });
 
 // HELPER FUNCTIONS
