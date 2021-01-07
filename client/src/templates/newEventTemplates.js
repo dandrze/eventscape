@@ -16,7 +16,7 @@ import {
   followUp,
 } from "./emailTemplates";
 
-export const regPageModelTemplate = (title) => {
+export const regPageModelTemplate = (title, startDate, endDate, timeZoneName) => {
   return [
     { html: logoHeaderModel(), name: "banner" },
     {

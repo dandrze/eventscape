@@ -131,7 +131,7 @@ function RegistrationForm(props) {
           lastName
         );
         if (res) {
-          setModalText("Thank you for registering for " + props.event.title);
+          setModalText("Thank you for registering for " + props.event.title + ". Your link to join the event has been sent to " + emailAddress);
           openModal();
         }
       }
@@ -150,7 +150,6 @@ function RegistrationForm(props) {
         onClose={closeModal}
         onContinue={closeModal}
         text={modalText}
-        closeText="Cancel"
         continueText="OK"
       />
       <div className="container">

@@ -1,74 +1,14 @@
 import { format } from "date-fns-tz";
 import { isSameDay } from "date-fns";
 
-/*export const heroBannerModelV1 = (eventTitle = "default") => {
-    return `
-    <div contenteditable="false">
-        <div contenteditable="true" style="position: relative; text-align: center; overflow: hidden;">
-            <img src="https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg" style="width: 100%; margin: 0; padding: 0;" class="fr-fic fr-dib">
-            <div style="position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);"
-            >
-            <div>
-                <span contenteditable="true" style="color: white; font-size: 8vw; line-height: 1;">${eventTitle}</span>
-            </div>
-        </div>
-    </div>
-`;
-};*/
-
-/*export const heroBannerModelV2 = (eventTitle = "default", primaryColor) => {
-
-    function hexToRGBA(hex, alpha) {
-        var r = parseInt(hex.slice(1, 3), 16),
-            g = parseInt(hex.slice(3, 5), 16),
-            b = parseInt(hex.slice(5, 7), 16);
-    
-        if (alpha) {
-            return "rgba(" + r + ", " + g + ", " + b + ", " + alpha + ")";
-        } else {
-            return "rgb(" + r + ", " + g + ", " + b + ")";
-        }
-    }    
-    
-    return `
-    <div contenteditable="false">
-            <div class="hero-image">
-                <span contenteditable="true" style="color: white; font-size: 8vw; line-height: 1; margin: 300px auto 300px auto" >${eventTitle}</span>
-            </div>
-        </div>
-    </div>
-
-    <style>
-        .hero-image {
-            background-image: 
-                linear-gradient(
-                    ${hexToRGBA('#521256', 0.45)}, 
-                    ${hexToRGBA('#521256', 0.45)}
-                ),
-                url("https://i.ibb.co/Thbv0N9/Abstract-glowing-particle-wave-on-a-dark-background.jpg");
-            background-color: #cccccc; /* Used if the image is unavailable */
-/*background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
-            width: 100%;
-            padding-top: 8vw;
-            padding-bottom: 8vw;
-            padding-right: 3%;
-            padding-left: 3%;
-        }
-    </style>
-`;
-};*/
-
 export const heroBannerModel = (eventTitle = "default") => {
   return `<div style="overflow: hidden;"><h1 class="title" >${eventTitle}</h1></div>
 
     <style>
         .title {
             padding: 0;
+            font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+            font-weight: 300;
             font-size: 96px;
             line-height: 1;
             margin-left: 5%;
@@ -129,7 +69,7 @@ export const registrationFormHeader = () => {
         }
       </style>
   `;
-};
+}; 
 
 export const descriptionRegistrationModel = (startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
@@ -211,7 +151,7 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
 export const registrationFormDescription = () => {
   return `<div class="one" contenteditable="true">
     <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
-    <p style="text-align: justify;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+    <p style="text-align: left;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
   </div>`;
 };
 

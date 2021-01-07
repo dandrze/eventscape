@@ -275,7 +275,7 @@ const EmailEditor = (props) => {
               ></input>
             </div>
 
-            <div className="inputDiv send-time-input-container">
+            <div className="inputDiv input-container-flex-wrap">
               <label htmlFor="sendTime" className="emailLabel">
                 Scheduled Send Time:{" "}
               </label>
@@ -338,6 +338,46 @@ const EmailEditor = (props) => {
                 </>
               )}
               <div className="errorMessage">{timeError}</div>
+            </div>
+            <div className="inputDiv input-container-flex-wrap">
+              <label htmlFor="variables" className="emailLabel">
+                Variables Toolbox:
+              </label>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{event_name}"}</p>
+                </div>
+              </Tooltip>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{first_name}"}</p>
+                </div>
+              </Tooltip>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{last_name}"}</p>
+                </div>
+              </Tooltip>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{start_date}"}</p>
+                </div>
+              </Tooltip>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{end_date}"}</p>
+                </div>
+              </Tooltip>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{time_zone}"}</p>
+                </div>
+              </Tooltip>
+              <Tooltip title="Copy and paste into message">
+                <div className="variable-bubble">
+                  <p className="variable-bubble-text">{"{event_link}"}</p>
+                </div>
+              </Tooltip>
             </div>
             <div style={{ margin: "3% 0" }}>
               <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
