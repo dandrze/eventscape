@@ -122,6 +122,7 @@ function ScheduledEmails(props) {
       icon: Edit,
       tooltip: "Edit Email",
       onClick: (event, rowData) => {
+        console.log(rowData);
         props.handleEdit(rowData);
       },
     },

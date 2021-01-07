@@ -6,6 +6,7 @@ const requireAuth = require("../middlewares/requireAuth");
 
 const conn = require("../sequelize").conn;
 const { ChatRoom } = require("../sequelize").models;
+const { recipientsOptions, statusOptions } = require("../model/enums");
 
 router.post("/api/event", async (req, res) => {
   const {
@@ -69,6 +70,13 @@ router.post("/api/event", async (req, res) => {
     );
   }
 
+  // create a default chatroom
+  const newRoom = await ChatRoom.create({
+    event: newEvent.rows[0].id,
+    isDefault: true,
+    name: "Main Chat (Default)",
+  });
+
   // Store a new model in the model table for the event page
   const pgEventModel = await db.query(
     `INSERT INTO model 
@@ -126,14 +134,12 @@ router.post("/api/event", async (req, res) => {
     }
   );
 
-  console.log(newEvent);
-
   // add the emails for this event
   for (var email of emails) {
     await db.query(
       `INSERT INTO email 
-			(subject, recipients, minutes_from_event, html, event) 
-		VALUES ($1, $2, $3, $4, $5)
+			(subject, recipients, minutes_from_event, html, event, status) 
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING *`,
       [
         email.subject,
@@ -141,6 +147,9 @@ router.post("/api/event", async (req, res) => {
         email.minutes_from_event,
         email.html,
         newEvent.rows[0].id,
+        email.recipients === recipientsOptions.NEW_REGISTRANTS
+          ? statusOptions.ACTIVE
+          : statusOptions.DRAFT,
       ],
       (err, res) => {
         if (err) {
@@ -149,12 +158,6 @@ router.post("/api/event", async (req, res) => {
       }
     );
   }
-
-  const newRoom = await ChatRoom.create({
-    event: newEvent.rows[0].id,
-    isDefault: true,
-    name: "Main Chat (Default)",
-  });
 
   res.status(200).send(newEvent.rows[0]);
 });
@@ -332,9 +335,9 @@ router.put("/api/event/set-registration", async (req, res) => {
   res.status(200).send(updatedEvent.rows[0]);
 });
 
-router.post("/api/event/chatroom/default", async (req, res) => {
+router.get("/api/event/chatroom/default", async (req, res) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
-  const { event } = req.body;
+  const { event } = req.query;
 
   const [newRoom, created] = await ChatRoom.findOrCreate({
     where: {

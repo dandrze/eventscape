@@ -41,10 +41,10 @@ const EmailEditor = (props) => {
 
   const [subject, setSubject] = useState(props.data.subject || "");
   const [days, setDays] = useState(
-    Math.abs(Math.floor(props.data.minutes_from_event / 1440))
+    Math.floor(Math.abs(props.data.minutes_from_event / 1440))
   );
   const [hours, setHours] = useState(
-    Math.abs(Math.floor((props.data.minutes_from_event % 1440) / 60))
+    Math.floor(Math.abs((props.data.minutes_from_event % 1440) / 60))
   );
   const [mins, setMins] = useState(
     Math.abs(props.data.minutes_from_event % 60)
@@ -58,14 +58,27 @@ const EmailEditor = (props) => {
   const [status, setStatus] = useState(
     props.data.status || statusOptions.DRAFT
   );
+  /*
+  // commented out, used for recipient drop down
   const [recipients, setRecipients] = useState(
     props.data.recipients || recipientsOptions.NEW_REGISTRANTS
   );
+  */
+
+  console.log(props.data.minutes_from_event);
+  console.log(Math.floor(Math.abs(props.data.minutes_from_event / 1440)));
 
   useEffect(() => {
     validateSendTime(days, hours, mins);
+
+    if (props.data.recipients == recipientsOptions.NEW_REGISTRANTS) {
+      setDays(0);
+      setHours(0);
+      setMins(0);
+    }
   }, [days, hours, mins]);
 
+  /*
   const handleChangeRecipients = (event) => {
     setRecipients(event.target.value);
     if (event.target.value == recipientsOptions.NEW_REGISTRANTS) {
@@ -73,7 +86,7 @@ const EmailEditor = (props) => {
       setHours(0);
       setMins(0);
     }
-  };
+  };*/
 
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);
@@ -125,7 +138,7 @@ const EmailEditor = (props) => {
       // if an id exists in the data, that means we're editing an email, so call editEmail. If it is invalid, then we're adding a new email
       if (props.data.id) {
         await props.editEmail(props.data.id, {
-          recipients,
+          recipients: props.data.recipients,
           status,
           subject,
           minutesFromEvent,
@@ -133,7 +146,7 @@ const EmailEditor = (props) => {
         });
       } else {
         await props.addEmail({
-          recipients,
+          recipients: props.data.recipients,
           status,
           subject,
           minutesFromEvent,
@@ -162,7 +175,7 @@ const EmailEditor = (props) => {
     // If the send time is in the past, and this is a scheduled send (not for new registrants), display an error message
     if (
       sendDate < new Date() &&
-      recipients != recipientsOptions.NEW_REGISTRANTS
+      props.data.recipients != recipientsOptions.NEW_REGISTRANTS
     ) {
       setTimeError(
         "This send time is in the past: " +
@@ -213,23 +226,27 @@ const EmailEditor = (props) => {
             />
           </div>
           <div className="button-bar-right">
-            <FormControl className={classes.margin}>
-              <InputLabel id="demo-customized-select-label">Status</InputLabel>
-              <Select
-                labelId="demo-customized-select-label"
-                id="demo-customized-select"
-                value={status}
-                onChange={handleChangeStatus}
-                input={<BootstrapInput />}
-                disabled={status === statusOptions.COMPLETE ? true : false}
-              >
-                <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
-                <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
-                {status === statusOptions.COMPLETE ? (
-                  <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
-                ) : null}
-              </Select>
-            </FormControl>
+            {props.data.recipients != recipientsOptions.NEW_REGISTRANTS ? (
+              <FormControl className={classes.margin}>
+                <InputLabel id="demo-customized-select-label">
+                  Status
+                </InputLabel>
+                <Select
+                  labelId="demo-customized-select-label"
+                  id="demo-customized-select"
+                  value={status}
+                  onChange={handleChangeStatus}
+                  input={<BootstrapInput />}
+                  disabled={status === statusOptions.COMPLETE ? true : false}
+                >
+                  <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
+                  <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
+                  {status === statusOptions.COMPLETE ? (
+                    <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
+                  ) : null}
+                </Select>
+              </FormControl>
+            ) : null}
           </div>
           <button className="Button1 button-bar-right" onClick={handleSave}>
             Save
@@ -243,7 +260,10 @@ const EmailEditor = (props) => {
                 To:{" "}
               </label>
               <div id="toSelect">
+                <div className="disabled-text">{props.data.recipients}</div>
+                {/*
                 <FormControl className={classes.margin}>
+                  
                   <Select
                     labelId="demo-customized-select-label"
                     id="demo-customized-select"
@@ -262,11 +282,14 @@ const EmailEditor = (props) => {
                     </MenuItem>
                   </Select>
                 </FormControl>
+                */}
+                {/*
                 <div id="editEmailList">
                   {recipients === recipientsOptions.EMAIL_LIST ? (
                     <EmailList emailId={props.data.id} />
                   ) : null}
                 </div>
+                  */}
               </div>
             </div>
 
@@ -289,8 +312,8 @@ const EmailEditor = (props) => {
                 Scheduled Send Time:{" "}
               </label>
               <br></br>
-              {recipients === recipientsOptions.NEW_REGISTRANTS ? (
-                <label className="emailLabel">Upon Registration</label>
+              {props.data.recipients === recipientsOptions.NEW_REGISTRANTS ? (
+                <div className="disabled-text">Upon Registration</div>
               ) : (
                 <>
                   <div className="send-time-input">

@@ -132,3 +132,7 @@ form {
   width: 45px;
   margin-right: 5px;
 }
+
+.disabled-text {
+  color: grey;
+}

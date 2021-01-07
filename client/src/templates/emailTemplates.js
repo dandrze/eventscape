@@ -61,6 +61,6 @@ export const reminderOneHour = {
 export const followUp = {
   subject: "Thank You for Attending {event_name}",
   recipients: recipientsOptions.ALL_REGISTRANTS,
-  minutes_from_event: 180, // 6 hours
+  minutes_from_event: 360, // 6 hours
   html: `Thank you email template goes here`,
 };

@@ -53,8 +53,8 @@ export const addSection = (
   const model = getState().model.id;
 
   if (react_component.name === "StreamChat") {
-    const chatRoom = await api.post("/api/event/chatroom/default", {
-      event: getState().event.id,
+    const chatRoom = await api.get("/api/event/chatroom/default", {
+      params: { event: getState().event.id },
     });
     react_component.props.chatRoom = chatRoom.data.id;
   }
