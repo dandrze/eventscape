@@ -53,30 +53,6 @@ router.post("/api/event", async (req, res) => {
     }
   );
 
-  // Store the section HTML for the model above
-  for (i = 0; i < reg_page_model.length; i++) {
-    await db.query(
-      `INSERT INTO section_html
-					(model, index, html, is_react, react_component)
-					VALUES
-					($1, $2, $3, $4, $5)`,
-      [
-        pgRegModel.rows[0].id,
-        i,
-        reg_page_model[i].html,
-        reg_page_model[i].is_react,
-        reg_page_model[i].react_component,
-      ]
-    );
-  }
-
-  // create a default chatroom
-  const newRoom = await ChatRoom.create({
-    event: newEvent.rows[0].id,
-    isDefault: true,
-    name: "Main Chat (Default)",
-  });
-
   // Store a new model in the model table for the event page
   const pgEventModel = await db.query(
     `INSERT INTO model 
@@ -90,23 +66,6 @@ router.post("/api/event", async (req, res) => {
       }
     }
   );
-
-  // Store the section HTML for the model above
-  for (i = 0; i < event_page_model.length; i++) {
-    await db.query(
-      `INSERT INTO section_html
-					(model, index, html, is_react, react_component)
-					VALUES
-					($1, $2, $3, $4, $5)`,
-      [
-        pgEventModel.rows[0].id,
-        i,
-        event_page_model[i].html,
-        event_page_model[i].is_react,
-        event_page_model[i].react_component,
-      ]
-    );
-  }
 
   // add the event to the event table. Make it the current event
   const newEvent = await db.query(
@@ -133,6 +92,63 @@ router.post("/api/event", async (req, res) => {
       }
     }
   );
+
+  // create a default chatroom
+  const newRoom = await ChatRoom.create({
+    event: newEvent.rows[0].id,
+    isDefault: true,
+    name: "Main Chat (Default)",
+  });
+
+  // Store the section HTML for the reg page model
+  for (i = 0; i < reg_page_model.length; i++) {
+    if (
+      reg_page_model[i].is_react &&
+      reg_page_model[i].react_component.name == "StreamChat"
+    ) {
+      reg_page_model[i].react_component.props.chatRoom = newRoom.id;
+    }
+
+    console.log(reg_page_model[i].react_component);
+
+    await db.query(
+      `INSERT INTO section_html
+					(model, index, html, is_react, react_component)
+					VALUES
+					($1, $2, $3, $4, $5)`,
+      [
+        pgRegModel.rows[0].id,
+        i,
+        reg_page_model[i].html,
+        reg_page_model[i].is_react,
+        reg_page_model[i].react_component,
+      ]
+    );
+  }
+
+  // Store the section HTML for the event page model
+  for (i = 0; i < event_page_model.length; i++) {
+    if (
+      event_page_model[i].is_react &&
+      event_page_model[i].react_component.name == "StreamChat"
+    ) {
+      event_page_model[i].react_component.props.chatRoom = newRoom.id;
+    }
+
+    await db.query(
+      `INSERT INTO section_html
+					(model, index, html, is_react, react_component)
+					VALUES
+					($1, $2, $3, $4, $5)`,
+      [
+        pgEventModel.rows[0].id,
+        i,
+        event_page_model[i].html,
+        event_page_model[i].is_react,
+        event_page_model[i].react_component,
+      ]
+    );
+  }
 
   // add the emails for this event
   for (var email of emails) {
