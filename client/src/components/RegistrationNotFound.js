@@ -32,35 +32,20 @@ function ErrorRegNotFound(props) {
   };
 
   const handleSubmit = async () => {
-    /*
     if (!email) {
       setEmailErrorText("Please enter your email address");
-    } else if (await emailExists()) {
-      setEmailErrorText(
-        "Account already exists with this email address. Please login or contact support."
-      );
-    } else if (!password) {
-      setPasswordErrorText("Please enter a password");
-    } else if (!confirmPassword) {
-      setConfirmPasswordErrorText("Please confirm your password");
-    } else if (password != confirmPassword) {
-      setPassword("");
-      setConfirmPassword("");
-      setConfirmPasswordErrorText("Passwords do not match");
-      setPasswordErrorText("Passwords do not match");
     } else {
-      const res = await props.createAccount({
-        email,
-        password,
-        firstName,
-        lastName,
-      });
+      const registration = await props.fetchRegistration(email);
 
-      console.log(res);
-      const auth = await props.signInLocal(email, password);
-      props.history.push("/event-details");
+      if (registration.email == email) {
+        setEmailFound(true);
+        setEmailNotFound(false);
+        await props.resendRegistrationEmail(email, props.event.id);
+      } else {
+        setEmailNotFound(true);
+        setEmailFound(false);
+      }
     }
-    */
   };
 
   return (
@@ -69,10 +54,12 @@ function ErrorRegNotFound(props) {
         className="form-box shadow-border"
         style={{
           maxWidth: "600px",
-          height: "700px"
+          height: "700px",
         }}
       >
-        <h2>Oops, it seems that your registration for event name cannot be found.</h2>
+        <h2>
+          Oops, it seems that your registration for event name cannot be found.
+        </h2>
         <p>Please enter your email address below to re-send your event link.</p>
         <FormControl variant="outlined" className={classes.formControl}>
           <TextField
@@ -95,8 +82,14 @@ function ErrorRegNotFound(props) {
           <>
             <br></br>
             <br></br>
-            <p>Your link to join the event has been sent to the email address you entered. </p>
-            <p>Please check your inbox and if it’s not there, try checking your junk mail.</p>
+            <p>
+              Your link to join the event has been sent to the email address you
+              entered.{" "}
+            </p>
+            <p>
+              Please check your inbox and if it’s not there, try checking your
+              junk mail.
+            </p>
           </>
         )}
 
@@ -105,8 +98,11 @@ function ErrorRegNotFound(props) {
           <>
             <br></br>
             <br></br>
-            <p>We could not find a registration for this email address. Please click below to register.</p>
-            <Link to="https://link.eventscape.io">
+            <p>
+              We could not find a registration for this email address. Please
+              click below to register.
+            </p>
+            <Link to="/">
               <button className="Button1" type="submit">
                 Register for Event Name
               </button>
@@ -118,4 +114,8 @@ function ErrorRegNotFound(props) {
   );
 }
 
-export default connect(null, actions)(ErrorRegNotFound);
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(ErrorRegNotFound);

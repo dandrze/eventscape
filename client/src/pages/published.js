@@ -10,6 +10,7 @@ import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
 import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
+import RegistrationNotFound from "../components/RegistrationNotFound";
 
 const Published = (props) => {
   const { hash } = useParams();
@@ -44,8 +45,7 @@ const Published = (props) => {
       return <p>No Event Found</p>;
     } else if (hash && !props.attendee) {
       // if there is a hash but no attendee returned
-      // We can have a login page instead here in the future
-      return <p>The unique link didn't work. Login page goes here</p>;
+      return <RegistrationNotFound />;
     } else if (props.event.id) {
       return (
         <div class="fr-view live-page-container">
@@ -55,7 +55,6 @@ const Published = (props) => {
           <style>{theme(props.event.primary_color)}</style>
           <ul>
             {props.model.sections.map(function (section) {
-              console.log(section);
               return section.is_react
                 ? createElement(
                     mapReactComponent[section.react_component.name],

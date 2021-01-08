@@ -13,6 +13,8 @@ import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Fade from "@material-ui/core/Fade";
 import Cancel from "./cancel.svg";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +33,10 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: "30px",
   },
+  formControl: {
+    margin: "20px 0px",
+    minWidth: "100%",
+  },
 }));
 
 function RegistrationForm(props) {
@@ -45,7 +51,7 @@ function RegistrationForm(props) {
   );
   const [emailAddressReSend, setEmailAddressReSend] = useState("");
   const [emailFound, setEmailFound] = useState(false);
-  const [emailNotFound, setEmailNotFound] = useState(true);
+  const [emailNotFound, setEmailNotFound] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [firstName, setFirstName] = useState(
     props.standardFields ? props.standardFields.firstName : ""
@@ -53,6 +59,7 @@ function RegistrationForm(props) {
   const [lastName, setLastName] = useState(
     props.standardFields ? props.standardFields.lastName : ""
   );
+  const [emailErrorText, setEmailErrorText] = useState("");
 
   useEffect(() => {
     fetchFormData();
@@ -117,6 +124,9 @@ function RegistrationForm(props) {
     } else if (!lastName) {
       setModalText("Please enter your last name");
       openModal();
+    } else if (props.fetchRegistration(emailAddress)) {
+      setModalText("Registration already exists under email: " + emailAddress);
+      openModal();
     } else {
       // If there is a custom callback (i.e. editting a registration) use that
       if (props.onSubmitCallback) {
@@ -134,6 +144,25 @@ function RegistrationForm(props) {
           setModalText("Thank you for registering for " + props.event.title);
           openModal();
         }
+      }
+    }
+  };
+
+  const handleResendEmailClick = async () => {
+    const mailFormat = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
+      setEmailErrorText("Please enter valid email address");
+    } else {
+      const registration = await props.fetchRegistration(emailAddressReSend);
+
+      if (registration.email == emailAddressReSend) {
+        setEmailFound(true);
+        setEmailNotFound(false);
+        await props.resendRegistrationEmail(emailAddressReSend, props.event.id);
+      } else {
+        setEmailNotFound(true);
+        setEmailFound(false);
       }
     }
   };
@@ -247,16 +276,23 @@ function RegistrationForm(props) {
             </div>
             <div style={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
               <p>Please enter the email address you registered with.</p>
-              <input
-                type="text"
-                class="form-control"
-                value={emailAddressReSend}
-                onChange={handleEmailReSendChange}
-                onBlur={handleEmailBlur}
-                placeholder="email@email.com"
-              />
+              <FormControl variant="outlined" className={classes.formControl}>
+                <TextField
+                  type="email"
+                  id="email"
+                  label="Email"
+                  variant="outlined"
+                  value={emailAddressReSend}
+                  onChange={handleEmailReSendChange}
+                  placeholder="email@email.com"
+                  helperText={emailErrorText}
+                />
+              </FormControl>
               <div className="btn-toolbar">
-                <button className="btn btn-school btn-big theme-button">
+                <button
+                  className="btn btn-school btn-big theme-button"
+                  onClick={handleResendEmailClick}
+                >
                   Re-Send My Event Link
                 </button>
               </div>
