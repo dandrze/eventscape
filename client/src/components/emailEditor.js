@@ -201,7 +201,16 @@ const EmailEditor = (props) => {
       <div className="email-editor-container">
         <div className="top-button-bar">
           <div className="button-bar-left">
-            <SendTestEmail />
+            <SendTestEmail
+              subject={subject}
+              html={html}
+              eventId={props.event.id}
+              recipient={{
+                firstName: props.user.first_name,
+                lastName: props.user.last_name,
+                email: props.user.email,
+              }}
+            />
           </div>
           <div className="button-bar-right">
             <FormControl className={classes.margin}>
@@ -399,6 +408,7 @@ const useStyles = makeStyles((theme) => ({
 const mapStateToProps = (state) => {
   return {
     event: state.event,
+    user: state.user,
   };
 };
 
