@@ -29,19 +29,21 @@ export const createEvent = (
     event_page_model: eventPageModelTemplate(title, start_date, end_date),
   };
 
-  const res = await api.post("/api/event", {
-    event,
-    emails: emaillistTemplate(start_date),
-  });
+  try {
+    const res = await api.post("/api/event", {
+      event,
+      emails: emaillistTemplate(start_date),
+    });
 
-  if (res.status === 200) {
     await dispatch({
       type: CREATE_EVENT,
       payload: res.data,
     });
-    toast.success("Event successfully created");
-  } else {
-    toast.error("Error when creating new event: " + res.statusText);
+    return true;
+  } catch (err) {
+    console.log(err.response);
+    toast.error("Error when creating new event: " + err.response.data);
+    return false;
   }
 };
 
@@ -65,16 +67,19 @@ export const updateEvent = (
     status: getState().event.status,
   };
 
-  const res = await api.put("/api/event", updatedEvent);
+  try {
+    const res = await api.put("/api/event", updatedEvent);
 
-  if (res.status === 200) {
     await dispatch({
       type: UPDATE_EVENT,
       payload: res.data,
     });
     toast.success("Event successfully saved.");
-  } else {
-    toast.error("Error when saving: " + res.statusText);
+    return true;
+  } catch (err) {
+    console.log(err.response);
+    toast.error("Error when updating event: " + err.response.data);
+    return false;
   }
 };
 
@@ -90,7 +95,7 @@ export const fetchEvent = () => async (dispatch) => {
       return null;
     }
   } catch (err) {
-    toast.error("Error when fetching events: " + err.toString());
+    toast.error("Error when fetching events: " + err.response.data);
     return false;
   }
 };
@@ -114,16 +119,16 @@ export const publishPage = () => async (dispatch, getState) => {
 
   const newEvent = { ...getState().event, status: "active" };
 
-  const res = await api.put("/api/event", newEvent);
+  try {
+    const res = await api.put("/api/event", newEvent);
 
-  if (res.status === 200) {
     await dispatch({
       type: UPDATE_EVENT,
       payload: res.data,
     });
     toast.success("Page successfully published");
-  } else {
-    toast.error("Error when saving: " + res.statusText);
+  } catch (err) {
+    toast.error("Error when saving: " + err.response.data);
   }
 };
 
@@ -148,7 +153,7 @@ export const setEventRegistration = (registrationEnabled, event) => async (
     toast.success("Registration successfuly changed");
     return true;
   } catch (err) {
-    toast.error("Error when setting Registration: " + err.toString());
+    toast.error("Error when setting Registration: " + err.response.data);
     return false;
   }
 };

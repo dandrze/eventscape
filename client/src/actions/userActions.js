@@ -4,18 +4,23 @@ import { FETCH_USER } from "../actions/types";
 
 export const signInLocal = (username, password) => async (dispatch) => {
   // response is {user, error}
-  const res = await api.post("/auth/login/local", {
-    username,
-    password,
-  });
+  try {
+    const res = await api.post("/auth/login/local", {
+      username,
+      password,
+    });
 
-  dispatch({ type: FETCH_USER, payload: res.data.user });
+    dispatch({ type: FETCH_USER, payload: res.data.user });
 
-  if (res.data.error) {
-    toast.error("Error when signing in: " + res.data.error[0]);
-    return false;
-  } else {
-    return res.data.user;
+    if (res.data.error) {
+      toast.error("Error when signing in: " + res.data.error[0]);
+      return { error: res.data.error[0] };
+    } else {
+      return { success: true };
+    }
+  } catch (err) {
+    toast.error("Error when signing in: " + err.response.data);
+    return { error: err.response.data };
   }
 };
 

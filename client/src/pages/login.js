@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 
@@ -22,6 +23,7 @@ function Login(props) {
 
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
+  const [isLoading, setIsloading] = useState(false);
 
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
@@ -32,12 +34,22 @@ function Login(props) {
   };
 
   const handleSubmit = async () => {
+    setIsloading(true);
     const isAuth = await props.signInLocal(email, password);
-
-    if (isAuth) {
+    setIsloading(false);
+    if (isAuth.success) {
       props.history.push("/design");
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="form-box shadow-border">
+        <p>Signing In...</p>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <div className="form-box shadow-border">

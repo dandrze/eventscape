@@ -18,6 +18,7 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
@@ -70,6 +71,7 @@ function Event_Details(props) {
     props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
   );
   const [color, setColor] = useState(props.color ? props.color : "#B0281C");
+  const [isLoading, setIsloading] = useState(false);
 
   const closeModal = () => setOpenModal(false);
 
@@ -150,8 +152,11 @@ function Event_Details(props) {
         ? new Date(selectedEndDate)
         : selectedEndDate;
 
+    setIsloading(true);
+    let response = false;
+
     if (props.isEventUpdate) {
-      await props.updateEvent(
+      response = await props.updateEvent(
         eventTitle,
         eventLink,
         eventCat,
@@ -161,7 +166,7 @@ function Event_Details(props) {
         color
       );
     } else {
-      await props.createEvent(
+      response = await props.createEvent(
         eventTitle,
         eventLink,
         eventCat,
@@ -171,9 +176,19 @@ function Event_Details(props) {
         color
       );
     }
+    setIsloading(false);
 
-    props.history.push("/Design");
+    if (response) props.history.push("/Design");
   };
+
+  if (isLoading && !props.isEventUpdate) {
+    return (
+      <div className="form-box shadow-border">
+        <p>Hang tight! We are building your event.</p>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <div>
