@@ -22,19 +22,30 @@ module.exports = (server) => {
         include: ChatUser,
       });
 
-      const [user, created] = await ChatUser.findOrCreate({
-        where: {
-          name,
-          EventscapeId: userId || null,
-        },
-      });
+      var user;
+      var created;
+
+      if (!userId) {
+        user = await ChatUser.create({ name });
+      } else {
+        [user, created] = await ChatUser.findOrCreate({
+          where: {
+            EventscapeId: userId || null,
+          },
+        });
+
+        if (created) {
+          user.name = name;
+          user.save();
+        }
+      }
 
       socket.join(room);
       // push the hidden state (true or false)
       if (chatRoom) socket.emit("chatHidden", chatRoom.isHidden);
 
       socket.emit("notification", {
-        text: "You are now connected to room " + room,
+        text: "Hello " + name + ".You are now connected to room " + room,
       });
 
       //push the message history
@@ -44,6 +55,7 @@ module.exports = (server) => {
           text: message.text,
           id: message.id,
           deleted: message.deleted,
+          userId: message.ChatUser.id,
         });
       });
 
@@ -61,6 +73,7 @@ module.exports = (server) => {
 
       io.to(room).emit("message", {
         user: chatUser.name,
+        userId: chatUser.id,
         text: message,
         id: chatMessage.id,
       });

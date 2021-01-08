@@ -32,20 +32,22 @@ let socket;
 
 const Messages = ({
   messages,
-  name,
+  chatUserId,
   isModerator,
   deleteMessage,
   restoreMessage,
+  name,
 }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
         <Message
           message={message}
-          name={name}
+          chatUserId={chatUserId}
           isModerator={isModerator}
           deleteMessage={deleteMessage}
           restoreMessage={restoreMessage}
+          name={name}
         />
       </div>
     ))}
@@ -53,15 +55,16 @@ const Messages = ({
 );
 
 const Message = ({
-  message: { text, user, id, deleted, isNotification },
-  name,
+  message: { text, user, userId, id, deleted, isNotification },
+  chatUserId,
   isModerator,
   deleteMessage,
   restoreMessage,
+  name,
 }) => {
   let isSentByCurrentUser = false;
 
-  if (user === name) {
+  if (userId === chatUserId) {
     isSentByCurrentUser = true;
   }
 
@@ -256,6 +259,8 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
     socket.emit("restoreMessage", { id, room });
   };
 
+  console.log(chatUserId);
+
   return (
     <div
       className={clsx({
@@ -275,10 +280,11 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
         </div>
         <Messages
           messages={messages}
-          name={name}
+          chatUserId={chatUserId}
           isModerator={isModerator}
           deleteMessage={deleteMessage}
           restoreMessage={restoreMessage}
+          name={name}
         />
         <Input
           message={message}

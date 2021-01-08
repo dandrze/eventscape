@@ -382,15 +382,18 @@ router.get("/api/event/chatroom/all", async (req, res) => {
 });
 
 router.put("/api/event/chatroom", async (req, res) => {
-  const { room } = req.body;
+  const {
+    room: { id, name, moderatorName },
+  } = req.body;
   try {
     const dbRoom = await ChatRoom.findOne({
       where: {
-        id: room.id,
+        id,
       },
     });
 
-    dbRoom.name = room.name;
+    dbRoom.name = name;
+    dbRoom.moderatorName = moderatorName;
     dbRoom.save();
 
     res.status(200).send();
