@@ -473,3 +473,7 @@ select {
 .w-300 {
   width: 300px;
 }
+
+.margin-auto {
+  margin: auto;
+}
