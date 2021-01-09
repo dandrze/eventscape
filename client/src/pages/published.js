@@ -2,7 +2,7 @@ import React, { createElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 
 import { connect } from "react-redux";
-import ReactHtmlParser from "react-html-parser";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { Helmet } from "react-helmet";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
@@ -34,9 +34,6 @@ const Published = (props) => {
     setIsLoaded(true);
   };
 
-  console.log(Boolean(props.event.id));
-  console.log(props.model);
-
   const renderPage = () => {
     // if there is a hash provided but no attendee found, display an error page
     if (!isLoaded) {
@@ -55,15 +52,20 @@ const Published = (props) => {
           <style>{theme(props.event.primary_color)}</style>
           <ul>
             {props.model.sections.map(function (section) {
-              return section.is_react
-                ? createElement(
-                    mapReactComponent[section.react_component.name],
-                    {
-                      ...section.react_component.props,
-                      sectionIndex: section.index,
-                    }
-                  )
-                : ReactHtmlParser(section.html);
+              return section.is_react ? (
+                createElement(mapReactComponent[section.react_component.name], {
+                  ...section.react_component.props,
+                  sectionIndex: section.index,
+                  isLive: true,
+                })
+              ) : (
+                <FroalaEditorView
+                  model={section.html.replace(
+                    `contenteditable="true"`,
+                    `contenteditable="false"`
+                  )}
+                />
+              );
             })}
           </ul>
         </div>

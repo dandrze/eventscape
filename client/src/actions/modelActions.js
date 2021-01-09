@@ -52,7 +52,7 @@ export const addSection = (
 ) => async (dispatch, getState) => {
   const model = getState().model.id;
 
-  if (react_component.name === "StreamChat") {
+  if (react_component && react_component.name === "StreamChat") {
     const chatRoom = await api.get("/api/event/chatroom/default", {
       params: { event: getState().event.id },
     });

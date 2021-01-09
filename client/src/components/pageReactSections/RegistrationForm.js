@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import ReactHtmlParser from "react-html-parser";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 import { ReactFormGenerator } from "../react-form-builder2/lib";
 import AlertModal from "../AlertModal";
@@ -8,6 +10,7 @@ import "./RegistrationForm.css";
 import api from "../../api/server";
 import * as actions from "../../actions";
 import Froala from "../froala";
+
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
@@ -176,6 +179,11 @@ function RegistrationForm(props) {
     return inputText.value.match(mailformat);
   };
 
+  const nonEditableHtml = props.model.sections[props.sectionIndex].html.replace(
+    `contenteditable="true"`,
+    `contenteditable="false"`
+  );
+
   return (
     <div>
       <AlertModal
@@ -190,7 +198,11 @@ function RegistrationForm(props) {
         {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
         {!props.isEditForm ? (
           <div className="form-editor-froala">
-            <Froala sectionIndex={props.sectionIndex} />
+            {props.isLive ? (
+              <FroalaEditorView model={nonEditableHtml} />
+            ) : (
+              <Froala sectionIndex={props.sectionIndex} />
+            )}
           </div>
         ) : null}
         {isLoading ? (
@@ -359,7 +371,7 @@ function RegistrationForm(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event };
+  return { event: state.event, model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(RegistrationForm);
