@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import ReactHtmlParser from "react-html-parser";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 import { ReactFormGenerator } from "../react-form-builder2/lib";
