@@ -106,10 +106,35 @@ router.put("/api/registration", async (req, res) => {
   res.status(200).send(updatedRegistration.rows[0]);
 });
 
+router.get("/api/registration/event", async (req, res) => {
+  const { event } = req.query;
+
+  const userId = req.user.id;
+
+  // Get list of all registrations for this event
+  const registrations = await db.query(
+    `SELECT * 
+		FROM 
+			registration
+		WHERE 
+      event=$1
+    ORDER BY
+      id`,
+    [event],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(Error);
+      }
+    }
+  );
+
+  res.status(200).send(registrations.rows);
+});
+
 router.get("/api/registration/email", async (req, res) => {
   const { email } = req.query;
 
-  // Get list of all registrations for this event
+  // Get the registration associated with an email
   const registrations = await db.query(
     `SELECT * 
 		FROM 

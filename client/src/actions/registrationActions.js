@@ -11,7 +11,7 @@ export const fetchRegistrations = (event) => async (dispatch) => {
   // call the api and return the registrations in json
 
   try {
-    const res = await api.get("/api/registration", { params: { event } });
+    const res = await api.get("/api/registration/event", { params: { event } });
     dispatch({ type: FETCH_REGISTRATION, payload: res.data });
     return true;
   } catch (err) {
