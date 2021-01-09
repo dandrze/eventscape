@@ -377,6 +377,83 @@ var Preview =
               _react["default"].createElement(
                 "div",
                 {
+                  className: "default-fields",
+                },
+                _react["default"].createElement(
+                  "div",
+                  {
+                    className: "form-group",
+                  },
+                  _react["default"].createElement(
+                    "label",
+                    {
+                      className: "default-fields-label",
+                    },
+                    "--------------------------------- Mandatory Fields (cannot edit) ---------------------------------"
+                  ),
+                  _react["default"].createElement(
+                    "label",
+                    {
+                      className: "",
+                    },
+                    _react["default"].createElement(
+                      "span",
+                      {
+                        className: "",
+                      },
+                      "First Name"
+                    )
+                  ),
+                  _react["default"].createElement("input", {
+                    className: "form-control",
+                    type: "text",
+                  }),
+                  _react["default"].createElement(
+                    "label",
+                    {
+                      className: "",
+                    },
+                    _react["default"].createElement(
+                      "span",
+                      {
+                        className: "",
+                      },
+                      "Last Name"
+                    )
+                  ),
+                  _react["default"].createElement("input", {
+                    className: "form-control",
+                    type: "text",
+                  }),
+                  _react["default"].createElement(
+                    "label",
+                    {
+                      className: "",
+                    },
+                    _react["default"].createElement(
+                      "span",
+                      {
+                        className: "",
+                      },
+                      "Email"
+                    )
+                  ),
+                  _react["default"].createElement("input", {
+                    className: "form-control",
+                    type: "text",
+                  }),
+                  _react["default"].createElement(
+                    "label",
+                    {
+                      className: "default-fields-label",
+                    },
+                    "--------------------------------- End Mandatory Fields ---------------------------------"
+                  )
+                )
+              ),
+              _react["default"].createElement(
+                "div",
+                {
                   className: "Sortable",
                 },
                 items
