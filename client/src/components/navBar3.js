@@ -16,9 +16,11 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
-import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
-import SettingsIcon from "@material-ui/icons/Settings";
+
+/* colapsible side nav experimenting, move later */
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import Collapse from '@material-ui/core/Collapse';
 
 import "./navBar3.css";
 
@@ -44,6 +46,9 @@ import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
 import ChevronRightIcon from "@material-ui/icons/ChevronRight";
 import ListIcon from "@material-ui/icons/List";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
+import SettingsIcon from "@material-ui/icons/Settings";
 
 /* Icons side nav */
 import PenIcon from "../icons/pen.svg";
@@ -160,6 +165,9 @@ const useStyles = makeStyles((theme) => ({
   highlight: {
     backgroundColor: "rgba(0, 0, 0, 0.06)",
   },
+  nested: {
+    paddingLeft: "90px",
+  },
 }));
 
 const StyledMenu = withStyles({
@@ -212,6 +220,8 @@ function NavBar3(props) {
   const openBlocked = props.openBlocked;
   const open = props.settings.sideDrawerOpen && !openBlocked;
   const highlight = props.highlight;
+  const [openDesignNested, setOpenDesignNested] = React.useState(false);
+  const [drawerPreviouslyOpen, setDrawerPreviouslyOpen] = React.useState(true);
 
   let history = useHistory();
 
@@ -249,6 +259,9 @@ function NavBar3(props) {
 
   const handleDrawerClose = () => {
     props.setSideDrawerOpen(false);
+    if (openDesignNested === true) {
+      setOpenDesignNested(false);
+    }
   };
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -261,16 +274,22 @@ function NavBar3(props) {
     setAnchorEl(null);
   };
 
-  /*Design drop down*/
-  const [anchorElDesign, setAnchorElDesign] = React.useState(null);
-
-  const handleClickDesign = (event) => {
-    setAnchorElDesign(event.currentTarget);
+  const handleClickDesignNested = () => {
+    setOpenDesignNested(!openDesignNested);
+    if (open === true) {
+      setDrawerPreviouslyOpen(true);
+    } else {
+      setDrawerPreviouslyOpen(false);
+      handleDrawerOpen();
+    }
   };
 
-  const handleCloseDesign = () => {
-    setAnchorElDesign(null);
-  };
+  const handleClickNestedItem = () => {
+    setOpenDesignNested(false);
+    if (drawerPreviouslyOpen === false) {
+      handleDrawerClose();
+    }
+  }
 
   const handleGoToLiveSite = () => {
     window.open(`https://${props.event.link}.eventscape.io`);
@@ -482,22 +501,67 @@ function NavBar3(props) {
           </div>
           <Divider />
           <List>
-            <ListItem
-              button
-              key="design"
-              component="a"
-              onClick={handleClickDesign}
+            {/* Design */}
+            <ListItem 
+              button 
+              onClick={handleClickDesignNested}
               className={clsx({
                 [classes.highlight]: highlight === "design",
               })}
             >
-              <Tooltip title="Design">
-                <ListItemIcon>
-                  <img src={PenIcon} height="20px"></img>
-                </ListItemIcon>
-              </Tooltip>
+              <ListItemIcon>
+                <img src={PenIcon} height="20px"></img>
+              </ListItemIcon>
               <ListItemText primary="Design" />
+              {openDesignNested ? <ExpandLess /> : <ExpandMore />}
             </ListItem>
+
+            {/* Design Nested Menu */}
+            <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+
+                {/* Event Details */}
+                <Link 
+                  to="./website-settings" 
+                  onClick={() => {
+                    handleClickNestedItem();
+                  }}
+                >
+                  <ListItem 
+                    button 
+                    className={classes.nested} 
+                  >
+                    <ListItemText secondary="Event Details" />
+                  </ListItem>
+                </Link>
+
+                {/* Registration Page */}
+                <ListItem 
+                  button 
+                  className={classes.nested} 
+                  onClick={() => {
+                    handleClickNestedItem();
+                    handlePageChange("registration");
+                  }}
+                >
+                  <ListItemText secondary="Registration Page" />
+                </ListItem>
+
+                {/* Event Page */}
+                <ListItem 
+                  button 
+                  className={classes.nested} 
+                  onClick={() => {
+                    handleClickNestedItem();
+                    handlePageChange("event");
+                  }}
+                >
+                  <ListItemText secondary="Event Page" />
+                </ListItem>
+
+              </List>
+            </Collapse>
+
             <Link to="/communication">
               <ListItem
                 button
@@ -563,6 +627,8 @@ function NavBar3(props) {
               </ListItem>
             </Link>
           </List>
+
+          {/*
           <Menu
             id="simple-menu"
             anchorEl={anchorElDesign}
@@ -590,6 +656,7 @@ function NavBar3(props) {
               <MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
             </Link>
           </Menu>
+            */}
         </Drawer>
       )}
 
@@ -625,7 +692,6 @@ function NavBar3(props) {
                 button
                 key="contact"
                 component="a"
-                onClick={handleClickDesign}
                 className={clsx({
                   [classes.highlight]: highlight === "contact",
                 })}
@@ -645,7 +711,6 @@ function NavBar3(props) {
                 button
                 key="password"
                 component="a"
-                onClick={handleClickDesign}
                 className={clsx({
                   [classes.highlight]: highlight === "password",
                 })}

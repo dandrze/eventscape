@@ -87,7 +87,7 @@ class FroalaEmail extends Component {
       toolbarInline: true,
       toolbarVisibleWithoutSelection: true,
       heightMin: "568px",
-      placeholderText: "Type something \n or click inside me",
+      placeholderText: "Type email body here",
       charCounterCount: true,
       attribution: false,
       width: "100%",

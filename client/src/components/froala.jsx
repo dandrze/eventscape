@@ -18,7 +18,7 @@ import "froala-editor/js/plugins/lists.min.js";
 import "froala-editor/js/plugins/align.min.js";
 import "froala-editor/js/plugins/link.min.js";
 import "froala-editor/js/plugins/file.min.js";
-//import "froala-editor/js/plugins/code_view.min.js";
+import "froala-editor/js/plugins/code_view.min.js";
 import "froala-editor/js/plugins/code_beautifier.min.js";
 import "froala-editor/js/plugins/image.min.js";
 //import "froala-editor/js/third_party/image_tui.min.js";
@@ -29,7 +29,7 @@ import "froala-editor/css/plugins/video.min.css";
 import "froala-editor/css/plugins/colors.min.css";
 //import "froala-editor/css/plugins/emoticons.min.css";
 import "froala-editor/css/plugins/file.min.css";
-//import "froala-editor/css/plugins/code_view.min.css";
+import "froala-editor/css/plugins/code_view.min.css";
 import "froala-editor/css/plugins/image.min.css";
 //import "froala-editor/css/third_party/image_tui.min.css";
 
@@ -66,9 +66,10 @@ class Froala extends Component {
             "insertLink",
             "insertFile",
             "emoticons",
+            "html",
             "image",
           ],
-          buttonsVisible: 5,
+          buttonsVisible: 7,
         },
         moreText: {
           buttons: [
