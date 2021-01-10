@@ -223,7 +223,7 @@ function Event_Details(props) {
 
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Category */}
-          <InputLabel id="event-cat">Category</InputLabel>
+          <InputLabel id="event-cat" className="mui-select-css-fix">Category</InputLabel>
           <Select
             labelId="event-cat"
             id="event-cat-select"
@@ -341,7 +341,7 @@ function Event_Details(props) {
 
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Time Zone */}
-          <InputLabel id="event-time-zone">Time Zone</InputLabel>
+          <InputLabel id="event-time-zone" className="mui-select-css-fix">Time Zone</InputLabel>
           <Select
             labelId="event-time-zone"
             id="event-time-zone-select"

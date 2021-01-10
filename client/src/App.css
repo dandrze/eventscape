@@ -473,3 +473,11 @@ select {
 .w-300 {
   width: 300px;
 }
+
+.mui-select-css-fix {
+  /* fixing flawed material UI CSS */
+  background-color: white;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  border-radius: 6px;
+}

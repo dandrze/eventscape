@@ -53,7 +53,7 @@ const EmailEditor = (props) => {
     props.data.minutes_from_event <= 0 ? -1 : 1
   );
   const [html, setHtml] = useState(
-    props.data.html || "Your email body goes here"
+    props.data.html || ""
   );
   const [status, setStatus] = useState(
     props.data.status || statusOptions.DRAFT

@@ -7,13 +7,6 @@
     margin-bottom: 6rem;
 }
 
-#event-cat, #event-time-zone {
-    /* fixing flawed material UI CSS */
-    background-color: white;
-    padding-left: 6px;
-    padding-right: 6px;
-}
-
 #event-cat-select, #event-time-zone-select{
   text-align: left;
 }
