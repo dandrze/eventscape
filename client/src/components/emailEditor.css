@@ -136,23 +136,18 @@ form {
 .variable-bubble {
   background: #f3f3f3;
   border-radius: 20px;
-  padding: 7px 11px;
-  color: white;
+  padding: 5px 11px;
+  color: black;
   display: inline-block;
-  margin: 0 2px;
+  margin: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 14px;
+  width: 115px;
+  text-align: center;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
 }
 
-.variable-bubble-text {
-  width: 100%;
-  letter-spacing: 0;
-  float: left;
-  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-weight: 400;
-  font-size: 14px;
-  margin: 0;
-  padding: 0;
-  line-height: 14px;
-}
 .disabled-text {
   color: grey;
 }

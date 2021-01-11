@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 import NavBar3 from "../components/navBar3.js";
 import "./emailEditor.css";
 import BootstrapInput from "../components/selectInput";
@@ -52,9 +53,7 @@ const EmailEditor = (props) => {
   const [preposition, setPreposition] = useState(
     props.data.minutes_from_event <= 0 ? -1 : 1
   );
-  const [html, setHtml] = useState(
-    props.data.html || ""
-  );
+  const [html, setHtml] = useState(props.data.html || "");
   const [status, setStatus] = useState(
     props.data.status || statusOptions.DRAFT
   );
@@ -65,8 +64,7 @@ const EmailEditor = (props) => {
   );
   */
 
-  console.log(props.data.minutes_from_event);
-  console.log(Math.floor(Math.abs(props.data.minutes_from_event / 1440)));
+  const nullRef = useRef(null);
 
   useEffect(() => {
     validateSendTime(days, hours, mins);
@@ -198,6 +196,17 @@ const EmailEditor = (props) => {
     } else {
       return num;
     }
+  };
+
+  const copyText = (event) => {
+    event.target.select();
+    document.execCommand("copy");
+    toast.success("Copied to clipboard!", {
+      autoClose: 1500,
+      pauseOnHover: false,
+    });
+    event.target.focus();
+    //do something to unfocus the text
   };
 
   return (
@@ -375,40 +384,61 @@ const EmailEditor = (props) => {
               <label htmlFor="variables" className="emailLabel">
                 Variables Toolbox:
               </label>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{event_name}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{event_name}"}
+                />
               </Tooltip>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{first_name}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{first_name}"}
+                />
               </Tooltip>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{last_name}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{last_name}"}
+                />
               </Tooltip>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{start_date}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{start_date}"}
+                />
               </Tooltip>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{end_date}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{end_date}"}
+                />
               </Tooltip>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{time_zone}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{time_zone}"}
+                />
               </Tooltip>
-              <Tooltip title="Copy and paste into message">
-                <div className="variable-bubble">
-                  <p className="variable-bubble-text">{"{event_link}"}</p>
-                </div>
+              <Tooltip title="Click to copy to clipboard">
+                <input
+                  readOnly
+                  className="variable-bubble"
+                  onClick={copyText}
+                  value={"{event_link}"}
+                />
               </Tooltip>
             </div>
             <div style={{ margin: "3% 0" }}>
