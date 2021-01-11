@@ -19,6 +19,7 @@ module.exports = (server) => {
 
       const messageHistory = await ChatMessage.findAll({
         where: { ChatRoomId: room },
+        order: [["id", "ASC"]],
         include: ChatUser,
       });
 
@@ -71,6 +72,7 @@ module.exports = (server) => {
 
       const messageHistory = await ChatMessage.findAll({
         where: { ChatRoomId: room },
+        order: [["id", "ASC"]],
         include: ChatUser,
       });
 
