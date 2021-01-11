@@ -26,7 +26,9 @@ import io from "socket.io-client";
 import "./chat4.css";
 
 const ENDPOINT =
-  window.location.host === "localhost:3000" ? "localhost:5000/" : "/";
+  window.location.hostname.split(".")[-1] === "localhost"
+    ? "http://localhost:5000/"
+    : "https://eventscape.io/";
 
 let socket;
 

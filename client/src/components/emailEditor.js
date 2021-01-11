@@ -64,8 +64,6 @@ const EmailEditor = (props) => {
   );
   */
 
-  const nullRef = useRef(null);
-
   useEffect(() => {
     validateSendTime(days, hours, mins);
 
@@ -205,8 +203,6 @@ const EmailEditor = (props) => {
       autoClose: 1500,
       pauseOnHover: false,
     });
-    event.target.focus();
-    //do something to unfocus the text
   };
 
   return (

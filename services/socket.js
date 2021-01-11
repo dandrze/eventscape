@@ -15,6 +15,7 @@ module.exports = (server) => {
     console.log("New client connected");
 
     socket.on("join", async ({ userId, name, room }, callback) => {
+      console.log(userId, name, room)
       const chatRoom = await ChatRoom.findByPk(room);
 
       const messageHistory = await ChatMessage.findAll({
