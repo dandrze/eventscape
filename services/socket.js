@@ -64,6 +64,28 @@ module.exports = (server) => {
       callback(user.id);
     });
 
+    socket.on("refreshChat", async ({ room }) => {
+      console.log("chat refreshed");
+      console.log(room);
+      io.to(room).emit("refresh");
+
+      const messageHistory = await ChatMessage.findAll({
+        where: { ChatRoomId: room },
+        include: ChatUser,
+      });
+
+      //push the message history
+      messageHistory.forEach((message) => {
+        io.to(room).emit("message", {
+          user: message.ChatUser.name,
+          text: message.text,
+          id: message.id,
+          deleted: message.deleted,
+          userId: message.ChatUser.id,
+        });
+      });
+    });
+
     socket.on("sendMessage", async ({ userId, room, message }, callback) => {
       const chatUser = await ChatUser.findOne({ where: { id: userId } });
 
@@ -100,7 +122,10 @@ module.exports = (server) => {
       io.to(room).emit("delete", id);
     });
 
-    socket.on("restoreMessage", ({ id, room }) => {
+    socket.on("restoreMessage", async ({ id, room }) => {
+      const chatMessage = await ChatMessage.findByPk(id);
+      chatMessage.deleted = false;
+      chatMessage.save();
       io.to(room).emit("restore", id);
     });
 

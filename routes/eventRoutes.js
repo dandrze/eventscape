@@ -392,12 +392,8 @@ router.put("/api/event/chatroom", async (req, res) => {
 
     dbRoom.name = name;
 
-    console.log(moderatorName);
-    console.log(dbRoom.moderatorName);
-
     if (dbRoom.moderatorName != moderatorName) {
       dbRoom.moderatorName = moderatorName;
-      console.log(dbRoom.id);
 
       const dbModerator = await ChatUser.findOne({
         where: {
@@ -405,7 +401,6 @@ router.put("/api/event/chatroom", async (req, res) => {
           isModerator: true,
         },
       });
-      console.log(dbModerator);
 
       dbModerator.name = moderatorName;
       dbModerator.save();

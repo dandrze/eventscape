@@ -225,6 +225,11 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
       );
     });
 
+    socket.on("refresh", () => {
+      console.log("chat refreshed");
+      setMessages([]);
+    });
+
     socket.emit("join", { name, userId, room, isModerator }, (id) => {
       setChatUserId(id);
     });
@@ -238,6 +243,9 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
     },
     setIsHidden(isHidden) {
       socket.emit("setChatHidden", { isHidden, room });
+    },
+    refreshChat() {
+      socket.emit("refreshChat", { room });
     },
   }));
 

@@ -33,7 +33,6 @@ const ModeratorChat = ({ room, user, updateChatRoom }) => {
     checked: room.isHidden,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
-  const [forceChatRefresh, setForceChatRefresh] = React.useState(0);
 
   const chatRef = React.useRef();
 
@@ -43,7 +42,7 @@ const ModeratorChat = ({ room, user, updateChatRoom }) => {
 
   const handleSubmitDisplayName = async () => {
     await updateChatRoom({ ...room, moderatorName: displayName });
-    setForceChatRefresh(forceChatRefresh + 1);
+    chatRef.current.refreshChat();
   };
   const handleChangeIsHidden = (event) => {
     chatRef.current.setIsHidden(event.target.checked);
@@ -71,7 +70,6 @@ const ModeratorChat = ({ room, user, updateChatRoom }) => {
           isModerator={true}
           ref={chatRef}
           userId={user.id}
-          key={forceChatRefresh}
         />
       </div>
       <div className="chat-options">
