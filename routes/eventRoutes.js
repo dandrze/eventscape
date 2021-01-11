@@ -163,9 +163,7 @@ router.post("/api/event", async (req, res) => {
         email.minutes_from_event,
         email.html,
         newEvent.rows[0].id,
-        email.recipients === recipientsOptions.NEW_REGISTRANTS
-          ? statusOptions.ACTIVE
-          : statusOptions.DRAFT,
+        email.status,
       ],
       (err, res) => {
         if (err) {
