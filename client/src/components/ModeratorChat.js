@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModeratorChat = ({ room, user, moderatorName, updateChatRoom }) => {
+const ModeratorChat = ({ room, user, updateChatRoom }) => {
   const classes = useStyles();
 
   const [displayName, setDisplayName] = useState(
@@ -38,7 +38,11 @@ const ModeratorChat = ({ room, user, moderatorName, updateChatRoom }) => {
 
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
-    updateChatRoom({ ...room, moderatorName: event.target.value });
+  };
+
+  const handleSubmitDisplayName = async () => {
+    await updateChatRoom({ ...room, moderatorName: displayName });
+    chatRef.current.refreshChat();
   };
   const handleChangeIsHidden = (event) => {
     chatRef.current.setIsHidden(event.target.checked);
@@ -79,8 +83,9 @@ const ModeratorChat = ({ room, user, moderatorName, updateChatRoom }) => {
             value={displayName}
             onChange={handleChangeDisplayName}
           />
-          <br></br>
-          <br></br>
+          <button className="Button2 mt-3" onClick={handleSubmitDisplayName}>
+            Update
+          </button>
         </FormControl>
         <Tooltip title="Temporarily hides chat. To permanently remove chat, remove the design block that contains the chat window.">
           <FormGroup>

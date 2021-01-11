@@ -15,7 +15,6 @@ const registrationRoutes = require("./routes/registrationRoutes");
 const emailRoutes = require("./routes/emailRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const liveEventRoutes = require("./routes/liveEventRoutes");
-const socket = require("./services/socket");
 require("./services/passport");
 
 const app = express();

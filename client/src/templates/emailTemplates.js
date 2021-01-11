@@ -1,6 +1,7 @@
-import { recipientsOptions } from "../model/enums";
+import { recipientsOptions, statusOptions } from "../model/enums";
 
 export const blankEmail = {
+  status: statusOptions.DRAFT,
   subject: "",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: 0,
@@ -8,12 +9,14 @@ export const blankEmail = {
 };
 
 export const invitation = {
+  status: statusOptions.DRAFT,
   subject: "You are Invited To {event_name}",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -10080, // 7 days before event start
   html: `Invitation email template goes here`,
 };
 export const registrationConfirmation = {
+  status: statusOptions.ACTIVE,
   subject: "Registration Confirmation for {event_name}",
   recipients: recipientsOptions.NEW_REGISTRANTS,
   html: `
@@ -47,6 +50,7 @@ export const registrationConfirmation = {
 };
 
 export const reminderOneDay = {
+  status: statusOptions.ACTIVE,
   subject: "Reminder: {event_name} Tomorrow",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -1440, // 1 day before event start
@@ -81,6 +85,7 @@ export const reminderOneDay = {
 };
 
 export const reminderOneHour = {
+  status: statusOptions.ACTIVE,
   subject: "Reminder: {event_name} in One Hour",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: -60, // 1 hour before event start
@@ -115,6 +120,7 @@ export const reminderOneHour = {
 };
 
 export const followUp = {
+  status: statusOptions.DRAFT,
   subject: "Thank You for Attending {event_name}",
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutes_from_event: 1440, // 24 hours after event start

@@ -191,6 +191,7 @@ function RegistrationForm(props) {
         {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
         {!props.isEditForm ? (
           <div className="form-editor-froala">
+            {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
             {props.isLive ? (
               <FroalaEditorView
                 model={props.model.sections[props.sectionIndex].html.replace(
@@ -217,7 +218,11 @@ function RegistrationForm(props) {
                 </div>
               </div>
             ) : (
-              <div className={!props.isEditForm ? "form-editor-react" : ""}>
+              <div
+                className={
+                  "margin-auto" + !props.isEditForm ? "form-editor-react" : ""
+                }
+              >
                 {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
                 <div className="form-group">
                   <label>
