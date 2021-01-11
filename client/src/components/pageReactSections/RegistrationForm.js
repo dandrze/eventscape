@@ -218,7 +218,11 @@ function RegistrationForm(props) {
                 </div>
               </div>
             ) : (
-              <div className={!props.isEditForm ? "form-editor-react" : ""}>
+              <div
+                className={
+                  "margin-auto" + !props.isEditForm ? "form-editor-react" : ""
+                }
+              >
                 {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
                 <div className="form-group">
                   <label>
