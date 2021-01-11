@@ -23,10 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModeratorChat = ({ room, user }) => {
+const ModeratorChat = ({ room, user, moderatorName, updateChatRoom }) => {
   const classes = useStyles();
 
-  const [displayName, setDisplayName] = useState("Moderator");
+  const [displayName, setDisplayName] = useState(
+    room.moderatorName || "Moderator"
+  );
   const [isHidden, setIsHidden] = React.useState({
     checked: room.isHidden,
   });
@@ -36,6 +38,7 @@ const ModeratorChat = ({ room, user }) => {
 
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
+    updateChatRoom({ ...room, moderatorName: event.target.value });
   };
   const handleChangeIsHidden = (event) => {
     chatRef.current.setIsHidden(event.target.checked);

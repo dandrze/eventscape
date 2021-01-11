@@ -9,6 +9,14 @@ export const fetchChatRooms = (event) => async (dispatch) => {
   return chatRooms;
 };
 
+export const fetchDefaultChatRoom = (event) => async (dispatch) => {
+  const chatRoom = await api.get("/api/event/chatroom/default", {
+    params: { event },
+  });
+
+  return chatRoom.data;
+};
+
 export const addChatRoom = (room, event) => async (dispatch) => {
   const response = await api.post("/api/event/chatroom", {
     room,

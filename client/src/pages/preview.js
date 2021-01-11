@@ -1,7 +1,7 @@
 import React, { useEffect, createElement } from "react";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import ReactHtmlParser from "react-html-parser";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { useParams } from "react-router-dom";
 import "froala-editor/css/froala_style.min.css";
 import mapReactComponent from "../components/mapReactComponent";
@@ -26,12 +26,20 @@ const Preview = (props) => {
       <ul>
         {props.model.sections.map(function (section) {
           console.log(section);
-          return section.is_react
-            ? createElement(mapReactComponent[section.react_component.name], {
-                ...section.react_component.props,
-                sectionIndex: section.index,
-              })
-            : ReactHtmlParser(section.html);
+          return section.is_react ? (
+            createElement(mapReactComponent[section.react_component.name], {
+              ...section.react_component.props,
+              sectionIndex: section.index,
+              isLive: true,
+            })
+          ) : (
+            <FroalaEditorView
+              model={section.html.replace(
+                `contenteditable="true"`,
+                `contenteditable="false"`
+              )}
+            />
+          );
         })}
       </ul>
     </div>

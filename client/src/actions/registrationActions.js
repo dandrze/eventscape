@@ -11,7 +11,7 @@ export const fetchRegistrations = (event) => async (dispatch) => {
   // call the api and return the registrations in json
 
   try {
-    const res = await api.get("/api/registration", { params: { event } });
+    const res = await api.get("/api/registration/event", { params: { event } });
     dispatch({ type: FETCH_REGISTRATION, payload: res.data });
     return true;
   } catch (err) {
@@ -91,6 +91,35 @@ export const deleteRegistration = (id) => async (dispatch) => {
     return true;
   } catch (err) {
     toast.error("Error when deleting registration: " + err.toString());
+    return false;
+  }
+};
+
+export const fetchRegistration = (email) => async (dispatch) => {
+  try {
+    const res = await api.get("/api/registration/email", { params: { email } });
+    return res.data;
+  } catch (err) {
+    toast.error(
+      "Server error when finding your registration. Please refresh and try again: " +
+        err.toString()
+    );
+    return false;
+  }
+};
+
+export const resendRegistrationEmail = (email, event) => async (dispatch) => {
+  try {
+    const res = await api.post("/api/registration/email/resend", {
+      email,
+      event,
+    });
+    return true;
+  } catch (err) {
+    toast.error(
+      "Server error when resending your link. Please refresh and try again: " +
+        err.toString()
+    );
     return false;
   }
 };

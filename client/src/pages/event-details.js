@@ -19,6 +19,7 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Tooltip from "@material-ui/core/Tooltip";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
@@ -71,6 +72,7 @@ function Event_Details(props) {
     props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
   );
   const [color, setColor] = useState(props.color ? props.color : "#B0281C");
+  const [isLoading, setIsloading] = useState(false);
 
   const closeModal = () => setOpenModal(false);
 
@@ -151,8 +153,11 @@ function Event_Details(props) {
         ? new Date(selectedEndDate)
         : selectedEndDate;
 
+    setIsloading(true);
+    let response = false;
+
     if (props.isEventUpdate) {
-      await props.updateEvent(
+      response = await props.updateEvent(
         eventTitle,
         eventLink,
         eventCat,
@@ -162,7 +167,7 @@ function Event_Details(props) {
         color
       );
     } else {
-      await props.createEvent(
+      response = await props.createEvent(
         eventTitle,
         eventLink,
         eventCat,
@@ -172,9 +177,19 @@ function Event_Details(props) {
         color
       );
     }
+    setIsloading(false);
 
-    props.history.push("/Design");
+    if (response) props.history.push("/Design");
   };
+
+  if (isLoading && !props.isEventUpdate) {
+    return (
+      <div className="form-box shadow-border">
+        <p>Hang tight! We are building your event.</p>
+        <CircularProgress />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -200,30 +215,32 @@ function Event_Details(props) {
           <br></br>
         </FormControl>
         <Tooltip title="Please note. This link can not be changed once it's created.">
-        <FormControl variant="outlined" className={classes.formControl}>
-          {/* Event Link */}
-          <TextField
-            id="event-link"
-            label="Event Link"
-            variant="outlined"
-            placeholder="myevent"
-            value={eventLink}
-            onChange={handleChangeEventLink}
-            onBlur={handleChangeEventLinkBlur}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">.eventscape.io</InputAdornment>
-              ),
-            }}
-            error={linkUnavailable}
-            helperText={linkHelperText}
-          />
-        </FormControl>
+          <FormControl variant="outlined" className={classes.formControl}>
+            {/* Event Link */}
+            <TextField
+              id="event-link"
+              label="Event Link"
+              variant="outlined"
+              placeholder="myevent"
+              value={eventLink}
+              onChange={handleChangeEventLink}
+              onBlur={handleChangeEventLinkBlur}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">.eventscape.io</InputAdornment>
+                ),
+              }}
+              error={linkUnavailable}
+              helperText={linkHelperText}
+            />
+          </FormControl>
         </Tooltip>
 
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Category */}
-          <InputLabel id="event-cat" className="mui-select-css-fix">Category</InputLabel>
+          <InputLabel id="event-cat" className="mui-select-css-fix">
+            Category
+          </InputLabel>
           <Select
             labelId="event-cat"
             id="event-cat-select"
@@ -341,7 +358,9 @@ function Event_Details(props) {
 
         <FormControl variant="outlined" className={classes.formControl}>
           {/* Time Zone */}
-          <InputLabel id="event-time-zone" className="mui-select-css-fix">Time Zone</InputLabel>
+          <InputLabel id="event-time-zone" className="mui-select-css-fix">
+            Time Zone
+          </InputLabel>
           <Select
             labelId="event-time-zone"
             id="event-time-zone-select"

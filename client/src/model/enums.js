@@ -26,7 +26,6 @@ export const emailVariableNames = [
   "end_date",
   "first_name",
   "last_name",
-  "guest_email",
 ];
 
 export const pageNames = { REGISTRATION: "registration", EVENT: "event" };

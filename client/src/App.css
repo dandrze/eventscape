@@ -481,3 +481,6 @@ select {
   padding-right: 6px !important;
   border-radius: 6px;
 }
+.margin-auto {
+  margin: auto;
+}

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
 import { Paper } from "@material-ui/core";
+import { toast } from "react-toastify";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -129,7 +130,14 @@ function ScheduledEmails(props) {
       icon: LibraryAdd,
       tooltip: "Duplicate Email",
       onClick: (event, rowData) => {
-        props.handleDuplicate(rowData);
+        console.log(rowData);
+        if (rowData.recipients == recipientsOptions.NEW_REGISTRANTS) {
+          toast.info(
+            "The registration confirmation email cannot be duplicated"
+          );
+        } else {
+          props.handleDuplicate(rowData);
+        }
       },
     },
     {

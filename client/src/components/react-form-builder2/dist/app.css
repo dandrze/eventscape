@@ -3283,3 +3283,10 @@ input[type="date"] {
 .form-group .label-required {
   margin-left: 5px;
 }
+
+.default-fields-label {
+  text-align: center;
+  color: grey;
+  display: block;
+  font-size: 0.8em;
+}

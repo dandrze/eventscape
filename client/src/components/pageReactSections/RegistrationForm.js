@@ -1,5 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
+import CircularProgress from "@material-ui/core/CircularProgress";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 import { ReactFormGenerator } from "../react-form-builder2/lib";
 import AlertModal from "../AlertModal";
@@ -7,12 +9,15 @@ import "./RegistrationForm.css";
 import api from "../../api/server";
 import * as actions from "../../actions";
 import Froala from "../froala";
+
 import Modal from "@material-ui/core/Modal";
 import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
 import Fade from "@material-ui/core/Fade";
 import Cancel from "./cancel.svg";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +36,10 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: "30px",
   },
+  formControl: {
+    margin: "20px 0px",
+    minWidth: "100%",
+  },
 }));
 
 function RegistrationForm(props) {
@@ -45,7 +54,7 @@ function RegistrationForm(props) {
   );
   const [emailAddressReSend, setEmailAddressReSend] = useState("");
   const [emailFound, setEmailFound] = useState(false);
-  const [emailNotFound, setEmailNotFound] = useState(true);
+  const [emailNotFound, setEmailNotFound] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [firstName, setFirstName] = useState(
     props.standardFields ? props.standardFields.firstName : ""
@@ -53,6 +62,9 @@ function RegistrationForm(props) {
   const [lastName, setLastName] = useState(
     props.standardFields ? props.standardFields.lastName : ""
   );
+  const [emailErrorText, setEmailErrorText] = useState("");
+  const [regComplete, setRegComplete] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchFormData();
@@ -117,11 +129,15 @@ function RegistrationForm(props) {
     } else if (!lastName) {
       setModalText("Please enter your last name");
       openModal();
+    } else if (await props.fetchRegistration(emailAddress)) {
+      setModalText("Registration already exists under email: " + emailAddress);
+      openModal();
     } else {
       // If there is a custom callback (i.e. editting a registration) use that
       if (props.onSubmitCallback) {
         props.onSubmitCallback(values, emailAddress, firstName, lastName);
       } else {
+        setIsLoading(true);
         // else use the default workflow
         const res = await props.addRegistration(
           props.event.id,
@@ -130,10 +146,29 @@ function RegistrationForm(props) {
           firstName,
           lastName
         );
+        setIsLoading(false);
         if (res) {
-          setModalText("Thank you for registering for " + props.event.title + ". Your link to join the event has been sent to " + emailAddress);
-          openModal();
+          setRegComplete(true);
         }
+      }
+    }
+  };
+
+  const handleResendEmailClick = async () => {
+    const mailFormat = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+    if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
+      setEmailErrorText("Please enter valid email address");
+    } else {
+      const registration = await props.fetchRegistration(emailAddressReSend);
+
+      if (registration.email == emailAddressReSend) {
+        setEmailFound(true);
+        setEmailNotFound(false);
+        await props.resendRegistrationEmail(emailAddressReSend, props.event.id);
+      } else {
+        setEmailNotFound(true);
+        setEmailFound(false);
       }
     }
   };
@@ -142,6 +177,11 @@ function RegistrationForm(props) {
     const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
     return inputText.value.match(mailformat);
   };
+
+  const nonEditableHtml = props.model.sections[props.sectionIndex].html.replace(
+    `contenteditable="true"`,
+    `contenteditable="false"`
+  );
 
   return (
     <div>
@@ -156,68 +196,94 @@ function RegistrationForm(props) {
         {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
         {!props.isEditForm ? (
           <div className="form-editor-froala">
-            <Froala sectionIndex={props.sectionIndex} />
+            {props.isLive ? (
+              <FroalaEditorView model={nonEditableHtml} />
+            ) : (
+              <Froala sectionIndex={props.sectionIndex} />
+            )}
           </div>
         ) : null}
-        {/* if we're editing an input, don't add the classname that includes all the styling*/}
-        <div className={!props.isEditForm ? "form-editor-react" : ""}>
-          {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
-          <div className="form-group">
-            <label>
-              <span>First Name</span>
-              <span class="label-required badge badge-danger">Required</span>
-            </label>
-            <input
-              type="text"
-              class="form-control"
-              value={firstName}
-              onChange={handleFirstNameChange}
-            />
-            <label>
-              <span>Last Name</span>
-              <span class="label-required badge badge-danger">Required</span>
-            </label>
-            <input
-              type="text"
-              class="form-control"
-              value={lastName}
-              onChange={handleLastNameChange}
-            />
-            <label>
-              <span>Email Address</span>
-              <span class="label-required badge badge-danger">Required</span>
-            </label>
-            <input
-              type="text"
-              class="form-control"
-              value={emailAddress}
-              onChange={handleEmailChange}
-              onBlur={handleEmailBlur}
-            />
-            <div className="errorMessage">{emailError}</div>
+        {isLoading ? (
+          <CircularProgress className="margin-auto" />
+        ) : (
+          <div className="margin-auto">
+            {regComplete ? (
+              <div className="margin-auto">
+                <div>Thank you for registering for {props.event.title}</div>
+                <br />
+                <div>
+                  A confirmation email was sent to {emailAddress}. Please check
+                  your spam if you don't see it in your inbox.
+                </div>
+              </div>
+            ) : (
+              <div className={!props.isEditForm ? "form-editor-react" : ""}>
+                {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
+                <div className="form-group">
+                  <label>
+                    <span>First Name</span>
+                    <span class="label-required badge badge-danger">
+                      Required
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value={firstName}
+                    onChange={handleFirstNameChange}
+                  />
+                  <label>
+                    <span>Last Name</span>
+                    <span class="label-required badge badge-danger">
+                      Required
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value={lastName}
+                    onChange={handleLastNameChange}
+                  />
+                  <label>
+                    <span>Email Address</span>
+                    <span class="label-required badge badge-danger">
+                      Required
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    class="form-control"
+                    value={emailAddress}
+                    onChange={handleEmailChange}
+                    onBlur={handleEmailBlur}
+                  />
+                  <div className="errorMessage">{emailError}</div>
+                </div>
+                <ReactFormGenerator
+                  action_name={props.registerText || "Register now"}
+                  onSubmit={handleSubmit}
+                  data={formData}
+                  answer_data={props.prePopulatedValues}
+                  className="form-editor-react"
+                />
+                <label>
+                  <span>Already registered? Click </span>
+                  <span
+                    className="theme-color"
+                    onClick={openReSendLinkModal}
+                    style={{
+                      cursor: "pointer",
+                      textDecoration: "underline",
+                    }}
+                  >
+                    here
+                  </span>
+                  <span> to re-send your event link.</span>
+                </label>
+              </div>
+            )}{" "}
           </div>
-          <ReactFormGenerator
-            action_name={props.registerText || "Register now"}
-            onSubmit={handleSubmit}
-            data={formData}
-            answer_data={props.prePopulatedValues}
-            className="form-editor-react"
-          />
-          <label>
-            <span>Already registered? Click </span>
-            <span
-              className="theme-color"
-              onClick={openReSendLinkModal}
-              style={{
-                cursor: "pointer",
-                textDecoration: "underline",
-              }}
-            >
-              here
-            </span>
-            <span> to re-send your event link.</span>
-          </label>
-        </div>
+        )}
       </div>
       {/* Re-send event link modal */}
       <Modal
@@ -246,16 +312,23 @@ function RegistrationForm(props) {
             </div>
             <div style={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
               <p>Please enter the email address you registered with.</p>
-              <input
-                type="text"
-                class="form-control"
-                value={emailAddressReSend}
-                onChange={handleEmailReSendChange}
-                onBlur={handleEmailBlur}
-                placeholder="email@email.com"
-              />
+              <FormControl variant="outlined" className={classes.formControl}>
+                <TextField
+                  type="email"
+                  id="email"
+                  label="Email"
+                  variant="outlined"
+                  value={emailAddressReSend}
+                  onChange={handleEmailReSendChange}
+                  placeholder="email@email.com"
+                  helperText={emailErrorText}
+                />
+              </FormControl>
               <div className="btn-toolbar">
-                <button className="btn btn-school btn-big theme-button">
+                <button
+                  className="btn btn-school btn-big theme-button"
+                  onClick={handleResendEmailClick}
+                >
                   Re-Send My Event Link
                 </button>
               </div>
@@ -296,7 +369,7 @@ function RegistrationForm(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event };
+  return { event: state.event, model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(RegistrationForm);

@@ -31,9 +31,12 @@ const StreamChat = (props) => {
   };
 
   // if there is an attendee object in redux, show the attendees name, else show Guest1234 (random number)
+  const rand = Math.floor(Math.random() * 1000).toString();
   const name = props.attendee.first_name
     ? props.attendee.first_name + " " + props.attendee.last_name
-    : "Guest" + Math.floor(Math.random() * 1000).toString();
+    : "Guest" + rand.toString();
+
+  const userId = props.attendee.id || rand;
 
   return (
     <div>

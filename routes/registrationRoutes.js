@@ -106,7 +106,7 @@ router.put("/api/registration", async (req, res) => {
   res.status(200).send(updatedRegistration.rows[0]);
 });
 
-router.get("/api/registration", async (req, res) => {
+router.get("/api/registration/event", async (req, res) => {
   const { event } = req.query;
 
   const userId = req.user.id;
@@ -129,6 +129,70 @@ router.get("/api/registration", async (req, res) => {
   );
 
   res.status(200).send(registrations.rows);
+});
+
+router.get("/api/registration/email", async (req, res) => {
+  const { email } = req.query;
+
+  // Get the registration associated with an email
+  const registrations = await db.query(
+    `SELECT * 
+		FROM 
+			registration
+		WHERE 
+      email=$1`,
+    [email],
+    (err, res) => {
+      if (err) {
+        throw res.status(500).send(Error);
+      }
+    }
+  );
+
+  res.status(200).send(registrations.rows[0]);
+});
+
+router.post("/api/registration/email/resend", async (req, res) => {
+  const { email, event } = req.body;
+
+  // pull all relevant data to map to variables and put them into a list
+  const registrationData = await db.query(
+    `SELECT 
+      event.title as event_name, 
+      event.time_zone, 
+      event.link, 
+      event.start_date, 
+      event.end_date ,
+      registration.first_name,
+      registration.last_name,
+      registration.email,
+      registration.hash
+
+      FROM registration INNER JOIN event on registration.event = event.id WHERE registration.email=$1 AND event.id=$2`,
+    [email, event]
+  );
+
+  // check to see if any emails need to be fired off
+  const registrationEmails = await db.query(
+    `SELECT * FROM email WHERE event=$1 AND recipients=$2 AND status=$3`,
+    [event, recipientsOptions.NEW_REGISTRANTS, statusOptions.ACTIVE]
+  );
+
+  for (var communication of registrationEmails.rows) {
+    const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+      registrationData.rows,
+      communication.subject,
+      communication.html
+    );
+
+    if (failed > 0) {
+      return res
+        .status(500)
+        .json({ message: "Error when sending confirmation email" });
+    }
+  }
+
+  res.status(200).send();
 });
 
 router.delete("/api/registration/id", async (req, res) => {

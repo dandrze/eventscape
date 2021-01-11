@@ -6,6 +6,7 @@ const requireAuth = require("../middlewares/requireAuth");
 
 const conn = require("../sequelize").conn;
 const { ChatRoom } = require("../sequelize").models;
+const { recipientsOptions, statusOptions } = require("../model/enums");
 
 router.post("/api/event", async (req, res) => {
   const {
@@ -52,23 +53,6 @@ router.post("/api/event", async (req, res) => {
     }
   );
 
-  // Store the section HTML for the model above
-  for (i = 0; i < reg_page_model.length; i++) {
-    await db.query(
-      `INSERT INTO section_html
-					(model, index, html, is_react, react_component)
-					VALUES
-					($1, $2, $3, $4, $5)`,
-      [
-        pgRegModel.rows[0].id,
-        i,
-        reg_page_model[i].html,
-        reg_page_model[i].is_react,
-        reg_page_model[i].react_component,
-      ]
-    );
-  }
-
   // Store a new model in the model table for the event page
   const pgEventModel = await db.query(
     `INSERT INTO model 
@@ -82,23 +66,6 @@ router.post("/api/event", async (req, res) => {
       }
     }
   );
-
-  // Store the section HTML for the model above
-  for (i = 0; i < event_page_model.length; i++) {
-    await db.query(
-      `INSERT INTO section_html
-					(model, index, html, is_react, react_component)
-					VALUES
-					($1, $2, $3, $4, $5)`,
-      [
-        pgEventModel.rows[0].id,
-        i,
-        event_page_model[i].html,
-        event_page_model[i].is_react,
-        event_page_model[i].react_component,
-      ]
-    );
-  }
 
   // add the event to the event table. Make it the current event
   const newEvent = await db.query(
@@ -126,14 +93,69 @@ router.post("/api/event", async (req, res) => {
     }
   );
 
-  console.log(newEvent);
+  // create a default chatroom
+  const newRoom = await ChatRoom.create({
+    event: newEvent.rows[0].id,
+    isDefault: true,
+    name: "Main Chat (Default)",
+  });
+
+  // Store the section HTML for the reg page model
+  for (i = 0; i < reg_page_model.length; i++) {
+    if (
+      reg_page_model[i].is_react &&
+      reg_page_model[i].react_component.name == "StreamChat"
+    ) {
+      reg_page_model[i].react_component.props.chatRoom = newRoom.id;
+    }
+
+    console.log(reg_page_model[i].react_component);
+
+    await db.query(
+      `INSERT INTO section_html
+					(model, index, html, is_react, react_component)
+					VALUES
+					($1, $2, $3, $4, $5)`,
+      [
+        pgRegModel.rows[0].id,
+        i,
+        reg_page_model[i].html,
+        reg_page_model[i].is_react,
+        reg_page_model[i].react_component,
+      ]
+    );
+  }
+
+  // Store the section HTML for the event page model
+  for (i = 0; i < event_page_model.length; i++) {
+    if (
+      event_page_model[i].is_react &&
+      event_page_model[i].react_component.name == "StreamChat"
+    ) {
+      event_page_model[i].react_component.props.chatRoom = newRoom.id;
+    }
+
+    await db.query(
+      `INSERT INTO section_html
+					(model, index, html, is_react, react_component)
+					VALUES
+					($1, $2, $3, $4, $5)`,
+      [
+        pgEventModel.rows[0].id,
+        i,
+        event_page_model[i].html,
+        event_page_model[i].is_react,
+        event_page_model[i].react_component,
+      ]
+    );
+  }
 
   // add the emails for this event
   for (var email of emails) {
     await db.query(
       `INSERT INTO email 
-			(subject, recipients, minutes_from_event, html, event) 
-		VALUES ($1, $2, $3, $4, $5)
+			(subject, recipients, minutes_from_event, html, event, status) 
+		VALUES ($1, $2, $3, $4, $5, $6)
 		RETURNING *`,
       [
         email.subject,
@@ -141,6 +163,9 @@ router.post("/api/event", async (req, res) => {
         email.minutes_from_event,
         email.html,
         newEvent.rows[0].id,
+        email.recipients === recipientsOptions.NEW_REGISTRANTS
+          ? statusOptions.ACTIVE
+          : statusOptions.DRAFT,
       ],
       (err, res) => {
         if (err) {
@@ -149,12 +174,6 @@ router.post("/api/event", async (req, res) => {
       }
     );
   }
-
-  const newRoom = await ChatRoom.create({
-    event: newEvent.rows[0].id,
-    isDefault: true,
-    name: "Main Chat (Default)",
-  });
 
   res.status(200).send(newEvent.rows[0]);
 });
@@ -332,9 +351,9 @@ router.put("/api/event/set-registration", async (req, res) => {
   res.status(200).send(updatedEvent.rows[0]);
 });
 
-router.post("/api/event/chatroom/default", async (req, res) => {
+router.get("/api/event/chatroom/default", async (req, res) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
-  const { event } = req.body;
+  const { event } = req.query;
 
   const [newRoom, created] = await ChatRoom.findOrCreate({
     where: {
@@ -363,15 +382,18 @@ router.get("/api/event/chatroom/all", async (req, res) => {
 });
 
 router.put("/api/event/chatroom", async (req, res) => {
-  const { room } = req.body;
+  const {
+    room: { id, name, moderatorName },
+  } = req.body;
   try {
     const dbRoom = await ChatRoom.findOne({
       where: {
-        id: room.id,
+        id,
       },
     });
 
-    dbRoom.name = room.name;
+    dbRoom.name = name;
+    dbRoom.moderatorName = moderatorName;
     dbRoom.save();
 
     res.status(200).send();
