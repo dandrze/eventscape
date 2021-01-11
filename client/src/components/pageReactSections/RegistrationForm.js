@@ -178,11 +178,6 @@ function RegistrationForm(props) {
     return inputText.value.match(mailformat);
   };
 
-  const nonEditableHtml = props.model.sections[props.sectionIndex].html.replace(
-    `contenteditable="true"`,
-    `contenteditable="false"`
-  );
-
   return (
     <div>
       <AlertModal
@@ -197,7 +192,12 @@ function RegistrationForm(props) {
         {!props.isEditForm ? (
           <div className="form-editor-froala">
             {props.isLive ? (
-              <FroalaEditorView model={nonEditableHtml} />
+              <FroalaEditorView
+                model={props.model.sections[props.sectionIndex].html.replace(
+                  `contenteditable="true"`,
+                  `contenteditable="false"`
+                )}
+              />
             ) : (
               <Froala sectionIndex={props.sectionIndex} />
             )}
