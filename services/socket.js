@@ -14,8 +14,7 @@ module.exports = (server) => {
   io.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("join", async ({ userId, name, room }, callback) => {
-      console.log(userId, name, room)
+    socket.on("join", async ({ userId, name, room, isModerator }, callback) => {
       const chatRoom = await ChatRoom.findByPk(room);
 
       const messageHistory = await ChatMessage.findAll({
@@ -27,11 +26,13 @@ module.exports = (server) => {
       var created;
 
       if (!userId) {
-        user = await ChatUser.create({ name });
+        user = await ChatUser.create({ name, ChatRoomId: room });
       } else {
         [user, created] = await ChatUser.findOrCreate({
           where: {
             EventscapeId: userId || null,
+            ChatRoomId: room,
+            isModerator,
           },
         });
 

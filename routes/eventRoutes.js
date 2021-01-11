@@ -5,7 +5,7 @@ const db = require("../db");
 const requireAuth = require("../middlewares/requireAuth");
 
 const conn = require("../sequelize").conn;
-const { ChatRoom } = require("../sequelize").models;
+const { ChatRoom, ChatUser } = require("../sequelize").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 
 router.post("/api/event", async (req, res) => {
@@ -391,7 +391,25 @@ router.put("/api/event/chatroom", async (req, res) => {
     });
 
     dbRoom.name = name;
-    dbRoom.moderatorName = moderatorName;
+
+    console.log(moderatorName);
+    console.log(dbRoom.moderatorName);
+
+    if (dbRoom.moderatorName != moderatorName) {
+      dbRoom.moderatorName = moderatorName;
+      console.log(dbRoom.id);
+
+      const dbModerator = await ChatUser.findOne({
+        where: {
+          ChatRoomId: dbRoom.id,
+          isModerator: true,
+        },
+      });
+      console.log(dbModerator);
+
+      dbModerator.name = moderatorName;
+      dbModerator.save();
+    }
     dbRoom.save();
 
     res.status(200).send();

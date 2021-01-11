@@ -26,7 +26,9 @@ import io from "socket.io-client";
 import "./chat4.css";
 
 const ENDPOINT =
-  window.location.hostname.split(".")[-1] === "localhost"
+  window.location.hostname.split(".")[
+    window.location.hostname.split(".").length - 1
+  ] === "localhost"
     ? "http://localhost:5000/"
     : "https://eventscape.io/";
 
@@ -38,7 +40,6 @@ const Messages = ({
   isModerator,
   deleteMessage,
   restoreMessage,
-  name,
 }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
@@ -49,7 +50,6 @@ const Messages = ({
           isModerator={isModerator}
           deleteMessage={deleteMessage}
           restoreMessage={restoreMessage}
-          name={name}
         />
       </div>
     ))}
@@ -62,7 +62,6 @@ const Message = ({
   isModerator,
   deleteMessage,
   restoreMessage,
-  name,
 }) => {
   let isSentByCurrentUser = false;
 
@@ -83,7 +82,7 @@ const Message = ({
 
   return isSentByCurrentUser ? (
     <div className={"messageContainer justifyEnd " + deletedClassName}>
-      <p className="sentText pr-10">{name}</p>
+      <p className="sentText pr-10">{user}</p>
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
       </div>
@@ -226,7 +225,7 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
       );
     });
 
-    socket.emit("join", { name, userId, room }, (id) => {
+    socket.emit("join", { name, userId, room, isModerator }, (id) => {
       setChatUserId(id);
     });
   }, []);
@@ -286,7 +285,6 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
           isModerator={isModerator}
           deleteMessage={deleteMessage}
           restoreMessage={restoreMessage}
-          name={name}
         />
         <Input
           message={message}
