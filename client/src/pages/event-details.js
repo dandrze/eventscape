@@ -212,7 +212,6 @@ function Event_Details(props) {
             value={eventTitle}
             onChange={handleChangeEventTitle}
           />
-          <br></br>
         </FormControl>
         <Tooltip title="Please note. This link can not be changed once it's created.">
           <FormControl variant="outlined" className={classes.formControl}>
@@ -232,6 +231,7 @@ function Event_Details(props) {
               }}
               error={linkUnavailable}
               helperText={linkHelperText}
+              disabled={props.isEventUpdate}
             />
           </FormControl>
         </Tooltip>

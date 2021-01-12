@@ -22,14 +22,12 @@ const Published = (props) => {
 
   const fetchData = async () => {
     console.log(hash);
-    if (hash) {
-      await props.fetchAttendeeData(hash);
-    }
 
-    const { event, pageModel } = await props.fetchLivePage(
-      props.subdomain,
-      hash
-    );
+    const { eventId } = await props.fetchLivePage(props.subdomain, hash);
+
+    if (hash) {
+      await props.fetchAttendeeData(hash, eventId);
+    }
 
     setIsLoaded(true);
   };
