@@ -10,7 +10,7 @@ class WebsiteSettings extends React.Component {
 			<div>
 				<NavBar3
 					displaySideNav="true"
-					highlight="design"
+					highlight="event-details"
 					content={
 						<div>
 						<div className="form-width">

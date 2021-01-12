@@ -313,12 +313,12 @@ const EmailEditor = (props) => {
             </div>
 
             <div className="inputDiv input-container-flex-wrap">
-              <label htmlFor="sendTime" className="emailLabel">
+              <label htmlFor="sendTime" className="emailLabel" style={{marginTop: "4px"}}>
                 Scheduled Send Time:{" "}
               </label>
               <br></br>
               {props.data.recipients === recipientsOptions.NEW_REGISTRANTS ? (
-                <div className="disabled-text">Upon Registration</div>
+                <div className="disabled-text" style={{marginTop: "4px"}}>Upon Registration</div>
               ) : (
                 <>
                   <div className="send-time-input">
@@ -418,14 +418,6 @@ const EmailEditor = (props) => {
                   className="variable-bubble"
                   onClick={copyText}
                   value={"{end_date}"}
-                />
-              </Tooltip>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{time_zone}"}
                 />
               </Tooltip>
               <Tooltip title="Click to copy to clipboard">
