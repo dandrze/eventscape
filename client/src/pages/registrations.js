@@ -140,7 +140,7 @@ const Registrations = (props) => {
     }
     fetchRegistrations();
     setEdittingRowId(null);
-    setEdittingValues([]);
+    setEdittingValues(null);
     setOpenReg(false);
   };
 

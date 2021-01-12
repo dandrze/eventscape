@@ -129,7 +129,7 @@ function RegistrationForm(props) {
     } else if (!lastName) {
       setModalText("Please enter your last name");
       openModal();
-    } else if (await props.fetchRegistration(emailAddress)) {
+    } else if (await props.fetchRegistration(emailAddress, props.event.id)) {
       setModalText("Registration already exists under email: " + emailAddress);
       openModal();
     } else {
@@ -149,6 +149,9 @@ function RegistrationForm(props) {
         setIsLoading(false);
         if (res) {
           setRegComplete(true);
+          setFirstName("");
+          setLastName("");
+          setEmailAddress("");
         }
       }
     }

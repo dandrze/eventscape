@@ -63,7 +63,7 @@ router.post("/api/registration", async (req, res) => {
     [newRegistrationId]
   );
 
-  console.log(registrationEmails.rows);
+  console.log(registrationData.rows);
 
   for (var email of registrationEmails.rows) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
@@ -132,7 +132,7 @@ router.get("/api/registration/event", async (req, res) => {
 });
 
 router.get("/api/registration/email", async (req, res) => {
-  const { email } = req.query;
+  const { email, eventId } = req.query;
 
   // Get the registration associated with an email
   const registrations = await db.query(
@@ -140,8 +140,8 @@ router.get("/api/registration/email", async (req, res) => {
 		FROM 
 			registration
 		WHERE 
-      email=$1`,
-    [email],
+      email=$1 AND event=$2`,
+    [email, eventId],
     (err, res) => {
       if (err) {
         throw res.status(500).send(Error);
