@@ -126,20 +126,14 @@ function ScheduledEmails(props) {
         props.handleEdit(rowData);
       },
     },
-    {
+    (rowData) => ({
       icon: LibraryAdd,
       tooltip: "Duplicate Email",
       onClick: (event, rowData) => {
-        console.log(rowData);
-        if (rowData.recipients == recipientsOptions.NEW_REGISTRANTS) {
-          toast.info(
-            "The registration confirmation email cannot be duplicated"
-          );
-        } else {
-          props.handleDuplicate(rowData);
-        }
+        props.handleDuplicate(rowData);
       },
-    },
+      disabled: rowData.recipients === recipientsOptions.NEW_REGISTRANTS,
+    }),
     {
       icon: AddBox,
       tooltip: "Add Email",
@@ -163,9 +157,17 @@ function ScheduledEmails(props) {
           Container: (props) => <Paper {...props} elevation={0} />,
         }}
         editable={{
+          isDeletable: (rowData) =>
+            rowData.recipients != recipientsOptions.NEW_REGISTRANTS,
           onRowDelete: (oldData) =>
             new Promise((resolve) => {
-              props.handleDelete(oldData.id);
+              if (oldData.recipients == recipientsOptions.NEW_REGISTRANTS) {
+                toast.info(
+                  "The registration confirmation email cannot be duplicated"
+                );
+              } else {
+                props.handleDelete(oldData.id);
+              }
               resolve();
             }),
         }}
