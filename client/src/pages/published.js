@@ -13,7 +13,7 @@ import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 
-const trackingId = "G-0DLLB4WNF7";
+const trackingId = "UA-187311895-1";
 
 const Published = (props) => {
   const { hash } = useParams();
