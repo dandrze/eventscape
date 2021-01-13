@@ -32,6 +32,7 @@ module.exports = (server) => {
         [user, created] = await ChatUser.findOrCreate({
           where: {
             EventscapeId: userId,
+            ChatRoomId: room,
           },
         });
 
@@ -72,6 +73,10 @@ module.exports = (server) => {
         where: { ChatRoomId: room },
         order: [["id", "ASC"]],
         include: ChatUser,
+      });
+
+      io.to(room).emit("notification", {
+        text: "You are now connected to room " + room,
       });
 
       //push the message history

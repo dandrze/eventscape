@@ -7,6 +7,8 @@ ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
 ChatRoom.hasMany(ChatMessage);
 ChatUser.hasMany(ChatMessage);
+ChatUser.belongsTo(ChatRoom);
+ChatRoom.hasMany(ChatUser);
 /*
 ChatUser.sync({ alter: true });
 ChatRoom.sync({ alter: true });

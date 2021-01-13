@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import Chat from "../components/chat4.js";
@@ -28,7 +29,7 @@ const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
   const classes = useStyles();
 
   const [displayName, setDisplayName] = useState("");
-
+  const [displayNameLoading, setDisplayNameLoading] = useState(false);
   const [isHidden, setIsHidden] = React.useState({
     checked: room.isHidden,
   });
@@ -41,7 +42,7 @@ const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
   }, []);
 
   const fetchDataAsync = async () => {
-    const chatUserName = await fetchChatUser(user.id);
+    const chatUserName = await fetchChatUser(user.id, room.id);
     setDisplayName(chatUserName.name);
   };
 
@@ -50,8 +51,10 @@ const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
   };
 
   const handleSubmitDisplayName = async () => {
-    await updateChatUserName(user.id, displayName);
+    setDisplayNameLoading(true);
+    await updateChatUserName(user.id, room.id, displayName);
     chatRef.current.refreshChat();
+    setDisplayNameLoading(false);
   };
 
   const handleChangeIsHidden = (event) => {
@@ -93,10 +96,15 @@ const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
             value={displayName}
             onChange={handleChangeDisplayName}
           />
-
-          <button className="Button2 mt-3" onClick={handleSubmitDisplayName}>
-            Update
-          </button>
+          {displayNameLoading ? (
+            <div className="text-center pt-1">
+              <CircularProgress />
+            </div>
+          ) : (
+            <button className="Button2 mt-3" onClick={handleSubmitDisplayName}>
+              Update
+            </button>
+          )}
         </FormControl>
         <Tooltip title="Temporarily hides chat. To permanently remove chat, remove the design block that contains the chat window.">
           <FormGroup>

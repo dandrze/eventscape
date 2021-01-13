@@ -2,14 +2,14 @@ import api from "../api/server";
 import { toast } from "react-toastify";
 
 export const fetchChatRooms = (event) => async (dispatch) => {
-  const chatRooms = await api.get("/api/event/chatroom/all", {
+  const chatRooms = await api.get("/api/chatroom/all", {
     params: { event },
   });
   return chatRooms;
 };
 
 export const fetchDefaultChatRoom = (event) => async (dispatch) => {
-  const chatRoom = await api.get("/api/event/chatroom/default", {
+  const chatRoom = await api.get("/api/chatroom/default", {
     params: { event },
   });
 
@@ -17,7 +17,7 @@ export const fetchDefaultChatRoom = (event) => async (dispatch) => {
 };
 
 export const addChatRoom = (room, event) => async (dispatch) => {
-  const response = await api.post("/api/event/chatroom", {
+  const response = await api.post("/api/chatroom", {
     room,
     event,
   });
@@ -28,7 +28,7 @@ export const addChatRoom = (room, event) => async (dispatch) => {
 };
 
 export const updateChatRoom = (room) => async (dispatch) => {
-  const response = await api.put("/api/event/chatroom", {
+  const response = await api.put("/api/chatroom", {
     room,
   });
 
@@ -39,7 +39,7 @@ export const updateChatRoom = (room) => async (dispatch) => {
 
 export const deleteChatRoom = (id) => async (dispatch) => {
   try {
-    const response = await api.delete("/api/event/chatroom", {
+    const response = await api.delete("/api/chatroom", {
       params: { id },
     });
 
@@ -49,11 +49,13 @@ export const deleteChatRoom = (id) => async (dispatch) => {
   }
 };
 
-export const updateChatUserName = (userId, name) => async (dispatch) => {
-  console.log(userId);
-  const response = await api.put("/api/event/chatuser", {
-    userId,
+export const updateChatUserName = (EventscapeId, ChatRoomId, name) => async (
+  dispatch
+) => {
+  const response = await api.put("/api/chatuser", {
+    EventscapeId,
     name,
+    ChatRoomId,
   });
 
   console.log(response);
@@ -61,9 +63,9 @@ export const updateChatUserName = (userId, name) => async (dispatch) => {
   return response;
 };
 
-export const fetchChatUser = (userId) => async (dispatch) => {
-  const response = await api.get("/api/event/chatuser", {
-    params: { userId },
+export const fetchChatUser = (EventscapeId, ChatRoomId) => async (dispatch) => {
+  const response = await api.get("/api/chatuser", {
+    params: { EventscapeId, ChatRoomId },
   });
 
   console.log(response);
