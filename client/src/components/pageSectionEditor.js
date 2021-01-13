@@ -35,8 +35,8 @@ const RegPageSectionEditor = (props) => {
           })
         ) : (
           <Froala
-            key={props.model.sections}
             sectionIndex={props.sectionIndex}
+            html={props.model.sections[props.sectionIndex].html}
           />
         )}
       </div>

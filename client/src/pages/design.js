@@ -27,7 +27,7 @@ const Design = (props) => {
         displaySideNav="true"
         highlight="design"
         content={
-          props.settings.loaded ? (
+          props.model.sections.length ? (
             <PageEditor key={props.model} />
           ) : (
             <CircularProgress />

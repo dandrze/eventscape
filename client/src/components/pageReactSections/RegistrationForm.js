@@ -203,7 +203,10 @@ function RegistrationForm(props) {
                 )}
               />
             ) : (
-              <Froala sectionIndex={props.sectionIndex} />
+              <Froala
+                sectionIndex={props.sectionIndex}
+                html={props.model.sections[props.sectionIndex].html}
+              />
             )}
           </div>
         ) : null}

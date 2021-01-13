@@ -36,7 +36,6 @@ export const fetchModel = (id) => async (dispatch) => {
 };
 
 export const updateSection = (index, html) => {
-  // call the api and return the event in json
   const payload = {
     index,
     html,
