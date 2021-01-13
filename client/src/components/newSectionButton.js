@@ -21,6 +21,7 @@ import heroBanner from "./designBlockThumbnails/heroBanner.png";
 import titleThumb from "./designBlockThumbnails/title.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
+import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png"
 import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
 import {
   logoHeaderModel,
@@ -30,7 +31,7 @@ import {
   streamChatModel,
   blankModel,
   streamChatReact,
-  registrationFormHeader,
+  timeDescription,
   registrationFormReact,
   registrationFormDescription,
 } from "../templates/designBlockModels";
@@ -207,6 +208,7 @@ const NewSectionButton = (props) => {
 
                 {blockCat === "registration" && (
                   <Grid container spacing={3}>
+
                     {/* Description Registration */}
                     <Grid item xs={12}>
                       <img
@@ -219,7 +221,18 @@ const NewSectionButton = (props) => {
                             true,
                             registrationFormReact
                           );
-                          await handleAddSection(registrationFormHeader());
+                        }}
+                      />
+                    </Grid>
+
+                    {/* Time Description */}
+                    <Grid item xs={12}>
+                      <img
+                        src={timeDescriptionThumb}
+                        id="designBlockThumbnail"
+                        onClick={() => {
+                          handleClose();
+                          handleAddSection(timeDescription());
                         }}
                       />
                     </Grid>

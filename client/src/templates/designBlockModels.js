@@ -39,39 +39,14 @@ export const logoHeaderRightModel = () => {
     `;
 };
 
-export const registrationFormHeader = () => {
-  return `<div style="overflow: hidden;">
-          <p class="registration-title">Sign Up Today</p>
-          <p class="registration-subtitle">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </p>
-      </div>
-  
-      <style>
-          .registration-title {
-              padding: 0;
-              font-size: 50px;
-              line-height: 1;
-              margin-left: 5%;
-              margin-right: 5%;
-              margin-top: 3%;
-              margin-bottom: 3%;
-              text-align: center;
-          }
-          .registration-subtitle {
-            padding: 0;
-            font-size: 20px;
-            line-height: 1;
-            margin-left: 5%;
-            margin-right: 5%;
-            margin-top: 3%;
-            margin-bottom: 3%;
-            text-align: center;
-            font-style: italic;
-        }
-      </style>
-  `;
+export const timeDescription = () => {
+  return `<div style="max-width: 1300px; margin: 0 auto; padding: 60px 20px;" contenteditable="true">
+  <p style="margin-top: 0; text-align: left;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
+  <p style="text-align: left;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+</div>`;
 }; 
 
-export const descriptionRegistrationModel = (startTime, endTime) => {
+/* export const descriptionRegistrationModel = (startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
   const endTimeParsed = Date.parse(endTime);
 
@@ -147,6 +122,7 @@ export const descriptionRegistrationModel = (startTime, endTime) => {
     
     `;
 };
+*/
 
 export const registrationFormDescription = () => {
   return `<div class="one" contenteditable="true">

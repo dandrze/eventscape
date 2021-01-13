@@ -343,7 +343,6 @@ function Event_Details(props) {
                     label="End Date"
                     disableToolbar
                     inputVariant="outlined"
-                    variant="inline"
                     format="MM/dd/yyyy"
                     margin="none"
                     id="event-end-date"

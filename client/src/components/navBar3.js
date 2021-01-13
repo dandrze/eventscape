@@ -51,6 +51,7 @@ import SwapHorizIcon from "@material-ui/icons/SwapHoriz";
 import SettingsIcon from "@material-ui/icons/Settings";
 
 /* Icons side nav */
+import ListMinimalIcon from "../icons/list-minimal.svg";
 import PenIcon from "../icons/pen.svg";
 import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
@@ -161,6 +162,10 @@ const useStyles = makeStyles((theme) => ({
   purple: {
     color: theme.palette.getContrastText(deepPurple[500]),
     backgroundColor: deepPurple[500],
+  },
+  greyWhite: {
+    color: MenuBackground,
+    backgroundColor: "#EAEAEA",
   },
   highlight: {
     backgroundColor: "rgba(0, 0, 0, 0.06)",
@@ -399,7 +404,7 @@ function NavBar3(props) {
               onClick={handleClick}
             >
               <div className={classes.root}>
-                <Avatar className={`${classes.purple} ${classes.large}`}>
+                <Avatar className={`${classes.greyWhite} ${classes.large}`}>
                   {props.user.first_name[0] + props.user.last_name[0]}
                 </Avatar>
               </div>
@@ -416,7 +421,7 @@ function NavBar3(props) {
             <StyledMenuItemNoButton>
               <ListItemIcon>
                 <div className={classes.root}>
-                  <Avatar className={`${classes.purple} ${classes.large}`}>
+                  <Avatar className={`${classes.greyWhite} ${classes.large}`}>
                     {props.user.first_name[0] + props.user.last_name[0]}
                   </Avatar>
                 </div>
@@ -501,6 +506,23 @@ function NavBar3(props) {
           </div>
           <Divider />
           <List>
+            <Link to="/website-settings">
+              <ListItem
+                button
+                key="event-details"
+                className={clsx({
+                  [classes.highlight]: highlight === "event-details",
+                })}
+              >
+                <Tooltip title="Event Details">
+                  <ListItemIcon>
+                    <img src={ListMinimalIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Event Details" />
+              </ListItem>
+            </Link>
+
             {/* Design */}
             <ListItem 
               button 
@@ -519,21 +541,6 @@ function NavBar3(props) {
             {/* Design Nested Menu */}
             <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-
-                {/* Event Details */}
-                <Link 
-                  to="./website-settings" 
-                  onClick={() => {
-                    handleClickNestedItem();
-                  }}
-                >
-                  <ListItem 
-                    button 
-                    className={classes.nested} 
-                  >
-                    <ListItemText secondary="Event Details" />
-                  </ListItem>
-                </Link>
 
                 {/* Registration Page */}
                 <ListItem 
