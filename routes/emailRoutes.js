@@ -213,7 +213,7 @@ router.post("/api/email/test", async (req, res) => {
     first_name: firstName,
     last_name: lastName,
     email,
-    hash: "UNIQUE-LINK-GENERATED-FOR-EACH-REGISTRANT",
+    hash: md5("tester"),
   };
 
   // pull all relevant data to map to variables and put them into a list

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Route, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import Grid from "@material-ui/core/Grid";
@@ -59,20 +59,34 @@ function Event_Details(props) {
   const [linkHelperText, setLinkHelperText] = React.useState("");
 
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    props.selectedStartDate
-      ? props.selectedStartDate
-      : new Date("2020-11-18T19:00:00")
+    props.selectedStartDate ? props.selectedStartDate : new Date()
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    props.selectedEndDate
-      ? props.selectedEndDate
-      : new Date("2020-11-18T21:00:00")
+    props.selectedEndDate ? props.selectedEndDate : new Date()
   );
   const [eventTimeZone, setEventTimeZone] = React.useState(
     props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
   );
   const [color, setColor] = useState(props.color ? props.color : "#B0281C");
   const [isLoading, setIsloading] = useState(false);
+
+  useEffect(() => {
+    if (!props.selectedStartDate) {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() + 7);
+      startDate.setHours(18);
+      startDate.setMinutes(0);
+      setSelectedStartDate(startDate);
+    }
+
+    if (!props.selectedEndDate) {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 7);
+      endDate.setHours(21);
+      endDate.setMinutes(0);
+      setSelectedEndDate(endDate);
+    }
+  }, []);
 
   const closeModal = () => setOpenModal(false);
 
@@ -140,6 +154,12 @@ function Event_Details(props) {
     }
     if (!eventCat) {
       setModalText("Please select a category.");
+      setOpenModal(true);
+      return null;
+    }
+
+    if (selectedEndDate < selectedStartDate) {
+      setModalText("End Date must be after Start Date.");
       setOpenModal(true);
       return null;
     }
@@ -212,7 +232,6 @@ function Event_Details(props) {
             value={eventTitle}
             onChange={handleChangeEventTitle}
           />
-          <br></br>
         </FormControl>
         <Tooltip title="Please note. This link can not be changed once it's created.">
           <FormControl variant="outlined" className={classes.formControl}>
@@ -232,6 +251,7 @@ function Event_Details(props) {
               }}
               error={linkUnavailable}
               helperText={linkHelperText}
+              disabled={props.isEventUpdate}
             />
           </FormControl>
         </Tooltip>

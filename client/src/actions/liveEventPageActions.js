@@ -29,11 +29,14 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
     });
   }
 
-  return true;
+  return { eventId: event.data.id };
 };
 
-export const fetchAttendeeData = (hash) => async (dispatch) => {
-  const attendee = await api.get("/api/attendee/hash", { params: { hash } });
+export const fetchAttendeeData = (hash, eventId) => async (dispatch) => {
+  console.log(eventId);
+  const attendee = await api.get("/api/attendee/hash", {
+    params: { hash, eventId },
+  });
 
   await dispatch({
     type: FETCH_ATTENDEE,

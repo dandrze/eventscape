@@ -36,7 +36,6 @@ export const fetchModel = (id) => async (dispatch) => {
 };
 
 export const updateSection = (index, html) => {
-  // call the api and return the event in json
   const payload = {
     index,
     html,
@@ -53,7 +52,7 @@ export const addSection = (
   const model = getState().model.id;
 
   if (react_component && react_component.name === "StreamChat") {
-    const chatRoom = await api.get("/api/event/chatroom/default", {
+    const chatRoom = await api.get("/api/chatroom/default", {
       params: { event: getState().event.id },
     });
     react_component.props.chatRoom = chatRoom.data.id;

@@ -176,7 +176,6 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
     });
 
     socket.on("message", (message) => {
-      console.log(message);
       setMessages((messages) => [...messages, message]);
     });
 
@@ -260,15 +259,12 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
   };
 
   const deleteMessage = (id) => {
-    console.log(id, room);
     socket.emit("deleteMessage", { id, room });
   };
 
   const restoreMessage = (id) => {
     socket.emit("restoreMessage", { id, room });
   };
-
-  console.log(chatUserId);
 
   return (
     <div

@@ -6,14 +6,27 @@ const router = express.Router();
 const db = require("../db");
 
 router.get("/api/attendee/hash", async (req, res) => {
-  const { hash } = req.query;
+  const { hash, eventId } = req.query;
 
-  // get the attendee information based on the hash
-  const attendee = await db.query(`SELECT * FROM registration WHERE hash=$1`, [
-    hash,
-  ]);
+  var attendee;
+  // if the hash is a testing hash, return a test attendee
+  if (hash === md5("tester")) {
+    attendee = {
+      first_name: "Test",
+      last_name: "Guest",
+      email: "test@guest.com",
+    };
+  } else {
+    // get the attendee information based on the hash
+    const res = await db.query(
+      `SELECT * FROM registration WHERE hash=$1 AND event=$2`,
+      [hash, eventId]
+    );
 
-  res.status(200).send(attendee.rows[0]);
+    attendee = res.rows[0];
+  }
+
+  res.status(200).send(attendee);
 });
 
 module.exports = router;

@@ -95,9 +95,11 @@ export const deleteRegistration = (id) => async (dispatch) => {
   }
 };
 
-export const fetchRegistration = (email) => async (dispatch) => {
+export const fetchRegistration = (email, eventId) => async (dispatch) => {
   try {
-    const res = await api.get("/api/registration/email", { params: { email } });
+    const res = await api.get("/api/registration/email", {
+      params: { email, eventId },
+    });
     return res.data;
   } catch (err) {
     toast.error(

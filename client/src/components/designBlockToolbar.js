@@ -169,8 +169,6 @@ function DesignBlockToolbar(props) {
     }
   };
 
-  console.log(props);
-
   return (
     <div>
       {/* Toolbar */}
