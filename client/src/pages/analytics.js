@@ -1,54 +1,60 @@
-import React, { Component } from "react";
+import React, { Component, useEffect, useState } from "react";
+import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import Tabs from "../components/Tabs";
 import Chart from "chart.js/dist/Chart.bundle";
 import LoginsTable from "../components/LoginsTables";
 import WorldMap from "../components/worldMap";
 import "./analytics.css";
+import * as actions from "../actions";
 
-export default class Analytics extends React.Component {
-  render() {
-    return (
-      <div>
-        <NavBar3
-          displaySideNav="true"
-          highlight={"analytics"}
-          content={<Content />}
-        />
-      </div>
-    );
-  }
-}
+const Analytics = (props) => {
+  const [currentVisitors, setCurrentVisitors] = useState(0);
+  useEffect(() => {
+    setInterval(fetchDataAsync(), 30000);
+  });
+  const fetchDataAsync = async () => {
+    console.log("current visitors fetched");
+    if (props.event.id) {
+      setCurrentVisitors(await props.fetchCurrentVisitors(props.event.id));
+    }
+  };
 
-const Content = (props) => {
-  console.log(getUniqueViewersArray(150));
   return (
-    <div className="boxes-main-container container-width">
-      <div className="UVContainer">
-        <div className="form-box shadow-border currentUV">
-          <h3>Current Unique Viewers</h3>
-          <h2>2712</h2>
-        </div>
-        <div className="form-box shadow-border totalUV">
-          <h3>Total Unique Viewers</h3>
-          <h2>3324</h2>
-        </div>
-      </div>
-      <div className="form-box shadow-border" id="uniqueViewersTable">
-        <h3>Unique Viewers over Time</h3>
-        <br></br>
-        <UniqueViewersChart />
-      </div>
-      <div className="shadow-border viewerLocation">
-        <div id="viewerLocationHeader">
-          <h3>Viewer Location</h3>
-        </div>
-        <WorldMap />
-      </div>
-      <div className="form-box shadow-border table-box">
-        <h3>Logins</h3>
-        <LoginsTable />
-      </div>
+    <div>
+      <NavBar3
+        displaySideNav="true"
+        highlight={"analytics"}
+        content={
+          <div className="boxes-main-container container-width">
+            <div className="UVContainer">
+              <div className="form-box shadow-border currentUV">
+                <h3>Current Unique Viewers</h3>
+                <h2>{currentVisitors}</h2>
+              </div>
+              <div className="form-box shadow-border totalUV">
+                <h3>Total Unique Viewers</h3>
+                <h2>3324</h2>
+              </div>
+            </div>
+            <div className="form-box shadow-border" id="uniqueViewersTable">
+              <h3>Unique Viewers over Time</h3>
+              <br></br>
+              <UniqueViewersChart />
+            </div>
+            <div className="shadow-border viewerLocation">
+              <div id="viewerLocationHeader">
+                <h3>Viewer Location</h3>
+              </div>
+              <WorldMap />
+            </div>
+            <div className="form-box shadow-border table-box">
+              <h3>Logins</h3>
+              <LoginsTable />
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 };
@@ -304,3 +310,11 @@ class UniqueViewersChart extends React.Component {
     );
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    event: state.event,
+  };
+};
+
+export default connect(mapStateToProps, actions)(Analytics);

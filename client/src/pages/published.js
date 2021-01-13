@@ -1,6 +1,8 @@
 import React, { createElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
+import Cookies from "universal-cookie";
+import uuid from "react-uuid";
 
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -22,15 +24,23 @@ const ENDPOINT =
 
 let socket;
 
+const cookies = new Cookies();
+
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
+
+  console.log(cookies.get("uuid"));
 
   useEffect(() => {
     socket = io(ENDPOINT, {
       path: "/api/socket/analytics",
       transports: ["websocket"],
     });
+
+    let uniqueVisitorId;
+
+    if (!cookies.get("uuid")) cookies.set("uuid", uuid());
 
     socket.on("connect", () => {
       console.log(socket.id);
@@ -45,14 +55,9 @@ const Published = (props) => {
       await props.fetchAttendeeData(hash);
     }
 
-    const { event, pageModel } = await props.fetchLivePage(
-      props.subdomain,
-      hash
-    );
+    const { eventId } = await props.fetchLivePage(props.subdomain, hash);
 
-    console.log(event);
-
-    socket.emit("join", { eventId: event.id });
+    socket.emit("join", { eventId, uuid: cookies.get("uuid") });
 
     setIsLoaded(true);
   };

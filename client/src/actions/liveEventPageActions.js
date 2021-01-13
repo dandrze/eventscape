@@ -29,7 +29,7 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
     });
   }
 
-  return true;
+  return { eventId: event.data.id };
 };
 
 export const fetchAttendeeData = (hash) => async (dispatch) => {

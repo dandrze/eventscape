@@ -15,6 +15,7 @@ const registrationRoutes = require("./routes/registrationRoutes");
 const emailRoutes = require("./routes/emailRoutes");
 const accountRoutes = require("./routes/accountRoutes");
 const liveEventRoutes = require("./routes/liveEventRoutes");
+const analyticsRoutes = require("./routes/analyticsRoutes");
 require("./services/passport");
 
 const app = express();
@@ -42,6 +43,7 @@ app.use(registrationRoutes);
 app.use(emailRoutes);
 app.use(accountRoutes);
 app.use(liveEventRoutes);
+app.use(analyticsRoutes);
 
 if (process.env.NODE_ENV == "production") {
   // if we don't recognize the route, look into the client/build folder
@@ -58,7 +60,8 @@ if (process.env.NODE_ENV == "production") {
 
 const server = http.createServer(app);
 
-require("./services/socket")(server);
+require("./services/ChatSocket")(server);
+require("./services/AnalyticsSocket")(server);
 
 const PORT = process.env.PORT || 5000;
 
