@@ -422,6 +422,28 @@ router.put("/api/event/chatuser", async (req, res) => {
   }
 });
 
+router.get("/api/event/chatuser", async (req, res) => {
+  const { userId } = req.query;
+
+  try {
+    const [dbUser, created] = await ChatUser.findOrCreate({
+      where: {
+        EventscapeId: userId,
+      },
+    });
+
+    if (created) {
+      dbUser.name = "Moderator";
+      await dbUser.save();
+    }
+
+    res.status(200).send(dbUser);
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({ message: "Error while updating moderator name" });
+  }
+});
+
 router.delete("/api/event/chatroom", async (req, res) => {
   const { id } = req.query;
 

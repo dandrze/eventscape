@@ -60,3 +60,13 @@ export const updateChatUserName = (userId, name) => async (dispatch) => {
 
   return response;
 };
+
+export const fetchChatUser = (userId) => async (dispatch) => {
+  const response = await api.get("/api/event/chatuser", {
+    params: { userId },
+  });
+
+  console.log(response);
+
+  return response.data;
+};

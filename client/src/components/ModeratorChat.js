@@ -12,6 +12,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import AlertModal from "../components/AlertModal";
+import { fetchAttendeeData } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,18 +24,26 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModeratorChat = ({ room, user, updateChatUserName }) => {
+const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
   const classes = useStyles();
 
-  const [displayName, setDisplayName] = useState(
-    user.first_name + " (Moderator)" || "Moderator"
-  );
+  const [displayName, setDisplayName] = useState("");
+
   const [isHidden, setIsHidden] = React.useState({
     checked: room.isHidden,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
 
   const chatRef = React.useRef();
+
+  useEffect(() => {
+    fetchDataAsync();
+  }, []);
+
+  const fetchDataAsync = async () => {
+    const chatUserName = await fetchChatUser(user.id);
+    setDisplayName(chatUserName.name);
+  };
 
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
