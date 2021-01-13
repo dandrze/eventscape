@@ -3,15 +3,15 @@ const conn = require("../sequelize").conn;
 const { ChatRoom, ChatUser, ChatMessage } = require("../sequelize").models;
 
 module.exports = (server) => {
-  const io = socketIo(server, {
-    path: "/api/socket",
+  const chatIO = socketIo(server, {
+    path: "/api/socket/chat",
     cors: {
       origin: "http://localhost:3000",
       methods: ["GET", "POST"],
     },
   });
 
-  io.on("connection", (socket) => {
+  chatIO.on("connection", (socket) => {
     console.log("New client connected");
 
     socket.on("join", async ({ userId, name, room, isModerator }, callback) => {
@@ -68,7 +68,7 @@ module.exports = (server) => {
     socket.on("refreshChat", async ({ room }) => {
       console.log("chat refreshed");
       console.log(room);
-      io.to(room).emit("refresh");
+      chatIO.to(room).emit("refresh");
 
       const messageHistory = await ChatMessage.findAll({
         where: { ChatRoomId: room },
@@ -78,7 +78,7 @@ module.exports = (server) => {
 
       //push the message history
       messageHistory.forEach((message) => {
-        io.to(room).emit("message", {
+        chatIO.to(room).emit("message", {
           user: message.ChatUser.name,
           text: message.text,
           id: message.id,
@@ -97,7 +97,7 @@ module.exports = (server) => {
         ChatUserId: chatUser.id,
       });
 
-      io.to(room).emit("message", {
+      chatIO.to(room).emit("message", {
         user: chatUser.name,
         userId: chatUser.id,
         text: message,
@@ -113,7 +113,7 @@ module.exports = (server) => {
       chatRoom.isHidden = isHidden;
       await chatRoom.save();
 
-      io.to(room).emit("chatHidden", isHidden);
+      chatIO.to(room).emit("chatHidden", isHidden);
     });
 
     socket.on("deleteMessage", async ({ id, room }) => {
@@ -121,14 +121,14 @@ module.exports = (server) => {
       chatMessage.deleted = true;
       chatMessage.save();
 
-      io.to(room).emit("delete", id);
+      chatIO.to(room).emit("delete", id);
     });
 
     socket.on("restoreMessage", async ({ id, room }) => {
       const chatMessage = await ChatMessage.findByPk(id);
       chatMessage.deleted = false;
       chatMessage.save();
-      io.to(room).emit("restore", id);
+      chatIO.to(room).emit("restore", id);
     });
 
     socket.on("deleteAllMessages", async ({ room }) => {
@@ -137,7 +137,27 @@ module.exports = (server) => {
         { where: { ChatRoomId: room } }
       );
 
-      io.to(room).emit("deleteAll");
+      chatIO.to(room).emit("deleteAll");
+    });
+
+    socket.on("disconnect", (reason) => {
+      console.log("Client disconnected: " + reason);
+    });
+  });
+
+  const analyticsIO = socketIo(server, {
+    path: "/api/socket/analytics",
+    cors: {
+      origin: "http://localhost:3000",
+      methods: ["GET", "POST"],
+    },
+  });
+
+  analyticsIO.on("connection", (socket) => {
+    console.log("New client connected");
+
+    socket.on("join", async ({ eventId }) => {
+      console.log(eventId);
     });
 
     socket.on("disconnect", (reason) => {

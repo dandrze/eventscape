@@ -7,7 +7,7 @@ module.exports = function (app) {
       "/api/model",
       "/auth",
       "/auth/current-user",
-      "/api/socket",
+      "/api/socket/chat",
     ],
     createProxyMiddleware({
       target: "http://localhost:5000",

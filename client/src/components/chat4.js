@@ -151,7 +151,7 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
 
   useEffect(() => {
     socket = io(ENDPOINT, {
-      path: "/api/socket",
+      path: "/api/socket/chat",
       transports: ["websocket"],
     });
     socket.on("connect", () => {

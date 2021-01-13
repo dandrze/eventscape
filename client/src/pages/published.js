@@ -1,6 +1,6 @@
 import React, { createElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ReactGA from "react-ga";
+import io from "socket.io-client";
 
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -13,15 +13,30 @@ import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 
-const trackingId = "UA-187311895-1";
+const ENDPOINT =
+  window.location.hostname.split(".")[
+    window.location.hostname.split(".").length - 1
+  ] === "localhost"
+    ? "http://localhost:5000/"
+    : "https://eventscape.io/";
+
+let socket;
 
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
+    socket = io(ENDPOINT, {
+      path: "/api/socket/analytics",
+      transports: ["websocket"],
+    });
+
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+
     fetchData();
-    ReactGA.initialize(trackingId);
   }, []);
 
   const fetchData = async () => {
@@ -35,12 +50,9 @@ const Published = (props) => {
       hash
     );
 
-    ReactGA.set({
-      event,
-      hash,
-      // any data that is relevant to the user session
-      // that you would like to track with google analytics
-    });
+    console.log(event);
+
+    socket.emit("join", { eventId: event.id });
 
     setIsLoaded(true);
   };
