@@ -48,3 +48,15 @@ export const deleteChatRoom = (id) => async (dispatch) => {
     toast.error(err.response.data.message);
   }
 };
+
+export const updateChatUserName = (userId, name) => async (dispatch) => {
+  console.log(userId);
+  const response = await api.put("/api/event/chatuser", {
+    userId,
+    name,
+  });
+
+  console.log(response);
+
+  return response;
+};

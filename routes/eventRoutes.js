@@ -381,7 +381,7 @@ router.get("/api/event/chatroom/all", async (req, res) => {
 
 router.put("/api/event/chatroom", async (req, res) => {
   const {
-    room: { id, name, moderatorName },
+    room: { id, name },
   } = req.body;
   try {
     const dbRoom = await ChatRoom.findOne({
@@ -391,25 +391,34 @@ router.put("/api/event/chatroom", async (req, res) => {
     });
 
     dbRoom.name = name;
-
-    if (dbRoom.moderatorName != moderatorName) {
-      dbRoom.moderatorName = moderatorName;
-
-      const dbModerator = await ChatUser.findOne({
-        where: {
-          ChatRoomId: dbRoom.id,
-          isModerator: true,
-        },
-      });
-
-      dbModerator.name = moderatorName;
-      dbModerator.save();
-    }
     dbRoom.save();
 
     res.status(200).send();
   } catch (err) {
     res.status(400).send({ message: "Error while updating chatroom" });
+  }
+});
+
+router.put("/api/event/chatuser", async (req, res) => {
+  const { userId, name } = req.body;
+  console.log(userId, name);
+
+  try {
+    const [dbUser, created] = await ChatUser.findOrCreate({
+      where: {
+        EventscapeId: userId,
+      },
+    });
+
+    console.log(dbUser, created);
+
+    dbUser.name = name;
+    dbUser.save();
+
+    res.status(200).send();
+  } catch (err) {
+    console.log(err);
+    res.status(400).send({ message: "Error while updating moderator name" });
   }
 });
 

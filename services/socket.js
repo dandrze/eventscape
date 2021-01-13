@@ -27,13 +27,11 @@ module.exports = (server) => {
       var created;
 
       if (!userId) {
-        user = await ChatUser.create({ name, ChatRoomId: room });
+        user = await ChatUser.create({ name });
       } else {
         [user, created] = await ChatUser.findOrCreate({
           where: {
-            EventscapeId: userId || null,
-            ChatRoomId: room,
-            isModerator,
+            EventscapeId: userId,
           },
         });
 
