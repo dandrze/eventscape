@@ -1,5 +1,6 @@
 import React, { createElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import ReactGA from "react-ga";
 
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -12,12 +13,15 @@ import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 
+const trackingId = "G-0DLLB4WNF7";
+
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     fetchData();
+    ReactGA.initialize(trackingId);
   }, []);
 
   const fetchData = async () => {
@@ -30,6 +34,13 @@ const Published = (props) => {
       props.subdomain,
       hash
     );
+
+    ReactGA.set({
+      event,
+      hash,
+      // any data that is relevant to the user session
+      // that you would like to track with google analytics
+    });
 
     setIsLoaded(true);
   };
