@@ -23,12 +23,8 @@
 /* Info Bar */
 
 .infoBar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
   background: #b0281c;
   height: 60px;
-  width: 100%;
 }
 
 .infoBar.grey {

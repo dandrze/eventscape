@@ -9,6 +9,15 @@ import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
 import clsx from "clsx";
 
+/* Tabs */
+import PropTypes from 'prop-types';
+import AppBar from '@material-ui/core/AppBar';
+import Tabs from '@material-ui/core/Tabs';
+import Tab from '@material-ui/core/Tab';
+import Typography from '@material-ui/core/Typography';
+import Box from '@material-ui/core/Box';
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+
 /* Icons */
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
@@ -121,12 +130,91 @@ const Message = ({
   );
 };
 
-const Input = ({ setMessage, sendMessage, message, theme }) => (
+/* for tabs */
+const useStyles = makeStyles((theme) => ({
+  root: {
+    flexGrow: 1,
+  },
+}));
+
+function TabPanel(props) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box p={0}>
+          {children}
+        </Box>
+      )}
+    </div>
+  );
+}
+
+TabPanel.propTypes = {
+  children: PropTypes.node,
+  index: PropTypes.any.isRequired,
+  value: PropTypes.any.isRequired,
+};
+
+function a11yProps(index) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
+
+const StyledTabs = withStyles({
+  indicator: {
+    display: 'flex',
+    justifyContent: 'center',
+    '& > span': {
+      width: '100%',
+      backgroundColor: 'white',
+    },
+  },
+})((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
+
+const StyledTab = withStyles((theme) => ({
+  root: {
+    textTransform: 'none',
+    height: '60px',
+    color: 'rgba(255, 255, 255, 0.9)',
+    fontSize: '18px',
+    fontWeight: '300',
+    fontFamily: [
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+    ].join(','),
+    '&:hover': {
+      color: '#fff',
+      opacity: 1,
+    },
+    '&$selected': {
+      color: '#fff',
+      fontWeight: '400',
+    },
+    '&:focus': {
+      color: '#fff',
+    },
+  },
+  selected: {},
+}))((props) => <Tab disableRipple {...props} />);
+
+const Input = ({ setMessage, sendMessage, message, theme, placeholder }) => (
   <form className="form">
     <input
       className="input"
       type="text"
-      placeholder="Type a message..."
+      placeholder={placeholder}
       value={message}
       onChange={({ target: { value } }) => setMessage(value)}
       onKeyPress={(event) =>
@@ -144,10 +232,17 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
 );
 
 const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
+  const classes = useStyles();
+  const [value, setValue] = React.useState(0); //for tabs
   const [chatUserId, setChatUserId] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [chatHidden, setChatHidden] = useState(false);
+
+  // for tabs
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -278,27 +373,43 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
       })}
     >
       <div className="chatContainer">
-        <div className={"infoBar" + (chatHidden ? " grey" : "")}>
-          <div className="leftInnerContainer box-header">
-            <img src={ChatWhiteIcon} className="info-bar-icon"></img>
-            <h3 className="chatText">Chat</h3>
-          </div>
-          <div className="rightInnerContainer">
-            {chatHidden ? <h3 className="chatText">(Hidden)</h3> : null}
-          </div>
+        <div className="infoBar">
+          <StyledTabs 
+            value={value} 
+            onChange={handleChange} 
+            aria-label="simple tabs example"
+            indicatorColor="secondary"
+            textColor="black"
+            variant="fullWidth"
+          >
+            <StyledTab label="Chat" {...a11yProps(0)} />
+            <StyledTab label="Ask a Question" {...a11yProps(1)} />
+          </StyledTabs>
         </div>
-        <Messages
-          messages={messages}
-          chatUserId={chatUserId}
-          isModerator={isModerator}
-          deleteMessage={deleteMessage}
-          restoreMessage={restoreMessage}
-        />
-        <Input
-          message={message}
-          setMessage={setMessage}
-          sendMessage={sendMessage}
-        />
+        <TabPanel value={value} index={0} classes={{ root: classes.tab }}>
+          <Messages
+            messages={messages}
+            chatUserId={chatUserId}
+            isModerator={isModerator}
+            deleteMessage={deleteMessage}
+            restoreMessage={restoreMessage}
+          />
+          <Input
+            message={message}
+            setMessage={setMessage}
+            sendMessage={sendMessage}
+            placeholder="Type a message..."
+          />
+        </TabPanel>
+        <TabPanel value={value} index={1}>
+          <p style={{  }}>Questions will be forwarded<br></br> to be answered live.</p>
+          <Input
+              message={message}
+              setMessage={setMessage}
+              sendMessage={sendMessage}
+              placeholder="Type a question..."
+            />
+        </TabPanel>
       </div>
     </div>
   );
