@@ -10,15 +10,65 @@ import * as actions from "../actions";
 
 const Analytics = (props) => {
   const [currentVisitors, setCurrentVisitors] = useState(0);
+  const [uniqueVisitors, setUniqueVisitors] = useState(0);
+  const [visitorsArray, setVisitorsArray] = useState([]);
+
   useEffect(() => {
-    setInterval(fetchDataAsync(), 30000);
-  });
-  const fetchDataAsync = async () => {
-    console.log("current visitors fetched");
-    if (props.event.id) {
-      setCurrentVisitors(await props.fetchCurrentVisitors(props.event.id));
-    }
-  };
+    // function to be called every X seconds to refresh the data on the dashboard
+    const fetchDataAsync = async () => {
+      // check to make sure the event was loaded (will crash otherwise)
+      if (props.event.id) {
+        // fetch data from API
+        const visitors = await props.fetchCurrentVisitors(props.event.id);
+        // set the counts for current and unique visitors (returned from the server api)
+        setCurrentVisitors(visitors.currentCount);
+        setUniqueVisitors(visitors.uniqueCount);
+
+        // create a cleaner array for the time chart to use with just start time and end times
+        const visitTimes = visitors.data.map((visitor) => {
+          const start = new Date(visitor.createdAt);
+          const end = visitor.loggedOutAt
+            ? new Date(visitor.loggedOutAt)
+            : new Date();
+          console.log(end - start);
+          return { start, end };
+        });
+
+        // set the lower and upper limits for the time chart
+        const startMiliseconds = visitTimes.length
+          ? visitTimes[0].start
+          : new Date();
+        const endMiliseconds = new Date();
+
+        const _visitorsArray = [];
+        // for each minute in the time chart range, cound how many visits are active (time falls between its start and end time)
+        for (
+          let i = startMiliseconds;
+          i < endMiliseconds;
+          i.setSeconds(i.getSeconds() + 60)
+        ) {
+          let count = 0;
+          for (const visitTime of visitTimes) {
+            if (i > visitTime.start && i < visitTime.end) count++;
+          }
+          _visitorsArray.push({ time: i.getTime(), value: count });
+        }
+
+        setVisitorsArray(_visitorsArray);
+      }
+    };
+
+    // fetch data once when mounted
+    fetchDataAsync();
+
+    // then fetch data every 30 seconds
+    const interval = setInterval(() => fetchDataAsync(), 30 * 1000);
+
+    // cleanup. Clears the interval when component unmounts.
+    return () => clearInterval(interval);
+  }, [props.event.id]);
+
+  console.log(visitorsArray);
 
   return (
     <div>
@@ -34,13 +84,19 @@ const Analytics = (props) => {
               </div>
               <div className="form-box shadow-border totalUV">
                 <h3>Total Unique Viewers</h3>
-                <h2>3324</h2>
+                <h2>{uniqueVisitors}</h2>
               </div>
             </div>
             <div className="form-box shadow-border" id="uniqueViewersTable">
               <h3>Unique Viewers over Time</h3>
               <br></br>
-              <UniqueViewersChart />
+              <div className="uniqueViewersChart">
+                <LineChart
+                  data={visitorsArray}
+                  title="Unique Viewers"
+                  color="#B0281C"
+                />
+              </div>
             </div>
             <div className="shadow-border viewerLocation">
               <div id="viewerLocationHeader">
@@ -203,7 +259,7 @@ class LineChart extends React.Component {
             {
               type: "time",
               time: {
-                unit: "hour",
+                unit: "minute",
               },
             },
           ],
