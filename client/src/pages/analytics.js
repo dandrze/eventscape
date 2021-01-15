@@ -24,6 +24,9 @@ const Analytics = (props) => {
         setCurrentVisitors(visitors.currentCount);
         setUniqueVisitors(visitors.uniqueCount);
 
+        const startTimes = [];
+        const endTimes = [];
+
         // create a cleaner array for the time chart to use with just start time and end times
         const visitTimes = visitors.data.map((visitor) => {
           const start = new Date(visitor.createdAt);
@@ -31,27 +34,26 @@ const Analytics = (props) => {
             ? new Date(visitor.loggedOutAt)
             : new Date();
           console.log(end - start);
+          startTimes.push(start);
+          endTimes.push(end);
+
           return { start, end };
         });
 
         // set the lower and upper limits for the time chart
-        const startMiliseconds = visitTimes.length
-          ? visitTimes[0].start
+        const startMiliseconds = startTimes.length
+          ? Math.min(...startTimes)
           : new Date();
-        const endMiliseconds = new Date();
+        const endMiliseconds = Math.max(...endTimes);
 
         const _visitorsArray = [];
-        // for each minute in the time chart range, cound how many visits are active (time falls between its start and end time)
-        for (
-          let i = startMiliseconds;
-          i < endMiliseconds;
-          i.setSeconds(i.getSeconds() + 60)
-        ) {
+        // for each minute in the time chart range, count how many visits are active (time falls between its start and end time)
+        for (let i = startMiliseconds; i < endMiliseconds; i += 60 * 1000) {
           let count = 0;
           for (const visitTime of visitTimes) {
             if (i > visitTime.start && i < visitTime.end) count++;
           }
-          _visitorsArray.push({ time: i.getTime(), value: count });
+          _visitorsArray.push({ time: i, value: count });
         }
 
         setVisitorsArray(_visitorsArray);
