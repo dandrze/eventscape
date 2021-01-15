@@ -14,6 +14,7 @@ import mapReactComponent from "../components/mapReactComponent";
 import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
+import { pageNames } from "../model/enums";
 
 const ENDPOINT =
   window.location.hostname.split(".")[
@@ -33,31 +34,36 @@ const Published = (props) => {
   console.log(cookies.get("uuid"));
 
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      path: "/api/socket/analytics",
-      transports: ["websocket"],
-    });
-
-    let uniqueVisitorId;
-
-    if (!cookies.get("uuid")) cookies.set("uuid", uuid());
-
-    socket.on("connect", () => {
-      console.log(socket.id);
-    });
-
-    fetchData();
+    fetchDataAsync();
   }, []);
 
-  const fetchData = async () => {
-    console.log(hash);
+  const fetchDataAsync = async () => {
     if (hash) {
       await props.fetchAttendeeData(hash);
     }
 
-    const { eventId } = await props.fetchLivePage(props.subdomain, hash);
+    const { event, pageType } = await props.fetchLivePage(
+      props.subdomain,
+      hash
+    );
 
-    socket.emit("join", { eventId, uuid: cookies.get("uuid") });
+    console.log(pageType);
+
+    // if the pagetype is event, turn on analytics
+    if (pageType == pageNames.EVENT) {
+      socket = io(ENDPOINT, {
+        path: "/api/socket/analytics",
+        transports: ["websocket"],
+      });
+
+      socket.on("connect", () => {
+        console.log(socket.id);
+      });
+
+      if (!cookies.get("uuid")) cookies.set("uuid", uuid());
+
+      socket.emit("join", { eventId: event.id, uuid: cookies.get("uuid") });
+    }
 
     setIsLoaded(true);
   };

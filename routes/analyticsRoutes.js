@@ -1,7 +1,5 @@
 const express = require("express");
 const { SiteVisit, Registration } = require("../sequelize").models;
-const conn = require("../sequelize/conn");
-const { QueryTypes } = require("sequelize");
 
 const router = express.Router();
 

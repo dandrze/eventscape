@@ -4,6 +4,7 @@ import {
   FETCH_EVENT,
   FETCH_PAGE_MODEL,
 } from "../actions/types";
+import { pageNames } from "../model/enums";
 
 export const fetchLivePage = (link, hash) => async (dispatch) => {
   const event = await api.get("/api/event/link", { params: { link } });
@@ -14,12 +15,15 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
     console.log(event.data);
     console.log(hash);
 
-    const modelId =
-      event.data.registration && !hash
-        ? // if there is no attendee and the registration is on, pull the registration page
-          event.data.reg_page_model
-        : // otherwise pull the event page
-          event.data.event_page_model;
+    var modelId, pageType;
+
+    if (event.data.registration && !hash) {
+      modelId = event.data.reg_page_model;
+      pageType = pageNames.REGISTRATION;
+    } else {
+      modelId = event.data.event_page_model;
+      pageType = pageNames.EVENT;
+    }
 
     const model = await api.get("/api/model/id", { params: { id: modelId } });
 
@@ -29,7 +33,7 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
     });
   }
 
-  return { eventId: event.data.id };
+  return { event, pageType };
 };
 
 export const fetchAttendeeData = (hash) => async (dispatch) => {
