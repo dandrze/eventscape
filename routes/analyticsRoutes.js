@@ -1,5 +1,5 @@
 const express = require("express");
-const { SiteVisit } = require("../sequelize").models;
+const { SiteVisit, Registration } = require("../sequelize").models;
 const conn = require("../sequelize/conn");
 const { QueryTypes } = require("sequelize");
 
@@ -27,6 +27,7 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
     where: {
       eventId,
     },
+    include: Registration,
   });
 
   res.status(200).send({ currentCount, uniqueCount, data });

@@ -11,6 +11,7 @@ import * as actions from "../actions";
 const Analytics = (props) => {
   const [currentVisitors, setCurrentVisitors] = useState(0);
   const [uniqueVisitors, setUniqueVisitors] = useState(0);
+  const [visitorsData, setVisitorsData] = useState([]);
   const [visitorsArray, setVisitorsArray] = useState([]);
 
   useEffect(() => {
@@ -23,6 +24,7 @@ const Analytics = (props) => {
         // set the counts for current and unique visitors (returned from the server api)
         setCurrentVisitors(visitors.currentCount);
         setUniqueVisitors(visitors.uniqueCount);
+        setVisitorsData(visitors.data);
 
         const startTimes = [];
         const endTimes = [];
@@ -33,7 +35,6 @@ const Analytics = (props) => {
           const end = visitor.loggedOutAt
             ? new Date(visitor.loggedOutAt)
             : new Date();
-          console.log(end - start);
           startTimes.push(start);
           endTimes.push(end);
 
@@ -64,13 +65,11 @@ const Analytics = (props) => {
     fetchDataAsync();
 
     // then fetch data every 30 seconds
-    const interval = setInterval(() => fetchDataAsync(), 30 * 1000);
+    //const interval = setInterval(() => fetchDataAsync(), 30 * 1000);
 
     // cleanup. Clears the interval when component unmounts.
-    return () => clearInterval(interval);
+    //return () => clearInterval(interval);
   }, [props.event.id]);
-
-  console.log(visitorsArray);
 
   return (
     <div>
@@ -108,7 +107,7 @@ const Analytics = (props) => {
             </div>
             <div className="form-box shadow-border table-box">
               <h3>Logins</h3>
-              <LoginsTable />
+              <LoginsTable data={visitorsData} />
             </div>
           </div>
         }
