@@ -18,7 +18,7 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
     where: {
       eventId,
     },
-    col: "uniqueVisitorId",
+    col: "SiteVisitorId",
     distinct: true,
   });
 
