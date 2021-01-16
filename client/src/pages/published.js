@@ -38,8 +38,10 @@ const Published = (props) => {
   }, []);
 
   const fetchDataAsync = async () => {
+    var attendeeId = null;
     if (hash) {
-      await props.fetchAttendeeData(hash);
+      const attendee = await props.fetchAttendeeData(hash);
+      attendeeId = attendee.id;
     }
 
     const { event, pageType } = await props.fetchLivePage(
@@ -63,7 +65,11 @@ const Published = (props) => {
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
       console.log(event);
 
-      socket.emit("join", { eventId: event.id, uuid: cookies.get("uuid") });
+      socket.emit("join", {
+        eventId: event.id,
+        uuid: cookies.get("uuid"),
+        attendeeId,
+      });
     }
 
     setIsLoaded(true);

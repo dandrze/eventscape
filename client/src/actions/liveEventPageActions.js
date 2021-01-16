@@ -43,4 +43,6 @@ export const fetchAttendeeData = (hash) => async (dispatch) => {
     type: FETCH_ATTENDEE,
     payload: attendee.data,
   });
+
+  return attendee.data;
 };
