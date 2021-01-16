@@ -209,12 +209,12 @@ const StyledTab = withStyles((theme) => ({
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
 
-const Input = ({ setMessage, sendMessage, message, theme, placeholder }) => (
+const Input = ({ setMessage, sendMessage, message, theme }) => (
   <form className="form">
     <input
-      className="input"
+      className="input width-80"
       type="text"
-      placeholder={placeholder}
+      placeholder="Type a message..."
       value={message}
       onChange={({ target: { value } }) => setMessage(value)}
       onKeyPress={(event) =>
@@ -222,7 +222,7 @@ const Input = ({ setMessage, sendMessage, message, theme, placeholder }) => (
       }
     />
     <button
-      className="theme-button send-button"
+      className="theme-button send-button width-20"
       style={theme}
       onClick={(e) => sendMessage(e)}
     >
@@ -231,9 +231,31 @@ const Input = ({ setMessage, sendMessage, message, theme, placeholder }) => (
   </form>
 );
 
-const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
+const InputAskQuestion = ({ setMessage, sendMessage, message, theme }) => (
+  <form className="form-question">
+    <textarea
+      className="input-question"
+      placeholder="Type a question..."
+      value={message}
+      onChange={({ target: { value } }) => setMessage(value)}
+      onKeyPress={(event) =>
+        event.key === "Enter" ? sendMessage(event) : null
+      }
+    />
+    <button
+      className="theme-button send-button max-height-60"
+      style={theme}
+      onClick={(e) => sendMessage(e)}
+    >
+      <div className="send-question-text">Send Question</div>
+      <TelegramIcon />
+    </button>
+  </form>
+);
+
+const Chat = forwardRef(({ name, room, userId, isModerator, tabs }, ref) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(0); //for tabs
+  const [value, setValue] = React.useState(1); //for tabs
   const [chatUserId, setChatUserId] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
@@ -398,16 +420,13 @@ const Chat = forwardRef(({ name, room, userId, isModerator }, ref) => {
             message={message}
             setMessage={setMessage}
             sendMessage={sendMessage}
-            placeholder="Type a message..."
           />
         </TabPanel>
-        <TabPanel value={value} index={1}>
-          <p style={{  }}>Questions will be forwarded<br></br> to be answered live.</p>
-          <Input
+        <TabPanel value={value} index={1} classes={{ root: classes.tab }}>
+          <InputAskQuestion
               message={message}
               setMessage={setMessage}
               sendMessage={sendMessage}
-              placeholder="Type a question..."
             />
         </TabPanel>
       </div>
