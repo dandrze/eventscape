@@ -13,7 +13,7 @@ module.exports = (server) => {
   io.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("join", async ({ userId, name, room, isModerator }, callback) => {
+    socket.on("join", async ({ userId, name, room }, callback) => {
       const chatRoom = await ChatRoom.findByPk(room);
 
       const messageHistory = await ChatMessage.findAll({
@@ -32,7 +32,6 @@ module.exports = (server) => {
           where: {
             EventscapeId: userId || null,
             ChatRoomId: room,
-            isModerator,
           },
         });
 
@@ -47,7 +46,7 @@ module.exports = (server) => {
       if (chatRoom) socket.emit("chatHidden", chatRoom.isHidden);
 
       socket.emit("notification", {
-        text: "Hello " + name + ".You are now connected to room " + room,
+        text: "You are now connected to room " + room,
       });
 
       //push the message history
@@ -73,6 +72,11 @@ module.exports = (server) => {
         where: { ChatRoomId: room },
         order: [["id", "ASC"]],
         include: ChatUser,
+      });
+
+      // push the welcome message
+      socket.emit("notification", {
+        text: "You are now connected to room " + room,
       });
 
       //push the message history

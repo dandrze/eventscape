@@ -37,6 +37,32 @@ export const updateChatRoom = (room) => async (dispatch) => {
   return response;
 };
 
+export const updateChatModerator = (user) => async (dispatch) => {
+  const response = await api.put("/api/event/chat-moderator", {
+    user,
+  });
+
+  console.log(response);
+
+  return response;
+};
+
+export const getChatModerator = (EventscapeId, ChatRoomId) => async (
+  dispatch
+) => {
+  console.log(EventscapeId);
+  const response = await api.get("/api/event/chat-moderator", {
+    params: {
+      EventscapeId,
+      ChatRoomId,
+    },
+  });
+
+  console.log(response);
+
+  return response.data;
+};
+
 export const deleteChatRoom = (id) => async (dispatch) => {
   try {
     const response = await api.delete("/api/event/chatroom", {

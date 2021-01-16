@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
+import { CircularProgress } from "@material-ui/core";
 
 import * as actions from "../actions";
 import Chat from "../components/chat4.js";
@@ -12,6 +13,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import AlertModal from "../components/AlertModal";
+import { getChatUser } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -23,16 +25,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModeratorChat = ({ room, user, updateChatRoom }) => {
+const ModeratorChat = ({
+  room,
+  user,
+  getChatModerator,
+  updateChatModerator,
+}) => {
   const classes = useStyles();
 
-  const [displayName, setDisplayName] = useState(
-    room.moderatorName || "Moderator"
-  );
+  const [displayName, setDisplayName] = useState("");
   const [isHidden, setIsHidden] = React.useState({
     checked: room.isHidden,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
+  const [isLoaded, setIsLoaded] = React.useState(false);
+
+  useEffect(() => {
+    fetchDataAsync();
+  }, []);
+
+  const fetchDataAsync = async () => {
+    const chatUser = await getChatModerator(user.id, room.id);
+    setDisplayName(chatUser.name);
+    setIsLoaded(true);
+  };
 
   const chatRef = React.useRef();
 
@@ -41,7 +57,11 @@ const ModeratorChat = ({ room, user, updateChatRoom }) => {
   };
 
   const handleSubmitDisplayName = async () => {
-    await updateChatRoom({ ...room, moderatorName: displayName });
+    await updateChatModerator({
+      EventscapeId: user.id,
+      name: displayName,
+      ChatRoomId: room.id,
+    });
     chatRef.current.refreshChat();
   };
   const handleChangeIsHidden = (event) => {
@@ -61,6 +81,7 @@ const ModeratorChat = ({ room, user, updateChatRoom }) => {
     setNavAlertOpen(false);
   };
 
+  if (!isLoaded) return <CircularProgress />;
   return (
     <div className="form-box shadow-border" id="chat">
       <div className="chat-container">

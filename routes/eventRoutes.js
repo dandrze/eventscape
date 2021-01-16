@@ -381,7 +381,7 @@ router.get("/api/event/chatroom/all", async (req, res) => {
 
 router.put("/api/event/chatroom", async (req, res) => {
   const {
-    room: { id, name, moderatorName },
+    room: { id, name },
   } = req.body;
   try {
     const dbRoom = await ChatRoom.findOne({
@@ -391,20 +391,6 @@ router.put("/api/event/chatroom", async (req, res) => {
     });
 
     dbRoom.name = name;
-
-    if (dbRoom.moderatorName != moderatorName) {
-      dbRoom.moderatorName = moderatorName;
-
-      const dbModerator = await ChatUser.findOne({
-        where: {
-          ChatRoomId: dbRoom.id,
-          isModerator: true,
-        },
-      });
-
-      dbModerator.name = moderatorName;
-      dbModerator.save();
-    }
     dbRoom.save();
 
     res.status(200).send();
@@ -443,6 +429,44 @@ router.post("/api/event/chatroom", async (req, res) => {
   const newRoom = await ChatRoom.create({ name: room.name, event });
 
   res.status(200).send(newRoom);
+});
+
+router.get("/api/event/chat-moderator", async (req, res) => {
+  const { EventscapeId, ChatRoomId } = req.query;
+
+  const [chatUser, created] = await ChatUser.findOrCreate({
+    where: {
+      EventscapeId,
+      ChatRoomId,
+    },
+  });
+
+  console.log(chatUser);
+  console.log(created);
+
+  if (created) chatUser.name = "Moderator";
+  chatUser.save();
+  console.log(chatUser);
+
+  res.status(200).send(chatUser);
+});
+
+router.put("/api/event/chat-moderator", async (req, res) => {
+  const {
+    user: { EventscapeId, name, ChatRoomId },
+  } = req.body;
+
+  const chatUser = await ChatUser.findOne({
+    where: {
+      EventscapeId,
+      ChatRoomId,
+    },
+  });
+
+  chatUser.name = name;
+  chatUser.save();
+
+  res.status(200).send(chatUser);
 });
 
 module.exports = router;
