@@ -61,6 +61,7 @@ const Published = (props) => {
       });
 
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
+      console.log(event);
 
       socket.emit("join", { eventId: event.id, uuid: cookies.get("uuid") });
     }

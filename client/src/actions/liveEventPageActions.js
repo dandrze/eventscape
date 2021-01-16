@@ -33,7 +33,7 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
     });
   }
 
-  return { event, pageType };
+  return { event: event.data, pageType };
 };
 
 export const fetchAttendeeData = (hash) => async (dispatch) => {

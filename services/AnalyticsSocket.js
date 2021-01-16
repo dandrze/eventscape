@@ -12,6 +12,7 @@ module.exports = (server) => {
 
   io.on("connection", (socket) => {
     socket.on("join", async ({ eventId, uuid }) => {
+      console.log(eventId);
       const siteVisit = await SiteVisit.create({
         eventId,
         uniqueVisitorId: uuid,
