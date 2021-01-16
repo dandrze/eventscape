@@ -1,5 +1,8 @@
 import React, { createElement, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import io from "socket.io-client";
+import Cookies from "universal-cookie";
+import uuid from "react-uuid";
 
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -11,22 +14,62 @@ import mapReactComponent from "../components/mapReactComponent";
 import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
+import { pageNames } from "../model/enums";
+
+const ENDPOINT =
+  window.location.hostname.split(".")[
+    window.location.hostname.split(".").length - 1
+  ] === "localhost"
+    ? "http://localhost:5000/"
+    : "https://eventscape.io/";
+
+let socket;
+
+const cookies = new Cookies();
 
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
 
+  console.log(cookies.get("uuid"));
+
   useEffect(() => {
-    fetchData();
+    fetchDataAsync();
   }, []);
 
-  const fetchData = async () => {
-    console.log(hash);
-
-    const { eventId } = await props.fetchLivePage(props.subdomain, hash);
-
+  const fetchDataAsync = async () => {
+    var attendeeId = null;
     if (hash) {
-      await props.fetchAttendeeData(hash, eventId);
+      const attendee = await props.fetchAttendeeData(hash);
+      attendeeId = attendee.id;
+    }
+
+    const { event, pageType } = await props.fetchLivePage(
+      props.subdomain,
+      hash
+    );
+
+    console.log(pageType);
+
+    // if the pagetype is event, turn on analytics
+    if (pageType == pageNames.EVENT) {
+      socket = io(ENDPOINT, {
+        path: "/api/socket/analytics",
+        transports: ["websocket"],
+      });
+
+      socket.on("connect", () => {
+        console.log(socket.id);
+      });
+
+      if (!cookies.get("uuid")) cookies.set("uuid", uuid());
+      console.log(event);
+
+      socket.emit("join", {
+        eventId: event.id,
+        uuid: cookies.get("uuid"),
+        attendeeId,
+      });
     }
 
     setIsLoaded(true);

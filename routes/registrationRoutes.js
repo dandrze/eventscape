@@ -6,6 +6,7 @@ const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 
 const db = require("../db");
+const { Registration } = require("../sequelize").models;
 
 router.post("/api/registration", async (req, res) => {
   const { event, values, emailAddress, firstName, lastName } = req.body;
@@ -24,6 +25,14 @@ router.post("/api/registration", async (req, res) => {
       }
     }
   );
+
+  /*
+  const registration = await Registration.create({
+    firstname,
+    LastName,
+    emailAddress,
+    event
+  })*/
 
   const addHash = await db.query(
     "UPDATE registration SET hash=$1 WHERE id=$2",

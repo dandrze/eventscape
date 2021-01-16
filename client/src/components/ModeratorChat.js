@@ -13,7 +13,6 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import AlertModal from "../components/AlertModal";
-import { fetchAttendeeData } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -25,34 +24,44 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
+const ModeratorChat = ({
+  room,
+  user,
+  getChatModerator,
+  updateChatModerator,
+}) => {
   const classes = useStyles();
 
   const [displayName, setDisplayName] = useState("");
-  const [displayNameLoading, setDisplayNameLoading] = useState(false);
   const [isHidden, setIsHidden] = React.useState({
     checked: room.isHidden,
   });
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
-
-  const chatRef = React.useRef();
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  const [displayNameLoading, setDisplayNameLoading] = React.useState(false);
 
   useEffect(() => {
     fetchDataAsync();
   }, []);
 
   const fetchDataAsync = async () => {
-    const chatUserName = await fetchChatUser(user.id, room.id);
-    setDisplayName(chatUserName.name);
+    const chatUser = await getChatModerator(user.id, room.id);
+    setDisplayName(chatUser.name);
+    setIsLoaded(true);
   };
+
+  const chatRef = React.useRef();
 
   const handleChangeDisplayName = (event) => {
     setDisplayName(event.target.value);
   };
 
   const handleSubmitDisplayName = async () => {
-    setDisplayNameLoading(true);
-    await updateChatUserName(user.id, room.id, displayName);
+    await updateChatModerator({
+      EventscapeId: user.id,
+      name: displayName,
+      ChatRoomId: room.id,
+    });
     chatRef.current.refreshChat();
     setDisplayNameLoading(false);
   };
@@ -74,6 +83,7 @@ const ModeratorChat = ({ room, user, updateChatUserName, fetchChatUser }) => {
     setNavAlertOpen(false);
   };
 
+  if (!isLoaded) return <CircularProgress />;
   return (
     <div className="form-box shadow-border" id="chat">
       <div className="chat-container">

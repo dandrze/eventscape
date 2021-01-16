@@ -1,10 +1,9 @@
 var socketIo = require("socket.io");
-const conn = require("../sequelize").conn;
 const { ChatRoom, ChatUser, ChatMessage } = require("../sequelize").models;
 
 module.exports = (server) => {
   const io = socketIo(server, {
-    path: "/api/socket",
+    path: "/api/socket/chat",
     cors: {
       origin: "http://localhost:3000",
       methods: ["GET", "POST"],
@@ -14,7 +13,7 @@ module.exports = (server) => {
   io.on("connection", (socket) => {
     console.log("New client connected");
 
-    socket.on("join", async ({ userId, name, room, isModerator }, callback) => {
+    socket.on("join", async ({ userId, name, room }, callback) => {
       const chatRoom = await ChatRoom.findByPk(room);
 
       const messageHistory = await ChatMessage.findAll({
@@ -47,7 +46,7 @@ module.exports = (server) => {
       if (chatRoom) socket.emit("chatHidden", chatRoom.isHidden);
 
       socket.emit("notification", {
-        text: "Hello " + name + ".You are now connected to room " + room,
+        text: "You are now connected to room " + room,
       });
 
       //push the message history

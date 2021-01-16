@@ -1,4 +1,3 @@
-const sequelize = require("..");
 const conn = require("../conn");
 const { Sequelize } = conn;
 

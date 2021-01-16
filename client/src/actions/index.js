@@ -7,3 +7,4 @@ export * from "./emailActions";
 export * from "./userActions";
 export * from "./liveEventPageActions";
 export * from "./chatRoomActions";
+export * from "./analyticsActions";
