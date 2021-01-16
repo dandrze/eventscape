@@ -45,46 +45,42 @@ const tableIcons = {
 };
 
 export default function LoginsTable({ data }) {
-  const [state, setState] = React.useState({
-    columns: [
-      {
-        title: "First Name",
-        field: "Registration.firstName",
-        render: (rowData) => (
-          <span>
-            {rowData.Registration
-              ? rowData.Registration.firstName
-              : "Anonymous"}
-          </span>
-        ),
-      },
-      {
-        title: "Last Name",
-        field: "Registration.lastName",
-        render: (rowData) => (
-          <span>
-            {rowData.Registration ? rowData.Registration.lastName : "Guest"}
-          </span>
-        ),
-      },
-      {
-        title: "Email",
-        field: "Registration.email",
-      },
-      {
-        title: "First Login",
-        field: "createdAt",
-      },
-      {
-        title: "Last Logout",
-        field: "loggedOutAt",
-      },
-      {
-        title: "Time Viewed",
-        field: "timeViewed",
-      },
-    ],
-  });
+  const columns = [
+    {
+      title: "First Name",
+      field: "Registration.firstName",
+      render: (rowData) => (
+        <span>
+          {rowData.Registration ? rowData.Registration.firstName : "Anonymous"}
+        </span>
+      ),
+    },
+    {
+      title: "Last Name",
+      field: "Registration.lastName",
+      render: (rowData) => (
+        <span>
+          {rowData.Registration ? rowData.Registration.lastName : "Guest"}
+        </span>
+      ),
+    },
+    {
+      title: "Email",
+      field: "Registration.email",
+    },
+    {
+      title: "First Login",
+      field: "createdAt",
+    },
+    {
+      title: "Last Logout",
+      field: "loggedOutAt",
+    },
+    {
+      title: "Time Viewed",
+      field: "timeViewed",
+    },
+  ];
 
   console.log(data);
 
@@ -115,7 +111,7 @@ export default function LoginsTable({ data }) {
   return (
     <MaterialTable
       title="Logins"
-      columns={state.columns}
+      columns={columns}
       data={data}
       options={options}
       icons={tableIcons}
