@@ -37,7 +37,7 @@ const Analytics = (props) => {
         });
         console.log("fetched");
 
-        // fetch data again in 5 seconds
+        // fetch data again in 10 seconds
         timeout = setTimeout(() => {
           fetchDataAsync();
         }, 10000);
@@ -50,7 +50,7 @@ const Analytics = (props) => {
     // then fetch data every 30 seconds
     //const interval = setInterval(() => fetchDataAsync(), 10 * 1000);
 
-    // cleanup. Clears the interval when component unmounts.
+    // cleanup. Clears the timeout when component unmounts.
     return () => {
       console.log("cleared");
       clearTimeout(timeout);
