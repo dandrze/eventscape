@@ -68,9 +68,10 @@
 /* Messages */
 
 .messages {
-  padding: 0; /* was 5% 0 */
+  padding: 0;
   overflow: auto;
   flex: auto;
+  height: 100%; /* need this to keep react-scroll-to-bottom working in Safari */
 }
 
 /* Message */
@@ -165,7 +166,7 @@
 .form {
   display: flex;
   border-top: 2px solid #d3d3d3;
-  max-height: 60px;
+  min-height: 60px;
 }
 
 .form-question {
