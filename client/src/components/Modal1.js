@@ -62,7 +62,7 @@ export default function Modal1(props) {
                                 </Tooltip>
                             </div>
                             <div style={{ overflowY: "scroll", overflowX: "scroll", maxHeight: "90vh", maxWidth: "95vw" }}>
-                            <div style={{ padding: "1.5% 60px 60px 60px" }}>
+                            <div style={{ padding: "18px 60px 60px 60px" }}>
                                 {content}
                             </div>
                             </div>

@@ -3,9 +3,7 @@ import { connect } from "react-redux";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Tooltip from "@material-ui/core/Tooltip";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import { makeStyles } from "@material-ui/core/styles";
+import Modal1 from "../components/Modal1";
 
 import "./registrations.css";
 
@@ -15,39 +13,7 @@ import * as actions from "../actions";
 import FormBuilder from "../components/FormBuilder";
 import Switch1 from "../components/switch";
 import RegistrationForm from "../components/pageReactSections/RegistrationForm";
-import Cancel from "../icons/cancel.svg";
 import { toast } from "react-toastify";
-
-const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: "600px",
-  },
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    outline: "none",
-  },
-  registrationBackground: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: "50px",
-    width: "600px",
-    overflow: "scroll",
-    height: "calc(100vh - 50px)",
-  },
-  formBuilderBackground: {
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: "20px",
-    height: "calc(100vh - 50px)",
-  },
-  formControl: {
-    margin: "20px 0px",
-    minWidth: "100%",
-  },
-}));
 
 const Registrations = (props) => {
   const [regOn, setRegOn] = React.useState(false);
@@ -61,7 +27,6 @@ const Registrations = (props) => {
     email: "",
   });
   const [edittingRowId, setEdittingRowId] = React.useState(null);
-  const classes = useStyles();
 
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
@@ -151,47 +116,17 @@ const Registrations = (props) => {
 
   return (
     <div>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <Modal1
         open={openForm}
         onClose={handleCloseForm}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        disableAutoFocus={true}
-        className={classes.modal}
-      >
-        <div className={classes.formBuilderBackground}>
+        content={
           <FormBuilder handleClose={handleCloseForm} />
-        </div>
-      </Modal>
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+        }
+      />
+      <Modal1
         open={openReg}
         onClose={handleCloseReg}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        disableAutoFocus={true}
-        className={classes.modal}
-      >
-        <div className={classes.registrationBackground}>
-          <div className="registration-modal-navbar">
-            <Tooltip title="Close Form">
-              <img
-                src={Cancel}
-                id="close-form-builder"
-                height="24px"
-                onClick={handleCloseReg}
-              ></img>
-            </Tooltip>
-          </div>
+        content={
           <RegistrationForm
             registerText={regButtonText}
             onSubmitCallback={handleSubmitReg}
@@ -199,8 +134,8 @@ const Registrations = (props) => {
             standardFields={standardFields}
             isEditForm={true}
           />
-        </div>
-      </Modal>
+        }
+      />
       <NavBar3
         displaySideNav="true"
         highlight="registrations"

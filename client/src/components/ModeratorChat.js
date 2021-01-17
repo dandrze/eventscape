@@ -91,6 +91,8 @@ const ModeratorChat = ({
           room={room.id}
           name={displayName}
           isModerator={true}
+          chatTabEnabled={true}
+          questionTabEnabled={false}
           ref={chatRef}
           userId={user.id}
         />
@@ -112,7 +114,7 @@ const ModeratorChat = ({
             </div>
           ) : (
             <button className="Button2 mt-3" onClick={handleSubmitDisplayName}>
-              Update
+              Update Display Name
             </button>
           )}
         </FormControl>

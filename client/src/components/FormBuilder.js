@@ -120,14 +120,6 @@ const FormBuilder = (props) => {
         <div id="form-builder-status">
           Status: <span style={{ color: "green" }}>Saved</span>
         </div>
-        <Tooltip title="Close Editor">
-          <img
-            src={Cancel}
-            id="close-form-builder"
-            height="24px"
-            onClick={props.handleClose}
-          ></img>
-        </Tooltip>
       </div>
       <ReactFormBuilder onPost={onPost} onLoad={onLoad} toolbarItems={items} />
     </div>
