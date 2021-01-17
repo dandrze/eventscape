@@ -11,18 +11,14 @@ import clsx from "clsx";
 
 /* Tabs */
 import PropTypes from 'prop-types';
-import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
-import Typography from '@material-ui/core/Typography';
-import Box from '@material-ui/core/Box';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
 
 /* Icons */
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import ReplayIcon from "@material-ui/icons/Replay";
-import ChatWhiteIcon from "../icons/chat-white.svg";
 
 /* Code based on the following tutorial: 
 https://www.youtube.com/watch?v=ZwFA3YMfkoc
@@ -147,11 +143,12 @@ function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
+      style={{ flexGrow: "1", height: "calc(100% - 60px)" }}
     >
       {value === index && (
-        <Box p={0}>
+        <span style={{ maxHeight: "100%", overflow: "none", flexGrow: "1"}} className="chatContainer">
           {children}
-        </Box>
+        </span>
       )}
     </div>
   );
@@ -231,39 +228,46 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
   </form>
 );
 
-const InputAskQuestion = ({ setMessage, sendMessage, message, theme }) => (
-  <form className="form-question">
-    <textarea
-      className="input-question"
-      placeholder="Type a question..."
-      value={message}
-      onChange={({ target: { value } }) => setMessage(value)}
-      onKeyPress={(event) =>
-        event.key === "Enter" ? sendMessage(event) : null
-      }
-    />
-    <button
-      className="theme-button send-button max-height-60"
-      style={theme}
-      onClick={(e) => sendMessage(e)}
-    >
-      <div className="send-question-text">Send Question</div>
-      <TelegramIcon />
-    </button>
-  </form>
+const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
+  <div style={{ marginTop: "auto"}}>
+    <form className="form-question">
+      <textarea
+        className="input-question"
+        placeholder="Type a question..."
+        value={question}
+        onChange={({ target: { value } }) => setQuestion(value)}
+      />
+      <button
+        className="theme-button send-button max-height-60"
+        style={theme}
+        onClick={(e) => sendQuestion(e)}
+      >
+        <div className="send-question-text">Send Question</div>
+        <TelegramIcon />
+      </button>
+    </form>
+  </div>
 );
 
-const Chat = forwardRef(({ name, room, userId, isModerator, tabs }, ref) => {
+const Chat = forwardRef(({ name, room, userId, isModerator, chatTabEnabled, questionTabEnabled }, ref) => {
   const classes = useStyles();
-  const [value, setValue] = React.useState(1); //for tabs
   const [chatUserId, setChatUserId] = useState("");
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
+  const [question, setQuestion] = useState("");
   const [chatHidden, setChatHidden] = useState(false);
+  const [tabValue, setTabValue] = React.useState(0);
 
-  // for tabs
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
+  //temporary, will become props:
+  /*const chatTabEnabled = true;
+  const questionTabEnabled = true;*/
+
+  // Index numbers for tabs:
+  const chatIndex = 0;
+  const questionIndex = (chatTabEnabled === true && questionTabEnabled === true) ? 1 : 0;
+
+  const handleChangeTab = (event, newValue) => {
+    setTabValue(newValue);
   };
 
   useEffect(() => {
@@ -375,6 +379,18 @@ const Chat = forwardRef(({ name, room, userId, isModerator, tabs }, ref) => {
     }
   };
 
+  const sendQuestion = (event) => {
+    // David to connect
+
+    event.preventDefault();
+
+    if (question) {
+      socket.emit("sendQuestion", { userId: chatUserId, room, question }, () => {
+        setQuestion("");
+      });
+    }
+  };
+
   const deleteMessage = (id) => {
     socket.emit("deleteMessage", { id, room });
   };
@@ -393,41 +409,56 @@ const Chat = forwardRef(({ name, room, userId, isModerator, tabs }, ref) => {
       <div className="chatContainer">
         <div className="infoBar">
           <StyledTabs 
-            value={value} 
-            onChange={handleChange} 
+            value={tabValue} 
+            onChange={handleChangeTab} 
             aria-label="simple tabs example"
             indicatorColor="secondary"
-            textColor="black"
             variant="fullWidth"
           >
-            <StyledTab label="Chat" {...a11yProps(0)} />
-            <StyledTab label="Ask a Question" {...a11yProps(1)} />
+            {chatTabEnabled === true && (
+              <StyledTab label="Chat" {...a11yProps(chatIndex)} />
+            )}
+            {questionTabEnabled === true && (
+              <StyledTab label="Ask a Question" {...a11yProps(questionIndex)} />
+            )}
           </StyledTabs>
         </div>
-        <TabPanel value={value} index={0} classes={{ root: classes.tab }}>
-          <Messages
-            messages={messages}
-            chatUserId={chatUserId}
-            isModerator={isModerator}
-            deleteMessage={deleteMessage}
-            restoreMessage={restoreMessage}
-          />
-          <Input
-            message={message}
-            setMessage={setMessage}
-            sendMessage={sendMessage}
-          />
-        </TabPanel>
-        <TabPanel value={value} index={1} classes={{ root: classes.tab }}>
-          <InputAskQuestion
+        {chatTabEnabled === true && (
+          <TabPanel value={tabValue} index={chatIndex} classes={{ root: classes.tab }}>
+            <>
+            <Messages
+              messages={messages}
+              chatUserId={chatUserId}
+              isModerator={isModerator}
+              deleteMessage={deleteMessage}
+              restoreMessage={restoreMessage}
+            />
+            <Input
               message={message}
               setMessage={setMessage}
               sendMessage={sendMessage}
             />
-        </TabPanel>
+            </>
+          </TabPanel>
+        )}
+        {questionTabEnabled === true && (
+          <TabPanel value={tabValue} index={questionIndex} classes={{ root: classes.tab }}>
+              <InputAskQuestion
+                  question={question}
+                  setQuestion={setQuestion}
+                  sendQuestion={sendQuestion}
+                />
+          </TabPanel>
+        )}
       </div>
     </div>
   );
 });
+
+Chat.defaultProps = {
+  isModerator: false,
+  chatTabEnabled: true,
+  questionTabEnabled: true,
+}
 
 export default Chat;

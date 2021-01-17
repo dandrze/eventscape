@@ -634,36 +634,6 @@ function NavBar3(props) {
               </ListItem>
             </Link>
           </List>
-
-          {/*
-          <Menu
-            id="simple-menu"
-            anchorEl={anchorElDesign}
-            keepMounted
-            open={Boolean(anchorElDesign)}
-            onClose={handleCloseDesign}
-          >
-            <MenuItem
-              onClick={() => {
-                handleCloseDesign();
-                handlePageChange("registration");
-              }}
-            >
-              Registration Page
-            </MenuItem>
-            <MenuItem
-              onClick={() => {
-                handleCloseDesign();
-                handlePageChange("event");
-              }}
-            >
-              Event Page
-            </MenuItem>
-            <Link to="./website-settings">
-              <MenuItem onClick={handleCloseDesign}>Website Settings</MenuItem>
-            </Link>
-          </Menu>
-            */}
         </Drawer>
       )}
 

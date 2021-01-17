@@ -13,9 +13,6 @@ import DialogActions from "@material-ui/core/DialogActions";
 //import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
 import Grid from "@material-ui/core/Grid";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -26,23 +23,12 @@ import * as actions from "../actions";
 import Tabs from "../components/Tabs";
 import RoomTable from "./room-table";
 import { fetchChatRooms } from "../actions";
+import Modal1 from "./Modal1";
 
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
     width: "600px",
-  },
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    outline: "none",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: "0px",
   },
   formControl: {
     margin: "20px 0px",
@@ -246,20 +232,11 @@ function DesignBlockToolbar(props) {
       </Dialog>
 
       {/*Stream Settings Modal: */}
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
+      <Modal1
         open={openStreamSettings}
         onClose={handleCloseStreamSettings}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-      >
-        <div className={classes.paper}>
-          <div id="testEmailModal">
+        content={
+          <div>
             <h3>Settings</h3>
             <br></br>
             <Tabs>
@@ -401,9 +378,9 @@ function DesignBlockToolbar(props) {
                 </div>
               </div>
             </Tabs>
-          </div>
         </div>
-      </Modal>
+        }
+      />
     </div>
   );
 }
