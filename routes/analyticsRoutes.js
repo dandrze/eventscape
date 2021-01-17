@@ -1,5 +1,5 @@
 const express = require("express");
-const { SiteVisit, Registration } = require("../sequelize").models;
+const { SiteVisit, Registration, SiteVisitor } = require("../sequelize").models;
 const db = require("../db");
 
 const router = express.Router();
@@ -26,7 +26,10 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
     where: {
       eventId,
     },
-    include: Registration,
+    include: {
+      model: SiteVisitor,
+      include: Registration,
+    },
   });
 
   const history = await createVisitorsHistory(data, eventId);

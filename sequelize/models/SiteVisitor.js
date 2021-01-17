@@ -1,7 +1,7 @@
-const conn = require("../conn");
-const { Sequelize } = conn;
+const sequelize = require("../sequelize");
+const { Sequelize } = sequelize;
 
-const SiteVisitor = conn.define("SiteVisitor", {
+const SiteVisitor = sequelize.define("SiteVisitor", {
   name: Sequelize.TEXT,
   uuid: Sequelize.TEXT,
 });

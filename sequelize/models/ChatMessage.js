@@ -1,7 +1,7 @@
-const conn = require("../conn");
-const { Sequelize } = conn;
+const sequelize = require("../sequelize");
+const { Sequelize } = sequelize;
 
-const ChatMessage = conn.define("ChatMessage", {
+const ChatMessage = sequelize.define("ChatMessage", {
   text: Sequelize.TEXT,
   deleted: Sequelize.BOOLEAN,
 });

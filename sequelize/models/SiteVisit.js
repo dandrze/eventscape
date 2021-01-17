@@ -1,8 +1,7 @@
-const sequelize = require("..");
-const conn = require("../conn");
-const { Sequelize } = conn;
+const sequelize = require("../sequelize");
+const { Sequelize } = sequelize;
 
-const SiteVisit = conn.define("SiteVisit", {
+const SiteVisit = sequelize.define("SiteVisit", {
   EventscapeId: Sequelize.INTEGER,
   loggedOutAt: Sequelize.DATE,
   eventId: Sequelize.INTEGER,

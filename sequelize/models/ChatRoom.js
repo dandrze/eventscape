@@ -1,8 +1,8 @@
-const conn = require("../conn");
-const { Sequelize } = conn;
+const sequelize = require("../sequelize");
+const { Sequelize } = sequelize;
 const { Op } = Sequelize;
 
-const ChatRoom = conn.define("ChatRoom", {
+const ChatRoom = sequelize.define("ChatRoom", {
   event: Sequelize.INTEGER,
   isHidden: Sequelize.BOOLEAN,
   isDefault: Sequelize.BOOLEAN,
