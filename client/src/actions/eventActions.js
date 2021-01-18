@@ -142,13 +142,13 @@ export const isLinkAvailable = (link) => async (dispatch) => {
   }
 };
 
-export const setEventRegistration = (registrationEnabled, event) => async (
+export const setEventRegistration = (registrationEnabled, eventId) => async (
   dispatch
 ) => {
   try {
     const res = await api.put("/api/event/set-registration", {
       registrationEnabled,
-      event,
+      eventId,
     });
     toast.success("Registration successfuly changed");
     return true;

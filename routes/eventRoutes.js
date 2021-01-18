@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 
-const db = require("../db");
 const requireAuth = require("../middlewares/requireAuth");
 
 const {
@@ -115,75 +114,39 @@ router.post("/api/event", async (req, res) => {
 });
 
 router.get("/api/event/current", requireAuth, async (req, res) => {
-  const userId = req.user.id;
-  const events = await db.query(
-    "SELECT * FROM event WHERE user_id=$1 AND is_current=true",
-    [userId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const AccountId = req.user.id;
+  const event = await Event.findOne({ where: { AccountId, isCurrent: true } });
 
-  res.send(events.rows[0]);
+  res.status(200).send(event);
 });
 
 router.put("/api/event/id/make-current", async (req, res) => {
-  const userId = req.user.id;
+  const AccountId = req.user.id;
   const { id } = req.body;
 
-  await db.query(
-    "UPDATE event SET is_current=false WHERE user_id=$1",
-    [userId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  await Event.update({ isCurrent: false }, { where: { AccountId } });
 
-  await db.query(
-    "UPDATE event SET is_current=true WHERE id=$1",
-    [id],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const event = await Event.findByPk(id);
+  event.isCurrent = true;
+  event.save();
 
   res.status(200).send();
 });
 
 router.get("/api/event/all", async (req, res) => {
-  const userId = req.user.id;
-  const events = await db.query(
-    "SELECT * FROM event WHERE user_id=$1",
-    [userId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const AccountId = req.user.id;
 
-  res.send(events.rows);
+  const events = await Event.findAll({ where: { AccountId } });
+
+  res.status(200).send(events);
 });
 
 router.get("/api/event/id", async (req, res) => {
   const { id } = req.query;
-  const events = await db.query(
-    "SELECT * FROM event WHERE id=$1",
-    [id],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
 
-  res.send(events.rows[0]);
+  const event = await Event.findByPk(id);
+
+  res.send(event);
 });
 
 router.get("/api/event/link", async (req, res) => {
@@ -195,19 +158,12 @@ router.get("/api/event/link", async (req, res) => {
 
 router.put("/api/event/id/status", async (req, res) => {
   const { id, status } = req.body;
-  const response = await db.query(
-    "UPDATE event SET status=$2 WHERE id=$1 RETURNING *",
-    [id, status],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
 
-  console.log(response.rows);
+  const event = await Event.findByPk(id);
+  event.status = status;
+  await event.save();
 
-  res.send(response);
+  res.send(event);
 });
 
 router.put("/api/event", async (req, res) => {
@@ -224,59 +180,34 @@ router.put("/api/event", async (req, res) => {
     status,
   } = req.body;
 
-  const events = await db.query(
-    `UPDATE event 
-		SET 
-		  title = $1, 
-		  link = $2, 
-		  category = $3,
-		  startDate = $4,
-		  endDate = $5, 
-		  timeZone = $6,
-		  primaryColor = $7,
-		  status = $8
-		WHERE 
-		  user_id=$9 AND is_current=true
-		RETURNING *`,
-    [
-      title,
-      link,
-      category,
-      startDate,
-      endDate,
-      timeZone,
-      primaryColor,
-      status,
-      userId,
-    ],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const event = await Event.findOne({
+    where: { AccountId: userId, isCurrent: true },
+  });
 
-  res.send(events.rows[0]);
+  event.title = title;
+  event.link = link;
+  event.category = category;
+  event.startDate = startDate;
+  event.endDate = endDate;
+  event.timeZone = timeZone;
+  event.primaryColor = primaryColor;
+  event.status = status;
+
+  await event.save();
+
+  res.send(event);
 });
 
 router.put("/api/event/set-registration", async (req, res) => {
-  const { registrationEnabled, event } = req.body;
+  const { registrationEnabled, eventId } = req.body;
 
-  const updatedEvent = await db.query(
-    `
-  UPDATE event
-  SET registration = $1
-  WHERE id = $2
-  RETURNING *`,
-    [registrationEnabled, event],
-    (err, res) => {
-      if (errDb) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const event = await Event.findByPk(eventId);
 
-  res.status(200).send(updatedEvent.rows[0]);
+  event.hasRegistration = registrationEnabled;
+
+  await event.save();
+
+  res.status(200).send(event);
 });
 
 router.get("/api/event/chatroom/default", async (req, res) => {
