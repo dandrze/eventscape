@@ -24,7 +24,7 @@ router.post("/api/registration", async (req, res) => {
     firstName,
     lastName,
     values,
-    email: emailAddress,
+    emailAddress,
     EventId: event,
   });
 
@@ -51,7 +51,7 @@ router.post("/api/registration", async (req, res) => {
       "Events"."endDate",
       "Registrations"."firstName",
       "Registrations"."lastName",
-      "Registrations".email,
+      "Registrations"."emailAddress",
       "Registrations".hash
 
       FROM "Registrations" INNER JOIN "Events" on "Registrations"."EventId" = "Events".id WHERE "Registrations".id=$1 AND "Events".id=$2`,
@@ -60,8 +60,6 @@ router.post("/api/registration", async (req, res) => {
       type: QueryTypes.SELECT,
     }
   );
-
-  console.log(registrationData);
 
   for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
@@ -87,7 +85,7 @@ router.put("/api/registration", async (req, res) => {
 
   const registration = await Registration.findByPk(id);
   registration.values = values;
-  registration.email = emailAddress;
+  registration.emailAddress = emailAddress;
   registration.firstName = firstName;
   registration.lastName = lastName;
 
@@ -109,12 +107,12 @@ router.get("/api/registration/event", async (req, res) => {
 });
 
 router.get("/api/registration/email", async (req, res) => {
-  const { email, eventId } = req.query;
+  const { emailAddress, eventId } = req.query;
 
   // Get the registration associated with an email
   const registrations = await Registration.findOne({
     where: {
-      email,
+      emailAddress,
       EventId: eventId,
     },
   });
@@ -136,7 +134,7 @@ router.post("/api/registration/email/resend", async (req, res) => {
       "Events"."endDate",
       "Registrations"."firstName",
       "Registrations"."lastName",
-      "Registrations".email,
+      "Registrations"."emailAddress",
       "Registrations".hash
 
       FROM "Registrations" INNER JOIN "Events" on "Registrations"."EventId" = "Events".id WHERE "Registrations".id=$1 AND "Events".id=$2`,
@@ -187,7 +185,8 @@ router.post("/api/form", async (req, res) => {
     where: { EventId: event },
   });
 
-  registrationForm.data = JSON.stringify(data);
+  registrationForm.data = data;
+  await registrationForm.save();
 
   res.status(200).send();
 });
@@ -195,11 +194,11 @@ router.post("/api/form", async (req, res) => {
 router.get("/api/form", async (req, res) => {
   const { event } = req.query;
 
-  const registrationForm = RegistrationForm.findOne({
+  const registrationForm = await RegistrationForm.findOne({
     where: { EventId: event },
   });
 
-  res.status(204).send(registrationForm);
+  res.status(200).send((registrationForm && registrationForm.data) || []);
 });
 
 module.exports = router;

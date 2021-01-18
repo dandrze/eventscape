@@ -57,7 +57,7 @@ const RegistrationTable2 = (props) => {
   const tableActions = [
     {
       icon: Edit,
-      tooltip: "Edit Event",
+      tooltip: "Edit Registration",
       onClick: async (event, rowData) => {
         const rowId = rowData.id;
         const firstName = rowData.firstName;
@@ -140,9 +140,9 @@ const RegistrationTable2 = (props) => {
       // add the email (not included in values) to row object
       rowObject = {
         ...rowObject,
-        emailAddress: row.email,
-        firstName: row.first_name,
-        lastName: row.last_name,
+        emailAddress: row.emailAddress,
+        firstName: row.firstName,
+        lastName: row.lastName,
       };
       // add this new row object to the data list
       data.push(rowObject);

@@ -71,7 +71,7 @@ export const updateRegistration = (
   try {
     const res = await api.put("/api/registration", {
       id,
-      values: JSON.stringify(values),
+      values,
       emailAddress,
       firstName,
       lastName,
@@ -95,10 +95,12 @@ export const deleteRegistration = (id) => async (dispatch) => {
   }
 };
 
-export const fetchRegistration = (email, eventId) => async (dispatch) => {
+export const fetchRegistration = (emailAddress, eventId) => async (
+  dispatch
+) => {
   try {
     const res = await api.get("/api/registration/email", {
-      params: { email, eventId },
+      params: { emailAddress, eventId },
     });
     return res.data;
   } catch (err) {
