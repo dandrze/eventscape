@@ -21,7 +21,7 @@ import heroBanner from "./designBlockThumbnails/heroBanner.png";
 import titleThumb from "./designBlockThumbnails/title.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
-import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png"
+import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png";
 import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
 import {
   logoHeaderModel,
@@ -78,10 +78,10 @@ const NewSectionButton = (props) => {
 
   const handleAddSection = async (
     html,
-    is_react = false,
-    react_component = null
+    isReact = false,
+    reactComponent = null
   ) => {
-    props.addSection(props.prevIndex, html, is_react, react_component);
+    props.addSection(props.prevIndex, html, isReact, reactComponent);
   };
 
   const handleChangeBlockCat = (event) => {
@@ -127,9 +127,15 @@ const NewSectionButton = (props) => {
             </div>
             <div className="block-picker-container">
               <h3>Choose a Design Block Template</h3>
-              <FormControl variant="outlined" className={classes.formControl} style={{marginBottom: "40px", marginTop: "30px"}}>
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                style={{ marginBottom: "40px", marginTop: "30px" }}
+              >
                 {/* Category */}
-                <InputLabel id="block-cat" className="mui-select-css-fix">Category</InputLabel>
+                <InputLabel id="block-cat" className="mui-select-css-fix">
+                  Category
+                </InputLabel>
                 <Select
                   labelId="block-cat"
                   id="block-cat-select"
@@ -137,21 +143,13 @@ const NewSectionButton = (props) => {
                   value={blockCat}
                   onChange={handleChangeBlockCat}
                 >
-                  <MenuItem value={"logo-header"}>
-                    Logo Header
-                  </MenuItem>
-                  <MenuItem value={"title"}>
-                    Title
-                  </MenuItem>
-                  <MenuItem value={"registration"}>
-                    Registration
-                  </MenuItem>
+                  <MenuItem value={"logo-header"}>Logo Header</MenuItem>
+                  <MenuItem value={"title"}>Title</MenuItem>
+                  <MenuItem value={"registration"}>Registration</MenuItem>
                   <MenuItem value={"stream-messaging"}>
                     Stream/Messaging
                   </MenuItem>
-                  <MenuItem value={"columns-blank"}>
-                    Columns (Blank)
-                  </MenuItem>
+                  <MenuItem value={"columns-blank"}>Columns (Blank)</MenuItem>
                 </Select>
               </FormControl>
 
@@ -196,8 +194,8 @@ const NewSectionButton = (props) => {
                           handleAddSection(
                             titleTimeModel(
                               props.event.title,
-                              props.event.start_date,
-                              props.event.end_date
+                              props.event.startDate,
+                              props.event.endDate
                             )
                           );
                         }}
@@ -208,7 +206,6 @@ const NewSectionButton = (props) => {
 
                 {blockCat === "registration" && (
                   <Grid container spacing={3}>
-
                     {/* Description Registration */}
                     <Grid item xs={12}>
                       <img
@@ -238,7 +235,6 @@ const NewSectionButton = (props) => {
                     </Grid>
                   </Grid>
                 )}
-
 
                 {blockCat === "stream-messaging" && (
                   <Grid container spacing={3}>

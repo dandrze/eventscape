@@ -18,10 +18,10 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
     var modelId, pageType;
 
     if (event.data.registration && !hash) {
-      modelId = event.data.reg_page_model;
+      modelId = event.data.regPageModel;
       pageType = pageNames.REGISTRATION;
     } else {
-      modelId = event.data.event_page_model;
+      modelId = event.data.eventPageModel;
       pageType = pageNames.EVENT;
     }
 

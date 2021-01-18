@@ -81,7 +81,7 @@ const formatDate = (recipientsList) => {
   return recipientsList.map((recipient) => {
     const dateFormatOptions = {
       timeZoneName: "short",
-      timeZone: recipient.time_zone,
+      timeZone: recipient.timeZone,
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -93,11 +93,8 @@ const formatDate = (recipientsList) => {
 
     return {
       ...recipient,
-      start_date: recipient.start_date.toLocaleString(
-        "en-us",
-        dateFormatOptions
-      ),
-      end_date: recipient.end_date.toLocaleString("en-us", dateFormatOptions),
+      startDate: recipient.startDate.toLocaleString("en-us", dateFormatOptions),
+      endDate: recipient.endDate.toLocaleString("en-us", dateFormatOptions),
     };
   });
 };

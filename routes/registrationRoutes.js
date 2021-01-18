@@ -6,7 +6,6 @@ const router = express.Router();
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 
-const db = require("../db");
 const {
   Registration,
   Communication,

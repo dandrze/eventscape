@@ -60,8 +60,8 @@ const createVisitorsHistory = async (visitors, eventId) => {
     }
   );
 
-  const lowerLimit = events.rows[0].start_date.getTime();
-  const upperLimit = events.rows[0].end_date.getTime();
+  const lowerLimit = events.rows[0].startDate.getTime();
+  const upperLimit = events.rows[0].endDate.getTime();
 
   const visitorsArray = [];
   // for each minute in the time chart range, count how many visits are active (time falls between its start and end time)

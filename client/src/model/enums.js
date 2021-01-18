@@ -20,10 +20,10 @@ export const statusOptions = {
 
 export const emailVariableNames = [
   "event_name",
-  "time_zone",
+  "timeZone",
   "event_link",
-  "start_date",
-  "end_date",
+  "startDate",
+  "endDate",
   "first_name",
   "last_name",
 ];

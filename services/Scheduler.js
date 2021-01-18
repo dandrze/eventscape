@@ -22,10 +22,10 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
         const registrationsList = await db.query(
           `SELECT 
             event.title as event_name, 
-            event.time_zone, 
+            event.timeZone, 
             event.link, 
-            event.start_date, 
-            event.end_date ,
+            event.startDate, 
+            event.endDate ,
             registration.first_name,
             registration.last_name,
             registration.email,
@@ -44,10 +44,10 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
             recipient.email,
             recipient.hash,
             event.title as event_name, 
-            event.time_zone, 
+            event.timeZone, 
             event.link, 
-            event.start_date, 
-            event.end_date
+            event.startDate, 
+            event.endDate
           FROM recipient 
           INNER JOIN email 
           on recipient.email_template_id = email.id 

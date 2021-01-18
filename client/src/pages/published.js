@@ -90,12 +90,12 @@ const Published = (props) => {
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
-          <style>{theme(props.event.primary_color)}</style>
+          <style>{theme(props.event.primaryColor)}</style>
           <ul>
             {props.model.sections.map(function (section) {
-              return section.is_react ? (
-                createElement(mapReactComponent[section.react_component.name], {
-                  ...section.react_component.props,
+              return section.isReact ? (
+                createElement(mapReactComponent[section.reactComponent.name], {
+                  ...section.reactComponent.props,
                   sectionIndex: section.index,
                   isLive: true,
                 })

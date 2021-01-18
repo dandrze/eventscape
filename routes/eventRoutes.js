@@ -4,7 +4,14 @@ const router = express.Router();
 const db = require("../db");
 const requireAuth = require("../middlewares/requireAuth");
 
-const { ChatRoom, ChatUser } = require("../sequelize").models;
+const {
+  ChatRoom,
+  ChatUser,
+  Event,
+  PageModel,
+  PageSection,
+  Communication,
+} = require("../sequelize").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 
 router.post("/api/event", async (req, res) => {
@@ -13,166 +20,98 @@ router.post("/api/event", async (req, res) => {
       title,
       link,
       category,
-      start_date,
-      end_date,
-      time_zone,
-      primary_color,
-      reg_page_model,
-      event_page_model,
+      startDate,
+      endDate,
+      timeZone,
+      primaryColor,
+      regPageModel,
+      eventPageModel,
     },
     emails,
   } = req.body;
 
-  const userId = req.user.id;
+  const AccountId = req.user.id;
 
-  // set all other events is_current to false so we can make our new event current
-  await db.query(
-    `UPDATE event 
-		SET is_current = false
-		WHERE user_id = $1`,
-    [userId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  // set all other events isCurrent to false so we can make our new event current
+  await Event.update({ isCurrent: false }, { where: { AccountId } });
 
   // Store a new model in the model table for the registration page
-  const pgRegModel = await db.query(
-    `INSERT INTO model 
-				(type)
-			VALUES ($1)
-			RETURNING id`,
-    ["model"],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(Error);
-      }
-    }
-  );
+  const dbRegModel = await PageModel.create();
 
   // Store a new model in the model table for the event page
-  const pgEventModel = await db.query(
-    `INSERT INTO model 
-				(type)
-			VALUES ($1)
-			RETURNING id`,
-    ["model"],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(Error);
-      }
-    }
-  );
+  const dbEventModel = await PageModel.create();
 
   // add the event to the event table. Make it the current event
-  const newEvent = await db.query(
-    `INSERT INTO event 
-			(title, link, category, start_date, end_date, time_zone, primary_color, is_current, user_id, reg_page_model, event_page_model) 
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-		RETURNING *`,
-    [
-      title,
-      link,
-      category,
-      start_date,
-      end_date,
-      time_zone,
-      primary_color,
-      true,
-      userId,
-      pgRegModel.rows[0].id,
-      pgEventModel.rows[0].id,
-    ],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(Error);
-      }
-    }
-  );
+  const event = await Event.create({
+    title,
+    link,
+    category,
+    startDate,
+    endDate,
+    timeZone,
+    primaryColor,
+    isCurrent: true,
+    AccountId,
+    RegPageModelId: dbRegModel.id,
+    EventPageModelId: dbEventModel.id,
+  });
 
   // create a default chatroom
-  const newRoom = await ChatRoom.create({
-    event: newEvent.rows[0].id,
+  const chatRoom = await ChatRoom.create({
+    event: event.id,
     isDefault: true,
     name: "Main Chat (Default)",
   });
 
   // Store the section HTML for the reg page model
-  for (i = 0; i < reg_page_model.length; i++) {
+  for (i = 0; i < regPageModel.length; i++) {
     if (
-      reg_page_model[i].is_react &&
-      reg_page_model[i].react_component.name == "StreamChat"
+      regPageModel[i].isReact &&
+      regPageModel[i].reactComponent.name == "StreamChat"
     ) {
-      reg_page_model[i].react_component.props.chatRoom = newRoom.id;
+      regPageModel[i].reactComponent.props.chatRoom = chatRoom.id;
     }
 
-    console.log(reg_page_model[i].react_component);
-
-    await db.query(
-      `INSERT INTO section_html
-					(model, index, html, is_react, react_component)
-					VALUES
-					($1, $2, $3, $4, $5)`,
-      [
-        pgRegModel.rows[0].id,
-        i,
-        reg_page_model[i].html,
-        reg_page_model[i].is_react,
-        reg_page_model[i].react_component,
-      ]
-    );
+    await PageSection.create({
+      PageModelId: dbRegModel.id,
+      index: i,
+      html: regPageModel[i].html,
+      isReact: regPageModel[i].isReact,
+      reactComponent: regPageModel[i].reactComponent,
+    });
   }
 
   // Store the section HTML for the event page model
-  for (i = 0; i < event_page_model.length; i++) {
+  for (i = 0; i < eventPageModel.length; i++) {
     if (
-      event_page_model[i].is_react &&
-      event_page_model[i].react_component.name == "StreamChat"
+      eventPageModel[i].isReact &&
+      eventPageModel[i].reactComponent.name == "StreamChat"
     ) {
-      event_page_model[i].react_component.props.chatRoom = newRoom.id;
+      eventPageModel[i].reactComponent.props.chatRoom = chatRoom.id;
     }
 
-    await db.query(
-      `INSERT INTO section_html
-					(model, index, html, is_react, react_component)
-					VALUES
-					($1, $2, $3, $4, $5)`,
-      [
-        pgEventModel.rows[0].id,
-        i,
-        event_page_model[i].html,
-        event_page_model[i].is_react,
-        event_page_model[i].react_component,
-      ]
-    );
+    await PageSection.create({
+      PageModelId: dbEventModel.id,
+      index: i,
+      html: eventPageModel[i].html,
+      isReact: eventPageModel[i].isReact,
+      reactComponent: eventPageModel[i].reactComponent,
+    });
   }
 
   // add the emails for this event
   for (var email of emails) {
-    await db.query(
-      `INSERT INTO email 
-			(subject, recipients, minutes_from_event, html, event, status) 
-		VALUES ($1, $2, $3, $4, $5, $6)
-		RETURNING *`,
-      [
-        email.subject,
-        email.recipients,
-        email.minutes_from_event,
-        email.html,
-        newEvent.rows[0].id,
-        email.status,
-      ],
-      (err, res) => {
-        if (err) {
-          throw res.status(500).send(Error);
-        }
-      }
-    );
+    await Communication.create({
+      subject: email.subject,
+      recipients: email.recipients,
+      minutesFromEvent: email.minutesFromEvent,
+      html: email.html,
+      EventId: event.id,
+      status: email.status,
+    });
   }
 
-  res.status(200).send(newEvent.rows[0]);
+  res.status(200).send(event);
 });
 
 router.get("/api/event/current", requireAuth, async (req, res) => {
@@ -249,17 +188,9 @@ router.get("/api/event/id", async (req, res) => {
 
 router.get("/api/event/link", async (req, res) => {
   const { link } = req.query;
-  const events = await db.query(
-    "SELECT * FROM event WHERE link=$1",
-    [link],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const event = await Event.findOne({ where: { link } });
 
-  res.send(events.rows[0]);
+  res.status(200).send(event);
 });
 
 router.put("/api/event/id/status", async (req, res) => {
@@ -286,10 +217,10 @@ router.put("/api/event", async (req, res) => {
     title,
     link,
     category,
-    start_date,
-    end_date,
-    time_zone,
-    primary_color,
+    startDate,
+    endDate,
+    timeZone,
+    primaryColor,
     status,
   } = req.body;
 
@@ -299,10 +230,10 @@ router.put("/api/event", async (req, res) => {
 		  title = $1, 
 		  link = $2, 
 		  category = $3,
-		  start_date = $4,
-		  end_date = $5, 
-		  time_zone = $6,
-		  primary_color = $7,
+		  startDate = $4,
+		  endDate = $5, 
+		  timeZone = $6,
+		  primaryColor = $7,
 		  status = $8
 		WHERE 
 		  user_id=$9 AND is_current=true
@@ -311,10 +242,10 @@ router.put("/api/event", async (req, res) => {
       title,
       link,
       category,
-      start_date,
-      end_date,
-      time_zone,
-      primary_color,
+      startDate,
+      endDate,
+      timeZone,
+      primaryColor,
       status,
       userId,
     ],

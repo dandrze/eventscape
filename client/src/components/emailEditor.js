@@ -38,16 +38,14 @@ const EmailEditor = (props) => {
 
   const [subject, setSubject] = useState(props.data.subject || "");
   const [days, setDays] = useState(
-    Math.floor(Math.abs(props.data.minutes_from_event / 1440))
+    Math.floor(Math.abs(props.data.minutesFromEvent / 1440))
   );
   const [hours, setHours] = useState(
-    Math.floor(Math.abs((props.data.minutes_from_event % 1440) / 60))
+    Math.floor(Math.abs((props.data.minutesFromEvent % 1440) / 60))
   );
-  const [mins, setMins] = useState(
-    Math.abs(props.data.minutes_from_event % 60)
-  );
+  const [mins, setMins] = useState(Math.abs(props.data.minutesFromEvent % 60));
   const [preposition, setPreposition] = useState(
-    props.data.minutes_from_event <= 0 ? -1 : 1
+    props.data.minutesFromEvent <= 0 ? -1 : 1
   );
   const [html, setHtml] = useState(props.data.html || "");
   const [status, setStatus] = useState(
@@ -123,7 +121,7 @@ const EmailEditor = (props) => {
     const minutesFromEvent =
       preposition * (Number(mins) + hoursInMinutes + daysInMinutes);
 
-    const sendDate = new Date(props.event.start_date);
+    const sendDate = new Date(props.event.startDate);
     sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
     if (!timeError) {
@@ -161,7 +159,7 @@ const EmailEditor = (props) => {
     const minutesFromEvent =
       preposition * (Number(m) + hoursInMinutes + daysInMinutes);
 
-    const sendDate = new Date(props.event.start_date);
+    const sendDate = new Date(props.event.startDate);
     sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
     // If the send time is in the past, and this is a scheduled send (not for new registrants), display an error message
@@ -173,7 +171,7 @@ const EmailEditor = (props) => {
         "This send time is in the past: " +
           sendDate.toLocaleString("en-us", {
             timeZoneName: "short",
-            timeZone: props.event.time_zone,
+            timeZone: props.event.timeZone,
           }) +
           ". Please set a send time in the future."
       );
@@ -309,12 +307,18 @@ const EmailEditor = (props) => {
             </div>
 
             <div className="inputDiv input-container-flex-wrap">
-              <label htmlFor="sendTime" className="emailLabel" style={{marginTop: "4px"}}>
+              <label
+                htmlFor="sendTime"
+                className="emailLabel"
+                style={{ marginTop: "4px" }}
+              >
                 Scheduled Send Time:{" "}
               </label>
               <br></br>
               {props.data.recipients === recipientsOptions.NEW_REGISTRANTS ? (
-                <div className="disabled-text" style={{marginTop: "4px"}}>Upon Registration</div>
+                <div className="disabled-text" style={{ marginTop: "4px" }}>
+                  Upon Registration
+                </div>
               ) : (
                 <>
                   <div className="send-time-input">
@@ -405,7 +409,7 @@ const EmailEditor = (props) => {
                   readOnly
                   className="variable-bubble"
                   onClick={copyText}
-                  value={"{start_date}"}
+                  value={"{startDate}"}
                 />
               </Tooltip>
               <Tooltip title="Click to copy to clipboard">
@@ -413,7 +417,7 @@ const EmailEditor = (props) => {
                   readOnly
                   className="variable-bubble"
                   onClick={copyText}
-                  value={"{end_date}"}
+                  value={"{endDate}"}
                 />
               </Tooltip>
               <Tooltip title="Click to copy to clipboard">

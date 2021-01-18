@@ -18,36 +18,6 @@ router.get("/api/model/id", async (req, res) => {
   res.send(sectionList.rows);
 });
 
-router.get("/api/model/link", async (req, res) => {
-  const link = req.query.link;
-
-  const event = await db.query(
-    "SELECT reg_page_model FROM event WHERE link=$1 AND status!= 'deleted'",
-    [link],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
-
-  if (event.rowCount == 0) {
-    res.send([]);
-  } else {
-    const sectionList = await db.query(
-      "SELECT * FROM section_html WHERE model=$1 ORDER BY index ASC",
-      [event.rows[0].reg_page_model],
-      (err, res) => {
-        if (err) {
-          throw res.status(500).send(err);
-        }
-      }
-    );
-
-    res.status(200).send(sectionList.rows);
-  }
-});
-
 router.put("/api/model", async (req, res) => {
   const { model } = req.body;
 
@@ -57,13 +27,13 @@ router.put("/api/model", async (req, res) => {
   // then write the newly updated model
   for (const [index, section] of model.entries()) {
     await db.query(
-      "INSERT INTO section_html (model, index, html, is_react, react_component) VALUES ($1,$2,$3,$4,$5)",
+      "INSERT INTO section_html (model, index, html, isReact, reactComponent) VALUES ($1,$2,$3,$4,$5)",
       [
         section.model,
         index,
         section.html,
-        section.is_react,
-        section.react_component,
+        section.isReact,
+        section.reactComponent,
       ],
       (err, res) => {
         if (err) {

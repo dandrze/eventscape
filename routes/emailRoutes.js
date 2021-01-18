@@ -36,7 +36,7 @@ router.post("/api/email", async (req, res) => {
   } = email;
 
   const newEmail = await db.query(
-    "INSERT INTO email (event, recipients, status, subject, minutes_from_event, html) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+    "INSERT INTO email (event, recipients, status, subject, minutesFromEvent, html) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
     [event, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
@@ -92,7 +92,7 @@ router.put("/api/email", async (req, res) => {
   const originalEmail = originalEmailData.rows[0];
 
   const updatedEmail = await db.query(
-    "UPDATE email SET recipients=$2, status=$3, subject=$4, minutes_from_event=$5, html=$6 WHERE id=$1 RETURNING *",
+    "UPDATE email SET recipients=$2, status=$3, subject=$4, minutesFromEvent=$5, html=$6 WHERE id=$1 RETURNING *",
     [id, recipients, status, subject, minutesFromEvent, html],
     (err, res) => {
       if (err) {
@@ -220,10 +220,10 @@ router.post("/api/email/test", async (req, res) => {
   const eventData = await db.query(
     `SELECT 
       title as event_name, 
-      time_zone, 
+      timeZone, 
       link, 
-      start_date, 
-      end_date 
+      startDate, 
+      endDate 
       FROM event 
       WHERE id=$1 `,
     [eventId]
@@ -250,7 +250,7 @@ const scheduleJob = async (jobName, email, eventId, minutesFromEvent) => {
 
   const event = await getEventFromId(eventId);
 
-  const sendDate = new Date(event.start_date);
+  const sendDate = new Date(event.startDate);
 
   sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 

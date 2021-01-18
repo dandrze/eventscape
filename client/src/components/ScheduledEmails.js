@@ -56,18 +56,18 @@ function ScheduledEmails(props) {
 
   useEffect(() => {
     const formattedEmailList = props.email.map((email) => {
-      // start with the event start date. Then modify if by adding the minutes_from_event
-      const sendDate = new Date(props.event.start_date);
-      sendDate.setMinutes(sendDate.getMinutes() + email.minutes_from_event);
+      // start with the event start date. Then modify if by adding the minutesFromEvent
+      const sendDate = new Date(props.event.startDate);
+      sendDate.setMinutes(sendDate.getMinutes() + email.minutesFromEvent);
 
       return {
         ...email,
-        send_date:
+        sendDate:
           email.recipients === recipientsOptions.NEW_REGISTRANTS
             ? "Upon Registration"
             : sendDate.toLocaleString("en-us", {
                 timeZoneName: "short",
-                timeZone: props.event.time_zone,
+                timeZone: props.event.timeZone,
               }),
 
         status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
@@ -87,7 +87,7 @@ function ScheduledEmails(props) {
     },
     {
       title: "Scheduled Send",
-      field: "send_date",
+      field: "sendDate",
     },
     {
       title: "Status",

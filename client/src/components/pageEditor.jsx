@@ -94,8 +94,8 @@ class PageEditor extends Component {
                 this.props.event.id +
                 "/" +
                 (this.props.settings.nowEditingPage == pageNames.REGISTRATION
-                  ? this.props.event.reg_page_model
-                  : this.props.event.event_page_model)
+                  ? this.props.event.regPageModel
+                  : this.props.event.eventPageModel)
               }
               target="_blank"
             >

@@ -32,8 +32,8 @@ Registration.belongsTo(Event);
 Event.belongsTo(Account);
 Account.hasMany(Event);
 
-PageModel.belongsTo(Event, { as: "EventPageModel" });
-PageModel.belongsTo(Event, { as: "RegPageModel" });
+Event.belongsTo(PageModel, { as: "EventPageModel" });
+Event.belongsTo(PageModel, { as: "RegPageModel" });
 
 PageModel.hasMany(PageSection);
 PageSection.belongsTo(PageModel);

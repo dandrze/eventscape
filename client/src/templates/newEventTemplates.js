@@ -16,7 +16,12 @@ import {
   followUp,
 } from "./emailTemplates";
 
-export const regPageModelTemplate = (title, startDate, endDate, timeZoneName) => {
+export const regPageModelTemplate = (
+  title,
+  startDate,
+  endDate,
+  timeZoneName
+) => {
   return [
     { html: logoHeaderModel(), name: "banner" },
     {
@@ -26,8 +31,8 @@ export const regPageModelTemplate = (title, startDate, endDate, timeZoneName) =>
     {
       html: registrationFormDescription(),
       name: "registration",
-      is_react: true,
-      react_component: registrationFormReact,
+      isReact: true,
+      reactComponent: registrationFormReact,
     },
   ];
 };
@@ -45,8 +50,8 @@ export const eventPageModelTemplate = (title, startDate, endDate) => {
     {
       html: null,
       name: "streamChat",
-      is_react: true,
-      react_component: streamChatReact,
+      isReact: true,
+      reactComponent: streamChatReact,
     },
     {
       html: blankModel(),

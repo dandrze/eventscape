@@ -10,7 +10,7 @@ import {
   SAVE_REG_MODEL,
   SAVE_EVENT_MODEL,
   MODEL_ISSAVED,
-  UPDATE_REACT_COMPONENT,
+  UPDATE_reactComponent,
   FETCH_EVENT,
 } from "./types";
 import { pageNames } from "../model/enums";
@@ -46,16 +46,16 @@ export const updateSection = (index, html) => {
 export const addSection = (
   prevIndex,
   html,
-  is_react = false,
-  react_component = null
+  isReact = false,
+  reactComponent = null
 ) => async (dispatch, getState) => {
   const model = getState().model.id;
 
-  if (react_component && react_component.name === "StreamChat") {
+  if (reactComponent && reactComponent.name === "StreamChat") {
     const chatRoom = await api.get("/api/chatroom/default", {
       params: { event: getState().event.id },
     });
-    react_component.props.chatRoom = chatRoom.data.id;
+    reactComponent.props.chatRoom = chatRoom.data.id;
   }
 
   const payload = {
@@ -63,8 +63,8 @@ export const addSection = (
     model: {
       model,
       html,
-      is_react,
-      react_component,
+      isReact,
+      reactComponent,
     },
   };
 
@@ -118,15 +118,15 @@ export const saveStreamSettings = (index, updatedProps) => async (
   dispatch,
   getState
 ) => {
-  const reactComponent = getState().model.sections[index].react_component;
+  const reactComponent = getState().model.sections[index].reactComponent;
   reactComponent.props.content = updatedProps.content;
   reactComponent.props.link = updatedProps.link;
   reactComponent.props.html = updatedProps.html;
   reactComponent.props.chatRoom = updatedProps.chatRoom;
 
   dispatch({
-    type: UPDATE_REACT_COMPONENT,
-    payload: { index, react_component: reactComponent },
+    type: UPDATE_reactComponent,
+    payload: { index, reactComponent: reactComponent },
   });
 };
 
@@ -134,12 +134,12 @@ export const saveChatSettings = (index, chatSettings) => async (
   dispatch,
   getState
 ) => {
-  const reactComponent = getState().model.sections[index].react_component;
+  const reactComponent = getState().model.sections[index].reactComponent;
 
   reactComponent.props.chatRoom = chatSettings.chatRoom;
 
   dispatch({
-    type: UPDATE_REACT_COMPONENT,
-    payload: { index, react_component: reactComponent },
+    type: UPDATE_reactComponent,
+    payload: { index, reactComponent: reactComponent },
   });
 };
