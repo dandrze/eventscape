@@ -167,9 +167,12 @@ function RegistrationForm(props) {
     if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
       setEmailErrorText("Please enter valid email address");
     } else {
-      const registration = await props.fetchRegistration(emailAddressReSend);
+      const registration = await props.fetchRegistration(
+        emailAddressReSend,
+        props.event.id
+      );
 
-      if (registration.email == emailAddressReSend) {
+      if (registration.emailAddress == emailAddressReSend) {
         setEmailFound(true);
         setEmailNotFound(false);
         await props.resendRegistrationEmail(emailAddressReSend, props.event.id);

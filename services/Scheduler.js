@@ -1,12 +1,21 @@
 const { response } = require("express");
 const schedule = require("node-schedule");
+const { QueryTypes } = require("sequelize");
+
 const Mailer = require("./Mailer");
-const { updateEmailJob } = require("../db/Email");
 const { recipientsOptions } = require("../model/enums");
 const db = require("../db/index");
 const { sub } = require("date-fns");
+const sequelize = require("../sequelize/sequelize");
+const {
+  Communication,
+  Registration,
+  Event,
+  EmailListRecipient,
+} = require("../sequelize").models;
 
-const scheduleSend = async (emailId, email, sendDate, eventId) => {
+const scheduleSend = async (emailId, email, sendDate, EventId) => {
+  console.log(emailId, email, sendDate, EventId);
   const { to, subject, html, recipients, emailList } = email;
 
   const newJob = schedule.scheduleJob(
@@ -19,45 +28,15 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
       var recipientsList = [];
       // get recipients either from the registration list, or use the email list provided
       if (recipients === recipientsOptions.ALL_REGISTRANTS) {
-        const registrationsList = await db.query(
-          `SELECT 
-            event.title as event_name, 
-            event.timeZone, 
-            event.link, 
-            event.startDate, 
-            event.endDate ,
-            registration.firstName,
-            registration.lastName,
-            registration.email,
-            registration.hash
-
-            FROM registration INNER JOIN event on registration.event = event.id WHERE registration.event=$1 `,
-          [eventId]
-        );
-
-        recipientsList = registrationsList.rows;
+        recipientsList = await Registration.findAll({
+          where: { Eventid },
+          include: Event,
+        });
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
-        const emailList = await db.query(
-          `SELECT 
-            recipient.firstName,
-            recipient.lastName,
-            recipient.email,
-            recipient.hash,
-            event.title as event_name, 
-            event.timeZone, 
-            event.link, 
-            event.startDate, 
-            event.endDate
-          FROM recipient 
-          INNER JOIN email 
-          on recipient.email_template_id = email.id 
-          INNER JOIN event
-          on email.event = event.id 
-          WHERE recipient.email_template_id=$1`,
-          [emailId]
-        );
-
-        recipientsList = emailList.rows;
+        recipientsList = await EmailListRecipient.findAll({
+          where: { EventId },
+          include: Event,
+        });
       }
 
       // provide a list of recipient data, a subject and html with {variables} to a function that maps the data to the variables and sends an email to each recipient
@@ -70,29 +49,44 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
 
       console.log({ success, failed });
 
-      updateEmailJob(
-        emailId,
-        job.triggeredJobs(),
-        job.nextInvocation(),
-        success,
-        failed
-      );
+      const completeCommunication = await Communication.findByPk(emailId);
+
+      completeCommunication.triggeredJobs = job.triggeredJobs();
+      completeCommunication.nextInvocation = job.nextInvocation();
+      completeCommunication.successfulSends = success;
+      completeCommunication.failedSends = failed;
+
+      // If the job was triggered, update the status to complete
+      if (job.triggeredJobs() === 1) {
+        completeCommunication.status = statusOptions.COMPLETE;
+      }
+
+      await completeCommunication.save();
 
       // We only ever need to run this job once. So remove it from node-schedule to keep things clean and avoid duplicate sends
       job.cancel();
     }
   );
 
-  updateEmailJob(emailId, newJob.triggeredJobs(), newJob.nextInvocation());
-  console.log(schedule.scheduledJobs);
+  // update the communication triggered jobs (0) and nextInvocation (send date)
+  const communication = await Communication.findByPk(emailId);
+
+  communication.triggeredJobs = newJob.triggeredJobs();
+  communication.nextInvocation = newJob.nextInvocation();
+
+  await communication.save();
 };
 
-const cancelSend = (emailId) => {
+const cancelSend = async (emailId) => {
   if (emailId in schedule.scheduledJobs) {
     const job = schedule.scheduledJobs[emailId];
     job.cancel();
 
-    updateEmailJob(emailId, job.triggeredJobs(), job.nextInvocation());
+    const communication = await Communication.findByPk(emailId);
+
+    communication.triggeredJobs = job.triggeredJobs();
+    communication.nextInvocation = job.nextInvocation();
+    await communication.save();
   }
   console.log(schedule.scheduledJobs);
 };

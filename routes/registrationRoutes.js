@@ -15,7 +15,7 @@ const {
 const sequelize = require("../sequelize/sequelize");
 
 router.post("/api/registration", async (req, res) => {
-  const { event, values, emailAddress, firstName, lastName } = req.body;
+  const { eventId, values, emailAddress, firstName, lastName } = req.body;
 
   // Add the registered user
 
@@ -24,7 +24,7 @@ router.post("/api/registration", async (req, res) => {
     lastName,
     values,
     emailAddress,
-    EventId: event,
+    EventId: eventId,
   });
 
   registration.hash = md5(registration.id);
@@ -33,38 +33,20 @@ router.post("/api/registration", async (req, res) => {
   // get all emails for new registrants
   const communications = await Communication.findAll({
     where: {
-      EventId: event,
+      EventId: eventId,
       recipients: recipientsOptions.NEW_REGISTRANTS,
       status: statusOptions.ACTIVE,
     },
   });
 
   // pull all relevant data to map to variables and put them into a list
-  // we need to use a raw query to avoid having a nested result, we want it all in 1 dimensional object
-  const registrationData = await sequelize.query(
-    `SELECT 
-      "Events".title, 
-      "Events"."timeZone", 
-      "Events".link, 
-      "Events"."startDate", 
-      "Events"."endDate",
-      "Registrations"."firstName",
-      "Registrations"."lastName",
-      "Registrations"."emailAddress",
-      "Registrations".hash
-
-      FROM "Registrations" INNER JOIN "Events" on "Registrations"."EventId" = "Events".id WHERE "Registrations".id=$1 AND "Events".id=$2`,
-    {
-      bind: [registration.id, event],
-      type: QueryTypes.SELECT,
-    }
-  );
-
-  console.log(communications);
+  const registrationData = await Registration.findByPk(registration.id, {
+    include: Event,
+  });
 
   for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-      registrationData,
+      [registrationData],
       communication.subject,
       communication.html
     );
@@ -108,47 +90,49 @@ router.get("/api/registration/event", async (req, res) => {
 });
 
 router.get("/api/registration/email", async (req, res) => {
-  const { emailAddress, eventId } = req.query;
+  const { emailAddress, EventId } = req.query;
 
   // Get the registration associated with an email
-  const registrations = await Registration.findOne({
+  const registration = await Registration.findOne({
     where: {
       emailAddress,
-      EventId: eventId,
+      EventId,
     },
   });
 
-  res.status(200).send(registrations);
+  console.log(registration, emailAddress, EventId);
+
+  res.status(200).send(registration);
+});
+
+router.get("/test", async (req, res) => {
+  const registration = await Registration.create({
+    firstName: "fdasfa",
+    EventId: 5,
+  });
+
+  const updatedRegistration = await registration.save();
+  console.log(updatedRegistration);
+
+  res.send(updatedRegistration);
 });
 
 router.post("/api/registration/email/resend", async (req, res) => {
-  const { email, event } = req.body;
+  const { emailAddress, EventId } = req.body;
 
   // pull all relevant data to map to variables and put them into a list
-  // we need to use a raw query to avoid having a nested result, we want it all in 1 dimensional object
-  const registrationData = await sequelize.query(
-    `SELECT 
-      "Events".title, 
-      "Events"."timeZone", 
-      "Events".link, 
-      "Events"."startDate", 
-      "Events"."endDate",
-      "Registrations"."firstName",
-      "Registrations"."lastName",
-      "Registrations"."emailAddress",
-      "Registrations".hash
-
-      FROM "Registrations" INNER JOIN "Events" on "Registrations"."EventId" = "Events".id WHERE "Registrations".id=$1 AND "Events".id=$2`,
-    {
-      bind: [registration.id, event],
-      type: QueryTypes.SELECT,
-    }
-  );
+  const registrationData = await Registration.findOne({
+    where: {
+      emailAddress,
+      EventId,
+    },
+    include: Event,
+  });
 
   // check to see if any emails need to be fired off
   const communications = await Communication.findAll({
     where: {
-      EventId: event,
+      EventId,
       recipients: recipientsOptions.NEW_REGISTRANTS,
       status: statusOptions.ACTIVE,
     },
@@ -156,7 +140,7 @@ router.post("/api/registration/email/resend", async (req, res) => {
 
   for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-      registrationData,
+      [registrationData],
       communication.subject,
       communication.html
     );
