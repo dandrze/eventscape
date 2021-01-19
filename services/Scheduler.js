@@ -26,8 +26,8 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
             event.link, 
             event.startDate, 
             event.endDate ,
-            registration.first_name,
-            registration.last_name,
+            registration.firstName,
+            registration.lastName,
             registration.email,
             registration.hash
 
@@ -39,8 +39,8 @@ const scheduleSend = async (emailId, email, sendDate, eventId) => {
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
         const emailList = await db.query(
           `SELECT 
-            recipient.first_name,
-            recipient.last_name,
+            recipient.firstName,
+            recipient.lastName,
             recipient.email,
             recipient.hash,
             event.title as event_name, 

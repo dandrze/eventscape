@@ -20,7 +20,7 @@ export const registrationConfirmation = {
   subject: "Registration Confirmation for {event_name}",
   recipients: recipientsOptions.NEW_REGISTRANTS,
   html: `
-  <p style="text-align: left">Hello {first_name},</p>
+  <p style="text-align: left">Hello {firstName},</p>
   <p style="text-align: left">Thank you for registering for {event_name} starting {startDate}.</p>
   <p style="text-align: left">A few minutes before the event begins, please click the following button to join.</p>
   <p style="text-align: left;" contenteditable="false">
@@ -55,7 +55,7 @@ export const reminderOneDay = {
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutesFromEvent: -1440, // 1 day before event start
   html: `
-  <p style="text-align: left">Hello {first_name},</p>
+  <p style="text-align: left">Hello {firstName},</p>
   <p style="text-align: left">This email is to remind you that {event_name} starts tomorrow {startDate}.</p>
   <p style="text-align: left">A few minutes before the event begins, please click the following button to join.</p>
   <p style="text-align: left;" contenteditable="false">
@@ -90,7 +90,7 @@ export const reminderOneHour = {
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutesFromEvent: -60, // 1 hour before event start
   html: `
-  <p style="text-align: left">Hello {first_name},</p>
+  <p style="text-align: left">Hello {firstName},</p>
   <p style="text-align: left">This email is to remind you that {event_name} starts in one hour ({startDate}).</p>
   <p style="text-align: left">A few minutes before the event begins, please click the following button to join.</p>
   <p style="text-align: left;" contenteditable="false">
@@ -125,7 +125,7 @@ export const followUp = {
   recipients: recipientsOptions.ALL_REGISTRANTS,
   minutesFromEvent: 1440, // 24 hours after event start
   html: `
-  <p style="text-align: left">Hello {first_name},</p>
+  <p style="text-align: left">Hello {firstName},</p>
   <p style="text-align: left">Thank you for attending {event_name} yesterday.</p>
   <p style="text-align: left">If you were unable to attend or would like to see the event again, you can view the recording at {event_link}</p>
   <p style="text-align: left">Thank you.</p>

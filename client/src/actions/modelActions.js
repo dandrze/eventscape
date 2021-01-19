@@ -87,6 +87,7 @@ export const saveModel = () => async (dispatch, getState) => {
   await dispatch(localSaveModel());
 
   const model = getState().model.sections;
+  console.log(model);
 
   // save the new model
   const res = await api.put("/api/model", { model });

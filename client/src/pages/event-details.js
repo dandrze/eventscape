@@ -199,7 +199,7 @@ function Event_Details(props) {
     }
     setIsloading(false);
 
-    //if (response) props.history.push("/Design");
+    if (response) props.history.push("/Design");
   };
 
   if (isLoading && !props.isEventUpdate) {

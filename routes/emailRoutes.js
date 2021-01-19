@@ -152,11 +152,11 @@ router.get("/api/email-list", async (req, res) => {
 router.post("/api/email-list", async (req, res) => {
   const { data, emailId } = req.body;
 
-  const { first_name, last_name, email } = data;
+  const { firstName, lastName, email } = data;
 
   const newRecipient = await db.query(
-    "INSERT INTO recipient (first_name, last_name, email, email_template_id) VALUES ($1, $2, $3, $4) returning id",
-    [first_name, last_name, email, emailId]
+    "INSERT INTO recipient (firstName, lastName, email, email_template_id) VALUES ($1, $2, $3, $4) returning id",
+    [firstName, lastName, email, emailId]
   );
 
   const addHash = await db.query("UPDATE recipient SET hash=$1 WHERE id=$2", [
@@ -172,11 +172,11 @@ router.put("/api/email-list", async (req, res) => {
 
   console.log(data);
 
-  const { first_name, last_name, email } = data;
+  const { firstName, lastName, email } = data;
 
   const emailList = await db.query(
-    "UPDATE recipient SET first_name=$1, last_name=$2, email=$3 WHERE id=$4",
-    [first_name, last_name, email, id],
+    "UPDATE recipient SET firstName=$1, lastName=$2, email=$3 WHERE id=$4",
+    [firstName, lastName, email, id],
     (err, res) => {
       if (err) {
         throw res.status(500).send(err);
@@ -210,8 +210,8 @@ router.post("/api/email/test", async (req, res) => {
   } = req.body;
 
   testSender = {
-    first_name: firstName,
-    last_name: lastName,
+    firstName: firstName,
+    lastName: lastName,
     email,
     hash: md5("tester"),
   };

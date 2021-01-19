@@ -46,9 +46,11 @@ export const createAccount = (userData) => async (dispatch) => {
   }
 };
 
-export const checkEmailExists = (email) => async (dispatch) => {
+export const checkEmailExists = (emailAddress) => async (dispatch) => {
   try {
-    const res = await api.get("/api/account/email", { params: { email } });
+    const res = await api.get("/api/account/email", {
+      params: { emailAddress },
+    });
 
     console.log(res.data);
 

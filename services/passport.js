@@ -2,7 +2,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 
 const LocalStrategy = require("passport-local").Strategy;
-const db = require("../db");
+const { Account } = require("../sequelize").models;
 
 const saltRounds = 10;
 
@@ -13,9 +13,7 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const response = await db.query("SELECT * FROM account WHERE id=$1", [id]);
-
-  const user = response.rows[0];
+  const user = await Account.findByPk(id);
 
   done(null, user);
 });
@@ -25,11 +23,7 @@ passport.use(
     console.log(username, password);
     console.log("strategy called");
 
-    const response = await db.query("SELECT * FROM account WHERE email = $1", [
-      username,
-    ]);
-
-    const user = response.rows[0];
+    const user = await Account.findOne({ where: { emailAddress: username } });
 
     if (!user) {
       console.log("user not found");

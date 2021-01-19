@@ -20,12 +20,14 @@ const useStyles = makeStyles((theme) => ({
 function AccountSettings(props) {
   const classes = useStyles();
 
-  const [fName, setFName] = React.useState(props.user.first_name || "");
-  const [lName, setLName] = React.useState(props.user.last_name || "");
-  const [email, setEmail] = React.useState(props.user.email || "");
+  const [fName, setFName] = React.useState(props.user.firstName || "");
+  const [lName, setLName] = React.useState(props.user.lastName || "");
+  const [emailAddress, setEmailAddress] = React.useState(
+    props.user.emailAddress || ""
+  );
 
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+  const handleChangeEmailAddress = (event) => {
+    setEmailAddress(event.target.value);
   };
 
   const handleChangeFName = (event) => {
@@ -38,9 +40,9 @@ function AccountSettings(props) {
 
   const handleUpdate = () => {
     props.updateAccountContact(props.user.id, {
-      first_name: fName,
-      last_name: lName,
-      email,
+      firstName: fName,
+      lastName: lName,
+      emailAddress,
     });
   };
 
@@ -82,8 +84,8 @@ function AccountSettings(props) {
                 id="email"
                 label="Email"
                 variant="outlined"
-                value={email}
-                onChange={handleChangeEmail}
+                value={emailAddress}
+                onChange={handleChangeEmailAddress}
               />
             </FormControl>
             <br></br>

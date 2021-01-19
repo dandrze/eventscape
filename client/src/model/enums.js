@@ -24,8 +24,8 @@ export const emailVariableNames = [
   "event_link",
   "startDate",
   "endDate",
-  "first_name",
-  "last_name",
+  "firstName",
+  "lastName",
 ];
 
 export const pageNames = { REGISTRATION: "registration", EVENT: "event" };

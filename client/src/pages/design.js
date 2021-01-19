@@ -14,10 +14,11 @@ const Design = (props) => {
     if (Object.keys(props.event).length != 0) {
       const modelId =
         props.settings.nowEditingPage === pageNames.REGISTRATION
-          ? props.event.regPageModel
-          : props.event.eventPageModel;
+          ? props.event.RegPageModelId
+          : props.event.EventPageModelId;
 
       props.fetchModel(modelId);
+      console.log(props);
     }
   }, [props.event, props.settings.nowEditingPage]);
 

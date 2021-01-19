@@ -12,8 +12,8 @@ router.get("/api/attendee/hash", async (req, res) => {
   // if the hash is a testing hash, return a test attendee
   if (hash === md5("tester")) {
     attendee = {
-      first_name: "Test",
-      last_name: "Guest",
+      firstName: "Test",
+      lastName: "Guest",
       email: "test@guest.com",
     };
   } else {

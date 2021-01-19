@@ -24,7 +24,7 @@ function Create_Account(props) {
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
@@ -35,7 +35,7 @@ function Create_Account(props) {
   const [confirmPasswordErrorText, setConfirmPasswordErrorText] = useState("");
 
   const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+    setEmailAddress(event.target.value);
     setEmailErrorText("");
   };
 
@@ -46,7 +46,7 @@ function Create_Account(props) {
   };
 
   const emailExists = async () => {
-    const response = await props.checkEmailExists(email);
+    const response = await props.checkEmailExists(emailAddress);
     console.log(response);
     return response;
   };
@@ -56,7 +56,7 @@ function Create_Account(props) {
       setFirstNameErrorText("Please enter a first name");
     } else if (!lastName) {
       setLastNameErrorText("Please enter a last name");
-    } else if (!email) {
+    } else if (!emailAddress) {
       setEmailErrorText("Please enter your email address");
     } else if (await emailExists()) {
       setEmailErrorText(
@@ -73,14 +73,14 @@ function Create_Account(props) {
       setPasswordErrorText("Passwords do not match");
     } else {
       const res = await props.createAccount({
-        email,
+        emailAddress,
         password,
         firstName,
         lastName,
       });
 
       console.log(res);
-      const auth = await props.signInLocal(email, password);
+      const auth = await props.signInLocal(emailAddress, password);
       props.history.push("/event-details");
     }
   };
@@ -142,7 +142,7 @@ function Create_Account(props) {
             id="email"
             label="Email"
             variant="outlined"
-            value={email}
+            value={emailAddress}
             onChange={handleChangeEmail}
             helperText={emailErrorText}
           />

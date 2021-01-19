@@ -218,8 +218,8 @@ const EmailEditor = (props) => {
               html={html}
               eventId={props.event.id}
               recipient={{
-                firstName: props.user.first_name,
-                lastName: props.user.last_name,
+                firstName: props.user.firstName,
+                lastName: props.user.lastName,
                 email: props.user.email,
               }}
             />
@@ -393,7 +393,7 @@ const EmailEditor = (props) => {
                   readOnly
                   className="variable-bubble"
                   onClick={copyText}
-                  value={"{first_name}"}
+                  value={"{firstName}"}
                 />
               </Tooltip>
               <Tooltip title="Click to copy to clipboard">
@@ -401,7 +401,7 @@ const EmailEditor = (props) => {
                   readOnly
                   className="variable-bubble"
                   onClick={copyText}
-                  value={"{last_name}"}
+                  value={"{lastName}"}
                 />
               </Tooltip>
               <Tooltip title="Click to copy to clipboard">

@@ -1,78 +1,55 @@
 const express = require("express");
-const db = require("../db");
 const bcrypt = require("bcrypt");
+const { Account } = require("../sequelize").models;
+
 const saltRounds = 10;
 
 const router = express.Router();
 
 router.put("/api/account", async (req, res) => {
   const { userId, contactData } = req.body;
-  const { first_name, last_name, email } = contactData;
+  const { firstName, lastName, emailAddress } = contactData;
 
-  const updatedAccount = await db.query(
-    "UPDATE account SET first_name=$1, last_name=$2, email=$3 WHERE id=$4 RETURNING first_name, last_name, email, id",
-    [first_name, last_name, email, userId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const account = await Account.findByPk(userId);
+  account.firstName = firstName;
+  account.lastName = lastName;
+  account.emailAddress = emailAddress;
+  account.save();
 
-  res.status(200).send(updatedAccount.rows[0]);
+  res.status(200).send(account);
 });
 
 router.post("/api/account", async (req, res) => {
   const { userData } = req.body;
-  const { email, firstName, lastName, password } = userData;
-  console.log(req.body);
+  const { emailAddress, firstName, lastName, password } = userData;
 
   const hashedPassword = await bcrypt.hashSync(password, saltRounds);
 
-  const newUser = await db.query(
-    "INSERT INTO account (email, first_name, last_name, password) VALUES ($1, $2, $3, $4) RETURNING *",
-    [email, firstName, lastName, hashedPassword],
-    (err, res) => {
-      if (err) {
-        console.log(err);
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const account = await Account.create({
+    emailAddress,
+    firstName,
+    lastName,
+    password,
+  });
 
-  res.status(200).send(newUser.rows[0]);
+  res.status(200).send(account);
 });
 
 router.get("/api/account/email", async (req, res) => {
-  const { email } = req.query;
+  const { emailAddress } = req.query;
 
-  const userData = await db.query(
-    "SELECT * FROM account WHERE email=$1",
-    [email],
-    (err, res) => {
-      if (err) {
-        console.log(err);
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const account = await Account.findOne({ where: { emailAddress } });
 
-  res.send(userData.rows[0]);
+  res.status(200).send(account);
 });
 
 router.put("/api/account/pw", async (req, res) => {
   const { userId, oldPassword, newPassword } = req.body;
 
-  const existingUser = await db.query(
-    "SELECT password from account where id=$1",
-    [userId]
-  );
+  const account = await Account.findByPk(userId);
 
   // if the password doesn't match, return an 401 unauthorized error
-  const match = await bcrypt.compare(
-    oldPassword,
-    existingUser.rows[0].password
-  );
+  const match = await bcrypt.compare(oldPassword, account.password);
   if (!match) {
     return res.status(401).send({ error: "Current password is not correct" });
   }
@@ -80,17 +57,10 @@ router.put("/api/account/pw", async (req, res) => {
   // has the password so we don't store the plain text password in our database
   const hashedPassword = await bcrypt.hashSync(newPassword, saltRounds);
 
-  const updatedAccount = await db.query(
-    "UPDATE account SET password=$1 WHERE id=$2 returning id",
-    [hashedPassword, userId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  account.password = hashedPassword;
+  account.save();
 
-  res.status(200).send(updatedAccount.rows[0]);
+  res.status(200).send(account);
 });
 
 module.exports = router;

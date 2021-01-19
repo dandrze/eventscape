@@ -24,8 +24,8 @@ const emailVariableNames = [
   "event_link",
   "startDate",
   "endDate",
-  "first_name",
-  "last_name",
+  "firstName",
+  "lastName",
 ];
 
 exports.recipientsOptions = recipientsOptions;
