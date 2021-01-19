@@ -3,9 +3,9 @@ const keys = require("../config/keys");
 
 sgMail.setApiKey(keys.sendGridKey);
 
-const sendEmail = async (emailAddress) => {
-  console.log(emailAddress);
-  const { to, subject, html } = emailAddress;
+const sendEmail = async (email) => {
+  console.log(email);
+  const { to, subject, html } = email;
   const msg = {
     to,
     from: "notifications@eventscape.io",
@@ -34,6 +34,12 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
     // for each recipient, reset the subject to the original with {variable_names}
     var updatedSubject = subject;
     var updatedHtml = html;
+
+    // creates snake case versions of camelcase varaibles
+    recipient.first_name = recipient.firstName;
+    recipient.last_name = recipient.lastName;
+    recipient.email_address = recipient.emailAddress;
+    recipient.event_name = recipient.title;
 
     // the event_link variable is created using the event link and the recipient hash which uniquely identifies the recipient
     if (recipient.link && recipient.hash) {
@@ -93,8 +99,11 @@ const formatDate = (recipientsList) => {
 
     return {
       ...recipient,
-      startDate: recipient.startDate.toLocaleString("en-us", dateFormatOptions),
-      endDate: recipient.endDate.toLocaleString("en-us", dateFormatOptions),
+      start_date: recipient.startDate.toLocaleString(
+        "en-us",
+        dateFormatOptions
+      ),
+      end_date: recipient.endDate.toLocaleString("en-us", dateFormatOptions),
     };
   });
 };

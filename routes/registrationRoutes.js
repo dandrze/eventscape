@@ -30,7 +30,7 @@ router.post("/api/registration", async (req, res) => {
   registration.hash = md5(registration.id);
   registration.save();
 
-  // first off registration email(s)
+  // get all emails for new registrants
   const communications = await Communication.findAll({
     where: {
       EventId: event,
@@ -43,7 +43,7 @@ router.post("/api/registration", async (req, res) => {
   // we need to use a raw query to avoid having a nested result, we want it all in 1 dimensional object
   const registrationData = await sequelize.query(
     `SELECT 
-      "Events".title as event_name, 
+      "Events".title, 
       "Events"."timeZone", 
       "Events".link, 
       "Events"."startDate", 
@@ -59,6 +59,8 @@ router.post("/api/registration", async (req, res) => {
       type: QueryTypes.SELECT,
     }
   );
+
+  console.log(communications);
 
   for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
@@ -126,7 +128,7 @@ router.post("/api/registration/email/resend", async (req, res) => {
   // we need to use a raw query to avoid having a nested result, we want it all in 1 dimensional object
   const registrationData = await sequelize.query(
     `SELECT 
-      "Events".title as event_name, 
+      "Events".title, 
       "Events"."timeZone", 
       "Events".link, 
       "Events"."startDate", 
