@@ -1,12 +1,7 @@
-const { response } = require("express");
 const schedule = require("node-schedule");
-const { QueryTypes } = require("sequelize");
 
 const Mailer = require("./Mailer");
-const { recipientsOptions } = require("../model/enums");
-const db = require("../db/index");
-const { sub } = require("date-fns");
-const sequelize = require("../sequelize/sequelize");
+const { recipientsOptions, statusOptions } = require("../model/enums");
 const {
   Communication,
   Registration,
@@ -15,8 +10,9 @@ const {
 } = require("../sequelize").models;
 
 const scheduleSend = async (emailId, email, sendDate, EventId) => {
-  console.log(emailId, email, sendDate, EventId);
   const { to, subject, html, recipients, emailList } = email;
+
+  console.log(EventId);
 
   const newJob = schedule.scheduleJob(
     emailId.toString(),
@@ -29,7 +25,7 @@ const scheduleSend = async (emailId, email, sendDate, EventId) => {
       // get recipients either from the registration list, or use the email list provided
       if (recipients === recipientsOptions.ALL_REGISTRANTS) {
         recipientsList = await Registration.findAll({
-          where: { Eventid },
+          where: { EventId },
           include: Event,
         });
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
