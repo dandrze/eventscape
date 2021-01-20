@@ -5,20 +5,14 @@ import React, {
     useImperativeHandle,
   } from "react";
   import ScrollToBottom from "react-scroll-to-bottom";
-  import ReactEmoji from "react-emoji";
   import Tooltip from "@material-ui/core/Tooltip";
-  import clsx from "clsx";
-  
-  /* Tabs */
-  import PropTypes from 'prop-types';
-  import Tabs from '@material-ui/core/Tabs';
-  import Tab from '@material-ui/core/Tab';
-  import { makeStyles, withStyles } from '@material-ui/core/styles';
+  import "./ModeratorQuestions.css";
   
   /* Icons */
-  import TelegramIcon from "@material-ui/icons/Telegram";
   import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
   import ReplayIcon from "@material-ui/icons/Replay";
+  import CheckBoxOutlineBlankIcon from '@material-ui/icons/CheckBoxOutlineBlank';
+  import CheckBoxIcon from '@material-ui/icons/CheckBox';
   
   import io from "socket.io-client";
     
@@ -34,15 +28,15 @@ import React, {
   const Questions = ({
     questions,
     chatUserId,
-    isModerator,
     deleteMessage,
     restoreMessage,
   }) => (
     <ScrollToBottom className="messages">
-      {messages.map((message, i) => (
+      {/*
+      {questions.map((question, i) => (
         <div key={i}>
           <Message
-            message={message}
+            message={question}
             chatUserId={chatUserId}
             isModerator={isModerator}
             deleteMessage={deleteMessage}
@@ -50,219 +44,53 @@ import React, {
           />
         </div>
       ))}
+      */}
+          <Question
+            question={"test question", "test user", 23, 453}
+            chatUserId={chatUserId}
+            checked={true}
+            deleteMessage={deleteMessage}
+            restoreMessage={restoreMessage}
+          />
     </ScrollToBottom>
   );
   
-  const Message = ({
-    message: { text, user, userId, id, deleted, isNotification },
+  const Question = ({
+    question: { text, user, userId, id },
     chatUserId,
-    isModerator,
+    checked, 
     deleteMessage,
     restoreMessage,
   }) => {
-    let isSentByCurrentUser = false;
+
   
-    if (userId === chatUserId) {
-      isSentByCurrentUser = true;
-    }
-  
-    if (deleted && !isModerator) {
-      // if the message is deleted and it is not the moderator, don't show the message
-      return null;
-    }
-  
-    if (isNotification) {
-      return <p className="sentText justifyCenter ">{text}</p>;
-    }
-  
-    const deletedClassName = isModerator && deleted ? "deleted-message" : null;
-  
-    return isSentByCurrentUser ? (
-      <div className={"messageContainer justifyEnd " + deletedClassName}>
-        <p className="sentText pr-10">{user}</p>
-        <div className="messageBox backgroundBlue">
-          <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
-        </div>
-  
-        {/* Moderator Controls */}
-        {isModerator &&
-          (deleted ? (
-            <Tooltip title="Restore chat message" className="delete-chat-message">
-              <ReplayIcon onClick={() => restoreMessage(id)} />
-            </Tooltip>
-          ) : (
-            <Tooltip title="Delete chat message" className="delete-chat-message">
-              <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-            </Tooltip>
-          ))}
-      </div>
-    ) : (
-      <div className={"messageContainer justifyStart " + deletedClassName}>
-        {/* Moderator Controls */}
-        {isModerator &&
-          (deleted ? (
-            <Tooltip title="Restore chat message" className="delete-chat-message">
-              <ReplayIcon onClick={() => restoreMessage(id)} />
-            </Tooltip>
-          ) : (
-            <Tooltip title="Delete chat message" className="delete-chat-message">
-              <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-            </Tooltip>
-          ))}
-  
-        <div className="messageBox backgroundLight">
-          <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-        </div>
-        <p className="sentText pl-10 ">{user}</p>
-      </div>
-    );
-  };
-  
-  /* for tabs */
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      flexGrow: 1,
-    },
-  }));
-  
-  function TabPanel(props) {
-    const { children, value, index, ...other } = props;
   
     return (
-      <div
-        role="tabpanel"
-        hidden={value !== index}
-        id={`simple-tabpanel-${index}`}
-        aria-labelledby={`simple-tab-${index}`}
-        {...other}
-        style={{ flexGrow: "1", height: "calc(100% - 60px)" }}
-      >
-        {value === index && (
-          <span style={{ maxHeight: "100%", overflow: "none", flexGrow: "1"}} className="chatContainer">
-            {children}
-          </span>
-        )}
+      <div className={"messageContainer justifyEnd "}>
+        <p className="sentText pr-10">{user}</p>
+        <div className="messageBox backgroundBlue">
+          <p className="messageText colorWhite">{text}</p>
+        </div>
+  
+        {(checked ? (
+            <Tooltip title="Restore chat message" className="delete-chat-message">
+              <ReplayIcon onClick={() => restoreMessage(id)} />
+            </Tooltip>
+          ) : (
+            <Tooltip title="Delete chat message" className="delete-chat-message">
+              <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
+            </Tooltip>
+          ))}
       </div>
     );
-  }
-  
-  TabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.any.isRequired,
-    value: PropTypes.any.isRequired,
   };
   
-  function a11yProps(index) {
-    return {
-      id: `simple-tab-${index}`,
-      'aria-controls': `simple-tabpanel-${index}`,
-    };
-  }
-  
-  const StyledTabs = withStyles({
-    indicator: {
-      display: 'flex',
-      justifyContent: 'center',
-      '& > span': {
-        width: '100%',
-        backgroundColor: 'white',
-      },
-    },
-  })((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
-  
-  const StyledTab = withStyles((theme) => ({
-    root: {
-      textTransform: 'none',
-      height: '60px',
-      color: 'rgba(255, 255, 255, 0.9)',
-      fontSize: '18px',
-      fontWeight: '300',
-      fontFamily: [
-        'Roboto',
-        '"Helvetica Neue"',
-        'Arial',
-        'sans-serif',
-      ].join(','),
-      '&:hover': {
-        color: '#fff',
-        opacity: 1,
-      },
-      '&$selected': {
-        color: '#fff',
-        fontWeight: '400',
-      },
-      '&:focus': {
-        color: '#fff',
-      },
-    },
-    selected: {},
-  }))((props) => <Tab disableRipple {...props} />);
-  
-  const Input = ({ setMessage, sendMessage, message, theme }) => (
-    <form className="form">
-      <input
-        className="input width-80"
-        type="text"
-        placeholder="Type a message..."
-        value={message}
-        onChange={({ target: { value } }) => setMessage(value)}
-        onKeyPress={(event) =>
-          event.key === "Enter" ? sendMessage(event) : null
-        }
-      />
-      <button
-        className="theme-button send-button width-20"
-        style={theme}
-        onClick={(e) => sendMessage(e)}
-      >
-        <TelegramIcon />
-      </button>
-    </form>
-  );
-  
-  const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
-    <div style={{ marginTop: "auto"}}>
-      <form className="form-question">
-        <textarea
-          className="input-question"
-          placeholder="Type a question..."
-          value={question}
-          onChange={({ target: { value } }) => setQuestion(value)}
-        />
-        <button
-          className="theme-button send-button max-height-60"
-          style={theme}
-          onClick={(e) => sendQuestion(e)}
-        >
-          <div className="send-question-text">Send Question</div>
-          <TelegramIcon />
-        </button>
-      </form>
-    </div>
-  );
   
   const ModeratorQuestions = forwardRef(({ name, room, userId, isModerator, chatTabEnabled, questionTabEnabled }, ref) => {
-    const classes = useStyles();
     const [chatUserId, setChatUserId] = useState("");
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [question, setQuestion] = useState("");
-    const [chatHidden, setChatHidden] = useState(false);
-    const [tabValue, setTabValue] = React.useState(0);
+    const [questions, setQuestions] = useState("");
   
-    //temporary, will become props:
-    /*const chatTabEnabled = true;
-    const questionTabEnabled = true;*/
-  
-    // Index numbers for tabs:
-    const chatIndex = 0;
-    const questionIndex = (chatTabEnabled === true && questionTabEnabled === true) ? 1 : 0;
-  
-    const handleChangeTab = (event, newValue) => {
-      setTabValue(newValue);
-    };
-  
-    useEffect(() => {
+    {/*useEffect(() => {
       socket = io(ENDPOINT, {
         path: "/api/socket/chat",
         transports: ["websocket"],
@@ -325,17 +153,7 @@ import React, {
         );
       });
   
-      socket.on("chatHidden", (isHidden) => {
-        setChatHidden(isHidden);
-      });
-  
-      socket.on("deleteAll", () => {
-        setMessages((messages) =>
-          messages.map((msg) => {
-            return { ...msg, deleted: true };
-          })
-        );
-      });
+
   
       socket.on("refresh", () => {
         console.log("chat refreshed");
@@ -360,88 +178,99 @@ import React, {
         socket.emit("refreshChat", { room });
       },
     }));
+  */}
+
   
-    const sendMessage = (event) => {
-      event.preventDefault();
-  
-      if (message) {
-        socket.emit("sendMessage", { userId: chatUserId, room, message }, () => {
-          setMessage("");
-        });
-      }
-    };
-  
-    const sendQuestion = (event) => {
+    {/*const sendQuestion = (event) => {
       // David to connect
   
       event.preventDefault();
   
-      if (question) {
+      if (questions) {
         socket.emit("sendQuestion", { userId: chatUserId, room, question }, () => {
           setQuestion("");
         });
       }
-    };
-  
-    const deleteMessage = (id) => {
-      socket.emit("deleteMessage", { id, room });
-    };
-  
-    const restoreMessage = (id) => {
-      socket.emit("restoreMessage", { id, room });
-    };
+    };*/}
   
     return (
-      <div
-        className={clsx({
-          chatOuterContainer: true,
-          "display-none": !isModerator && chatHidden,
-        })}
-      >
+      <div className="chatOuterContainer">
         <div className="chatContainer">
-          <div className="infoBar">
-            <StyledTabs 
-              value={tabValue} 
-              onChange={handleChangeTab} 
-              aria-label="simple tabs example"
-              indicatorColor="secondary"
-              variant="fullWidth"
-            >
-              {chatTabEnabled === true && (
-                <StyledTab label="Chat" {...a11yProps(chatIndex)} />
-              )}
-              {questionTabEnabled === true && (
-                <StyledTab label="Ask a Question" {...a11yProps(questionIndex)} />
-              )}
-            </StyledTabs>
+          <div className="infoBar moderator-questions-header">
+            Questions
           </div>
-          {chatTabEnabled === true && (
-            <TabPanel value={tabValue} index={chatIndex} classes={{ root: classes.tab }}>
-              <>
-              <Messages
-                messages={messages}
-                chatUserId={chatUserId}
-                isModerator={isModerator}
-                deleteMessage={deleteMessage}
-                restoreMessage={restoreMessage}
-              />
-              <Input
-                message={message}
-                setMessage={setMessage}
-                sendMessage={sendMessage}
-              />
-              </>
-            </TabPanel>
-          )}
-          {questionTabEnabled === true && (
-            <TabPanel value={tabValue} index={questionIndex} classes={{ root: classes.tab }}>
-                <InputAskQuestion
-                    question={question}
-                    setQuestion={setQuestion}
-                    sendQuestion={sendQuestion}
-                  />
-            </TabPanel>
-          )}
+          {/*<Questions
+            questions={questions}
+            chatUserId={chatUserId}
+          />*/}
+          <ScrollToBottom className="messages">
+
+            <div className={"questionContainer justifyEnd"}>
+              <p className="questionSendTime">
+                1:26pm
+              </p>
+              <div className="questionMiddleContainer">
+                <div className="questionNameTextContainer">
+                  <span className="questionText"><span className="questionUsername">Kevin Richardson    </span>question Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</span>
+                </div>
+                <div className="questionUsernameEmail">kevin.richardson101@gmail.com</div>
+
+              </div>
+              {(false ? (
+                  <Tooltip title="Uncheck" className="check-question">
+                    <CheckBoxIcon />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Check" className="check-question">
+                    <CheckBoxOutlineBlankIcon />
+                  </Tooltip>
+                ))}
+            </div>
+
+            <div className={"questionContainer justifyEnd  questionChecked"}>
+              <p className="questionSendTime">
+                1:26pm
+              </p>
+              <div className="questionMiddleContainer">
+                <div className="questionNameTextContainer">
+                  <span className="questionText"><span className="questionUsername">Kevin Richardson    </span>question Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur</span>
+                </div>
+                <div className="questionUsernameEmail">kevin.richardson101@gmail.com</div>
+
+              </div>
+              {(true ? (
+                  <Tooltip title="Uncheck" className="check-question">
+                    <CheckBoxIcon />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Check" className="check-question">
+                    <CheckBoxOutlineBlankIcon />
+                  </Tooltip>
+                ))}
+            </div>
+
+            <div className={"questionContainer justifyEnd"}>
+              <p className="questionSendTime">
+                1:26pm
+              </p>
+              <div className="questionMiddleContainer">
+                <div className="questionNameTextContainer">
+                  <span className="questionText"><span className="questionUsername">Kevin Richardson</span>question Lorem ipsum dolor sit amet</span>
+                </div>
+                <div className="questionUsernameEmail">kevin.richardson101@gmail.com</div>
+
+              </div>
+              {(false ? (
+                  <Tooltip title="Uncheck" className="check-question">
+                    <CheckBoxIcon />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Check" className="check-question">
+                    <CheckBoxOutlineBlankIcon />
+                  </Tooltip>
+                ))}
+            </div>
+          </ScrollToBottom>
         </div>
       </div>
     );
