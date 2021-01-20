@@ -7,17 +7,17 @@ const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 const { Communication, EmailListRecipient, Event } = require("../db").models;
 
-router.get("/api/communication/all", async (req, res) => {
+router.get("/api/communication/all", async (req, res, next) => {
   const { EventId } = req.query;
 
   const communications = await Communication.findAll({
     where: { EventId },
-  });
+  }).catch(next);
 
   res.send(communications);
 });
 
-router.post("/api/communication", async (req, res) => {
+router.post("/api/communication", async (req, res, next) => {
   const { event, email } = req.body;
   const {
     recipients,
@@ -35,7 +35,7 @@ router.post("/api/communication", async (req, res) => {
     subject,
     minutesFromEvent,
     html,
-  });
+  }).catch(next);
 
   if (
     status === statusOptions.ACTIVE &&
@@ -54,18 +54,18 @@ router.post("/api/communication", async (req, res) => {
   res.send(communication);
 });
 
-router.delete("/api/communication", async (req, res) => {
+router.delete("/api/communication", async (req, res, next) => {
   const { id } = req.query;
-  const response = await Communication.destroy({ where: { id } });
+  const response = await Communication.destroy({ where: { id } }).catch(next);
 
   res.status(200).send({ response });
 });
 
-router.put("/api/communication", async (req, res) => {
+router.put("/api/communication", async (req, res, next) => {
   const { id, email } = req.body;
   const { recipients, status, subject, minutesFromEvent, html } = email;
 
-  const communication = await Communication.findByPk(id);
+  const communication = await Communication.findByPk(id).catch(next);
 
   if (status === "Active" && recipients != "New Registrants") {
     // delete the old job because it could have stale data
@@ -107,17 +107,17 @@ router.post("/api/communication/jobs/cancel", async (req, res) => {
   Scheduler.cancelSend(id);
 });
 
-router.get("/api/communication-list", async (req, res) => {
+router.get("/api/communication-list", async (req, res, next) => {
   const { emailId } = req.query;
 
   const emailListRecipients = await EmailListRecipient.findAll({
     where: { CommunicationId: emailId },
-  });
+  }).catch(next);
 
   res.status(200).send(emailListRecipients);
 });
 
-router.post("/api/communication-list", async (req, res) => {
+router.post("/api/communication-list", async (req, res, next) => {
   const { data, emailId } = req.body;
 
   const { firstName, lastName, email } = data;
@@ -127,40 +127,40 @@ router.post("/api/communication-list", async (req, res) => {
     lastName,
     email,
     CommunicationId: emailId,
-  });
+  }).catch(next);
 
   emailListRecipient.hash = md5(emailListRecipient.id);
 
-  await emailListRecipient.save();
+  await emailListRecipient.save().catch(next);
 
   res.status(200).send(emailListRecipient);
 });
 
-router.put("/api/communication-list", async (req, res) => {
+router.put("/api/communication-list", async (req, res, next) => {
   const { data, id } = req.body;
 
   const { firstName, lastName, email } = data;
 
-  const emailListRecipient = EmailListRecipient.findByPk(id);
+  const emailListRecipient = await EmailListRecipient.findByPk(id).catch(next);
 
   emailListRecipient.firstName = firstName;
   emailListRecipient.lastName = lastName;
   emailListRecipient.email = email;
-  await emailListRecipient.save();
+  await emailListRecipient.save().catch(next);
 
   res.status(200).send(emailListRecipient);
 });
 
-router.delete("/api/communication-list", async (req, res) => {
+router.delete("/api/communication-list", async (req, res, next) => {
   const { id } = req.query;
 
-  const emailListRecipient = EmailListRecipient.findByPk(id);
-  const response = await emailListRecipient.destroy();
+  const emailListRecipient = await EmailListRecipient.findByPk(id).catch(next);
+  const response = await emailListRecipient.destroy().catch(next);
 
   res.status(200).send({ response });
 });
 
-router.post("/api/communication/test", async (req, res) => {
+router.post("/api/communication/test", async (req, res, next) => {
   const {
     EventId,
     email: { emailAddress, firstName, lastName, subject, html },
@@ -174,7 +174,7 @@ router.post("/api/communication/test", async (req, res) => {
   };
 
   // pull all relevant data to map to variables and put them into a list
-  const event = await Event.findByPk(EventId, { raw: true });
+  const event = await Event.findByPk(EventId, { raw: true }).catch(next);
 
   const recipientData = { ...event, ...testRecipient };
 
@@ -182,7 +182,7 @@ router.post("/api/communication/test", async (req, res) => {
     [recipientData],
     subject,
     html
-  );
+  ).catch(next);
   if (success) {
     res.status(200).send();
   } else {

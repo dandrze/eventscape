@@ -11,7 +11,7 @@ const {
   models: { Registration, Communication, Event, RegistrationForm },
 } = require("../db");
 
-router.post("/api/registration", async (req, res) => {
+router.post("/api/registration", async (req, res, next) => {
   const { EventId, values, emailAddress, firstName, lastName } = req.body;
 
   // Add the registered user
@@ -22,7 +22,7 @@ router.post("/api/registration", async (req, res) => {
     values,
     emailAddress,
     EventId: EventId,
-  });
+  }).catch(next);
 
   registration.hash = md5(registration.id);
   registration.save();
@@ -34,24 +34,22 @@ router.post("/api/registration", async (req, res) => {
       recipients: recipientsOptions.NEW_REGISTRANTS,
       status: statusOptions.ACTIVE,
     },
-  });
+  }).catch(next);
 
   // pull all relevant data to map to variables and put them into a list
   const registrationData = await Registration.findByPk(registration.id, {
     include: Event,
-  });
+  }).catch(next);
 
   for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
       [registrationData],
       communication.subject,
       communication.html
-    );
+    ).catch(next);
 
     if (failed > 0) {
-      res
-        .status(500)
-        .json({ message: "Error when sending confirmation email" });
+      res.status(500).json({ error: "Error when sending confirmation email" });
       return;
     }
   }
@@ -60,10 +58,10 @@ router.post("/api/registration", async (req, res) => {
   res.status(200).send(registration);
 });
 
-router.put("/api/registration", async (req, res) => {
+router.put("/api/registration", async (req, res, next) => {
   const { id, values, emailAddress, firstName, lastName } = req.body;
 
-  const registration = await Registration.findByPk(id);
+  const registration = await Registration.findByPk(id).catch(next);
   registration.values = values;
   registration.emailAddress = emailAddress;
   registration.firstName = firstName;
@@ -81,12 +79,12 @@ router.get("/api/registration/event", async (req, res) => {
     where: {
       EventId: event,
     },
-  });
+  }).catch(next);
 
   res.status(200).send(registrations);
 });
 
-router.get("/api/registration/email", async (req, res) => {
+router.get("/api/registration/email", async (req, res, next) => {
   const { emailAddress, EventId } = req.query;
 
   // Get the registration associated with an email
@@ -95,26 +93,23 @@ router.get("/api/registration/email", async (req, res) => {
       emailAddress,
       EventId,
     },
-  });
-
-  console.log(registration, emailAddress, EventId);
+  }).catch(next);
 
   res.status(200).send(registration);
 });
 
-router.get("/test", async (req, res) => {
+router.get("/test", async (req, res, next) => {
   const registration = await Registration.create({
     firstName: "fdasfa",
     EventId: 5,
-  });
+  }).catch(next);
 
-  const updatedRegistration = await registration.save();
-  console.log(updatedRegistration);
+  const updatedRegistration = await registration.save().catch(next);
 
   res.send(updatedRegistration);
 });
 
-router.post("/api/registration/email/resend", async (req, res) => {
+router.post("/api/registration/email/resend", async (req, res, next) => {
   const { emailAddress, EventId } = req.body;
 
   // pull all relevant data to map to variables and put them into a list
@@ -124,7 +119,7 @@ router.post("/api/registration/email/resend", async (req, res) => {
       EventId,
     },
     include: Event,
-  });
+  }).catch(next);
 
   // check to see if any emails need to be fired off
   const communications = await Communication.findAll({
@@ -133,14 +128,14 @@ router.post("/api/registration/email/resend", async (req, res) => {
       recipients: recipientsOptions.NEW_REGISTRANTS,
       status: statusOptions.ACTIVE,
     },
-  });
+  }).catch(next);
 
   for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
       [registrationData],
       communication.subject,
       communication.html
-    );
+    ).catch(next);
 
     if (failed > 0) {
       return res
@@ -152,33 +147,33 @@ router.post("/api/registration/email/resend", async (req, res) => {
   res.status(200).send();
 });
 
-router.delete("/api/registration/id", async (req, res) => {
+router.delete("/api/registration/id", async (req, res, next) => {
   const { id } = req.query;
-  const registration = await Registration.findByPk(id);
-  await registration.destroy();
+  const registration = await Registration.findByPk(id).catch(next);
+  await registration.destroy().catch(next);
 
   res.status(200).send();
 });
 
-router.post("/api/form", async (req, res) => {
+router.post("/api/form", async (req, res, next) => {
   const { event, data } = req.body;
 
   const [registrationForm] = await RegistrationForm.findOrCreate({
     where: { EventId: event },
-  });
+  }).catch(next);
 
   registrationForm.data = data;
-  await registrationForm.save();
+  await registrationForm.save().catch(next);
 
   res.status(200).send();
 });
 
-router.get("/api/form", async (req, res) => {
+router.get("/api/form", async (req, res, next) => {
   const { event } = req.query;
 
   const registrationForm = await RegistrationForm.findOne({
     where: { EventId: event },
-  });
+  }).catch(next);
 
   res.status(200).send((registrationForm && registrationForm.data) || []);
 });

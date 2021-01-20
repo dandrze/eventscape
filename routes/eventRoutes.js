@@ -13,7 +13,7 @@ const {
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 
-router.post("/api/event", async (req, res) => {
+router.post("/api/event", async (req, res, next) => {
   const {
     event: {
       title,
@@ -32,13 +32,15 @@ router.post("/api/event", async (req, res) => {
   const AccountId = req.user.id;
 
   // set all other events isCurrent to false so we can make our new event current
-  await Event.update({ isCurrent: false }, { where: { AccountId } });
+  await Event.update({ isCurrent: false }, { where: { AccountId } }).catch(
+    next
+  );
 
   // Store a new model in the model table for the registration page
-  const dbRegModel = await PageModel.create();
+  const dbRegModel = await PageModel.create().catch(next);
 
   // Store a new model in the model table for the event page
-  const dbEventModel = await PageModel.create();
+  const dbEventModel = await PageModel.create().catch(next);
 
   // add the event to the event table. Make it the current event
   const event = await Event.create({
@@ -53,14 +55,15 @@ router.post("/api/event", async (req, res) => {
     AccountId,
     RegPageModelId: dbRegModel.id,
     EventPageModelId: dbEventModel.id,
-  });
+    status: statusOptions.ACTIVE,
+  }).catch(next);
 
   // create a default chatroom
   const chatRoom = await ChatRoom.create({
     event: event.id,
     isDefault: true,
-    name: "Main Chat (Default)",
-  });
+    name: "Main (Default)",
+  }).catch(next);
 
   // Store the section HTML for the reg page model
   for (i = 0; i < regPageModel.length; i++) {
@@ -113,19 +116,19 @@ router.post("/api/event", async (req, res) => {
   res.status(200).send(event);
 });
 
-router.post("/api/event/duplicate", async (req, res) => {
+router.post("/api/event/duplicate", async (req, res, next) => {
   const { EventId, link } = req.body;
 
   const AccountId = req.user.id;
 
   // Store a new model in the model table for the registration page
-  const dbRegModel = await PageModel.create();
+  const dbRegModel = await PageModel.create().catch(next);
 
   // Store a new model in the model table for the event page
-  const dbEventModel = await PageModel.create();
+  const dbEventModel = await PageModel.create().catch(next);
 
   // fetch data from the original event
-  const originalEvent = await Event.findByPk(EventId);
+  const originalEvent = await Event.findByPk(EventId).catch(next);
 
   // add the event to the event table. Make it the current event
   const event = await Event.create({
@@ -140,21 +143,20 @@ router.post("/api/event/duplicate", async (req, res) => {
     AccountId: originalEvent.AccountId,
     RegPageModelId: dbRegModel.id,
     EventPageModelId: dbEventModel.id,
-  });
+  }).catch(next);
 
   // create a default chatroom
   const chatRoom = await ChatRoom.create({
     event: event.id,
     isDefault: true,
-    name: "Main Chat (Default)",
-  });
+    name: "Main (Default)",
+  }).catch(next);
 
   // Store the section HTML for the reg page model
   const originalRegPageModel = await PageSection.findAll({
     where: { PageModelId: originalEvent.RegPageModelId },
-  });
-  console.log(event.RegPageModelId);
-  console.log(originalRegPageModel);
+  }).catch(next);
+
   for (let section of originalRegPageModel) {
     await PageSection.create({
       PageModelId: dbRegModel.id,
@@ -162,13 +164,14 @@ router.post("/api/event/duplicate", async (req, res) => {
       html: section.html,
       isReact: section.isReact,
       reactComponent: section.reactComponent,
-    });
+    }).catch(next);
   }
 
   // Store the section HTML for the event page model
   const originalEventPageModel = await PageSection.findAll({
     where: { PageModelId: originalEvent.EventPageModelId },
-  });
+  }).catch(next);
+
   for (let section of originalEventPageModel) {
     await PageSection.create({
       PageModelId: dbEventModel.id,
@@ -181,7 +184,8 @@ router.post("/api/event/duplicate", async (req, res) => {
 
   const originalCommunications = await Communication.findAll({
     where: { EventId },
-  });
+  }).catch(next);
+
   // add the emails for this event
   for (var communication of originalCommunications) {
     await Communication.create({
@@ -191,68 +195,72 @@ router.post("/api/event/duplicate", async (req, res) => {
       html: communication.html,
       EventId: event.id,
       status: communication.status,
-    });
+    }).catch(next);
   }
 
   res.status(200).send(event);
 });
 
-router.get("/api/event/current", requireAuth, async (req, res) => {
+router.get("/api/event/current", requireAuth, async (req, res, next) => {
   const AccountId = req.user.id;
-  const event = await Event.findOne({ where: { AccountId, isCurrent: true } });
+  const event = await Event.findOne({
+    where: { AccountId, isCurrent: true },
+  }).catch(next);
 
   res.status(200).send(event);
 });
 
-router.put("/api/event/id/make-current", async (req, res) => {
+router.put("/api/event/id/make-current", async (req, res, next) => {
   const AccountId = req.user.id;
   const { id } = req.body;
 
-  await Event.update({ isCurrent: false }, { where: { AccountId } });
+  await Event.update({ isCurrent: false }, { where: { AccountId } }).catch(
+    next
+  );
 
-  const event = await Event.findByPk(id);
+  const event = await Event.findByPk(id).catch(next);
   event.isCurrent = true;
   event.save();
 
   res.status(200).send();
 });
 
-router.get("/api/event/all", async (req, res) => {
+router.get("/api/event/all", async (req, res, next) => {
   const AccountId = req.user.id;
 
-  const events = await Event.findAll({ where: { AccountId } });
+  const events = await Event.findAll({ where: { AccountId } }).catch(next);
 
   res.status(200).send(events);
 });
 
-router.get("/api/event/id", async (req, res) => {
+router.get("/api/event/id", async (req, res, next) => {
   const { id } = req.query;
 
-  const event = await Event.findByPk(id);
+  const event = await Event.findByPk(id).catch(next);
 
   res.send(event);
 });
 
-router.get("/api/event/link", async (req, res) => {
+router.get("/api/event/link", async (req, res, next) => {
   const { link } = req.query;
   const event = await Event.findOne({
     where: { link, status: statusOptions.ACTIVE },
-  });
+  }).catch(next);
 
   res.status(200).send(event);
 });
 
-router.put("/api/event/id/status", async (req, res) => {
+router.put("/api/event/id/status", async (req, res, next) => {
   const { id, status } = req.body;
 
-  const event = await Event.findByPk(id);
+  const event = await Event.findByPk(id).catch(next);
   event.status = status;
-  await event.save();
+  await event.save().catch(next);
 
   res.send(event);
 });
 
-router.put("/api/event", async (req, res) => {
+router.put("/api/event", async (req, res, next) => {
   const userId = req.user.id;
 
   const {
@@ -268,7 +276,7 @@ router.put("/api/event", async (req, res) => {
 
   const event = await Event.findOne({
     where: { AccountId: userId, isCurrent: true },
-  });
+  }).catch(next);
 
   event.title = title;
   event.link = link;
@@ -280,27 +288,27 @@ router.put("/api/event", async (req, res) => {
   event.status = status;
 
   console.log(status);
-  await event.save();
+  await event.save().catch(next);
 
   res.send(event);
 });
 
-router.put("/api/event/set-registration", async (req, res) => {
+router.put("/api/event/set-registration", async (req, res, next) => {
   const { hasRegistration, EventId } = req.body;
 
-  const event = await Event.findByPk(EventId);
+  const event = await Event.findByPk(EventId).catch(next);
 
   console.log(event);
   console.log(hasRegistration, EventId);
 
   event.hasRegistration = hasRegistration;
 
-  await event.save();
+  await event.save().catch(next);
 
   res.status(200).send(event);
 });
 
-router.get("/api/event/chatroom/default", async (req, res) => {
+router.get("/api/chatroom/default", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { event } = req.query;
 
@@ -309,80 +317,70 @@ router.get("/api/event/chatroom/default", async (req, res) => {
       event,
       isDefault: true,
     },
-  });
+  }).catch(next);
 
   if (created) {
     newRoom.name = "Main Room (Default)";
-    await newRoom.save();
+    await newRoom.save().catch(next);
   }
 
   res.status(200).send({ id: newRoom.id });
 });
 
-router.get("/api/event/chatroom/all", async (req, res) => {
+router.get("/api/chatroom/all", async (req, res, next) => {
   const { event } = req.query;
   const chatRooms = await ChatRoom.findAll({
     where: {
       event,
     },
-  });
+  }).catch(next);
 
   res.status(200).send(chatRooms);
 });
 
-router.put("/api/event/chatroom", async (req, res) => {
+router.put("/api/chatroom", async (req, res, next) => {
   const {
     room: { id, name },
   } = req.body;
-  try {
-    const dbRoom = await ChatRoom.findOne({
-      where: {
-        id,
-      },
-    });
+  const dbRoom = await ChatRoom.findOne({
+    where: {
+      id,
+    },
+  }).catch(next);
 
-    dbRoom.name = name;
-    dbRoom.save();
+  dbRoom.name = name;
+  dbRoom.save();
 
-    res.status(200).send();
-  } catch (err) {
-    res.status(400).send({ message: "Error while updating chatroom" });
-  }
+  res.status(200).send();
 });
 
-router.delete("/api/event/chatroom", async (req, res) => {
+router.delete("/api/chatroom", async (req, res, next) => {
   const { id } = req.query;
 
-  try {
-    const chatRoom = await ChatRoom.findOne({
-      where: {
-        id,
-      },
-    });
-    if (chatRoom.isDefault)
-      return res
-        .status(400)
-        .send({ message: "You cannot delete the primary chat room." });
-    if (chatRoom) await chatRoom.destroy();
+  const chatRoom = await ChatRoom.findOne({
+    where: {
+      id,
+    },
+  }).catch(next);
+  if (chatRoom.isDefault)
+    return res
+      .status(400)
+      .send({ error: "You cannot delete the primary chat room." });
+  if (chatRoom) await chatRoom.destroy().catch(next);
 
-    res.status(200).send();
-  } catch (err) {
-    res.status(400).send({ message: "Error while deleting chat room" });
-  }
+  res.status(200).send();
 });
 
-router.post("/api/event/chatroom", async (req, res) => {
+router.post("/api/chatroom", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { room, event } = req.body;
 
-  console.log(room, event);
-
-  const newRoom = await ChatRoom.create({ name: room.name, event });
+  const newRoom = await ChatRoom.create({ name: room.name, event }).catch(next);
 
   res.status(200).send(newRoom);
 });
 
-router.get("/api/event/chat-moderator", async (req, res) => {
+router.get("/api/event/chat-moderator", async (req, res, next) => {
   const { EventscapeId, ChatRoomId } = req.query;
 
   const [chatUser, created] = await ChatUser.findOrCreate({
@@ -390,19 +388,15 @@ router.get("/api/event/chat-moderator", async (req, res) => {
       EventscapeId,
       ChatRoomId,
     },
-  });
-
-  console.log(chatUser);
-  console.log(created);
+  }).catch(next);
 
   if (created) chatUser.name = "Moderator";
   chatUser.save();
-  console.log(chatUser);
 
   res.status(200).send(chatUser);
 });
 
-router.put("/api/event/chat-moderator", async (req, res) => {
+router.put("/api/event/chat-moderator", async (req, res, next) => {
   const {
     user: { EventscapeId, name, ChatRoomId },
   } = req.body;
@@ -412,10 +406,10 @@ router.put("/api/event/chat-moderator", async (req, res) => {
       EventscapeId,
       ChatRoomId,
     },
-  });
+  }).catch(next);
 
   chatUser.name = name;
-  chatUser.save();
+  chatUser.save().catch(next);
 
   res.status(200).send(chatUser);
 });
