@@ -200,238 +200,222 @@ const EmailEditor = (props) => {
   };
 
   return (
-    <div style={{ overflowY: "scroll", maxHeight: "95vh" }}>
-      <div className="cancel-bar">
-        <Tooltip title="Close Email Editor">
-          <img
-            src={Cancel}
-            className="cancel-bar-icon"
-            onClick={props.handleClose}
-          ></img>
-        </Tooltip>
+    <div>
+      <div className="top-button-bar">
+        <div className="button-bar-left">
+          <SendTestEmail
+            subject={subject}
+            html={html}
+            eventId={props.event.id}
+            recipient={{
+              firstName: props.user.firstName,
+              lastName: props.user.lastName,
+              emailAddress: props.user.emailAddress,
+            }}
+          />
+        </div>
+        <div className="button-bar-right">
+          {props.data.recipients != recipientsOptions.NEW_REGISTRANTS ? (
+            <FormControl className={classes.margin}>
+              <InputLabel id="demo-customized-select-label">Status</InputLabel>
+              <Select
+                labelId="demo-customized-select-label"
+                id="demo-customized-select"
+                value={status}
+                onChange={handleChangeStatus}
+                input={<BootstrapInput />}
+                disabled={status === statusOptions.COMPLETE ? true : false}
+              >
+                <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
+                <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
+                {status === statusOptions.COMPLETE ? (
+                  <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
+                ) : null}
+              </Select>
+            </FormControl>
+          ) : null}
+        </div>
+        <button className="Button1 button-bar-right" onClick={handleSave}>
+          Save
+        </button>
       </div>
-      <div className="email-editor-container">
-        <div className="top-button-bar">
-          <div className="button-bar-left">
-            <SendTestEmail
-              subject={subject}
-              html={html}
-              EventId={props.event.id}
-              recipient={{
-                firstName: props.user.firstName,
-                lastName: props.user.lastName,
-                emailAddress: props.user.emailAddress,
-              }}
-            />
-          </div>
-          <div className="button-bar-right">
-            {props.data.recipients != recipientsOptions.NEW_REGISTRANTS ? (
+
+      <div style={{ overflow: "hidden" }}>
+        <div id="emailInputs">
+          <div className="inputDiv">
+            <label htmlFor="toSelect" className="emailLabel">
+              To:{" "}
+            </label>
+            <div id="toSelect">
+              <div className="disabled-text">{props.data.recipients}</div>
+              {/*
               <FormControl className={classes.margin}>
-                <InputLabel id="demo-customized-select-label">
-                  Status
-                </InputLabel>
+                
                 <Select
                   labelId="demo-customized-select-label"
                   id="demo-customized-select"
-                  value={status}
-                  onChange={handleChangeStatus}
+                  value={recipients}
+                  onChange={handleChangeRecipients}
                   input={<BootstrapInput />}
-                  disabled={status === statusOptions.COMPLETE ? true : false}
                 >
-                  <MenuItem value={statusOptions.ACTIVE}>Active</MenuItem>
-                  <MenuItem value={statusOptions.DRAFT}>Draft</MenuItem>
-                  {status === statusOptions.COMPLETE ? (
-                    <MenuItem value={statusOptions.COMPLETE}>Complete</MenuItem>
-                  ) : null}
+                  <MenuItem value={recipientsOptions.EMAIL_LIST}>
+                    Email List
+                  </MenuItem>
+                  <MenuItem value={recipientsOptions.NEW_REGISTRANTS}>
+                    New Registrants
+                  </MenuItem>
+                  <MenuItem value={recipientsOptions.ALL_REGISTRANTS}>
+                    All Registrants
+                  </MenuItem>
                 </Select>
               </FormControl>
-            ) : null}
-          </div>
-          <button className="Button1 button-bar-right" onClick={handleSave}>
-            Save
-          </button>
-        </div>
-
-        <div style={{ overflow: "hidden" }}>
-          <div id="emailInputs">
-            <div className="inputDiv">
-              <label htmlFor="toSelect" className="emailLabel">
-                To:{" "}
-              </label>
-              <div id="toSelect">
-                <div className="disabled-text">{props.data.recipients}</div>
-                {/*
-                <FormControl className={classes.margin}>
-                  
-                  <Select
-                    labelId="demo-customized-select-label"
-                    id="demo-customized-select"
-                    value={recipients}
-                    onChange={handleChangeRecipients}
-                    input={<BootstrapInput />}
-                  >
-                    <MenuItem value={recipientsOptions.EMAIL_LIST}>
-                      Email List
-                    </MenuItem>
-                    <MenuItem value={recipientsOptions.NEW_REGISTRANTS}>
-                      New Registrants
-                    </MenuItem>
-                    <MenuItem value={recipientsOptions.ALL_REGISTRANTS}>
-                      All Registrants
-                    </MenuItem>
-                  </Select>
-                </FormControl>
-                */}
-                {/*
-                <div id="editEmailList">
-                  {recipients === recipientsOptions.EMAIL_LIST ? (
-                    <EmailList emailId={props.data.id} />
-                  ) : null}
-                </div>
-                  */}
+              */}
+              {/*
+              <div id="editEmailList">
+                {recipients === recipientsOptions.EMAIL_LIST ? (
+                  <EmailList emailId={props.data.id} />
+                ) : null}
               </div>
+                */}
             </div>
+          </div>
 
-            <div className="inputDiv">
-              <label htmlFor="subject" className="emailLabel">
-                Subject:{" "}
-              </label>
-              <input
-                type="text"
-                className="emailInput"
-                name="subject"
-                placeholder=""
-                value={subject}
-                onChange={handleChangeSubject}
-              ></input>
-            </div>
+          <div className="inputDiv">
+            <label htmlFor="subject" className="emailLabel">
+              Subject:{" "}
+            </label>
+            <input
+              type="text"
+              className="emailInput"
+              name="subject"
+              placeholder=""
+              value={subject}
+              onChange={handleChangeSubject}
+            ></input>
+          </div>
 
-            <div className="inputDiv input-container-flex-wrap">
-              <label
-                htmlFor="sendTime"
-                className="emailLabel"
-                style={{ marginTop: "4px" }}
-              >
-                Scheduled Send Time:{" "}
-              </label>
-              <br></br>
-              {props.data.recipients === recipientsOptions.NEW_REGISTRANTS ? (
-                <div className="disabled-text" style={{ marginTop: "4px" }}>
-                  Upon Registration
+          <div className="inputDiv input-container-flex-wrap">
+            <label
+              htmlFor="sendTime"
+              className="emailLabel"
+              style={{ marginTop: "4px" }}
+            >
+              Scheduled Send Time:{" "}
+            </label>
+            <br></br>
+            {props.data.recipients === recipientsOptions.NEW_REGISTRANTS ? (
+              <div className="disabled-text" style={{ marginTop: "4px" }}>
+                Upon Registration
+              </div>
+            ) : (
+              <>
+                <div className="send-time-input">
+                  <TextField
+                    id="number-days"
+                    type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{ min: 0, max: 180 }}
+                    onChange={handleChangeDays}
+                    value={days}
+                  />
                 </div>
-              ) : (
-                <>
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-days"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeDays}
-                      value={days}
-                    />
-                  </div>
-                  <label className="emailLabel">days </label>
+                <label className="emailLabel">days </label>
 
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-hours"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 23 }}
-                      onChange={handleChangeHours}
-                      value={hours}
-                    />
-                  </div>
-                  <label className="emailLabel">hours </label>
+                <div className="send-time-input">
+                  <TextField
+                    id="number-hours"
+                    type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{ min: 0, max: 23 }}
+                    onChange={handleChangeHours}
+                    value={hours}
+                  />
+                </div>
+                <label className="emailLabel">hours </label>
 
-                  <div className="send-time-input">
-                    <TextField
-                      id="number-mins"
-                      type="number"
-                      InputLabelProps={{
-                        shrink: true,
-                      }}
-                      inputProps={{ min: 0, max: 180 }}
-                      onChange={handleChangeMins}
-                      value={mins}
-                    />
-                  </div>
-                  <label className="emailLabel">minutes </label>
+                <div className="send-time-input">
+                  <TextField
+                    id="number-mins"
+                    type="number"
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
+                    inputProps={{ min: 0, max: 180 }}
+                    onChange={handleChangeMins}
+                    value={mins}
+                  />
+                </div>
+                <label className="emailLabel">minutes </label>
 
-                  <Select
-                    value={preposition}
-                    onChange={handleChangePreposition}
-                  >
-                    <MenuItem value={-1}>Before</MenuItem>
-                    <MenuItem value={1}>After</MenuItem>
-                  </Select>
+                <Select value={preposition} onChange={handleChangePreposition}>
+                  <MenuItem value={-1}>Before</MenuItem>
+                  <MenuItem value={1}>After</MenuItem>
+                </Select>
 
-                  <label className="emailLabel">{" event start time"}</label>
-                </>
-              )}
-              <div className="errorMessage">{timeError}</div>
-            </div>
-            <div className="inputDiv input-container-flex-wrap">
-              <label htmlFor="variables" className="emailLabel">
-                Variables Toolbox:
-              </label>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{event_name}"}
-                />
-              </Tooltip>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{first_name}"}
-                />
-              </Tooltip>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{last_name}"}
-                />
-              </Tooltip>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{start_date}"}
-                />
-              </Tooltip>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{end_date}"}
-                />
-              </Tooltip>
-              <Tooltip title="Click to copy to clipboard">
-                <input
-                  readOnly
-                  className="variable-bubble"
-                  onClick={copyText}
-                  value={"{event_link}"}
-                />
-              </Tooltip>
-            </div>
-            <div style={{ margin: "3% 0" }}>
-              <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
-            </div>
+                <label className="emailLabel">{" event start time"}</label>
+              </>
+            )}
+            <div className="errorMessage">{timeError}</div>
+          </div>
+          <div className="inputDiv input-container-flex-wrap">
+            <label htmlFor="variables" className="emailLabel">
+              Variables Toolbox:
+            </label>
+            <Tooltip title="Click to copy to clipboard">
+              <input
+                readOnly
+                className="variable-bubble"
+                onClick={copyText}
+                value={"{event_name}"}
+              />
+            </Tooltip>
+            <Tooltip title="Click to copy to clipboard">
+              <input
+                readOnly
+                className="variable-bubble"
+                onClick={copyText}
+                value={"{first_name}"}
+              />
+            </Tooltip>
+            <Tooltip title="Click to copy to clipboard">
+              <input
+                readOnly
+                className="variable-bubble"
+                onClick={copyText}
+                value={"{last_name}"}
+              />
+            </Tooltip>
+            <Tooltip title="Click to copy to clipboard">
+              <input
+                readOnly
+                className="variable-bubble"
+                onClick={copyText}
+                value={"{start_date}"}
+              />
+            </Tooltip>
+            <Tooltip title="Click to copy to clipboard">
+              <input
+                readOnly
+                className="variable-bubble"
+                onClick={copyText}
+                value={"{end_date}"}
+              />
+            </Tooltip>
+            <Tooltip title="Click to copy to clipboard">
+              <input
+                readOnly
+                className="variable-bubble"
+                onClick={copyText}
+                value={"{event_link}"}
+              />
+            </Tooltip>
+          </div>
+          <div style={{ margin: "3% 0" }}>
+            <FroalaEmail html={html} handleHtmlChange={handleHtmlChange} />
           </div>
         </div>
       </div>

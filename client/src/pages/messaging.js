@@ -47,10 +47,6 @@ const Messaging = (props) => {
                 <CircularProgress />
               </div>
             )}
-
-            <div className="form-box shadow-border">
-              <h3>Q&A</h3>
-            </div>
           </div>
         }
       />

@@ -453,9 +453,9 @@ select {
 
 .cancel-bar {
   display: flex;
-  margin-top: 1.5%;
-  margin-right: 1.5%;
-  margin-left: calc(98.5% - 24px);
+  margin-top: 18px;
+  margin-right: 18px;
+  margin-left: calc(100% - 42px); /* 24px icon plus 18px margin */
   justify-content: left;
 }
 

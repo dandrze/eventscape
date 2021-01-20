@@ -32,6 +32,8 @@ function SendTestEmail({ subject, html, EventId, sendTestEmail, recipient }) {
   const [firstName, setFirstName] = React.useState(recipient.firstName);
   const [lastName, setLastName] = React.useState(recipient.lastName);
 
+  console.log(recipient);
+
   const handleOpen = () => {
     setOpen(true);
   };

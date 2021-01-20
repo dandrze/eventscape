@@ -60,6 +60,6 @@ PlaceHolder.propTypes = {
   show: _propTypes["default"].bool
 };
 PlaceHolder.defaultProps = {
-  text: 'Drop a item here....',
+  text: 'Drop an item here....',
   show: false
 };

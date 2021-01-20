@@ -10,32 +10,12 @@ import api from "../../api/server";
 import * as actions from "../../actions";
 import Froala from "../froala";
 
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
 import { makeStyles } from "@material-ui/core/styles";
-import Tooltip from "@material-ui/core/Tooltip";
-import Fade from "@material-ui/core/Fade";
-import Cancel from "./cancel.svg";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
+import Modal1 from "../Modal1";
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    flexGrow: 1,
-    width: "600px",
-  },
-  modal: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    outline: "none",
-  },
-  paper: {
-    backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
-    boxShadow: theme.shadows[5],
-    padding: "30px",
-  },
   formControl: {
     margin: "20px 0px",
     minWidth: "100%",
@@ -306,84 +286,63 @@ function RegistrationForm(props) {
         )}
       </div>
       {/* Re-send event link modal */}
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
+      <Modal1
         open={openReSendLink}
         onClose={closeReSendLinkModal}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        disableAutoFocus={true}
-        className={classes.modal}
-      >
-        <Fade in={openReSendLink}>
-          <div className={classes.paper}>
-            <div className="cancel-bar">
-              <Tooltip title="Close">
-                <img
-                  src={Cancel}
-                  className="cancel-bar-icon"
-                  onClick={closeReSendLinkModal}
-                ></img>
-              </Tooltip>
+        content={
+          <div style={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
+            <p>Please enter the email address you registered with.</p>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="email"
+                id="email"
+                label="Email"
+                variant="outlined"
+                value={emailAddressReSend}
+                onChange={handleEmailReSendChange}
+                placeholder="email@email.com"
+                helperText={emailErrorText}
+              />
+            </FormControl>
+            <div className="btn-toolbar">
+              <button
+                className="btn btn-school btn-big theme-button"
+                onClick={handleResendEmailClick}
+              >
+                Re-Send My Event Link
+              </button>
             </div>
-            <div style={{ padding: "5px 30px 30px 30px", maxWidth: "550px" }}>
-              <p>Please enter the email address you registered with.</p>
-              <FormControl variant="outlined" className={classes.formControl}>
-                <TextField
-                  type="email"
-                  id="email"
-                  label="Email"
-                  variant="outlined"
-                  value={emailAddressReSend}
-                  onChange={handleEmailReSendChange}
-                  placeholder="email@email.com"
-                  helperText={emailErrorText}
-                />
-              </FormControl>
-              <div className="btn-toolbar">
-                <button
-                  className="btn btn-school btn-big theme-button"
-                  onClick={handleResendEmailClick}
-                >
-                  Re-Send My Event Link
-                </button>
-              </div>
 
-              {/* Email found and link sent confirmation message: */}
-              {emailFound === true && (
-                <>
-                  <br></br>
-                  <br></br>
-                  <p>
-                    Your link to join the event has been sent to the email
-                    address you entered.
-                  </p>
-                  <p>
-                    Please check your inbox and if it’s not there, try checking
-                    your junk mail.
-                  </p>
-                </>
-              )}
+            {/* Email found and link sent confirmation message: */}
+            {emailFound === true && (
+              <>
+                <br></br>
+                <br></br>
+                <p>
+                  Your link to join the event has been sent to the email
+                  address you entered.
+                </p>
+                <p>
+                  Please check your inbox and if it’s not there, try checking
+                  your junk mail.
+                </p>
+              </>
+            )}
 
-              {/* Email not found message: */}
-              {emailNotFound === true && (
-                <>
-                  <br></br>
-                  <br></br>
-                  <p>
-                    No registration found for this address. Please close this
-                    window and register to attend the event.
-                  </p>
-                </>
-              )}
-            </div>
+            {/* Email not found message: */}
+            {emailNotFound === true && (
+              <>
+                <br></br>
+                <br></br>
+                <p>
+                  No registration found for this address. Please close this
+                  window and register to attend the event.
+                </p>
+              </>
+            )}
           </div>
-        </Fade>
-      </Modal>
+        }
+      />
     </div>
   );
 }
