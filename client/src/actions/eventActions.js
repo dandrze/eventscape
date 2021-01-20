@@ -32,7 +32,7 @@ export const createEvent = (
   try {
     const res = await api.post("/api/event", {
       event,
-      emails: emaillistTemplate(startDate),
+      communications: emaillistTemplate(startDate),
     });
 
     await dispatch({

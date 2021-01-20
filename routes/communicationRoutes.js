@@ -8,10 +8,10 @@ const Mailer = require("../services/Mailer");
 const { Communication, EmailListRecipient, Event } = require("../db").models;
 
 router.get("/api/communication/all", async (req, res) => {
-  const { event } = req.query;
+  const { EventId } = req.query;
 
   const communications = await Communication.findAll({
-    where: { EventId: event },
+    where: { EventId },
   });
 
   res.send(communications);

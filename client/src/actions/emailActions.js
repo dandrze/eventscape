@@ -3,10 +3,15 @@ import { toast } from "react-toastify";
 import api from "../api/server";
 import { FETCH_COMMUNICATION_LIST, FETCH_EMAIL_LIST } from "./types";
 
-export const fetchCommunicationList = (event) => async (dispatch, getState) => {
+export const fetchCommunicationList = (EventId) => async (
+  dispatch,
+  getState
+) => {
   // call the api and return the event in json
   try {
-    const res = await api.get("/api/communication/all", { params: { event } });
+    const res = await api.get("/api/communication/all", {
+      params: { EventId },
+    });
 
     dispatch({ type: FETCH_COMMUNICATION_LIST, payload: res.data });
 

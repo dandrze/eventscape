@@ -26,7 +26,7 @@ router.post("/api/event", async (req, res) => {
       regPageModel,
       eventPageModel,
     },
-    emails,
+    communications,
   } = req.body;
 
   const AccountId = req.user.id;
@@ -99,14 +99,98 @@ router.post("/api/event", async (req, res) => {
   }
 
   // add the emails for this event
-  for (var email of emails) {
+  for (var communication of communications) {
     await Communication.create({
-      subject: email.subject,
-      recipients: email.recipients,
-      minutesFromEvent: email.minutesFromEvent,
-      html: email.html,
+      subject: communication.subject,
+      recipients: communication.recipients,
+      minutesFromEvent: communication.minutesFromEvent,
+      html: communication.html,
       EventId: event.id,
-      status: email.status,
+      status: communication.status,
+    });
+  }
+
+  res.status(200).send(event);
+});
+
+router.post("/api/event/duplicate", async (req, res) => {
+  const { EventId, link } = req.body;
+
+  const AccountId = req.user.id;
+
+  // Store a new model in the model table for the registration page
+  const dbRegModel = await PageModel.create();
+
+  // Store a new model in the model table for the event page
+  const dbEventModel = await PageModel.create();
+
+  // fetch data from the original event
+  const originalEvent = await Event.findByPk(EventId);
+
+  // add the event to the event table. Make it the current event
+  const event = await Event.create({
+    title: originalEvent.title + " Copy",
+    link,
+    category: originalEvent.category,
+    startDate: originalEvent.startDate,
+    endDate: originalEvent.endDate,
+    timeZone: originalEvent.timeZone,
+    primaryColor: originalEvent.primaryColor,
+    isCurrent: false,
+    AccountId: originalEvent.AccountId,
+    RegPageModelId: dbRegModel.id,
+    EventPageModelId: dbEventModel.id,
+  });
+
+  // create a default chatroom
+  const chatRoom = await ChatRoom.create({
+    event: event.id,
+    isDefault: true,
+    name: "Main Chat (Default)",
+  });
+
+  // Store the section HTML for the reg page model
+  const originalRegPageModel = await PageSection.findAll({
+    where: { PageModelId: originalEvent.RegPageModelId },
+  });
+  console.log(event.RegPageModelId);
+  console.log(originalRegPageModel);
+  for (let section of originalRegPageModel) {
+    await PageSection.create({
+      PageModelId: dbRegModel.id,
+      index: section.index,
+      html: section.html,
+      isReact: section.isReact,
+      reactComponent: section.reactComponent,
+    });
+  }
+
+  // Store the section HTML for the event page model
+  const originalEventPageModel = await PageSection.findAll({
+    where: { PageModelId: originalEvent.EventPageModelId },
+  });
+  for (let section of originalEventPageModel) {
+    await PageSection.create({
+      PageModelId: dbEventModel.id,
+      index: section.index,
+      html: section.html,
+      isReact: section.isReact,
+      reactComponent: section.reactComponent,
+    });
+  }
+
+  const originalCommunications = await Communication.findAll({
+    where: { EventId },
+  });
+  // add the emails for this event
+  for (var communication of originalCommunications) {
+    await Communication.create({
+      subject: communication.subject,
+      recipients: communication.recipients,
+      minutesFromEvent: communication.minutesFromEvent,
+      html: communication.html,
+      EventId: event.id,
+      status: communication.status,
     });
   }
 
@@ -151,7 +235,9 @@ router.get("/api/event/id", async (req, res) => {
 
 router.get("/api/event/link", async (req, res) => {
   const { link } = req.query;
-  const event = await Event.findOne({ where: { link } });
+  const event = await Event.findOne({
+    where: { link, status: statusOptions.ACTIVE },
+  });
 
   res.status(200).send(event);
 });
