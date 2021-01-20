@@ -1,5 +1,5 @@
 var socketIo = require("socket.io");
-const { SiteVisit, SiteVisitor } = require("../sequelize").models;
+const { SiteVisit, SiteVisitor } = require("../db").models;
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -11,7 +11,7 @@ module.exports = (server) => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("join", async ({ eventId, uuid, attendeeId }) => {
+    socket.on("join", async ({ EventId, uuid, attendeeId }) => {
       const [siteVisitor, created] = await SiteVisitor.findOrCreate({
         where: {
           uuid,
@@ -21,7 +21,7 @@ module.exports = (server) => {
       console.log(attendeeId);
 
       const siteVisit = await SiteVisit.create({
-        eventId,
+        EventId,
         SiteVisitorId: siteVisitor.id,
       });
       socket.visitId = siteVisit.id;

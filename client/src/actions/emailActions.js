@@ -103,9 +103,9 @@ export const editEmail = (id, email) => async (dispatch, getState) => {
   }
 };
 
-export const sendTestEmail = (eventId, email) => async (dispatch, getState) => {
+export const sendTestEmail = (EventId, email) => async (dispatch, getState) => {
   try {
-    const res = await api.post("/api/communication/test", { eventId, email });
+    const res = await api.post("/api/communication/test", { EventId, email });
     toast.success("Successfully sent test email to " + email.emailAddress);
     return true;
   } catch (err) {

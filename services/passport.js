@@ -2,7 +2,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 
 const LocalStrategy = require("passport-local").Strategy;
-const { Account } = require("../sequelize").models;
+const { Account } = require("../db").models;
 
 const saltRounds = 10;
 

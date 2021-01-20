@@ -1,5 +1,5 @@
 const express = require("express");
-const { PageSection } = require("../sequelize").models;
+const { PageSection } = require("../db").models;
 
 const router = express.Router();
 

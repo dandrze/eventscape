@@ -216,7 +216,7 @@ const EmailEditor = (props) => {
             <SendTestEmail
               subject={subject}
               html={html}
-              eventId={props.event.id}
+              EventId={props.event.id}
               recipient={{
                 firstName: props.user.firstName,
                 lastName: props.user.lastName,

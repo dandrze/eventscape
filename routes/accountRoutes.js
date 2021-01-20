@@ -1,6 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
-const { Account } = require("../sequelize").models;
+const { Account } = require("../db").models;
 
 const saltRounds = 10;
 

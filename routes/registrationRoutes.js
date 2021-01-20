@@ -7,15 +7,12 @@ const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 
 const {
-  Registration,
-  Communication,
-  Event,
-  RegistrationForm,
-} = require("../sequelize").models;
-const sequelize = require("../sequelize/sequelize");
+  sequelize,
+  models: { Registration, Communication, Event, RegistrationForm },
+} = require("../db");
 
 router.post("/api/registration", async (req, res) => {
-  const { eventId, values, emailAddress, firstName, lastName } = req.body;
+  const { EventId, values, emailAddress, firstName, lastName } = req.body;
 
   // Add the registered user
 
@@ -24,7 +21,7 @@ router.post("/api/registration", async (req, res) => {
     lastName,
     values,
     emailAddress,
-    EventId: eventId,
+    EventId: EventId,
   });
 
   registration.hash = md5(registration.id);
@@ -33,7 +30,7 @@ router.post("/api/registration", async (req, res) => {
   // get all emails for new registrants
   const communications = await Communication.findAll({
     where: {
-      EventId: eventId,
+      EventId: EventId,
       recipients: recipientsOptions.NEW_REGISTRANTS,
       status: statusOptions.ACTIVE,
     },

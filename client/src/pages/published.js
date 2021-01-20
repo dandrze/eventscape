@@ -66,7 +66,7 @@ const Published = (props) => {
       console.log(event);
 
       socket.emit("join", {
-        eventId: event.id,
+        EventId: event.id,
         uuid: cookies.get("uuid"),
         attendeeId,
       });

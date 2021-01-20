@@ -10,7 +10,7 @@ const {
   PageModel,
   PageSection,
   Communication,
-} = require("../sequelize").models;
+} = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 
 router.post("/api/event", async (req, res) => {
@@ -199,11 +199,14 @@ router.put("/api/event", async (req, res) => {
 });
 
 router.put("/api/event/set-registration", async (req, res) => {
-  const { registrationEnabled, eventId } = req.body;
+  const { hasRegistration, EventId } = req.body;
 
-  const event = await Event.findByPk(eventId);
+  const event = await Event.findByPk(EventId);
 
-  event.hasRegistration = registrationEnabled;
+  console.log(event);
+  console.log(hasRegistration, EventId);
+
+  event.hasRegistration = hasRegistration;
 
   await event.save();
 

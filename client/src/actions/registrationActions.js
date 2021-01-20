@@ -39,7 +39,7 @@ export const fetchRegistrationForm = (event) => async (dispatch) => {
 };
 
 export const addRegistration = (
-  eventId,
+  EventId,
   values,
   emailAddress,
   firstName,
@@ -47,7 +47,7 @@ export const addRegistration = (
 ) => async (dispatch) => {
   try {
     const res = await api.post("/api/registration", {
-      eventId,
+      EventId,
       values,
       emailAddress,
       firstName,

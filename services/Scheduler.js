@@ -7,12 +7,10 @@ const {
   Registration,
   Event,
   EmailListRecipient,
-} = require("../sequelize").models;
+} = require("../db").models;
 
 const scheduleSend = async (emailId, email, sendDate, EventId) => {
   const { to, subject, html, recipients, emailList } = email;
-
-  console.log(EventId);
 
   const newJob = schedule.scheduleJob(
     emailId.toString(),
@@ -42,8 +40,6 @@ const scheduleSend = async (emailId, email, sendDate, EventId) => {
         subject,
         html
       );
-
-      console.log({ success, failed });
 
       const completeCommunication = await Communication.findByPk(emailId);
 
@@ -84,7 +80,6 @@ const cancelSend = async (emailId) => {
     communication.nextInvocation = job.nextInvocation();
     await communication.save();
   }
-  console.log(schedule.scheduledJobs);
 };
 
 const scheduledJobs = () => {

@@ -1,22 +1,21 @@
 const express = require("express");
-const { SiteVisit, Registration, SiteVisitor } = require("../sequelize").models;
-const db = require("../db");
+const { SiteVisit, Registration, SiteVisitor, Event } = require("../db").models;
 
 const router = express.Router();
 
 router.get("/api/analytics/visitor-data", async (req, res) => {
-  const { eventId } = req.query;
+  const { EventId } = req.query;
 
   const currentCount = await SiteVisit.count({
     where: {
       loggedOutAt: null,
-      eventId,
+      EventId,
     },
   });
 
   const uniqueCount = await SiteVisit.count({
     where: {
-      eventId,
+      EventId,
     },
     col: "SiteVisitorId",
     distinct: true,
@@ -24,7 +23,7 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
 
   const data = await SiteVisit.findAll({
     where: {
-      eventId,
+      EventId,
     },
     include: {
       model: SiteVisitor,
@@ -32,12 +31,12 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
     },
   });
 
-  const history = await createVisitorsHistory(data, eventId);
+  const history = await createVisitorsHistory(data, EventId);
 
   res.status(200).send({ currentCount, uniqueCount, data, history });
 });
 
-const createVisitorsHistory = async (visitors, eventId) => {
+const createVisitorsHistory = async (visitors, EventId) => {
   // create a cleaner array for the time chart to use with just start time and end times
   const visitTimes = visitors.map((visitor) => {
     const start = new Date(visitor.createdAt);
@@ -50,18 +49,10 @@ const createVisitorsHistory = async (visitors, eventId) => {
   });
 
   // set the lower and upper limits for the time chart
-  const events = await db.query(
-    "SELECT * FROM event WHERE id=$1",
-    [eventId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const event = await Event.findByPk(EventId);
 
-  const lowerLimit = events.rows[0].startDate.getTime();
-  const upperLimit = events.rows[0].endDate.getTime();
+  const lowerLimit = event.startDate.getTime();
+  const upperLimit = event.endDate.getTime();
 
   const visitorsArray = [];
   // for each minute in the time chart range, count how many visits are active (time falls between its start and end time)

@@ -1,5 +1,5 @@
 var socketIo = require("socket.io");
-const { ChatRoom, ChatUser, ChatMessage } = require("../sequelize").models;
+const { ChatRoom, ChatUser, ChatMessage } = require("../db").models;
 
 module.exports = (server) => {
   const io = socketIo(server, {
