@@ -91,7 +91,7 @@ const Table = (props) => {
           timeZoneName: "short",
           timeZone: event.timeZone,
         }),
-        status: event.status.charAt(0).toUpperCase() + event.status.slice(1),
+        status: event.status,
       };
     });
 

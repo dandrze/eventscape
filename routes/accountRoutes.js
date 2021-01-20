@@ -29,7 +29,7 @@ router.post("/api/account", async (req, res) => {
     emailAddress,
     firstName,
     lastName,
-    password,
+    password: hashedPassword,
   });
 
   res.status(200).send(account);
