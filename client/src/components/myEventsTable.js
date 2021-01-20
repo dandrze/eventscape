@@ -62,7 +62,7 @@ const Table = (props) => {
 
   const data = props.eventList
     .filter((event) => {
-      const startDate = new Date(event.start_date);
+      const startDate = new Date(event.startDate);
       const today = new Date();
       if (event.status === statusOptions.DELETED && props.tab === "deleted") {
         return true;
@@ -83,15 +83,15 @@ const Table = (props) => {
       }
     })
     .map((event) => {
-      const eventDate = new Date(event.start_date);
+      const eventDate = new Date(event.startDate);
       return {
         id: event.id,
         name: event.title,
         date: eventDate.toLocaleString("en-us", {
           timeZoneName: "short",
-          timeZone: event.time_zone,
+          timeZone: event.timeZone,
         }),
-        status: event.status.charAt(0).toUpperCase() + event.status.slice(1),
+        status: event.status,
       };
     });
 

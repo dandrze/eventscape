@@ -28,17 +28,43 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
   const htmlVariables = html.match(/[^{\}]+(?=})/g);
   let success = 0;
   let failed = 0;
+  const dateFormatOptions = {
+    timeZoneName: "short",
+    timeZone: recipientsList[0].Event.timeZone,
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    timeZoneName: "short",
+  };
 
   //Iterate through the recipientsList and send an email to each recipient with variables replaced with database values
-  for (const recipient of formatDate(recipientsList)) {
+  for (const recipient of recipientsList) {
     // for each recipient, reset the subject to the original with {variable_names}
     var updatedSubject = subject;
     var updatedHtml = html;
 
+    // creates snake case versions of camelcase varaibles
+
+    recipient.first_name = recipient.firstName;
+    recipient.last_name = recipient.lastName;
+    recipient.email_address = recipient.emailAddress;
+    recipient.event_name = recipient.Event.title;
+    recipient.start_date = recipient.Event.startDate.toLocaleString(
+      "en-us",
+      dateFormatOptions
+    );
+    recipient.end_date = recipient.Event.endDate.toLocaleString(
+      "en-us",
+      dateFormatOptions
+    );
+
     // the event_link variable is created using the event link and the recipient hash which uniquely identifies the recipient
-    if (recipient.link && recipient.hash) {
+    if (recipient.hash) {
       recipient.event_link =
-        "https://" + recipient.link + ".eventscape.io/" + recipient.hash;
+        "https://" + recipient.Event.link + ".eventscape.io/" + recipient.hash;
     }
 
     //for each variable in the subjectVariables array, replace it with the value from the database value. If the array is empty, skip it
@@ -60,8 +86,9 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
         );
       }
     }
+
     const isSuccessful = await sendEmail({
-      to: recipient.email,
+      to: recipient.emailAddress,
       subject: updatedSubject,
       html: updatedHtml,
     });
@@ -74,31 +101,6 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
 
   console.log("mailer: ", { success, failed });
   return { success, failed };
-};
-
-const formatDate = (recipientsList) => {
-  return recipientsList.map((recipient) => {
-    const dateFormatOptions = {
-      timeZoneName: "short",
-      timeZone: recipient.time_zone,
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      hour: "numeric",
-      minute: "2-digit",
-      timeZoneName: "short",
-    };
-
-    return {
-      ...recipient,
-      start_date: recipient.start_date.toLocaleString(
-        "en-us",
-        dateFormatOptions
-      ),
-      end_date: recipient.end_date.toLocaleString("en-us", dateFormatOptions),
-    };
-  });
 };
 
 exports.sendEmail = sendEmail;

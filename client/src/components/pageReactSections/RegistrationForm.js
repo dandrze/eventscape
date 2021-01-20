@@ -119,6 +119,7 @@ function RegistrationForm(props) {
   };
 
   const handleSubmit = async (values) => {
+    console.log(values);
     // Check to make sure the standard fields are valid first
     if (emailError || !emailAddress) {
       setModalText("Please enter a valid email");
@@ -129,7 +130,10 @@ function RegistrationForm(props) {
     } else if (!lastName) {
       setModalText("Please enter your last name");
       openModal();
-    } else if (await props.fetchRegistration(emailAddress, props.event.id)) {
+    } else if (
+      !props.isEditForm &&
+      (await props.fetchRegistration(emailAddress, props.event.id))
+    ) {
       setModalText("Registration already exists under email: " + emailAddress);
       openModal();
     } else {
@@ -163,9 +167,12 @@ function RegistrationForm(props) {
     if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
       setEmailErrorText("Please enter valid email address");
     } else {
-      const registration = await props.fetchRegistration(emailAddressReSend);
+      const registration = await props.fetchRegistration(
+        emailAddressReSend,
+        props.event.id
+      );
 
-      if (registration.email == emailAddressReSend) {
+      if (registration.emailAddress == emailAddressReSend) {
         setEmailFound(true);
         setEmailNotFound(false);
         await props.resendRegistrationEmail(emailAddressReSend, props.event.id);
@@ -214,7 +221,7 @@ function RegistrationForm(props) {
           <CircularProgress className="margin-auto" />
         ) : (
           <div className="margin-auto">
-            {regComplete ? (
+            {regComplete && !props.isEditForm ? (
               <div className="margin-auto">
                 <div>Thank you for registering for {props.event.title}</div>
                 <br />
@@ -277,22 +284,24 @@ function RegistrationForm(props) {
                   answer_data={props.prePopulatedValues}
                   className="form-editor-react"
                 />
-                <label>
-                  <span>Already registered? Click </span>
-                  <span
-                    className="theme-color"
-                    onClick={openReSendLinkModal}
-                    style={{
-                      cursor: "pointer",
-                      textDecoration: "underline",
-                    }}
-                  >
-                    here
-                  </span>
-                  <span> to re-send your event link.</span>
-                </label>
+                {!props.isEditForm ? (
+                  <label>
+                    <span>Already registered? Click </span>
+                    <span
+                      className="theme-color"
+                      onClick={openReSendLinkModal}
+                      style={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      here
+                    </span>
+                    <span> to re-send your event link.</span>
+                  </label>
+                ) : null}
               </div>
-            )}{" "}
+            )}
           </div>
         )}
       </div>

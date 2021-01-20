@@ -7,32 +7,33 @@ import {
   eventPageModelTemplate,
   emaillistTemplate,
 } from "../templates/newEventTemplates";
+import { statusOptions } from "../model/enums";
 
 export const createEvent = (
   title,
   link,
   category,
-  start_date,
-  end_date,
-  time_zone,
-  primary_color
+  startDate,
+  endDate,
+  timeZone,
+  primaryColor
 ) => async (dispatch) => {
   const event = {
     title,
     link,
     category,
-    start_date,
-    end_date,
-    time_zone,
-    primary_color,
-    reg_page_model: regPageModelTemplate(title),
-    event_page_model: eventPageModelTemplate(title, start_date, end_date),
+    startDate,
+    endDate,
+    timeZone,
+    primaryColor,
+    regPageModel: regPageModelTemplate(title),
+    eventPageModel: eventPageModelTemplate(title, startDate, endDate),
   };
 
   try {
     const res = await api.post("/api/event", {
       event,
-      emails: emaillistTemplate(start_date),
+      communications: emaillistTemplate(startDate),
     });
 
     await dispatch({
@@ -51,19 +52,19 @@ export const updateEvent = (
   title,
   link,
   category,
-  start_date,
-  end_date,
-  time_zone,
-  primary_color
+  startDate,
+  endDate,
+  timeZone,
+  primaryColor
 ) => async (dispatch, getState) => {
   const updatedEvent = {
     title,
     link,
     category,
-    start_date,
-    end_date,
-    time_zone,
-    primary_color,
+    startDate,
+    endDate,
+    timeZone,
+    primaryColor,
     status: getState().event.status,
   };
 
@@ -117,9 +118,11 @@ export const publishPage = () => async (dispatch, getState) => {
   // save the model
   await dispatch(saveModel());
 
-  const newEvent = { ...getState().event, status: "active" };
+  const newEvent = { ...getState().event, status: statusOptions.ACTIVE };
+  console.log(newEvent);
 
   try {
+    console.log(newEvent);
     const res = await api.put("/api/event", newEvent);
 
     await dispatch({
@@ -133,7 +136,7 @@ export const publishPage = () => async (dispatch, getState) => {
 };
 
 export const isLinkAvailable = (link) => async (dispatch) => {
-  const res = await api.get("/api/model/link", { params: { link } });
+  const res = await api.get("/api/event/link", { params: { link } });
 
   if (res.data.length == 0) {
     return true;
@@ -142,13 +145,13 @@ export const isLinkAvailable = (link) => async (dispatch) => {
   }
 };
 
-export const setEventRegistration = (registrationEnabled, event) => async (
+export const setEventRegistration = (hasRegistration, EventId) => async (
   dispatch
 ) => {
   try {
     const res = await api.put("/api/event/set-registration", {
-      registrationEnabled,
-      event,
+      hasRegistration,
+      EventId,
     });
     toast.success("Registration successfuly changed");
     return true;

@@ -1,5 +1,5 @@
 const Sequelize = require("sequelize");
-const conn = new Sequelize(process.env.DATABASE_URL, {
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
   dialectOptions: {
     ssl: {
       require: true,
@@ -8,4 +8,4 @@ const conn = new Sequelize(process.env.DATABASE_URL, {
   },
 });
 
-module.exports = conn;
+module.exports = sequelize;

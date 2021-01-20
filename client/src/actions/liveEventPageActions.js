@@ -12,16 +12,13 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
   if (event.data) {
     await dispatch({ type: FETCH_EVENT, payload: event.data });
 
-    console.log(event.data);
-    console.log(hash);
-
     var modelId, pageType;
 
-    if (event.data.registration && !hash) {
-      modelId = event.data.reg_page_model;
+    if (event.data.hasRegistration && !hash) {
+      modelId = event.data.RegPageModelId;
       pageType = pageNames.REGISTRATION;
     } else {
-      modelId = event.data.event_page_model;
+      modelId = event.data.EventPageModelId;
       pageType = pageNames.EVENT;
     }
 
@@ -36,10 +33,9 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
   return { event: event.data, pageType };
 };
 
-export const fetchAttendeeData = (hash, eventId) => async (dispatch) => {
-  console.log(eventId);
+export const fetchAttendeeData = (hash, EventId) => async (dispatch) => {
   const attendee = await api.get("/api/attendee/hash", {
-    params: { hash, eventId },
+    params: { hash, EventId },
   });
 
   await dispatch({

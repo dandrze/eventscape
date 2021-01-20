@@ -59,21 +59,20 @@ function DesignBlockToolbar(props) {
   const [rooms, setRooms] = React.useState([]);
 
   const showStreamSettings =
-    props.section.is_react &&
-    props.section.react_component.name == "StreamChat";
+    props.section.isReact && props.section.reactComponent.name == "StreamChat";
 
   // Updating the settings based on props
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
-    if (props.section.react_component) {
-      setContent(props.section.react_component.props.content);
-      setYoutubeLink(props.section.react_component.props.link);
-      setCustomHTML(props.section.react_component.props.html);
-      setRoom(props.section.react_component.props.chatRoom);
+    if (props.section.reactComponent) {
+      setContent(props.section.reactComponent.props.content);
+      setYoutubeLink(props.section.reactComponent.props.link);
+      setCustomHTML(props.section.reactComponent.props.html);
+      setRoom(props.section.reactComponent.props.chatRoom);
 
       // set the section tooltip if it's a section that requires one
-      if (props.section.is_react) {
-        switch (props.section.react_component.name) {
+      if (props.section.isReact) {
+        switch (props.section.reactComponent.name) {
           case "StreamChat":
             setSectionTooltip("Click the gears icon to add your stream");
             fetchChatRooms();
@@ -378,7 +377,7 @@ function DesignBlockToolbar(props) {
                 </div>
               </div>
             </Tabs>
-        </div>
+          </div>
         }
       />
     </div>

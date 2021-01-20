@@ -25,8 +25,8 @@ router.get("/auth/fail", async (req, res) => {
 
 router.get("/auth/current-user", async (req, res) => {
   if (req.user) {
-    const { first_name, last_name, email, id } = req.user;
-    res.send({ first_name, last_name, email, id });
+    const { firstName, lastName, emailAddress, id } = req.user;
+    res.send({ firstName, lastName, emailAddress, id });
   } else {
     res.send(null);
   }

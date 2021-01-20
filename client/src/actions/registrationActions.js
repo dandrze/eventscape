@@ -39,7 +39,7 @@ export const fetchRegistrationForm = (event) => async (dispatch) => {
 };
 
 export const addRegistration = (
-  event,
+  EventId,
   values,
   emailAddress,
   firstName,
@@ -47,7 +47,7 @@ export const addRegistration = (
 ) => async (dispatch) => {
   try {
     const res = await api.post("/api/registration", {
-      event,
+      EventId,
       values,
       emailAddress,
       firstName,
@@ -71,7 +71,7 @@ export const updateRegistration = (
   try {
     const res = await api.put("/api/registration", {
       id,
-      values: JSON.stringify(values),
+      values,
       emailAddress,
       firstName,
       lastName,
@@ -95,10 +95,12 @@ export const deleteRegistration = (id) => async (dispatch) => {
   }
 };
 
-export const fetchRegistration = (email, eventId) => async (dispatch) => {
+export const fetchRegistration = (emailAddress, EventId) => async (
+  dispatch
+) => {
   try {
     const res = await api.get("/api/registration/email", {
-      params: { email, eventId },
+      params: { emailAddress, EventId },
     });
     return res.data;
   } catch (err) {
@@ -110,11 +112,15 @@ export const fetchRegistration = (email, eventId) => async (dispatch) => {
   }
 };
 
-export const resendRegistrationEmail = (email, event) => async (dispatch) => {
+export const resendRegistrationEmail = (emailAddress, EventId) => async (
+  dispatch
+) => {
+  console.log(emailAddress);
+  console.log(EventId);
   try {
     const res = await api.post("/api/registration/email/resend", {
-      email,
-      event,
+      emailAddress,
+      EventId,
     });
     return true;
   } catch (err) {

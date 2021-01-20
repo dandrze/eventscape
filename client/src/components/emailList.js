@@ -79,11 +79,11 @@ const EmailList = (props) => {
   const columns = [
     {
       title: "First Name",
-      field: "first_name",
+      field: "firstName",
     },
     {
       title: "Last Name",
-      field: "last_name",
+      field: "lastName",
     },
     {
       title: "Email",

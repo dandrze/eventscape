@@ -18,9 +18,9 @@ import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
 
 /* colapsible side nav experimenting, move later */
-import ExpandLess from '@material-ui/icons/ExpandLess';
-import ExpandMore from '@material-ui/icons/ExpandMore';
-import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from "@material-ui/icons/ExpandLess";
+import ExpandMore from "@material-ui/icons/ExpandMore";
+import Collapse from "@material-ui/core/Collapse";
 
 import "./navBar3.css";
 
@@ -294,7 +294,7 @@ function NavBar3(props) {
     if (drawerPreviouslyOpen === false) {
       handleDrawerClose();
     }
-  }
+  };
 
   const handleGoToLiveSite = () => {
     window.open(`https://${props.event.link}.eventscape.io`);
@@ -405,7 +405,7 @@ function NavBar3(props) {
             >
               <div className={classes.root}>
                 <Avatar className={`${classes.greyWhite} ${classes.large}`}>
-                  {props.user.first_name[0] + props.user.last_name[0]}
+                  {props.user.firstName[0] + props.user.lastName[0]}
                 </Avatar>
               </div>
             </Button>
@@ -422,12 +422,12 @@ function NavBar3(props) {
               <ListItemIcon>
                 <div className={classes.root}>
                   <Avatar className={`${classes.greyWhite} ${classes.large}`}>
-                    {props.user.first_name[0] + props.user.last_name[0]}
+                    {props.user.firstName[0] + props.user.lastName[0]}
                   </Avatar>
                 </div>
               </ListItemIcon>
               <ListItemText
-                primary={props.user.first_name + " " + props.user.last_name}
+                primary={props.user.firstName + " " + props.user.lastName}
                 secondary={props.user.email}
               />
             </StyledMenuItemNoButton>
@@ -524,8 +524,8 @@ function NavBar3(props) {
             </Link>
 
             {/* Design */}
-            <ListItem 
-              button 
+            <ListItem
+              button
               onClick={handleClickDesignNested}
               className={clsx({
                 [classes.highlight]: highlight === "design",
@@ -541,11 +541,10 @@ function NavBar3(props) {
             {/* Design Nested Menu */}
             <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
-
                 {/* Registration Page */}
-                <ListItem 
-                  button 
-                  className={classes.nested} 
+                <ListItem
+                  button
+                  className={classes.nested}
                   onClick={() => {
                     handleClickNestedItem();
                     handlePageChange("registration");
@@ -555,9 +554,9 @@ function NavBar3(props) {
                 </ListItem>
 
                 {/* Event Page */}
-                <ListItem 
-                  button 
-                  className={classes.nested} 
+                <ListItem
+                  button
+                  className={classes.nested}
                   onClick={() => {
                     handleClickNestedItem();
                     handlePageChange("event");
@@ -565,7 +564,6 @@ function NavBar3(props) {
                 >
                   <ListItemText secondary="Event Page" />
                 </ListItem>
-
               </List>
             </Collapse>
 

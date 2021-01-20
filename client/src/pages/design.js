@@ -14,8 +14,8 @@ const Design = (props) => {
     if (Object.keys(props.event).length != 0) {
       const modelId =
         props.settings.nowEditingPage === pageNames.REGISTRATION
-          ? props.event.reg_page_model
-          : props.event.event_page_model;
+          ? props.event.RegPageModelId
+          : props.event.EventPageModelId;
 
       props.fetchModel(modelId);
     }

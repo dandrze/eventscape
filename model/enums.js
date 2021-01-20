@@ -20,12 +20,12 @@ const statusOptions = {
 
 const emailVariableNames = [
   "event_name",
-  "time_zone",
+  "timeZone",
   "event_link",
-  "start_date",
-  "end_date",
-  "first_name",
-  "last_name",
+  "startDate",
+  "endDate",
+  "firstName",
+  "lastName",
 ];
 
 exports.recipientsOptions = recipientsOptions;

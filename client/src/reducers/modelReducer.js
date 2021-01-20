@@ -6,7 +6,7 @@ import {
   MOVE_SECTION,
   DELETE_SECTION,
   MODEL_ISSAVED,
-  UPDATE_REACT_COMPONENT,
+  UPDATE_reactComponent,
 } from "../actions/types";
 
 export default function (
@@ -58,7 +58,7 @@ export default function (
       };
     case MODEL_ISSAVED:
       return { ...state, isUnsaved: false };
-    case UPDATE_REACT_COMPONENT:
+    case UPDATE_reactComponent:
       return {
         ...state,
         isUnsaved: true,
@@ -66,7 +66,7 @@ export default function (
           if (index === action.payload.index) {
             return {
               ...section,
-              react_component: action.payload.react_component,
+              reactComponent: action.payload.reactComponent,
             };
           }
           return section;

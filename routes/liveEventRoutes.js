@@ -1,29 +1,20 @@
 const express = require("express");
 const md5 = require("md5");
+const { Registration } = require("../db").models;
 
 const router = express.Router();
 
-const db = require("../db");
-
 router.get("/api/attendee/hash", async (req, res) => {
-  const { hash, eventId } = req.query;
+  const { hash, EventId } = req.query;
 
   var attendee;
   // if the hash is a testing hash, return a test attendee
   if (hash === md5("tester")) {
-    attendee = {
-      first_name: "Test",
-      last_name: "Guest",
-      email: "test@guest.com",
-    };
+    // there is a test registration associated with this hash. It isn't tied to a single event
+    attendee = await Registration.findOne({ where: { hash } });
   } else {
     // get the attendee information based on the hash
-    const res = await db.query(
-      `SELECT * FROM registration WHERE hash=$1 AND event=$2`,
-      [hash, eventId]
-    );
-
-    attendee = res.rows[0];
+    attendee = await Registration.findOne({ where: { hash, EventId } });
   }
 
   res.status(200).send(attendee);

@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { ChatRoom, ChatUser } = require("../sequelize").models;
+const { ChatRoom, ChatUser } = require("../db").models;
 
 router.get("/api/chatroom/default", async (req, res) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one

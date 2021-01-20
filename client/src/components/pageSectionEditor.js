@@ -20,7 +20,7 @@ const RegPageSectionEditor = (props) => {
 
   return (
     <div>
-      <style>{theme(props.event.primary_color)}</style>
+      <style>{theme(props.event.primaryColor)}</style>
       <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
         <DesignBlockToolbar
           displayToolbar={isHovering}
@@ -28,9 +28,9 @@ const RegPageSectionEditor = (props) => {
           sectionIndex={props.sectionIndex}
           maxIndex={props.model.sections.length}
         />
-        {props.section.is_react ? (
-          createElement(mapReactComponent[props.section.react_component.name], {
-            ...props.section.react_component.props,
+        {props.section.isReact ? (
+          createElement(mapReactComponent[props.section.reactComponent.name], {
+            ...props.section.reactComponent.props,
             sectionIndex: props.sectionIndex,
           })
         ) : (

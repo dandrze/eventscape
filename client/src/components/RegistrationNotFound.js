@@ -35,9 +35,9 @@ function ErrorRegNotFound(props) {
     if (!email) {
       setEmailErrorText("Please enter your email address");
     } else {
-      const registration = await props.fetchRegistration(email);
+      const registration = await props.fetchRegistration(email, props.event.id);
 
-      if (registration.email == email) {
+      if (registration.emailAddress == email) {
         setEmailFound(true);
         setEmailNotFound(false);
         await props.resendRegistrationEmail(email, props.event.id);

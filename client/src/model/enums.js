@@ -20,12 +20,12 @@ export const statusOptions = {
 
 export const emailVariableNames = [
   "event_name",
-  "time_zone",
+  "timeZone",
   "event_link",
-  "start_date",
-  "end_date",
-  "first_name",
-  "last_name",
+  "startDate",
+  "endDate",
+  "firstName",
+  "lastName",
 ];
 
 export const pageNames = { REGISTRATION: "registration", EVENT: "event" };

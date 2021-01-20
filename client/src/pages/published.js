@@ -39,15 +39,16 @@ const Published = (props) => {
 
   const fetchDataAsync = async () => {
     var attendeeId = null;
-    if (hash) {
-      const attendee = await props.fetchAttendeeData(hash);
-      attendeeId = attendee.id;
-    }
 
     const { event, pageType } = await props.fetchLivePage(
       props.subdomain,
       hash
     );
+
+    if (hash) {
+      const attendee = await props.fetchAttendeeData(hash, event.id);
+      attendeeId = attendee.id;
+    }
 
     console.log(pageType);
 
@@ -66,7 +67,7 @@ const Published = (props) => {
       console.log(event);
 
       socket.emit("join", {
-        eventId: event.id,
+        EventId: event.id,
         uuid: cookies.get("uuid"),
         attendeeId,
       });
@@ -90,12 +91,12 @@ const Published = (props) => {
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
-          <style>{theme(props.event.primary_color)}</style>
+          <style>{theme(props.event.primaryColor)}</style>
           <ul>
             {props.model.sections.map(function (section) {
-              return section.is_react ? (
-                createElement(mapReactComponent[section.react_component.name], {
-                  ...section.react_component.props,
+              return section.isReact ? (
+                createElement(mapReactComponent[section.reactComponent.name], {
+                  ...section.reactComponent.props,
                   sectionIndex: section.index,
                   isLive: true,
                 })

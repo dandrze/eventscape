@@ -1,84 +1,51 @@
 const express = require("express");
 const md5 = require("md5");
+const { QueryTypes } = require("sequelize");
 
 const router = express.Router();
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 
-const db = require("../db");
-const { Registration } = require("../sequelize").models;
+const {
+  sequelize,
+  models: { Registration, Communication, Event, RegistrationForm },
+} = require("../db");
 
 router.post("/api/registration", async (req, res) => {
-  const { event, values, emailAddress, firstName, lastName } = req.body;
+  const { EventId, values, emailAddress, firstName, lastName } = req.body;
 
   // Add the registered user
-  const newRegistration = await db.query(
-    `INSERT INTO registration 
-				(event, values, email, first_name, last_name)
-			VALUES ($1, $2, $3, $4, $5)
-			RETURNING *`,
-    [event, JSON.stringify(values), emailAddress, firstName, lastName],
-    (err, res) => {
-      if (err) {
-        res.status(500).json({ message: "Error when saving to database" });
-        return;
-      }
-    }
-  );
 
-  /*
   const registration = await Registration.create({
-    firstname,
-    LastName,
+    firstName,
+    lastName,
+    values,
     emailAddress,
-    event
-  })*/
+    EventId: EventId,
+  });
 
-  const addHash = await db.query(
-    "UPDATE registration SET hash=$1 WHERE id=$2",
-    [md5(newRegistration.rows[0].id), newRegistration.rows[0].id]
-  );
+  registration.hash = md5(registration.id);
+  registration.save();
 
-  const newRegistrationId = newRegistration.rows[0].id;
-
-  // check to see if any emails need to be fired off
-  const registrationEmails = await db.query(
-    `SELECT * FROM email WHERE event=$1 AND recipients=$2 AND status=$3`,
-    [event, recipientsOptions.NEW_REGISTRANTS, statusOptions.ACTIVE],
-    (err, res) => {
-      if (err) {
-        res
-          .status(500)
-          .json({ message: "Error when sending confirmation email" });
-        return;
-      }
-    }
-  );
+  // get all emails for new registrants
+  const communications = await Communication.findAll({
+    where: {
+      EventId: EventId,
+      recipients: recipientsOptions.NEW_REGISTRANTS,
+      status: statusOptions.ACTIVE,
+    },
+  });
 
   // pull all relevant data to map to variables and put them into a list
-  const registrationData = await db.query(
-    `SELECT 
-      event.title as event_name, 
-      event.time_zone, 
-      event.link, 
-      event.start_date, 
-      event.end_date ,
-      registration.first_name,
-      registration.last_name,
-      registration.email,
-      hash
+  const registrationData = await Registration.findByPk(registration.id, {
+    include: Event,
+  });
 
-      FROM registration INNER JOIN event on registration.event = event.id WHERE registration.id=$1 `,
-    [newRegistrationId]
-  );
-
-  console.log(registrationData.rows);
-
-  for (var email of registrationEmails.rows) {
+  for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-      registrationData.rows,
-      email.subject,
-      email.html
+      [registrationData],
+      communication.subject,
+      communication.html
     );
 
     if (failed > 0) {
@@ -90,106 +57,87 @@ router.post("/api/registration", async (req, res) => {
   }
 
   //if no errors were triggered and sent (res.status.(500).send()) then everything worked and send the new regsitration
-  res.status(200).send(newRegistration.rows[0]);
+  res.status(200).send(registration);
 });
 
 router.put("/api/registration", async (req, res) => {
   const { id, values, emailAddress, firstName, lastName } = req.body;
 
-  // Update the registered user
-  const updatedRegistration = await db.query(
-    `UPDATE registration 
-    SET 
-      values = $1
-    WHERE
-      id = $2
-		RETURNING *`,
-    [values, id],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(Error);
-      }
-    }
-  );
+  const registration = await Registration.findByPk(id);
+  registration.values = values;
+  registration.emailAddress = emailAddress;
+  registration.firstName = firstName;
+  registration.lastName = lastName;
 
-  res.status(200).send(updatedRegistration.rows[0]);
+  registration.save();
+
+  res.status(200).send(registration);
 });
 
 router.get("/api/registration/event", async (req, res) => {
   const { event } = req.query;
 
-  const userId = req.user.id;
+  const registrations = await Registration.findAll({
+    where: {
+      EventId: event,
+    },
+  });
 
-  // Get list of all registrations for this event
-  const registrations = await db.query(
-    `SELECT * 
-		FROM 
-			registration
-		WHERE 
-      event=$1
-    ORDER BY
-      id`,
-    [event],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(Error);
-      }
-    }
-  );
-
-  res.status(200).send(registrations.rows);
+  res.status(200).send(registrations);
 });
 
 router.get("/api/registration/email", async (req, res) => {
-  const { email, eventId } = req.query;
+  const { emailAddress, EventId } = req.query;
 
   // Get the registration associated with an email
-  const registrations = await db.query(
-    `SELECT * 
-		FROM 
-			registration
-		WHERE 
-      email=$1 AND event=$2`,
-    [email, eventId],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(Error);
-      }
-    }
-  );
+  const registration = await Registration.findOne({
+    where: {
+      emailAddress,
+      EventId,
+    },
+  });
 
-  res.status(200).send(registrations.rows[0]);
+  console.log(registration, emailAddress, EventId);
+
+  res.status(200).send(registration);
+});
+
+router.get("/test", async (req, res) => {
+  const registration = await Registration.create({
+    firstName: "fdasfa",
+    EventId: 5,
+  });
+
+  const updatedRegistration = await registration.save();
+  console.log(updatedRegistration);
+
+  res.send(updatedRegistration);
 });
 
 router.post("/api/registration/email/resend", async (req, res) => {
-  const { email, event } = req.body;
+  const { emailAddress, EventId } = req.body;
 
   // pull all relevant data to map to variables and put them into a list
-  const registrationData = await db.query(
-    `SELECT 
-      event.title as event_name, 
-      event.time_zone, 
-      event.link, 
-      event.start_date, 
-      event.end_date ,
-      registration.first_name,
-      registration.last_name,
-      registration.email,
-      registration.hash
-
-      FROM registration INNER JOIN event on registration.event = event.id WHERE registration.email=$1 AND event.id=$2`,
-    [email, event]
-  );
+  const registrationData = await Registration.findOne({
+    where: {
+      emailAddress,
+      EventId,
+    },
+    include: Event,
+  });
 
   // check to see if any emails need to be fired off
-  const registrationEmails = await db.query(
-    `SELECT * FROM email WHERE event=$1 AND recipients=$2 AND status=$3`,
-    [event, recipientsOptions.NEW_REGISTRANTS, statusOptions.ACTIVE]
-  );
+  const communications = await Communication.findAll({
+    where: {
+      EventId,
+      recipients: recipientsOptions.NEW_REGISTRANTS,
+      status: statusOptions.ACTIVE,
+    },
+  });
 
-  for (var communication of registrationEmails.rows) {
+  for (var communication of communications) {
     const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-      registrationData.rows,
+      [registrationData],
       communication.subject,
       communication.html
     );
@@ -206,48 +154,21 @@ router.post("/api/registration/email/resend", async (req, res) => {
 
 router.delete("/api/registration/id", async (req, res) => {
   const { id } = req.query;
-  const response = await db.query(
-    "DELETE FROM registration WHERE id=$1",
-    [id],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const registration = await Registration.findByPk(id);
+  await registration.destroy();
 
-  res.send(response);
+  res.status(200).send();
 });
 
 router.post("/api/form", async (req, res) => {
   const { event, data } = req.body;
 
-  const existingForm = await db.query(
-    "SELECT * FROM registration_form WHERE event=$1",
-    [event]
-  );
+  const [registrationForm] = await RegistrationForm.findOrCreate({
+    where: { EventId: event },
+  });
 
-  if (existingForm.rowCount == 0) {
-    const entry = await db.query(
-      "INSERT INTO registration_form (event, data) VALUES ($1,$2)",
-      [event, JSON.stringify(data)],
-      (err, res) => {
-        if (err) {
-          throw res.status(500).send(err);
-        }
-      }
-    );
-  } else {
-    const entry = await db.query(
-      "UPDATE registration_form SET data=$2 WHERE event=$1",
-      [event, JSON.stringify(data)],
-      (err, res) => {
-        if (err) {
-          throw res.status(500).send(err);
-        }
-      }
-    );
-  }
+  registrationForm.data = data;
+  await registrationForm.save();
 
   res.status(200).send();
 });
@@ -255,21 +176,11 @@ router.post("/api/form", async (req, res) => {
 router.get("/api/form", async (req, res) => {
   const { event } = req.query;
 
-  const data = await db.query(
-    "SELECT data FROM registration_form WHERE event=$1",
-    [event],
-    (err, res) => {
-      if (err) {
-        throw res.status(500).send(err);
-      }
-    }
-  );
+  const registrationForm = await RegistrationForm.findOne({
+    where: { EventId: event },
+  });
 
-  if (data.rowCount != 0) {
-    res.status(200).send(data.rows[0].data);
-  } else {
-    res.status(204).send([]);
-  }
+  res.status(200).send((registrationForm && registrationForm.data) || []);
 });
 
 module.exports = router;

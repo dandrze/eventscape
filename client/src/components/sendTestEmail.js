@@ -23,10 +23,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SendTestEmail({ subject, html, eventId, sendTestEmail, recipient }) {
+function SendTestEmail({ subject, html, EventId, sendTestEmail, recipient }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
-  const [email, setEmail] = React.useState(recipient.email);
+  const [emailAddress, setEmailAddress] = React.useState(
+    recipient.emailAddress
+  );
   const [firstName, setFirstName] = React.useState(recipient.firstName);
   const [lastName, setLastName] = React.useState(recipient.lastName);
 
@@ -40,18 +42,18 @@ function SendTestEmail({ subject, html, eventId, sendTestEmail, recipient }) {
 
   const handleSend = () => {
     setOpen(false);
-    sendTestEmail(eventId, {
+    sendTestEmail(EventId, {
       subject,
       html,
-      eventId,
-      email,
+      EventId,
+      emailAddress,
       firstName,
       lastName,
     });
   };
 
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+  const handleChangeEmailAddress = (event) => {
+    setEmailAddress(event.target.value);
   };
 
   const handleChangeFirstName = (event) => {
@@ -83,14 +85,15 @@ function SendTestEmail({ subject, html, eventId, sendTestEmail, recipient }) {
         <Fade in={open}>
           <div className={classes.paper}>
             <div id="testEmailModal">
-              <label htmlFor="email">Send test email to: </label>
+              <label htmlFor="email">Email Address: </label>
               <input
                 className="d-block w-300"
                 type="text"
                 name="email"
-                value={email}
-                onChange={handleChangeEmail}
+                value={emailAddress}
+                onChange={handleChangeEmailAddress}
               ></input>
+              <label htmlFor="firstName">First Name: </label>
               <input
                 className="d-block w-300"
                 type="text"
@@ -98,6 +101,7 @@ function SendTestEmail({ subject, html, eventId, sendTestEmail, recipient }) {
                 value={firstName}
                 onChange={handleChangeFirstName}
               ></input>
+              <label htmlFor="lastName">Last Name: </label>
               <input
                 className="d-block w-300"
                 type="text"
