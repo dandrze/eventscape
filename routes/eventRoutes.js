@@ -279,6 +279,7 @@ router.put("/api/event", async (req, res) => {
   event.primaryColor = primaryColor;
   event.status = status;
 
+  console.log(status);
   await event.save();
 
   res.send(event);

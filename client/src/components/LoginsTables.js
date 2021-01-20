@@ -48,37 +48,51 @@ export default function LoginsTable({ data }) {
   const columns = [
     {
       title: "First Name",
-      field: "Registration.firstName",
       render: (rowData) => (
         <span>
-          {rowData.Registration ? rowData.Registration.firstName : "Anonymous"}
+          {rowData.SiteVisitor.Registration
+            ? rowData.SiteVisitor.Registration.firstName
+            : "Anonymous"}
         </span>
       ),
     },
     {
       title: "Last Name",
-      field: "Registration.lastName",
       render: (rowData) => (
         <span>
-          {rowData.Registration ? rowData.Registration.lastName : "Guest"}
+          {rowData.SiteVisitor.Registration
+            ? rowData.SiteVisitor.Registration.lastName
+            : "Guest"}
         </span>
       ),
     },
     {
       title: "Email",
-      field: "Registration.email",
+      field: "SiteVisitor.Registration.emailAddress",
     },
     {
-      title: "First Login",
+      title: "Login",
       field: "createdAt",
     },
     {
-      title: "Last Logout",
+      title: "Logout",
       field: "loggedOutAt",
     },
     {
       title: "Time Viewed",
-      field: "timeViewed",
+      render: (rowData) => (
+        <span>
+          {(
+            ((rowData.loggedOutAt
+              ? new Date(rowData.loggedOutAt)
+              : new Date()) -
+              new Date(rowData.createdAt)) /
+            60000
+          )
+            .toFixed(2)
+            .toString() + " Minutes"}
+        </span>
+      ),
     },
   ];
 

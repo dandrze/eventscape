@@ -15,7 +15,7 @@ module.exports = (server) => {
       const [siteVisitor, created] = await SiteVisitor.findOrCreate({
         where: {
           uuid,
-          // attendeeId (could be null if it's a visitor. Otherwise it points to an attendee)
+          RegistrationId: attendeeId,
         },
       });
       console.log(attendeeId);

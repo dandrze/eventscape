@@ -7,6 +7,7 @@ import {
   eventPageModelTemplate,
   emaillistTemplate,
 } from "../templates/newEventTemplates";
+import { statusOptions } from "../model/enums";
 
 export const createEvent = (
   title,
@@ -117,9 +118,11 @@ export const publishPage = () => async (dispatch, getState) => {
   // save the model
   await dispatch(saveModel());
 
-  const newEvent = { ...getState().event, status: "active" };
+  const newEvent = { ...getState().event, status: statusOptions.ACTIVE };
+  console.log(newEvent);
 
   try {
+    console.log(newEvent);
     const res = await api.put("/api/event", newEvent);
 
     await dispatch({

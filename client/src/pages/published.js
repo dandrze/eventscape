@@ -39,15 +39,16 @@ const Published = (props) => {
 
   const fetchDataAsync = async () => {
     var attendeeId = null;
-    if (hash) {
-      const attendee = await props.fetchAttendeeData(hash);
-      attendeeId = attendee.id;
-    }
 
     const { event, pageType } = await props.fetchLivePage(
       props.subdomain,
       hash
     );
+
+    if (hash) {
+      const attendee = await props.fetchAttendeeData(hash, event.id);
+      attendeeId = attendee.id;
+    }
 
     console.log(pageType);
 
