@@ -3,7 +3,7 @@ const { SiteVisit, Registration, SiteVisitor, Event } = require("../db").models;
 
 const router = express.Router();
 
-router.get("/api/analytics/visitor-data", async (req, res) => {
+router.get("/api/analytics/visitor-data", async (req, res, next) => {
   const { EventId } = req.query;
 
   const currentCount = await SiteVisit.count({
@@ -11,7 +11,7 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
       loggedOutAt: null,
       EventId,
     },
-  });
+  }).catch(next);
 
   const uniqueCount = await SiteVisit.count({
     where: {
@@ -19,7 +19,7 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
     },
     col: "SiteVisitorId",
     distinct: true,
-  });
+  }).catch(next);
 
   const data = await SiteVisit.findAll({
     where: {
@@ -29,9 +29,9 @@ router.get("/api/analytics/visitor-data", async (req, res) => {
       model: SiteVisitor,
       include: Registration,
     },
-  });
+  }).catch(next);
 
-  const history = await createVisitorsHistory(data, EventId);
+  const history = await createVisitorsHistory(data, EventId).catch(next);
 
   res.status(200).send({ currentCount, uniqueCount, data, history });
 });

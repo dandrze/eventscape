@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { ChatRoom, ChatUser } = require("../db").models;
 
-router.get("/api/chatroom/default", async (req, res) => {
+router.get("/api/chatroom/default", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { event } = req.query;
 
@@ -11,7 +11,7 @@ router.get("/api/chatroom/default", async (req, res) => {
       event,
       isDefault: true,
     },
-  });
+  }).catch(next);
 
   if (created) {
     newRoom.name = "Main Room (Default)";
@@ -27,106 +27,89 @@ router.get("/api/chatroom/all", async (req, res) => {
     where: {
       event,
     },
-  });
+  }).catch(next);
 
   res.status(200).send(chatRooms);
 });
 
-router.put("/api/chatroom", async (req, res) => {
+router.put("/api/chatroom", async (req, res, next) => {
   const {
     room: { id, name },
   } = req.body;
-  try {
-    const dbRoom = await ChatRoom.findOne({
-      where: {
-        id,
-      },
-    });
+  const dbRoom = await ChatRoom.findOne({
+    where: {
+      id,
+    },
+  }).catch(next);
 
-    dbRoom.name = name;
-    dbRoom.save();
+  dbRoom.name = name;
+  dbRoom.save();
 
-    res.status(200).send();
-  } catch (err) {
-    res.status(400).send({ message: "Error while updating chatroom" });
-  }
+  res.status(200).send();
 });
 
-router.put("/api/chatuser", async (req, res) => {
+router.put("/api/chatuser", async (req, res, next) => {
   const { EventscapeId, ChatRoomId, name } = req.body;
-  console.log(EventscapeId, name);
 
-  try {
-    const [dbUser, created] = await ChatUser.findOrCreate({
-      where: {
-        EventscapeId,
-        ChatRoomId,
-      },
-    });
+  const [dbUser, created] = await ChatUser.findOrCreate({
+    where: {
+      EventscapeId,
+      ChatRoomId,
+    },
+  }).catch(next);
 
-    console.log(dbUser, created);
+  console.log(dbUser, created);
 
-    dbUser.name = name;
-    dbUser.save();
+  dbUser.name = name;
+  dbUser.save();
 
-    res.status(200).send();
-  } catch (err) {
-    console.log(err);
-    res.status(400).send({ message: "Error while updating moderator name" });
-  }
+  res.status(200).send();
 });
 
-router.get("/api/chatuser", async (req, res) => {
+router.get("/api/chatuser", async (req, res, next) => {
   const { EventscapeId, ChatRoomId } = req.query;
 
-  try {
-    const [dbUser, created] = await ChatUser.findOrCreate({
-      where: {
-        EventscapeId,
-        ChatRoomId,
-      },
-    });
+  const [dbUser, created] = await ChatUser.findOrCreate({
+    where: {
+      EventscapeId,
+      ChatRoomId,
+    },
+  }).catch(next);
 
-    if (created) {
-      dbUser.name = "Moderator";
-      await dbUser.save();
-    }
-
-    res.status(200).send(dbUser);
-  } catch (err) {
-    console.log(err);
-    res.status(400).send({ message: "Error while updating moderator name" });
+  if (created) {
+    dbUser.name = "Moderator";
+    await dbUser.save();
   }
+
+  res.status(200).send(dbUser);
 });
 
-router.delete("/api/chatroom", async (req, res) => {
+router.delete("/api/chatroom", async (req, res, next) => {
   const { id } = req.query;
 
-  try {
-    const chatRoom = await ChatRoom.findOne({
-      where: {
-        id,
-      },
-    });
-    if (chatRoom.isDefault)
-      return res
-        .status(400)
-        .send({ message: "You cannot delete the primary chat room." });
-    if (chatRoom) await chatRoom.destroy();
+  const chatRoom = await ChatRoom.findOne({
+    where: {
+      id,
+    },
+  }).catch(next);
 
-    res.status(200).send();
-  } catch (err) {
-    res.status(400).send({ message: "Error while deleting chat room" });
-  }
+  if (chatRoom.isDefault)
+    return res
+      .status(400)
+      .send({ error: "You cannot delete the primary chat room." });
+
+  if (chatRoom) await chatRoom.destroy().catch(next);
+
+  res.status(200).send();
 });
 
-router.post("/api/chatroom", async (req, res) => {
+router.post("/api/chatroom", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { room, event } = req.body;
 
   console.log(room, event);
 
-  const newRoom = await ChatRoom.create({ name: room.name, event });
+  const newRoom = await ChatRoom.create({ name: room.name, event }).catch(next);
 
   res.status(200).send(newRoom);
 });

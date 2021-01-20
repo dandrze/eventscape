@@ -22,8 +22,6 @@ export const addChatRoom = (room, event) => async (dispatch) => {
     event,
   });
 
-  console.log(response);
-
   return response;
 };
 
@@ -32,8 +30,6 @@ export const updateChatRoom = (room) => async (dispatch) => {
     room,
   });
 
-  console.log(response);
-
   return response;
 };
 
@@ -41,8 +37,6 @@ export const updateChatModerator = (user) => async (dispatch) => {
   const response = await api.put("/api/event/chat-moderator", {
     user,
   });
-
-  console.log(response);
 
   return response;
 };
@@ -58,8 +52,6 @@ export const getChatModerator = (EventscapeId, ChatRoomId) => async (
     },
   });
 
-  console.log(response);
-
   return response.data;
 };
 
@@ -71,7 +63,7 @@ export const deleteChatRoom = (id) => async (dispatch) => {
 
     return response;
   } catch (err) {
-    toast.error(err.response.data.message);
+    toast.error(err.response.data.error);
   }
 };
 
@@ -84,8 +76,6 @@ export const updateChatUserName = (EventscapeId, ChatRoomId, name) => async (
     ChatRoomId,
   });
 
-  console.log(response);
-
   return response;
 };
 
@@ -93,8 +83,6 @@ export const fetchChatUser = (EventscapeId, ChatRoomId) => async (dispatch) => {
   const response = await api.get("/api/chatuser", {
     params: { EventscapeId, ChatRoomId },
   });
-
-  console.log(response);
 
   return response.data;
 };

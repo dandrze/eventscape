@@ -43,7 +43,7 @@ export const createEvent = (
     return true;
   } catch (err) {
     console.log(err.response);
-    toast.error("Error when creating new event: " + err.response.data);
+    toast.error("Error when creating new event: " + err.response.data.error);
     return false;
   }
 };
@@ -79,7 +79,7 @@ export const updateEvent = (
     return true;
   } catch (err) {
     console.log(err.response);
-    toast.error("Error when updating event: " + err.response.data);
+    toast.error("Error when updating event: " + err.response.data.error);
     return false;
   }
 };
@@ -96,7 +96,7 @@ export const fetchEvent = () => async (dispatch) => {
       return null;
     }
   } catch (err) {
-    toast.error("Error when fetching events: " + err.response.data);
+    toast.error("Error when fetching events: " + err.response.data.error);
     return false;
   }
 };
@@ -131,7 +131,7 @@ export const publishPage = () => async (dispatch, getState) => {
     });
     toast.success("Page successfully published");
   } catch (err) {
-    toast.error("Error when saving: " + err.response.data);
+    toast.error("Error when saving: " + err.response.data.error);
   }
 };
 
@@ -156,7 +156,7 @@ export const setEventRegistration = (hasRegistration, EventId) => async (
     toast.success("Registration successfuly changed");
     return true;
   } catch (err) {
-    toast.error("Error when setting Registration: " + err.response.data);
+    toast.error("Error when setting Registration: " + err.response.data.error);
     return false;
   }
 };

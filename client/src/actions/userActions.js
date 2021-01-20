@@ -19,8 +19,8 @@ export const signInLocal = (username, password) => async (dispatch) => {
       return { success: true };
     }
   } catch (err) {
-    toast.error("Error when signing in: " + err.response.data);
-    return { error: err.response.data };
+    toast.error("Error when signing in: " + err.response.data.error);
+    return { error: err.response.data.error };
   }
 };
 
