@@ -18,7 +18,6 @@ module.exports = (server) => {
           RegistrationId: attendeeId,
         },
       });
-      console.log(attendeeId);
 
       const siteVisit = await SiteVisit.create({
         EventId,

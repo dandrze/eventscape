@@ -17,7 +17,9 @@ const accountRoutes = require("./routes/accountRoutes");
 const liveEventRoutes = require("./routes/liveEventRoutes");
 const chatRoomRoutes = require("./routes/chatRoomRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
+const testRoutes = require("./routes/testRoutes");
 require("./services/passport");
+const terminate = require("./terminate");
 
 const app = express();
 
@@ -46,6 +48,7 @@ app.use(accountRoutes);
 app.use(liveEventRoutes);
 app.use(chatRoomRoutes);
 app.use(analyticsRoutes);
+app.use(testRoutes);
 // universal error handling for all database calls with .catch(next) at the end
 app.use((error, req, res, next) => {
   // console log will be replaced with logging when implemented
@@ -54,18 +57,6 @@ app.use((error, req, res, next) => {
 });
 
 if (process.env.NODE_ENV == "production") {
-  // safely crash if there is an uncaught exception
-  process.on("uncaughtException", (err) => {
-    console.log(`Uncaught Exception: ${err.message}`);
-    process.exit(1);
-  });
-
-  // safely crash if there is an unhandled rejection
-  process.on("unhandledRejection", (reason, promise) => {
-    console.log("Unhandled rejection at ", promise, `reason: ${err.message}`);
-    process.exit(1);
-  });
-
   // if we don't recognize the route, look into the client/build folder
   // will catch things like main.js and main.css
   app.use(express.static("client/build"));
@@ -82,6 +73,16 @@ const server = http.createServer(app);
 
 require("./services/ChatSocket")(server);
 require("./services/AnalyticsSocket")(server);
+
+const exitHandler = terminate(server, {
+  coredump: false,
+  timeout: 500,
+});
+// safely crash if there is an uncaught exception
+process.on("uncaughtException", exitHandler(1, "Unexpected Error"));
+process.on("unhandledRejection", exitHandler(1, "Unhandled Promise"));
+process.on("SIGTERM", exitHandler(0, "SIGTERM"));
+process.on("SIGINT", exitHandler(0, "SIGINT"));
 
 const PORT = process.env.PORT || 5000;
 
