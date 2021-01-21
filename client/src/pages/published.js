@@ -71,6 +71,10 @@ const Published = (props) => {
         uuid: cookies.get("uuid"),
         attendeeId,
       });
+
+      setInterval(() => {
+        socket.emit("pingVisit");
+      }, 15000);
     }
 
     setIsLoaded(true);
