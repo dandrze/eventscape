@@ -54,6 +54,18 @@ app.use((error, req, res, next) => {
 });
 
 if (process.env.NODE_ENV == "production") {
+  // safely crash if there is an uncaught exception
+  process.on("uncaughtException", (err) => {
+    console.log(`Uncaught Exception: ${err.message}`);
+    process.exit(1);
+  });
+
+  // safely crash if there is an unhandled rejection
+  process.on("unhandledRejection", (reason, promise) => {
+    console.log("Unhandled rejection at ", promise, `reason: ${err.message}`);
+    process.exit(1);
+  });
+
   // if we don't recognize the route, look into the client/build folder
   // will catch things like main.js and main.css
   app.use(express.static("client/build"));
