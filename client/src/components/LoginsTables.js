@@ -49,54 +49,52 @@ export default function LoginsTable({ data }) {
     {
       title: "First Name",
       render: (rowData) => (
-        <span>
-          {rowData.SiteVisitor.Registration
-            ? rowData.SiteVisitor.Registration.firstName
-            : "Anonymous"}
-        </span>
+        <span>{rowData.Registration?.firstName || "Anonymous"}</span>
       ),
     },
     {
       title: "Last Name",
       render: (rowData) => (
-        <span>
-          {rowData.SiteVisitor.Registration
-            ? rowData.SiteVisitor.Registration.lastName
-            : "Guest"}
-        </span>
+        <span>{rowData.Registration?.lastName || "Guest"}</span>
       ),
     },
     {
       title: "Email",
-      field: "SiteVisitor.Registration.emailAddress",
+      field: "Registration.emailAddress",
     },
     {
-      title: "Login",
-      field: "createdAt",
-    },
-    {
-      title: "Logout",
-      field: "loggedOutAt",
-    },
-    {
-      title: "Time Viewed",
+      title: "First Login",
       render: (rowData) => (
         <span>
-          {(
-            ((rowData.loggedOutAt
-              ? new Date(rowData.loggedOutAt)
-              : new Date()) -
-              new Date(rowData.createdAt)) /
-            60000
-          )
-            .toFixed(2)
-            .toString() + " Minutes"}
+          {new Date(rowData.createdAt).toLocaleString("en-us", {
+            dateStyle: "long",
+            timeStyle: "long",
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Last Logout",
+      render: (rowData) => (
+        <span>
+          {rowData.lastLogout
+            ? new Date(rowData.lastLogout).toLocaleString("en-us", {
+                dateStyle: "long",
+                timeStyle: "long",
+              })
+            : "Currently Logged In"}
+        </span>
+      ),
+    },
+    {
+      title: "Total Time Viewed",
+      render: (rowData) => (
+        <span>
+          {(rowData.timeViewed / 60000).toFixed(2).toString() + " Minutes"}
         </span>
       ),
     },
   ];
-
-  console.log(data);
 
   const options = {
     actionsColumnIndex: -1,

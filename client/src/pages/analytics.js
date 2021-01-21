@@ -32,7 +32,7 @@ const Analytics = (props) => {
         setData({
           current: visitors.currentCount,
           unique: visitors.uniqueCount,
-          data: visitors.data,
+          visitorData: visitors.visitorData,
           history: visitors.history,
         });
         console.log("fetched");
@@ -94,7 +94,7 @@ const Analytics = (props) => {
               </div>
               <div className="form-box shadow-border table-box">
                 <h3>Logins</h3>
-                <LoginsTable data={data.data} />
+                <LoginsTable data={data.visitorData} />
               </div>
             </div>
           ) : (

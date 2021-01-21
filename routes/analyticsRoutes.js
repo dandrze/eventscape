@@ -21,29 +21,54 @@ router.get("/api/analytics/visitor-data", async (req, res, next) => {
     distinct: true,
   }).catch(next);
 
-  const data = await SiteVisit.findAll({
+  const visitData = await SiteVisit.findAll({
     where: {
       EventId,
     },
-    include: {
-      model: SiteVisitor,
-      include: Registration,
-    },
+    raw: true,
+    order: [
+      "id",
+    ] /* ensures that the latest visit shows up last, required for mapping functions*/,
   }).catch(next);
 
-  const history = await createVisitorsHistory(data, EventId).catch(next);
+  const siteVisitors = await SiteVisitor.findAll({
+    where: {
+      EventId,
+    },
+    include: Registration,
+    raw: true,
+  }).catch(next);
 
-  res.status(200).send({ currentCount, uniqueCount, data, history });
+  const visitorData = siteVisitors.map((visitor) => {
+    let timeViewed = 0;
+    let lastLogout = null;
+    console.log(visitData);
+    for (let visit of visitData) {
+      if (visit.SiteVisitorId === visitor.id) {
+        if (visit.loggedOutAt) {
+          lastLogout = Math.max(lastLogout, visit.loggedOutAt);
+          timeViewed += visit.loggedOutAt - visit.createdAt;
+        } else {
+          lastLogout = null;
+          timeViewed += new Date() - visit.createdAt;
+        }
+      }
+      console.log(lastLogout);
+    }
+    return { ...visitor, timeViewed, lastLogout };
+  });
+
+  const history = await createVisitHistory(visitData, EventId).catch(next);
+
+  res.status(200).send({ currentCount, uniqueCount, visitorData, history });
 });
 
-const createVisitorsHistory = async (visitors, EventId) => {
+const createVisitHistory = async (visitData, EventId) => {
   // create a cleaner array for the time chart to use with just start time and end times
-  const visitTimes = visitors.map((visitor) => {
-    const start = new Date(visitor.createdAt);
+  const visitTimes = visitData.map((visit) => {
+    const start = new Date(visit.createdAt);
     // if the user hasn't logged out yet, just return the current timestamp
-    const end = visitor.loggedOutAt
-      ? new Date(visitor.loggedOutAt)
-      : new Date();
+    const end = visit.loggedOutAt ? new Date(visit.loggedOutAt) : new Date();
 
     return { start, end };
   });
@@ -54,17 +79,17 @@ const createVisitorsHistory = async (visitors, EventId) => {
   const lowerLimit = event.startDate.getTime();
   const upperLimit = event.endDate.getTime();
 
-  const visitorsArray = [];
+  const visitArray = [];
   // for each minute in the time chart range, count how many visits are active (time falls between its start and end time)
   for (let i = lowerLimit; i < upperLimit; i += 60 * 1000) {
     let count = 0;
     for (const visitTime of visitTimes) {
       if (i > visitTime.start && i < visitTime.end) count++;
     }
-    visitorsArray.push({ time: i, value: count });
+    visitArray.push({ time: i, value: count });
   }
 
-  return visitorsArray;
+  return visitArray;
 };
 
 module.exports = router;

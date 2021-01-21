@@ -16,6 +16,7 @@ module.exports = (server) => {
         where: {
           uuid,
           RegistrationId: attendeeId,
+          EventId,
         },
       });
 
@@ -27,11 +28,15 @@ module.exports = (server) => {
     });
 
     socket.on("disconnect", async (reason) => {
-      const siteVisit = await SiteVisit.findByPk(socket.visitId);
+      const siteVisit = await SiteVisit.findByPk(socket.visitId, {
+        include: SiteVisitor,
+      });
 
       if (siteVisit) {
         siteVisit.loggedOutAt = new Date();
+        siteVisit.SiteVisitor.loggedOutAt = siteVisit.loggedOutAt;
         siteVisit.save();
+        siteVisit.SiteVisitor.save();
       }
     });
   });

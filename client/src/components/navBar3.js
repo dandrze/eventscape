@@ -428,7 +428,7 @@ function NavBar3(props) {
               </ListItemIcon>
               <ListItemText
                 primary={props.user.firstName + " " + props.user.lastName}
-                secondary={props.user.email}
+                secondary={props.user.emailAddress}
               />
             </StyledMenuItemNoButton>
 

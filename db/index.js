@@ -27,6 +27,9 @@ SiteVisitor.hasMany(SiteVisit);
 SiteVisit.belongsTo(Event);
 Event.hasMany(SiteVisit);
 
+SiteVisitor.belongsTo(Event);
+Event.hasMany(SiteVisitor);
+
 Registration.hasMany(SiteVisitor);
 SiteVisitor.belongsTo(Registration);
 Event.hasMany(Registration);
@@ -51,7 +54,7 @@ RegistrationForm.belongsTo(Event);
 Event.hasMany(RegistrationForm);
 
 //sequelize.sync({ alter: true });
-//SiteVisit.sync({ alter: true });
+//SiteVisitor.sync({ alter: true });
 /*
 ChatUser.sync({ alter: true });
 ChatRoom.sync({ alter: true });
