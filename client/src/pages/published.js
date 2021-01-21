@@ -50,18 +50,22 @@ const Published = (props) => {
     }
 
     // Get user geo location
-    const geoData = await axios.get(
-      "http://api.ipstack.com/187.252.203.71?access_key=" +
-        process.env.REACT_APP_IPSTACK_KEY
-    );
+    try {
+      const geoData = await axios.get(
+        "http://api.ipstack.com/187.252.203.71?access_key=" +
+          process.env.REACT_APP_IPSTACK_KEY
+      );
 
-    const {
-      latitude,
-      longitude,
-      city,
-      country_name,
-      country_code,
-    } = geoData.data;
+      var {
+        latitude,
+        longitude,
+        city,
+        country_name,
+        country_code,
+      } = geoData.data;
+    } catch {
+      var { latitude, longitude, city, country_name, country_code } = null;
+    }
 
     // if the pagetype is event, turn on analytics
     if (pageType == pageNames.EVENT) {

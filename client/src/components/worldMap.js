@@ -4,12 +4,18 @@ import { VectorMap } from "react-jvectormap";
 const WorldMap = ({ data }) => {
   console.log(data);
 
-  const visitorLocations = data.map((visitor) => {
-    return {
-      latLng: [visitor.lat, visitor.long],
-      name: visitor.city,
-    };
-  });
+  const visitorLocations = data
+    .map((visitor) => {
+      if (visitor.lat) {
+        return {
+          latLng: [visitor.lat, visitor.long],
+          name: visitor.city,
+        };
+      } else {
+        return null;
+      }
+    })
+    .filter((location) => location != null);
 
   console.log(visitorLocations);
 
