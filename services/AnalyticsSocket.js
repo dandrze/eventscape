@@ -11,7 +11,7 @@ module.exports = (server) => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("join", async ({ EventId, uuid, attendeeId }) => {
+    socket.on("join", async ({ EventId, uuid, attendeeId, geoData }) => {
       const [siteVisitor, created] = await SiteVisitor.findOrCreate({
         where: {
           uuid,
@@ -19,6 +19,15 @@ module.exports = (server) => {
           EventId,
         },
       });
+
+      console.log(geoData);
+      // Save geo data
+      siteVisitor.city = geoData.city;
+      siteVisitor.country = geoData.country;
+      siteVisitor.countryCode = geoData.countryCode;
+      siteVisitor.lat = geoData.lat;
+      siteVisitor.long = geoData.long;
+      siteVisitor.save();
 
       const siteVisit = await SiteVisit.create({
         EventId,

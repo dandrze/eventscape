@@ -42,7 +42,6 @@ router.get("/api/analytics/visitor-data", async (req, res, next) => {
   const visitorData = siteVisitors.map((visitor) => {
     let timeViewed = 0;
     let lastLogout = null;
-    console.log(visitData);
     for (let visit of visitData) {
       if (visit.SiteVisitorId === visitor.id) {
         if (visit.loggedOutAt) {
@@ -53,7 +52,6 @@ router.get("/api/analytics/visitor-data", async (req, res, next) => {
           timeViewed += new Date() - visit.createdAt;
         }
       }
-      console.log(lastLogout);
     }
     return { ...visitor, timeViewed, lastLogout };
   });

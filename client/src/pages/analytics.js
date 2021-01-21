@@ -20,7 +20,6 @@ const Analytics = (props) => {
   });
 
   useEffect(() => {
-    console.log("useeffect called");
     var timeout;
     // refresh the data on the dashboard
     const fetchDataAsync = async () => {
@@ -35,7 +34,6 @@ const Analytics = (props) => {
           visitorData: visitors.visitorData,
           history: visitors.history,
         });
-        console.log("fetched");
 
         // fetch data again in 10 seconds
         timeout = setTimeout(() => {
@@ -52,7 +50,6 @@ const Analytics = (props) => {
 
     // cleanup. Clears the timeout when component unmounts.
     return () => {
-      console.log("cleared");
       clearTimeout(timeout);
     };
   }, [props.event.id]);
@@ -90,7 +87,7 @@ const Analytics = (props) => {
                 <div id="viewerLocationHeader">
                   <h3>Viewer Location</h3>
                 </div>
-                <WorldMap />
+                {data.visitorData ? <WorldMap data={data.visitorData} /> : null}
               </div>
               <div className="form-box shadow-border table-box">
                 <h3>Logins</h3>

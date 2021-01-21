@@ -14,3 +14,5 @@ node_modules
 
 # our keys will be here in plain text, so make sure this isn't pushed to git
 dev.js
+
+.env

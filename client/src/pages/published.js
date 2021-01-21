@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
 import uuid from "react-uuid";
+import axios from "axios";
 
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -31,8 +32,6 @@ const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
 
-  console.log(cookies.get("uuid"));
-
   useEffect(() => {
     fetchDataAsync();
   }, []);
@@ -50,7 +49,19 @@ const Published = (props) => {
       attendeeId = attendee.id;
     }
 
-    console.log(pageType);
+    // Get user geo location
+    const geoData = await axios.get(
+      "http://api.ipstack.com/187.252.203.71?access_key=" +
+        process.env.REACT_APP_IPSTACK_KEY
+    );
+
+    const {
+      latitude,
+      longitude,
+      city,
+      country_name,
+      country_code,
+    } = geoData.data;
 
     // if the pagetype is event, turn on analytics
     if (pageType == pageNames.EVENT) {
@@ -64,12 +75,18 @@ const Published = (props) => {
       });
 
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
-      console.log(event);
 
       socket.emit("join", {
         EventId: event.id,
         uuid: cookies.get("uuid"),
         attendeeId,
+        geoData: {
+          lat: latitude,
+          long: longitude,
+          city: city,
+          country: country_name,
+          countryCode: country_code,
+        },
       });
 
       setInterval(() => {
