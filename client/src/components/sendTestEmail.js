@@ -23,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function SendTestEmail({ subject, html, EventId, sendTestEmail, recipient }) {
+function SendTestEmail({ subject, html, eventId, sendTestEmail, recipient }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [emailAddress, setEmailAddress] = React.useState(
@@ -31,8 +31,6 @@ function SendTestEmail({ subject, html, EventId, sendTestEmail, recipient }) {
   );
   const [firstName, setFirstName] = React.useState(recipient.firstName);
   const [lastName, setLastName] = React.useState(recipient.lastName);
-
-  console.log(recipient);
 
   const handleOpen = () => {
     setOpen(true);
@@ -44,10 +42,10 @@ function SendTestEmail({ subject, html, EventId, sendTestEmail, recipient }) {
 
   const handleSend = () => {
     setOpen(false);
-    sendTestEmail(EventId, {
+    sendTestEmail(eventId, {
       subject,
       html,
-      EventId,
+      EventId: eventId,
       emailAddress,
       firstName,
       lastName,

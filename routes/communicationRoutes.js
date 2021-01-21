@@ -6,6 +6,7 @@ const Scheduler = require("../services/Scheduler");
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 const { Communication, EmailListRecipient, Event } = require("../db").models;
+const Registration = require("../db/models/Registration");
 
 router.get("/api/communication/all", async (req, res, next) => {
   const { EventId } = req.query;
@@ -175,8 +176,7 @@ router.post("/api/communication/test", async (req, res, next) => {
 
   // pull all relevant data to map to variables and put them into a list
   const event = await Event.findByPk(EventId, { raw: true }).catch(next);
-
-  const recipientData = { ...event, ...testRecipient };
+  const recipientData = { ...testRecipient, Event: event };
 
   const { success, failed } = await Mailer.mapVariablesAndSendEmail(
     [recipientData],
