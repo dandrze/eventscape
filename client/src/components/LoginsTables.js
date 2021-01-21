@@ -49,13 +49,13 @@ export default function LoginsTable({ data }) {
     {
       title: "First Name",
       render: (rowData) => (
-        <span>{rowData.Registration?.firstName || "Anonymous"}</span>
+        <span>{rowData["Registration.firstName"] || "Anonymous"}</span>
       ),
     },
     {
       title: "Last Name",
       render: (rowData) => (
-        <span>{rowData.Registration?.lastName || "Guest"}</span>
+        <span>{rowData["Registration.lastName"] || "Guest"}</span>
       ),
     },
     {
