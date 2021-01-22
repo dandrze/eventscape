@@ -17,7 +17,6 @@ const accountRoutes = require("./routes/accountRoutes");
 const liveEventRoutes = require("./routes/liveEventRoutes");
 const chatRoomRoutes = require("./routes/chatRoomRoutes");
 const analyticsRoutes = require("./routes/analyticsRoutes");
-const testRoutes = require("./routes/testRoutes");
 require("./services/passport");
 const terminate = require("./terminate");
 
@@ -48,7 +47,6 @@ app.use(accountRoutes);
 app.use(liveEventRoutes);
 app.use(chatRoomRoutes);
 app.use(analyticsRoutes);
-app.use(testRoutes);
 // universal error handling for all database calls with .catch(next) at the end
 app.use((error, req, res, next) => {
   // console log will be replaced with logging when implemented

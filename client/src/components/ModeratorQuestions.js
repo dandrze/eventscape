@@ -27,8 +27,6 @@ const ENDPOINT =
 let socket;
 
 const Questions = ({ questions, deleteMessage, restoreMessage }) => {
-  console.log(questions);
-
   return (
     <ScrollToBottom className="messages">
       {questions.map((question, i) => (
@@ -45,13 +43,21 @@ const Questions = ({ questions, deleteMessage, restoreMessage }) => {
 };
 
 const Question = ({
-  question: { text, name, time, email },
-  checked,
+  question: { id, text, name, time, email },
   deleteMessage,
   restoreMessage,
 }) => {
+  const [checked, setChecked] = useState(false);
+
+  const handleCheck = (newChecked) => {
+    setChecked(newChecked);
+  };
   return (
-    <div className={"questionContainer justifyEnd"}>
+    <div
+      className={`questionContainer justifyEnd" + ${
+        checked ? " questionChecked" : ""
+      }`}
+    >
       <p className="questionSendTime">
         {new Date(time).toLocaleTimeString("en-us", {
           hour: "2-digit",
@@ -67,13 +73,13 @@ const Question = ({
         </div>
         <div className="questionUsernameEmail">{email}</div>
       </div>
-      {false ? (
+      {checked ? (
         <Tooltip title="Uncheck" className="check-question">
-          <CheckBoxIcon />
+          <CheckBoxIcon onClick={() => handleCheck(false)} />
         </Tooltip>
       ) : (
         <Tooltip title="Check" className="check-question">
-          <CheckBoxOutlineBlankIcon />
+          <CheckBoxOutlineBlankIcon onClick={() => handleCheck(true)} />
         </Tooltip>
       )}
     </div>
@@ -108,7 +114,6 @@ const ModeratorQuestions = forwardRef(
       });
 
       socket.on("question", ({ name, text, time, email }) => {
-        console.log({ name, text, time, email });
         setQuestions((questions) => [
           ...questions,
           { name, text, time, email },
@@ -123,7 +128,6 @@ const ModeratorQuestions = forwardRef(
     // code below pulls in functions from messaging for moderator actions
     useImperativeHandle(ref, () => ({
       deleteAllMessages() {
-        console.log("child delete all called: " + room);
         socket.emit("deleteAllMessages", { room });
       },
       setIsHidden(isHidden) {

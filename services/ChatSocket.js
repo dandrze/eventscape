@@ -93,6 +93,7 @@ module.exports = (server) => {
               text: chatQuestion.text,
               time: chatQuestion.createdAt,
               email: chatQuestion.ChatUser.Registration?.emailAddress,
+              id: chatQuestion.id,
             });
           });
         }
