@@ -38,10 +38,9 @@ const Questions = ({ questions, setChecked }) => {
   );
 };
 
-const Question = ({
-  question: { id, text, name, time, email, isChecked },
-  setChecked,
-}) => {
+const Question = ({ question, setChecked }) => {
+  console.log(question);
+  const { id, text, name, time, email, isChecked } = question;
   const handleCheck = (newChecked) => {
     setChecked(id, newChecked);
   };

@@ -7,6 +7,8 @@ import React, {
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
+import CircularProgress from "@material-ui/core/CircularProgress";
+
 import clsx from "clsx";
 
 /* Tabs */
@@ -204,7 +206,7 @@ const StyledTab = withStyles((theme) => ({
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
 
-const Input = ({ setMessage, sendMessage, message, theme }) => (
+const Input = ({ setMessage, sendMessage, message, theme, sendLoading }) => (
   <form className="form">
     <input
       className="input width-80"
@@ -215,14 +217,19 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
       onKeyPress={(event) =>
         event.key === "Enter" ? sendMessage(event) : null
       }
+      disabled={sendLoading}
     />
-    <button
-      className="theme-button send-button width-20"
-      style={theme}
-      onClick={(e) => sendMessage(e)}
-    >
-      <TelegramIcon />
-    </button>
+    {sendLoading ? (
+      <CircularProgress style={{ margin: "auto" }} />
+    ) : (
+      <button
+        className="theme-button send-button width-20"
+        style={theme}
+        onClick={(e) => sendMessage(e)}
+      >
+        <TelegramIcon />
+      </button>
+    )}
   </form>
 );
 
@@ -267,8 +274,8 @@ const Chat = forwardRef(
     const [question, setQuestion] = useState("");
     const [chatHidden, setChatHidden] = useState(false);
     const [tabValue, setTabValue] = React.useState(0);
+    const [sendLoading, setSendLoading] = useState(false);
 
-    console.log(chatUserId);
     //temporary, will become props:
     /*const chatTabEnabled = true;
   const questionTabEnabled = true;*/
@@ -302,10 +309,6 @@ const Chat = forwardRef(
           ...messages,
           { text: error, isNotification: true },
         ]);
-      });
-
-      socket.on("roomData", ({ users }) => {
-        console.log(users);
       });
 
       socket.on("message", (message) => {
@@ -374,7 +377,6 @@ const Chat = forwardRef(
     // code below pulls in functions from messaging for moderator actions
     useImperativeHandle(ref, () => ({
       deleteAllMessages() {
-        console.log("child delete all called: " + room);
         socket.emit("deleteAllMessages", { room });
       },
       setIsHidden(isHidden) {
@@ -388,9 +390,11 @@ const Chat = forwardRef(
     const sendMessage = (event) => {
       event.preventDefault();
 
+      setSendLoading(true);
       if (message) {
         socket.emit("sendMessage", { chatUserId, room, message }, () => {
           setMessage("");
+          setSendLoading(false);
         });
       }
     };
@@ -400,11 +404,12 @@ const Chat = forwardRef(
 
       event.preventDefault();
 
-      console.log(chatUserId);
-
       if (question) {
         socket.emit("sendQuestion", { chatUserId, room, question }, () => {
           setQuestion("");
+          alert(
+            "Question successfully submitted! (Temporary alert, replace with better alert type)"
+          );
         });
       }
     };
@@ -462,6 +467,7 @@ const Chat = forwardRef(
                   message={message}
                   setMessage={setMessage}
                   sendMessage={sendMessage}
+                  sendLoading={sendLoading}
                 />
               </>
             </TabPanel>

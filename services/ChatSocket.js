@@ -169,8 +169,11 @@ module.exports = (server) => {
           text: chatQuestion.text,
           time: chatQuestion.createdAt,
           email: chatUser.Registration?.emailAddress || "",
+          id: chatQuestion.id,
           isChecked: chatQuestion.isChecked,
         });
+
+        callback();
       }
     );
 
