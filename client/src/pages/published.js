@@ -64,6 +64,7 @@ const Published = (props) => {
         country_code,
       } = geoData.data;
     } catch {
+      // return null if our subsrciption ran out
       var { latitude, longitude, city, country_name, country_code } = null;
     }
 

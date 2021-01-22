@@ -36,7 +36,7 @@ const StreamChat = (props) => {
     ? props.attendee.firstName + " " + props.attendee.lastName
     : "Guest" + rand.toString();
 
-  const userId = props.attendee.id || rand;
+  console.log(props.attendee.id);
 
   return (
     <div>
@@ -51,7 +51,7 @@ const StreamChat = (props) => {
                 room={props.chatRoom}
                 name={name}
                 isModerator={false}
-                userId={props.attendee.id}
+                registrationId={props.attendee.id}
               />
             </div>
           </div>

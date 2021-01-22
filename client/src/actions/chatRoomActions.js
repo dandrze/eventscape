@@ -41,13 +41,10 @@ export const updateChatModerator = (user) => async (dispatch) => {
   return response;
 };
 
-export const getChatModerator = (EventscapeId, ChatRoomId) => async (
-  dispatch
-) => {
-  console.log(EventscapeId);
+export const getChatModerator = (AccountId, ChatRoomId) => async (dispatch) => {
   const response = await api.get("/api/event/chat-moderator", {
     params: {
-      EventscapeId,
+      AccountId,
       ChatRoomId,
     },
   });
@@ -67,11 +64,11 @@ export const deleteChatRoom = (id) => async (dispatch) => {
   }
 };
 
-export const updateChatUserName = (EventscapeId, ChatRoomId, name) => async (
+export const updateChatUserName = (AccountId, ChatRoomId, name) => async (
   dispatch
 ) => {
   const response = await api.put("/api/chatuser", {
-    EventscapeId,
+    AccountId,
     name,
     ChatRoomId,
   });
@@ -79,9 +76,9 @@ export const updateChatUserName = (EventscapeId, ChatRoomId, name) => async (
   return response;
 };
 
-export const fetchChatUser = (EventscapeId, ChatRoomId) => async (dispatch) => {
+export const fetchChatUser = (AccountId, ChatRoomId) => async (dispatch) => {
   const response = await api.get("/api/chatuser", {
-    params: { EventscapeId, ChatRoomId },
+    params: { AccountId, ChatRoomId },
   });
 
   return response.data;

@@ -14,7 +14,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import AlertModal from "../components/AlertModal";
-import Grid from '@material-ui/core/Grid';
+import Grid from "@material-ui/core/Grid";
 
 import "./ModeratorChat.css";
 
@@ -62,7 +62,7 @@ const ModeratorChat = ({
 
   const handleSubmitDisplayName = async () => {
     await updateChatModerator({
-      EventscapeId: user.id,
+      AccountId: user.id,
       name: displayName,
       ChatRoomId: room.id,
     });
@@ -108,7 +108,12 @@ const ModeratorChat = ({
               />
             </div>
           </div>
-          <Grid container spacing={3} alignItems="flex-end" style={{ marginTop: "70px"}}>
+          <Grid
+            container
+            spacing={3}
+            alignItems="flex-end"
+            style={{ marginTop: "70px" }}
+          >
             <Grid item xs={6}>
               {/* Display Name */}
               <FormControl variant="outlined" className={classes.formControl}>
@@ -145,14 +150,22 @@ const ModeratorChat = ({
                   <CircularProgress />
                 </div>
               ) : (
-                <button className="Button2 mt-3" onClick={handleSubmitDisplayName} style={{ width: "100%" }}>
+                <button
+                  className="Button2 mt-3"
+                  onClick={handleSubmitDisplayName}
+                  style={{ width: "100%" }}
+                >
                   Update Display Name
                 </button>
               )}
             </Grid>
             <Grid item xs={6}>
               {/* Delete all chat message button */}
-              <button className="Button2 mt-3" onClick={handleNavAlertOpen} style={{ width: "100%" }}>
+              <button
+                className="Button2 mt-3"
+                onClick={handleNavAlertOpen}
+                style={{ width: "100%" }}
+              >
                 Delete All Chat Messages
               </button>
             </Grid>

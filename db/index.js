@@ -12,6 +12,7 @@ const Account = require("./models/Account");
 const Communication = require("./models/Communication");
 const EmailListRecipient = require("./models/EmailListRecipient");
 const RegistrationForm = require("./models/RegistrationForm");
+const ChatQuestion = require("./models/ChatQuestion");
 
 ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
@@ -20,6 +21,16 @@ ChatRoom.hasMany(ChatMessage);
 ChatUser.hasMany(ChatMessage);
 ChatUser.belongsTo(ChatRoom);
 ChatRoom.hasMany(ChatUser);
+
+ChatQuestion.belongsTo(ChatRoom);
+ChatQuestion.belongsTo(ChatUser);
+ChatRoom.hasMany(ChatQuestion);
+ChatUser.hasMany(ChatQuestion);
+
+ChatUser.belongsTo(Registration);
+Registration.hasMany(ChatUser);
+ChatUser.belongsTo(Account);
+Account.hasMany(ChatUser);
 
 SiteVisit.belongsTo(SiteVisitor);
 SiteVisitor.hasMany(SiteVisit);
@@ -82,5 +93,6 @@ module.exports = {
     Communication,
     EmailListRecipient,
     RegistrationForm,
+    ChatQuestion,
   },
 };

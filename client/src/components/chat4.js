@@ -10,10 +10,10 @@ import Tooltip from "@material-ui/core/Tooltip";
 import clsx from "clsx";
 
 /* Tabs */
-import PropTypes from 'prop-types';
-import Tabs from '@material-ui/core/Tabs';
-import Tab from '@material-ui/core/Tab';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import PropTypes from "prop-types";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 /* Icons */
 import TelegramIcon from "@material-ui/icons/Telegram";
@@ -146,7 +146,10 @@ function TabPanel(props) {
       style={{ flexGrow: "1", height: "calc(100% - 60px)" }}
     >
       {value === index && (
-        <span style={{ maxHeight: "100%", overflow: "none", flexGrow: "1"}} className="chatContainer">
+        <span
+          style={{ maxHeight: "100%", overflow: "none", flexGrow: "1" }}
+          className="chatContainer"
+        >
           {children}
         </span>
       )}
@@ -163,44 +166,39 @@ TabPanel.propTypes = {
 function a11yProps(index) {
   return {
     id: `simple-tab-${index}`,
-    'aria-controls': `simple-tabpanel-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
   };
 }
 
 const StyledTabs = withStyles({
   indicator: {
-    display: 'flex',
-    justifyContent: 'center',
-    '& > span': {
-      width: '100%',
-      backgroundColor: 'white',
+    display: "flex",
+    justifyContent: "center",
+    "& > span": {
+      width: "100%",
+      backgroundColor: "white",
     },
   },
 })((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
 const StyledTab = withStyles((theme) => ({
   root: {
-    textTransform: 'none',
-    height: '60px',
-    color: 'rgba(255, 255, 255, 0.9)',
-    fontSize: '18px',
-    fontWeight: '300',
-    fontFamily: [
-      'Roboto',
-      '"Helvetica Neue"',
-      'Arial',
-      'sans-serif',
-    ].join(','),
-    '&:hover': {
-      color: '#fff',
+    textTransform: "none",
+    height: "60px",
+    color: "rgba(255, 255, 255, 0.9)",
+    fontSize: "18px",
+    fontWeight: "300",
+    fontFamily: ["Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(","),
+    "&:hover": {
+      color: "#fff",
       opacity: 1,
     },
-    '&$selected': {
-      color: '#fff',
-      fontWeight: '400',
+    "&$selected": {
+      color: "#fff",
+      fontWeight: "400",
     },
-    '&:focus': {
-      color: '#fff',
+    "&:focus": {
+      color: "#fff",
     },
   },
   selected: {},
@@ -229,7 +227,7 @@ const Input = ({ setMessage, sendMessage, message, theme }) => (
 );
 
 const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
-  <div style={{ marginTop: "auto"}}>
+  <div style={{ marginTop: "auto" }}>
     <form className="form-question">
       <textarea
         className="input-question"
@@ -249,216 +247,248 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
   </div>
 );
 
-const Chat = forwardRef(({ name, room, userId, isModerator, chatTabEnabled, questionTabEnabled }, ref) => {
-  const classes = useStyles();
-  const [chatUserId, setChatUserId] = useState("");
-  const [message, setMessage] = useState("");
-  const [messages, setMessages] = useState([]);
-  const [question, setQuestion] = useState("");
-  const [chatHidden, setChatHidden] = useState(false);
-  const [tabValue, setTabValue] = React.useState(0);
+const Chat = forwardRef(
+  (
+    {
+      name,
+      room,
+      userId,
+      registrationId,
+      isModerator,
+      chatTabEnabled,
+      questionTabEnabled,
+    },
+    ref
+  ) => {
+    const classes = useStyles();
+    const [chatUserId, setChatUserId] = useState("");
+    const [message, setMessage] = useState("");
+    const [messages, setMessages] = useState([]);
+    const [question, setQuestion] = useState("");
+    const [chatHidden, setChatHidden] = useState(false);
+    const [tabValue, setTabValue] = React.useState(0);
 
-  //temporary, will become props:
-  /*const chatTabEnabled = true;
+    console.log(chatUserId);
+    //temporary, will become props:
+    /*const chatTabEnabled = true;
   const questionTabEnabled = true;*/
 
-  // Index numbers for tabs:
-  const chatIndex = 0;
-  const questionIndex = (chatTabEnabled === true && questionTabEnabled === true) ? 1 : 0;
+    // Index numbers for tabs:
+    const chatIndex = 0;
+    const questionIndex =
+      chatTabEnabled === true && questionTabEnabled === true ? 1 : 0;
 
-  const handleChangeTab = (event, newValue) => {
-    setTabValue(newValue);
-  };
+    const handleChangeTab = (event, newValue) => {
+      setTabValue(newValue);
+    };
 
-  useEffect(() => {
-    socket = io(ENDPOINT, {
-      path: "/api/socket/chat",
-      transports: ["websocket"],
-    });
-    socket.on("connect", () => {
-      console.log(socket.id);
-    });
-    socket.on("connect_error", (error) => {
-      setMessages((messages) => [
-        ...messages,
-        { text: error, isNotification: true },
-      ]);
-    });
+    useEffect(() => {
+      socket = io(ENDPOINT, {
+        path: "/api/socket/chat",
+        transports: ["websocket"],
+      });
+      socket.on("connect", () => {
+        console.log(socket.id);
+      });
+      socket.on("connect_error", (error) => {
+        setMessages((messages) => [
+          ...messages,
+          { text: error, isNotification: true },
+        ]);
+      });
 
-    socket.on("error", (error) => {
-      setMessages((messages) => [
-        ...messages,
-        { text: error, isNotification: true },
-      ]);
-    });
+      socket.on("error", (error) => {
+        setMessages((messages) => [
+          ...messages,
+          { text: error, isNotification: true },
+        ]);
+      });
 
-    socket.on("roomData", ({ users }) => {
-      console.log(users);
-    });
+      socket.on("roomData", ({ users }) => {
+        console.log(users);
+      });
 
-    socket.on("message", (message) => {
-      setMessages((messages) => [...messages, message]);
-    });
+      socket.on("message", (message) => {
+        setMessages((messages) => [...messages, message]);
+      });
 
-    socket.on("notification", (message) => {
-      setMessages((messages) => [
-        ...messages,
-        { ...message, isNotification: true },
-      ]);
-    });
+      socket.on("notification", (message) => {
+        setMessages((messages) => [
+          ...messages,
+          { ...message, isNotification: true },
+        ]);
+      });
 
-    socket.on("delete", (id) => {
-      //map through the messages array and add the deleted flag to the message with the target id
-      setMessages((messages) =>
-        messages.map((msg) => {
-          if (msg.id == id) {
+      socket.on("delete", (id) => {
+        //map through the messages array and add the deleted flag to the message with the target id
+        setMessages((messages) =>
+          messages.map((msg) => {
+            if (msg.id == id) {
+              return { ...msg, deleted: true };
+            } else {
+              return msg;
+            }
+          })
+        );
+      });
+
+      socket.on("restore", (id) => {
+        //map through the messages array and add the deleted flag to the message with the target id
+        setMessages((messages) =>
+          messages.map((msg) => {
+            if (msg.id == id) {
+              return { ...msg, deleted: false };
+            } else {
+              return msg;
+            }
+          })
+        );
+      });
+
+      socket.on("chatHidden", (isHidden) => {
+        setChatHidden(isHidden);
+      });
+
+      socket.on("deleteAll", () => {
+        setMessages((messages) =>
+          messages.map((msg) => {
             return { ...msg, deleted: true };
-          } else {
-            return msg;
-          }
-        })
-      );
-    });
-
-    socket.on("restore", (id) => {
-      //map through the messages array and add the deleted flag to the message with the target id
-      setMessages((messages) =>
-        messages.map((msg) => {
-          if (msg.id == id) {
-            return { ...msg, deleted: false };
-          } else {
-            return msg;
-          }
-        })
-      );
-    });
-
-    socket.on("chatHidden", (isHidden) => {
-      setChatHidden(isHidden);
-    });
-
-    socket.on("deleteAll", () => {
-      setMessages((messages) =>
-        messages.map((msg) => {
-          return { ...msg, deleted: true };
-        })
-      );
-    });
-
-    socket.on("refresh", () => {
-      console.log("chat refreshed");
-      setMessages([]);
-    });
-
-    socket.emit("join", { name, userId, room, isModerator }, (id) => {
-      setChatUserId(id);
-    });
-  }, []);
-
-  // code below pulls in functions from messaging for moderator actions
-  useImperativeHandle(ref, () => ({
-    deleteAllMessages() {
-      console.log("child delete all called: " + room);
-      socket.emit("deleteAllMessages", { room });
-    },
-    setIsHidden(isHidden) {
-      socket.emit("setChatHidden", { isHidden, room });
-    },
-    refreshChat() {
-      socket.emit("refreshChat", { room });
-    },
-  }));
-
-  const sendMessage = (event) => {
-    event.preventDefault();
-
-    if (message) {
-      socket.emit("sendMessage", { userId: chatUserId, room, message }, () => {
-        setMessage("");
+          })
+        );
       });
-    }
-  };
 
-  const sendQuestion = (event) => {
-    // David to connect
-
-    event.preventDefault();
-
-    if (question) {
-      socket.emit("sendQuestion", { userId: chatUserId, room, question }, () => {
-        setQuestion("");
+      socket.on("refresh", () => {
+        console.log("chat refreshed");
+        setMessages([]);
       });
-    }
-  };
 
-  const deleteMessage = (id) => {
-    socket.emit("deleteMessage", { id, room });
-  };
+      socket.emit(
+        "join",
+        { name, userId, registrationId, room, isModerator },
+        (id) => {
+          setChatUserId(id);
+        }
+      );
+    }, []);
 
-  const restoreMessage = (id) => {
-    socket.emit("restoreMessage", { id, room });
-  };
+    // code below pulls in functions from messaging for moderator actions
+    useImperativeHandle(ref, () => ({
+      deleteAllMessages() {
+        console.log("child delete all called: " + room);
+        socket.emit("deleteAllMessages", { room });
+      },
+      setIsHidden(isHidden) {
+        socket.emit("setChatHidden", { isHidden, room });
+      },
+      refreshChat() {
+        socket.emit("refreshChat", { room });
+      },
+    }));
 
-  return (
-    <div
-      className={clsx({
-        chatOuterContainer: true,
-        "display-none": !isModerator && chatHidden,
-      })}
-    >
-      <div className="chatContainer">
-        <div className="infoBar">
-          <StyledTabs 
-            value={tabValue} 
-            onChange={handleChangeTab} 
-            aria-label="simple tabs example"
-            indicatorColor="secondary"
-            variant="fullWidth"
-          >
-            {chatTabEnabled === true && (
-              <StyledTab label="Chat" {...a11yProps(chatIndex)} />
-            )}
-            {questionTabEnabled === true && (
-              <StyledTab label="Ask a Question" {...a11yProps(questionIndex)} />
-            )}
-          </StyledTabs>
-        </div>
-        {chatTabEnabled === true && (
-          <TabPanel value={tabValue} index={chatIndex} classes={{ root: classes.tab }}>
-            <>
-            <Messages
-              messages={messages}
-              chatUserId={chatUserId}
-              isModerator={isModerator}
-              deleteMessage={deleteMessage}
-              restoreMessage={restoreMessage}
-            />
-            <Input
-              message={message}
-              setMessage={setMessage}
-              sendMessage={sendMessage}
-            />
-            </>
-          </TabPanel>
-        )}
-        {questionTabEnabled === true && (
-          <TabPanel value={tabValue} index={questionIndex} classes={{ root: classes.tab }}>
-              <InputAskQuestion
-                  question={question}
-                  setQuestion={setQuestion}
-                  sendQuestion={sendQuestion}
+    const sendMessage = (event) => {
+      event.preventDefault();
+
+      if (message) {
+        socket.emit("sendMessage", { chatUserId, room, message }, () => {
+          setMessage("");
+        });
+      }
+    };
+
+    const sendQuestion = (event) => {
+      // David to connect
+
+      event.preventDefault();
+
+      console.log(chatUserId);
+
+      if (question) {
+        socket.emit("sendQuestion", { chatUserId, room, question }, () => {
+          setQuestion("");
+        });
+      }
+    };
+
+    const deleteMessage = (id) => {
+      socket.emit("deleteMessage", { id, room });
+    };
+
+    const restoreMessage = (id) => {
+      socket.emit("restoreMessage", { id, room });
+    };
+
+    return (
+      <div
+        className={clsx({
+          chatOuterContainer: true,
+          "display-none": !isModerator && chatHidden,
+        })}
+      >
+        <div className="chatContainer">
+          <div className="infoBar">
+            <StyledTabs
+              value={tabValue}
+              onChange={handleChangeTab}
+              aria-label="simple tabs example"
+              indicatorColor="secondary"
+              variant="fullWidth"
+            >
+              {chatTabEnabled === true && (
+                <StyledTab label="Chat" {...a11yProps(chatIndex)} />
+              )}
+              {questionTabEnabled === true && (
+                <StyledTab
+                  label="Ask a Question"
+                  {...a11yProps(questionIndex)}
                 />
-          </TabPanel>
-        )}
+              )}
+            </StyledTabs>
+          </div>
+          {chatTabEnabled === true && (
+            <TabPanel
+              value={tabValue}
+              index={chatIndex}
+              classes={{ root: classes.tab }}
+            >
+              <>
+                <Messages
+                  messages={messages}
+                  chatUserId={chatUserId}
+                  isModerator={isModerator}
+                  deleteMessage={deleteMessage}
+                  restoreMessage={restoreMessage}
+                />
+                <Input
+                  message={message}
+                  setMessage={setMessage}
+                  sendMessage={sendMessage}
+                />
+              </>
+            </TabPanel>
+          )}
+          {questionTabEnabled === true && (
+            <TabPanel
+              value={tabValue}
+              index={questionIndex}
+              classes={{ root: classes.tab }}
+            >
+              <InputAskQuestion
+                question={question}
+                setQuestion={setQuestion}
+                sendQuestion={sendQuestion}
+              />
+            </TabPanel>
+          )}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  }
+);
 
 Chat.defaultProps = {
   isModerator: false,
   chatTabEnabled: true,
   questionTabEnabled: true,
-}
+};
 
 export default Chat;
