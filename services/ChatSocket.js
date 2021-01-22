@@ -34,8 +34,6 @@ module.exports = (server) => {
         var user;
         var created;
 
-        console.log({ userId, registrationId, name, room, isModerator });
-
         if (!userId && !registrationId) {
           // if they are not an eventscape user or a registered guest, make an anonymous ChatUser
           user = await ChatUser.create({ name });
@@ -87,13 +85,13 @@ module.exports = (server) => {
           });
 
           chatQuestions.forEach((chatQuestion) => {
-            console.log(chatQuestion.ChatUser);
             socket.emit("question", {
               name: chatQuestion.ChatUser.name,
               text: chatQuestion.text,
               time: chatQuestion.createdAt,
               email: chatQuestion.ChatUser.Registration?.emailAddress,
               id: chatQuestion.id,
+              isChecked: chatQuestion.isChecked,
             });
           });
         }
@@ -103,8 +101,6 @@ module.exports = (server) => {
     );
 
     socket.on("refreshChat", async ({ room }) => {
-      console.log("chat refreshed");
-      console.log(room);
       io.to(room).emit("refresh");
 
       const messageHistory = await ChatMessage.findAll({
@@ -127,6 +123,10 @@ module.exports = (server) => {
           userId: message.ChatUser.id,
         });
       });
+    });
+
+    socket.on("setQuestionChecked", async ({ id, isChecked }) => {
+      await ChatQuestion.update({ isChecked }, { where: { id } });
     });
 
     socket.on(
@@ -154,8 +154,6 @@ module.exports = (server) => {
     socket.on(
       "sendQuestion",
       async ({ chatUserId, room, question }, callback) => {
-        console.log({ chatUserId, room, question });
-
         const chatUser = await ChatUser.findByPk(chatUserId, {
           include: Registration,
         });
@@ -166,12 +164,12 @@ module.exports = (server) => {
           ChatRoomId: room,
         });
 
-        console.log(chatUser.Registration?.emailAddress);
         io.to(room).emit("question", {
           name: chatUser.name,
           text: chatQuestion.text,
           time: chatQuestion.createdAt,
           email: chatUser.Registration?.emailAddress || "",
+          isChecked: chatQuestion.isChecked,
         });
       }
     );

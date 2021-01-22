@@ -26,16 +26,12 @@ const ENDPOINT =
 
 let socket;
 
-const Questions = ({ questions, deleteMessage, restoreMessage }) => {
+const Questions = ({ questions, setChecked }) => {
   return (
     <ScrollToBottom className="messages">
       {questions.map((question, i) => (
         <div key={i}>
-          <Question
-            question={question}
-            deleteMessage={deleteMessage}
-            restoreMessage={restoreMessage}
-          />
+          <Question question={question} setChecked={setChecked} />
         </div>
       ))}
     </ScrollToBottom>
@@ -43,19 +39,16 @@ const Questions = ({ questions, deleteMessage, restoreMessage }) => {
 };
 
 const Question = ({
-  question: { id, text, name, time, email },
-  deleteMessage,
-  restoreMessage,
+  question: { id, text, name, time, email, isChecked },
+  setChecked,
 }) => {
-  const [checked, setChecked] = useState(false);
-
   const handleCheck = (newChecked) => {
-    setChecked(newChecked);
+    setChecked(id, newChecked);
   };
   return (
     <div
       className={`questionContainer justifyEnd" + ${
-        checked ? " questionChecked" : ""
+        isChecked ? " questionChecked" : ""
       }`}
     >
       <p className="questionSendTime">
@@ -73,7 +66,7 @@ const Question = ({
         </div>
         <div className="questionUsernameEmail">{email}</div>
       </div>
-      {checked ? (
+      {isChecked ? (
         <Tooltip title="Uncheck" className="check-question">
           <CheckBoxIcon onClick={() => handleCheck(false)} />
         </Tooltip>
@@ -113,11 +106,8 @@ const ModeratorQuestions = forwardRef(
         ]);
       });
 
-      socket.on("question", ({ name, text, time, email }) => {
-        setQuestions((questions) => [
-          ...questions,
-          { name, text, time, email },
-        ]);
+      socket.on("question", (question) => {
+        setQuestions((questions) => [...questions, question]);
       });
 
       socket.emit("join", { name, userId, room, isModerator: true }, (id) => {
@@ -138,11 +128,27 @@ const ModeratorQuestions = forwardRef(
       },
     }));
 
+    const setChecked = (id, isChecked) => {
+      socket.emit("setQuestionChecked", { id, isChecked });
+      setQuestions((questions) =>
+        questions.map((question) => {
+          // if the id matches, set isChecked to the new value, otherwise set it to the existing value
+          const newChecked =
+            question.id === id ? isChecked : question.isChecked;
+          return { ...question, isChecked: newChecked };
+        })
+      );
+    };
+
     return (
       <div className="chatOuterContainer">
         <div className="chatContainer">
           <div className="infoBar moderator-questions-header">Questions</div>
-          <Questions questions={questions} chatUserId={chatUserId} />
+          <Questions
+            questions={questions}
+            chatUserId={chatUserId}
+            setChecked={setChecked}
+          />
         </div>
       </div>
     );
