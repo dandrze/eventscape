@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import SimpleNavBar from "../components/simpleNavBar";
+
 import { toast } from "react-toastify";
 
 import * as actions from "../actions";
@@ -102,87 +104,86 @@ function Create_Account(props) {
 
   return (
     <div>
-      <div
-        className="form-box shadow-border"
-        style={{
-          maxWidth: "550px",
-          marginTop: "60px",
-        }}
-      >
-        <h1>
-          Create your<br></br>free account to<br></br>continue.
-        </h1>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <TextField
-            type="text"
-            id="f-name"
-            label="First Name"
-            variant="outlined"
-            value={firstName}
-            onChange={handleChangeFirstName}
-            helperText={firstNameErrorText}
-          />
-        </FormControl>
-        <br></br>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <TextField
-            type="text"
-            id="l-name"
-            label="Last Name"
-            variant="outlined"
-            value={lastName}
-            onChange={handleChangeLastName}
-            helperText={lastNameErrorText}
-          />
-        </FormControl>
-        <br></br>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <TextField
-            type="email"
-            id="email"
-            label="Email"
-            variant="outlined"
-            value={emailAddress}
-            onChange={handleChangeEmail}
-            helperText={emailErrorText}
-          />
-        </FormControl>
-        <br></br>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <TextField
-            type="password"
-            id="password"
-            label="Password"
-            variant="outlined"
-            value={password}
-            onChange={handleChangePassword}
-            helperText={passwordErrorText}
-          />
-        </FormControl>
-        <FormControl variant="outlined" className={classes.formControl}>
-          <TextField
-            type="password"
-            id="confirmPassword"
-            label="Confirm Password"
-            variant="outlined"
-            value={confirmPassword}
-            onChange={handleChangeConfirmPassword}
-            helperText={confirmPasswordErrorText}
-          />
-        </FormControl>
-        <br></br>
-        <br></br>
-        <button className="Button1" type="submit" onClick={handleSubmit}>
-          Create My Account
-        </button>
-      </div>
-      <div className="force-width">
-        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-        - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-      </div>
+      <SimpleNavBar
+        content={
+          <div
+            className="form-box shadow-border"
+            style={{
+              maxWidth: "550px",
+              marginTop: "60px",
+              marginBottom: "60px",
+            }}
+          >
+            <h1>
+              Create your<br></br>free account to<br></br>continue.
+            </h1>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="text"
+                id="f-name"
+                label="First Name"
+                variant="outlined"
+                value={firstName}
+                onChange={handleChangeFirstName}
+                helperText={firstNameErrorText}
+              />
+            </FormControl>
+            <br></br>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="text"
+                id="l-name"
+                label="Last Name"
+                variant="outlined"
+                value={lastName}
+                onChange={handleChangeLastName}
+                helperText={lastNameErrorText}
+              />
+            </FormControl>
+            <br></br>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="email"
+                id="email"
+                label="Email"
+                variant="outlined"
+                value={emailAddress}
+                onChange={handleChangeEmail}
+                helperText={emailErrorText}
+              />
+            </FormControl>
+            <br></br>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="password"
+                id="password"
+                label="Password"
+                variant="outlined"
+                value={password}
+                onChange={handleChangePassword}
+                helperText={passwordErrorText}
+              />
+            </FormControl>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="password"
+                id="confirmPassword"
+                label="Confirm Password"
+                variant="outlined"
+                value={confirmPassword}
+                onChange={handleChangeConfirmPassword}
+                helperText={confirmPasswordErrorText}
+              />
+            </FormControl>
+            <br></br>
+            <br></br>
+            <button className="Button1" type="submit" onClick={handleSubmit}>
+              Create My Account
+            </button>
+            <p className="subtext" style={{ marginTop: "8px" }}>Already have an account? <Link to="/login" className="link1">Sign in</Link></p>
+          </div>
+        }
+      />
     </div>
   );
 }

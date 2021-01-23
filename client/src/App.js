@@ -27,6 +27,8 @@ import Login from "./pages/login";
 import AccountSettingsContact from "./pages/account-settings-contact";
 import AccountSettingsPassword from "./pages/account-settings-password";
 import AccountSettingsPayments from "./pages/account-settings-payments";
+import ResetPassword from "./pages/password-reset";
+import ChangePassword from "./pages/change-password";
 import Test from "./pages/test";
 
 //import "froala-editor/css/froala_style.min.css";
@@ -150,6 +152,16 @@ function App(props) {
           exact
           path="/account-settings-payments"
           component={requireAuth(AccountSettingsPayments)}
+        />
+        <Route
+          exact
+          path="/reset-password"
+          component={ResetPassword}
+        />
+        <Route
+          exact
+          path="/change-password"
+          component={ChangePassword}
         />
         <Route exact path="/test" component={Test} />
       </header>
