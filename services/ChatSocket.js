@@ -22,7 +22,7 @@ module.exports = (server) => {
 
     socket.on(
       "join",
-      async ({ userId, registrationId, name, room, isModerator }, callback) => {
+      async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
         const chatRoom = await ChatRoom.findByPk(room);
 
         const messageHistory = await ChatMessage.findAll({
@@ -34,29 +34,35 @@ module.exports = (server) => {
         var user;
         var created;
 
-        if (!userId && !registrationId) {
-          // if they are not an eventscape user or a registered guest, make an anonymous ChatUser
-          user = await ChatUser.create({ name });
-        } else {
-          // if the client passed a registrationId that means it's a registered guest, so fetch their info
-          const registration = registrationId
-            ? await Registration.findByPk(registrationId)
-            : null;
-          // if the client passed a userId taht means it's an eventscape user so fetch their info
-          const account = userId ? await Account.findByPk(userId) : null;
+        // if the client passed a registrationId that means it's a registered guest, so fetch their info
+        const registration = registrationId
+          ? await Registration.findByPk(registrationId)
+          : null;
+        // if the client passed a userId taht means it's an eventscape user so fetch their info
+        const account = userId ? await Account.findByPk(userId) : null;
 
-          [user, created] = await ChatUser.findOrCreate({
-            where: {
-              AccountId: account ? account.id : null,
-              RegistrationId: registration ? registration.id : null,
-              ChatRoomId: room,
-            },
-          });
+        [user, created] = await ChatUser.findOrCreate({
+          where: {
+            //If it's an eventscape user, there will be an account, otherwise it is not an eventscape user
+            AccountId: account ? account.id : null,
+            //if it's a registered attendee, there will be a registration, otherwise it is not a registered attendee
+            RegistrationId: registration ? registration.id : null,
+            //if there is no accountId or RegistrationId then the client will pass us a uuid to idenfity the anonymous visitor
+            uuid: uuid || null,
+            ChatRoomId: room,
+          },
+        });
 
-          if (created) {
-            user.name = name;
-            user.save();
-          }
+        // if it's an eventscape moderator, the name as already set in the chatroom endpoint upon load
+        // for everyone else we need to set their name if it's a new user
+        if (created && !account) {
+          // if it's a registered attendee, use the attendee first name + last name as their name
+          // if it's not a registered attendee then we'll create a guest name for them
+          user.name = registration
+            ? registration.firstName + " " + registration.lastName
+            : "Guest" + user.id;
+
+          user.save();
         }
 
         socket.join(room);
