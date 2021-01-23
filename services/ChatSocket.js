@@ -95,7 +95,9 @@ module.exports = (server) => {
               name: chatQuestion.ChatUser.name,
               text: chatQuestion.text,
               time: chatQuestion.createdAt,
-              email: chatQuestion.ChatUser.Registration?.emailAddress,
+              email: chatQuestion.ChatUser.Registration
+                ? chatQuestion.ChatUser.Registration.emailAddress
+                : null,
               id: chatQuestion.id,
               isChecked: chatQuestion.isChecked,
             });
@@ -174,7 +176,9 @@ module.exports = (server) => {
           name: chatUser.name,
           text: chatQuestion.text,
           time: chatQuestion.createdAt,
-          email: chatUser.Registration?.emailAddress || "",
+          email: chatUser.Registration
+            ? chatUser.Registration.emailAddress
+            : null,
           id: chatQuestion.id,
           isChecked: chatQuestion.isChecked,
         });
