@@ -299,7 +299,7 @@ const Chat = forwardRef(
         transports: ["websocket"],
       });
       socket.on("connect", () => {
-        console.log(socket.id);
+        console.log("Connected to socket");
       });
       socket.on("connect_error", (error) => {
         setMessages((messages) => [

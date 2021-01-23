@@ -113,7 +113,7 @@ const Published = (props) => {
       return <RegistrationNotFound />;
     } else if (props.event.id) {
       return (
-        <div class="fr-view live-page-container">
+        <div className="fr-view live-page-container">
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
@@ -128,6 +128,7 @@ const Published = (props) => {
                 })
               ) : (
                 <FroalaEditorView
+                  key={section.id}
                   model={section.html.replace(
                     `contenteditable="true"`,
                     `contenteditable="false"`

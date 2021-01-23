@@ -220,37 +220,37 @@ function RegistrationForm(props) {
                 <div className="form-group">
                   <label>
                     <span>First Name</span>
-                    <span class="label-required badge badge-danger">
+                    <span className="label-required badge badge-danger">
                       Required
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     value={firstName}
                     onChange={handleFirstNameChange}
                   />
                   <label>
                     <span>Last Name</span>
-                    <span class="label-required badge badge-danger">
+                    <span className="label-required badge badge-danger">
                       Required
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     value={lastName}
                     onChange={handleLastNameChange}
                   />
                   <label>
                     <span>Email Address</span>
-                    <span class="label-required badge badge-danger">
+                    <span className="label-required badge badge-danger">
                       Required
                     </span>
                   </label>
                   <input
                     type="text"
-                    class="form-control"
+                    className="form-control"
                     value={emailAddress}
                     onChange={handleEmailChange}
                     onBlur={handleEmailBlur}
@@ -319,8 +319,8 @@ function RegistrationForm(props) {
                 <br></br>
                 <br></br>
                 <p>
-                  Your link to join the event has been sent to the email
-                  address you entered.
+                  Your link to join the event has been sent to the email address
+                  you entered.
                 </p>
                 <p>
                   Please check your inbox and if it’s not there, try checking

@@ -24,11 +24,11 @@ import Tabs from "../components/Tabs";
 import RoomTable from "./room-table";
 import { fetchChatRooms } from "../actions";
 import Modal1 from "./Modal1";
-import FormLabel from '@material-ui/core/FormLabel';
-import FormGroup from '@material-ui/core/FormGroup';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import FormHelperText from '@material-ui/core/FormHelperText';
-import Checkbox from '@material-ui/core/Checkbox';
+import FormLabel from "@material-ui/core/FormLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import FormHelperText from "@material-ui/core/FormHelperText";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -164,7 +164,10 @@ function DesignBlockToolbar(props) {
   };
 
   const handleChangeTabsEnabled = (event) => {
-    setTabsEnabled({ ...tabsEnabled, [event.target.name]: event.target.checked });
+    setTabsEnabled({
+      ...tabsEnabled,
+      [event.target.name]: event.target.checked,
+    });
   };
 
   const { chat, question } = tabsEnabled;
@@ -345,25 +348,44 @@ function DesignBlockToolbar(props) {
               <div label="Chat / Ask a Question">
                 <div className="settings-container">
                   <div className={classes.root}>
-                  <FormControl error={tabsEnabledError} component="fieldset" className={classes.formControl}>
-                    <FormLabel component="legend">Tabs Enabled</FormLabel>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={<Checkbox checked={chat} onChange={handleChangeTabsEnabled} name="chat" />}
-                        label="Chat"
-                      />
-                      <FormControlLabel
-                        control={<Checkbox checked={question} onChange={handleChangeTabsEnabled} name="question" />}
-                        label="Ask a Question"
-                      />
-                    </FormGroup>
-                    {tabsEnabledError === true && (
-                      <FormHelperText>Please choose at least one tab.</FormHelperText>
-                    )}
-                  </FormControl>
+                    <FormControl
+                      error={tabsEnabledError}
+                      component="fieldset"
+                      className={classes.formControl}
+                    >
+                      <FormLabel component="legend">Tabs Enabled</FormLabel>
+                      <FormGroup>
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={chat}
+                              onChange={handleChangeTabsEnabled}
+                              name="chat"
+                            />
+                          }
+                          label="Chat"
+                        />
+                        <FormControlLabel
+                          control={
+                            <Checkbox
+                              checked={question}
+                              onChange={handleChangeTabsEnabled}
+                              name="question"
+                            />
+                          }
+                          label="Ask a Question"
+                        />
+                      </FormGroup>
+                      {tabsEnabledError === true && (
+                        <FormHelperText>
+                          Please choose at least one tab.
+                        </FormHelperText>
+                      )}
+                    </FormControl>
                     <p>
-                      If you would like to have multiple independent chat/question
-                      windows, you can create and assign new rooms below.
+                      If you would like to have multiple independent
+                      chat/question windows, you can create and assign new rooms
+                      below.
                     </p>
                     <Grid container spacing={3}>
                       <Grid item xs={12}>
@@ -387,7 +409,9 @@ function DesignBlockToolbar(props) {
                           >
                             {rooms.map((room) => {
                               return (
-                                <MenuItem value={room.id}>{room.name}</MenuItem>
+                                <MenuItem key={room.id} value={room.id}>
+                                  {room.name}
+                                </MenuItem>
                               );
                             })}
                           </Select>
