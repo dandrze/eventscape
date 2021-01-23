@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
 import uuid from "react-uuid";
+import axios from "axios";
 
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -31,8 +32,6 @@ const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
 
-  console.log(cookies.get("uuid"));
-
   useEffect(() => {
     fetchDataAsync();
   }, []);
@@ -50,7 +49,24 @@ const Published = (props) => {
       attendeeId = attendee.id;
     }
 
-    console.log(pageType);
+    // Get user geo location
+    try {
+      const geoData = await axios.get(
+        "http://api.ipstack.com/187.252.203.71?access_key=" +
+          process.env.REACT_APP_IPSTACK_KEY
+      );
+
+      var {
+        latitude,
+        longitude,
+        city,
+        country_name,
+        country_code,
+      } = geoData.data;
+    } catch {
+      // return null if our subsrciption ran out
+      var { latitude, longitude, city, country_name, country_code } = null;
+    }
 
     // if the pagetype is event, turn on analytics
     if (pageType == pageNames.EVENT) {
@@ -64,13 +80,23 @@ const Published = (props) => {
       });
 
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
-      console.log(event);
 
       socket.emit("join", {
         EventId: event.id,
         uuid: cookies.get("uuid"),
         attendeeId,
+        geoData: {
+          lat: latitude,
+          long: longitude,
+          city: city,
+          country: country_name,
+          countryCode: country_code,
+        },
       });
+
+      setInterval(() => {
+        socket.emit("pingVisit");
+      }, 15000);
     }
 
     setIsLoaded(true);
@@ -87,7 +113,7 @@ const Published = (props) => {
       return <RegistrationNotFound />;
     } else if (props.event.id) {
       return (
-        <div class="fr-view live-page-container">
+        <div className="fr-view live-page-container">
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
@@ -102,6 +128,7 @@ const Published = (props) => {
                 })
               ) : (
                 <FroalaEditorView
+                  key={section.id}
                   model={section.html.replace(
                     `contenteditable="true"`,
                     `contenteditable="false"`

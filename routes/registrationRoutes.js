@@ -72,7 +72,7 @@ router.put("/api/registration", async (req, res, next) => {
   res.status(200).send(registration);
 });
 
-router.get("/api/registration/event", async (req, res) => {
+router.get("/api/registration/event", async (req, res, next) => {
   const { event } = req.query;
 
   const registrations = await Registration.findAll({

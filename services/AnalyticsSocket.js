@@ -11,13 +11,23 @@ module.exports = (server) => {
   });
 
   io.on("connection", (socket) => {
-    socket.on("join", async ({ EventId, uuid, attendeeId }) => {
+    socket.on("join", async ({ EventId, uuid, attendeeId, geoData }) => {
       const [siteVisitor, created] = await SiteVisitor.findOrCreate({
         where: {
           uuid,
           RegistrationId: attendeeId,
+          EventId,
         },
       });
+
+      console.log(geoData);
+      // Save geo data
+      siteVisitor.city = geoData.city;
+      siteVisitor.country = geoData.country;
+      siteVisitor.countryCode = geoData.countryCode;
+      siteVisitor.lat = geoData.lat;
+      siteVisitor.long = geoData.long;
+      siteVisitor.save();
 
       const siteVisit = await SiteVisit.create({
         EventId,
@@ -27,11 +37,15 @@ module.exports = (server) => {
     });
 
     socket.on("disconnect", async (reason) => {
-      const siteVisit = await SiteVisit.findByPk(socket.visitId);
+      const siteVisit = await SiteVisit.findByPk(socket.visitId, {
+        include: SiteVisitor,
+      });
 
       if (siteVisit) {
         siteVisit.loggedOutAt = new Date();
+        siteVisit.SiteVisitor.loggedOutAt = siteVisit.loggedOutAt;
         siteVisit.save();
+        siteVisit.SiteVisitor.save();
       }
     });
   });

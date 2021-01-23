@@ -68,6 +68,13 @@ function ScheduledEmails(props) {
             : sendDate.toLocaleString("en-us", {
                 timeZoneName: "short",
                 timeZone: props.event.timeZone,
+                weekday: "long",
+                year: "numeric",
+                month: "long",
+                day: "numeric",
+                hour: "numeric",
+                minute: "2-digit",
+                timeZoneName: "short",
               }),
 
         status: email.status.charAt(0).toUpperCase() + email.status.slice(1),

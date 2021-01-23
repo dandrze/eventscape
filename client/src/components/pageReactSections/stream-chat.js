@@ -36,22 +36,20 @@ const StreamChat = (props) => {
     ? props.attendee.firstName + " " + props.attendee.lastName
     : "Guest" + rand.toString();
 
-  const userId = props.attendee.id || rand;
-
   return (
     <div>
-      <section class="stream-chat-main-container">
-        <div class="container-one-video-window">
+      <section className="stream-chat-main-container">
+        <div className="container-one-video-window">
           <div className="video-responsive">{displayStream()}</div>
         </div>
-        <div class="container-two-chat-window">
+        <div className="container-two-chat-window">
           <div className="chat-responsive">
             <div id="video-responsive-iframe">
               <Chat
                 room={props.chatRoom}
                 name={name}
                 isModerator={false}
-                userId={props.attendee.id}
+                registrationId={props.attendee.id}
               />
             </div>
           </div>

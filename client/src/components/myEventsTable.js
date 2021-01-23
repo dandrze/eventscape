@@ -89,6 +89,14 @@ const Table = (props) => {
         name: event.title,
         date: eventDate.toLocaleString("en-us", {
           timeZoneName: "short",
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+          hour: "numeric",
+          minute: "2-digit",
+          timeZoneName: "short",
+
           timeZone: event.timeZone,
         }),
         status: event.status,

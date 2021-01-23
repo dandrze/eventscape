@@ -12,6 +12,7 @@ const Account = require("./models/Account");
 const Communication = require("./models/Communication");
 const EmailListRecipient = require("./models/EmailListRecipient");
 const RegistrationForm = require("./models/RegistrationForm");
+const ChatQuestion = require("./models/ChatQuestion");
 
 ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
@@ -21,11 +22,24 @@ ChatUser.hasMany(ChatMessage);
 ChatUser.belongsTo(ChatRoom);
 ChatRoom.hasMany(ChatUser);
 
+ChatQuestion.belongsTo(ChatRoom);
+ChatQuestion.belongsTo(ChatUser);
+ChatRoom.hasMany(ChatQuestion);
+ChatUser.hasMany(ChatQuestion);
+
+ChatUser.belongsTo(Registration);
+Registration.hasMany(ChatUser);
+ChatUser.belongsTo(Account);
+Account.hasMany(ChatUser);
+
 SiteVisit.belongsTo(SiteVisitor);
 SiteVisitor.hasMany(SiteVisit);
 
 SiteVisit.belongsTo(Event);
 Event.hasMany(SiteVisit);
+
+SiteVisitor.belongsTo(Event);
+Event.hasMany(SiteVisitor);
 
 Registration.hasMany(SiteVisitor);
 SiteVisitor.belongsTo(Registration);
@@ -51,7 +65,7 @@ RegistrationForm.belongsTo(Event);
 Event.hasMany(RegistrationForm);
 
 //sequelize.sync({ alter: true });
-//SiteVisit.sync({ alter: true });
+//ChatUser.sync({ alter: true });
 /*
 ChatUser.sync({ alter: true });
 ChatRoom.sync({ alter: true });
@@ -79,5 +93,6 @@ module.exports = {
     Communication,
     EmailListRecipient,
     RegistrationForm,
+    ChatQuestion,
   },
 };

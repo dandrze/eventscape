@@ -381,11 +381,11 @@ router.post("/api/chatroom", async (req, res, next) => {
 });
 
 router.get("/api/event/chat-moderator", async (req, res, next) => {
-  const { EventscapeId, ChatRoomId } = req.query;
+  const { AccountId, ChatRoomId } = req.query;
 
   const [chatUser, created] = await ChatUser.findOrCreate({
     where: {
-      EventscapeId,
+      AccountId,
       ChatRoomId,
     },
   }).catch(next);
@@ -398,12 +398,12 @@ router.get("/api/event/chat-moderator", async (req, res, next) => {
 
 router.put("/api/event/chat-moderator", async (req, res, next) => {
   const {
-    user: { EventscapeId, name, ChatRoomId },
+    user: { AccountId, name, ChatRoomId },
   } = req.body;
 
   const chatUser = await ChatUser.findOne({
     where: {
-      EventscapeId,
+      AccountId,
       ChatRoomId,
     },
   }).catch(next);

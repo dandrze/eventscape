@@ -11,7 +11,6 @@ import {
   SAVE_EVENT_MODEL,
   MODEL_ISSAVED,
   UPDATE_reactComponent,
-  FETCH_EVENT,
 } from "./types";
 import { pageNames } from "../model/enums";
 
@@ -110,6 +109,8 @@ export const localSaveModel = () => (dispatch, getState) => {
     case pageNames.EVENT:
       dispatch({ type: SAVE_EVENT_MODEL, payload: currentModel });
       dispatch({ type: MODEL_ISSAVED });
+      break;
+    default:
       break;
   }
 };
