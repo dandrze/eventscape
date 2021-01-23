@@ -64,7 +64,7 @@ import AccountIcon from "../icons/account.svg";
 import KeyIcon from "../icons/key.svg";
 import CreditCardIcon from "../icons/credit-card.svg";
 
-/* color palette */
+/* colour palette */
 const MenuText = "#EAEAEA";
 const MenuBackground = "#2F2F2F";
 

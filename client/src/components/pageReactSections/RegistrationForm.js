@@ -200,7 +200,7 @@ function RegistrationForm(props) {
         {isLoading ? (
           <CircularProgress className="margin-auto" />
         ) : (
-          <div className="margin-auto">
+          <div>
             {regComplete && !props.isEditForm ? (
               <div className="margin-auto">
                 <div>Thank you for registering for {props.event.title}</div>
