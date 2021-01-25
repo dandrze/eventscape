@@ -51,10 +51,9 @@ const Published = (props) => {
 
     // Get user geo location
     try {
-      const geoData = await axios.get(
-        "https://api.ipstack.com/187.252.203.71?access_key=" +
-          process.env.REACT_APP_IPSTACK_KEY
-      );
+      const geoData = await axios.get("https://ipapi.co//187.252.203.71/json");
+
+      console.log(geoData);
 
       var {
         latitude,
