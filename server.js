@@ -10,6 +10,7 @@ throng({
 });
 
 function start() {
+  const compression = require("compression");
   const express = require("express");
   const bodyParser = require("body-parser");
   const passport = require("passport");
@@ -36,6 +37,9 @@ function start() {
 
   // Force HTTPS
   app.use(secure);
+
+  // Compress to improve page load times
+  app.use(compression());
 
   // passport set up for user auth
   app.use(bodyParser.json());
