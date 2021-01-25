@@ -43,7 +43,8 @@
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
     "sequelize": "^6.3.5",
-    "socket.io": "^3.0.4"
+    "socket.io": "^3.0.4",
+    "throng": "^5.0.0"
   },
   "devDependencies": {
     "sequelize-cli": "^6.2.0"
