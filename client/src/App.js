@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, lazy, Suspense } from "react";
 import { connect } from "react-redux";
 import { Route, Redirect } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -8,28 +8,36 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import logo from "./logo.svg";
 import "./App.css";
 import "./components/fonts.css";
-import Dashboard from "./pages/dashboard";
-import Landing from "./pages/landing";
-import Create_Account from "./pages/create-account";
-import Event_Details from "./pages/event-details";
-import My_Events from "./pages/my-events";
-import Design from "./pages/design";
-import Communication from "./pages/communication";
-import Registrations from "./pages/registrations";
-import Analytics from "./pages/analytics";
-import Messaging from "./pages/messaging";
-import Preview from "./pages/preview";
-import Published from "./pages/published";
 import * as actions from "./actions";
-import WebsiteSettings from "./pages/websiteSettings";
-import Giller from "./pages/Giller";
-import Login from "./pages/login";
-import AccountSettingsContact from "./pages/account-settings-contact";
-import AccountSettingsPassword from "./pages/account-settings-password";
-import AccountSettingsPayments from "./pages/account-settings-payments";
-import ResetPassword from "./pages/password-reset";
-import ChangePassword from "./pages/change-password";
-import Test from "./pages/test";
+
+// lazy loading is used so only the relevant component is loaded rather than all components
+const Dashboard = lazy(() => import("./pages/dashboard"));
+const Landing = lazy(() => import("./pages/landing"));
+const Create_Account = lazy(() => import("./pages/create-account"));
+const Event_Details = lazy(() => import("./pages/event-details"));
+const My_Events = lazy(() => import("./pages/my-events"));
+const Design = lazy(() => import("./pages/design"));
+const Communication = lazy(() => import("./pages/communication"));
+const Registrations = lazy(() => import("./pages/registrations"));
+const Analytics = lazy(() => import("./pages/analytics"));
+const Messaging = lazy(() => import("./pages/messaging"));
+const Preview = lazy(() => import("./pages/preview"));
+const Published = lazy(() => import("./pages/published"));
+const WebsiteSettings = lazy(() => import("./pages/websiteSettings"));
+const Giller = lazy(() => import("./pages/Giller"));
+const Login = lazy(() => import("./pages/login"));
+const AccountSettingsContact = lazy(() =>
+  import("./pages/account-settings-contact")
+);
+const AccountSettingsPassword = lazy(() =>
+  import("./pages/account-settings-password")
+);
+const AccountSettingsPayments = lazy(() =>
+  import("./pages/account-settings-payments")
+);
+const ResetPassword = lazy(() => import("./pages/password-reset"));
+const ChangePassword = lazy(() => import("./pages/change-password"));
+const Test = lazy(() => import("./pages/test"));
 
 //import "froala-editor/css/froala_style.min.css";
 
@@ -72,15 +80,17 @@ function App(props) {
     return (
       <div className="App">
         <header className="App-header">
-          <Route
-            exact
-            path="/"
-            render={(props) => <Published {...props} subdomain={path[0]} />}
-          />
-          <Route
-            path="/:hash"
-            render={(props) => <Published {...props} subdomain={path[0]} />}
-          />
+          <Suspense fallback={<CircularProgress />}>
+            <Route
+              exact
+              path="/"
+              render={(props) => <Published {...props} subdomain={path[0]} />}
+            />
+            <Route
+              path="/:hash"
+              render={(props) => <Published {...props} subdomain={path[0]} />}
+            />
+          </Suspense>
         </header>
       </div>
     );
@@ -104,66 +114,60 @@ function App(props) {
     <div className="App">
       <ToastContainer position="top-right" autoClose={3000} />
       <header className="App-header">
-        <Route exact path="/" component={Landing} />
-        <Route exact path="/login" component={Login} />
-        <Route exact path="/create-account" component={Create_Account} />
-        <Route exact path="/dashboard" component={requireAuth(Dashboard)} />
-        <Route
-          exact
-          path="/event-details"
-          component={requireAuth(Event_Details)}
-        />
-        <Route exact path="/my-events" component={requireAuth(My_Events)} />
-        <Route exact path="/design" component={requireAuth(Design)} />
-        <Route
-          exact
-          path="/website-settings"
-          component={requireAuth(WebsiteSettings)}
-        />
-        <Route
-          exact
-          path="/communication"
-          component={requireAuth(Communication)}
-        />
-        <Route
-          exact
-          path="/registrations"
-          component={requireAuth(Registrations)}
-        />
-        <Route exact path="/analytics" component={requireAuth(Analytics)} />
-        <Route exact path="/messaging" component={requireAuth(Messaging)} />
-        <Route
-          exact
-          path="/preview/:event/:model"
-          component={requireAuth(Preview)}
-        />
-        <Route exact path="/ScotiabankGillerPrize" component={Giller} />
-        <Route
-          exact
-          path="/account-settings-contact"
-          component={requireAuth(AccountSettingsContact)}
-        />
-        <Route
-          exact
-          path="/account-settings-password"
-          component={requireAuth(AccountSettingsPassword)}
-        />
-        <Route
-          exact
-          path="/account-settings-payments"
-          component={requireAuth(AccountSettingsPayments)}
-        />
-        <Route
-          exact
-          path="/reset-password"
-          component={ResetPassword}
-        />
-        <Route
-          exact
-          path="/change-password"
-          component={ChangePassword}
-        />
-        <Route exact path="/test" component={Test} />
+        <Suspense fallback={<CircularProgress />}>
+          <Route exact path="/" component={Landing} />
+          <Route exact path="/login" component={Login} />
+          <Route exact path="/create-account" component={Create_Account} />
+          <Route exact path="/dashboard" component={requireAuth(Dashboard)} />
+          <Route
+            exact
+            path="/event-details"
+            component={requireAuth(Event_Details)}
+          />
+          <Route exact path="/my-events" component={requireAuth(My_Events)} />
+          <Route exact path="/design" component={requireAuth(Design)} />
+          <Route
+            exact
+            path="/website-settings"
+            component={requireAuth(WebsiteSettings)}
+          />
+          <Route
+            exact
+            path="/communication"
+            component={requireAuth(Communication)}
+          />
+          <Route
+            exact
+            path="/registrations"
+            component={requireAuth(Registrations)}
+          />
+          <Route exact path="/analytics" component={requireAuth(Analytics)} />
+          <Route exact path="/messaging" component={requireAuth(Messaging)} />
+          <Route
+            exact
+            path="/preview/:event/:model"
+            component={requireAuth(Preview)}
+          />
+          <Route exact path="/ScotiabankGillerPrize" component={Giller} />
+          <Route
+            exact
+            path="/account-settings-contact"
+            component={requireAuth(AccountSettingsContact)}
+          />
+          <Route
+            exact
+            path="/account-settings-password"
+            component={requireAuth(AccountSettingsPassword)}
+          />
+          <Route
+            exact
+            path="/account-settings-payments"
+            component={requireAuth(AccountSettingsPayments)}
+          />
+          <Route exact path="/reset-password" component={ResetPassword} />
+          <Route exact path="/change-password" component={ChangePassword} />
+          <Route exact path="/test" component={Test} />
+        </Suspense>
       </header>
     </div>
   );
