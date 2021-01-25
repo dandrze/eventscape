@@ -7,7 +7,7 @@ import DesignBlockToolbar from "./designBlockToolbar";
 import mapReactComponent from "./mapReactComponent";
 import theme from "../templates/theme";
 
-const RegPageSectionEditor = (props) => {
+const PageSectionEditor = (props) => {
   const [isHovering, setIsHovering] = useState(false);
 
   const handleMouseEnter = () => {
@@ -49,4 +49,4 @@ const mapStateToProps = (state) => {
   return { model: state.model, event: state.event };
 };
 
-export default connect(mapStateToProps, actions)(RegPageSectionEditor);
+export default connect(mapStateToProps, actions)(PageSectionEditor);

@@ -405,7 +405,7 @@ function NavBar3(props) {
             <Divider />
 
             {displaySideNav === "false" && (
-              <Link to="./design">
+              <Link to="/design/event">
                 <StyledMenuItem>
                   <ListItemIcon>
                     <ArrowBackIcon fontSize="small" />
@@ -567,7 +567,7 @@ function NavBar3(props) {
                 <ListItemText primary="Registrations" />
               </ListItem>
             </Link>
-            <Link to="./analytics">
+            <Link to="/analytics">
               <ListItem
                 button
                 key="analytics"
@@ -583,7 +583,7 @@ function NavBar3(props) {
                 <ListItemText primary="Analytics" />
               </ListItem>
             </Link>
-            <Link to="./messaging">
+            <Link to="/messaging">
               <ListItem
                 button
                 key="messaging"

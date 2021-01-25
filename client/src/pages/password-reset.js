@@ -26,7 +26,6 @@ function ResetPassword(props) {
   const [emailSent, setEmailSent] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
 
-
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -36,72 +35,72 @@ function ResetPassword(props) {
     const isAuth = await props.signInLocal(email, password);
     setIsloading(false);
     if (isAuth.success) {
-      props.history.push("/design");
+      props.history.push("/design/event");
     }*/
   };
 
   if (emailSent) {
     return (
-        <div>
-            <SimpleNavBar
-                content={
-                    <div className="form-box shadow-border">
-                        <h2>Reset Password</h2>
-                        <p>An email has been sent.</p>
-                        <p>Please click the link when you get it.</p>
-                    </div>
-                }
-            />
-        </div>
+      <div>
+        <SimpleNavBar
+          content={
+            <div className="form-box shadow-border">
+              <h2>Reset Password</h2>
+              <p>An email has been sent.</p>
+              <p>Please click the link when you get it.</p>
+            </div>
+          }
+        />
+      </div>
     );
   }
 
-
   if (emailNotFound) {
     return (
-        <div>
-            <SimpleNavBar
-                content={
-                    <div className="form-box shadow-border">
-                        <p>There doesn't appear to be an account created yet for this email address.</p>
-                        <Link to="/create-account">
-                            <button className="Button1">
-                                Create an Account
-                            </button>
-                        </Link>
-                    </div>
-                }
-            />
-        </div>
+      <div>
+        <SimpleNavBar
+          content={
+            <div className="form-box shadow-border">
+              <p>
+                There doesn't appear to be an account created yet for this email
+                address.
+              </p>
+              <Link to="/create-account">
+                <button className="Button1">Create an Account</button>
+              </Link>
+            </div>
+          }
+        />
+      </div>
     );
   }
 
   return (
     <div>
-        <SimpleNavBar
-            content={
-                <div className="form-box shadow-border" style={{ width: "500px"}}>
-                <h2>Reset Password</h2>
-                <p className="subtext">Don't worry, happens to the best of us.</p>
-                <FormControl variant="outlined" className={classes.formControl}>
-                    <TextField
-                    type="email"
-                    id="email"
-                    label="Email"
-                    variant="outlined"
-                    value={email}
-                    onChange={handleChangeEmail}
-                    />
-                </FormControl>
-                <br></br>
-                <div style={{ marginTop: "15px"}}>
-                    <button className="Button1" type="submit" onClick={handleSubmit}>
-                        Email me a recovery link
-                    </button>
-                </div>
-                </div>
-            }
-        />
+      <SimpleNavBar
+        content={
+          <div className="form-box shadow-border" style={{ width: "500px" }}>
+            <h2>Reset Password</h2>
+            <p className="subtext">Don't worry, happens to the best of us.</p>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                type="email"
+                id="email"
+                label="Email"
+                variant="outlined"
+                value={email}
+                onChange={handleChangeEmail}
+              />
+            </FormControl>
+            <br></br>
+            <div style={{ marginTop: "15px" }}>
+              <button className="Button1" type="submit" onClick={handleSubmit}>
+                Email me a recovery link
+              </button>
+            </div>
+          </div>
+        }
+      />
     </div>
   );
 }

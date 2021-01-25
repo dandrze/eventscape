@@ -12,8 +12,6 @@ import { pageNames } from "../model/enums";
 const Design = ({ event, model, fetchModel }) => {
   const page = useParams().page || "event";
 
-  console.log(page);
-
   useEffect(() => {
     // only fetch the model if the event data is finished fetching. Otherwise it is an empty obect
     if (Object.keys(event).length !== 0) {
