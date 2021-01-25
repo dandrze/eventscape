@@ -14,8 +14,15 @@ import reducers from "./reducers";
 //import global variables
 import "./global";
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-const store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
+var store;
+if (process.env.NODE_ENV == "production") {
+  store = createStore(reducers, applyMiddleware(thunk));
+} else {
+  // if the environmet is not production, show the redux dev tools
+  const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+  store = createStore(reducers, composeEnhancers(applyMiddleware(thunk)));
+}
 
 const theme = createMuiTheme({
   palette: {
