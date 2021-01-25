@@ -232,31 +232,11 @@ function NavBar3(props) {
 
   const classes = useStyles();
   const theme = useTheme();
-  const [navAlertOpen, setNavAlertOpen] = React.useState(false);
   const [target, setTarget] = React.useState("");
 
   useEffect(() => {
     props.fetchEvent();
   }, []);
-
-  const handlePageChange = (pageName) => {
-    // if the user is currently on the design page, and they want to navigate to the other page editor with unsaved changes, display the confirmation alert
-    if (history.location.pathname == "/design" && props.model.isUnsaved) {
-      setTarget(pageName);
-      setNavAlertOpen(true);
-    } else {
-      changePageEditor(pageName);
-      history.push("/design");
-    }
-  };
-
-  const handleNavAlertClose = () => {
-    setNavAlertOpen(false);
-  };
-
-  const changePageEditor = (pageName) => {
-    props.changePageEditor(pageName);
-  };
 
   const handleDrawerOpen = () => {
     props.setSideDrawerOpen(true);
@@ -303,17 +283,7 @@ function NavBar3(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-      <AlertModal
-        open={navAlertOpen}
-        onClose={handleNavAlertClose}
-        onContinue={() => {
-          handleNavAlertClose();
-          changePageEditor(target);
-        }}
-        text="You have unsaved changes, are you sure you want to proceed?"
-        closeText="Go back"
-        continueText="Continue"
-      />
+
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
@@ -435,7 +405,7 @@ function NavBar3(props) {
             <Divider />
 
             {displaySideNav === "false" && (
-              <Link to="./design">
+              <Link to="/design/event">
                 <StyledMenuItem>
                   <ListItemIcon>
                     <ArrowBackIcon fontSize="small" />
@@ -542,28 +512,26 @@ function NavBar3(props) {
             <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
               <List component="div" disablePadding>
                 {/* Registration Page */}
-                <ListItem
-                  button
-                  className={classes.nested}
-                  onClick={() => {
-                    handleClickNestedItem();
-                    handlePageChange("registration");
-                  }}
-                >
-                  <ListItemText secondary="Registration Page" />
-                </ListItem>
+                <Link to="/design/registration">
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    onClick={handleClickNestedItem}
+                  >
+                    <ListItemText secondary="Registration Page" />
+                  </ListItem>
+                </Link>
 
                 {/* Event Page */}
-                <ListItem
-                  button
-                  className={classes.nested}
-                  onClick={() => {
-                    handleClickNestedItem();
-                    handlePageChange("event");
-                  }}
-                >
-                  <ListItemText secondary="Event Page" />
-                </ListItem>
+                <Link to="/design/event">
+                  <ListItem
+                    button
+                    className={classes.nested}
+                    onClick={handleClickNestedItem}
+                  >
+                    <ListItemText secondary="Event Page" />
+                  </ListItem>
+                </Link>
               </List>
             </Collapse>
 
@@ -599,7 +567,7 @@ function NavBar3(props) {
                 <ListItemText primary="Registrations" />
               </ListItem>
             </Link>
-            <Link to="./analytics">
+            <Link to="/analytics">
               <ListItem
                 button
                 key="analytics"
@@ -615,7 +583,7 @@ function NavBar3(props) {
                 <ListItemText primary="Analytics" />
               </ListItem>
             </Link>
-            <Link to="./messaging">
+            <Link to="/messaging">
               <ListItem
                 button
                 key="messaging"

@@ -8,7 +8,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
 import SimpleNavBar from "../components/simpleNavBar";
 
-
 import * as actions from "../actions";
 
 const useStyles = makeStyles((theme) => ({
@@ -41,7 +40,7 @@ function Login(props) {
     const isAuth = await props.signInLocal(email, password);
     setIsloading(false);
     if (isAuth.success) {
-      props.history.push("/design");
+      props.history.push("/design/event");
     }
   };
 
@@ -85,8 +84,17 @@ function Login(props) {
             <button className="Button1" type="submit" onClick={handleSubmit}>
               Sign In
             </button>
-            <p className="subtext" style={{ marginTop: "8px" }}>Don't have an account yet? <Link to="/create-account" className="link1">Create an account</Link></p>
-            <p className="subtext"><Link to="reset-password" className="link1">Forgot your password?</Link></p>
+            <p className="subtext" style={{ marginTop: "8px" }}>
+              Don't have an account yet?{" "}
+              <Link to="/create-account" className="link1">
+                Create an account
+              </Link>
+            </p>
+            <p className="subtext">
+              <Link to="reset-password" className="link1">
+                Forgot your password?
+              </Link>
+            </p>
           </div>
         }
       />

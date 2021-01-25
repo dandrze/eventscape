@@ -23,7 +23,7 @@ router.put("/api/model", async (req, res, next) => {
 
   // then write the newly updated model
   for (const [index, section] of model.entries()) {
-    await PageSection.create({
+    const pageSection = await PageSection.create({
       PageModelId: section.PageModelId,
       index,
       html: section.html,

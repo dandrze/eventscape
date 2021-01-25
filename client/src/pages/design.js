@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -8,18 +9,20 @@ import PageEditor from "../components/pageEditor";
 import "../components/fonts.css";
 import { pageNames } from "../model/enums";
 
-const Design = ({ event, settings, model, fetchModel }) => {
+const Design = ({ event, model, fetchModel }) => {
+  const page = useParams().page || "event";
+
   useEffect(() => {
     // only fetch the model if the event data is finished fetching. Otherwise it is an empty obect
     if (Object.keys(event).length !== 0) {
       const modelId =
-        settings.nowEditingPage === pageNames.REGISTRATION
+        page === pageNames.REGISTRATION
           ? event.RegPageModelId
           : event.EventPageModelId;
 
       fetchModel(modelId);
     }
-  }, [event, settings.nowEditingPage]);
+  }, [event, page]);
 
   return (
     <div>
@@ -28,7 +31,7 @@ const Design = ({ event, settings, model, fetchModel }) => {
         highlight="design"
         content={
           model.sections.length ? (
-            <PageEditor key={model} />
+            <PageEditor key={model} page={page} />
           ) : (
             <CircularProgress />
           )

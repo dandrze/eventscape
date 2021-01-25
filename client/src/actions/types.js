@@ -16,7 +16,6 @@ export const ADD_SECTION = "add_section";
 export const UPDATE_SECTION = "update_section";
 export const FETCH_PUBLISHED_PAGE = "FETCH_PUBLISHED_PAGE";
 
-export const CHANGE_PAGE_EDITOR = "CHANGE_PAGE_EDITOR";
 export const SET_LOADED = "SET_LOADED";
 export const SET_SIDE_DRAWER_OPEN = "SET_SIDE_DRAWER_OPEN";
 

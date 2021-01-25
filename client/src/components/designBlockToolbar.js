@@ -143,7 +143,8 @@ function DesignBlockToolbar(props) {
   };
 
   const handleChangeYoutubeLink = (event) => {
-    setYoutubeLink(event.target.value);
+    // remove any whitespace
+    setYoutubeLink(event.target.value.replace(/\s+/g, ""));
   };
 
   const handleChangeCustomHTML = (event) => {

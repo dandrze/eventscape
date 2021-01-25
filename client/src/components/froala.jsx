@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
 import FroalaEditor from "react-froala-wysiwyg";
@@ -36,8 +36,22 @@ import "froala-editor/css/plugins/image.min.css";
 import * as actions from "../actions";
 
 const Froala = (props) => {
+  const [userClicked, setUserClicked] = useState(false);
   const handleModelChange = (model) => {
-    props.updateSection(props.sectionIndex, model);
+    // if the user clicked into the div, only then do we update the section
+    //the purpose of this check is sometimes froala makes small adjustments on loading which we don't need to treat as an "update"
+    if (userClicked) props.updateSection(props.sectionIndex, model);
+  };
+
+  // The entire useEffect hook below simply resets the user clicked state back to false after the model was updated
+  // so if there are no further changes, we can navigate away from the page
+  useEffect(() => {
+    setUserClicked(false);
+  }, [props.model.isUnsaved]);
+
+  const handleUserInput = (event) => {
+    // when a user clicks on a froala component, we set the UserClicked value to be true so that any changes from now on prevent navigation away from the screen
+    setUserClicked(true);
   };
 
   const config = {
@@ -145,7 +159,7 @@ const Froala = (props) => {
   };
 
   return (
-    <div>
+    <div onClick={handleUserInput}>
       <FroalaEditor
         config={config}
         model={props.html}

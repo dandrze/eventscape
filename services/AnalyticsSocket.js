@@ -20,14 +20,16 @@ module.exports = (server) => {
         },
       });
 
-      console.log(geoData);
+      console.log({ EventId, uuid, attendeeId, geoData });
       // Save geo data
       siteVisitor.city = geoData.city;
       siteVisitor.country = geoData.country;
       siteVisitor.countryCode = geoData.countryCode;
       siteVisitor.lat = geoData.lat;
       siteVisitor.long = geoData.long;
-      siteVisitor.save();
+      await siteVisitor.save();
+
+      console.log(EventId, siteVisitor.id);
 
       const siteVisit = await SiteVisit.create({
         EventId,
@@ -43,7 +45,6 @@ module.exports = (server) => {
 
       if (siteVisit) {
         siteVisit.loggedOutAt = new Date();
-        siteVisit.SiteVisitor.loggedOutAt = siteVisit.loggedOutAt;
         siteVisit.save();
         siteVisit.SiteVisitor.save();
       }

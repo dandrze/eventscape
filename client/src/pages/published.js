@@ -12,7 +12,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
-import { streamChatModel } from "../templates/designBlockModels";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
@@ -51,10 +50,9 @@ const Published = (props) => {
 
     // Get user geo location
     try {
-      const geoData = await axios.get(
-        "https://api.ipstack.com/187.252.203.71?access_key=" +
-          process.env.REACT_APP_IPSTACK_KEY
-      );
+      const geoData = await axios.get("https://ipapi.co//187.252.203.71/json");
+
+      console.log(geoData);
 
       var {
         latitude,
