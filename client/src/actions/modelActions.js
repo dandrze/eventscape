@@ -48,7 +48,7 @@ export const addSection = (
   isReact = false,
   reactComponent = null
 ) => async (dispatch, getState) => {
-  const model = getState().model.id;
+  const PageModelId = getState().model.id;
 
   if (reactComponent && reactComponent.name === "StreamChat") {
     const chatRoom = await api.get("/api/chatroom/default", {
@@ -60,7 +60,7 @@ export const addSection = (
   const payload = {
     index: prevIndex + 1,
     model: {
-      model,
+      PageModelId,
       html,
       isReact,
       reactComponent,
