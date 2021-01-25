@@ -125,7 +125,7 @@ function App(props) {
             component={requireAuth(Event_Details)}
           />
           <Route exact path="/my-events" component={requireAuth(My_Events)} />
-          <Route exact path="/design" component={requireAuth(Design)} />
+          <Route exact path="/design/:page?" component={requireAuth(Design)} />
           <Route
             exact
             path="/website-settings"

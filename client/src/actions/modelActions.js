@@ -81,9 +81,9 @@ export const moveSection = (index, offset) => {
   return { type: MOVE_SECTION, payload: { index, offset } };
 };
 
-export const saveModel = () => async (dispatch, getState) => {
+export const saveModel = (page) => async (dispatch, getState) => {
   // copy the model over to the event object
-  await dispatch(localSaveModel());
+  await dispatch(localSaveModel(page));
 
   const model = getState().model.sections;
 
@@ -97,11 +97,10 @@ export const saveModel = () => async (dispatch, getState) => {
   }
 };
 
-export const localSaveModel = () => (dispatch, getState) => {
-  const currentPage = getState().settings.nowEditingPage;
+export const localSaveModel = (page) => (dispatch, getState) => {
   const currentModel = getState().model.sections;
 
-  switch (currentPage) {
+  switch (page) {
     case pageNames.REGISTRATION:
       dispatch({ type: SAVE_REG_MODEL, payload: currentModel });
       dispatch({ type: MODEL_ISSAVED });
