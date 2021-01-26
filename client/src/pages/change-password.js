@@ -10,6 +10,8 @@ import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SimpleNavBar from "../components/simpleNavBar";
 import InfoMessage from "../components/InfoMessage";
+import WarningIcon from "@material-ui/icons/Warning";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 import * as actions from "../actions";
 
@@ -94,7 +96,8 @@ function ChangePassword(props) {
               <CircularProgress />
             ) : passwordUpdated ? (
               <InfoMessage
-                header="Successful changed password"
+                icon={<CheckCircleIcon style={{ fontSize: 50 }} />}
+                header="Successfully changed password"
                 body={
                   <p>
                     Your password was successfully changed. Please login using
@@ -104,6 +107,7 @@ function ChangePassword(props) {
               />
             ) : tokenIsExpired ? (
               <InfoMessage
+                icon={<WarningIcon style={{ fontSize: 50 }} />}
                 header="Password link expired"
                 body={
                   <p>
@@ -114,17 +118,22 @@ function ChangePassword(props) {
               />
             ) : tokenIsInvalid ? (
               <InfoMessage
+                icon={<WarningIcon style={{ fontSize: 50 }} />}
                 header="Invalid Link"
                 body={
-                  <p>
-                    Invalid password reset link. Please try again. <br />
-                    <br />
-                    If this problem persists please contact support at{" "}
-                    <a href="mailto:support@eventscape.io?subject=Password Reset">
-                      support@eventscape.io
-                    </a>
-                    .
-                  </p>
+                  <>
+                    <p>
+                      Invalid password reset link. Request a new link{" "}
+                      <a href="/reset-password">here</a>.
+                    </p>
+                    <p>
+                      If this problem persists please contact support at{" "}
+                      <a href="mailto:support@eventscape.io?subject=Password Reset">
+                        support@eventscape.io
+                      </a>
+                      .
+                    </p>
+                  </>
                 }
               />
             ) : (
