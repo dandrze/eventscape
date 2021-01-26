@@ -4,7 +4,7 @@ export * from "./modelActions";
 export * from "./settingsActions";
 export * from "./registrationActions";
 export * from "./emailActions";
-export * from "./userActions";
+export * from "./accountActions";
 export * from "./liveEventPageActions";
 export * from "./chatRoomActions";
 export * from "./analyticsActions";

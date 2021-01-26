@@ -1,12 +1,15 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import { toast } from "react-toastify";
+import api from "../api/server";
+
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SimpleNavBar from "../components/simpleNavBar";
-
+import InfoMessage from "../components/InfoMessage";
 
 import * as actions from "../actions";
 
@@ -22,28 +25,64 @@ const useStyles = makeStyles((theme) => ({
 
 function ChangePassword(props) {
   const classes = useStyles();
+  const { token } = useParams();
 
   const [newPassword, setNewPassword] = React.useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = React.useState("");
-  const [isLoading, setIsloading] = useState(false);
+  const [isLoading, setIsloading] = useState(true);
+  const [tokenIsInvalid, setTokenIsInvalid] = useState(true);
+  const [passwordUpdated, setPasswordUpdated] = useState(false);
+  const [passwordErrorText, setPasswordErrorText] = useState("");
+  const [tokenIsExpired, setTokenIsExpired] = useState(false);
+
+  useEffect(() => {
+    const validateToken = async () => {
+      try {
+        const res = await api.get("/auth/validate-token/" + token);
+        setTokenIsInvalid(false);
+      } catch (err) {
+        if (err.response.data.error === "expired") {
+          setTokenIsExpired(true);
+        } else {
+          setTokenIsInvalid(true);
+        }
+      }
+      setIsloading(false);
+    };
+
+    validateToken();
+  }, []);
 
   const handleChangeNewPassword = (event) => {
     setNewPassword(event.target.value);
+    setPasswordErrorText("");
   };
 
   const handleChangeNewPasswordConfirm = (event) => {
     setNewPasswordConfirm(event.target.value);
+    setPasswordErrorText("");
   };
 
   const handleSubmit = async () => {
-    /*
-    setIsloading(true);
-    const isAuth = await props.signInLocal(email, password);
-    setIsloading(false);
-    if (isAuth.success) {
-      props.history.push("/design");
+    if (newPassword != newPasswordConfirm) {
+      setNewPassword("");
+      setNewPasswordConfirm("");
+      setPasswordErrorText("Passwords do not match");
+    } else {
+      setIsloading(true);
+      try {
+        const res = await api.post("/auth/change-password-with-token", {
+          newPassword,
+          token,
+        });
+        setPasswordUpdated(true);
+        setIsloading(false);
+      } catch (err) {
+        console.log(err);
+        toast.error("Error when updating password: " + err.response.data.error);
+        setIsloading(false);
+      }
     }
-    */
   };
 
   return (
@@ -51,32 +90,79 @@ function ChangePassword(props) {
       <SimpleNavBar
         content={
           <div className="form-box shadow-border">
-            <h2>Change password</h2>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="password"
-                label="New Password"
-                variant="outlined"
-                value={newPassword}
-                onChange={handleChangeNewPassword}
+            {isLoading ? (
+              <CircularProgress />
+            ) : passwordUpdated ? (
+              <InfoMessage
+                header="Successful changed password"
+                body={
+                  <p>
+                    Your password was successfully changed. Please login using
+                    your new password <a href="/login">here</a>.
+                  </p>
+                }
               />
-            </FormControl>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="password-confirm"
-                label="Confirm New Password"
-                variant="outlined"
-                value={newPasswordConfirm}
-                onChange={handleChangeNewPasswordConfirm}
+            ) : tokenIsExpired ? (
+              <InfoMessage
+                header="Password link expired"
+                body={
+                  <p>
+                    Your change password link has expired. Request a new one{" "}
+                    <a href="/reset-password">here</a>.
+                  </p>
+                }
               />
-            </FormControl>
-            <br></br>
-            <br></br>
-            <button className="Button1" type="submit" onClick={handleSubmit}>
-              Change Password
-            </button>
+            ) : tokenIsInvalid ? (
+              <InfoMessage
+                header="Invalid Link"
+                body={
+                  <p>
+                    Invalid password reset link. Please try again. <br />
+                    <br />
+                    If this problem persists please contact support at{" "}
+                    <a href="mailto:support@eventscape.io?subject=Password Reset">
+                      support@eventscape.io
+                    </a>
+                    .
+                  </p>
+                }
+              />
+            ) : (
+              <>
+                <h2>Change password</h2>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <TextField
+                    type="password"
+                    id="password"
+                    label="New Password"
+                    variant="outlined"
+                    value={newPassword}
+                    onChange={handleChangeNewPassword}
+                    helperText={passwordErrorText}
+                  />
+                </FormControl>
+                <FormControl variant="outlined" className={classes.formControl}>
+                  <TextField
+                    type="password"
+                    id="password-confirm"
+                    label="Confirm New Password"
+                    variant="outlined"
+                    value={newPasswordConfirm}
+                    onChange={handleChangeNewPasswordConfirm}
+                    helperText={passwordErrorText}
+                  />
+                </FormControl>
+                <br></br>
+                <br></br>
+                <button
+                  className="Button1"
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  Change Password
+                </button>
+              </>
+            )}
           </div>
         }
       />
@@ -84,6 +170,8 @@ function ChangePassword(props) {
   );
 }
 
-{/* When users click change password, they get logged in right away. */}
+{
+  /* When users click change password, they get logged in right away. */
+}
 
 export default connect(null, actions)(ChangePassword);

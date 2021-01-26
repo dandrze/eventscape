@@ -19,7 +19,6 @@ function start() {
   const flash = require("connect-flash");
   const http = require("http");
 
-  const db = require("./db");
   const keys = require("./config/keys");
   const authRoutes = require("./routes/authRoutes");
   const eventRoutes = require("./routes/eventRoutes");

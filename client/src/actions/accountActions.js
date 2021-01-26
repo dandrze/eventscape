@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_USER } from "../actions/types";
+import { FETCH_USER } from "./types";
 
 export const signInLocal = (username, password) => async (dispatch) => {
   // response is {user, error}
@@ -87,7 +87,7 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
   dispatch
 ) => {
   try {
-    const res = await api.put("/api/account/pw", {
+    const res = await api.put("/auth/change-password", {
       userId,
       oldPassword,
       newPassword,
@@ -100,6 +100,23 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
     return true;
   } catch (err) {
     toast.error("Error when updating password: " + err.response.data.error);
+    return false;
+  }
+};
+
+export const requestPasswordReset = (emailAddress) => async (dispatch) => {
+  try {
+    const res = await api.post("/auth/request-password-reset", {
+      emailAddress,
+    });
+
+    const emailFound = res.data;
+
+    return emailFound;
+  } catch (err) {
+    toast.error(
+      "Error when requesting password reset: " + err.response.data.error
+    );
     return false;
   }
 };

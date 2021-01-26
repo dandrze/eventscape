@@ -1,5 +1,6 @@
 const express = require("express");
 const bcrypt = require("bcrypt");
+
 const { Account } = require("../db").models;
 
 const saltRounds = 10;
@@ -41,26 +42,6 @@ router.get("/api/account/email", async (req, res, next) => {
   const account = await Account.findOne({ where: { emailAddress } }).catch(
     next
   );
-
-  res.status(200).send(account);
-});
-
-router.put("/api/account/pw", async (req, res, next) => {
-  const { userId, oldPassword, newPassword } = req.body;
-
-  const account = await Account.findByPk(userId).catch(next);
-
-  // if the password doesn't match, return an 401 unauthorized error
-  const match = await bcrypt.compare(oldPassword, account.password);
-  if (!match) {
-    return res.status(401).json({ error: "Current password is not correct" });
-  }
-
-  // has the password so we don't store the plain text password in our database
-  const hashedPassword = await bcrypt.hashSync(newPassword, saltRounds);
-
-  account.password = hashedPassword;
-  account.save();
 
   res.status(200).send(account);
 });

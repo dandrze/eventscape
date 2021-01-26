@@ -25,18 +25,21 @@ function ResetPassword(props) {
   const [email, setEmail] = React.useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
   };
 
   const handleSubmit = async () => {
-    /*setIsloading(true);
-    const isAuth = await props.signInLocal(email, password);
-    setIsloading(false);
-    if (isAuth.success) {
-      props.history.push("/design/event");
-    }*/
+    setIsLoading(true);
+    const emailExists = await props.requestPasswordReset(email);
+    setIsLoading(false);
+    if (emailExists) {
+      setEmailSent(true);
+    } else {
+      setEmailNotFound(true);
+    }
   };
 
   if (emailSent) {
@@ -46,8 +49,10 @@ function ResetPassword(props) {
           content={
             <div className="form-box shadow-border">
               <h2>Reset Password</h2>
-              <p>An email has been sent.</p>
-              <p>Please click the link when you get it.</p>
+              <p>
+                An email has been sent to you with a link to change your
+                password.
+              </p>
             </div>
           }
         />
