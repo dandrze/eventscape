@@ -43,7 +43,7 @@ function ChangePassword(props) {
         const res = await api.get("/auth/validate-token/" + token);
         setTokenIsInvalid(false);
       } catch (err) {
-        if (err.response.data.error === "expired") {
+        if (err.response.data.message === "expired") {
           setTokenIsExpired(true);
         } else {
           setTokenIsInvalid(true);
@@ -80,8 +80,9 @@ function ChangePassword(props) {
         setPasswordUpdated(true);
         setIsloading(false);
       } catch (err) {
-        console.log(err);
-        toast.error("Error when updating password: " + err.response.data.error);
+        toast.error(
+          "Error when updating password: " + err.response.data.message
+        );
         setIsloading(false);
       }
     }

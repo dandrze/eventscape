@@ -60,7 +60,7 @@ export const deleteChatRoom = (id) => async (dispatch) => {
 
     return response;
   } catch (err) {
-    toast.error(err.response.data.error);
+    toast.error(err.response.data.message);
   }
 };
 

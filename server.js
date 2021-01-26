@@ -31,6 +31,7 @@ function start() {
   const analyticsRoutes = require("./routes/analyticsRoutes");
   require("./services/passport");
   const terminate = require("./terminate");
+  const { handleError, ErrorHandler } = require("./services/error");
 
   const app = express();
 
@@ -62,11 +63,10 @@ function start() {
   app.use(liveEventRoutes);
   app.use(chatRoomRoutes);
   app.use(analyticsRoutes);
+
   // universal error handling for all database calls with .catch(next) at the end
-  app.use((error, req, res, next) => {
-    // console log will be replaced with logging when implemented
-    console.log("ERROR: " + error.toString());
-    return res.status(500).json({ error: error.toString() });
+  app.use((err, req, res, next) => {
+    handleError(err, res);
   });
 
   if (process.env.NODE_ENV == "production") {

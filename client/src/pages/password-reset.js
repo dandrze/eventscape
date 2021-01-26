@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import SimpleNavBar from "../components/simpleNavBar";
+import api from "../api/server";
 
 import * as actions from "../actions";
 
@@ -22,24 +24,36 @@ const useStyles = makeStyles((theme) => ({
 function ResetPassword(props) {
   const classes = useStyles();
 
-  const [email, setEmail] = React.useState("");
+  const [emailAddress, setEmailAddress] = React.useState("");
   const [emailSent, setEmailSent] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+  const handleChangeEmailAddress = (event) => {
+    setEmailAddress(event.target.value);
   };
 
   const handleSubmit = async () => {
     setIsLoading(true);
-    const emailExists = await props.requestPasswordReset(email);
-    setIsLoading(false);
-    if (emailExists) {
-      setEmailSent(true);
-    } else {
-      setEmailNotFound(true);
+    try {
+      const res = await api.post("/auth/request-password-reset", {
+        emailAddress,
+      });
+
+      const emailFound = res.data;
+
+      if (emailFound) {
+        setEmailSent(true);
+      } else {
+        setEmailNotFound(true);
+      }
+    } catch (err) {
+      console.log(err.response.data);
+      toast.error(
+        "Error when requesting password reset: " + err.response.data.message
+      );
     }
+    setIsLoading(false);
   };
 
   if (emailSent) {
@@ -93,15 +107,23 @@ function ResetPassword(props) {
                 id="email"
                 label="Email"
                 variant="outlined"
-                value={email}
-                onChange={handleChangeEmail}
+                value={emailAddress}
+                onChange={handleChangeEmailAddress}
               />
             </FormControl>
             <br></br>
             <div style={{ marginTop: "15px" }}>
-              <button className="Button1" type="submit" onClick={handleSubmit}>
-                Email me a recovery link
-              </button>
+              {isLoading ? (
+                <CircularProgress />
+              ) : (
+                <button
+                  className="Button1"
+                  type="submit"
+                  onClick={handleSubmit}
+                >
+                  Email me a recovery link
+                </button>
+              )}
             </div>
           </div>
         }

@@ -49,7 +49,9 @@ router.post("/api/registration", async (req, res, next) => {
     ).catch(next);
 
     if (failed > 0) {
-      res.status(500).json({ error: "Error when sending confirmation email" });
+      res
+        .status(500)
+        .json({ message: "Error when sending confirmation email" });
       return;
     }
   }

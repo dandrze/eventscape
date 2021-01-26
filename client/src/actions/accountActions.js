@@ -19,8 +19,8 @@ export const signInLocal = (username, password) => async (dispatch) => {
       return { success: true };
     }
   } catch (err) {
-    toast.error("Error when signing in: " + err.response.data.error);
-    return { error: err.response.data.error };
+    toast.error("Error when signing in: " + err.response.data.message);
+    return { error: err.response.data.message };
   }
 };
 
@@ -99,24 +99,7 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
 
     return true;
   } catch (err) {
-    toast.error("Error when updating password: " + err.response.data.error);
-    return false;
-  }
-};
-
-export const requestPasswordReset = (emailAddress) => async (dispatch) => {
-  try {
-    const res = await api.post("/auth/request-password-reset", {
-      emailAddress,
-    });
-
-    const emailFound = res.data;
-
-    return emailFound;
-  } catch (err) {
-    toast.error(
-      "Error when requesting password reset: " + err.response.data.error
-    );
+    toast.error("Error when updating password: " + err.response.data.message);
     return false;
   }
 };

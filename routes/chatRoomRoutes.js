@@ -96,7 +96,7 @@ router.delete("/api/chatroom", async (req, res, next) => {
   if (chatRoom.isDefault)
     return res
       .status(400)
-      .send({ error: "You cannot delete the primary chat room." });
+      .send({ message: "You cannot delete the primary chat room." });
 
   if (chatRoom) await chatRoom.destroy().catch(next);
 
