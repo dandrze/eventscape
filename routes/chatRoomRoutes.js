@@ -6,112 +6,139 @@ router.get("/api/chatroom/default", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { event } = req.query;
 
-  const [newRoom, created] = await ChatRoom.findOrCreate({
-    where: {
-      event,
-      isDefault: true,
-    },
-  }).catch(next);
+  try {
+    const [newRoom, created] = await ChatRoom.findOrCreate({
+      where: {
+        event,
+        isDefault: true,
+      },
+    });
 
-  if (created) {
-    newRoom.name = "Main Room (Default)";
-    await newRoom.save();
+    if (created) {
+      newRoom.name = "Main Room (Default)";
+      await newRoom.save();
+    }
+
+    res.status(200).send({ id: newRoom.id });
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).send({ id: newRoom.id });
 });
 
 router.get("/api/chatroom/all", async (req, res) => {
   const { event } = req.query;
-  const chatRooms = await ChatRoom.findAll({
-    where: {
-      event,
-    },
-  }).catch(next);
+  try {
+    const chatRooms = await ChatRoom.findAll({
+      where: {
+        event,
+      },
+    });
 
-  res.status(200).send(chatRooms);
+    res.status(200).send(chatRooms);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/api/chatroom", async (req, res, next) => {
   const {
     room: { id, name },
   } = req.body;
-  const dbRoom = await ChatRoom.findOne({
-    where: {
-      id,
-    },
-  }).catch(next);
 
-  dbRoom.name = name;
-  dbRoom.save();
+  try {
+    const dbRoom = await ChatRoom.findOne({
+      where: {
+        id,
+      },
+    });
 
-  res.status(200).send();
+    dbRoom.name = name;
+    dbRoom.save();
+
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/api/chatuser", async (req, res, next) => {
   const { AccountId, ChatRoomId, name } = req.body;
 
-  const [dbUser, created] = await ChatUser.findOrCreate({
-    where: {
-      AccountId,
-      ChatRoomId,
-    },
-  }).catch(next);
+  try {
+    const [dbUser, created] = await ChatUser.findOrCreate({
+      where: {
+        AccountId,
+        ChatRoomId,
+      },
+    });
 
-  console.log(dbUser, created);
+    console.log(dbUser, created);
 
-  dbUser.name = name;
-  dbUser.save();
+    dbUser.name = name;
+    dbUser.save();
 
-  res.status(200).send();
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/api/chatuser", async (req, res, next) => {
   const { AccountId, ChatRoomId } = req.query;
 
-  const [dbUser, created] = await ChatUser.findOrCreate({
-    where: {
-      AccountId,
-      ChatRoomId,
-    },
-  }).catch(next);
+  try {
+    const [dbUser, created] = await ChatUser.findOrCreate({
+      where: {
+        AccountId,
+        ChatRoomId,
+      },
+    });
 
-  if (created) {
-    dbUser.name = "Moderator";
-    await dbUser.save();
+    if (created) {
+      dbUser.name = "Moderator";
+      await dbUser.save();
+    }
+
+    res.status(200).send(dbUser);
+  } catch (error) {
+    next(error);
   }
-
-  res.status(200).send(dbUser);
 });
 
 router.delete("/api/chatroom", async (req, res, next) => {
   const { id } = req.query;
 
-  const chatRoom = await ChatRoom.findOne({
-    where: {
-      id,
-    },
-  }).catch(next);
+  try {
+    const chatRoom = await ChatRoom.findOne({
+      where: {
+        id,
+      },
+    });
 
-  if (chatRoom.isDefault)
-    return res
-      .status(400)
-      .send({ message: "You cannot delete the primary chat room." });
+    if (chatRoom.isDefault)
+      return res
+        .status(400)
+        .send({ message: "You cannot delete the primary chat room." });
 
-  if (chatRoom) await chatRoom.destroy().catch(next);
+    if (chatRoom) await chatRoom.destroy();
 
-  res.status(200).send();
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/api/chatroom", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { room, event } = req.body;
 
-  console.log(room, event);
+  try {
+    const newRoom = await ChatRoom.create({ name: room.name, event });
 
-  const newRoom = await ChatRoom.create({ name: room.name, event }).catch(next);
-
-  res.status(200).send(newRoom);
+    res.status(200).send(newRoom);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

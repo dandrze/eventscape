@@ -46,7 +46,8 @@
     "react-helmet": "^6.1.0",
     "sequelize": "^6.3.5",
     "socket.io": "^3.0.4",
-    "throng": "^5.0.0"
+    "throng": "^5.0.0",
+    "winston": "^3.3.3"
   },
   "devDependencies": {
     "sequelize-cli": "^6.2.0"

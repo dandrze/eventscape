@@ -26,24 +26,30 @@ router.post("/api/account", async (req, res, next) => {
 
   const hashedPassword = await bcrypt.hashSync(password, saltRounds);
 
-  const account = await Account.create({
-    emailAddress,
-    firstName,
-    lastName,
-    password: hashedPassword,
-  }).catch(next);
+  try {
+    const account = await Account.create({
+      emailAddress,
+      firstName,
+      lastName,
+      password: hashedPassword,
+    });
 
-  res.status(200).send(account);
+    res.status(200).send(account);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/api/account/email", async (req, res, next) => {
   const { emailAddress } = req.query;
 
-  const account = await Account.findOne({ where: { emailAddress } }).catch(
-    next
-  );
+  try {
+    const account = await Account.findOne({ where: { emailAddress } });
 
-  res.status(200).send(account);
+    res.status(200).send(account);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

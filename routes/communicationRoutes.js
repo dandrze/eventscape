@@ -11,15 +11,19 @@ const Registration = require("../db/models/Registration");
 router.get("/api/communication/all", async (req, res, next) => {
   const { EventId } = req.query;
 
-  const communications = await Communication.findAll({
-    where: { EventId },
-  }).catch(next);
+  try {
+    const communications = await Communication.findAll({
+      where: { EventId },
+    });
 
-  res.send(communications);
+    res.send(communications);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/api/communication", async (req, res, next) => {
-  const { event, email } = req.body;
+  const { EventId, email } = req.body;
   const {
     recipients,
     status,
@@ -29,73 +33,89 @@ router.post("/api/communication", async (req, res, next) => {
     emailList,
   } = email;
 
-  const communication = await Communication.create({
-    EventId: event,
-    recipients,
-    status,
-    subject,
-    minutesFromEvent,
-    html,
-  }).catch(next);
+  try {
+    const communication = await Communication.create({
+      EventId,
+      recipients,
+      status,
+      subject,
+      minutesFromEvent,
+      html,
+    });
 
-  if (
-    status === statusOptions.ACTIVE &&
-    recipients != recipientsOptions.NEW_REGISTRANTS
-  ) {
-    const to = [];
+    if (
+      status === statusOptions.ACTIVE &&
+      recipients != recipientsOptions.NEW_REGISTRANTS
+    ) {
+      const to = [];
 
-    scheduleJob(
-      communication.id,
-      { subject, html, recipients },
-      event,
-      minutesFromEvent
-    );
+      const event = await Event.findByPk(EventId);
+
+      scheduleJob(
+        communication.id,
+        { subject, html, recipients },
+        event,
+        minutesFromEvent
+      );
+    }
+
+    res.send(communication);
+  } catch (error) {
+    next(error);
   }
-
-  res.send(communication);
 });
 
 router.delete("/api/communication", async (req, res, next) => {
   const { id } = req.query;
-  const response = await Communication.destroy({ where: { id } }).catch(next);
+  try {
+    const response = await Communication.destroy({ where: { id } });
 
-  res.status(200).send({ response });
+    res.status(200).send({ response });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/api/communication", async (req, res, next) => {
   const { id, email } = req.body;
   const { recipients, status, subject, minutesFromEvent, html } = email;
 
-  const communication = await Communication.findByPk(id).catch(next);
+  try {
+    const communication = await Communication.findByPk(id);
 
-  if (status === "Active" && recipients != "New Registrants") {
-    // delete the old job because it could have stale data
-    Scheduler.cancelSend(id.toString());
-    // create a new job with fresh data
+    if (status === "Active" && recipients != "New Registrants") {
+      // delete the old job because it could have stale data
+      Scheduler.cancelSend(id.toString());
+      // create a new job with fresh data
 
-    scheduleJob(
-      id.toString(),
-      { subject, html, recipients },
-      communication.EventId,
-      minutesFromEvent
-    );
-  } else if (
-    communication.status === "Active" ||
-    communication.recipients != "New Registrants"
-  ) {
-    // if either of these two conditions is true, then there might be an existing job we need to cancel
-    Scheduler.cancelSend(id.toString());
+      const event = await Event.findByPk(communication.EventId);
+
+      scheduleJob(
+        id.toString(),
+        { subject, html, recipients },
+        event,
+        minutesFromEvent
+      );
+    } else if (
+      communication.status === "Active" ||
+      communication.recipients != "New Registrants"
+    ) {
+      // if either of these two conditions is true, then there might be an existing job we need to cancel
+      Scheduler.cancelSend(id.toString());
+    }
+
+    communication.recipients = recipients;
+    communication.status = status;
+    communication.subject = subject;
+    communication.minutesFromEvent = minutesFromEvent;
+    communication.html = html;
+
+    await communication.save();
+
+    res.send(communication);
+  } catch (error) {
+    next(error);
   }
-
-  communication.recipients = recipients;
-  communication.status = status;
-  communication.subject = subject;
-  communication.minutesFromEvent = minutesFromEvent;
-  communication.html = html;
-
-  communication.save();
-
-  res.send(communication);
 });
 
 router.get("/api/communication/jobs", async (req, res) => {
@@ -111,11 +131,15 @@ router.post("/api/communication/jobs/cancel", async (req, res) => {
 router.get("/api/communication-list", async (req, res, next) => {
   const { emailId } = req.query;
 
-  const emailListRecipients = await EmailListRecipient.findAll({
-    where: { CommunicationId: emailId },
-  }).catch(next);
+  try {
+    const emailListRecipients = await EmailListRecipient.findAll({
+      where: { CommunicationId: emailId },
+    });
 
-  res.status(200).send(emailListRecipients);
+    res.status(200).send(emailListRecipients);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/api/communication-list", async (req, res, next) => {
@@ -123,18 +147,22 @@ router.post("/api/communication-list", async (req, res, next) => {
 
   const { firstName, lastName, email } = data;
 
-  const emailListRecipient = await EmailListRecipient.create({
-    firstName,
-    lastName,
-    email,
-    CommunicationId: emailId,
-  }).catch(next);
+  try {
+    const emailListRecipient = await EmailListRecipient.create({
+      firstName,
+      lastName,
+      email,
+      CommunicationId: emailId,
+    });
 
-  emailListRecipient.hash = md5(emailListRecipient.id);
+    emailListRecipient.hash = md5(emailListRecipient.id);
 
-  await emailListRecipient.save().catch(next);
+    await emailListRecipient.save();
 
-  res.status(200).send(emailListRecipient);
+    res.status(200).send(emailListRecipient);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/api/communication-list", async (req, res, next) => {
@@ -142,23 +170,31 @@ router.put("/api/communication-list", async (req, res, next) => {
 
   const { firstName, lastName, email } = data;
 
-  const emailListRecipient = await EmailListRecipient.findByPk(id).catch(next);
+  try {
+    const emailListRecipient = await EmailListRecipient.findByPk(id);
 
-  emailListRecipient.firstName = firstName;
-  emailListRecipient.lastName = lastName;
-  emailListRecipient.email = email;
-  await emailListRecipient.save().catch(next);
+    emailListRecipient.firstName = firstName;
+    emailListRecipient.lastName = lastName;
+    emailListRecipient.email = email;
+    await emailListRecipient.save();
 
-  res.status(200).send(emailListRecipient);
+    res.status(200).send(emailListRecipient);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/api/communication-list", async (req, res, next) => {
   const { id } = req.query;
 
-  const emailListRecipient = await EmailListRecipient.findByPk(id).catch(next);
-  const response = await emailListRecipient.destroy().catch(next);
+  try {
+    const emailListRecipient = await EmailListRecipient.findByPk(id);
+    const response = await emailListRecipient.destroy();
 
-  res.status(200).send({ response });
+    res.status(200).send({ response });
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/api/communication/test", async (req, res, next) => {
@@ -175,27 +211,31 @@ router.post("/api/communication/test", async (req, res, next) => {
   };
 
   // pull all relevant data to map to variables and put them into a list
-  const event = await Event.findByPk(EventId, { raw: true }).catch(next);
+  const event = await Event.findByPk(EventId, { raw: true });
   const recipientData = { ...testRecipient, Event: event };
 
-  const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-    [recipientData],
-    subject,
-    html
-  ).catch(next);
-  if (success) {
-    res.status(200).send();
-  } else {
-    res.status(400).send();
+  try {
+    const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+      [recipientData],
+      subject,
+      html
+    );
+
+    if (success) {
+      res.status(200).send();
+    } else {
+      res.status(400).send();
+    }
+  } catch (error) {
+    next(error);
   }
 });
 
 // HELPER FUNCTIONS
 
-const scheduleJob = async (jobName, email, EventId, minutesFromEvent) => {
+const scheduleJob = async (jobName, email, event, minutesFromEvent) => {
   const { subject, html, recipients } = email;
 
-  const event = await Event.findByPk(EventId);
   const sendDate = new Date(event.startDate);
 
   sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
@@ -204,7 +244,7 @@ const scheduleJob = async (jobName, email, EventId, minutesFromEvent) => {
     jobName,
     { to: "andrzejewski.d@gmail.com", subject, html, recipients },
     sendDate,
-    EventId
+    event.id
   );
 };
 

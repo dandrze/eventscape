@@ -8,7 +8,7 @@ const sendEmail = async (email = { to: "", subject: "", html: "" }) => {
   const { to, subject, html } = email;
   const msg = {
     to,
-    from: { email: "notifications@eventscape.io", name: "EventScape" },
+    from: { email: "notifications@eventscape.io", name: "Eventscape" },
     subject,
     text: html,
     html,

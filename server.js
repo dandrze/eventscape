@@ -33,6 +33,8 @@ function start() {
   const terminate = require("./terminate");
   const { handleError, ErrorHandler } = require("./services/error");
 
+  const logger = require("./services/winston");
+
   const app = express();
 
   // Force HTTPS
@@ -64,8 +66,10 @@ function start() {
   app.use(chatRoomRoutes);
   app.use(analyticsRoutes);
 
-  // universal error handling for all database calls with .catch(next) at the end
+  // universal error handling for all database calls
   app.use((err, req, res, next) => {
+    logger.error(err.message);
+    logger.error(err.stack);
     handleError(err, res);
   });
 

@@ -6,59 +6,63 @@ const router = express.Router();
 router.get("/api/analytics/visitor-data", async (req, res, next) => {
   const { EventId } = req.query;
 
-  const currentCount = await SiteVisit.count({
-    where: {
-      loggedOutAt: null,
-      EventId,
-    },
-  }).catch(next);
+  try {
+    const currentCount = await SiteVisit.count({
+      where: {
+        loggedOutAt: null,
+        EventId,
+      },
+    });
 
-  const uniqueCount = await SiteVisit.count({
-    where: {
-      EventId,
-    },
-    col: "SiteVisitorId",
-    distinct: true,
-  }).catch(next);
+    const uniqueCount = await SiteVisit.count({
+      where: {
+        EventId,
+      },
+      col: "SiteVisitorId",
+      distinct: true,
+    });
 
-  const visitData = await SiteVisit.findAll({
-    where: {
-      EventId,
-    },
-    raw: true,
-    order: [
-      "id",
-    ] /* ensures that the latest visit shows up last, required for mapping functions*/,
-  }).catch(next);
+    const visitData = await SiteVisit.findAll({
+      where: {
+        EventId,
+      },
+      raw: true,
+      order: [
+        "id",
+      ] /* ensures that the latest visit shows up last, required for mapping functions*/,
+    });
 
-  const siteVisitors = await SiteVisitor.findAll({
-    where: {
-      EventId,
-    },
-    include: Registration,
-    raw: true,
-  }).catch(next);
+    const siteVisitors = await SiteVisitor.findAll({
+      where: {
+        EventId,
+      },
+      include: Registration,
+      raw: true,
+    });
 
-  const visitorData = siteVisitors.map((visitor) => {
-    let timeViewed = 0;
-    let lastLogout = null;
-    for (let visit of visitData) {
-      if (visit.SiteVisitorId === visitor.id) {
-        if (visit.loggedOutAt) {
-          lastLogout = Math.max(lastLogout, visit.loggedOutAt);
-          timeViewed += visit.loggedOutAt - visit.createdAt;
-        } else {
-          lastLogout = null;
-          timeViewed += new Date() - visit.createdAt;
+    const visitorData = siteVisitors.map((visitor) => {
+      let timeViewed = 0;
+      let lastLogout = null;
+      for (let visit of visitData) {
+        if (visit.SiteVisitorId === visitor.id) {
+          if (visit.loggedOutAt) {
+            lastLogout = Math.max(lastLogout, visit.loggedOutAt);
+            timeViewed += visit.loggedOutAt - visit.createdAt;
+          } else {
+            lastLogout = null;
+            timeViewed += new Date() - visit.createdAt;
+          }
         }
       }
-    }
-    return { ...visitor, timeViewed, lastLogout };
-  });
+      return { ...visitor, timeViewed, lastLogout };
+    });
 
-  const history = await createVisitHistory(visitData, EventId).catch(next);
+    const history = await createVisitHistory(visitData, EventId);
 
-  res.status(200).send({ currentCount, uniqueCount, visitorData, history });
+    res.status(200).send({ currentCount, uniqueCount, visitorData, history });
+  } catch (error) {
+    next(error);
+  }
 });
 
 const createVisitHistory = async (visitData, EventId) => {

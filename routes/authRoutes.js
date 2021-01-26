@@ -130,21 +130,27 @@ router.post("/auth/change-password-with-token", async (req, res, next) => {
 router.put("/auth/change-password", async (req, res, next) => {
   const { userId, oldPassword, newPassword } = req.body;
 
-  const account = await Account.findByPk(userId).catch(next);
+  try {
+    const account = await Account.findByPk(userId);
 
-  // if the password doesn't match, return an 401 unauthorized error
-  const match = await bcrypt.compare(oldPassword, account.password);
-  if (!match) {
-    return res.status(401).json({ message: "Current password is not correct" });
+    // if the password doesn't match, return an 401 unauthorized error
+    const match = await bcrypt.compare(oldPassword, account.password);
+    if (!match) {
+      return res
+        .status(401)
+        .json({ message: "Current password is not correct" });
+    }
+
+    // has the password so we don't store the plain text password in our database
+    const hashedPassword = await bcrypt.hashSync(newPassword, saltRounds);
+
+    account.password = hashedPassword;
+    account.save();
+
+    res.status(200).send(account);
+  } catch (error) {
+    next(error);
   }
-
-  // has the password so we don't store the plain text password in our database
-  const hashedPassword = await bcrypt.hashSync(newPassword, saltRounds);
-
-  account.password = hashedPassword;
-  account.save();
-
-  res.status(200).send(account);
 });
 
 module.exports = router;

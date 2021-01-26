@@ -73,10 +73,10 @@ export const updateFromEmailList = (data, id) => async (dispatch, getState) => {
 };
 
 export const addEmail = (email) => async (dispatch, getState) => {
-  const event = getState().event.id;
+  const EventId = getState().event.id;
 
   try {
-    const res = await api.post("/api/communication", { email, event });
+    const res = await api.post("/api/communication", { email, EventId });
     toast.success("Successfully added email");
   } catch (err) {
     toast.error(
