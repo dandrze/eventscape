@@ -9,6 +9,7 @@ import { Provider } from "react-redux";
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
 import { createMuiTheme, MuiThemeProvider } from "@material-ui/core/styles";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 import reducers from "./reducers";
 //import global variables
@@ -43,9 +44,11 @@ ReactDOM.render(
   <React.StrictMode>
     <BrowserRouter>
       <MuiThemeProvider theme={theme}>
-        <Provider store={store}>
-          <App />
-        </Provider>
+        <ErrorBoundary>
+          <Provider store={store}>
+            <App />
+          </Provider>
+        </ErrorBoundary>
       </MuiThemeProvider>
     </BrowserRouter>
   </React.StrictMode>,
