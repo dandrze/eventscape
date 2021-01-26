@@ -55,7 +55,7 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
 
   if (account) {
     const expiration = new Date();
-    expiration.setMinutes(expiration.getMinutes() + 30);
+    expiration.setMinutes(expiration.getMinutes() + 2);
 
     const payload = { userId: account.id, expiration };
     const secret = keys.jwtSecretKey;
@@ -69,7 +69,7 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
     contact us
     </a> immediately.</p>
 
-    <a href="https://eventscape.io/auth/password-reset/${token}">Create New Password</a>
+    <a href="https://eventscape.io/change-password/${token}">Create New Password</a>
     `;
 
     sendEmail({
@@ -81,19 +81,6 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
     return res.status(200).send(true);
   } else {
     return res.status(200).send(false);
-  }
-});
-
-router.get("/auth/password-reset/:token", (req, res) => {
-  const { token } = req.params;
-
-  try {
-    const payload = jwt.decode(token, keys.jwtSecretKey);
-    // If we're able to successfuly decode it, then it's a valid token, so redirect the user to the password change page with the token as a param
-    res.redirect("/change-password/" + token);
-  } catch {
-    // The token cannot be decoded, so it's invalid. So let's send the user to the change password page but pass an invalid token (any string really)
-    res.redirect("/change-password/" + "invalidtoken");
   }
 });
 
