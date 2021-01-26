@@ -1,4 +1,5 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -23,7 +24,7 @@ class ErrorBoundary extends React.Component {
         <Redirect
           to={{
             pathname: "/login",
-            state: { from: props.location },
+            state: { from: this.props.location },
           }}
         />
       );
