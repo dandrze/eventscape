@@ -402,8 +402,8 @@ const Chat = forwardRef(
     const sendMessage = (event) => {
       event.preventDefault();
 
-      setSendLoading(true);
       if (message) {
+        setSendLoading(true);
         socket.emit("sendMessage", { chatUserId, room, message }, () => {
           setMessage("");
           setSendLoading(false);
