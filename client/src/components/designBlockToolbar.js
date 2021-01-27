@@ -64,7 +64,7 @@ function DesignBlockToolbar(props) {
   const [rooms, setRooms] = React.useState([]);
   const [tabsEnabled, setTabsEnabled] = React.useState({
     chat: true,
-    question: false,
+    question: true,
   });
 
   const showStreamSettings =
@@ -78,6 +78,8 @@ function DesignBlockToolbar(props) {
       setYoutubeLink(props.section.reactComponent.props.link);
       setCustomHTML(props.section.reactComponent.props.html);
       setRoom(props.section.reactComponent.props.chatRoom);
+      if (props.section.reactComponent.props.tabsEnabled)
+        setTabsEnabled(props.section.reactComponent.props.tabsEnabled);
 
       // set the section tooltip if it's a section that requires one
       if (props.section.isReact) {
@@ -128,13 +130,8 @@ function DesignBlockToolbar(props) {
       content,
       link: youtubeLink,
       html: customHTML,
-    });
-  };
-
-  const handleSaveChatSettings = () => {
-    setOpenStreamSettings(false);
-    props.saveChatSettings(props.sectionIndex, {
       chatRoom: room,
+      tabsEnabled,
     });
   };
 
@@ -424,7 +421,7 @@ function DesignBlockToolbar(props) {
                       <Grid item xs={12} id="save-button">
                         <button
                           className="Button1"
-                          onClick={handleSaveChatSettings}
+                          onClick={handleSaveStreamSettings}
                         >
                           Save
                         </button>

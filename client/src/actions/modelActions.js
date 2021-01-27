@@ -10,7 +10,7 @@ import {
   SAVE_REG_MODEL,
   SAVE_EVENT_MODEL,
   MODEL_ISSAVED,
-  UPDATE_reactComponent,
+  UPDATE_REACT_COMPONENT,
 } from "./types";
 import { pageNames } from "../model/enums";
 
@@ -119,27 +119,11 @@ export const saveStreamSettings = (index, updatedProps) => async (
   getState
 ) => {
   const reactComponent = getState().model.sections[index].reactComponent;
-  reactComponent.props.content = updatedProps.content;
-  reactComponent.props.link = updatedProps.link;
-  reactComponent.props.html = updatedProps.html;
-  reactComponent.props.chatRoom = updatedProps.chatRoom;
+
+  reactComponent.props = updatedProps;
 
   dispatch({
-    type: UPDATE_reactComponent,
-    payload: { index, reactComponent: reactComponent },
-  });
-};
-
-export const saveChatSettings = (index, chatSettings) => async (
-  dispatch,
-  getState
-) => {
-  const reactComponent = getState().model.sections[index].reactComponent;
-
-  reactComponent.props.chatRoom = chatSettings.chatRoom;
-
-  dispatch({
-    type: UPDATE_reactComponent,
+    type: UPDATE_REACT_COMPONENT,
     payload: { index, reactComponent: reactComponent },
   });
 };

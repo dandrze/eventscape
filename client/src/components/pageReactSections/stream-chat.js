@@ -30,12 +30,6 @@ const StreamChat = (props) => {
     }
   };
 
-  // if there is an attendee object in redux, show the attendees name, else show Guest1234 (random number)
-  const rand = Math.floor(Math.random() * 1000).toString();
-  const name = props.attendee.firstName
-    ? props.attendee.firstName + " " + props.attendee.lastName
-    : "Guest" + rand.toString();
-
   return (
     <div>
       <section className="stream-chat-main-container">
@@ -47,9 +41,10 @@ const StreamChat = (props) => {
             <div id="video-responsive-iframe">
               <Chat
                 room={props.chatRoom}
-                name={name}
                 isModerator={false}
                 registrationId={props.attendee.id}
+                chatTabEnabled={props.tabsEnabled?.chat}
+                questionTabEnabled={props.tabsEnabled?.question}
               />
             </div>
           </div>

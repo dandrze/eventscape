@@ -261,7 +261,6 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
 const Chat = forwardRef(
   (
     {
-      name,
       room,
       userId,
       registrationId,
@@ -279,10 +278,6 @@ const Chat = forwardRef(
     const [chatHidden, setChatHidden] = useState(false);
     const [tabValue, setTabValue] = React.useState(0);
     const [sendLoading, setSendLoading] = useState(false);
-
-    //temporary, will become props:
-    /*const chatTabEnabled = true;
-  const questionTabEnabled = true;*/
 
     // Index numbers for tabs:
     const chatIndex = 0;
@@ -379,7 +374,7 @@ const Chat = forwardRef(
 
       socket.emit(
         "join",
-        { name, userId, registrationId, uuid, room, isModerator },
+        { userId, registrationId, uuid, room, isModerator },
         (id) => {
           setChatUserId(id);
         }
