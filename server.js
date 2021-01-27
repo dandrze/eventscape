@@ -21,6 +21,9 @@ function start() {
   const keys = require("./config/keys");
   require("./services/passport");
   const terminate = require("./terminate");
+  const { handleError, ErrorHandler } = require("./services/error");
+
+  const logger = require("./services/winston");
 
   const app = express();
 
@@ -53,11 +56,12 @@ function start() {
   app.use(require("./routes/chatRoomRoutes"));
   app.use(require("./routes/analyticsRoutes"));
   app.use(require("./routes/froalaRoutes"));
-  // universal error handling for all database calls with .catch(next) at the end
-  app.use((error, req, res, next) => {
-    // console log will be replaced with logging when implemented
-    console.log("ERROR: " + error.toString());
-    return res.status(500).json({ error: error.toString() });
+
+  // universal error handling for all database calls
+  app.use((err, req, res, next) => {
+    logger.error(err.message);
+    logger.error(err.stack);
+    handleError(err, res);
   });
 
   if (process.env.NODE_ENV == "production") {

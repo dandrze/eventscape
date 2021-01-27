@@ -31,13 +31,15 @@ passport.use(
     }
 
     // compare the password against the hashed password stored in postgres
-    const match = bcrypt.compare(password, user.password);
+    console.log({ password, oldpw: user.password });
+    const match = await bcrypt.compare(password, user.password);
+    console.log(match);
 
-    if (!match) {
+    if (match) {
+      return done(null, user);
+    } else {
       console.log("incorrect password");
       return done(null, false, { message: "Incorrect password." });
     }
-
-    return done(null, user);
   })
 );

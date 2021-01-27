@@ -165,7 +165,11 @@ function App(props) {
             component={requireAuth(AccountSettingsPayments)}
           />
           <Route exact path="/reset-password" component={ResetPassword} />
-          <Route exact path="/change-password" component={ChangePassword} />
+          <Route
+            exact
+            path="/change-password/:token"
+            component={ChangePassword}
+          />
           <Route exact path="/test" component={Test} />
         </Suspense>
       </header>

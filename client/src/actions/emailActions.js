@@ -73,13 +73,15 @@ export const updateFromEmailList = (data, id) => async (dispatch, getState) => {
 };
 
 export const addEmail = (email) => async (dispatch, getState) => {
-  const event = getState().event.id;
+  const EventId = getState().event.id;
 
   try {
-    const res = await api.post("/api/communication", { email, event });
+    const res = await api.post("/api/communication", { email, EventId });
     toast.success("Successfully added email");
   } catch (err) {
-    toast.error(`Error when adding new email. Error: ` + err.toString());
+    toast.error(
+      `Error when adding new email. Error: ` + err.response.data.messaage
+    );
     return false;
   }
 };
@@ -92,7 +94,9 @@ export const deleteEmail = (id) => async (dispatch) => {
     toast.success("Successfully deleted email");
     return true;
   } catch (err) {
-    toast.error(`Error when deleting email. Error: ` + err.toString());
+    toast.error(
+      `Error when deleting email. Error: ` + err.response.data.messaage
+    );
     return false;
   }
 };
@@ -103,7 +107,9 @@ export const editEmail = (id, email) => async (dispatch, getState) => {
     toast.success("Successfully updated email");
     return true;
   } catch (err) {
-    toast.error(`Error when updating email. Error: ` + err.toString());
+    toast.error(
+      `Error when updating email. Error: ` + err.response.data.messaage
+    );
     return false;
   }
 };
@@ -114,7 +120,9 @@ export const sendTestEmail = (EventId, email) => async (dispatch, getState) => {
     toast.success("Successfully sent test email to " + email.emailAddress);
     return true;
   } catch (err) {
-    toast.error(`Error when sending email. Error: ` + err.toString());
+    toast.error(
+      `Error when sending email. Error: ` + err.response.data.messaage
+    );
     return false;
   }
 };

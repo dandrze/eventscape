@@ -56,7 +56,7 @@ export const addRegistration = (
     return true;
   } catch (err) {
     console.log(err.response);
-    toast.error("Error when adding registration: " + err.response.data.error);
+    toast.error("Error when adding registration: " + err.response.data.message);
     return false;
   }
 };

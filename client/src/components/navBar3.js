@@ -415,7 +415,7 @@ function NavBar3(props) {
               </Link>
             )}
 
-            <Link to="./my-events">
+            <Link to="/my-events">
               <StyledMenuItem>
                 <ListItemIcon>
                   <ListIcon fontSize="small" />
@@ -424,7 +424,7 @@ function NavBar3(props) {
               </StyledMenuItem>
             </Link>
 
-            <Link to="./account-settings-contact">
+            <Link to="/account-settings-contact">
               <StyledMenuItem>
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />

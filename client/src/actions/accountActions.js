@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_USER, SET_S3HASH } from "../actions/types";
+import { FETCH_USER, SET_S3HASH } from "./types";
 
 export const signInLocal = (username, password) => async (dispatch) => {
   // response is {user, error}
@@ -27,8 +27,8 @@ export const signInLocal = (username, password) => async (dispatch) => {
       return { success: true };
     }
   } catch (err) {
-    toast.error("Error when signing in: " + err.response.data.error);
-    return { error: err.response.data.error };
+    toast.error("Error when signing in: " + err.response.data.message);
+    return { error: err.response.data.message };
   }
 };
 
@@ -105,7 +105,7 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
   dispatch
 ) => {
   try {
-    const res = await api.put("/api/account/pw", {
+    const res = await api.put("/auth/change-password", {
       userId,
       oldPassword,
       newPassword,
@@ -117,7 +117,7 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
 
     return true;
   } catch (err) {
-    toast.error("Error when updating password: " + err.response.data.error);
+    toast.error("Error when updating password: " + err.response.data.message);
     return false;
   }
 };

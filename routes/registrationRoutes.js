@@ -16,166 +16,189 @@ router.post("/api/registration", async (req, res, next) => {
 
   // Add the registered user
 
-  const registration = await Registration.create({
-    firstName,
-    lastName,
-    values,
-    emailAddress,
-    EventId: EventId,
-  }).catch(next);
-
-  registration.hash = md5(registration.id);
-  registration.save();
-
-  // get all emails for new registrants
-  const communications = await Communication.findAll({
-    where: {
+  try {
+    const registration = await Registration.create({
+      firstName,
+      lastName,
+      values,
+      emailAddress,
       EventId: EventId,
-      recipients: recipientsOptions.NEW_REGISTRANTS,
-      status: statusOptions.ACTIVE,
-    },
-  }).catch(next);
+    });
 
-  // pull all relevant data to map to variables and put them into a list
-  const registrationData = await Registration.findByPk(registration.id, {
-    include: Event,
-  }).catch(next);
+    registration.hash = md5(registration.id);
+    registration.save();
 
-  for (var communication of communications) {
-    const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-      [registrationData],
-      communication.subject,
-      communication.html
-    ).catch(next);
+    // get all emails for new registrants
+    const communications = await Communication.findAll({
+      where: {
+        EventId: EventId,
+        recipients: recipientsOptions.NEW_REGISTRANTS,
+        status: statusOptions.ACTIVE,
+      },
+    });
 
-    if (failed > 0) {
-      res.status(500).json({ error: "Error when sending confirmation email" });
-      return;
+    // pull all relevant data to map to variables and put them into a list
+    const registrationData = await Registration.findByPk(registration.id, {
+      include: Event,
+    });
+
+    for (var communication of communications) {
+      const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+        [registrationData],
+        communication.subject,
+        communication.html
+      );
+
+      if (failed > 0) {
+        res
+          .status(500)
+          .json({ message: "Error when sending confirmation email" });
+        return;
+      }
     }
-  }
 
-  //if no errors were triggered and sent (res.status.(500).send()) then everything worked and send the new regsitration
-  res.status(200).send(registration);
+    //if no errors were triggered and sent (res.status.(500).send()) then everything worked and send the new regsitration
+    res.status(200).send(registration);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.put("/api/registration", async (req, res, next) => {
   const { id, values, emailAddress, firstName, lastName } = req.body;
 
-  const registration = await Registration.findByPk(id).catch(next);
-  registration.values = values;
-  registration.emailAddress = emailAddress;
-  registration.firstName = firstName;
-  registration.lastName = lastName;
+  try {
+    const registration = await Registration.findByPk(id);
+    registration.values = values;
+    registration.emailAddress = emailAddress;
+    registration.firstName = firstName;
+    registration.lastName = lastName;
 
-  registration.save();
+    registration.save();
 
-  res.status(200).send(registration);
+    res.status(200).send(registration);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/api/registration/event", async (req, res, next) => {
   const { event } = req.query;
 
-  const registrations = await Registration.findAll({
-    where: {
-      EventId: event,
-    },
-  }).catch(next);
+  try {
+    const registrations = await Registration.findAll({
+      where: {
+        EventId: event,
+      },
+    });
 
-  res.status(200).send(registrations);
+    res.status(200).send(registrations);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/api/registration/email", async (req, res, next) => {
   const { emailAddress, EventId } = req.query;
 
-  // Get the registration associated with an email
-  const registration = await Registration.findOne({
-    where: {
-      emailAddress,
-      EventId,
-    },
-  }).catch(next);
+  try {
+    // Get the registration associated with an email
+    const registration = await Registration.findOne({
+      where: {
+        emailAddress,
+        EventId,
+      },
+    });
 
-  res.status(200).send(registration);
-});
-
-router.get("/test", async (req, res, next) => {
-  const registration = await Registration.create({
-    firstName: "fdasfa",
-    EventId: 5,
-  }).catch(next);
-
-  const updatedRegistration = await registration.save().catch(next);
-
-  res.send(updatedRegistration);
+    res.status(200).send(registration);
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/api/registration/email/resend", async (req, res, next) => {
   const { emailAddress, EventId } = req.body;
 
-  // pull all relevant data to map to variables and put them into a list
-  const registrationData = await Registration.findOne({
-    where: {
-      emailAddress,
-      EventId,
-    },
-    include: Event,
-  }).catch(next);
+  try {
+    // pull all relevant data to map to variables and put them into a list
+    const registrationData = await Registration.findOne({
+      where: {
+        emailAddress,
+        EventId,
+      },
+      include: Event,
+    });
 
-  // check to see if any emails need to be fired off
-  const communications = await Communication.findAll({
-    where: {
-      EventId,
-      recipients: recipientsOptions.NEW_REGISTRANTS,
-      status: statusOptions.ACTIVE,
-    },
-  }).catch(next);
+    // check to see if any emails need to be fired off
+    const communications = await Communication.findAll({
+      where: {
+        EventId,
+        recipients: recipientsOptions.NEW_REGISTRANTS,
+        status: statusOptions.ACTIVE,
+      },
+    });
 
-  for (var communication of communications) {
-    const { success, failed } = await Mailer.mapVariablesAndSendEmail(
-      [registrationData],
-      communication.subject,
-      communication.html
-    ).catch(next);
+    for (var communication of communications) {
+      const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+        [registrationData],
+        communication.subject,
+        communication.html
+      );
 
-    if (failed > 0) {
-      return res
-        .status(500)
-        .json({ message: "Error when sending confirmation email" });
+      if (failed > 0) {
+        return res
+          .status(500)
+          .json({ message: "Error when sending confirmation email" });
+      }
     }
-  }
 
-  res.status(200).send();
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.delete("/api/registration/id", async (req, res, next) => {
   const { id } = req.query;
-  const registration = await Registration.findByPk(id).catch(next);
-  await registration.destroy().catch(next);
+  try {
+    const registration = await Registration.findByPk(id);
+    await registration.destroy();
 
-  res.status(200).send();
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post("/api/form", async (req, res, next) => {
   const { event, data } = req.body;
 
-  const [registrationForm] = await RegistrationForm.findOrCreate({
-    where: { EventId: event },
-  }).catch(next);
+  try {
+    const [registrationForm] = await RegistrationForm.findOrCreate({
+      where: { EventId: event },
+    });
 
-  registrationForm.data = data;
-  await registrationForm.save().catch(next);
+    registrationForm.data = data;
+    await registrationForm.save();
 
-  res.status(200).send();
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.get("/api/form", async (req, res, next) => {
   const { event } = req.query;
 
-  const registrationForm = await RegistrationForm.findOne({
-    where: { EventId: event },
-  }).catch(next);
+  try {
+    const registrationForm = await RegistrationForm.findOne({
+      where: { EventId: event },
+    });
 
-  res.status(200).send((registrationForm && registrationForm.data) || []);
+    res.status(200).send((registrationForm && registrationForm.data) || []);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;
