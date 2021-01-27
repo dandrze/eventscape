@@ -502,3 +502,8 @@ select {
 .margin-auto {
   margin: auto;
 }
+
+.fr-popup {
+  /* ensures froala buttons are always on top. Must be greater than 1300 because the material ui pop up modal is 1300 */
+  z-index: 2000 !important;
+}

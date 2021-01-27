@@ -18,18 +18,7 @@ function start() {
   const cookieSession = require("cookie-session");
   const flash = require("connect-flash");
   const http = require("http");
-
-  const db = require("./db");
   const keys = require("./config/keys");
-  const authRoutes = require("./routes/authRoutes");
-  const eventRoutes = require("./routes/eventRoutes");
-  const modelRoutes = require("./routes/modelRoutes");
-  const registrationRoutes = require("./routes/registrationRoutes");
-  const communicationRoutes = require("./routes/communicationRoutes");
-  const accountRoutes = require("./routes/accountRoutes");
-  const liveEventRoutes = require("./routes/liveEventRoutes");
-  const chatRoomRoutes = require("./routes/chatRoomRoutes");
-  const analyticsRoutes = require("./routes/analyticsRoutes");
   require("./services/passport");
   const terminate = require("./terminate");
 
@@ -54,15 +43,16 @@ function start() {
   app.use(flash());
 
   // routes
-  app.use(authRoutes);
-  app.use(eventRoutes);
-  app.use(modelRoutes);
-  app.use(registrationRoutes);
-  app.use(communicationRoutes);
-  app.use(accountRoutes);
-  app.use(liveEventRoutes);
-  app.use(chatRoomRoutes);
-  app.use(analyticsRoutes);
+  app.use(require("./routes/authRoutes"));
+  app.use(require("./routes/eventRoutes"));
+  app.use(require("./routes/modelRoutes"));
+  app.use(require("./routes/registrationRoutes"));
+  app.use(require("./routes/communicationRoutes"));
+  app.use(require("./routes/accountRoutes"));
+  app.use(require("./routes/liveEventRoutes"));
+  app.use(require("./routes/chatRoomRoutes"));
+  app.use(require("./routes/analyticsRoutes"));
+  app.use(require("./routes/froalaRoutes"));
   // universal error handling for all database calls with .catch(next) at the end
   app.use((error, req, res, next) => {
     // console log will be replaced with logging when implemented
