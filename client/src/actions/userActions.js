@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_USER } from "../actions/types";
+import { FETCH_USER, SET_S3HASH } from "../actions/types";
 
 export const signInLocal = (username, password) => async (dispatch) => {
   // response is {user, error}
@@ -11,6 +11,14 @@ export const signInLocal = (username, password) => async (dispatch) => {
     });
 
     dispatch({ type: FETCH_USER, payload: res.data.user });
+
+    if (res.data.user) {
+      const s3hash = await api.get("/api/froala/get-s3-signature", {
+        params: { accountId: res.data.user.id },
+      });
+
+      dispatch({ type: SET_S3HASH, payload: s3hash.data });
+    }
 
     if (res.data.error) {
       toast.error("Error when signing in: " + res.data.error[0]);
@@ -29,6 +37,16 @@ export const fetchUser = () => async (dispatch) => {
     const res = await api.get("/auth/current-user");
 
     dispatch({ type: FETCH_USER, payload: res.data });
+
+    console.log(res.data);
+
+    if (res.data) {
+      const s3hash = await api.get("/api/froala/get-s3-signature", {
+        params: { accountId: res.data.id },
+      });
+
+      dispatch({ type: SET_S3HASH, payload: s3hash.data });
+    }
 
     return res.data;
   } catch (err) {

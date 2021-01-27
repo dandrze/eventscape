@@ -20,9 +20,9 @@ import "froala-editor/js/plugins/link.min.js";
 import "froala-editor/js/plugins/file.min.js";
 import "froala-editor/js/plugins/code_view.min.js";
 import "froala-editor/js/plugins/code_beautifier.min.js";
-import "froala-editor/js/plugins/image.min.js";
 //import "froala-editor/js/third_party/image_tui.min.js";
 import "froala-editor/js/plugins/forms.min.js";
+import "froala-editor/js/plugins/draggable.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
@@ -34,14 +34,18 @@ import "froala-editor/css/plugins/image.min.css";
 //import "froala-editor/css/third_party/image_tui.min.css";
 
 import * as actions from "../actions";
+import api from "../api/server";
 
 const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
   const handleModelChange = (model) => {
     // if the user clicked into the div, only then do we update the section
     //the purpose of this check is sometimes froala makes small adjustments on loading which we don't need to treat as an "update"
+    console.log(userClicked);
     if (userClicked) props.updateSection(props.sectionIndex, model);
   };
+
+  console.log(userClicked);
 
   // The entire useEffect hook below simply resets the user clicked state back to false after the model was updated
   // so if there are no further changes, we can navigate away from the page
@@ -156,10 +160,21 @@ const Froala = (props) => {
     ],
     key:
       "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
+    imageUploadToS3: props.settings.s3Hash,
+    pluginsEnabled: ["image", "link", "draggable"],
+    dragInline: false,
+
+    events: {
+      "image.removed": async (img) => {
+        const src = img[0].src.toString();
+        // if we want to permanently delete the image we can do it here
+        //await api.post("/api/froala/delete-image", { src });
+      },
+    },
   };
 
   return (
-    <div onClick={handleUserInput}>
+    <div onFocus={handleUserInput}>
       <FroalaEditor
         config={config}
         model={props.html}
