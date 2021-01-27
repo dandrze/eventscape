@@ -20,8 +20,8 @@ import "froala-editor/js/plugins/link.min.js";
 import "froala-editor/js/plugins/file.min.js";
 import "froala-editor/js/plugins/code_view.min.js";
 import "froala-editor/js/plugins/code_beautifier.min.js";
-import "froala-editor/js/plugins/image.min.js";
 import "froala-editor/js/third_party/image_tui.min.js";
+import "froala-editor/js/plugins/draggable.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
