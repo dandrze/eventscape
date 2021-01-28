@@ -23,14 +23,9 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import ReplayIcon from "@material-ui/icons/Replay";
-
-/* Code based on the following tutorial: 
-https://www.youtube.com/watch?v=ZwFA3YMfkoc
-https://github.com/adrianhajdin/project_chat_application
-*/
-
-import queryString from "query-string";
 import io from "socket.io-client";
+
+import api from "../api/server";
 
 import "./chat4.css";
 
@@ -259,17 +254,7 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
 );
 
 const Chat = forwardRef(
-  (
-    {
-      room,
-      userId,
-      registrationId,
-      isModerator,
-      chatTabEnabled,
-      questionTabEnabled,
-    },
-    ref
-  ) => {
+  ({ room, userId, registrationId, isModerator }, ref) => {
     const classes = useStyles();
     const [chatUserId, setChatUserId] = useState("");
     const [message, setMessage] = useState("");
@@ -278,15 +263,31 @@ const Chat = forwardRef(
     const [chatHidden, setChatHidden] = useState(false);
     const [tabValue, setTabValue] = React.useState(0);
     const [sendLoading, setSendLoading] = useState(false);
+    const [chatTabEnabled, setChatTabEnabled] = useState(true);
+    const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
 
     // Index numbers for tabs:
     const chatIndex = 0;
     const questionIndex =
-      chatTabEnabled === true && questionTabEnabled === true ? 1 : 0;
+      chatTabEnabled === true && questionsTabEnabled === true ? 1 : 0;
 
     const handleChangeTab = (event, newValue) => {
       setTabValue(newValue);
     };
+
+    useEffect(() => {
+      const fetchChatRoomData = async () => {
+        const chatRoom = await api.get("/api/chatroom/id", {
+          params: { roomId: room },
+        });
+
+        console.log(chatRoom);
+
+        setChatTabEnabled(chatRoom.data.chatEnabled);
+        setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
+      };
+      fetchChatRoomData();
+    }, [room]);
 
     useEffect(() => {
       socket = io(ENDPOINT, {
@@ -463,7 +464,7 @@ const Chat = forwardRef(
                   {...a11yProps(chatIndex)}
                 />
               )}
-              {questionTabEnabled && (
+              {questionsTabEnabled && (
                 <StyledTab
                   label="Ask a Question"
                   isHidden={chatHidden}
@@ -495,7 +496,7 @@ const Chat = forwardRef(
               </>
             </TabPanel>
           )}
-          {questionTabEnabled === true && (
+          {questionsTabEnabled && (
             <TabPanel
               value={tabValue}
               index={questionIndex}
@@ -517,7 +518,7 @@ const Chat = forwardRef(
 Chat.defaultProps = {
   isModerator: false,
   chatTabEnabled: true,
-  questionTabEnabled: true,
+  questionsTabEnabled: true,
 };
 
 export default Chat;

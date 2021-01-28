@@ -61,10 +61,6 @@ function DesignBlockToolbar(props) {
   const [sectionTooltip, setSectionTooltip] = React.useState("");
   const [room, setRoom] = React.useState();
   const [rooms, setRooms] = React.useState([]);
-  const [tabsEnabled, setTabsEnabled] = React.useState({
-    chat: true,
-    question: true,
-  });
 
   const showStreamSettings =
     props.section.isReact && props.section.reactComponent.name == "StreamChat";
@@ -77,8 +73,6 @@ function DesignBlockToolbar(props) {
       setYoutubeLink(props.section.reactComponent.props.link);
       setCustomHTML(props.section.reactComponent.props.html);
       setRoom(props.section.reactComponent.props.chatRoom);
-      if (props.section.reactComponent.props.tabsEnabled)
-        setTabsEnabled(props.section.reactComponent.props.tabsEnabled);
 
       // set the section tooltip if it's a section that requires one
       if (props.section.isReact) {
@@ -126,16 +120,12 @@ function DesignBlockToolbar(props) {
 
   const handleSaveStreamSettings = () => {
     setOpenStreamSettings(false);
-    props.saveStreamSettings(
-      props.sectionIndex,
-      {
-        content,
-        link: youtubeLink,
-        html: customHTML,
-        chatRoom: room,
-      },
-      tabsEnabled
-    );
+    props.saveStreamSettings(props.sectionIndex, {
+      content,
+      link: youtubeLink,
+      html: customHTML,
+      chatRoom: room,
+    });
   };
 
   const handleChangeContent = (event) => {
@@ -163,16 +153,6 @@ function DesignBlockToolbar(props) {
       props.moveSection(props.sectionIndex, offset);
     }
   };
-
-  const handleChangeTabsEnabled = (event) => {
-    setTabsEnabled({
-      ...tabsEnabled,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const { chat, question } = tabsEnabled;
-  const tabsEnabledError = [chat, question].filter((v) => v).length < 1;
 
   return (
     <div>

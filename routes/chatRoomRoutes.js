@@ -25,6 +25,18 @@ router.get("/api/chatroom/default", async (req, res, next) => {
   }
 });
 
+router.get("/api/chatroom/id", async (req, res, next) => {
+  const { roomId } = req.query;
+
+  try {
+    const chatRoom = await ChatRoom.findByPk(roomId);
+
+    res.status(200).send(chatRoom);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/api/chatroom/all", async (req, res) => {
   const { event } = req.query;
   try {

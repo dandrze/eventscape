@@ -43,8 +43,6 @@ const StreamChat = (props) => {
                 room={props.chatRoom}
                 isModerator={false}
                 registrationId={props.attendee.id}
-                chatTabEnabled={props.tabsEnabled?.chat}
-                questionTabEnabled={props.tabsEnabled?.question}
               />
             </div>
           </div>

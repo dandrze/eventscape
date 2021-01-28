@@ -101,8 +101,6 @@ const ModeratorChat = ({
                 room={room.id}
                 name={displayName}
                 isModerator={true}
-                chatTabEnabled={true}
-                questionTabEnabled={false}
                 ref={chatRef}
                 userId={user.id}
               />
