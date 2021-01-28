@@ -65,7 +65,7 @@ RegistrationForm.belongsTo(Event);
 Event.hasMany(RegistrationForm);
 
 //sequelize.sync({ alter: true });
-//ChatUser.sync({ alter: true });
+//ChatRoom.sync({ alter: true });
 /*
 ChatUser.sync({ alter: true });
 ChatRoom.sync({ alter: true });

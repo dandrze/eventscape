@@ -79,7 +79,7 @@ const Question = ({ question, setChecked }) => {
 };
 
 const ModeratorQuestions = forwardRef(
-  ({ name, room, userId, chatTabEnabled, questionTabEnabled }, ref) => {
+  ({ name, room, userId, questionTabEnabled, isHidden }) => {
     const [chatUserId, setChatUserId] = useState("");
     const [questions, setQuestions] = useState([]);
 
@@ -114,19 +114,6 @@ const ModeratorQuestions = forwardRef(
       });
     }, []);
 
-    // code below pulls in functions from messaging for moderator actions
-    useImperativeHandle(ref, () => ({
-      deleteAllMessages() {
-        socket.emit("deleteAllMessages", { room });
-      },
-      setIsHidden(isHidden) {
-        socket.emit("setChatHidden", { isHidden, room });
-      },
-      refreshChat() {
-        socket.emit("refreshChat", { room });
-      },
-    }));
-
     const setChecked = (id, isChecked) => {
       socket.emit("setQuestionChecked", { id, isChecked });
       setQuestions((questions) =>
@@ -142,7 +129,16 @@ const ModeratorQuestions = forwardRef(
     return (
       <div className="chatOuterContainer">
         <div className="chatContainer">
-          <div className="infoBar moderator-questions-header">Questions</div>
+          <div
+            className={
+              isHidden || !questionTabEnabled
+                ? "infoBar moderator-questions-header grey"
+                : "infoBar moderator-questions-header"
+            }
+          >
+            Questions{" "}
+            {!questionTabEnabled ? "(Disabled)" : isHidden ? "(Hidden)" : ""}
+          </div>
           <Questions
             questions={questions}
             chatUserId={chatUserId}

@@ -437,7 +437,11 @@ const Chat = forwardRef(
         })}
       >
         <div className="chatContainer">
-          <div className="infoBar">
+          <div
+            className={
+              chatHidden || !chatTabEnabled ? "infoBar grey" : "infoBar"
+            }
+          >
             <StyledTabs
               value={tabValue}
               onChange={handleChangeTab}
@@ -445,18 +449,30 @@ const Chat = forwardRef(
               indicatorColor="secondary"
               variant="fullWidth"
             >
-              {chatTabEnabled === true && (
-                <StyledTab label="Chat" {...a11yProps(chatIndex)} />
+              {(chatTabEnabled ||
+                isModerator) /* if it's moderator, still display the component but as "disabled"*/ && (
+                <StyledTab
+                  label={
+                    chatHidden
+                      ? "Chat (Hidden)"
+                      : !chatTabEnabled
+                      ? "Chat (Disabled)"
+                      : "Chat"
+                  }
+                  isHidden={chatHidden}
+                  {...a11yProps(chatIndex)}
+                />
               )}
-              {questionTabEnabled === true && (
+              {questionTabEnabled && (
                 <StyledTab
                   label="Ask a Question"
+                  isHidden={chatHidden}
                   {...a11yProps(questionIndex)}
                 />
               )}
             </StyledTabs>
           </div>
-          {chatTabEnabled === true && (
+          {chatTabEnabled && (
             <TabPanel
               value={tabValue}
               index={chatIndex}

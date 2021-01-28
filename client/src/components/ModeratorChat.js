@@ -190,6 +190,7 @@ const ModeratorChat = ({
                 name={displayName}
                 ref={chatRef}
                 userId={user.id}
+                isHIdden={isHidden.checked}
               />
             </div>
           </div>
