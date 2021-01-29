@@ -80,12 +80,14 @@ const RoomTable = (props) => {
       });
 
       await props.fetchData();
+      props.triggerChatUpdate();
     }
 
     setLoadingCheckboxes(0);
   };
 
   const columns = [
+    { field: "id", defaultSort: "asc", hidden: true },
     {
       title: "Room Name",
       field: "name",

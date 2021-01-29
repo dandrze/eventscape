@@ -16,6 +16,7 @@ import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 import CheckBoxIcon from "@material-ui/icons/CheckBox";
 
 import io from "socket.io-client";
+import api from "../../api/server";
 
 const ENDPOINT =
   window.location.hostname.split(".")[
@@ -78,76 +79,72 @@ const Question = ({ question, setChecked }) => {
   );
 };
 
-const ModeratorQuestions = forwardRef(
-  ({ name, room, userId, questionTabEnabled, isHidden }) => {
-    const [chatUserId, setChatUserId] = useState("");
-    const [questions, setQuestions] = useState([]);
+const ModeratorQuestions = ({ room, userId, isHidden }) => {
+  const [chatUserId, setChatUserId] = useState("");
+  const [questions, setQuestions] = useState([]);
 
-    useEffect(() => {
-      socket = io(ENDPOINT, {
-        path: "/api/socket/chat",
-        transports: ["websocket"],
-      });
-      socket.on("connect", () => {
-        console.log(socket.id);
-      });
-      socket.on("connect_error", (error) => {
-        setQuestions((questions) => [
-          ...questions,
-          { text: error, isNotification: true },
-        ]);
-      });
+  useEffect(() => {
+    socket = io(ENDPOINT, {
+      path: "/api/socket/chat",
+      transports: ["websocket"],
+    });
+    socket.on("connect", () => {
+      console.log(socket.id);
+    });
+    socket.on("connect_error", (error) => {
+      setQuestions((questions) => [
+        ...questions,
+        { text: error, isNotification: true },
+      ]);
+    });
 
-      socket.on("error", (error) => {
-        setQuestions((questions) => [
-          ...questions,
-          { text: error, isNotification: true },
-        ]);
-      });
+    socket.on("error", (error) => {
+      setQuestions((questions) => [
+        ...questions,
+        { text: error, isNotification: true },
+      ]);
+    });
 
-      socket.on("question", (question) => {
-        setQuestions((questions) => [...questions, question]);
-      });
+    socket.on("question", (question) => {
+      setQuestions((questions) => [...questions, question]);
+    });
 
-      socket.emit("join", { name, userId, room, isModerator: true }, (id) => {
-        setChatUserId(id);
-      });
-    }, []);
+    socket.emit("join", { userId, room, isModerator: true }, (id) => {
+      setChatUserId(id);
+    });
+  }, []);
 
-    const setChecked = (id, isChecked) => {
-      socket.emit("setQuestionChecked", { id, isChecked });
-      setQuestions((questions) =>
-        questions.map((question) => {
-          // if the id matches, set isChecked to the new value, otherwise set it to the existing value
-          const newChecked =
-            question.id === id ? isChecked : question.isChecked;
-          return { ...question, isChecked: newChecked };
-        })
-      );
-    };
-
-    return (
-      <div className="chatOuterContainer">
-        <div className="chatContainer">
-          <div
-            className={
-              isHidden || !questionTabEnabled
-                ? "infoBar moderator-questions-header grey"
-                : "infoBar moderator-questions-header"
-            }
-          >
-            Questions{" "}
-            {!questionTabEnabled ? "(Disabled)" : isHidden ? "(Hidden)" : ""}
-          </div>
-          <Questions
-            questions={questions}
-            chatUserId={chatUserId}
-            setChecked={setChecked}
-          />
-        </div>
-      </div>
+  const setChecked = (id, isChecked) => {
+    socket.emit("setQuestionChecked", { id, isChecked });
+    setQuestions((questions) =>
+      questions.map((question) => {
+        // if the id matches, set isChecked to the new value, otherwise set it to the existing value
+        const newChecked = question.id === id ? isChecked : question.isChecked;
+        return { ...question, isChecked: newChecked };
+      })
     );
-  }
-);
+  };
+
+  return (
+    <div className="chatOuterContainer">
+      <div className="chatContainer">
+        <div
+          className={
+            isHidden
+              ? "infoBar moderator-questions-header grey"
+              : "infoBar moderator-questions-header"
+          }
+        >
+          Questions {isHidden ? "(Hidden)" : ""}
+        </div>
+        <Questions
+          questions={questions}
+          chatUserId={chatUserId}
+          setChecked={setChecked}
+        />
+      </div>
+    </div>
+  );
+};
 
 export default ModeratorQuestions;

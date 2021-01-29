@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
+import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -26,8 +27,6 @@ import ReplayIcon from "@material-ui/icons/Replay";
 import io from "socket.io-client";
 
 import api from "../api/server";
-
-import "./chat4.css";
 
 const cookies = new Cookies();
 
@@ -146,14 +145,7 @@ function TabPanel(props) {
       {...other}
       style={{ flexGrow: "1", height: "calc(100% - 60px)" }}
     >
-      {value === index && (
-        <span
-          style={{ maxHeight: "100%", overflow: "none", flexGrow: "1" }}
-          className="chatContainer"
-        >
-          {children}
-        </span>
-      )}
+      {value === index && <span className="chatTextArea">{children}</span>}
     </div>
   );
 }
@@ -254,7 +246,7 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
 );
 
 const Chat = forwardRef(
-  ({ room, userId, registrationId, isModerator }, ref) => {
+  ({ room, userId, registrationId, isModerator, settings }, ref) => {
     const classes = useStyles();
     const [chatUserId, setChatUserId] = useState("");
     const [message, setMessage] = useState("");
@@ -287,7 +279,7 @@ const Chat = forwardRef(
         setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
       };
       fetchChatRoomData();
-    }, [room]);
+    }, [room, settings.triggerChatUpdate]);
 
     useEffect(() => {
       socket = io(ENDPOINT, {
@@ -440,7 +432,9 @@ const Chat = forwardRef(
         <div className="chatContainer">
           <div
             className={
-              chatHidden || !chatTabEnabled ? "infoBar grey" : "infoBar"
+              isModerator && (chatHidden || !chatTabEnabled)
+                ? "infoBar grey"
+                : "infoBar"
             }
           >
             <StyledTabs
@@ -520,5 +514,8 @@ Chat.defaultProps = {
   chatTabEnabled: true,
   questionsTabEnabled: true,
 };
+const mapStateToProps = (state) => {
+  return { settings: state.settings };
+};
 
-export default Chat;
+export default connect(mapStateToProps)(Chat);

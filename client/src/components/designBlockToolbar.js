@@ -126,6 +126,7 @@ function DesignBlockToolbar(props) {
       html: customHTML,
       chatRoom: room,
     });
+    props.triggerChatUpdate();
   };
 
   const handleChangeContent = (event) => {

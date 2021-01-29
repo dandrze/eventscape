@@ -4,7 +4,7 @@ import NavBar3 from "../components/navBar3.js";
 import "./messaging.css";
 import { makeStyles } from "@material-ui/core/styles";
 import * as actions from "../actions";
-import ModeratorChat from "../components/ModeratorChat.js";
+import ModeratorDashboard from "../components/moderator/ModeratorDashboard.js";
 import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
@@ -40,7 +40,7 @@ const Messaging = (props) => {
           <div className="mainWrapper container-width">
             {chatRooms.length ? (
               chatRooms.map((chatRoom) => {
-                return <ModeratorChat room={chatRoom} />;
+                return <ModeratorDashboard room={chatRoom} />;
               })
             ) : (
               <div className="form-box shadow-border">
