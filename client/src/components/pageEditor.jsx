@@ -11,6 +11,10 @@ import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
 import AlertModal from "./AlertModal";
 import { pageNames } from "../model/enums";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Switch1 from "../components/switch";
+
 
 const PageEditor = (props) => {
   const { history } = props;
@@ -101,14 +105,9 @@ const PageEditor = (props) => {
           <button
             className="Button1 button-bar-right"
             onClick={() => props.saveModel(props.page)}
+            style={{ marginLeft: "auto" }}
           >
             Save
-          </button>
-          <button
-            className="Button1 button-bar-right"
-            onClick={props.publishPage}
-          >
-            Publish
           </button>
           <br></br>
         </div>
