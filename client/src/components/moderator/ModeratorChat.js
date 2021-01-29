@@ -220,8 +220,14 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
 
   // code below pulls in functions from messaging for moderator actions
   useImperativeHandle(ref, () => ({
-    test() {
-      console.log("test");
+    deleteAllMessages() {
+      socket.emit("deleteAllMessages", { room });
+    },
+    setIsHidden(isHidden) {
+      socket.emit("setChatHidden", { isHidden, room });
+    },
+    refreshChat() {
+      socket.emit("refreshChat", { room });
     },
   }));
 
@@ -257,14 +263,12 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
         >
           Chat {isHidden ? "(Hidden)" : ""}
         </div>
-        <div className="chatTextArea">
-          <Messages
-            messages={messages}
-            chatUserId={chatUserId}
-            deleteMessage={deleteMessage}
-            restoreMessage={restoreMessage}
-          />
-        </div>
+        <Messages
+          messages={messages}
+          chatUserId={chatUserId}
+          deleteMessage={deleteMessage}
+          restoreMessage={restoreMessage}
+        />
         <Input
           message={message}
           setMessage={setMessage}
@@ -276,8 +280,4 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
   );
 });
 
-const mapStateToProps = (state) => {
-  return { settings: state.settings };
-};
-
-export default connect(mapStateToProps)(ModeratorChat);
+export default ModeratorChat;

@@ -71,8 +71,7 @@ const ModeratorDashboard = ({
   };
 
   const handleChangeIsHidden = (event) => {
-    console.log(chatRef);
-    //chatRef.current.hideChat(event.target.checked);
+    chatRef.current.setIsHidden(event.target.checked);
 
     setIsHidden({ ...isHidden, [event.target.name]: event.target.checked });
   };

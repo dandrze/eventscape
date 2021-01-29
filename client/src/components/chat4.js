@@ -143,7 +143,7 @@ function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-      style={{ flexGrow: "1", height: "calc(100% - 60px)" }}
+      className="chatTextAreaContainer"
     >
       {value === index && <span className="chatTextArea">{children}</span>}
     </div>

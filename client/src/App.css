@@ -538,6 +538,12 @@ select {
   flex-grow: 1;
 }
 
+.chatTextAreaContainer {
+  flex-grow: 1;
+  height: calc(100% - 60px);
+  overflow: none;
+}
+
 .display-none {
   display: none;
 }
