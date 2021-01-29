@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
 import { Paper } from "@material-ui/core";
+import { toast } from "react-toastify";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -22,8 +23,11 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
+import Checkbox from "@material-ui/core/Checkbox";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
+import api from "../api/server";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -51,15 +55,68 @@ const tableIcons = {
 
 const RoomTable = (props) => {
   const [data, setData] = useState([]);
+  const [loadingCheckboxes, setLoadingCheckboxes] = useState(0);
 
   useEffect(() => {
     setData(props.rooms);
-  });
+  }, [props.rooms]);
+
+  const handleChangeCheckbox = async (event, rowData) => {
+    setLoadingCheckboxes(rowData.id);
+    const chatEnabled =
+      event.target.name === "chat" ? event.target.checked : rowData.chatEnabled;
+    const questionsEnabled =
+      event.target.name === "questions"
+        ? event.target.checked
+        : rowData.questionsEnabled;
+
+    if (!chatEnabled && !questionsEnabled) {
+      toast.error("At least one tab must be enabled");
+    } else {
+      const response = await api.put("/api/chatroom/tab-set-enabled", {
+        roomId: rowData.id,
+        chatEnabled,
+        questionsEnabled,
+      });
+
+      await props.fetchData();
+      props.triggerChatUpdate();
+    }
+
+    setLoadingCheckboxes(0);
+  };
 
   const columns = [
+    { field: "id", defaultSort: "asc", hidden: true },
     {
       title: "Room Name",
       field: "name",
+    },
+    {
+      title: "Chat Tab",
+      render: (rowData) =>
+        loadingCheckboxes === rowData.id ? (
+          <CircularProgress size={24} />
+        ) : (
+          <Checkbox
+            checked={rowData.chatEnabled}
+            name="chat"
+            onChange={(event) => handleChangeCheckbox(event, rowData)}
+          />
+        ),
+    },
+    {
+      title: "Ask a Question Tab",
+      render: (rowData) =>
+        loadingCheckboxes === rowData.id ? (
+          <CircularProgress size={24} />
+        ) : (
+          <Checkbox
+            checked={rowData.questionsEnabled}
+            name="questions"
+            onChange={(event) => handleChangeCheckbox(event, rowData)}
+          />
+        ),
     },
   ];
 

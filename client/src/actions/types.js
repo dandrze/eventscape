@@ -24,7 +24,7 @@ export const FETCH_EVENT_LIST = "FETCH_EVENT_LIST";
 export const DELETE_EVENT = "DELETE_EVENT";
 export const DUPLICATE_EVENT = "DUPLICATE_EVENT";
 
-export const UPDATE_reactComponent = "UPDATE_reactComponent";
+export const UPDATE_REACT_COMPONENT = "UPDATE_REACT_COMPONENT";
 
 export const FETCH_REGISTRATION = "FETCH_REGISTRATION";
 export const FETCH_FORM = "FETCH_FORM";
@@ -35,3 +35,4 @@ export const FETCH_EMAIL_LIST = "FETCH_EMAIL_LIST";
 export const FETCH_ATTENDEE = "FETCH_ATTENDEE";
 
 export const SET_S3HASH = "SET_S3HASH";
+export const TRIGGER_CHAT_UPDATE = "TRIGGER_CHAT_UPDATE";

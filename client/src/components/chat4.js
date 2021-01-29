@@ -4,6 +4,7 @@ import React, {
   forwardRef,
   useImperativeHandle,
 } from "react";
+import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -23,16 +24,9 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import ReplayIcon from "@material-ui/icons/Replay";
-
-/* Code based on the following tutorial: 
-https://www.youtube.com/watch?v=ZwFA3YMfkoc
-https://github.com/adrianhajdin/project_chat_application
-*/
-
-import queryString from "query-string";
 import io from "socket.io-client";
 
-import "./chat4.css";
+import api from "../api/server";
 
 const cookies = new Cookies();
 
@@ -149,16 +143,9 @@ function TabPanel(props) {
       id={`simple-tabpanel-${index}`}
       aria-labelledby={`simple-tab-${index}`}
       {...other}
-      style={{ flexGrow: "1", height: "calc(100% - 60px)" }}
+      className="chatTextAreaContainer"
     >
-      {value === index && (
-        <span
-          style={{ maxHeight: "100%", overflow: "none", flexGrow: "1" }}
-          className="chatContainer"
-        >
-          {children}
-        </span>
-      )}
+      {value === index && <span className="chatTextArea">{children}</span>}
     </div>
   );
 }
@@ -259,18 +246,7 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
 );
 
 const Chat = forwardRef(
-  (
-    {
-      name,
-      room,
-      userId,
-      registrationId,
-      isModerator,
-      chatTabEnabled,
-      questionTabEnabled,
-    },
-    ref
-  ) => {
+  ({ room, userId, registrationId, isModerator, settings }, ref) => {
     const classes = useStyles();
     const [chatUserId, setChatUserId] = useState("");
     const [message, setMessage] = useState("");
@@ -279,19 +255,31 @@ const Chat = forwardRef(
     const [chatHidden, setChatHidden] = useState(false);
     const [tabValue, setTabValue] = React.useState(0);
     const [sendLoading, setSendLoading] = useState(false);
-
-    //temporary, will become props:
-    /*const chatTabEnabled = true;
-  const questionTabEnabled = true;*/
+    const [chatTabEnabled, setChatTabEnabled] = useState(true);
+    const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
 
     // Index numbers for tabs:
     const chatIndex = 0;
     const questionIndex =
-      chatTabEnabled === true && questionTabEnabled === true ? 1 : 0;
+      chatTabEnabled === true && questionsTabEnabled === true ? 1 : 0;
 
     const handleChangeTab = (event, newValue) => {
       setTabValue(newValue);
     };
+
+    useEffect(() => {
+      const fetchChatRoomData = async () => {
+        const chatRoom = await api.get("/api/chatroom/id", {
+          params: { roomId: room },
+        });
+
+        console.log(chatRoom);
+
+        setChatTabEnabled(chatRoom.data.chatEnabled);
+        setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
+      };
+      fetchChatRoomData();
+    }, [room, settings.triggerChatUpdate]);
 
     useEffect(() => {
       socket = io(ENDPOINT, {
@@ -379,7 +367,7 @@ const Chat = forwardRef(
 
       socket.emit(
         "join",
-        { name, userId, registrationId, uuid, room, isModerator },
+        { userId, registrationId, uuid, room, isModerator },
         (id) => {
           setChatUserId(id);
         }
@@ -391,9 +379,7 @@ const Chat = forwardRef(
       deleteAllMessages() {
         socket.emit("deleteAllMessages", { room });
       },
-      setIsHidden(isHidden) {
-        socket.emit("setChatHidden", { isHidden, room });
-      },
+
       refreshChat() {
         socket.emit("refreshChat", { room });
       },
@@ -402,8 +388,8 @@ const Chat = forwardRef(
     const sendMessage = (event) => {
       event.preventDefault();
 
-      setSendLoading(true);
       if (message) {
+        setSendLoading(true);
         socket.emit("sendMessage", { chatUserId, room, message }, () => {
           setMessage("");
           setSendLoading(false);
@@ -442,7 +428,13 @@ const Chat = forwardRef(
         })}
       >
         <div className="chatContainer">
-          <div className="infoBar">
+          <div
+            className={
+              isModerator && (chatHidden || !chatTabEnabled)
+                ? "infoBar grey"
+                : "infoBar"
+            }
+          >
             <StyledTabs
               value={tabValue}
               onChange={handleChangeTab}
@@ -450,18 +442,30 @@ const Chat = forwardRef(
               indicatorColor="secondary"
               variant="fullWidth"
             >
-              {chatTabEnabled === true && (
-                <StyledTab label="Chat" {...a11yProps(chatIndex)} />
+              {(chatTabEnabled ||
+                isModerator) /* if it's moderator, still display the component but as "disabled"*/ && (
+                <StyledTab
+                  label={
+                    chatHidden
+                      ? "Chat (Hidden)"
+                      : !chatTabEnabled
+                      ? "Chat (Disabled)"
+                      : "Chat"
+                  }
+                  isHidden={chatHidden}
+                  {...a11yProps(chatIndex)}
+                />
               )}
-              {questionTabEnabled === true && (
+              {questionsTabEnabled && (
                 <StyledTab
                   label="Ask a Question"
+                  isHidden={chatHidden}
                   {...a11yProps(questionIndex)}
                 />
               )}
             </StyledTabs>
           </div>
-          {chatTabEnabled === true && (
+          {chatTabEnabled && (
             <TabPanel
               value={tabValue}
               index={chatIndex}
@@ -484,7 +488,7 @@ const Chat = forwardRef(
               </>
             </TabPanel>
           )}
-          {questionTabEnabled === true && (
+          {questionsTabEnabled && (
             <TabPanel
               value={tabValue}
               index={questionIndex}
@@ -506,7 +510,10 @@ const Chat = forwardRef(
 Chat.defaultProps = {
   isModerator: false,
   chatTabEnabled: true,
-  questionTabEnabled: true,
+  questionsTabEnabled: true,
+};
+const mapStateToProps = (state) => {
+  return { settings: state.settings };
 };
 
-export default Chat;
+export default connect(mapStateToProps)(Chat);

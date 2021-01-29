@@ -1,65 +1,57 @@
 .stream-chat-main-container {
-	padding: 0.5rem;
-	margin: 0rem;
-	display: flex;
-	width: 100%;
-	box-sizing: border-box;
+  padding: 0.5rem;
+  margin: 0rem;
+  display: flex;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .container-one-video-window {
-	margin: 0.5rem;
-	text-align: justify;
-	max-width: 100%;
-	overflow: hidden;
+  margin: 0.5rem;
+  text-align: justify;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .container-two-chat-window {
-	margin: 0.5rem;
+  margin: 0.5rem;
 }
 
 .chat-responsive {
-	overflow: hidden;
-	position: relative;
-	height: 0;
+  overflow: hidden;
+  position: relative;
+  height: 0;
 }
 
 /* Side by Side */
 @media only screen and (min-width: 1101px) {
-	.container-one-video-window {
-		flex: 2;
-	}
+  .container-one-video-window {
+    flex: 2;
+  }
 
-	.container-two-chat-window {
-		flex: 1;
-	}
+  .container-two-chat-window {
+    flex: 1;
+  }
 
-	.chat-responsive {
-		padding-bottom: 112.5%;
-	}
+  .chat-responsive {
+    padding-bottom: 112.5%;
+  }
 }
 
 /* Over Under */
 @media only screen and (max-width: 1100px) {
-	.stream-chat-main-container {
-		flex-direction: column;
-	}
+  .stream-chat-main-container {
+    flex-direction: column;
+  }
 
-	.chat-responsive {
-		padding-bottom: calc(175px + 28.13%);
-	}
+  .chat-responsive {
+    padding-bottom: calc(175px + 28.13%);
+  }
 }
 
 .video-responsive {
-	overflow: hidden;
-	padding-bottom: 56.25%;
-	position: relative;
-	height: 0;
-}
-
-#video-responsive-iframe {
-	left: 0;
-	top: 0;
-	height: 100%;
-	width: 100%;
-	position: absolute;
+  overflow: hidden;
+  padding-bottom: 56.25%;
+  position: relative;
+  height: 0;
 }

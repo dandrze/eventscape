@@ -47,8 +47,8 @@
     "sequelize": "^6.3.5",
     "socket.io": "^3.0.4",
     "throng": "^5.0.0",
-    "wysiwyg-editor-node-sdk": "^3.2.5",
-    "winston": "^3.3.3"
+    "winston": "^3.3.3",
+    "wysiwyg-editor-node-sdk": "^3.2.5"
   },
   "devDependencies": {
     "sequelize-cli": "^6.2.0"

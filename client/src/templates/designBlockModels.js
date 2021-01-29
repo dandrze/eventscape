@@ -44,7 +44,7 @@ export const timeDescription = () => {
   <p style="margin-top: 0; text-align: left;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
   <p style="text-align: left;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
 </div>`;
-}; 
+};
 
 /* export const descriptionRegistrationModel = (startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
@@ -176,7 +176,7 @@ export const streamChatModel = () => {
                 <div class="one2">
                     <div class="video-responsive">
                         <!--Adding ?modestbranding=1;showinfo=0;rel=0 at the end of the link removes the YouTube logo and suggested videos-->
-                        <iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/X9llog6QNVM??rel=0;&modestbranding=1&showinfo=0&autoplay=1&mute=1&loop=1” frameborder=“0" allowfullscreen include></iframe>
+                        <iframe class="video-responsive-iframe" src="https://www.youtube.com/embed/X9llog6QNVM??rel=0;&modestbranding=1&showinfo=0&autoplay=1&mute=1&loop=1” frameborder=“0" allowfullscreen include></iframe>
                     </div>
                 </div>
                 <div class="two2" contenteditable="false">
@@ -304,7 +304,7 @@ export const streamChatModel = () => {
                 height:0;
             }
 
-            #video-responsive-iframe{
+            .video-responsive-iframe{
                 left:0;
                 top:0;
                 height:100%;
@@ -457,7 +457,7 @@ allowfullscreen
                 <div class="one">
                     <div class="video-responsive">
                         <!--Adding ?modestbranding=1;showinfo=0;rel=0 at the end of the link removes the YouTube logo and suggested videos-->
-                        <iframe id="video-responsive-iframe" src="https://www.youtube.com/embed/MnrJzXM7a6o?modestbranding=1;showinfo=0;rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        <iframe class="video-responsive-iframe" src="https://www.youtube.com/embed/MnrJzXM7a6o?modestbranding=1;showinfo=0;rel=0" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
                     </div>
                 </div>
                 <div class="two">
@@ -497,7 +497,7 @@ allowfullscreen
                 position:relative;
                 height:0;
             }
-            #video-responsive-iframe{
+            .video-responsive-iframe{
                 left:0;
                 top:0;
                 height:100%;

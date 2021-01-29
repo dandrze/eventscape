@@ -22,7 +22,6 @@ import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
 import Tabs from "../components/Tabs";
 import RoomTable from "./room-table";
-import { fetchChatRooms } from "../actions";
 import Modal1 from "./Modal1";
 import FormLabel from "@material-ui/core/FormLabel";
 import FormGroup from "@material-ui/core/FormGroup";
@@ -62,10 +61,6 @@ function DesignBlockToolbar(props) {
   const [sectionTooltip, setSectionTooltip] = React.useState("");
   const [room, setRoom] = React.useState();
   const [rooms, setRooms] = React.useState([]);
-  const [tabsEnabled, setTabsEnabled] = React.useState({
-    chat: true,
-    question: false,
-  });
 
   const showStreamSettings =
     props.section.isReact && props.section.reactComponent.name == "StreamChat";
@@ -98,6 +93,7 @@ function DesignBlockToolbar(props) {
 
   const fetchChatRooms = async () => {
     const chatRooms = await props.fetchChatRooms(props.event.id);
+    console.log(chatRooms);
     setRooms(chatRooms.data);
   };
 
@@ -128,14 +124,9 @@ function DesignBlockToolbar(props) {
       content,
       link: youtubeLink,
       html: customHTML,
-    });
-  };
-
-  const handleSaveChatSettings = () => {
-    setOpenStreamSettings(false);
-    props.saveChatSettings(props.sectionIndex, {
       chatRoom: room,
     });
+    props.triggerChatUpdate();
   };
 
   const handleChangeContent = (event) => {
@@ -163,16 +154,6 @@ function DesignBlockToolbar(props) {
       props.moveSection(props.sectionIndex, offset);
     }
   };
-
-  const handleChangeTabsEnabled = (event) => {
-    setTabsEnabled({
-      ...tabsEnabled,
-      [event.target.name]: event.target.checked,
-    });
-  };
-
-  const { chat, question } = tabsEnabled;
-  const tabsEnabledError = [chat, question].filter((v) => v).length < 1;
 
   return (
     <div>
@@ -349,40 +330,6 @@ function DesignBlockToolbar(props) {
               <div label="Chat / Ask a Question">
                 <div className="settings-container">
                   <div className={classes.root}>
-                    <FormControl
-                      error={tabsEnabledError}
-                      component="fieldset"
-                      className={classes.formControl}
-                    >
-                      <FormLabel component="legend">Tabs Enabled</FormLabel>
-                      <FormGroup>
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={chat}
-                              onChange={handleChangeTabsEnabled}
-                              name="chat"
-                            />
-                          }
-                          label="Chat"
-                        />
-                        <FormControlLabel
-                          control={
-                            <Checkbox
-                              checked={question}
-                              onChange={handleChangeTabsEnabled}
-                              name="question"
-                            />
-                          }
-                          label="Ask a Question"
-                        />
-                      </FormGroup>
-                      {tabsEnabledError === true && (
-                        <FormHelperText>
-                          Please choose at least one tab.
-                        </FormHelperText>
-                      )}
-                    </FormControl>
                     <p>
                       If you would like to have multiple independent
                       chat/question windows, you can create and assign new rooms
@@ -424,7 +371,7 @@ function DesignBlockToolbar(props) {
                       <Grid item xs={12} id="save-button">
                         <button
                           className="Button1"
-                          onClick={handleSaveChatSettings}
+                          onClick={handleSaveStreamSettings}
                         >
                           Save
                         </button>

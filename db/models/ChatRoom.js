@@ -7,6 +7,8 @@ const ChatRoom = sequelize.define("ChatRoom", {
   isHidden: Sequelize.BOOLEAN,
   isDefault: Sequelize.BOOLEAN,
   name: Sequelize.TEXT,
+  chatEnabled: { type: Sequelize.BOOLEAN, defaultValue: true },
+  questionsEnabled: { type: Sequelize.BOOLEAN, defaultValue: true },
 });
 
 module.exports = ChatRoom;

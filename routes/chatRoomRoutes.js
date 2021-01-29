@@ -25,6 +25,18 @@ router.get("/api/chatroom/default", async (req, res, next) => {
   }
 });
 
+router.get("/api/chatroom/id", async (req, res, next) => {
+  const { roomId } = req.query;
+
+  try {
+    const chatRoom = await ChatRoom.findByPk(roomId);
+
+    res.status(200).send(chatRoom);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/api/chatroom/all", async (req, res) => {
   const { event } = req.query;
   try {
@@ -136,6 +148,22 @@ router.post("/api/chatroom", async (req, res, next) => {
     const newRoom = await ChatRoom.create({ name: room.name, event });
 
     res.status(200).send(newRoom);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/api/chatroom/tab-set-enabled", async (req, res, next) => {
+  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
+  const { roomId, chatEnabled, questionsEnabled } = req.body;
+
+  try {
+    const chatRoom = await ChatRoom.findByPk(roomId);
+    chatRoom.chatEnabled = chatEnabled;
+    chatRoom.questionsEnabled = questionsEnabled;
+    await chatRoom.save();
+
+    res.status(200).send(chatRoom);
   } catch (error) {
     next(error);
   }
