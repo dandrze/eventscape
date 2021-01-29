@@ -99,7 +99,7 @@ const ModeratorDashboard = ({
           <div className="container-one-chat-window">
             <div className="chat-moderator-responsive">
               <div id="video-responsive-iframe">
-                <ModeratorChat room={room.id} userId={user.id}  ref={chatRef} />
+                <ModeratorChat room={room.id} userId={user.id} ref={chatRef} />
               </div>
             </div>
             <Grid

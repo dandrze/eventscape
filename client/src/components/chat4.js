@@ -379,9 +379,7 @@ const Chat = forwardRef(
       deleteAllMessages() {
         socket.emit("deleteAllMessages", { room });
       },
-      setIsHidden(isHidden) {
-        socket.emit("setChatHidden", { isHidden, room });
-      },
+
       refreshChat() {
         socket.emit("refreshChat", { room });
       },

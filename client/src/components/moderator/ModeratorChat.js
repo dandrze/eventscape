@@ -220,14 +220,8 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
 
   // code below pulls in functions from messaging for moderator actions
   useImperativeHandle(ref, () => ({
-    deleteAllMessages() {
-      socket.emit("deleteAllMessages", { room });
-    },
-    hideChat(isHidden) {
-      socket.emit("setChatHidden", { isHidden, room });
-    },
-    refreshChat() {
-      socket.emit("refreshChat", { room });
+    test() {
+      console.log("test");
     },
   }));
 
