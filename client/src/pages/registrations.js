@@ -16,7 +16,7 @@ import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
 
 const Registrations = (props) => {
-  const [regOn, setRegOn] = React.useState(false);
+  {/*const [regOn, setRegOn] = React.useState(false);*/}
   const [openForm, setOpenForm] = React.useState(false);
   const [openReg, setOpenReg] = React.useState(false);
   const [regButtonText, setRegButtonText] = React.useState("Edit Registration");
@@ -40,16 +40,16 @@ const Registrations = (props) => {
     if (event) {
       props.fetchRegistrations(event.data.id);
       props.fetchRegistrationForm(event.data.id);
-      setRegOn(event.data.hasRegistration);
+      //setRegOn(event.data.hasRegistration);
       console.log(event.data);
     }
   };
 
-  const handleChange = (event) => {
+  {/*const handleChange = (event) => {
     if (props.setEventRegistration(event.target.checked, props.event.id)) {
       setRegOn(event.target.checked);
     }
-  };
+  };*/}
 
   const handleCloseForm = () => {
     fetchRegistrations();
@@ -143,6 +143,7 @@ const Registrations = (props) => {
         content={
           <div className="container-width">
             <div className="top-button-bar">
+              {/*
               <div className="button-bar-left">
                 <Tooltip title="If registration is off, attendees will go directly to the event page and no registration data will be collected.">
                   <FormGroup>
@@ -159,8 +160,10 @@ const Registrations = (props) => {
                   </FormGroup>
                 </Tooltip>
               </div>
+              */}
               <button
                 className="Button1 button-bar-right"
+                style={{ marginLeft: "auto"}}
                 onClick={handleOpenForm}
               >
                 Edit Registration Form

@@ -13,7 +13,6 @@ import "./event-details.css";
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
@@ -26,6 +25,10 @@ import "react-colorful/dist/index.css";
 import * as actions from "../actions";
 import momentTZ from "moment-timezone";
 import AlertModal from "../components/AlertModal";
+import FormLabel from "@material-ui/core/FormLabel";
+import FormGroup from "@material-ui/core/FormGroup";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
+import Checkbox from "@material-ui/core/Checkbox";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -67,6 +70,13 @@ function Event_Details(props) {
   const [eventTimeZone, setEventTimeZone] = React.useState(
     props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
   );
+
+  const [regRequired, setRegRequired] = React.useState({
+    registrationRequired: true,
+  });
+
+  const { registrationRequired } = regRequired; // Required for registration checkbox to function
+
   const [color, setColor] = useState(props.color ? props.color : "#B0281C");
   const [isLoading, setIsloading] = useState(false);
 
@@ -132,6 +142,10 @@ function Event_Details(props) {
     console.log(
       momentTZ.tz(new Date(selectedStartDate), "UTC").format("YYYYMMDD HH:mm z")
     );
+  };
+
+  const handleChangeRegRequired = (event) => {
+    setRegRequired({ ...regRequired, [event.target.name]: event.target.checked });
   };
 
   const handleSubmit = async () => {
@@ -233,7 +247,7 @@ function Event_Details(props) {
             onChange={handleChangeEventTitle}
           />
         </FormControl>
-        <Tooltip title="Please note. This link can not be changed once it's created.">
+        <Tooltip title="This link can not be changed once it's created.">
           <FormControl variant="outlined" className={classes.formControl}>
             {/* Event Link */}
             <TextField
@@ -981,6 +995,17 @@ function Event_Details(props) {
           </Select>
         </FormControl>
         <br></br>
+        <br></br>
+
+        {/* Registration Required Checkbox */}
+        <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics."> 
+          <FormGroup>
+            <FormControlLabel
+              control={<Checkbox checked={registrationRequired} onChange={handleChangeRegRequired} name="registrationRequired" />}
+              label="Registration Required"
+            />
+          </FormGroup>
+        </Tooltip>
         <br></br>
 
         {/* Primary Color */}

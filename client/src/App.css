@@ -458,7 +458,7 @@ select {
 .button-bar-left {
   margin-left: 0rem;
   align-self: flex-end;
-  margin-right: auto !important;
+  margin-right: 1rem;
 }
 
 .button-bar-right {
@@ -506,4 +506,12 @@ select {
 .fr-popup {
   /* ensures froala buttons are always on top. Must be greater than 1300 because the material ui pop up modal is 1300 */
   z-index: 2000 !important;
+}
+
+#video-responsive-iframe {
+	left: 0;
+	top: 0;
+	height: 100%;
+	width: 100%;
+	position: absolute;
 }

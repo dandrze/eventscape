@@ -214,7 +214,7 @@ const EmailEditor = (props) => {
             }}
           />
         </div>
-        <div className="button-bar-right">
+        <div className="button-bar-right" style={{ marginLeft: "auto" }}>
           {props.data.recipients != recipientsOptions.NEW_REGISTRANTS ? (
             <FormControl className={classes.margin}>
               <InputLabel id="demo-customized-select-label">Status</InputLabel>

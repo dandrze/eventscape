@@ -169,6 +169,9 @@ const useStyles = makeStyles((theme) => ({
   },
   highlight: {
     backgroundColor: "rgba(0, 0, 0, 0.06)",
+    borderLeft: "solid 4px var(--main-color)",
+    paddingLeft: "12px", //16px minus border width
+    color: "var(--main-color)",
   },
   nested: {
     paddingLeft: "90px",
