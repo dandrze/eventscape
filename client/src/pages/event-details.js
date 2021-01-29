@@ -43,18 +43,19 @@ const useStyles = makeStyles((theme) => ({
 function Event_Details(props) {
   const classes = useStyles();
   const defaultTimeZone = momentTZ.tz.guess();
+  console.log(props.event);
 
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState("");
 
   const [eventCat, setEventCat] = React.useState(
-    props.eventCat ? props.eventCat : ""
+    props.event.category ? props.event.category : ""
   );
   const [eventTitle, setEventTitle] = React.useState(
-    props.eventTitle ? props.eventTitle : ""
+    props.event.title ? props.event.title : ""
   );
   const [eventLink, setEventLink] = React.useState(
-    props.eventLink ? props.eventLink : ""
+    props.event.link ? props.event.link : ""
   );
 
   const [linkUnavailable, setLinkUnavailable] = React.useState(false);
@@ -62,20 +63,20 @@ function Event_Details(props) {
   const [linkHelperText, setLinkHelperText] = React.useState("");
 
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    props.selectedStartDate ? props.selectedStartDate : new Date()
+    props.event.startDate ? props.event.startDate : new Date()
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    props.selectedEndDate ? props.selectedEndDate : new Date()
+    props.event.endDate ? props.event.endDate : new Date()
   );
   const [eventTimeZone, setEventTimeZone] = React.useState(
-    props.eventTimeZone ? props.eventTimeZone : defaultTimeZone
+    props.event.timeZone ? props.event.timeZone : defaultTimeZone
   );
 
-  const [regRequired, setRegRequired] = React.useState({
-    registrationRequired: true,
-  });
-
-  const { registrationRequired } = regRequired; // Required for registration checkbox to function
+  const [registrationRequired, setRegistrationRequired] = React.useState(
+    props.event.registrationRequired === undefined
+      ? true
+      : props.event.registrationRequired
+  );
 
   const [color, setColor] = useState(props.color ? props.color : "#B0281C");
   const [isLoading, setIsloading] = useState(false);
@@ -144,8 +145,8 @@ function Event_Details(props) {
     );
   };
 
-  const handleChangeRegRequired = (event) => {
-    setRegRequired({ ...regRequired, [event.target.name]: event.target.checked });
+  const handleChangeregistrationRequired = (event) => {
+    setRegistrationRequired(event.target.checked);
   };
 
   const handleSubmit = async () => {
@@ -198,7 +199,8 @@ function Event_Details(props) {
         startDate,
         endDate,
         eventTimeZone,
-        color
+        color,
+        registrationRequired
       );
     } else {
       response = await props.createEvent(
@@ -208,7 +210,8 @@ function Event_Details(props) {
         startDate,
         endDate,
         eventTimeZone,
-        color
+        color,
+        registrationRequired
       );
     }
     setIsloading(false);
@@ -998,10 +1001,16 @@ function Event_Details(props) {
         <br></br>
 
         {/* Registration Required Checkbox */}
-        <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics."> 
+        <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics.">
           <FormGroup>
             <FormControlLabel
-              control={<Checkbox checked={registrationRequired} onChange={handleChangeRegRequired} name="registrationRequired" />}
+              control={
+                <Checkbox
+                  checked={registrationRequired}
+                  onChange={handleChangeregistrationRequired}
+                  name="registrationRequired"
+                />
+              }
               label="Registration Required"
             />
           </FormGroup>
@@ -1028,8 +1037,11 @@ function Event_Details(props) {
     </div>
   );
 }
+const mapStateToProps = (state) => {
+  return { event: state.event };
+};
 
-export default connect(null, actions)(withRouter(Event_Details));
+export default connect(mapStateToProps, actions)(withRouter(Event_Details));
 
 // Below used to produce time zone list
 // Has Canadian cities listed under America by default "ie. America/Toronto". Export, then correct.

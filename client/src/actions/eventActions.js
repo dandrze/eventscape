@@ -16,7 +16,8 @@ export const createEvent = (
   startDate,
   endDate,
   timeZone,
-  primaryColor
+  primaryColor,
+  registrationRequired
 ) => async (dispatch) => {
   const event = {
     title,
@@ -26,6 +27,7 @@ export const createEvent = (
     endDate,
     timeZone,
     primaryColor,
+    registrationRequired,
     regPageModel: regPageModelTemplate(title),
     eventPageModel: eventPageModelTemplate(title, startDate, endDate),
   };
@@ -55,8 +57,10 @@ export const updateEvent = (
   startDate,
   endDate,
   timeZone,
-  primaryColor
+  primaryColor,
+  registrationRequired
 ) => async (dispatch, getState) => {
+  console.log(registrationRequired);
   const updatedEvent = {
     title,
     link,
@@ -65,6 +69,7 @@ export const updateEvent = (
     endDate,
     timeZone,
     primaryColor,
+    registrationRequired,
     status: getState().event.status,
   };
 
@@ -141,24 +146,6 @@ export const isLinkAvailable = (link) => async (dispatch) => {
   if (res.data.length === 0) {
     return true;
   } else {
-    return false;
-  }
-};
-
-export const setEventRegistration = (hasRegistration, EventId) => async (
-  dispatch
-) => {
-  try {
-    const res = await api.put("/api/event/set-registration", {
-      hasRegistration,
-      EventId,
-    });
-    toast.success("Registration successfuly changed");
-    return true;
-  } catch (err) {
-    toast.error(
-      "Error when setting Registration: " + err.response.data.message
-    );
     return false;
   }
 };

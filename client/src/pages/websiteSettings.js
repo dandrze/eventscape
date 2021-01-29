@@ -14,16 +14,9 @@ class WebsiteSettings extends React.Component {
           content={
             <div>
               <div className="form-width">
-                <Event_Details
-                  isEventUpdate={true}
-                  eventTitle={this.props.event.title}
-                  eventCat={this.props.event.category}
-                  eventLink={this.props.event.link}
-                  selectedStartDate={this.props.event.startDate}
-                  selectedEndDate={this.props.event.endDate}
-                  color={this.props.event.primaryColor}
-                  eventTimeZone={this.props.event.timeZone}
-                />
+                {this.props.event.id ? (
+                  <Event_Details isEventUpdate={true} />
+                ) : null}
               </div>
             </div>
           }

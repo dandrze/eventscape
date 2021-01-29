@@ -25,6 +25,7 @@ router.post("/api/event", async (req, res, next) => {
       primaryColor,
       regPageModel,
       eventPageModel,
+      registrationRequired,
     },
     communications,
   } = req.body;
@@ -55,6 +56,7 @@ router.post("/api/event", async (req, res, next) => {
       RegPageModelId: dbRegModel.id,
       EventPageModelId: dbEventModel.id,
       status: statusOptions.ACTIVE,
+      registrationRequired,
     });
 
     // create a default chatroom
@@ -146,6 +148,7 @@ router.post("/api/event/duplicate", async (req, res, next) => {
       AccountId: originalEvent.AccountId,
       RegPageModelId: dbRegModel.id,
       EventPageModelId: dbEventModel.id,
+      registrationRequired: dbEventModel.registrationRequired,
     });
 
     // create a default chatroom
@@ -301,7 +304,10 @@ router.put("/api/event", async (req, res, next) => {
     timeZone,
     primaryColor,
     status,
+    registrationRequired,
   } = req.body;
+
+  console.log(registrationRequired);
 
   try {
     const event = await Event.findOne({
@@ -316,30 +322,14 @@ router.put("/api/event", async (req, res, next) => {
     event.timeZone = timeZone;
     event.primaryColor = primaryColor;
     event.status = status;
+    event.registrationRequired = registrationRequired;
 
     console.log(status);
     await event.save();
 
-    res.send(event);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/api/event/set-registration", async (req, res, next) => {
-  const { hasRegistration, EventId } = req.body;
-
-  try {
-    const event = await Event.findByPk(EventId);
-
     console.log(event);
-    console.log(hasRegistration, EventId);
 
-    event.hasRegistration = hasRegistration;
-
-    await event.save();
-
-    res.status(200).send(event);
+    res.send(event);
   } catch (error) {
     next(error);
   }
