@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 
 import { makeStyles } from "@material-ui/core/styles";
 import CircularProgress from "@material-ui/core/CircularProgress";
@@ -10,7 +11,8 @@ import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
 import InputAdornment from "@material-ui/core/InputAdornment";
-import SaveIcon from '@material-ui/icons/Save';
+import SaveIcon from "@material-ui/icons/Save";
+import { CSVLink, CSVDownload } from "react-csv";
 
 import "./ModeratorChat.css";
 import * as actions from "../../actions";
@@ -36,7 +38,8 @@ const ModeratorDashboard = ({
   getChatModerator,
   updateChatModerator,
 }) => {
-  const chatRef = React.useRef();
+  const chatRef = useRef();
+  const chatHistoryDownload = useRef();
   const classes = useStyles();
 
   const [displayName, setDisplayName] = useState("");
@@ -44,10 +47,18 @@ const ModeratorDashboard = ({
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [displayNameLoading, setDisplayNameLoading] = React.useState(false);
+  const [chatHistory, setChatHistory] = useState(null);
 
   useEffect(() => {
     fetchDataAsync();
   }, []);
+
+  // The csv download library only has a link that doesn't work with async requests and a component that auto downloads on render
+  // Our logic for downloading the csv is when the user clicks export, chatHistory is set to the result of the database call, and then <CSVDownload /> renders
+  // Then after the component is mounted we set chatHistory back to null so that CSVDownload doesn't trigger another download
+  useEffect(() => {
+    if (chatHistory) setChatHistory(null);
+  }, [chatHistory]);
 
   const fetchDataAsync = async () => {
     const chatUser = await getChatModerator(user.id, room.id);
@@ -87,9 +98,40 @@ const ModeratorDashboard = ({
     setNavAlertOpen(false);
   };
 
+  const handleExportChat = async () => {
+    const chatMessages = await api.get("/api/chatroom/export", {
+      params: { roomId: room.id },
+    });
+
+    const history = chatMessages.data.map((chatMessage) => {
+      return {
+        Message: chatMessage.text,
+        "Sent At": chatMessage.createdAt,
+        "First Name": chatMessage.ChatUser.Registration?.firstName || "",
+        "Last Name": chatMessage.ChatUser.Registration?.lastName || "",
+        "Email Address": chatMessage.ChatUser.Registration?.emailAddress || "",
+      };
+    });
+
+    setChatHistory(history);
+  };
+
+  console.log(chatHistory);
+
   if (!isLoaded) return <CircularProgress />;
   return (
-    <div className="form-box shadow-border" style={{ marginBottom: "60px"}}>
+    <div className="form-box shadow-border" style={{ marginBottom: "60px" }}>
+      {/*<CSVLink
+        data={chatHistory}
+        filename="Chat History.csv"
+        ref={chatHistoryDownload}
+        onClick={() => {
+          console.log(chatHistory);
+          toast.success("CSV successfully exported!");
+        }}
+      ></CSVLink>*/}
+      {chatHistory ? <CSVDownload data={chatHistory} target="_blank" /> : null}
+
       <div className="room-bar">
         <p>Room: {room.name}</p>
       </div>
@@ -119,13 +161,16 @@ const ModeratorDashboard = ({
                     InputProps={{
                       endAdornment: (
                         <Tooltip title="Save moderator display name">
-                          <InputAdornment 
-                            position="end" 
+                          <InputAdornment
+                            position="end"
                             onClick={handleSubmitDisplayName}
-                            style={{ color: "var(--main-color)", cursor: "pointer" }} 
+                            style={{
+                              color: "var(--main-color)",
+                              cursor: "pointer",
+                            }}
                           >
                             Save
-                            <SaveIcon style={{ marginLeft: "4px" }}/>
+                            <SaveIcon style={{ marginLeft: "4px" }} />
                           </InputAdornment>
                         </Tooltip>
                       ),
@@ -166,6 +211,7 @@ const ModeratorDashboard = ({
                   <button
                     className="Button2"
                     style={{ width: "100%" }}
+                    onClick={handleExportChat}
                   >
                     Export
                   </button>

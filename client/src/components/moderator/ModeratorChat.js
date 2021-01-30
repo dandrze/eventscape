@@ -229,6 +229,9 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
     refreshChat() {
       socket.emit("refreshChat", { room });
     },
+    getChatHistory() {
+      return messages;
+    },
   }));
 
   const sendMessage = (event) => {
