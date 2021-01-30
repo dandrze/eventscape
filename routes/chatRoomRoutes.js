@@ -4,6 +4,7 @@ const {
   ChatRoom,
   ChatUser,
   ChatMessage,
+  ChatQuestion,
   Registration,
 } = require("../db").models;
 
@@ -42,7 +43,7 @@ router.get("/api/chatroom/id", async (req, res, next) => {
   }
 });
 
-router.get("/api/chatroom/export", async (req, res, next) => {
+router.get("/api/chatroom/export/chat", async (req, res, next) => {
   const { roomId } = req.query;
 
   try {
@@ -52,6 +53,21 @@ router.get("/api/chatroom/export", async (req, res, next) => {
     });
 
     res.status(200).send(chatMessages);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/api/chatroom/export/questions", async (req, res, next) => {
+  const { roomId } = req.query;
+
+  try {
+    const chatQuestions = await ChatQuestion.findAll({
+      where: { ChatRoomId: roomId },
+      include: { model: ChatUser, include: Registration },
+    });
+
+    res.status(200).send(chatQuestions);
   } catch (error) {
     next(error);
   }

@@ -48,17 +48,25 @@ const ModeratorDashboard = ({
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [displayNameLoading, setDisplayNameLoading] = React.useState(false);
   const [chatHistory, setChatHistory] = useState(null);
+  const [questionsHistory, setQuestionsHistory] = useState(null);
 
   useEffect(() => {
     fetchDataAsync();
   }, []);
 
-  // The csv download library only has a link that doesn't work with async requests and a component that auto downloads on render
-  // Our logic for downloading the csv is when the user clicks export, chatHistory is set to the result of the database call, and then <CSVDownload /> renders
-  // Then after the component is mounted we set chatHistory back to null so that CSVDownload doesn't trigger another download
   useEffect(() => {
+    // The csv download library only has a link that doesn't work with async requests and a component that auto downloads on render
+    // Our logic for downloading the csv is when the user clicks export, chatHistory is set to the result of the database call, and then <CSVDownload /> renders
+    // Then after the component is mounted we set chatHistory back to null so that CSVDownload doesn't trigger another download
     if (chatHistory) setChatHistory(null);
   }, [chatHistory]);
+
+  useEffect(() => {
+    // The csv download library only has a link that doesn't work with async requests and a component that auto downloads on render
+    // Our logic for downloading the csv is when the user clicks export, questionsHistory is set to the result of the database call, and then <CSVDownload /> renders
+    // Then after the component is mounted we set questionsHistory back to null so that CSVDownload doesn't trigger another download
+    if (questionsHistory) setQuestionsHistory(questionsHistory);
+  }, [questionsHistory]);
 
   const fetchDataAsync = async () => {
     const chatUser = await getChatModerator(user.id, room.id);
@@ -99,14 +107,17 @@ const ModeratorDashboard = ({
   };
 
   const handleExportChat = async () => {
-    const chatMessages = await api.get("/api/chatroom/export", {
+    const chatMessages = await api.get("/api/chatroom/export/chat", {
       params: { roomId: room.id },
     });
 
     const history = chatMessages.data.map((chatMessage) => {
       return {
         Message: chatMessage.text,
-        "Sent At": chatMessage.createdAt,
+        "Sent At": new Date(chatMessage.createdAt).toLocaleString("en-us", {
+          dateStyle: "long",
+          timeStyle: "long",
+        }),
         "First Name": chatMessage.ChatUser.Registration?.firstName || "",
         "Last Name": chatMessage.ChatUser.Registration?.lastName || "",
         "Email Address": chatMessage.ChatUser.Registration?.emailAddress || "",
@@ -116,21 +127,38 @@ const ModeratorDashboard = ({
     setChatHistory(history);
   };
 
-  console.log(chatHistory);
+  const handleExportQuestions = async () => {
+    const questions = await api.get("/api/chatroom/export/questions", {
+      params: { roomId: room.id },
+    });
+
+    console.log(questions.data);
+
+    const history = questions.data.map((question) => {
+      return {
+        Question: question.text,
+        "Sent At": new Date(question.createdAt).toLocaleString("en-us", {
+          dateStyle: "long",
+          timeStyle: "long",
+        }),
+        Answered: question.isChecked,
+        "First Name": question.ChatUser.Registration?.firstName || "",
+        "Last Name": question.ChatUser.Registration?.lastName || "",
+        "Email Address": question.ChatUser.Registration?.emailAddress || "",
+      };
+    });
+
+    setQuestionsHistory(history);
+  };
 
   if (!isLoaded) return <CircularProgress />;
   return (
     <div className="form-box shadow-border" style={{ marginBottom: "60px" }}>
-      {/*<CSVLink
-        data={chatHistory}
-        filename="Chat History.csv"
-        ref={chatHistoryDownload}
-        onClick={() => {
-          console.log(chatHistory);
-          toast.success("CSV successfully exported!");
-        }}
-      ></CSVLink>*/}
+      {/* The components below are used to download csvs. Upon render they will download the data in the data prop*/}
       {chatHistory ? <CSVDownload data={chatHistory} target="_blank" /> : null}
+      {questionsHistory ? (
+        <CSVDownload data={questionsHistory} target="_blank" />
+      ) : null}
 
       <div className="room-bar">
         <p>Room: {room.name}</p>
@@ -253,6 +281,7 @@ const ModeratorDashboard = ({
                   <button
                     className="Button2"
                     style={{ width: "100%", marginTop: "auto" }}
+                    onClick={handleExportQuestions}
                   >
                     Export
                   </button>
