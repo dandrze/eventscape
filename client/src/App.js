@@ -5,7 +5,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import logo from "./logo.svg";
 import "./App.css";
 import "./components/fonts.css";
 import * as actions from "./actions";
