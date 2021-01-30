@@ -40,9 +40,7 @@ const ModeratorDashboard = ({
   const classes = useStyles();
 
   const [displayName, setDisplayName] = useState("");
-  const [isHidden, setIsHidden] = React.useState({
-    checked: room.isHidden,
-  });
+  const [chatHidden, setChatHidden] = React.useState(room.chatHidden);
   const [navAlertOpen, setNavAlertOpen] = React.useState(false);
   const [isLoaded, setIsLoaded] = React.useState(false);
   const [displayNameLoading, setDisplayNameLoading] = React.useState(false);
@@ -72,10 +70,10 @@ const ModeratorDashboard = ({
     setDisplayNameLoading(false);
   };
 
-  const handleChangeIsHidden = (event) => {
-    chatRef.current.setIsHidden(event.target.checked);
+  const handleChangeChatHidden = (event) => {
+    chatRef.current.updateChatHidden(event.target.checked);
 
-    setIsHidden({ ...isHidden, [event.target.name]: event.target.checked });
+    setChatHidden(event.target.checked);
   };
   const handleNavAlertOpen = () => {
     setNavAlertOpen(true);
@@ -142,8 +140,8 @@ const ModeratorDashboard = ({
                     <FormControlLabel
                       control={
                         <Switch1
-                          checked={isHidden.checked}
-                          onChange={handleChangeIsHidden}
+                          checked={chatHidden}
+                          onChange={handleChangeChatHidden}
                           name="checked"
                         />
                       }
@@ -191,11 +189,7 @@ const ModeratorDashboard = ({
           <div className="container-two-question-window">
             <div className="chat-moderator-responsive">
               <div className="video-responsive-iframe">
-                <ModeratorQuestions
-                  room={room.id}
-                  userId={user.id}
-                  isHIdden={isHidden.checked}
-                />
+                <ModeratorQuestions room={room.id} userId={user.id} />
               </div>
             </div>
             <Grid

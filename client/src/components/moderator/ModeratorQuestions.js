@@ -79,7 +79,7 @@ const Question = ({ question, setChecked }) => {
   );
 };
 
-const ModeratorQuestions = ({ room, userId, isHidden }) => {
+const ModeratorQuestions = ({ room, userId }) => {
   const [chatUserId, setChatUserId] = useState("");
   const [questions, setQuestions] = useState([]);
 
@@ -106,7 +106,9 @@ const ModeratorQuestions = ({ room, userId, isHidden }) => {
     });
 
     socket.on("question", (question) => {
-      setQuestions((questions) => [...questions, question]);
+      setQuestions((questions) =>
+        [...questions, question].sort((a, b) => (a.time < b.time ? -1 : 1))
+      );
     });
 
     socket.emit("join", { userId, room, isModerator: true }, (id) => {
@@ -128,15 +130,7 @@ const ModeratorQuestions = ({ room, userId, isHidden }) => {
   return (
     <div className="chatOuterContainer">
       <div className="chatContainer">
-        <div
-          className={
-            isHidden
-              ? "infoBar moderator-questions-header grey"
-              : "infoBar moderator-questions-header"
-          }
-        >
-          Questions {isHidden ? "(Hidden)" : ""}
-        </div>
+        <div className="infoBar moderator-questions-header">Questions</div>
         <Questions
           questions={questions}
           chatUserId={chatUserId}

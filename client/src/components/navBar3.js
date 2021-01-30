@@ -497,46 +497,66 @@ function NavBar3(props) {
             </Link>
 
             {/* Design */}
-            <ListItem
-              button
-              onClick={handleClickDesignNested}
-              className={clsx({
-                [classes.highlight]: highlight === "design",
-              })}
-            >
-              <ListItemIcon>
-                <img src={PenIcon} height="20px"></img>
-              </ListItemIcon>
-              <ListItemText primary="Design" />
-              {openDesignNested ? <ExpandLess /> : <ExpandMore />}
-            </ListItem>
+            {props.event.registrationRequired ? (
+              <>
+                <ListItem
+                  button
+                  onClick={handleClickDesignNested}
+                  className={clsx({
+                    [classes.highlight]: highlight === "design",
+                  })}
+                >
+                  <ListItemIcon>
+                    <img src={PenIcon} height="20px"></img>
+                  </ListItemIcon>
+                  <ListItemText primary="Design" />
+                  {openDesignNested ? <ExpandLess /> : <ExpandMore />}
+                </ListItem>
+                {/* Design Nested Menu */}
+                <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
+                  <List component="div" disablePadding>
+                    {/* Registration Page */}
+                    <Link to="/design/registration">
+                      <ListItem
+                        button
+                        className={classes.nested}
+                        onClick={handleClickNestedItem}
+                      >
+                        <ListItemText secondary="Registration Page" />
+                      </ListItem>
+                    </Link>
 
-            {/* Design Nested Menu */}
-            <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                {/* Registration Page */}
-                <Link to="/design/registration">
-                  <ListItem
-                    button
-                    className={classes.nested}
-                    onClick={handleClickNestedItem}
-                  >
-                    <ListItemText secondary="Registration Page" />
-                  </ListItem>
-                </Link>
-
-                {/* Event Page */}
-                <Link to="/design/event">
-                  <ListItem
-                    button
-                    className={classes.nested}
-                    onClick={handleClickNestedItem}
-                  >
-                    <ListItemText secondary="Event Page" />
-                  </ListItem>
-                </Link>
-              </List>
-            </Collapse>
+                    {/* Event Page */}
+                    <Link to="/design/event">
+                      <ListItem
+                        button
+                        className={classes.nested}
+                        onClick={handleClickNestedItem}
+                      >
+                        <ListItemText secondary="Event Page" />
+                      </ListItem>
+                    </Link>
+                  </List>
+                </Collapse>{" "}
+              </>
+            ) : (
+              <Link to="/design">
+                <ListItem
+                  button
+                  key="design"
+                  className={clsx({
+                    [classes.highlight]: highlight === "analytics",
+                  })}
+                >
+                  <Tooltip title="Design">
+                    <ListItemIcon>
+                      <img src={GraphIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Design" />
+                </ListItem>
+              </Link>
+            )}
 
             <Link to="/communication">
               <ListItem
@@ -554,22 +574,24 @@ function NavBar3(props) {
                 <ListItemText primary="Communicate" />
               </ListItem>
             </Link>
-            <Link to="/registrations">
-              <ListItem
-                button
-                key="registrations"
-                className={clsx({
-                  [classes.highlight]: highlight === "registrations",
-                })}
-              >
-                <Tooltip title="Registrations">
-                  <ListItemIcon>
-                    <img src={NotepadIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Registrations" />
-              </ListItem>
-            </Link>
+            {props.event.registrationRequired ? (
+              <Link to="/registrations">
+                <ListItem
+                  button
+                  key="registrations"
+                  className={clsx({
+                    [classes.highlight]: highlight === "registrations",
+                  })}
+                >
+                  <Tooltip title="Registrations">
+                    <ListItemIcon>
+                      <img src={NotepadIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Registrations" />
+                </ListItem>
+              </Link>
+            ) : null}
             <Link to="/analytics">
               <ListItem
                 button

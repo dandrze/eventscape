@@ -1,7 +1,8 @@
-import React, { Component, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Prompt } from "react-router";
-import { ToastContainer } from "react-toastify";
+
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 import "./pageEditor.css";
 import * as actions from "../actions";
@@ -11,10 +12,6 @@ import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
 import AlertModal from "./AlertModal";
 import { pageNames } from "../model/enums";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Switch1 from "../components/switch";
-
 
 const PageEditor = (props) => {
   const { history } = props;
@@ -22,6 +19,7 @@ const PageEditor = (props) => {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(null);
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
+  const [saveLoading, setSaveLoading] = useState(false);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -63,6 +61,12 @@ const PageEditor = (props) => {
     await props.fetchModel(modelId);
   };
 
+  const handleSave = async () => {
+    setSaveLoading(true);
+    const res = await props.saveModel(props.page);
+    setSaveLoading(false);
+  };
+
   return (
     <div>
       <Prompt when={props.model.isUnsaved} message={handleBlockedNavigation} />
@@ -102,13 +106,19 @@ const PageEditor = (props) => {
           >
             <button className="Button1">Preview Page As Guest</button>
           </Link>
-          <button
-            className="Button1 button-bar-right"
-            onClick={() => props.saveModel(props.page)}
-            style={{ marginLeft: "auto" }}
-          >
-            Save
-          </button>
+          {saveLoading ? (
+            <div style={{ marginLeft: "auto", marginRight: "15px" }}>
+              <CircularProgress />
+            </div>
+          ) : (
+            <button
+              className="Button1 button-bar-right"
+              onClick={handleSave}
+              style={{ marginLeft: "auto" }}
+            >
+              Save
+            </button>
+          )}
           <br></br>
         </div>
         <div id="designBoard">

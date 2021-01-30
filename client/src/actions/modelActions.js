@@ -88,12 +88,15 @@ export const saveModel = (page) => async (dispatch, getState) => {
   const model = getState().model.sections;
 
   // save the new model
-  const res = await api.put("/api/model", { model });
+  try {
+    const res = await api.put("/api/model", { model });
 
-  if (res.status === 200) {
     toast.success("Page successfully saved");
-  } else {
-    toast.error("Error when saving: " + res.statusText);
+    return res.data;
+  } catch (err) {
+    console.log(err.response);
+    toast.error("Error when updating event: " + err.response.data.message);
+    return false;
   }
 };
 

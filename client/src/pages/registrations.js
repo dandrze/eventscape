@@ -16,7 +16,9 @@ import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
 
 const Registrations = (props) => {
-  {/*const [regOn, setRegOn] = React.useState(false);*/}
+  {
+    /*const [regOn, setRegOn] = React.useState(false);*/
+  }
   const [openForm, setOpenForm] = React.useState(false);
   const [openReg, setOpenReg] = React.useState(false);
   const [regButtonText, setRegButtonText] = React.useState("Edit Registration");
@@ -44,12 +46,6 @@ const Registrations = (props) => {
       console.log(event.data);
     }
   };
-
-  {/*const handleChange = (event) => {
-    if (props.setEventRegistration(event.target.checked, props.event.id)) {
-      setRegOn(event.target.checked);
-    }
-  };*/}
 
   const handleCloseForm = () => {
     fetchRegistrations();
@@ -120,9 +116,7 @@ const Registrations = (props) => {
       <Modal1
         open={openForm}
         onClose={handleCloseForm}
-        content={
-          <FormBuilder handleClose={handleCloseForm} />
-        }
+        content={<FormBuilder handleClose={handleCloseForm} />}
       />
       <Modal1
         open={openReg}
@@ -163,7 +157,7 @@ const Registrations = (props) => {
               */}
               <button
                 className="Button1 button-bar-right"
-                style={{ marginLeft: "auto"}}
+                style={{ marginLeft: "auto" }}
                 onClick={handleOpenForm}
               >
                 Edit Registration Form
