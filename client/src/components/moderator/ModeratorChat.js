@@ -135,7 +135,7 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [sendLoading, setSendLoading] = useState(false);
-  const [isHidden, setIsHidden] = useState(false);
+  const [chatHidden, setChatHidden] = useState(false);
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -196,8 +196,8 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       );
     });
 
-    socket.on("chatHidden", (isHidden) => {
-      setIsHidden(isHidden);
+    socket.on("chatHidden", (chatHidden) => {
+      setChatHidden(chatHidden);
     });
 
     socket.on("deleteAll", () => {
@@ -223,8 +223,8 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
     deleteAllMessages() {
       socket.emit("deleteAllMessages", { room });
     },
-    setIsHidden(isHidden) {
-      socket.emit("setChatHidden", { isHidden, room });
+    updateChatHidden(chatHidden) {
+      socket.emit("setChatHidden", { chatHidden, room });
     },
     refreshChat() {
       socket.emit("refreshChat", { room });
@@ -256,12 +256,12 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       <div className="chatContainer">
         <div
           className={
-            isHidden
+            chatHidden
               ? "infoBar moderator-questions-header grey"
               : "infoBar moderator-questions-header"
           }
         >
-          Chat {isHidden ? "(Hidden)" : ""}
+          Chat {chatHidden ? "(Hidden)" : ""}
         </div>
         <Messages
           messages={messages}

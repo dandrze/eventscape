@@ -1,13 +1,7 @@
-import React, {
-  useState,
-  useEffect,
-  forwardRef,
-  useImperativeHandle,
-} from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
-import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Cookies from "universal-cookie";
 import createUUID from "react-uuid";
@@ -22,8 +16,6 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 /* Icons */
 import TelegramIcon from "@material-ui/icons/Telegram";
-import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
-import ReplayIcon from "@material-ui/icons/Replay";
 import io from "socket.io-client";
 
 import api from "../api/server";
@@ -39,23 +31,11 @@ const ENDPOINT =
 
 let socket;
 
-const Messages = ({
-  messages,
-  chatUserId,
-  isModerator,
-  deleteMessage,
-  restoreMessage,
-}) => (
+const Messages = ({ messages, chatUserId }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
-        <Message
-          message={message}
-          chatUserId={chatUserId}
-          isModerator={isModerator}
-          deleteMessage={deleteMessage}
-          restoreMessage={restoreMessage}
-        />
+        <Message message={message} chatUserId={chatUserId} />
       </div>
     ))}
   </ScrollToBottom>
@@ -64,9 +44,6 @@ const Messages = ({
 const Message = ({
   message: { text, user, userId, id, deleted, isNotification },
   chatUserId,
-  isModerator,
-  deleteMessage,
-  restoreMessage,
 }) => {
   let isSentByCurrentUser = false;
 
@@ -74,8 +51,8 @@ const Message = ({
     isSentByCurrentUser = true;
   }
 
-  if (deleted && !isModerator) {
-    // if the message is deleted and it is not the moderator, don't show the message
+  if (deleted) {
+    // if the message is deleted, don't show the message
     return null;
   }
 
@@ -83,41 +60,15 @@ const Message = ({
     return <p className="sentText justifyCenter ">{text}</p>;
   }
 
-  const deletedClassName = isModerator && deleted ? "deleted-message" : null;
-
   return isSentByCurrentUser ? (
-    <div className={"messageContainer justifyEnd " + deletedClassName}>
+    <div className="messageContainer justifyEnd">
       <p className="sentText pr-10">{user}</p>
       <div className="messageBox backgroundBlue">
         <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
       </div>
-
-      {/* Moderator Controls */}
-      {isModerator &&
-        (deleted ? (
-          <Tooltip title="Restore chat message" className="delete-chat-message">
-            <ReplayIcon onClick={() => restoreMessage(id)} />
-          </Tooltip>
-        ) : (
-          <Tooltip title="Delete chat message" className="delete-chat-message">
-            <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-          </Tooltip>
-        ))}
     </div>
   ) : (
-    <div className={"messageContainer justifyStart " + deletedClassName}>
-      {/* Moderator Controls */}
-      {isModerator &&
-        (deleted ? (
-          <Tooltip title="Restore chat message" className="delete-chat-message">
-            <ReplayIcon onClick={() => restoreMessage(id)} />
-          </Tooltip>
-        ) : (
-          <Tooltip title="Delete chat message" className="delete-chat-message">
-            <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-          </Tooltip>
-        ))}
-
+    <div className={"messageContainer justifyStart"}>
       <div className="messageBox backgroundLight">
         <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
       </div>
@@ -245,270 +196,225 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
   </div>
 );
 
-const Chat = forwardRef(
-  ({ room, userId, registrationId, isModerator, settings }, ref) => {
-    const classes = useStyles();
-    const [chatUserId, setChatUserId] = useState("");
-    const [message, setMessage] = useState("");
-    const [messages, setMessages] = useState([]);
-    const [question, setQuestion] = useState("");
-    const [chatHidden, setChatHidden] = useState(false);
-    const [tabValue, setTabValue] = React.useState(0);
-    const [sendLoading, setSendLoading] = useState(false);
-    const [chatTabEnabled, setChatTabEnabled] = useState(true);
-    const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
+const Chat = ({ room, userId, registrationId, settings }) => {
+  const classes = useStyles();
+  const [chatUserId, setChatUserId] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+  const [question, setQuestion] = useState("");
+  const [chatHidden, setChatHidden] = useState(false);
+  const [tabValue, setTabValue] = React.useState(0);
+  const [sendLoading, setSendLoading] = useState(false);
+  const [chatTabEnabled, setChatTabEnabled] = useState(true);
+  const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
 
-    // Index numbers for tabs:
-    const chatIndex = 0;
-    const questionIndex =
-      chatTabEnabled === true && questionsTabEnabled === true ? 1 : 0;
+  // Index numbers for tabs:
+  const chatIndex = 0;
+  const questionIndex = chatTabEnabled && !chatHidden ? 1 : 0;
 
-    const handleChangeTab = (event, newValue) => {
-      setTabValue(newValue);
+  const handleChangeTab = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  useEffect(() => {
+    const fetchChatRoomData = async () => {
+      const chatRoom = await api.get("/api/chatroom/id", {
+        params: { roomId: room },
+      });
+
+      setChatTabEnabled(chatRoom.data.chatEnabled);
+      setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
     };
+    fetchChatRoomData();
+  }, [room, settings.triggerChatUpdate]);
 
-    useEffect(() => {
-      const fetchChatRoomData = async () => {
-        const chatRoom = await api.get("/api/chatroom/id", {
-          params: { roomId: room },
-        });
+  useEffect(() => {
+    socket = io(ENDPOINT, {
+      path: "/api/socket/chat",
+      transports: ["websocket"],
+    });
+    socket.on("connect", () => {
+      console.log("Connected to socket");
+    });
+    socket.on("connect_error", (error) => {
+      setMessages((messages) => [
+        ...messages,
+        { text: error, isNotification: true },
+      ]);
+    });
 
-        console.log(chatRoom);
+    socket.on("error", (error) => {
+      setMessages((messages) => [
+        ...messages,
+        { text: error, isNotification: true },
+      ]);
+    });
 
-        setChatTabEnabled(chatRoom.data.chatEnabled);
-        setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
-      };
-      fetchChatRoomData();
-    }, [room, settings.triggerChatUpdate]);
+    socket.on("message", (message) => {
+      setMessages((messages) => [...messages, message]);
+    });
 
-    useEffect(() => {
-      socket = io(ENDPOINT, {
-        path: "/api/socket/chat",
-        transports: ["websocket"],
-      });
-      socket.on("connect", () => {
-        console.log("Connected to socket");
-      });
-      socket.on("connect_error", (error) => {
-        setMessages((messages) => [
-          ...messages,
-          { text: error, isNotification: true },
-        ]);
-      });
+    socket.on("notification", (message) => {
+      setMessages((messages) => [
+        ...messages,
+        { ...message, isNotification: true },
+      ]);
+    });
 
-      socket.on("error", (error) => {
-        setMessages((messages) => [
-          ...messages,
-          { text: error, isNotification: true },
-        ]);
-      });
-
-      socket.on("message", (message) => {
-        setMessages((messages) => [...messages, message]);
-      });
-
-      socket.on("notification", (message) => {
-        setMessages((messages) => [
-          ...messages,
-          { ...message, isNotification: true },
-        ]);
-      });
-
-      socket.on("delete", (id) => {
-        //map through the messages array and add the deleted flag to the message with the target id
-        setMessages((messages) =>
-          messages.map((msg) => {
-            if (msg.id == id) {
-              return { ...msg, deleted: true };
-            } else {
-              return msg;
-            }
-          })
-        );
-      });
-
-      socket.on("restore", (id) => {
-        //map through the messages array and add the deleted flag to the message with the target id
-        setMessages((messages) =>
-          messages.map((msg) => {
-            if (msg.id == id) {
-              return { ...msg, deleted: false };
-            } else {
-              return msg;
-            }
-          })
-        );
-      });
-
-      socket.on("chatHidden", (isHidden) => {
-        setChatHidden(isHidden);
-      });
-
-      socket.on("deleteAll", () => {
-        setMessages((messages) =>
-          messages.map((msg) => {
+    socket.on("delete", (id) => {
+      //map through the messages array and add the deleted flag to the message with the target id
+      setMessages((messages) =>
+        messages.map((msg) => {
+          if (msg.id == id) {
             return { ...msg, deleted: true };
-          })
+          } else {
+            return msg;
+          }
+        })
+      );
+    });
+
+    socket.on("restore", (id) => {
+      //map through the messages array and add the deleted flag to the message with the target id
+      setMessages((messages) =>
+        messages.map((msg) => {
+          if (msg.id == id) {
+            return { ...msg, deleted: false };
+          } else {
+            return msg;
+          }
+        })
+      );
+    });
+
+    socket.on("chatHidden", (chatHidden) => {
+      setChatHidden(chatHidden);
+    });
+
+    socket.on("deleteAll", () => {
+      setMessages((messages) =>
+        messages.map((msg) => {
+          return { ...msg, deleted: true };
+        })
+      );
+    });
+
+    socket.on("refresh", () => {
+      console.log("chat refreshed");
+      setMessages([]);
+    });
+
+    // if there is no userId (eventscape account) or registrationId (registered user) then we need a uuid to idenfity the anonymous visitor
+    var uuid = null;
+    if (!userId && !registrationId) {
+      if (!cookies.get("uuid")) cookies.set("uuid", createUUID());
+
+      uuid = cookies.get("uuid");
+    }
+
+    socket.emit("join", { userId, registrationId, uuid, room }, (id) => {
+      setChatUserId(id);
+    });
+  }, []);
+
+  const sendMessage = (event) => {
+    event.preventDefault();
+
+    if (message) {
+      setSendLoading(true);
+      socket.emit("sendMessage", { chatUserId, room, message }, () => {
+        setMessage("");
+        setSendLoading(false);
+      });
+    }
+  };
+
+  const sendQuestion = (event) => {
+    event.preventDefault();
+
+    if (question) {
+      socket.emit("sendQuestion", { chatUserId, room, question }, () => {
+        setQuestion("");
+        alert(
+          "Question successfully submitted! (Temporary alert, replace with better alert type)"
         );
       });
+    }
+  };
 
-      socket.on("refresh", () => {
-        console.log("chat refreshed");
-        setMessages([]);
-      });
+  const deleteMessage = (id) => {
+    socket.emit("deleteMessage", { id, room });
+  };
 
-      // if there is no userId (eventscape account) or registrationId (registered user) then we need a uuid to idenfity the anonymous visitor
-      var uuid = null;
-      if (!userId && !registrationId) {
-        if (!cookies.get("uuid")) cookies.set("uuid", createUUID());
+  const restoreMessage = (id) => {
+    socket.emit("restoreMessage", { id, room });
+  };
 
-        uuid = cookies.get("uuid");
-      }
-
-      socket.emit(
-        "join",
-        { userId, registrationId, uuid, room, isModerator },
-        (id) => {
-          setChatUserId(id);
-        }
-      );
-    }, []);
-
-    // code below pulls in functions from messaging for moderator actions
-    useImperativeHandle(ref, () => ({
-      deleteAllMessages() {
-        socket.emit("deleteAllMessages", { room });
-      },
-
-      refreshChat() {
-        socket.emit("refreshChat", { room });
-      },
-    }));
-
-    const sendMessage = (event) => {
-      event.preventDefault();
-
-      if (message) {
-        setSendLoading(true);
-        socket.emit("sendMessage", { chatUserId, room, message }, () => {
-          setMessage("");
-          setSendLoading(false);
-        });
-      }
-    };
-
-    const sendQuestion = (event) => {
-      // David to connect
-
-      event.preventDefault();
-
-      if (question) {
-        socket.emit("sendQuestion", { chatUserId, room, question }, () => {
-          setQuestion("");
-          alert(
-            "Question successfully submitted! (Temporary alert, replace with better alert type)"
-          );
-        });
-      }
-    };
-
-    const deleteMessage = (id) => {
-      socket.emit("deleteMessage", { id, room });
-    };
-
-    const restoreMessage = (id) => {
-      socket.emit("restoreMessage", { id, room });
-    };
-
-    return (
-      <div
-        className={clsx({
-          chatOuterContainer: true,
-          "display-none": !isModerator && chatHidden,
-        })}
-      >
-        <div className="chatContainer">
-          <div
-            className={
-              isModerator && (chatHidden || !chatTabEnabled)
-                ? "infoBar grey"
-                : "infoBar"
-            }
+  return (
+    <div
+      className={clsx({
+        chatOuterContainer: true,
+        "display-none": chatHidden && !questionsTabEnabled,
+      })}
+    >
+      <div className="chatContainer">
+        <div className="infoBar">
+          <StyledTabs
+            value={tabValue}
+            onChange={handleChangeTab}
+            aria-label="simple tabs example"
+            indicatorColor="secondary"
+            variant="fullWidth"
           >
-            <StyledTabs
-              value={tabValue}
-              onChange={handleChangeTab}
-              aria-label="simple tabs example"
-              indicatorColor="secondary"
-              variant="fullWidth"
-            >
-              {(chatTabEnabled ||
-                isModerator) /* if it's moderator, still display the component but as "disabled"*/ && (
-                <StyledTab
-                  label={
-                    chatHidden
-                      ? "Chat (Hidden)"
-                      : !chatTabEnabled
-                      ? "Chat (Disabled)"
-                      : "Chat"
-                  }
-                  isHidden={chatHidden}
-                  {...a11yProps(chatIndex)}
-                />
-              )}
-              {questionsTabEnabled && (
-                <StyledTab
-                  label="Ask a Question"
-                  isHidden={chatHidden}
-                  {...a11yProps(questionIndex)}
-                />
-              )}
-            </StyledTabs>
-          </div>
-          {chatTabEnabled && (
-            <TabPanel
-              value={tabValue}
-              index={chatIndex}
-              classes={{ root: classes.tab }}
-            >
-              <>
-                <Messages
-                  messages={messages}
-                  chatUserId={chatUserId}
-                  isModerator={isModerator}
-                  deleteMessage={deleteMessage}
-                  restoreMessage={restoreMessage}
-                />
-                <Input
-                  message={message}
-                  setMessage={setMessage}
-                  sendMessage={sendMessage}
-                  sendLoading={sendLoading}
-                />
-              </>
-            </TabPanel>
-          )}
-          {questionsTabEnabled && (
-            <TabPanel
-              value={tabValue}
-              index={questionIndex}
-              classes={{ root: classes.tab }}
-            >
-              <InputAskQuestion
-                question={question}
-                setQuestion={setQuestion}
-                sendQuestion={sendQuestion}
-              />
-            </TabPanel>
-          )}
+            {chatTabEnabled && !chatHidden && (
+              <StyledTab label="Chat" {...a11yProps(chatIndex)} />
+            )}
+            {questionsTabEnabled && (
+              <StyledTab label="Ask a Question" {...a11yProps(questionIndex)} />
+            )}
+          </StyledTabs>
         </div>
+        {chatTabEnabled && !chatHidden && (
+          <TabPanel
+            value={tabValue}
+            index={chatIndex}
+            classes={{ root: classes.tab }}
+          >
+            <>
+              <Messages
+                messages={messages}
+                chatUserId={chatUserId}
+                deleteMessage={deleteMessage}
+                restoreMessage={restoreMessage}
+              />
+              <Input
+                message={message}
+                setMessage={setMessage}
+                sendMessage={sendMessage}
+                sendLoading={sendLoading}
+              />
+            </>
+          </TabPanel>
+        )}
+        {questionsTabEnabled && (
+          <TabPanel
+            value={tabValue}
+            index={questionIndex}
+            classes={{ root: classes.tab }}
+          >
+            <InputAskQuestion
+              question={question}
+              setQuestion={setQuestion}
+              sendQuestion={sendQuestion}
+            />
+          </TabPanel>
+        )}
       </div>
-    );
-  }
-);
+    </div>
+  );
+};
 
 Chat.defaultProps = {
-  isModerator: false,
   chatTabEnabled: true,
   questionsTabEnabled: true,
 };

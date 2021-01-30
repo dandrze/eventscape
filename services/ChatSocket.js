@@ -67,7 +67,7 @@ module.exports = (server) => {
 
         socket.join(room);
         // push the hidden state (true or false)
-        if (chatRoom) socket.emit("chatHidden", chatRoom.isHidden);
+        if (chatRoom) socket.emit("chatHidden", chatRoom.chatHidden);
 
         socket.emit("notification", {
           text: "You are now connected to room " + room,
@@ -187,13 +187,13 @@ module.exports = (server) => {
       }
     );
 
-    socket.on("setChatHidden", async ({ isHidden, room }) => {
+    socket.on("setChatHidden", async ({ chatHidden, room }) => {
       const chatRoom = await ChatRoom.findByPk(room);
 
-      chatRoom.isHidden = isHidden;
+      chatRoom.chatHidden = chatHidden;
       await chatRoom.save();
 
-      io.to(room).emit("chatHidden", isHidden);
+      io.to(room).emit("chatHidden", chatHidden);
     });
 
     socket.on("deleteMessage", async ({ id, room }) => {
