@@ -5,6 +5,7 @@ import ReactEmoji from "react-emoji";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Cookies from "universal-cookie";
 import createUUID from "react-uuid";
+import { toast } from "react-toastify";
 
 import clsx from "clsx";
 
@@ -342,9 +343,68 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     }
   };
 
-  const deleteMessage = (id) => {
-    socket.emit("deleteMessage", { id, room });
-  };
+      socket.on("refresh", () => {
+        console.log("chat refreshed");
+        setMessages([]);
+      });
+
+      // if there is no userId (eventscape account) or registrationId (registered user) then we need a uuid to idenfity the anonymous visitor
+      var uuid = null;
+      if (!userId && !registrationId) {
+        if (!cookies.get("uuid")) cookies.set("uuid", createUUID());
+
+        uuid = cookies.get("uuid");
+      }
+
+      socket.emit(
+        "join",
+        { userId, registrationId, uuid, room, isModerator },
+        (id) => {
+          setChatUserId(id);
+        }
+      );
+    }, []);
+
+    // code below pulls in functions from messaging for moderator actions
+    useImperativeHandle(ref, () => ({
+      deleteAllMessages() {
+        socket.emit("deleteAllMessages", { room });
+      },
+
+      refreshChat() {
+        socket.emit("refreshChat", { room });
+      },
+    }));
+
+    const sendMessage = (event) => {
+      event.preventDefault();
+
+      if (message) {
+        setSendLoading(true);
+        socket.emit("sendMessage", { chatUserId, room, message }, () => {
+          setMessage("");
+          setSendLoading(false);
+        });
+      }
+    };
+
+    const sendQuestion = (event) => {
+
+      event.preventDefault();
+
+      if (question) {
+        socket.emit("sendQuestion", { chatUserId, room, question }, () => {
+          setQuestion("");
+          toast.success("Question successfully submitted!");
+        });
+      } else if (!question) {
+        toast.error("Please enter a question.")
+      }
+    };
+
+    const deleteMessage = (id) => {
+      socket.emit("deleteMessage", { id, room });
+    };
 
   const restoreMessage = (id) => {
     socket.emit("restoreMessage", { id, room });

@@ -23,6 +23,8 @@ import "froala-editor/js/plugins/code_beautifier.min.js";
 //import "froala-editor/js/third_party/image_tui.min.js";
 import "froala-editor/js/plugins/forms.min.js";
 import "froala-editor/js/plugins/draggable.min.js";
+import "froala-editor/js/plugins/table.min.js";
+import "froala-editor/js/plugins/word_paste.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
@@ -32,6 +34,8 @@ import "froala-editor/css/plugins/file.min.css";
 import "froala-editor/css/plugins/code_view.min.css";
 import "froala-editor/css/plugins/image.min.css";
 //import "froala-editor/css/third_party/image_tui.min.css";
+import "froala-editor/css/plugins/table.min.css";
+
 
 import * as actions from "../actions";
 import api from "../api/server";
@@ -60,25 +64,13 @@ const Froala = (props) => {
 
   const config = {
     toolbarButtons: {
-      moreRich: {
-        buttons: [
-          "insertImage",
-          "insertVideo",
-          "insertLink",
-          "insertFile",
-          "emoticons",
-          "html",
-          "image",
-        ],
-        buttonsVisible: 7,
-      },
       moreText: {
         buttons: [
-          "fontFamily",
-          "fontSize",
           "bold",
           "italic",
           "underline",
+          "fontFamily",
+          "fontSize",
           "strikeThrough",
           "subscript",
           "superscript",
@@ -86,6 +78,11 @@ const Froala = (props) => {
           "backgroundColor",
           "inlineClass",
           "inlineStyle",
+        ],
+        buttonsVisible: 3,
+      },
+      moreParagraph: {
+        buttons: [
           "alignLeft",
           "alignCenter",
           "alignRight",
@@ -101,7 +98,26 @@ const Froala = (props) => {
           "quote",
           "clearFormatting",
         ],
-        buttonsVisible: 0,
+        buttonsVisible: 3,
+      },
+      moreRich: {
+        buttons: [
+          "insertImage",
+          "insertLink",
+          "insertFile",
+          "emoticons",
+          "insertVideo",
+          //"insertTable", // Not currenlty allowing input into the table
+          "html",
+        ],
+        buttonsVisible: 3,
+      },
+      moreMisc: {
+        buttons: [
+          "undo",
+          "redo",
+        ],
+        buttonsVisible: 2,
       },
     },
     fontFamily: {
@@ -140,6 +156,7 @@ const Froala = (props) => {
     charCounterCount: false,
     keepFormatOnDelete: true,
     attribution: false,
+    initOnClick: true, // Only the minimum required events are initialized on page load and the rest of them when the user clicks inside the editable area. This is very useful when using multiple editors on the same page because it reduces the page load time.
     width: "100%",
     imageEditButtons: [
       "imageReplace",
@@ -157,11 +174,34 @@ const Froala = (props) => {
       "imageStyle",
       "imageAlt",
       "imageSize",
+      //"imageTUI", // Not currenlty working
     ],
     key:
       "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
     imageUploadToS3: props.settings.s3Hash,
-    pluginsEnabled: ["image", "link", "draggable"],
+    // By default all plugins are enabled
+    /*pluginsEnabled: [
+      "image", 
+      "imageTUI", 
+      "imageManager", 
+      "video", 
+      "link", 
+      "draggable", 
+      "align", 
+      "codeBeautifier", 
+      "codeView", 
+      "colors", 
+      "emoticons", 
+      "fontFamily", 
+      "fontSize", 
+      "lineHeight", 
+      "link", 
+      "lists", 
+      "table", 
+      "url", 
+      "wordPaste", 
+      "file" 
+    ],*/
     dragInline: false,
 
     events: {

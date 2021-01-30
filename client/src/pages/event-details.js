@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Route, withRouter } from "react-router-dom";
+import { toast } from "react-toastify";
 import { connect } from "react-redux";
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
@@ -29,6 +30,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -228,6 +230,14 @@ function Event_Details(props) {
     );
   }
 
+  function copyLink() {
+    navigator.clipboard.writeText(eventLink + ".eventscape.io")
+    toast.success("Copied to clipboard!", {
+      autoClose: 1500,
+      pauseOnHover: false,
+    });
+  };
+
   return (
     <div>
       <AlertModal
@@ -263,7 +273,12 @@ function Event_Details(props) {
               onBlur={handleChangeEventLinkBlur}
               InputProps={{
                 endAdornment: (
-                  <InputAdornment position="end">.eventscape.io</InputAdornment>
+                  <InputAdornment position="end">
+                    .eventscape.io
+                    <Tooltip title="Copy to clipboard">
+                      <FileCopyIcon onClick={copyLink} style={{ marginLeft: "12px", cursor: "pointer" }}/>
+                    </Tooltip>
+                  </InputAdornment>
                 ),
               }}
               error={linkUnavailable}

@@ -9,6 +9,8 @@ import Tooltip from "@material-ui/core/Tooltip";
 import FormControl from "@material-ui/core/FormControl";
 import TextField from "@material-ui/core/TextField";
 import Grid from "@material-ui/core/Grid";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import SaveIcon from '@material-ui/icons/Save';
 
 import "./ModeratorChat.css";
 import * as actions from "../../actions";
@@ -87,7 +89,7 @@ const ModeratorDashboard = ({
 
   if (!isLoaded) return <CircularProgress />;
   return (
-    <div className="form-box shadow-border">
+    <div className="form-box shadow-border" style={{ marginBottom: "60px"}}>
       <div className="room-bar">
         <p>Room: {room.name}</p>
       </div>
@@ -114,6 +116,20 @@ const ModeratorDashboard = ({
                     variant="outlined"
                     value={displayName}
                     onChange={handleChangeDisplayName}
+                    InputProps={{
+                      endAdornment: (
+                        <Tooltip title="Save moderator display name">
+                          <InputAdornment 
+                            position="end" 
+                            onClick={handleSubmitDisplayName}
+                            style={{ color: "var(--main-color)", cursor: "pointer" }} 
+                          >
+                            Save
+                            <SaveIcon style={{ marginLeft: "4px" }}/>
+                          </InputAdornment>
+                        </Tooltip>
+                      ),
+                    }}
                   />
                 </FormControl>
               </Grid>
@@ -135,30 +151,25 @@ const ModeratorDashboard = ({
                 </Tooltip>
               </Grid>
               <Grid item xs={6}>
-                {/* Update Display Name Button */}
-                {displayNameLoading ? (
-                  <div className="text-center pt-1">
-                    <CircularProgress />
-                  </div>
-                ) : (
-                  <button
-                    className="Button2 mt-3"
-                    onClick={handleSubmitDisplayName}
-                    style={{ width: "100%" }}
-                  >
-                    Update Display Name
-                  </button>
-                )}
-              </Grid>
-              <Grid item xs={6}>
                 {/* Delete all chat message button */}
                 <button
-                  className="Button2 mt-3"
+                  className="Button2"
                   onClick={handleNavAlertOpen}
                   style={{ width: "100%" }}
                 >
                   Delete All Chat Messages
                 </button>
+              </Grid>
+              <Grid item xs={6}>
+                {/* Export Chat to CSV */}
+                <Tooltip title="Export chat messages to csv file">
+                  <button
+                    className="Button2"
+                    style={{ width: "100%" }}
+                  >
+                    Export
+                  </button>
+                </Tooltip>
               </Grid>
             </Grid>
 
@@ -181,6 +192,27 @@ const ModeratorDashboard = ({
                 <ModeratorQuestions room={room.id} userId={user.id} />
               </div>
             </div>
+            <Grid
+              container
+              spacing={3}
+              alignItems="flex-end"
+              style={{ marginTop: "70px" }}
+            >
+              <Grid item xs={6}>
+                {/* Intentionally left blank */}
+              </Grid>
+              <Grid item xs={6}>
+                {/* Export Questions to CSV */}
+                <Tooltip title="Export questions to csv file">
+                  <button
+                    className="Button2"
+                    style={{ width: "100%", marginTop: "auto" }}
+                  >
+                    Export
+                  </button>
+                </Tooltip>
+              </Grid>
+            </Grid>
           </div>
         ) : null}
       </div>
