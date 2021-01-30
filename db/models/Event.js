@@ -11,7 +11,6 @@ const Event = sequelize.define("Event", {
   isCurrent: Sequelize.BOOLEAN,
   startDate: Sequelize.DATE,
   endDate: Sequelize.DATE,
-  hasRegistration: Sequelize.BOOLEAN /* delete after merge */,
   registrationRequired: Sequelize.BOOLEAN,
   status: { type: Sequelize.TEXT, defaultValue: statusOptions.DRAFT },
 });

@@ -78,6 +78,7 @@ function App(props) {
   ) {
     return (
       <div className="App">
+        <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
           <Suspense fallback={<CircularProgress />}>
             <Route
