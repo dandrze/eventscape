@@ -607,6 +607,7 @@ select {
   overflow: auto;
   flex: auto;
   height: 100%; /* need this to keep react-scroll-to-bottom working in Safari */
+  margin-bottom: 5px;
 }
 
 /* Message */
