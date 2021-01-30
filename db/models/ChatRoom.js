@@ -4,7 +4,8 @@ const { Op } = Sequelize;
 
 const ChatRoom = sequelize.define("ChatRoom", {
   event: Sequelize.INTEGER,
-  isHidden: Sequelize.BOOLEAN,
+  isHidden: Sequelize.BOOLEAN /*TODO DELETE POST MERGE*/,
+  chatHidden: Sequelize.BOOLEAN,
   isDefault: Sequelize.BOOLEAN,
   name: Sequelize.TEXT,
   chatEnabled: { type: Sequelize.BOOLEAN, defaultValue: true },
