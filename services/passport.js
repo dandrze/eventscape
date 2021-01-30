@@ -23,7 +23,9 @@ passport.use(
     console.log(username, password);
     console.log("strategy called");
 
-    const user = await Account.findOne({ where: { emailAddress: username } });
+    const user = await Account.findOne({
+      where: { emailAddress: username.toLowerCase() },
+    });
 
     if (!user) {
       console.log("user not found");

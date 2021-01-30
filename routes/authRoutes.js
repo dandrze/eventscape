@@ -50,7 +50,7 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
   try {
     const account = await Account.findOne({
       where: {
-        emailAddress,
+        emailAddress: emailAddress.toLowerCase(),
       },
     });
     if (account) {

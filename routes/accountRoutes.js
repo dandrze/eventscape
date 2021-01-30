@@ -28,7 +28,7 @@ router.post("/api/account", async (req, res, next) => {
 
   try {
     const account = await Account.create({
-      emailAddress,
+      emailAddress: emailAddress.toLowerCase(),
       firstName,
       lastName,
       password: hashedPassword,
