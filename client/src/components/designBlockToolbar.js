@@ -9,25 +9,11 @@ import Tooltip from "@material-ui/core/Tooltip";
 import Button from "@material-ui/core/Button";
 import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
-//import DialogContent from '@material-ui/core/DialogContent';
-//import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
-import Grid from "@material-ui/core/Grid";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
-import InputLabel from "@material-ui/core/InputLabel";
-import TextField from "@material-ui/core/TextField";
 import * as actions from "../actions";
-import Tabs from "../components/Tabs";
-import RoomTable from "./room-table";
 import Modal1 from "./Modal1";
-import FormLabel from "@material-ui/core/FormLabel";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import FormHelperText from "@material-ui/core/FormHelperText";
-import Checkbox from "@material-ui/core/Checkbox";
+import DesignBlockSettings from "./designBlockSettings";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -54,48 +40,27 @@ const useStyles = makeStyles(() => ({
 function DesignBlockToolbar(props) {
   const classes = useStyles();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
-  const [openStreamSettings, setOpenStreamSettings] = React.useState(false);
-  const [content, setContent] = React.useState("youtube-embed");
-  const [youtubeLink, setYoutubeLink] = React.useState("");
-  const [customHTML, setCustomHTML] = React.useState("");
+  const [openSettings, setOpenSettings] = React.useState(false);
   const [sectionTooltip, setSectionTooltip] = React.useState("");
-  const [room, setRoom] = React.useState();
-  const [rooms, setRooms] = React.useState([]);
 
-  const showStreamSettings =
-    props.section.isReact && props.section.reactComponent.name == "StreamChat";
-
-  // Updating the settings based on props
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
-    if (props.section.reactComponent) {
-      setContent(props.section.reactComponent.props.content);
-      setYoutubeLink(props.section.reactComponent.props.link);
-      setCustomHTML(props.section.reactComponent.props.html);
-      setRoom(props.section.reactComponent.props.chatRoom);
-
       // set the section tooltip if it's a section that requires one
       if (props.section.isReact) {
         switch (props.section.reactComponent.name) {
           case "StreamChat":
-            setSectionTooltip("Click the gears icon to add your stream");
-            fetchChatRooms();
+            setSectionTooltip("Click the gears icon to add your stream and change chat/question settings");
             break;
           case "RegistrationForm":
-            setSectionTooltip(
-              "Go to registration tab to edit the registration form"
-            );
+            setSectionTooltip("Click the gears icon to edit the registration form");
             break;
         }
       }
-    }
   }, []);
 
-  const fetchChatRooms = async () => {
-    const chatRooms = await props.fetchChatRooms(props.event.id);
-    console.log(chatRooms);
-    setRooms(chatRooms.data);
-  };
+  const showSettings =
+    props.section.isReact && props.section.reactComponent.name == "StreamChat" || 
+    props.section.isReact && props.section.reactComponent.name == "RegistrationForm";
 
   const handleClickDelete = () => {
     setDeleteConfirmOpen(true);
@@ -109,41 +74,13 @@ function DesignBlockToolbar(props) {
     props.deleteSection(props.sectionIndex, props.section);
   };
 
-  // Stream Settings:
-  const handleOpenStreamSettings = () => {
-    setOpenStreamSettings(true);
+  // Settings:
+  const handleOpenSettings = () => {
+    setOpenSettings(true);
   };
 
-  const handleCloseStreamSettings = () => {
-    setOpenStreamSettings(false);
-  };
-
-  const handleSaveStreamSettings = () => {
-    setOpenStreamSettings(false);
-    props.saveStreamSettings(props.sectionIndex, {
-      content,
-      link: youtubeLink,
-      html: customHTML,
-      chatRoom: room,
-    });
-    props.triggerChatUpdate();
-  };
-
-  const handleChangeContent = (event) => {
-    setContent(event.target.value);
-  };
-
-  const handleChangeYoutubeLink = (event) => {
-    // remove any whitespace
-    setYoutubeLink(event.target.value.replace(/\s+/g, ""));
-  };
-
-  const handleChangeCustomHTML = (event) => {
-    setCustomHTML(event.target.value);
-  };
-
-  const handleChangeRoom = (event) => {
-    setRoom(event.target.value);
+  const handleCloseSettings = () => {
+    setOpenSettings(false);
   };
 
   const handleClickMove = (offset) => {
@@ -159,7 +96,7 @@ function DesignBlockToolbar(props) {
     <div>
       {/* Toolbar */}
       {(props.displayToolbar === true) &
-      (openStreamSettings === false) &
+      (openSettings === false) &
       (deleteConfirmOpen === false) ? (
         <div className="toolbar_container">
           <Tooltip title="Move Up">
@@ -186,12 +123,12 @@ function DesignBlockToolbar(props) {
               <DeleteOutlined />
             </div>
           </Tooltip>
-          {showStreamSettings ? (
+          {showSettings ? (
             <>
               <Tooltip title="Stream Settings">
                 <div
                   className="design-block-toolbar-button"
-                  onClick={handleOpenStreamSettings}
+                  onClick={handleOpenSettings}
                 >
                   <SettingsIcon />
                 </div>
@@ -233,155 +170,15 @@ function DesignBlockToolbar(props) {
 
       {/*Stream Settings Modal: */}
       <Modal1
-        open={openStreamSettings}
-        onClose={handleCloseStreamSettings}
+        open={openSettings}
+        onClose={handleCloseSettings}
         content={
-          <div>
-            <h3>Settings</h3>
-            <br></br>
-            <Tabs>
-              <div label="Stream">
-                <div className="settings-container">
-                  <div className={classes.root}>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12}>
-                        <FormControl
-                          variant="outlined"
-                          className={classes.formControl}
-                        >
-                          {/* Category */}
-                          <InputLabel
-                            id="content"
-                            className="fix-mui-select-label"
-                          >
-                            Content
-                          </InputLabel>
-                          <Select
-                            labelId="content"
-                            id="content-select"
-                            required="true"
-                            value={content}
-                            onChange={handleChangeContent}
-                          >
-                            <MenuItem value={"youtube-live"}>
-                              Youtube Live
-                            </MenuItem>
-                            <MenuItem value={"custom-embed"}>
-                              Custom HTML Embed (Advanced)
-                            </MenuItem>
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                      <Grid item xs={12}>
-                        {content === "youtube-live" && (
-                          <div>
-                            <FormControl
-                              variant="outlined"
-                              className={classes.formControl}
-                            >
-                              <TextField
-                                id="youtube-link"
-                                label="Youtube Link"
-                                variant="outlined"
-                                value={youtubeLink}
-                                onChange={handleChangeYoutubeLink}
-                                placeholder="http://www.youtube.com"
-                              />
-                            </FormControl>
-                            <p>
-                              Need help? Click here for instructions on setting
-                              up a YouTube Live stream.
-                            </p>
-                            <p>
-                              Heads up! YouTube may take down any streams
-                              containing copyrighted music.
-                            </p>
-                          </div>
-                        )}
-                        {content === "custom-embed" && (
-                          <FormControl
-                            variant="outlined"
-                            className={classes.formControl}
-                          >
-                            <TextField
-                              id="custom-HTML"
-                              label="Custom HTML"
-                              variant="outlined"
-                              multiline
-                              rows={12}
-                              value={customHTML}
-                              onChange={handleChangeCustomHTML}
-                            />
-                          </FormControl>
-                        )}
-                      </Grid>
-                      <Grid item xs={12} id="save-button">
-                        <button
-                          className="Button1"
-                          onClick={handleSaveStreamSettings}
-                        >
-                          Save
-                        </button>
-                      </Grid>
-                    </Grid>
-                  </div>
-                </div>
-              </div>
-              <div label="Chat / Ask a Question">
-                <div className="settings-container">
-                  <div className={classes.root}>
-                    <p>
-                      If you would like to have multiple independent
-                      chat/question windows, you can create and assign new rooms
-                      below.
-                    </p>
-                    <Grid container spacing={3}>
-                      <Grid item xs={12}>
-                        <FormControl
-                          variant="outlined"
-                          className={classes.formControl}
-                        >
-                          {/* Chat Room */}
-                          <InputLabel
-                            id="room"
-                            className="fix-mui-select-label"
-                          >
-                            Room Assignment
-                          </InputLabel>
-                          <Select
-                            labelId="room"
-                            id="room-select"
-                            required="true"
-                            value={room}
-                            onChange={handleChangeRoom}
-                          >
-                            {rooms.map((room) => {
-                              return (
-                                <MenuItem key={room.id} value={room.id}>
-                                  {room.name}
-                                </MenuItem>
-                              );
-                            })}
-                          </Select>
-                        </FormControl>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <RoomTable rooms={rooms} fetchData={fetchChatRooms} />
-                      </Grid>
-                      <Grid item xs={12} id="save-button">
-                        <button
-                          className="Button1"
-                          onClick={handleSaveStreamSettings}
-                        >
-                          Save
-                        </button>
-                      </Grid>
-                    </Grid>
-                  </div>
-                </div>
-              </div>
-            </Tabs>
-          </div>
+          <DesignBlockSettings 
+            reactComponent={props.section.reactComponent}
+            isReact={props.section.isReact}
+            sectionIndex={props.sectionIndex}
+            onClose={handleCloseSettings}
+          />
         }
       />
     </div>

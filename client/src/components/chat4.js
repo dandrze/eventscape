@@ -11,6 +11,7 @@ import Tooltip from "@material-ui/core/Tooltip";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Cookies from "universal-cookie";
 import createUUID from "react-uuid";
+import { toast } from "react-toastify";
 
 import clsx from "clsx";
 
@@ -398,17 +399,16 @@ const Chat = forwardRef(
     };
 
     const sendQuestion = (event) => {
-      // David to connect
 
       event.preventDefault();
 
       if (question) {
         socket.emit("sendQuestion", { chatUserId, room, question }, () => {
           setQuestion("");
-          alert(
-            "Question successfully submitted! (Temporary alert, replace with better alert type)"
-          );
+          toast.success("Question successfully submitted!");
         });
+      } else if (!question) {
+        toast.error("Please enter a question.")
       }
     };
 

@@ -58,7 +58,7 @@ function ErrorRegNotFound(props) {
         }}
       >
         <h2>
-          Oops, it seems that your registration for event name cannot be found.
+          Oops, it seems that your registration for {props.event.title} cannot be found.
         </h2>
         <p>Please enter your email address below to re-send your event link.</p>
         <FormControl variant="outlined" className={classes.formControl}>
@@ -104,7 +104,7 @@ function ErrorRegNotFound(props) {
             </p>
             <Link to="/">
               <button className="Button1" type="submit">
-                Register for Event Name
+                Register for {props.event.title}
               </button>
             </Link>
           </>
