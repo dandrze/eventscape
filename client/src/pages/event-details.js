@@ -220,7 +220,7 @@ function Event_Details(props) {
     }
     setIsloading(false);
 
-    if (response) props.history.push("/design/event");
+    if (response && !props.isEventUpdate) props.history.push("/design/event");
   };
 
   if (isLoading && !props.isEventUpdate) {
@@ -1049,10 +1049,13 @@ function Event_Details(props) {
         <br></br>
 
         {/* Submit */}
-        {/* remove link and replace with onSubmit */}
-        <button className="Button1" onClick={handleSubmit}>
-          {props.isEventUpdate ? "Update Event" : "Create Event"}
-        </button>
+        {isLoading && props.isEventUpdate ? (
+          <CircularProgress />
+        ) : (
+          <button className="Button1" onClick={handleSubmit}>
+            {props.isEventUpdate ? "Update Event" : "Create Event"}
+          </button>
+        )}
       </div>
     </div>
   );
