@@ -71,6 +71,11 @@ function App(props) {
     );
   };
 
+  console.log(process.env.NODE_ENV);
+  console.log(process.env.PIPELINE_ENV);
+  alert(process.env.NODE_ENV);
+  alert(process.env.PIPELINE_ENV);
+
   if (
     path[0] !== "localhost:3000" &&
     path[0] !== "eventscape" &&
