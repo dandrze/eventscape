@@ -46,11 +46,7 @@ function App(props) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (
-      path[0] !== "localhost:3000" ||
-      path[0] !== "eventscape" ||
-      path[0] !== "www"
-    ) {
+    if (path[0] === "localhost:3000" || path[0] === "eventscape") {
       fetchDataAsync();
     }
   }, []);
@@ -70,11 +66,11 @@ function App(props) {
       />
     );
   };
+  if (process.env.NODE_ENV === "development") {
+    const pathName = window.location.pathname.split("/");
 
-  console.log(process.env.NODE_ENV);
-  console.log(process.env.PIPELINE_ENV);
-  alert(process.env.NODE_ENV);
-  alert(process.env.PIPELINE_ENV);
+    console.log(pathName);
+  }
 
   if (
     path[0] !== "localhost:3000" &&
