@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { ChatRoom, ChatUser } = require("../db").models;
+const {
+  ChatRoom,
+  ChatUser,
+  ChatMessage,
+  ChatQuestion,
+  Registration,
+} = require("../db").models;
 
 router.get("/api/chatroom/default", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
@@ -32,6 +38,36 @@ router.get("/api/chatroom/id", async (req, res, next) => {
     const chatRoom = await ChatRoom.findByPk(roomId);
 
     res.status(200).send(chatRoom);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/api/chatroom/export/chat", async (req, res, next) => {
+  const { roomId } = req.query;
+
+  try {
+    const chatMessages = await ChatMessage.findAll({
+      where: { ChatRoomId: roomId },
+      include: { model: ChatUser, include: Registration },
+    });
+
+    res.status(200).send(chatMessages);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/api/chatroom/export/questions", async (req, res, next) => {
+  const { roomId } = req.query;
+
+  try {
+    const chatQuestions = await ChatQuestion.findAll({
+      where: { ChatRoomId: roomId },
+      include: { model: ChatUser, include: Registration },
+    });
+
+    res.status(200).send(chatQuestions);
   } catch (error) {
     next(error);
   }

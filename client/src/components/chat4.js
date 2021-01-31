@@ -336,7 +336,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     if (question) {
       socket.emit("sendQuestion", { chatUserId, room, question }, () => {
         setQuestion("");
-        toast.success("Question successfully submitted!");
+        toast.success("Your question was submitted to the hosts!");
       });
     } else if (!question) {
       toast.error("Please enter a question.");
