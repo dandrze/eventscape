@@ -45,22 +45,28 @@ function DesignBlockToolbar(props) {
 
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
-      // set the section tooltip if it's a section that requires one
-      if (props.section.isReact) {
-        switch (props.section.reactComponent.name) {
-          case "StreamChat":
-            setSectionTooltip("Click the gears icon to add your stream and change chat/question settings");
-            break;
-          case "RegistrationForm":
-            setSectionTooltip("Click the gears icon to edit the registration form");
-            break;
-        }
+    // set the section tooltip if it's a section that requires one
+    if (props.section.isReact) {
+      switch (props.section.reactComponent.name) {
+        case "StreamChat":
+          setSectionTooltip(
+            "Click the gears icon to add your stream and change chat/question settings"
+          );
+          break;
+        case "RegistrationForm":
+          setSectionTooltip(
+            "Click the gears icon to edit the registration form"
+          );
+          break;
       }
+    }
   }, []);
 
   const showSettings =
-    props.section.isReact && props.section.reactComponent.name == "StreamChat" || 
-    props.section.isReact && props.section.reactComponent.name == "RegistrationForm";
+    (props.section.isReact &&
+      props.section.reactComponent.name == "StreamChat") ||
+    (props.section.isReact &&
+      props.section.reactComponent.name == "RegistrationForm");
 
   const handleClickDelete = () => {
     setDeleteConfirmOpen(true);
@@ -125,7 +131,7 @@ function DesignBlockToolbar(props) {
           </Tooltip>
           {showSettings ? (
             <>
-              <Tooltip title="Stream Settings">
+              <Tooltip title="Settings">
                 <div
                   className="design-block-toolbar-button"
                   onClick={handleOpenSettings}
@@ -173,7 +179,7 @@ function DesignBlockToolbar(props) {
         open={openSettings}
         onClose={handleCloseSettings}
         content={
-          <DesignBlockSettings 
+          <DesignBlockSettings
             reactComponent={props.section.reactComponent}
             isReact={props.section.isReact}
             sectionIndex={props.sectionIndex}

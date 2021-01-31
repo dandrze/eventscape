@@ -30,7 +30,7 @@ import FormLabel from "@material-ui/core/FormLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -80,7 +80,9 @@ function Event_Details(props) {
       : props.event.registrationRequired
   );
 
-  const [color, setColor] = useState(props.color ? props.color : "#B0281C");
+  const [color, setColor] = useState(
+    props.event.primaryColor ? props.event.primaryColor : "#B0281C"
+  );
   const [isLoading, setIsloading] = useState(false);
 
   useEffect(() => {
@@ -231,12 +233,12 @@ function Event_Details(props) {
   }
 
   function copyLink() {
-    navigator.clipboard.writeText(eventLink + ".eventscape.io")
+    navigator.clipboard.writeText(eventLink + ".eventscape.io");
     toast.success("Copied to clipboard!", {
       autoClose: 1500,
       pauseOnHover: false,
     });
-  };
+  }
 
   return (
     <div>
@@ -276,7 +278,10 @@ function Event_Details(props) {
                   <InputAdornment position="end">
                     .eventscape.io
                     <Tooltip title="Copy to clipboard">
-                      <FileCopyIcon onClick={copyLink} style={{ marginLeft: "12px", cursor: "pointer" }}/>
+                      <FileCopyIcon
+                        onClick={copyLink}
+                        style={{ marginLeft: "12px", cursor: "pointer" }}
+                      />
                     </Tooltip>
                   </InputAdornment>
                 ),
