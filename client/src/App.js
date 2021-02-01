@@ -66,11 +66,6 @@ function App(props) {
       />
     );
   };
-  if (process.env.NODE_ENV === "development") {
-    const pathName = window.location.pathname.split("/");
-
-    console.log(pathName);
-  }
 
   if (
     path[0] !== "localhost:3000" &&
