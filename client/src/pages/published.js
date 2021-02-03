@@ -27,8 +27,6 @@ const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
 
-  console.log(window.location);
-
   useEffect(() => {
     fetchDataAsync();
   }, []);
@@ -49,8 +47,6 @@ const Published = (props) => {
     // Get user geo location
     try {
       const geoData = await axios.get("https://ipapi.co//187.252.203.71/json");
-
-      console.log(geoData);
 
       var {
         latitude,
@@ -75,9 +71,7 @@ const Published = (props) => {
         transports: ["websocket"],
       });
 
-      socket.on("connect", () => {
-        console.log(socket.id);
-      });
+      socket.on("connect", () => {});
 
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
 

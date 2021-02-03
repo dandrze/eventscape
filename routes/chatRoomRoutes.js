@@ -120,8 +120,6 @@ router.put("/api/chatuser", async (req, res, next) => {
       },
     });
 
-    console.log(dbUser, created);
-
     dbUser.name = name;
     dbUser.save();
 

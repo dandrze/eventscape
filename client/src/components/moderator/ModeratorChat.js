@@ -205,7 +205,6 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
     });
 
     socket.on("refresh", () => {
-      console.log("chat refreshed");
       setMessages([]);
     });
 

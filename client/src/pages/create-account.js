@@ -49,7 +49,6 @@ function Create_Account(props) {
 
   const emailExists = async () => {
     const response = await props.checkEmailExists(emailAddress);
-    console.log(response);
     return response;
   };
 
@@ -81,7 +80,6 @@ function Create_Account(props) {
         lastName,
       });
 
-      console.log(res);
       const auth = await props.signInLocal(emailAddress, password);
       props.history.push("/event-details");
     }
@@ -180,7 +178,12 @@ function Create_Account(props) {
             <button className="Button1" type="submit" onClick={handleSubmit}>
               Create My Account
             </button>
-            <p className="subtext" style={{ marginTop: "8px" }}>Already have an account? <Link to="/login" className="link1">Sign in</Link></p>
+            <p className="subtext" style={{ marginTop: "8px" }}>
+              Already have an account?{" "}
+              <Link to="/login" className="link1">
+                Sign in
+              </Link>
+            </p>
           </div>
         }
       />

@@ -44,7 +44,6 @@ export const createEvent = (
     });
     return true;
   } catch (err) {
-    console.log(err.response);
     toast.error("Error when creating new event: " + err.response.data.message);
     return false;
   }
@@ -60,7 +59,6 @@ export const updateEvent = (
   primaryColor,
   registrationRequired
 ) => async (dispatch, getState) => {
-  console.log(registrationRequired);
   const updatedEvent = {
     title,
     link,
@@ -83,7 +81,6 @@ export const updateEvent = (
     toast.success("Event successfully saved.");
     return true;
   } catch (err) {
-    console.log(err.response);
     toast.error("Error when updating event: " + err.response.data.message);
     return false;
   }
@@ -97,7 +94,6 @@ export const fetchEvent = () => async (dispatch) => {
       dispatch({ type: FETCH_EVENT, payload: event.data });
       return event;
     } else {
-      console.log("no events");
       return null;
     }
   } catch (err) {
@@ -114,7 +110,6 @@ export const fetchEventFromId = (id) => async (dispatch) => {
     dispatch({ type: FETCH_EVENT, payload: event.data });
     return event;
   } else {
-    console.log("no events");
     return null;
   }
 };
@@ -124,10 +119,8 @@ export const publishPage = () => async (dispatch, getState) => {
   await dispatch(saveModel());
 
   const newEvent = { ...getState().event, status: statusOptions.ACTIVE };
-  console.log(newEvent);
 
   try {
-    console.log(newEvent);
     const res = await api.put("/api/event", newEvent);
 
     await dispatch({

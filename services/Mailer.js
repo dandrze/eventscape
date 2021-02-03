@@ -4,7 +4,6 @@ const keys = require("../config/keys");
 sgMail.setApiKey(keys.sendGridKey);
 
 const sendEmail = async (email = { to: "", subject: "", html: "" }) => {
-  console.log(email);
   const { to, subject, html } = email;
   const msg = {
     to,
@@ -99,7 +98,6 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
     }
   }
 
-  console.log("mailer: ", { success, failed });
   return { success, failed };
 };
 

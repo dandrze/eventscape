@@ -35,11 +35,8 @@ export const signInLocal = (username, password) => async (dispatch) => {
 export const fetchUser = () => async (dispatch) => {
   try {
     const res = await api.get("/auth/current-user");
-    console.log(res);
 
     dispatch({ type: FETCH_USER, payload: res.data });
-
-    console.log(res.data);
 
     if (res.data) {
       const s3hash = await api.get("/api/froala/get-s3-signature", {
@@ -71,9 +68,6 @@ export const checkEmailExists = (emailAddress) => async (dispatch) => {
       params: { emailAddress },
     });
 
-    console.log(res.data);
-
-    console.log(Boolean(res.data));
     // if it's empty, send false, if it exists, send true
     return Boolean(res.data);
   } catch (err) {
@@ -88,8 +82,6 @@ export const updateAccountContact = (userId, contactData) => async (
 ) => {
   try {
     const res = await api.put("/api/account", { userId, contactData });
-
-    console.log(res.data);
 
     if (res.data) {
       dispatch({ type: FETCH_USER, payload: res.data });
@@ -111,8 +103,6 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
       oldPassword,
       newPassword,
     });
-
-    console.log(res.data);
 
     toast.success("Password successfully updated!");
 

@@ -132,8 +132,6 @@ const ModeratorDashboard = ({
       params: { roomId: room.id },
     });
 
-    console.log(questions.data);
-
     const history = questions.data.map((question) => {
       return {
         Question: question.text,

@@ -18,8 +18,6 @@ module.exports = (server) => {
   });
 
   io.on("connection", (socket) => {
-    console.log("New client connected");
-
     socket.on(
       "join",
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
@@ -220,8 +218,6 @@ module.exports = (server) => {
       io.to(room).emit("deleteAll");
     });
 
-    socket.on("disconnect", (reason) => {
-      console.log("Client disconnected: " + reason);
-    });
+    socket.on("disconnect", (reason) => {});
   });
 };

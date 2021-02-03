@@ -164,7 +164,6 @@ const EmailList = (props) => {
               editable={{
                 onRowAdd: (newData) =>
                   new Promise(async (resolve) => {
-                    console.log(newData);
                     await props.addToEmailList(newData, props.emailId);
                     fetchData();
                     resolve();

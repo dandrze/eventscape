@@ -55,7 +55,6 @@ export const addRegistration = (
     });
     return true;
   } catch (err) {
-    console.log(err.response);
     toast.error("Error when adding registration: " + err.response.data.message);
     return false;
   }
@@ -115,8 +114,6 @@ export const fetchRegistration = (emailAddress, EventId) => async (
 export const resendRegistrationEmail = (emailAddress, EventId) => async (
   dispatch
 ) => {
-  console.log(emailAddress);
-  console.log(EventId);
   try {
     const res = await api.post("/api/registration/email/resend", {
       emailAddress,

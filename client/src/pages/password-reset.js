@@ -48,7 +48,6 @@ function ResetPassword(props) {
         setEmailNotFound(true);
       }
     } catch (err) {
-      console.log(err.response.data);
       toast.error(
         "Error when requesting password reset: " + err.response.data.message
       );

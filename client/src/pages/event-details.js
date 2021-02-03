@@ -45,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
 function Event_Details(props) {
   const classes = useStyles();
   const defaultTimeZone = momentTZ.tz.guess();
-  console.log(props.event);
 
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState("");
@@ -1074,4 +1073,4 @@ var i;
 for (i = 0; i < timeZonesList.length; i++) { 
 	timezoneMenuItems += "<MenuItem value={'" + timeZonesList[i] + "'}>" + timeZonesList[i] + "</MenuItem>"
 }
-console.log(timezoneMenuItems); */
+ */

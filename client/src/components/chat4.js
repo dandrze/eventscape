@@ -297,7 +297,6 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     });
 
     socket.on("refresh", () => {
-      console.log("chat refreshed");
       setMessages([]);
     });
 

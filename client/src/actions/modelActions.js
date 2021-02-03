@@ -94,7 +94,6 @@ export const saveModel = (page) => async (dispatch, getState) => {
     toast.success("Page successfully saved");
     return res.data;
   } catch (err) {
-    console.log(err.response);
     toast.error("Error when updating event: " + err.response.data.message);
     return false;
   }

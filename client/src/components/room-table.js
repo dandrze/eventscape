@@ -157,7 +157,6 @@ const RoomTable = (props) => {
         editable={{
           onRowAdd: (newData) =>
             new Promise(async (resolve) => {
-              console.log(newData);
               await props.addChatRoom(newData, props.event.id);
               await props.fetchData();
               resolve();

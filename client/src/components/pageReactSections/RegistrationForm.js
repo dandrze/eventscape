@@ -99,7 +99,6 @@ function RegistrationForm(props) {
   };
 
   const handleSubmit = async (values) => {
-    console.log(values);
     // Check to make sure the standard fields are valid first
     if (emailError || !emailAddress) {
       setModalText("Please enter a valid email");

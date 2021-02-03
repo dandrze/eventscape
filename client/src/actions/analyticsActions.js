@@ -6,6 +6,5 @@ export const fetchCurrentVisitors = (EventId) => async (dispatch) => {
     params: { EventId },
   });
 
-  console.log(visitorData.data);
   return visitorData.data;
 };

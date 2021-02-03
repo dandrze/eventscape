@@ -105,12 +105,10 @@ router.get("/auth/validate-token/:token", (req, res) => {
 });
 
 router.post("/auth/change-password-with-token", async (req, res, next) => {
-  console.log(req.body);
   const { newPassword, token } = req.body;
 
   try {
     const payload = jwt.decode(token, keys.jwtSecretKey);
-    console.log(payload);
     const { userId, expiration } = payload;
 
     if (new Date(expiration) < new Date()) {

@@ -20,7 +20,6 @@ module.exports = (server) => {
         },
       });
 
-      console.log({ EventId, uuid, attendeeId, geoData });
       // Save geo data
       siteVisitor.city = geoData.city;
       siteVisitor.country = geoData.country;
@@ -28,8 +27,6 @@ module.exports = (server) => {
       siteVisitor.lat = geoData.lat;
       siteVisitor.long = geoData.long;
       await siteVisitor.save();
-
-      console.log(EventId, siteVisitor.id);
 
       const siteVisit = await SiteVisit.create({
         EventId,

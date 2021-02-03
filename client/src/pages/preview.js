@@ -25,7 +25,6 @@ const Preview = (props) => {
       <style>{theme(props.event.primaryColor)}</style>
       <ul>
         {props.model.sections.map(function (section) {
-          console.log(section);
           return section.isReact ? (
             createElement(mapReactComponent[section.reactComponent.name], {
               ...section.reactComponent.props,

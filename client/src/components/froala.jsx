@@ -44,11 +44,8 @@ const Froala = (props) => {
   const handleModelChange = (model) => {
     // if the user clicked into the div, only then do we update the section
     //the purpose of this check is sometimes froala makes small adjustments on loading which we don't need to treat as an "update"
-    console.log(userClicked);
     if (userClicked) props.updateSection(props.sectionIndex, model);
   };
-
-  console.log(userClicked);
 
   // The entire useEffect hook below simply resets the user clicked state back to false after the model was updated
   // so if there are no further changes, we can navigate away from the page

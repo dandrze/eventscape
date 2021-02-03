@@ -23,7 +23,6 @@ export const fetchEventList = () => async (dispatch) => {
 export const duplicateEvent = (EventId, link) => async (dispatch) => {
   try {
     const response = await api.post("/api/event/duplicate", { EventId, link });
-    console.log(response);
     toast.success("Event successfully duplicated");
     return true;
   } catch (err) {

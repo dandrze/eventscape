@@ -42,7 +42,6 @@ const Registrations = (props) => {
     if (event) {
       props.fetchRegistrations(event.data.id);
       props.fetchRegistrationForm(event.data.id);
-      console.log(event.data);
     }
   };
 
