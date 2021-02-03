@@ -36,7 +36,6 @@ import "froala-editor/css/plugins/image.min.css";
 //import "froala-editor/css/third_party/image_tui.min.css";
 import "froala-editor/css/plugins/table.min.css";
 
-
 import * as actions from "../actions";
 import api from "../api/server";
 
@@ -113,10 +112,7 @@ const Froala = (props) => {
         buttonsVisible: 3,
       },
       moreMisc: {
-        buttons: [
-          "undo",
-          "redo",
-        ],
+        buttons: ["undo", "redo"],
         buttonsVisible: 2,
       },
     },

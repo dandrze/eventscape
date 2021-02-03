@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
-    "server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscapeio) nodemon server.js",
+    "server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-dev) nodemon server.js",
+    "server-withproddb": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-prod) nodemon server.js",
+    "server-withstagingdb": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-staging) nodemon server.js",
     "client": "npm run start --prefix client",
     "heroku-postbuild": "npm install --prefix client && npm run build --prefix client"
   },

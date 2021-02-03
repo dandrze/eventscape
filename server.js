@@ -64,7 +64,7 @@ function start() {
     handleError(err, res);
   });
 
-  if (process.env.NODE_ENV == "production") {
+  if (process.env.NODE_ENV != "development") {
     // if we don't recognize the route, look into the client/build folder
     // will catch things like main.js and main.css
     app.use(express.static("client/build"));
