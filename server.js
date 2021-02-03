@@ -28,7 +28,7 @@ function start() {
   const app = express();
 
   // Force HTTPS
-  app.use(secure);
+  if (process.env.NODE_ENV === "production") app.use(secure);
 
   // Compress to improve page load times
   app.use(compression());
