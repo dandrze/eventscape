@@ -24,11 +24,7 @@ import api from "../api/server";
 const cookies = new Cookies();
 
 const ENDPOINT =
-  window.location.hostname.split(".")[
-    window.location.hostname.split(".").length - 1
-  ] === "localhost"
-    ? "http://localhost:5000/"
-    : "https://eventscape.io/";
+  process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
 
 let socket;
 

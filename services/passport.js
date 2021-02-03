@@ -9,11 +9,13 @@ const saltRounds = 10;
 // this is called after the strategy is complete and when done(null, user) is called
 // it takes the user and then serializes it and puts it into a cookie in the users browser for future server calls
 passport.serializeUser((user, done) => {
+  console.log(user);
   done(null, user.id);
 });
 
 passport.deserializeUser(async (id, done) => {
   const user = await Account.findByPk(id);
+  console.log(user);
 
   done(null, user);
 });
@@ -33,9 +35,7 @@ passport.use(
     }
 
     // compare the password against the hashed password stored in postgres
-    console.log({ password, oldpw: user.password });
     const match = await bcrypt.compare(password, user.password);
-    console.log(match);
 
     if (match) {
       return done(null, user);

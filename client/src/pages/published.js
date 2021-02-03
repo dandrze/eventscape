@@ -17,11 +17,7 @@ import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
 
 const ENDPOINT =
-  window.location.hostname.split(".")[
-    window.location.hostname.split(".").length - 1
-  ] === "localhost"
-    ? "http://localhost:5000/"
-    : "https://eventscape.io/";
+  process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
 
 let socket;
 
@@ -30,6 +26,8 @@ const cookies = new Cookies();
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
+
+  console.log(window.location);
 
   useEffect(() => {
     fetchDataAsync();

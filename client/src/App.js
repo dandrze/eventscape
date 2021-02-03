@@ -46,11 +46,7 @@ function App(props) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (
-      path[0] === "localhost:3000" ||
-      path[0] === "eventscape" ||
-      path[0] === "eventscape-staging"
-    ) {
+    if (path[0] === "localhost:3000" || path[0] === "eventscape") {
       fetchDataAsync();
     }
   }, []);
@@ -74,7 +70,6 @@ function App(props) {
   if (
     path[0] !== "localhost:3000" &&
     path[0] !== "eventscape" &&
-    path[0] !== "eventscape-staging" &&
     path[0] !== "www"
   ) {
     return (

@@ -280,7 +280,14 @@ function NavBar3(props) {
   };
 
   const handleGoToLiveSite = () => {
-    window.open(`https://${props.event.link}.eventscape.io`);
+    switch (process.env.NODE_ENV) {
+      case "development":
+        return window.open(`http://${props.event.link}.localhost:3000`);
+      case "staging":
+        return window.open(`http://${props.event.link}.eventscape.ca`);
+      case "production":
+        return window.open(`https://${props.event.link}.eventscape.io`);
+    }
   };
 
   return (
