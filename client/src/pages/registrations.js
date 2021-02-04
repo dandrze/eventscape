@@ -161,8 +161,9 @@ const Registrations = (props) => {
                 Edit Registration Form
               </button>
               <button
-                className="Button1 button-bar-right"
+                className="Button1"
                 onClick={handleAddReg}
+                style={{ marginLeft: "20px" }}
               >
                 Add Registration
               </button>

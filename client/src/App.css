@@ -452,8 +452,8 @@ select {
 
 .top-button-bar {
   display: flex;
-  margin-bottom: 3rem;
-  margin-top: 0;
+  margin-bottom: 20px;
+  margin-top: 20px;
 }
 
 .button-bar-left {
