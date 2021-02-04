@@ -169,7 +169,7 @@ function App(props) {
           <Route
             exact
             path="/testlivepage"
-            render={(props) => <Published {...props} subdomain={test} />}
+            render={(props) => <Published {...props} subdomain="test" />}
           />
         </Suspense>
       </header>
