@@ -166,7 +166,11 @@ function App(props) {
             path="/change-password/:token"
             component={ChangePassword}
           />
-          <Route exact path="/test" component={Test} />
+          <Route
+            exact
+            path="/testlivepage"
+            render={(props) => <Published {...props} subdomain={test} />}
+          />
         </Suspense>
       </header>
     </div>

@@ -56,6 +56,7 @@ function start() {
   app.use(require("./routes/chatRoomRoutes"));
   app.use(require("./routes/analyticsRoutes"));
   app.use(require("./routes/froalaRoutes"));
+  app.use(require("./routes/testRoutes"));
 
   // universal error handling for all database calls
   app.use((err, req, res, next) => {
