@@ -124,20 +124,18 @@ export const timeDescription = () => {
 };
 */
 
-export const registrationFormDescription = (startTime, endTime) => {
+export const registrationFormDescription = (startTime, endTime, timeZone) => {
   const startTimeParsed = Date.parse(startTime);
   const endTimeParsed = Date.parse(endTime);
 
-  console.log(startTimeParsed);
-  console.log(startTimeParsed);
-
   const endDifferentDay = isSameDay(startTimeParsed, endTimeParsed)
     ? ""
-    : format(endTimeParsed, "MMMM dd, yyyy ");
+    : format(endTimeParsed, "MMMM dd, yyyy ", { timeZone: timeZone });
+
   const timeFormatted =
-    format(startTimeParsed, "MMMM dd, yyyy h:mm a - ") +
+    format(startTimeParsed, "MMMM dd, yyyy h:mm a - ", { timeZone: timeZone }) +
     endDifferentDay +
-    format(endTimeParsed, "h:mm a zzz");
+    format(endTimeParsed, "h:mm a zzz", { timeZone: timeZone });
 
   return `<div class="one" contenteditable="true">
     <p style="margin-top: 0;"><strong><span style="font-size: 30px; text-align: left;">${timeFormatted}</span></strong></p>

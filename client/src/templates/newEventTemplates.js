@@ -16,7 +16,7 @@ import {
   followUp,
 } from "./emailTemplates";
 
-export const regPageModelTemplate = (title, startDate, endDate) => {
+export const regPageModelTemplate = (title, startDate, endDate, timeZone) => {
   return [
     { html: logoHeaderModel(), name: "banner" },
     {
@@ -24,7 +24,7 @@ export const regPageModelTemplate = (title, startDate, endDate) => {
       name: "heroBanner",
     },
     {
-      html: registrationFormDescription(startDate, endDate),
+      html: registrationFormDescription(startDate, endDate, timeZone),
       name: "registration",
       isReact: true,
       reactComponent: registrationFormReact,
@@ -32,7 +32,7 @@ export const regPageModelTemplate = (title, startDate, endDate) => {
   ];
 };
 
-export const eventPageModelTemplate = (title, startDate, endDate) => {
+export const eventPageModelTemplate = (title, startDate, endDate, timeZone) => {
   return [
     {
       html: logoHeaderRightModel(),
