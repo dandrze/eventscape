@@ -58,6 +58,12 @@ function start() {
   app.use(require("./routes/froalaRoutes"));
   app.use(require("./routes/testRoutes"));
 
+  app.get("/loaderio-770148bdcbe788892fafba4a049219a4/", async (req, res) => {
+    file = `${__dirname}/public/loaderio-770148bdcbe788892fafba4a049219a4.txt`;
+
+    res.download(file);
+  });
+
   // universal error handling for all database calls
   app.use((err, req, res, next) => {
     logger.error(err.message);
