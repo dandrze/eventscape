@@ -201,6 +201,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
   const [chatReady, setChatReady] = useState(false);
   const [chatTabEnabled, setChatTabEnabled] = useState(true);
   const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
+  const [reconnect, setReconnect] = useState(false);
 
   // Index numbers for tabs:
   const chatIndex = 0;
@@ -209,14 +210,6 @@ const Chat = ({ room, userId, registrationId, settings }) => {
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
-
-  useEffect(() => {
-    setInterval(() => {
-      console.log(socket);
-    }, 10000);
-
-    console.log(socket);
-  }, []);
 
   useEffect(() => {
     const fetchChatRoomData = async () => {
@@ -317,7 +310,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     socket.emit("join", { userId, registrationId, uuid, room }, (id) => {
       setChatUserId(id);
     });
-  }, []);
+  }, [reconnect]);
 
   const sendMessage = (event) => {
     event.preventDefault();
