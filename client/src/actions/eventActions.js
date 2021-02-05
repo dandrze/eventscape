@@ -28,8 +28,8 @@ export const createEvent = (
     timeZone,
     primaryColor,
     registrationRequired,
-    regPageModel: regPageModelTemplate(title),
-    eventPageModel: eventPageModelTemplate(title, startDate, endDate),
+    regPageModel: regPageModelTemplate(title, startDate, endDate, timeZone),
+    eventPageModel: eventPageModelTemplate(title, startDate, endDate, timeZone),
   };
 
   try {
@@ -70,6 +70,8 @@ export const updateEvent = (
     registrationRequired,
     status: getState().event.status,
   };
+
+  console.log(updatedEvent);
 
   try {
     const res = await api.put("/api/event", updatedEvent);

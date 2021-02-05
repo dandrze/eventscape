@@ -33,6 +33,7 @@ const Analytics = (props) => {
           unique: visitors.uniqueCount,
           visitorData: visitors.visitorData,
           history: visitors.history,
+          loaded: true,
         });
 
         // fetch data again in 10 seconds
@@ -65,33 +66,59 @@ const Analytics = (props) => {
               <div className="UVContainer">
                 <div className="form-box shadow-border currentUV">
                   <h3>Current Unique Viewers</h3>
-                  <h2>{data.current}</h2>
+                  <h2>
+                    {data.loaded ? (
+                      data.current
+                    ) : (
+                      <CircularProgress size={30} />
+                    )}
+                  </h2>
                 </div>
                 <div className="form-box shadow-border totalUV">
                   <h3>Total Unique Viewers</h3>
-                  <h2>{data.unique}</h2>
+                  <h2>
+                    {data.loaded ? data.unique : <CircularProgress size={30} />}
+                  </h2>
                 </div>
               </div>
               <div className="form-box shadow-border" id="uniqueViewersTable">
                 <h3>Unique Viewers over Time</h3>
                 <br></br>
                 <div className="uniqueViewersChart">
-                  <LineChart
-                    data={data.history}
-                    title="Unique Viewers"
-                    color="#B0281C"
-                  />
+                  {data.loaded ? (
+                    <LineChart
+                      data={data.history}
+                      title="Unique Viewers"
+                      color="#B0281C"
+                    />
+                  ) : (
+                    <div style={{ textAlign: "center" }}>
+                      <CircularProgress size={40} className="margin-auto" />
+                    </div>
+                  )}
                 </div>
               </div>
               <div className="shadow-border viewerLocation">
                 <div id="viewerLocationHeader">
                   <h3>Viewer Location</h3>
                 </div>
-                {data.visitorData ? <WorldMap data={data.visitorData} /> : null}
+                {!data.loaded ? (
+                  <div style={{ textAlign: "center" }}>
+                    <CircularProgress size={40} />
+                  </div>
+                ) : data.visitorData ? (
+                  <WorldMap data={data.visitorData} className="margin-auto" />
+                ) : null}
               </div>
               <div className="form-box shadow-border table-box">
                 <h3>Logins</h3>
-                <LoginsTable data={data.visitorData} />
+                {data.loaded ? (
+                  <LoginsTable data={data.visitorData} />
+                ) : (
+                  <div style={{ textAlign: "center" }}>
+                    <CircularProgress size={40} className="margin-auto" />
+                  </div>
+                )}
               </div>
             </div>
           ) : (

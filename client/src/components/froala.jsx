@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 
-import FroalaEditor from "react-froala-wysiwyg";
+import FroalaEditorComponent from "react-froala-wysiwyg";
+import FroalaEditor from "froala-editor";
 
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import "froala-editor/css/froala_style.min.css";
@@ -110,7 +111,7 @@ const Froala = (props) => {
       },
       moreMisc: {
         buttons: ["undo", "redo"],
-        buttonsVisible: 2,
+        buttonsVisible: 3,
       },
     },
     fontFamily: {
@@ -206,9 +207,21 @@ const Froala = (props) => {
     },
   };
 
+  // Custom button to add variables (WIP)
+  FroalaEditor.DefineIcon("startDate", { NAME: "plus", SVG_KEY: "add" });
+  FroalaEditor.RegisterCommand("startDate", {
+    title: "Insert Start Date",
+    focus: true,
+    undo: true,
+    refreshAfterCallback: true,
+    callback: function () {
+      this.html.insert("Event start date");
+    },
+  });
+
   return (
     <div onFocus={handleUserInput}>
-      <FroalaEditor
+      <FroalaEditorComponent
         config={config}
         model={props.html}
         onModelChange={handleModelChange}

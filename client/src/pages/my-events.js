@@ -21,16 +21,13 @@ const My_Events = (props) => {
 
   return (
     <div>
-      <NavBar3 
-        displaySideNav="false" 
-        openBlocked="true"
-      />
+      <NavBar3 displaySideNav="false" openBlocked="true" />
       <div className="my-events-container">
         <div className="top-button-bar">
           <h1 className="button-bar-left my-events-title">My Events</h1>
           <br></br>
-          <Link to="/event-details">
-            <button className="Button1 button-bar-left">Create New Event</button>
+          <Link to="/event-details" className="button-bar-right">
+            <button className="Button1">Create New Event</button>
           </Link>
         </div>
         <Tabs>

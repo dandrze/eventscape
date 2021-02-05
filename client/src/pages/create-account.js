@@ -10,6 +10,8 @@ import { toast } from "react-toastify";
 
 import * as actions from "../actions";
 import { checkEmailExists } from "../actions";
+import CreatePassword from "../components/CreatePassword";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -28,13 +30,12 @@ function Create_Account(props) {
   const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
 
   const [emailErrorText, setEmailErrorText] = useState(false);
   const [firstNameErrorText, setFirstNameErrorText] = useState("");
   const [lastNameErrorText, setLastNameErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
-  const [confirmPasswordErrorText, setConfirmPasswordErrorText] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleChangeEmail = (event) => {
     setEmailAddress(event.target.value);
@@ -44,7 +45,6 @@ function Create_Account(props) {
   const handleChangePassword = (event) => {
     setPassword(event.target.value);
     setPasswordErrorText("");
-    setConfirmPasswordErrorText("");
   };
 
   const emailExists = async () => {
@@ -65,14 +65,10 @@ function Create_Account(props) {
       );
     } else if (!password) {
       setPasswordErrorText("Please enter a password");
-    } else if (!confirmPassword) {
-      setConfirmPasswordErrorText("Please confirm your password");
-    } else if (password != confirmPassword) {
-      setPassword("");
-      setConfirmPassword("");
-      setConfirmPasswordErrorText("Passwords do not match");
-      setPasswordErrorText("Passwords do not match");
+    } else if (password.length < 8) {
+      setPasswordErrorText("Password must be at least 8 characters");
     } else {
+      setIsLoading(true);
       const res = await props.createAccount({
         emailAddress,
         password,
@@ -81,6 +77,7 @@ function Create_Account(props) {
       });
 
       const auth = await props.signInLocal(emailAddress, password);
+      setIsLoading(false);
       props.history.push("/event-details");
     }
   };
@@ -92,12 +89,6 @@ function Create_Account(props) {
   const handleChangeLastName = (event) => {
     setLastName(event.target.value);
     setLastNameErrorText("");
-  };
-
-  const handleChangeConfirmPassword = (event) => {
-    setConfirmPassword(event.target.value);
-    setPasswordErrorText("");
-    setConfirmPasswordErrorText("");
   };
 
   return (
@@ -151,33 +142,21 @@ function Create_Account(props) {
               />
             </FormControl>
             <br></br>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="password"
-                label="Password"
-                variant="outlined"
-                value={password}
-                onChange={handleChangePassword}
-                helperText={passwordErrorText}
-              />
-            </FormControl>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="confirmPassword"
-                label="Confirm Password"
-                variant="outlined"
-                value={confirmPassword}
-                onChange={handleChangeConfirmPassword}
-                helperText={confirmPasswordErrorText}
-              />
-            </FormControl>
+
+            <CreatePassword
+              password={password}
+              onChange={handleChangePassword}
+              helperText={passwordErrorText}
+            />
+
             <br></br>
-            <br></br>
-            <button className="Button1" type="submit" onClick={handleSubmit}>
-              Create My Account
-            </button>
+            {isLoading ? (
+              <CircularProgress />
+            ) : (
+              <button className="Button1" type="submit" onClick={handleSubmit}>
+                Create My Account
+              </button>
+            )}
             <p className="subtext" style={{ marginTop: "8px" }}>
               Already have an account?{" "}
               <Link to="/login" className="link1">

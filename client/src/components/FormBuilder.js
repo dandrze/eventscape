@@ -1,4 +1,4 @@
-import React, { useEffect, createElement } from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import Tooltip from "@material-ui/core/Tooltip";
 
@@ -7,8 +7,10 @@ import { ReactFormBuilder } from "./react-form-builder2/lib";
 import "./react-form-builder2/dist/app.css";
 import Cancel from "../icons/cancel.svg";
 import api from "../api/server";
+import { toast } from "react-toastify";
 
 const FormBuilder = (props) => {
+  const [status, setStatus] = useState("Saved");
   const items = [
     {
       key: "Header",
@@ -103,8 +105,18 @@ const FormBuilder = (props) => {
     },
   ];
 
-  const onPost = (data) => {
-    api.post("/api/form", { data: data.task_data, event: props.event.id });
+  const onPost = async (data) => {
+    try {
+      setStatus("Saving");
+      const res = await api.post("/api/form", {
+        data: data.task_data,
+        event: props.event.id,
+      });
+      setStatus("Saved");
+    } catch (err) {
+      setStatus("Error");
+      toast.error("Error when updating form: " + err.response.data.message);
+    }
   };
 
   const onLoad = async () => {
@@ -118,7 +130,19 @@ const FormBuilder = (props) => {
     <div className="form-builder-container">
       <div className="registration-modal-navbar">
         <div id="form-builder-status">
-          Status: <span style={{ color: "green" }}>Saved</span>
+          Status:{" "}
+          <span
+            style={{
+              color:
+                status === "Saved"
+                  ? "green"
+                  : status === "Saving"
+                  ? "orange"
+                  : "red",
+            }}
+          >
+            {status}
+          </span>
         </div>
       </div>
       <ReactFormBuilder onPost={onPost} onLoad={onLoad} toolbarItems={items} />

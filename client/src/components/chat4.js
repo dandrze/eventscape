@@ -145,7 +145,7 @@ const StyledTab = withStyles((theme) => ({
   selected: {},
 }))((props) => <Tab disableRipple {...props} />);
 
-const Input = ({ setMessage, sendMessage, message, theme, sendLoading }) => (
+const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
   <form className="form">
     <input
       className="input width-80"
@@ -156,19 +156,16 @@ const Input = ({ setMessage, sendMessage, message, theme, sendLoading }) => (
       onKeyPress={(event) =>
         event.key === "Enter" ? sendMessage(event) : null
       }
-      disabled={sendLoading}
+      disabled={!chatReady}
     />
-    {sendLoading ? (
-      <CircularProgress style={{ margin: "auto" }} />
-    ) : (
-      <button
-        className="theme-button send-button width-20"
-        style={theme}
-        onClick={(e) => sendMessage(e)}
-      >
-        <TelegramIcon />
-      </button>
-    )}
+
+    <button
+      className="theme-button send-button width-20"
+      style={theme}
+      onClick={(e) => sendMessage(e)}
+    >
+      <TelegramIcon />
+    </button>
   </form>
 );
 
@@ -201,9 +198,10 @@ const Chat = ({ room, userId, registrationId, settings }) => {
   const [question, setQuestion] = useState("");
   const [chatHidden, setChatHidden] = useState(false);
   const [tabValue, setTabValue] = React.useState(0);
-  const [sendLoading, setSendLoading] = useState(false);
+  const [chatReady, setChatReady] = useState(false);
   const [chatTabEnabled, setChatTabEnabled] = useState(true);
   const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
+  const [reconnect, setReconnect] = useState(false);
 
   // Index numbers for tabs:
   const chatIndex = 0;
@@ -232,6 +230,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     });
     socket.on("connect", () => {
       console.log("Connected to socket");
+      setChatReady(true);
     });
     socket.on("connect_error", (error) => {
       setMessages((messages) => [
@@ -311,16 +310,16 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     socket.emit("join", { userId, registrationId, uuid, room }, (id) => {
       setChatUserId(id);
     });
-  }, []);
+  }, [reconnect]);
 
   const sendMessage = (event) => {
     event.preventDefault();
 
-    if (message) {
-      setSendLoading(true);
+    if (message && chatReady) {
+      setChatReady(false);
       socket.emit("sendMessage", { chatUserId, room, message }, () => {
         setMessage("");
-        setSendLoading(false);
+        setChatReady(true);
       });
     }
   };
@@ -387,7 +386,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
                 message={message}
                 setMessage={setMessage}
                 sendMessage={sendMessage}
-                sendLoading={sendLoading}
+                chatReady={chatReady}
               />
             </>
           </TabPanel>
