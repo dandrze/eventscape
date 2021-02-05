@@ -78,7 +78,7 @@ function Create_Account(props) {
 
       const auth = await props.signInLocal(emailAddress, password);
       setIsLoading(false);
-      props.history.push("/event-details");
+      props.history.push("/app/event-details");
     }
   };
   const handleChangeFirstName = (event) => {
