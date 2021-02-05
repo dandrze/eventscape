@@ -85,7 +85,7 @@ function Event_Details(props) {
   const [isLoading, setIsloading] = useState(false);
 
   useEffect(() => {
-    if (!props.selectedStartDate) {
+    if (!props.event.startDate) {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() + 7);
       startDate.setHours(18);
@@ -93,7 +93,7 @@ function Event_Details(props) {
       setSelectedStartDate(startDate);
     }
 
-    if (!props.selectedEndDate) {
+    if (!props.event.startDate) {
       const endDate = new Date();
       endDate.setDate(endDate.getDate() + 7);
       endDate.setHours(21);

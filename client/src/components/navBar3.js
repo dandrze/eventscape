@@ -552,7 +552,7 @@ function NavBar3(props) {
                   button
                   key="design"
                   className={clsx({
-                    [classes.highlight]: highlight === "analytics",
+                    [classes.highlight]: highlight === "design",
                   })}
                 >
                   <Tooltip title="Design">

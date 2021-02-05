@@ -307,6 +307,8 @@ router.put("/api/event", async (req, res, next) => {
     registrationRequired,
   } = req.body;
 
+  console.log(startDate, endDate);
+
   try {
     const event = await Event.findOne({
       where: { AccountId: userId, isCurrent: true },
@@ -323,6 +325,8 @@ router.put("/api/event", async (req, res, next) => {
     event.registrationRequired = registrationRequired;
 
     await event.save();
+
+    console.log(event);
 
     res.send(event);
   } catch (error) {

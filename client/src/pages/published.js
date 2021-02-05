@@ -107,7 +107,7 @@ const Published = (props) => {
       return <RegistrationNotFound />;
     } else if (props.event.id) {
       return (
-        <div className="fr-view live-page-container">
+        <div>
           <Helmet>
             <title>{props.event.title}</title>
           </Helmet>
@@ -136,7 +136,7 @@ const Published = (props) => {
     }
   };
 
-  return <div>{renderPage()}</div>;
+  return <div className="fr-view live-page-container">{renderPage()}</div>;
 };
 
 const mapStateToProps = (state) => {

@@ -8,6 +8,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 
 import * as actions from "../actions";
+import CreatePassword from "../components/CreatePassword";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -24,7 +25,7 @@ function AccountSettingsPassword(props) {
 
   const [currentPassword, setCurrentPassword] = React.useState("");
   const [newPassword, setNewPassword] = React.useState("");
-  const [confirmNewPassword, setConfirmNewPassword] = React.useState("");
+  const [helperText, setHelperText] = React.useState("");
 
   const handleChangeCurrentPassword = (event) => {
     setCurrentPassword(event.target.value);
@@ -34,26 +35,18 @@ function AccountSettingsPassword(props) {
     setNewPassword(event.target.value);
   };
 
-  const handleChangeConfirmNewPassword = (event) => {
-    setConfirmNewPassword(event.target.value);
-  };
-
   const handleSubmit = async () => {
-    if (newPassword === confirmNewPassword) {
-      const response = await props.updatePassword(
-        props.user.id,
-        currentPassword,
-        newPassword
-      );
-      if (response) {
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmNewPassword("");
-      }
-    } else {
-      toast.error("New passwords do not match");
+    if (newPassword.length < 8)
+      return setHelperText("New password must be at least 8 characters");
+    const response = await props.updatePassword(
+      props.user.id,
+      currentPassword,
+      newPassword
+    );
+    if (response) {
+      setCurrentPassword("");
       setNewPassword("");
-      setConfirmNewPassword("");
+      setHelperText("");
     }
   };
 
@@ -78,27 +71,12 @@ function AccountSettingsPassword(props) {
               />
             </FormControl>
             <br></br>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="new-password"
-                label="New Password"
-                variant="outlined"
-                value={newPassword}
-                onChange={handleChangeNewPassword}
-              />
-            </FormControl>
-            <br></br>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="confirm-new-password"
-                label="Confirm New Password"
-                variant="outlined"
-                value={confirmNewPassword}
-                onChange={handleChangeConfirmNewPassword}
-              />
-            </FormControl>
+            <CreatePassword
+              password={newPassword}
+              onChange={handleChangeNewPassword}
+              helperText={helperText}
+            />
+
             <br></br>
             <br></br>
             <button className="Button1" type="submit" onClick={handleSubmit}>

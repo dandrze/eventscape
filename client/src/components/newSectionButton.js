@@ -214,7 +214,11 @@ const NewSectionButton = (props) => {
                         onClick={async () => {
                           handleClose();
                           await handleAddSection(
-                            registrationFormDescription(),
+                            registrationFormDescription(
+                              props.event.startDate,
+                              props.event.endDate,
+                              props.event.timeZone
+                            ),
                             true,
                             registrationFormReact
                           );

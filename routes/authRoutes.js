@@ -55,7 +55,7 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
     });
     if (account) {
       const expiration = new Date();
-      expiration.setMinutes(expiration.getMinutes() + 2);
+      expiration.setMinutes(expiration.getMinutes() + 30);
 
       const payload = { userId: account.id, expiration };
       const secret = keys.jwtSecretKey;
@@ -92,10 +92,13 @@ router.get("/auth/validate-token/:token", (req, res) => {
 
   try {
     const payload = jwt.decode(token, keys.jwtSecretKey);
+    console.log(payload);
 
     const { userId, expiration } = payload;
 
     if (new Date(expiration) < new Date()) {
+      console.log(new Date(expiration).toLocaleString());
+      console.log(new Date().toLocaleString());
       return res.status(400).json({ message: "expired" });
     }
     return res.status(200).json({ isValid: true });
@@ -112,6 +115,8 @@ router.post("/auth/change-password-with-token", async (req, res, next) => {
     const { userId, expiration } = payload;
 
     if (new Date(expiration) < new Date()) {
+      console.log(new Date(expiration));
+      console.log(new Date());
       return res.status(500).json({ message: "Password reset link expired" });
     }
 

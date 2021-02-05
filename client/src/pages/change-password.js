@@ -14,6 +14,7 @@ import WarningIcon from "@material-ui/icons/Warning";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 
 import * as actions from "../actions";
+import CreatePassword from "../components/CreatePassword";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,11 +27,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function ChangePassword(props) {
-  const classes = useStyles();
   const { token } = useParams();
 
   const [newPassword, setNewPassword] = React.useState("");
-  const [newPasswordConfirm, setNewPasswordConfirm] = React.useState("");
   const [isLoading, setIsloading] = useState(true);
   const [tokenIsInvalid, setTokenIsInvalid] = useState(true);
   const [passwordUpdated, setPasswordUpdated] = useState(false);
@@ -60,16 +59,9 @@ function ChangePassword(props) {
     setPasswordErrorText("");
   };
 
-  const handleChangeNewPasswordConfirm = (event) => {
-    setNewPasswordConfirm(event.target.value);
-    setPasswordErrorText("");
-  };
-
   const handleSubmit = async () => {
-    if (newPassword != newPasswordConfirm) {
-      setNewPassword("");
-      setNewPasswordConfirm("");
-      setPasswordErrorText("Passwords do not match");
+    if (newPassword.length < 8) {
+      setPasswordErrorText("Password must be at least 8 characters");
     } else {
       setIsloading(true);
       try {
@@ -140,29 +132,12 @@ function ChangePassword(props) {
             ) : (
               <>
                 <h2>Change password</h2>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <TextField
-                    type="password"
-                    id="password"
-                    label="New Password"
-                    variant="outlined"
-                    value={newPassword}
-                    onChange={handleChangeNewPassword}
-                    helperText={passwordErrorText}
-                  />
-                </FormControl>
-                <FormControl variant="outlined" className={classes.formControl}>
-                  <TextField
-                    type="password"
-                    id="password-confirm"
-                    label="Confirm New Password"
-                    variant="outlined"
-                    value={newPasswordConfirm}
-                    onChange={handleChangeNewPasswordConfirm}
-                    helperText={passwordErrorText}
-                  />
-                </FormControl>
-                <br></br>
+                <CreatePassword
+                  password={newPassword}
+                  onChange={handleChangeNewPassword}
+                  helperText={passwordErrorText}
+                />
+
                 <br></br>
                 <button
                   className="Button1"
