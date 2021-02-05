@@ -32,6 +32,8 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 
+import LongLoadingScreen from "../components/LongLoadingScreen";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
@@ -219,16 +221,12 @@ function Event_Details(props) {
     }
     setIsloading(false);
 
-    if (response && !props.isEventUpdate) props.history.push("/design/event");
+    if (response && !props.isEventUpdate)
+      props.history.push("/app/design/event");
   };
 
   if (isLoading && !props.isEventUpdate) {
-    return (
-      <div className="form-box shadow-border">
-        <p>Hang tight! We are building your event.</p>
-        <CircularProgress />
-      </div>
-    );
+    return <LongLoadingScreen text="Hang tight! We are building your event." />;
   }
 
   function copyLink() {

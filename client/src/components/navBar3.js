@@ -344,7 +344,7 @@ function NavBar3(props) {
               </Tooltip>
 
               <Tooltip title="Change Event">
-                <Link to="/my-events">
+                <Link to="/app/my-events">
                   <div className="current_event_container">
                     <Typography
                       className={classes.currentEvent}
@@ -415,7 +415,7 @@ function NavBar3(props) {
             <Divider />
 
             {displaySideNav === "false" && (
-              <Link to="/design/event">
+              <Link to="/app/design/event">
                 <StyledMenuItem>
                   <ListItemIcon>
                     <ArrowBackIcon fontSize="small" />
@@ -425,7 +425,7 @@ function NavBar3(props) {
               </Link>
             )}
 
-            <Link to="/my-events">
+            <Link to="/app/my-events">
               <StyledMenuItem>
                 <ListItemIcon>
                   <ListIcon fontSize="small" />
@@ -434,7 +434,7 @@ function NavBar3(props) {
               </StyledMenuItem>
             </Link>
 
-            <Link to="/account-settings-contact">
+            <Link to="/app/account-settings-contact">
               <StyledMenuItem>
                 <ListItemIcon>
                   <SettingsIcon fontSize="small" />
@@ -486,7 +486,7 @@ function NavBar3(props) {
           </div>
           <Divider />
           <List>
-            <Link to="/website-settings">
+            <Link to="/app/website-settings">
               <ListItem
                 button
                 key="event-details"
@@ -523,7 +523,7 @@ function NavBar3(props) {
                 <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
                   <List component="div" disablePadding>
                     {/* Registration Page */}
-                    <Link to="/design/registration">
+                    <Link to="/app/design/registration">
                       <ListItem
                         button
                         className={classes.nested}
@@ -534,7 +534,7 @@ function NavBar3(props) {
                     </Link>
 
                     {/* Event Page */}
-                    <Link to="/design/event">
+                    <Link to="/app/design/event">
                       <ListItem
                         button
                         className={classes.nested}
@@ -547,7 +547,7 @@ function NavBar3(props) {
                 </Collapse>{" "}
               </>
             ) : (
-              <Link to="/design">
+              <Link to="/app/design">
                 <ListItem
                   button
                   key="design"
@@ -565,7 +565,7 @@ function NavBar3(props) {
               </Link>
             )}
 
-            <Link to="/communication">
+            <Link to="/app/communication">
               <ListItem
                 button
                 key="communicate"
@@ -582,7 +582,7 @@ function NavBar3(props) {
               </ListItem>
             </Link>
             {props.event.registrationRequired ? (
-              <Link to="/registrations">
+              <Link to="/app/registrations">
                 <ListItem
                   button
                   key="registrations"
@@ -599,7 +599,7 @@ function NavBar3(props) {
                 </ListItem>
               </Link>
             ) : null}
-            <Link to="/analytics">
+            <Link to="/app/analytics">
               <ListItem
                 button
                 key="analytics"
@@ -615,7 +615,7 @@ function NavBar3(props) {
                 <ListItemText primary="Analytics" />
               </ListItem>
             </Link>
-            <Link to="/messaging">
+            <Link to="/app/messaging">
               <ListItem
                 button
                 key="messaging"
@@ -662,7 +662,7 @@ function NavBar3(props) {
           <Divider />
           <List>
             {/* Contact */}
-            <Link to="/account-settings-contact">
+            <Link to="/app/account-settings-contact">
               <ListItem
                 button
                 key="contact"
@@ -681,7 +681,7 @@ function NavBar3(props) {
             </Link>
 
             {/* Password */}
-            <Link to="/account-settings-password">
+            <Link to="/app/account-settings-password">
               <ListItem
                 button
                 key="password"
@@ -700,7 +700,7 @@ function NavBar3(props) {
             </Link>
 
             {/* Billing and Payments */}
-            <Link to="/account-settings-payments">
+            <Link to="/app/account-settings-payments">
               <ListItem
                 button
                 key="payments"

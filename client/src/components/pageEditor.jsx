@@ -95,7 +95,7 @@ const PageEditor = (props) => {
           <Link
             className="button-bar-left"
             to={() =>
-              "/preview/" +
+              "/app/preview/" +
               props.event.id +
               "/" +
               (props.page == pageNames.REGISTRATION

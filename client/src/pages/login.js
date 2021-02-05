@@ -7,6 +7,7 @@ import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
 import SimpleNavBar from "../components/simpleNavBar";
+import LongLoadingScreen from "../components/LongLoadingScreen";
 
 import * as actions from "../actions";
 
@@ -40,17 +41,12 @@ function Login(props) {
     const isAuth = await props.signInLocal(email, password);
     setIsloading(false);
     if (isAuth.success) {
-      props.history.push("/design");
+      props.history.push("/app/design");
     }
   };
 
   if (isLoading) {
-    return (
-      <div className="form-box shadow-border">
-        <p>Signing In...</p>
-        <CircularProgress />
-      </div>
-    );
+    return <LongLoadingScreen text="Signing In..." />;
   }
 
   return (

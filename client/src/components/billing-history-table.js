@@ -149,7 +149,7 @@ const BillingHistoryTable = (props) => {
         await props.fetchEvent();
         props.setLoaded(true);
 
-        props.history.push("/design/event");
+        props.history.push("/app/design/event");
       },
     },
     {
