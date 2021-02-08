@@ -69,7 +69,7 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
       contact us
       </a> immediately.</p>
   
-      <a href="https://eventscape.io/change-password/${token}">Create New Password</a>
+      <a href="https://app.eventscape.io/change-password/${token}">Create New Password</a>
       `;
 
       sendEmail({
