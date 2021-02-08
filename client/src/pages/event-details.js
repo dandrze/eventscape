@@ -221,8 +221,7 @@ function Event_Details(props) {
     }
     setIsloading(false);
 
-    if (response && !props.isEventUpdate)
-      props.history.push("/app/design/event");
+    if (response && !props.isEventUpdate) props.history.push("/design/event");
   };
 
   if (isLoading && !props.isEventUpdate) {

@@ -15,6 +15,7 @@ import mapReactComponent from "../components/mapReactComponent";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
+import LongLoadingScreen from "../components/LongLoadingScreen";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -87,56 +88,54 @@ const Published = (props) => {
           countryCode: country_code,
         },
       });
-
-      setInterval(() => {
-        socket.emit("pingVisit");
-      }, 15000);
     }
 
     setIsLoaded(true);
   };
 
-  const renderPage = () => {
-    // if there is a hash provided but no attendee found, display an error page
-    if (!isLoaded) {
-      return <CircularProgress />;
-    } else if (!props.event.id) {
-      return <p>No Event Found</p>;
-    } else if (hash && !props.attendee) {
-      // if there is a hash but no attendee returned
-      return <RegistrationNotFound />;
-    } else if (props.event.id) {
-      return (
-        <div>
-          <Helmet>
-            <title>{props.event.title}</title>
-          </Helmet>
-          <style>{theme(props.event.primaryColor)}</style>
-          <ul>
-            {props.model.sections.map(function (section) {
-              return section.isReact ? (
-                createElement(mapReactComponent[section.reactComponent.name], {
-                  ...section.reactComponent.props,
-                  sectionIndex: section.index,
-                  isLive: true,
-                })
-              ) : (
-                <FroalaEditorView
-                  key={section.id}
-                  model={section.html.replace(
-                    `contenteditable="true"`,
-                    `contenteditable="false"`
-                  )}
-                />
-              );
-            })}
-          </ul>
-        </div>
-      );
-    }
-  };
-
-  return <div className="fr-view live-page-container">{renderPage()}</div>;
+  // if there is a hash provided but no attendee found, display an error page
+  if (!isLoaded) {
+    return (
+      <LongLoadingScreen text="Hang tight! You are now joining the event..." />
+    );
+  } else if (!props.event.id) {
+    return (
+      <>
+        <p>Invalid Link. Please check your link and try again. </p>
+      </>
+    );
+  } else if (hash && !props.attendee) {
+    // if there is a hash but no attendee returned
+    return <RegistrationNotFound />;
+  } else if (props.event.id) {
+    return (
+      <div className="fr-view live-page-container">
+        <Helmet>
+          <title>{props.event.title}</title>
+        </Helmet>
+        <style>{theme(props.event.primaryColor)}</style>
+        <ul>
+          {props.model.sections.map(function (section) {
+            return section.isReact ? (
+              createElement(mapReactComponent[section.reactComponent.name], {
+                ...section.reactComponent.props,
+                sectionIndex: section.index,
+                isLive: true,
+              })
+            ) : (
+              <FroalaEditorView
+                key={section.id}
+                model={section.html.replace(
+                  `contenteditable="true"`,
+                  `contenteditable="false"`
+                )}
+              />
+            );
+          })}
+        </ul>
+      </div>
+    );
+  }
 };
 
 const mapStateToProps = (state) => {

@@ -19,3 +19,4 @@ dev.js
 
 combined.log
 error.log
+newrelic_agent.log

@@ -41,7 +41,7 @@ function Login(props) {
     const isAuth = await props.signInLocal(email, password);
     setIsloading(false);
     if (isAuth.success) {
-      props.history.push("/app/design");
+      props.history.push("/design");
     }
   };
 

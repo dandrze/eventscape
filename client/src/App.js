@@ -1,5 +1,5 @@
 import React, { lazy, Suspense, useState, useEffect } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -64,16 +64,61 @@ function App(props) {
     }
   };
 
-  if (
-    path[0] !== "localhost:3000" &&
-    path[0] !== "eventscape" &&
-    path[0] !== "www"
-  ) {
+  if (path[0] === "app") {
     return (
       <div className="App">
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
-          <Suspense fallback={<CircularProgress />}>
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  backgroundColor: "#f8f8f8",
+                  width: "100%",
+                  height: "100%",
+                }}
+              ></div>
+            }
+          >
+            <Switch>
+              <Route exact path="/login" component={Login} />
+              <Route exact path="/create-account" component={Create_Account} />
+              <Route exact path="/reset-password" component={ResetPassword} />
+              <Route exact path="/ScotiabankGillerPrize" component={Giller} />
+              <Route
+                exact
+                path="/change-password/:token"
+                component={ChangePassword}
+              />
+              <Route
+                exact
+                path="/testlivepage"
+                render={(props) => <Published {...props} subdomain="test" />}
+              />
+
+              {/* Because we're using a switch, only one route will load. If the route doesn't match any of the public routes, then go to the internal app*/}
+              <Route component={requireAuth} />
+            </Switch>
+          </Suspense>
+        </header>
+      </div>
+    );
+  } else {
+    return (
+      <div className="App">
+        <ToastContainer position="top-right" autoClose={3000} />
+        <header className="App-header">
+          <Suspense
+            fallback={
+              <div
+                style={{
+                  backgroundColor: "#f8f8f8",
+                  width: "100%",
+                  height: "100%",
+                }}
+              ></div>
+            }
+          >
             <Route
               exact
               path="/"
@@ -88,33 +133,6 @@ function App(props) {
       </div>
     );
   }
-
-  return (
-    <div className="App">
-      <ToastContainer position="top-right" autoClose={3000} />
-      <header className="App-header">
-        <Suspense fallback={<CircularProgress />}>
-          <Route exact path="/" component={Landing} />
-          <Route exact path="/login" component={Login} />
-          <Route exact path="/create-account" component={Create_Account} />
-          <Route exact path="/reset-password" component={ResetPassword} />
-          <Route exact path="/ScotiabankGillerPrize" component={Giller} />
-          <Route
-            exact
-            path="/change-password/:token"
-            component={ChangePassword}
-          />
-          <Route
-            exact
-            path="/testlivepage"
-            render={(props) => <Published {...props} subdomain="test" />}
-          />
-        </Suspense>
-
-        <Route path="/app" component={requireAuth} />
-      </header>
-    </div>
-  );
 }
 
 const mapStateToProps = (state) => {

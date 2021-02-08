@@ -7,6 +7,7 @@ const {
   Account,
   Registration,
 } = require("../db").models;
+const logger = require("./winston");
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -21,6 +22,7 @@ module.exports = (server) => {
     socket.on(
       "join",
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
+        const startTime = new Date();
         const chatRoom = await ChatRoom.findByPk(room);
 
         const messageHistory = await ChatMessage.findAll({
@@ -102,6 +104,7 @@ module.exports = (server) => {
           });
         }
 
+        logger.info("Chat Socket Join Took" + new Date() - startTime + "ms");
         callback(user.id);
       }
     );

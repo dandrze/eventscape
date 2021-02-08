@@ -157,7 +157,7 @@ const Table = (props) => {
         await props.fetchEvent();
         props.setLoaded(true);
 
-        props.history.push("/app/design/event");
+        props.history.push("/design/event");
       },
     },
     {
