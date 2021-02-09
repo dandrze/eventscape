@@ -123,6 +123,7 @@ router.post("/auth/change-password-with-token", async (req, res, next) => {
     const account = await Account.findByPk(userId);
     account.password = await bcrypt.hashSync(newPassword, saltRounds);
     await account.save();
+    clearCache(`Account:${account.id}:pk`);
 
     return res.status(200).send(true);
   } catch {
@@ -149,6 +150,7 @@ router.put("/auth/change-password", async (req, res, next) => {
 
     account.password = hashedPassword;
     account.save();
+    clearCache(`Account:id:${account.id}`);
 
     res.status(200).send(account);
   } catch (error) {

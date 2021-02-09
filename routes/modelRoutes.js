@@ -1,15 +1,21 @@
 const express = require("express");
-const { PageSection } = require("../db").models;
+const { PageSection, PageSectionCached } = require("../db").models;
+const { clearCache } = require("../services/redis");
 
 const router = express.Router();
 
 router.get("/api/model/id", async (req, res, next) => {
   const { id } = req.query;
   try {
-    const pageSections = await PageSection.findAll({
+    const pageSectionCacheKey = `PageSection:PageModelId:${id}`;
+    const [
+      pageSections,
+      pageSectionCacheHit,
+    ] = await PageSectionCached.findAllCached(pageSectionCacheKey, {
       where: { PageModelId: id },
       order: [["index", "ASC"]],
     });
+    if (pageSectionCacheHit) console.log("Cache Hit: " + pageSectionCacheKey);
 
     res.status(200).send(pageSections);
   } catch (error) {
@@ -19,11 +25,15 @@ router.get("/api/model/id", async (req, res, next) => {
 
 router.put("/api/model", async (req, res, next) => {
   const { model } = req.body;
+  const PageModelId = model[0].PageModelId;
 
   try {
-    // first delete the old model
+    // clear the cache
+    console.log(PageModelId);
+    clearCache(`PageSection:PageModelId:${PageModelId}`);
+    //  delete the old model
     await PageSection.destroy({
-      where: { PageModelId: model[0].PageModelId },
+      where: { PageModelId },
     });
 
     // then write the newly updated model

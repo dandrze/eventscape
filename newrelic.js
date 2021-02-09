@@ -1,7 +1,9 @@
 "use strict";
 const keys = require("./config/keys");
 const appName =
-  process.env.NODE_ENV === "production" ? "eventscape" : "eventscape-staging";
+  process.env.NODE_ENV === "production"
+    ? "eventscape-prod"
+    : "eventscape-staging";
 /**
  * New Relic agent configuration.
  *

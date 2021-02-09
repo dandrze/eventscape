@@ -8,12 +8,4 @@ const Account = sequelize.define("Account", {
   password: Sequelize.TEXT,
 });
 
-/*
-Account.findByPkCached = async function (pk) {
-  console.log("cached called");
-
-  return await this.findByPk(pk);
-};
-*/
-
 module.exports = Account;

@@ -8,6 +8,8 @@ const {
   Registration,
 } = require("../db").models;
 
+const { clearCache } = require("../services/redis");
+
 router.get("/api/chatroom/default", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
   const { event } = req.query;
@@ -196,6 +198,7 @@ router.put("/api/chatroom/tab-set-enabled", async (req, res, next) => {
     chatRoom.chatEnabled = chatEnabled;
     chatRoom.questionsEnabled = questionsEnabled;
     await chatRoom.save();
+    clearCache(`ChatRoom:id:${chatRoom.id}`);
 
     res.status(200).send(chatRoom);
   } catch (error) {

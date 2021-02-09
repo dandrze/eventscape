@@ -196,11 +196,11 @@ const Chat = ({ room, userId, registrationId, settings }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
-  const [chatHidden, setChatHidden] = useState(false);
+  const [chatHidden, setChatHidden] = useState(true);
   const [tabValue, setTabValue] = React.useState(0);
   const [chatReady, setChatReady] = useState(false);
-  const [chatTabEnabled, setChatTabEnabled] = useState(true);
-  const [questionsTabEnabled, setQuestionsTabEnabled] = useState(true);
+  const [chatTabEnabled, setChatTabEnabled] = useState(false);
+  const [questionsTabEnabled, setQuestionsTabEnabled] = useState(false);
   const [reconnect, setReconnect] = useState(false);
 
   // Index numbers for tabs:
@@ -216,6 +216,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       const chatRoom = await api.get("/api/chatroom/id", {
         params: { roomId: room },
       });
+      console.log(chatRoom.data);
 
       setChatTabEnabled(chatRoom.data.chatEnabled);
       setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
@@ -361,7 +362,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
             indicatorColor="secondary"
             variant="fullWidth"
           >
-            {chatTabEnabled && !chatHidden && (
+            {!chatHidden && chatTabEnabled && (
               <StyledTab label="Chat" {...a11yProps(chatIndex)} />
             )}
             {questionsTabEnabled && (
@@ -369,7 +370,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
             )}
           </StyledTabs>
         </div>
-        {chatTabEnabled && !chatHidden && (
+        {!chatHidden && chatTabEnabled && (
           <TabPanel
             value={tabValue}
             index={chatIndex}

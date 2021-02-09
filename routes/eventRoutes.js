@@ -7,11 +7,14 @@ const {
   ChatRoom,
   ChatUser,
   Event,
+  EventCached,
   PageModel,
   PageSection,
   Communication,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
+
+const { clearCache } = require("../services/redis");
 
 router.post("/api/event", async (req, res, next) => {
   const {
@@ -233,6 +236,7 @@ router.put("/api/event/id/make-current", async (req, res, next) => {
     const event = await Event.findByPk(id);
     event.isCurrent = true;
     await event.save();
+    clearCache(`Event:link:${event.link}`);
 
     res.status(200).send();
   } catch (error) {
@@ -268,9 +272,15 @@ router.get("/api/event/link", async (req, res, next) => {
   const { link } = req.query;
 
   try {
-    const event = await Event.findOne({
-      where: { link, status: statusOptions.ACTIVE },
-    });
+    const eventCacheKey = `Event:link:${link}`;
+    const [event, eventCacheHit] = await EventCached.findOneCached(
+      eventCacheKey,
+      {
+        where: { link, status: statusOptions.ACTIVE },
+      }
+    );
+
+    if (eventCacheHit) console.log("Cache Hit: " + eventCacheKey);
 
     res.status(200).send(event);
   } catch (error) {
@@ -285,6 +295,7 @@ router.put("/api/event/id/status", async (req, res, next) => {
     const event = await Event.findByPk(id);
     event.status = status;
     await event.save();
+    clearCache(`Event:link:${event.link}`);
 
     res.send(event);
   } catch (error) {
@@ -311,6 +322,7 @@ router.put("/api/event", async (req, res, next) => {
     const event = await Event.findOne({
       where: { AccountId: userId, isCurrent: true },
     });
+    clearCache(`Event:link:${event.link}`);
 
     event.title = title;
     event.link = link;

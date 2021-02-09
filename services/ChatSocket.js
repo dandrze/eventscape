@@ -1,13 +1,17 @@
 var socketIo = require("socket.io");
 const {
   ChatRoom,
+  ChatRoomCached,
   ChatUser,
   ChatMessage,
+  ChatMessageCached,
   ChatQuestion,
   Account,
   Registration,
 } = require("../db").models;
 const logger = require("./winston");
+
+const { clearCache } = require("../services/redis");
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -23,9 +27,21 @@ module.exports = (server) => {
       "join",
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
         const startTime = new Date();
-        const chatRoom = await ChatRoom.findByPk(room);
 
-        const messageHistory = await ChatMessage.findAll({
+        // Get the chat room. If the chatroom is cached, pull that.
+        const chatRoomCacheKey = `ChatRoom:id:${room}`;
+        const [
+          chatRoom,
+          chatRoomCacheHit,
+        ] = await ChatRoomCached.findByPkCached(chatRoomCacheKey, room);
+        if (chatRoomCacheHit) console.log("Cache hit: " + chatRoomCacheKey);
+
+        // Find all chat messages for a room. If there is a cached version of this query, then pull that instead
+        const messageHistoryCacheKey = `ChatRoom:MessageHistory:${room}`;
+        const [
+          messageHistory,
+          messageHistoryCacheHit,
+        ] = await ChatMessageCached.findAllCached(messageHistoryCacheKey, {
           where: { ChatRoomId: room },
           order: [["id", "ASC"]],
           include: ChatUser,
@@ -104,7 +120,15 @@ module.exports = (server) => {
           });
         }
 
-        logger.info("Chat Socket Join Took" + new Date() - startTime + "ms");
+        const duration = new Date() - startTime;
+
+        logger.info(
+          JSON.stringify({
+            chatJoinLoadTime: duration,
+            chatRoomCacheHit,
+            messageHistoryCacheHit,
+          })
+        );
         callback(user.id);
       }
     );
@@ -148,6 +172,9 @@ module.exports = (server) => {
           text: message,
           ChatUserId: chatUserId,
         });
+
+        // Now that there is a new message, the chatroom history cached value is no longer valid so clear it
+        clearCache(`ChatRoom:MessageHistory:${room}`);
 
         io.to(room).emit("message", {
           user: chatUser.name,
@@ -193,6 +220,7 @@ module.exports = (server) => {
 
       chatRoom.chatHidden = chatHidden;
       await chatRoom.save();
+      clearCache(`ChatRoom:id:${chatRoom.id}`);
 
       io.to(room).emit("chatHidden", chatHidden);
     });
@@ -201,6 +229,8 @@ module.exports = (server) => {
       const chatMessage = await ChatMessage.findByPk(id);
       chatMessage.deleted = true;
       chatMessage.save();
+      // the chatroom history cached value is no longer valid so clear it
+      clearCache(`ChatRoom:MessageHistory:${room}`);
 
       io.to(room).emit("delete", id);
     });
@@ -209,6 +239,9 @@ module.exports = (server) => {
       const chatMessage = await ChatMessage.findByPk(id);
       chatMessage.deleted = false;
       chatMessage.save();
+
+      // the chatroom history cached value is no longer valid so clear it
+      clearCache(`ChatRoom:MessageHistory:${room}`);
       io.to(room).emit("restore", id);
     });
 
@@ -217,6 +250,9 @@ module.exports = (server) => {
         { deleted: true },
         { where: { ChatRoomId: room } }
       );
+
+      // the chatroom history cached value is no longer valid so clear it
+      clearCache(`ChatRoom:MessageHistory:${room}`);
 
       io.to(room).emit("deleteAll");
     });

@@ -14,8 +14,8 @@ router.get("/api/_crash", async (req, res, next) => {
 });
 
 router.get("/api/test", async (req, res, next) => {
-  const account = await Account.findByPkCached(1);
-  res.send(account);
+  //const account = await Account.findByPkCached(1);
+  //res.send(account);
 });
 
 module.exports = router;
