@@ -6,4 +6,5 @@ module.exports = {
   awsAccessKey: process.env.AWS_ACCESS_KEY,
   awsSecretKey: process.env.AWS_SECRET_KEY,
   newRelicKey: process.env.NEW_RELIC_LICENSE_KEY,
+  redisUrl: process.env.REDIS_URL,
 };

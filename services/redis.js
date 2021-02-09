@@ -1,13 +1,13 @@
 const SequelizeRedis = require("sequelize-redis");
 const redis = require("redis");
 const bluebird = require("bluebird");
+const keys = require("../config/keys");
 
 // Let's promisify Redis
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const redisUrl = "redis://127.0.0.1:6379";
-const redisClient = redis.createClient(redisUrl);
+const redisClient = redis.createClient(keys.redisUrl);
 
 // Let's start
 const sequelizeRedis = new SequelizeRedis(redisClient);
