@@ -20,6 +20,7 @@ module.exports = (server) => {
       origin: "http://localhost:3000",
       methods: ["GET", "POST"],
     },
+    transports: ["websocket"],
   });
 
   io.on("connection", (socket) => {
