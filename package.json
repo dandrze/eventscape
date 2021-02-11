@@ -51,6 +51,7 @@
     "sequelize": "^6.3.5",
     "sequelize-redis": "^1.0.12",
     "socket.io": "^3.0.4",
+    "socket.io-redis": "^6.0.1",
     "throng": "^5.0.0",
     "winston": "^3.3.3",
     "wysiwyg-editor-node-sdk": "^3.2.5"

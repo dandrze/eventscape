@@ -1,4 +1,5 @@
 var socketIo = require("socket.io");
+const redis = require("socket.io-redis");
 const {
   ChatRoom,
   ChatRoomCached,
@@ -10,7 +11,7 @@ const {
   Registration,
 } = require("../db").models;
 const logger = require("./winston");
-
+const keys = require("../config/keys");
 const { clearCache } = require("../services/redis");
 
 module.exports = (server) => {
@@ -23,11 +24,14 @@ module.exports = (server) => {
     transports: ["websocket"],
   });
 
+  io.adapter(redis({ host: 'localhost', port: 6379 }));
+
   io.on("connection", (socket) => {
     socket.on(
       "join",
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
         const startTime = new Date();
+        console.log(process.pid)
 
         // Get the chat room. If the chatroom is cached, pull that.
         const chatRoomCacheKey = `ChatRoom:id:${room}`;
