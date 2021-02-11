@@ -11,12 +11,13 @@ module.exports = (server) => {
     },
   });
 
+  /*
   io.on("connection", (socket) => {
     socket.on("join", async ({ EventId, uuid, attendeeId, geoData }) => {
       const [siteVisitor, created] = await SiteVisitor.findOrCreate({
         where: {
           uuid,
-          RegistrationId: attendeeId,
+          RegistrationId: attendeeId || null,
           EventId,
         },
       });
@@ -48,4 +49,5 @@ module.exports = (server) => {
       }
     });
   });
+  */
 };

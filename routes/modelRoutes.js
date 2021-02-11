@@ -1,6 +1,6 @@
 const express = require("express");
 const { PageSection, PageSectionCached } = require("../db").models;
-const { clearCache } = require("../services/redis");
+const { clearCache } = require("../services/sequelizeRedis");
 
 const router = express.Router();
 

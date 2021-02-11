@@ -230,7 +230,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       transports: ["websocket"],
     });
     socket.on("connect", () => {
-      console.log("Connected to socket");
+      console.log(socket);
       setChatReady(true);
     });
     socket.on("connect_error", (error) => {
@@ -252,6 +252,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     });
 
     socket.on("notification", (message) => {
+      console.log(message);
       setMessages((messages) => [
         ...messages,
         { ...message, isNotification: true },

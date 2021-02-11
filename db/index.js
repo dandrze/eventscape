@@ -1,4 +1,4 @@
-const { sequelizeRedis } = require("../services/redis");
+const { sequelizeRedis } = require("../services/sequelizeRedis");
 
 const sequelize = require("./sequelize");
 const ChatMessage = require("./models/ChatMessage");

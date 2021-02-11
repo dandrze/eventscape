@@ -8,7 +8,7 @@ const {
   Registration,
 } = require("../db").models;
 
-const { clearCache } = require("../services/redis");
+const { clearCache } = require("../services/sequelizeRedis");
 
 router.get("/api/chatroom/default", async (req, res, next) => {
   //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one

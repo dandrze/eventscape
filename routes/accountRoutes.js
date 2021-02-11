@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 
 const { Account } = require("../db").models;
-const { clearCache } = require("../services/redis");
+const { clearCache } = require("../services/sequelizeRedis");
 
 const saltRounds = 10;
 

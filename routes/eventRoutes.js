@@ -14,7 +14,7 @@ const {
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 
-const { clearCache } = require("../services/redis");
+const { clearCache } = require("../services/sequelizeRedis");
 
 router.post("/api/event", async (req, res, next) => {
   const {

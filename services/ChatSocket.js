@@ -1,5 +1,6 @@
 var socketIo = require("socket.io");
-const redis = require("socket.io-redis");
+const redisAdapter = require("socket.io-redis");
+
 const {
   ChatRoom,
   ChatRoomCached,
@@ -12,7 +13,7 @@ const {
 } = require("../db").models;
 const logger = require("./winston");
 const keys = require("../config/keys");
-const { clearCache } = require("../services/redis");
+const { clearCache } = require("../services/sequelizeRedis");
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -24,14 +25,13 @@ module.exports = (server) => {
     transports: ["websocket"],
   });
 
-  io.adapter(redis({ host: 'localhost', port: 6379 }));
+  io.adapter(redisAdapter(keys.redisUrl));
 
-  io.on("connection", (socket) => {
+  io.on("connection", function (socket) {
     socket.on(
       "join",
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
         const startTime = new Date();
-        console.log(process.pid)
 
         // Get the chat room. If the chatroom is cached, pull that.
         const chatRoomCacheKey = `ChatRoom:id:${room}`;
@@ -86,7 +86,8 @@ module.exports = (server) => {
           user.save();
         }
 
-        socket.join(room);
+        socket.join(room.toString());
+
         // push the hidden state (true or false)
         if (chatRoom) socket.emit("chatHidden", chatRoom.chatHidden);
 
@@ -139,7 +140,7 @@ module.exports = (server) => {
     );
 
     socket.on("refreshChat", async ({ room }) => {
-      io.to(room).emit("refresh");
+      io.to(room.toString()).emit("refresh");
 
       const messageHistory = await ChatMessage.findAll({
         where: { ChatRoomId: room },
@@ -147,13 +148,13 @@ module.exports = (server) => {
         include: ChatUser,
       });
 
-      io.to(room).emit("notification", {
+      io.to(room.toString()).emit("notification", {
         text: "You are now connected to room " + room,
       });
 
       //push the message history
       messageHistory.forEach((message) => {
-        io.to(room).emit("message", {
+        io.to(room.toString()).emit("message", {
           user: message.ChatUser.name,
           text: message.text,
           id: message.id,
@@ -181,7 +182,7 @@ module.exports = (server) => {
         // Now that there is a new message, the chatroom history cached value is no longer valid so clear it
         clearCache(`ChatRoom:MessageHistory:${room}`);
 
-        io.to(room).emit("message", {
+        io.to(room.toString()).emit("message", {
           user: chatUser.name,
           userId: chatUser.id,
           text: message,
@@ -205,7 +206,7 @@ module.exports = (server) => {
           ChatRoomId: room,
         });
 
-        io.to(room).emit("question", {
+        io.to(room.toString()).emit("question", {
           name: chatUser.name,
           text: chatQuestion.text,
           time: chatQuestion.createdAt,
@@ -227,7 +228,7 @@ module.exports = (server) => {
       await chatRoom.save();
       clearCache(`ChatRoom:id:${chatRoom.id}`);
 
-      io.to(room).emit("chatHidden", chatHidden);
+      io.to(room.toString()).emit("chatHidden", chatHidden);
     });
 
     socket.on("deleteMessage", async ({ id, room }) => {
@@ -237,7 +238,7 @@ module.exports = (server) => {
       // the chatroom history cached value is no longer valid so clear it
       clearCache(`ChatRoom:MessageHistory:${room}`);
 
-      io.to(room).emit("delete", id);
+      io.to(room.toString()).emit("delete", id);
     });
 
     socket.on("restoreMessage", async ({ id, room }) => {
@@ -247,7 +248,7 @@ module.exports = (server) => {
 
       // the chatroom history cached value is no longer valid so clear it
       clearCache(`ChatRoom:MessageHistory:${room}`);
-      io.to(room).emit("restore", id);
+      io.to(room.toString()).emit("restore", id);
     });
 
     socket.on("deleteAllMessages", async ({ room }) => {
@@ -259,7 +260,7 @@ module.exports = (server) => {
       // the chatroom history cached value is no longer valid so clear it
       clearCache(`ChatRoom:MessageHistory:${room}`);
 
-      io.to(room).emit("deleteAll");
+      io.to(room.toString()).emit("deleteAll");
     });
 
     socket.on("disconnect", (reason) => {});
