@@ -2,8 +2,7 @@ const throng = require("throng");
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging")
   require("newrelic");
 
-//const WORKERS = process.env.WEB_CONCURRENCY || 1;
-const WORKERS = 2;
+const WORKERS = process.env.WEB_CONCURRENCY || 1;
 const PORT = process.env.PORT || 5000;
 
 throng({
@@ -30,6 +29,7 @@ function start() {
 
   const app = express();
   console.log(`server process is: ${process.pid}`);
+  console.log(`server running with ${WORKERS} workers`);
 
   // Force HTTPS
   if (process.env.NODE_ENV === "production") app.use(secure);
