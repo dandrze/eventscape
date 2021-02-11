@@ -1,3 +1,5 @@
+const { sequelizeRedis } = require("../services/sequelizeRedis");
+
 const sequelize = require("./sequelize");
 const ChatMessage = require("./models/ChatMessage");
 const ChatRoom = require("./models/ChatRoom");
@@ -77,18 +79,24 @@ SiteVisitor.sync({ alter: true });
 Registration.sync({ alter: true });
 */
 
+// any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
   sequelize,
   models: {
+    ChatMessageCached: sequelizeRedis.getModel(ChatMessage, { ttl: 60 * 60 }),
     ChatMessage,
+    ChatRoomCached: sequelizeRedis.getModel(ChatRoom, { ttl: 60 * 60 }),
     ChatRoom,
     ChatUser,
     SiteVisit,
     SiteVisitor,
     Registration,
     Event,
+    EventCached: sequelizeRedis.getModel(Event, { ttl: 60 * 60 }),
     PageModel,
     PageSection,
+    PageSectionCached: sequelizeRedis.getModel(PageSection, { ttl: 60 * 60 }),
+    AccountCached: sequelizeRedis.getModel(Account, { ttl: 60 * 60 }),
     Account,
     Communication,
     EmailListRecipient,

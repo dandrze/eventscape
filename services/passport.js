@@ -2,7 +2,7 @@ const passport = require("passport");
 const bcrypt = require("bcrypt");
 
 const LocalStrategy = require("passport-local").Strategy;
-const { Account } = require("../db").models;
+const { Account, AccountCached } = require("../db").models;
 
 const saltRounds = 10;
 
@@ -13,7 +13,10 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const user = await Account.findByPk(id);
+  const cacheKey = `Account:id:${id}`;
+  const [user, cacheHit] = await AccountCached.findByPkCached(cacheKey, id);
+
+  if (cacheHit) console.log("Cache Hit: " + cacheKey);
 
   done(null, user);
 });

@@ -2,6 +2,7 @@ const express = require("express");
 const bcrypt = require("bcrypt");
 
 const { Account } = require("../db").models;
+const { clearCache } = require("../services/sequelizeRedis");
 
 const saltRounds = 10;
 
@@ -16,6 +17,7 @@ router.put("/api/account", async (req, res) => {
   account.lastName = lastName;
   account.emailAddress = emailAddress;
   account.save();
+  clearCache(`Account:id:${account.id}`);
 
   res.status(200).send(account);
 });

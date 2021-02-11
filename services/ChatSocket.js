@@ -1,13 +1,19 @@
 var socketIo = require("socket.io");
+const redisAdapter = require("socket.io-redis");
+
 const {
   ChatRoom,
+  ChatRoomCached,
   ChatUser,
   ChatMessage,
+  ChatMessageCached,
   ChatQuestion,
   Account,
   Registration,
 } = require("../db").models;
 const logger = require("./winston");
+const keys = require("../config/keys");
+const { clearCache } = require("../services/sequelizeRedis");
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -16,16 +22,31 @@ module.exports = (server) => {
       origin: "http://localhost:3000",
       methods: ["GET", "POST"],
     },
+    transports: ["websocket"],
   });
 
-  io.on("connection", (socket) => {
+  io.adapter(redisAdapter(keys.redisUrl));
+
+  io.on("connection", function (socket) {
     socket.on(
       "join",
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
         const startTime = new Date();
-        const chatRoom = await ChatRoom.findByPk(room);
 
-        const messageHistory = await ChatMessage.findAll({
+        // Get the chat room. If the chatroom is cached, pull that.
+        const chatRoomCacheKey = `ChatRoom:id:${room}`;
+        const [
+          chatRoom,
+          chatRoomCacheHit,
+        ] = await ChatRoomCached.findByPkCached(chatRoomCacheKey, room);
+        if (chatRoomCacheHit) console.log("Cache hit: " + chatRoomCacheKey);
+
+        // Find all chat messages for a room. If there is a cached version of this query, then pull that instead
+        const messageHistoryCacheKey = `ChatRoom:MessageHistory:${room}`;
+        const [
+          messageHistory,
+          messageHistoryCacheHit,
+        ] = await ChatMessageCached.findAllCached(messageHistoryCacheKey, {
           where: { ChatRoomId: room },
           order: [["id", "ASC"]],
           include: ChatUser,
@@ -65,7 +86,8 @@ module.exports = (server) => {
           user.save();
         }
 
-        socket.join(room);
+        socket.join(room.toString());
+
         // push the hidden state (true or false)
         if (chatRoom) socket.emit("chatHidden", chatRoom.chatHidden);
 
@@ -104,13 +126,21 @@ module.exports = (server) => {
           });
         }
 
-        logger.info("Chat Socket Join Took" + new Date() - startTime + "ms");
+        const duration = new Date() - startTime;
+
+        logger.info(
+          JSON.stringify({
+            chatJoinLoadTime: duration,
+            chatRoomCacheHit,
+            messageHistoryCacheHit,
+          })
+        );
         callback(user.id);
       }
     );
 
     socket.on("refreshChat", async ({ room }) => {
-      io.to(room).emit("refresh");
+      io.to(room.toString()).emit("refresh");
 
       const messageHistory = await ChatMessage.findAll({
         where: { ChatRoomId: room },
@@ -118,13 +148,13 @@ module.exports = (server) => {
         include: ChatUser,
       });
 
-      io.to(room).emit("notification", {
+      io.to(room.toString()).emit("notification", {
         text: "You are now connected to room " + room,
       });
 
       //push the message history
       messageHistory.forEach((message) => {
-        io.to(room).emit("message", {
+        io.to(room.toString()).emit("message", {
           user: message.ChatUser.name,
           text: message.text,
           id: message.id,
@@ -149,7 +179,10 @@ module.exports = (server) => {
           ChatUserId: chatUserId,
         });
 
-        io.to(room).emit("message", {
+        // Now that there is a new message, the chatroom history cached value is no longer valid so clear it
+        clearCache(`ChatRoom:MessageHistory:${room}`);
+
+        io.to(room.toString()).emit("message", {
           user: chatUser.name,
           userId: chatUser.id,
           text: message,
@@ -173,7 +206,7 @@ module.exports = (server) => {
           ChatRoomId: room,
         });
 
-        io.to(room).emit("question", {
+        io.to(room.toString()).emit("question", {
           name: chatUser.name,
           text: chatQuestion.text,
           time: chatQuestion.createdAt,
@@ -193,23 +226,29 @@ module.exports = (server) => {
 
       chatRoom.chatHidden = chatHidden;
       await chatRoom.save();
+      clearCache(`ChatRoom:id:${chatRoom.id}`);
 
-      io.to(room).emit("chatHidden", chatHidden);
+      io.to(room.toString()).emit("chatHidden", chatHidden);
     });
 
     socket.on("deleteMessage", async ({ id, room }) => {
       const chatMessage = await ChatMessage.findByPk(id);
       chatMessage.deleted = true;
       chatMessage.save();
+      // the chatroom history cached value is no longer valid so clear it
+      clearCache(`ChatRoom:MessageHistory:${room}`);
 
-      io.to(room).emit("delete", id);
+      io.to(room.toString()).emit("delete", id);
     });
 
     socket.on("restoreMessage", async ({ id, room }) => {
       const chatMessage = await ChatMessage.findByPk(id);
       chatMessage.deleted = false;
       chatMessage.save();
-      io.to(room).emit("restore", id);
+
+      // the chatroom history cached value is no longer valid so clear it
+      clearCache(`ChatRoom:MessageHistory:${room}`);
+      io.to(room.toString()).emit("restore", id);
     });
 
     socket.on("deleteAllMessages", async ({ room }) => {
@@ -218,7 +257,10 @@ module.exports = (server) => {
         { where: { ChatRoomId: room } }
       );
 
-      io.to(room).emit("deleteAll");
+      // the chatroom history cached value is no longer valid so clear it
+      clearCache(`ChatRoom:MessageHistory:${room}`);
+
+      io.to(room.toString()).emit("deleteAll");
     });
 
     socket.on("disconnect", (reason) => {});
