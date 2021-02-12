@@ -280,8 +280,6 @@ router.get("/api/event/link", async (req, res, next) => {
       }
     );
 
-    if (eventCacheHit) console.log("Cache Hit: " + eventCacheKey);
-
     res.status(200).send(event);
   } catch (error) {
     next(error);

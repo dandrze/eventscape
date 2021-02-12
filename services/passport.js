@@ -16,8 +16,6 @@ passport.deserializeUser(async (id, done) => {
   const cacheKey = `Account:id:${id}`;
   const [user, cacheHit] = await AccountCached.findByPkCached(cacheKey, id);
 
-  if (cacheHit) console.log("Cache Hit: " + cacheKey);
-
   done(null, user);
 });
 

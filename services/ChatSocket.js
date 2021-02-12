@@ -39,7 +39,6 @@ module.exports = (server) => {
           chatRoom,
           chatRoomCacheHit,
         ] = await ChatRoomCached.findByPkCached(chatRoomCacheKey, room);
-        if (chatRoomCacheHit) console.log("Cache hit: " + chatRoomCacheKey);
 
         // Find all chat messages for a room. If there is a cached version of this query, then pull that instead
         const messageHistoryCacheKey = `ChatRoom:MessageHistory:${room}`;

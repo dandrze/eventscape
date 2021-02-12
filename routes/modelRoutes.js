@@ -15,7 +15,6 @@ router.get("/api/model/id", async (req, res, next) => {
       where: { PageModelId: id },
       order: [["index", "ASC"]],
     });
-    if (pageSectionCacheHit) console.log("Cache Hit: " + pageSectionCacheKey);
 
     res.status(200).send(pageSections);
   } catch (error) {
