@@ -1,15 +1,6 @@
 const SequelizeRedis = require("sequelize-redis");
-const redis = require("redis");
-const bluebird = require("bluebird");
-const keys = require("../config/keys");
+const redisClient = require("./redis");
 
-// Let's promisify Redis
-bluebird.promisifyAll(redis.RedisClient.prototype);
-bluebird.promisifyAll(redis.Multi.prototype);
-
-const redisClient = redis.createClient(keys.redisUrl);
-
-// Let's start
 const sequelizeRedis = new SequelizeRedis(redisClient);
 
 const clearCache = (key) => {
