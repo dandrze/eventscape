@@ -1,7 +1,7 @@
 const Sequelize = require("sequelize");
 var logging
 if(process.env.NODE_ENV === "development"){
-  logging = (...msg) => console.log(msg)
+  logging = console.log()
 } else {
   logging = false
 }

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
+import { CSVReader } from 'react-papaparse'
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -14,6 +15,7 @@ import FormBuilder from "../components/FormBuilder";
 import Switch1 from "../components/switch";
 import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
+import ImportFile from "../components/ImportFile"
 
 const Registrations = (props) => {
   {
@@ -21,6 +23,7 @@ const Registrations = (props) => {
   }
   const [openForm, setOpenForm] = React.useState(false);
   const [openReg, setOpenReg] = React.useState(false);
+  const [openImport, setOpenImport] = React.useState(false);
   const [regButtonText, setRegButtonText] = React.useState("Edit Registration");
   const [edittingValues, setEdittingValues] = React.useState([]);
   const [standardFields, setStandardFields] = React.useState({
@@ -59,6 +62,10 @@ const Registrations = (props) => {
     setOpenReg(false);
   };
 
+  const handleCloseImport = () => {
+    setOpenImport(false);
+  };
+
   const handleOpenReg = () => {
     setOpenForm(true);
   };
@@ -67,6 +74,11 @@ const Registrations = (props) => {
     setRegButtonText("Add Registration");
     setOpenReg(true);
   };
+
+  const handleImport = () => {
+    setOpenImport(true)
+  }
+
 
   const handleEditReg = (id, incomingstandardFields, incomingValues) => {
     setRegButtonText("Edit Registration");
@@ -111,6 +123,11 @@ const Registrations = (props) => {
 
   return (
     <div>
+    <Modal1
+        open={openImport}
+        onClose={handleCloseImport}
+        content={<ImportFile handleClose={handleCloseImport} />}
+      />
       <Modal1
         open={openForm}
         onClose={handleCloseForm}
@@ -160,7 +177,19 @@ const Registrations = (props) => {
               >
                 Edit Registration Form
               </button>
+      
+       
+     
               <button
+                className="Button1"
+                style={{ marginLeft: "20px" }}
+                onClick={handleImport}
+              >
+                Import Registrations from CSV
+              </button>
+              
+
+               <button
                 className="Button1"
                 onClick={handleAddReg}
                 style={{ marginLeft: "20px" }}
