@@ -6,10 +6,12 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import Select from "@material-ui/core/Select";
-import Grid from "@material-ui/core/Grid";
+
+import ColumnMapping from "./ColumnMapping";
+import { validateEmailFormat } from "../utils/validationFunctions";
+import ImportCsvConfirmationTable from "./ImportCsvConfirmationTable";
+import api from "../api/server";
+import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,17 +35,16 @@ const useStyles = makeStyles((theme) => ({
   dropDown: {
     width: "100%",
   },
-
-  verifyTable: {
-    height: "100%",
+  postUpload: {
+    textAlign: "center",
   },
 }));
 
 const getSteps = () => {
-  return ["Upload CSV", "Verify Columns", "Create an ad"];
+  return ["Upload CSV", "Verify Columns", "Confirm"];
 };
 
-const ImportFile = (props) => {
+const ImportFile = ({ handleClose }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(null);
@@ -54,15 +55,19 @@ const ImportFile = (props) => {
     firstName: null,
     lastName: null,
   });
+  const [errors, setErrors] = useState([]);
+  const [output, setOutput] = useState([]);
+  const [uploadComplete, setUploadComplete] = useState(false);
   const steps = getSteps();
 
   const isStepFailed = (step) => {
     return step === stepHasError;
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     switch (activeStep) {
       case 0:
+        // logic to handle going from first importing the csv to mapping columns
         if (!data) {
           setStepHasError(0);
           setAlertMessage("Please upload a CSV file");
@@ -71,7 +76,68 @@ const ImportFile = (props) => {
         }
         break;
       case 1:
-        return console.log(columnMap);
+        // logic to handle going from mapping columns to viewing result (including errors)
+        if (!columnMap.emailAddress) {
+          setStepHasError(1);
+          setAlertMessage("Please select your Email Address column");
+          //exit the function
+          return;
+        }
+
+        const _output = [];
+        const _errors = [];
+
+        data.slice(1).map((row) => {
+          // extract the email address using the columnMap.emailAddress index location
+          const emailAddress = row.data[columnMap.emailAddress];
+          // if there is a firstName mapping, extract the first name. Otherwise leave it black
+          const firstName =
+            columnMap.firstName != null ? row.data[columnMap.firstName] : "";
+          // if there is a lastName mapping, extract the last name. Otherwise leave it black
+          const lastName =
+            columnMap.lastName != null ? row.data[columnMap.lastName] : "";
+          var rowErrors = "";
+
+          // flag any errors that could cause problems in our code in the future
+          if (!emailAddress) {
+            rowErrors += "Email Address missing\n";
+          } else if (_output.find((row) => row.emailAddress === emailAddress)) {
+            rowErrors += "Duplicate email address\n";
+          } else if (!validateEmailFormat(emailAddress)) {
+            rowErrors += "Invalid email format\n";
+          }
+
+          // if there are any errors, push them to the errors array including all row information
+          if (rowErrors) {
+            _errors.push({
+              emailAddress,
+              firstName,
+              lastName,
+              rowErrors,
+            });
+          } else {
+            // if no errors, then push the row to our output
+            _output.push({
+              emailAddress,
+              firstName,
+              lastName,
+            });
+          }
+        });
+
+        setErrors(_errors);
+        setOutput(_output);
+        break;
+      case 2:
+        setUploadComplete(false);
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        const response = await api.post("/api/registration/bulk", {
+          registrations: output,
+        });
+
+        console.log(response);
+        setUploadComplete(true);
+        return;
     }
 
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
@@ -106,53 +172,9 @@ const ImportFile = (props) => {
     console.log(data);
   };
 
-  const updateMap = (column, index) => {
-    const newColumnMap = columnMap;
-    columnMap[column] = index;
-
-    setColumnMap(newColumnMap);
-  };
-
-  const MappingRow = ({ colName, index, updateMap }) => {
-    const [column, setColumn] = useState("");
-
-    const handleChangeColumn = (event) => {
-      setColumn(event.target.value);
-      updateMap(event.target.value, index);
-    };
-
-    return (
-      <Grid container spacing={3}>
-        <Grid
-          item
-          xs={6}
-          style={{
-            textAlign: "center",
-            justifyContent: "center",
-            alignItems: "center",
-            display: "flex",
-          }}
-        >
-          {colName}
-        </Grid>
-        <Grid item xs={6}>
-          <Select
-            variant="outlined"
-            value={column}
-            onChange={handleChangeColumn}
-            label="Age"
-            className={classes.dropDown}
-          >
-            <MenuItem value="">
-              <em>None</em>
-            </MenuItem>
-            <MenuItem value="emailAddress">Email Address</MenuItem>
-            <MenuItem value="firstName">First Name</MenuItem>
-            <MenuItem value="lastName">Last Name</MenuItem>
-          </Select>
-        </Grid>
-      </Grid>
-    );
+  const handleUpdateColumnMap = (updatedColumnMap) => {
+    clearErrors();
+    setColumnMap(updatedColumnMap);
   };
 
   const getStepContent = (step) => {
@@ -182,30 +204,22 @@ const ImportFile = (props) => {
         );
       case 1:
         return (
-          <div style={{ height: "100%" }}>
-            <Grid container spacing={3}>
-              <Grid item xs={6}>
-                Your Column
-              </Grid>
-              <Grid item xs={6}>
-                Our Column
-              </Grid>
-            </Grid>
-            <div className={classes.verifyTable}>
-              {data[0].data.map((colName, index) => {
-                return (
-                  <MappingRow
-                    colName={colName}
-                    index={index}
-                    updateMap={updateMap}
-                  />
-                );
-              })}
-            </div>
-          </div>
+          <ColumnMapping
+            data={data}
+            columnMap={columnMap}
+            handleUpdateColumnMap={handleUpdateColumnMap}
+          />
         );
       case 2:
-        return "This is the bit I really care about!";
+        return (
+          <ImportCsvConfirmationTable
+            output={output}
+            errors={errors}
+            startOver={handleReset}
+          />
+        );
+      case 3:
+        return <div>All Done</div>;
       default:
         return "Unknown step";
     }
@@ -235,12 +249,23 @@ const ImportFile = (props) => {
       <div>
         {activeStep === steps.length ? (
           <div>
-            <Typography className={classes.instructions}>
-              All steps completed - you&apos;re finished
-            </Typography>
-            <Button onClick={handleReset} className={classes.button}>
-              Reset
-            </Button>
+            {uploadComplete ? (
+              <div className={classes.postUpload}>
+                <Typography className={classes.instructions}>
+                  Upload successfully completed
+                </Typography>
+                <Button onClick={handleClose} className={classes.button}>
+                  Close
+                </Button>
+              </div>
+            ) : (
+              <div className={classes.postUpload}>
+                <Typography className={classes.instructions}>
+                  Uploading registrations...
+                </Typography>
+                <CircularProgress />
+              </div>
+            )}
           </div>
         ) : (
           <div>

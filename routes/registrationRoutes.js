@@ -82,6 +82,20 @@ router.put("/api/registration", async (req, res, next) => {
   }
 });
 
+router.post("/api/registration/bulk", async (req, res, next) => {
+  const { registrations } = req.body;
+
+  try {
+    console.log(registrations);
+
+    await Registration.findByPk(1);
+
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/api/registration/event", async (req, res, next) => {
   const { event } = req.query;
 
