@@ -5,7 +5,7 @@ const Registration = sequelize.define("Registration", {
   emailAddress: Sequelize.TEXT,
   firstName: Sequelize.TEXT,
   lastName: Sequelize.TEXT,
-  values: Sequelize.JSONB,
+  values: { type: Sequelize.JSONB, defaultValue: [] },
   hash: Sequelize.TEXT,
 });
 

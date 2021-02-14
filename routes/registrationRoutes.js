@@ -83,12 +83,22 @@ router.put("/api/registration", async (req, res, next) => {
 });
 
 router.post("/api/registration/bulk", async (req, res, next) => {
-  const { registrations } = req.body;
+  const { registrations, eventId } = req.body;
 
   try {
-    console.log(registrations);
+    // add EventId to registration object
+    registrations.map((registration) => {
+      registration.EventId = eventId;
+      return registration;
+    });
 
-    await Registration.findByPk(1);
+    for (let registration of registrations) {
+      const result = await Registration.create(registration);
+      // create a unique hash based on the id
+      result.hash = md5(result.id);
+      // do not wait for save to complete before moving to next registration in list to improve performance
+      result.save();
+    }
 
     res.status(200).send();
   } catch (error) {

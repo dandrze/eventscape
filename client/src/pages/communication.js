@@ -16,15 +16,14 @@ const Communication = (props) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [props.event]);
 
   const fetchData = async () => {
     props.setLoaded(false);
-    const event = await props.fetchEvent();
     props.setLoaded(true);
-    if (event) {
+    if (props.event.id) {
       props.setLoaded(false);
-      await props.fetchCommunicationList(event.data.id);
+      await props.fetchCommunicationList(props.event.id);
       props.setLoaded(true);
     }
   };

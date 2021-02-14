@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
 import { CSVReader } from "react-papaparse";
 import { makeStyles } from "@material-ui/core/styles";
 import Stepper from "@material-ui/core/Stepper";
@@ -44,7 +45,7 @@ const getSteps = () => {
   return ["Upload CSV", "Verify Columns", "Confirm"];
 };
 
-const ImportFile = ({ handleClose }) => {
+const ImportFile = ({ handleClose, triggerUpdate, event }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(null);
@@ -133,9 +134,10 @@ const ImportFile = ({ handleClose }) => {
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         const response = await api.post("/api/registration/bulk", {
           registrations: output,
+          eventId: event.id,
         });
 
-        console.log(response);
+        triggerUpdate();
         setUploadComplete(true);
         return;
     }
@@ -295,4 +297,10 @@ const ImportFile = ({ handleClose }) => {
   );
 };
 
-export default ImportFile;
+const mapStateToProps = (state) => {
+  return {
+    event: state.event,
+  };
+};
+
+export default connect(mapStateToProps)(ImportFile);

@@ -65,7 +65,7 @@ export default ({ output, errors, startOver }) => {
         {errors.length} contacts causing errors
       </div>
       <div className={classes.paragraph}>
-        Contacts causing errros will not be uploaded. See below for more
+        Contacts causing errors will not be uploaded. See below for more
         information. Finish the import by pressing Finish below, or fix the errors and{" "}
         <span onClick={startOver} className={classes.link}>
           start over

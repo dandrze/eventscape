@@ -1,9 +1,5 @@
 import React, { useEffect } from "react";
 import { connect } from "react-redux";
-import { CSVReader } from 'react-papaparse'
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Tooltip from "@material-ui/core/Tooltip";
 import Modal1 from "../components/Modal1";
 
 import "./registrations.css";
@@ -12,10 +8,9 @@ import NavBar3 from "../components/navBar3.js";
 import RegistrationTable2 from "../components/RegistrationTable2.js";
 import * as actions from "../actions";
 import FormBuilder from "../components/FormBuilder";
-import Switch1 from "../components/switch";
 import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
-import ImportFile from "../components/ImportFile"
+import ImportFile from "../components/ImportFile";
 
 const Registrations = (props) => {
   {
@@ -32,19 +27,23 @@ const Registrations = (props) => {
     email: "",
   });
   const [edittingRowId, setEdittingRowId] = React.useState(null);
+  const [
+    triggerFetchRegistrations,
+    setTriggerFetchRegistrations,
+  ] = React.useState(false);
 
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
   useEffect(() => {
     fetchRegistrations();
-  }, []);
+  }, [triggerFetchRegistrations, props.event]);
 
   //Separated function because useEffect should not be an async function
   const fetchRegistrations = async () => {
-    const event = await props.fetchEvent();
-    if (event) {
-      props.fetchRegistrations(event.data.id);
-      props.fetchRegistrationForm(event.data.id);
+    if (props.event.id) {
+      console.log("fetch reg called");
+      props.fetchRegistrations(props.event.id);
+      props.fetchRegistrationForm(props.event.id);
     }
   };
 
@@ -76,9 +75,8 @@ const Registrations = (props) => {
   };
 
   const handleImport = () => {
-    setOpenImport(true)
-  }
-
+    setOpenImport(true);
+  };
 
   const handleEditReg = (id, incomingstandardFields, incomingValues) => {
     setRegButtonText("Edit Registration");
@@ -121,12 +119,21 @@ const Registrations = (props) => {
     fetchRegistrations();
   };
 
+  const triggerUpdate = () => {
+    setTriggerFetchRegistrations(!triggerFetchRegistrations);
+  };
+
   return (
     <div>
-    <Modal1
+      <Modal1
         open={openImport}
         onClose={handleCloseImport}
-        content={<ImportFile handleClose={handleCloseImport} />}
+        content={
+          <ImportFile
+            handleClose={handleCloseImport}
+            triggerUpdate={triggerUpdate}
+          />
+        }
       />
       <Modal1
         open={openForm}
@@ -177,9 +184,7 @@ const Registrations = (props) => {
               >
                 Edit Registration Form
               </button>
-      
-       
-     
+
               <button
                 className="Button1"
                 style={{ marginLeft: "20px" }}
@@ -187,9 +192,8 @@ const Registrations = (props) => {
               >
                 Import Registrations from CSV
               </button>
-              
 
-               <button
+              <button
                 className="Button1"
                 onClick={handleAddReg}
                 style={{ marginLeft: "20px" }}

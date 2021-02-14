@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
@@ -231,15 +231,8 @@ function NavBar3(props) {
   const [openDesignNested, setOpenDesignNested] = React.useState(false);
   const [drawerPreviouslyOpen, setDrawerPreviouslyOpen] = React.useState(true);
 
-  let history = useHistory();
-
   const classes = useStyles();
   const theme = useTheme();
-  const [target, setTarget] = React.useState("");
-
-  useEffect(() => {
-    props.fetchEvent();
-  }, []);
 
   const handleDrawerOpen = () => {
     props.setSideDrawerOpen(true);
