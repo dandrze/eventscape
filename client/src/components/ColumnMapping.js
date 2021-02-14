@@ -41,7 +41,7 @@ const ColumnMapping = ({ data, columnMap, handleUpdateColumnMap }) => {
           Your Column
         </Grid>
         <Grid item xs={6}>
-          Email Address
+          Email Address <em>(Required)</em>
         </Grid>
         <Grid item xs={6}>
           <Select
