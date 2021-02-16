@@ -28,18 +28,18 @@ module.exports = (server) => {
   io.adapter(redisAdapter(keys.redisUrl));
 
   io.on("connection", function (socket) {
+    console.log("socket joined: " + process.pid);
     socket.on(
       "join",
-      async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
-        const startTime = new Date();
-
-        console.log(
-          "Joined on process: " +
-            process.pid +
-            " and port:  " +
-            process.env.PORT
-        );
-
+      async (
+        { userId, registrationId, uuid, room, isModerator, isInitialConnect },
+        callback
+      ) => {
+        // if it's not the initial connection, it's a reconnection
+        // Everything else was already initialized, so just rejoin the room
+        if (!isInitialConnect) {
+          return socket.join(room.toString());
+        }
         // Get the chat room. If the chatroom is cached, pull that.
         const chatRoomCacheKey = `ChatRoom:id:${room}`;
         const [
@@ -132,15 +132,6 @@ module.exports = (server) => {
           });
         }
 
-        const duration = new Date() - startTime;
-
-        logger.info(
-          JSON.stringify({
-            chatJoinLoadTime: duration,
-            chatRoomCacheHit,
-            messageHistoryCacheHit,
-          })
-        );
         callback(user.id);
       }
     );
@@ -177,6 +168,14 @@ module.exports = (server) => {
     socket.on(
       "sendMessage",
       async ({ chatUserId, room, message }, callback) => {
+        console.log(
+          "Message " +
+            message +
+            " sent on process: " +
+            process.pid +
+            " and port:  " +
+            process.env.PORT
+        );
         const chatUser = await ChatUser.findOne({ where: { id: chatUserId } });
 
         const chatMessage = await ChatMessage.create({

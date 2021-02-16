@@ -3,6 +3,7 @@ import React, {
   useEffect,
   forwardRef,
   useImperativeHandle,
+  useRef,
 } from "react";
 import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
@@ -132,6 +133,11 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
   const [messages, setMessages] = useState([]);
   const [sendLoading, setSendLoading] = useState(false);
   const [chatHidden, setChatHidden] = useState(false);
+  const [isInitialConnect, setIsInitialConnect] = useState(true);
+  const connectRef = useRef();
+
+  // set a reference to isInitialConnect so we can access it from inside the on connect callback
+  connectRef.current = isInitialConnect;
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -140,6 +146,19 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
     });
     socket.on("connect", () => {
       console.log("Connected to socket");
+
+      // join room
+      // Or if reconnecting, rejoin the room with the flag isInitialConnect = false
+      socket.emit(
+        "join",
+        { userId, room, isInitialConnect: connectRef.current },
+        (id) => {
+          // If it's the initial connection, set the chat user id
+          if (connectRef.current) setChatUserId(id);
+          // Joined at least once, so set the isInititalConnect to false
+          setIsInitialConnect(false);
+        }
+      );
     });
     socket.on("connect_error", (error) => {
       setMessages((messages) => [
@@ -206,10 +225,6 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
 
     socket.on("refresh", () => {
       setMessages([]);
-    });
-
-    socket.emit("join", { userId, room }, (id) => {
-      setChatUserId(id);
     });
   }, []);
 

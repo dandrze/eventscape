@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
@@ -202,6 +202,10 @@ const Chat = ({ room, userId, registrationId, settings }) => {
   const [chatTabEnabled, setChatTabEnabled] = useState(false);
   const [questionsTabEnabled, setQuestionsTabEnabled] = useState(false);
   const [reconnect, setReconnect] = useState(false);
+  const [isInitialConnect, setIsInitialConnect] = useState(true);
+  const connectRef = useRef();
+  // set a ref to isInitialConnect so we can access the latest state from within the on connect callback
+  connectRef.current = isInitialConnect;
 
   // Index numbers for tabs:
   const chatIndex = 0;
@@ -230,9 +234,45 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       transports: ["websocket"],
     });
     socket.on("connect", () => {
-      console.log(socket);
       setChatReady(true);
+
+      // if there is no userId (eventscape account) or registrationId (registered user) then we need a uuid to idenfity the anonymous visitor
+      var uuid = null;
+      if (!userId && !registrationId) {
+        if (!cookies.get("uuid")) cookies.set("uuid", createUUID());
+
+        uuid = cookies.get("uuid");
+      }
+
+      socket.emit(
+        "join",
+        {
+          userId,
+          registrationId,
+          uuid,
+          room,
+          isInitialConnect: connectRef.current,
+        },
+        (id) => {
+          // If it's the initial connection, set the chat user id
+          if (connectRef.current) setChatUserId(id);
+          // sets the initial connect flag so that future connections are flagged as reconnections not initial connections
+          setIsInitialConnect(false);
+        }
+      );
     });
+
+    socket.on("reconnect", () => {
+      console.log("reconnected!");
+    });
+    socket.on("reconnect_attempt", () => {
+      console.log("reconnect attempt!");
+    });
+
+    socket.on("reconnect_failed", () => {
+      console.log("reconnect failed!");
+    });
+
     socket.on("connect_error", (error) => {
       setMessages((messages) => [
         ...messages,
@@ -301,16 +341,8 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       setMessages([]);
     });
 
-    // if there is no userId (eventscape account) or registrationId (registered user) then we need a uuid to idenfity the anonymous visitor
-    var uuid = null;
-    if (!userId && !registrationId) {
-      if (!cookies.get("uuid")) cookies.set("uuid", createUUID());
-
-      uuid = cookies.get("uuid");
-    }
-
-    socket.emit("join", { userId, registrationId, uuid, room }, (id) => {
-      setChatUserId(id);
+    socket.on("disconnect", function () {
+      console.log("socket disconnected", socket);
     });
   }, [reconnect]);
 
