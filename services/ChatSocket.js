@@ -33,6 +33,13 @@ module.exports = (server) => {
       async ({ userId, registrationId, uuid, room, isModerator }, callback) => {
         const startTime = new Date();
 
+        console.log(
+          "Joined on process: " +
+            process.pid +
+            " and port:  " +
+            process.env.PORT
+        );
+
         // Get the chat room. If the chatroom is cached, pull that.
         const chatRoomCacheKey = `ChatRoom:id:${room}`;
         const [
