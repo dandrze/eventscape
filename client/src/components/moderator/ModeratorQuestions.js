@@ -106,9 +106,14 @@ const ModeratorQuestions = ({ room, userId }) => {
       );
     });
 
-    socket.emit("join", { userId, room, isModerator: true }, (id) => {
-      setChatUserId(id);
-    });
+    socket.emit(
+      "join",
+      { userId, room, isModerator: true, isInitialConnect: true },
+      (id) => {
+        //to satisfy the callback in ChatSocket
+        console.log(id);
+      }
+    );
   }, []);
 
   const setChecked = (id, isChecked) => {
@@ -126,11 +131,7 @@ const ModeratorQuestions = ({ room, userId }) => {
     <div className="chatOuterContainer">
       <div className="chatContainer">
         <div className="infoBar moderator-questions-header">Questions</div>
-        <Questions
-          questions={questions}
-          chatUserId={chatUserId}
-          setChecked={setChecked}
-        />
+        <Questions questions={questions} setChecked={setChecked} />
       </div>
     </div>
   );

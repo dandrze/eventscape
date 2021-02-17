@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import Checkbox from "@material-ui/core/Checkbox";
 import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import InputAdornment from "@material-ui/core/InputAdornment";
+import Tooltip from "@material-ui/core/Tooltip";
+import VisibilityIcon from "@material-ui/icons/Visibility";
+import VisibilityOffIcon from "@material-ui/icons/VisibilityOff";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -20,10 +22,6 @@ export default ({ password, onChange, helperText }) => {
   const [showPassword, setShowPassword] = useState(false);
   const classes = useStyles();
 
-  const handleChangeShowPassword = (event) => {
-    setShowPassword(event.target.checked);
-  };
-
   return (
     <FormGroup>
       <FormControl variant="outlined" className={classes.formControl}>
@@ -35,19 +33,29 @@ export default ({ password, onChange, helperText }) => {
           value={password}
           onChange={onChange}
           helperText={helperText}
+          InputProps={{
+            endAdornment: (
+              <InputAdornment position="end">
+                {showPassword ? (
+                  <Tooltip title="Hide password">
+                    <VisibilityOffIcon
+                      onClick={() => setShowPassword(false)}
+                      style={{ marginLeft: "12px", cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                ) : (
+                  <Tooltip title="Show password">
+                    <VisibilityIcon
+                      onClick={() => setShowPassword(true)}
+                      style={{ marginLeft: "12px", cursor: "pointer" }}
+                    />
+                  </Tooltip>
+                )}
+              </InputAdornment>
+            ),
+          }}
         />
       </FormControl>
-      <FormControlLabel
-        control={
-          <Checkbox
-            checked={showPassword}
-            onChange={handleChangeShowPassword}
-            name="showPw"
-            color="primary"
-          />
-        }
-        label="Show Password"
-      />
     </FormGroup>
   );
 };

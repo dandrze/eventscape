@@ -11,7 +11,7 @@ module.exports = (server) => {
     },
   });
 
-  /*
+  
   io.on("connection", (socket) => {
     socket.on("join", async ({ EventId, uuid, attendeeId, geoData }) => {
       const [siteVisitor, created] = await SiteVisitor.findOrCreate({
@@ -49,5 +49,5 @@ module.exports = (server) => {
       }
     });
   });
-  */
+  
 };

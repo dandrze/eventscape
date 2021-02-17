@@ -26,7 +26,6 @@ import "react-colorful/dist/index.css";
 import * as actions from "../actions";
 import momentTZ from "moment-timezone";
 import AlertModal from "../components/AlertModal";
-import FormLabel from "@material-ui/core/FormLabel";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
@@ -44,7 +43,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Event_Details(props) {
+function Event_Details({
+  event,
+  isEventUpdate,
+  history,
+  createEvent,
+  updateEvent,
+  isLinkAvailable,
+}) {
   const classes = useStyles();
   const defaultTimeZone = momentTZ.tz.guess();
 
@@ -52,13 +58,13 @@ function Event_Details(props) {
   const [modalText, setModalText] = useState("");
 
   const [eventCat, setEventCat] = React.useState(
-    props.event.category ? props.event.category : ""
+    isEventUpdate && event.category ? event.category : ""
   );
   const [eventTitle, setEventTitle] = React.useState(
-    props.event.title ? props.event.title : ""
+    isEventUpdate && event.title ? event.title : ""
   );
   const [eventLink, setEventLink] = React.useState(
-    props.event.link ? props.event.link : ""
+    isEventUpdate && event.link ? event.link : ""
   );
 
   const [linkUnavailable, setLinkUnavailable] = React.useState(false);
@@ -66,28 +72,28 @@ function Event_Details(props) {
   const [linkHelperText, setLinkHelperText] = React.useState("");
 
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    props.event.startDate ? props.event.startDate : new Date()
+    isEventUpdate && event.startDate ? event.startDate : new Date()
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    props.event.endDate ? props.event.endDate : new Date()
+    isEventUpdate && event.endDate ? event.endDate : new Date()
   );
   const [eventTimeZone, setEventTimeZone] = React.useState(
-    props.event.timeZone ? props.event.timeZone : defaultTimeZone
+    isEventUpdate && event.timeZone ? event.timeZone : defaultTimeZone
   );
 
   const [registrationRequired, setRegistrationRequired] = React.useState(
-    props.event.registrationRequired === undefined
-      ? true
-      : props.event.registrationRequired
+    isEventUpdate && event.registrationRequired != undefined
+      ? event.registrationRequired
+      : true
   );
 
   const [color, setColor] = useState(
-    props.event.primaryColor ? props.event.primaryColor : "#B0281C"
+    isEventUpdate && event.primaryColor ? event.primaryColor : "#B0281C"
   );
   const [isLoading, setIsloading] = useState(false);
 
   useEffect(() => {
-    if (!props.event.startDate) {
+    if (!event.startDate) {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() + 7);
       startDate.setHours(18);
@@ -95,7 +101,7 @@ function Event_Details(props) {
       setSelectedStartDate(startDate);
     }
 
-    if (!props.event.startDate) {
+    if (!event.startDate) {
       const endDate = new Date();
       endDate.setDate(endDate.getDate() + 7);
       endDate.setHours(21);
@@ -122,8 +128,35 @@ function Event_Details(props) {
   };
 
   const handleChangeEventLinkBlur = async (event) => {
-    const res = await props.isLinkAvailable(eventLink);
+    // offlimit subdomain names that we might want to use in the future
+    const offLimitValues = [
+      "app",
+      "www",
+      "blog",
+      "email",
+      "mail",
+      "help",
+      "support",
+      "dashboard",
+      "billing",
+      "contact",
+      "about",
+      "careers",
+      "affiliate",
+      "affiliates",
+    ];
 
+    // check if the event link is one of the offlimit names
+    if (offLimitValues.includes(eventLink)) {
+      setLinkUnavailable(true);
+      setLinkHelperText(
+        "This link name is unavailable. Please choose another one."
+      );
+      return;
+    }
+
+    // check if any other events already used this link name
+    const res = await isLinkAvailable(eventLink);
     if (res) {
       setLinkUnavailable(false);
       setLinkHelperText("");
@@ -196,8 +229,8 @@ function Event_Details(props) {
     setIsloading(true);
     let response = false;
 
-    if (props.isEventUpdate) {
-      response = await props.updateEvent(
+    if (isEventUpdate) {
+      response = await updateEvent(
         eventTitle,
         eventLink,
         eventCat,
@@ -208,7 +241,7 @@ function Event_Details(props) {
         registrationRequired
       );
     } else {
-      response = await props.createEvent(
+      response = await createEvent(
         eventTitle,
         eventLink,
         eventCat,
@@ -221,10 +254,10 @@ function Event_Details(props) {
     }
     setIsloading(false);
 
-    if (response && !props.isEventUpdate) props.history.push("/design/event");
+    if (response && !isEventUpdate) history.push("/design/event");
   };
 
-  if (isLoading && !props.isEventUpdate) {
+  if (isLoading && !isEventUpdate) {
     return <LongLoadingScreen text="Hang tight! We are building your event." />;
   }
 
@@ -284,7 +317,7 @@ function Event_Details(props) {
               }}
               error={linkUnavailable}
               helperText={linkHelperText}
-              disabled={props.isEventUpdate}
+              disabled={isEventUpdate}
             />
           </FormControl>
         </Tooltip>
@@ -1045,11 +1078,11 @@ function Event_Details(props) {
         <br></br>
 
         {/* Submit */}
-        {isLoading && props.isEventUpdate ? (
+        {isLoading && isEventUpdate ? (
           <CircularProgress />
         ) : (
           <button className="Button1" onClick={handleSubmit}>
-            {props.isEventUpdate ? "Update Event" : "Create Event"}
+            {isEventUpdate ? "Update Event" : "Create Event"}
           </button>
         )}
       </div>

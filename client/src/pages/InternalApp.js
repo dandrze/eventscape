@@ -25,7 +25,6 @@ import PageNotFound from "./PageNotFound";
 const InternalApp = (props) => {
   return (
     <div className="App">
-      <ToastContainer position="top-right" autoClose={3000} />
       <header className="App-header">
         <Switch>
           <Route exact path="/" component={Design} />

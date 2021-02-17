@@ -178,6 +178,11 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       setMessages((messages) => [...messages, message]);
     });
 
+    // receive multiple messages at once (i.e. full history when joining a room)
+    socket.on("bulkMessage", (bulkMessages) => {
+      setMessages((messages) => [...messages, ...bulkMessages]);
+    });
+
     socket.on("notification", (message) => {
       setMessages((messages) => [
         ...messages,

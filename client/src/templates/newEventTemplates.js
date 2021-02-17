@@ -57,7 +57,7 @@ export const eventPageModelTemplate = (title, startDate, endDate, timeZone) => {
 
 export const emaillistTemplate = (eventStartDate) => {
   return [
-    invitation,
+    //invitation,
     registrationConfirmation,
     reminderOneDay,
     reminderOneHour,

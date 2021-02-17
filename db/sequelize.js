@@ -7,14 +7,16 @@ if (process.env.NODE_ENV === "development") {
   logging = false;
 }
 */
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialectOptions: {
+
+// Allows for a local postgres db without ssl
+const dialectOptions = process.env.IS_LOCAL ? {} : {
     ssl: {
       require: true,
       rejectUnauthorized: false,
     },
-  },
-  logging: false,
+  }
+const sequelize = new Sequelize(process.env.DATABASE_URL, {
+  dialectOptions
 });
 
 module.exports = sequelize;
