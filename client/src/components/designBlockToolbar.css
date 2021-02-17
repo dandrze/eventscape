@@ -1,66 +1,68 @@
 .toolbar_container {
-    display: block;
-    box-shadow: 0 3px 5px -1px rgba(0,0,0,0.2), 0 6px 10px 0 rgba(0,0,0,0.14), 0 1px 18px 0 rgba(0,0,0,0.12);
-    border: 0;
-    white-space: nowrap;
-    position: absolute;
-    margin-top: 0px;
-    z-index: 2147483630;
-    color: #222222;
-    background: #FFF;
-    font-family: Arial, Helvetica, sans-serif;
-    box-sizing: border-box;
-    -webkit-border-radius: 2px;
-    background-clip: padding-box;
-    text-align: left;
-    text-rendering: optimizelegibility;
-    -webkit-font-smoothing: antialiased;
-    line-height: 1.2;
-    padding-bottom: 0;
-    -webkit-transition: padding-bottom 0.5s;
-    padding-left: 1px;
-    padding-right: 1px;
+  display: block;
+  box-shadow: 0 3px 5px -1px rgba(0, 0, 0, 0.2),
+    0 6px 10px 0 rgba(0, 0, 0, 0.14), 0 1px 18px 0 rgba(0, 0, 0, 0.12);
+  border: 0;
+  white-space: nowrap;
+  position: absolute;
+  margin-top: 0px;
+  z-index: 1000;
+  color: #222222;
+  background: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  box-sizing: border-box;
+  -webkit-border-radius: 2px;
+  background-clip: padding-box;
+  text-align: left;
+  text-rendering: optimizelegibility;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.2;
+  padding-bottom: 0;
+  -webkit-transition: padding-bottom 0.5s;
+  padding-left: 1px;
+  padding-right: 1px;
 }
 
 .design-block-toolbar-button {
-    background: transparent;
-    color: #333333;
-    outline: none;
-    border: 0;
-    line-height: 1;
-    cursor: pointer;
-    margin: 4px 2px;
-    padding: 0px 5px 5px 5px;
-    -webkit-transition: all 0.5s;
-    border-radius: 4px;
-    -moz-border-radius: 4px;
-    -webkit-border-radius: 4px;
-    box-sizing: border-box;
-    text-decoration: none;
-    display: inline-block;
+  background: transparent;
+  color: #333333;
+  outline: none;
+  border: 0;
+  line-height: 1;
+  cursor: pointer;
+  margin: 4px 2px;
+  padding: 0px 5px 5px 5px;
+  -webkit-transition: all 0.5s;
+  border-radius: 4px;
+  -moz-border-radius: 4px;
+  -webkit-border-radius: 4px;
+  box-sizing: border-box;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .design-block-toolbar-button:hover {
-    background-color: rgba(0,0,0,0.07);
+  background-color: rgba(0, 0, 0, 0.07);
 }
 
 .fix-mui-select-label {
-    /* fixing flawed material UI CSS */
-    background-color: white;
-    padding-left: 6px !important;
-    padding-right: 6px !important;
+  /* fixing flawed material UI CSS */
+  background-color: white;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
 }
 
-#content-select, #room-select {
-    text-align: left;
-    width: 100%;
+#content-select,
+#room-select {
+  text-align: left;
+  width: 100%;
 }
 
 #save-button {
-    text-align: center;
+  text-align: center;
 }
 
 .settings-container {
-    padding: 60px;
-    min-height: 750px;
+  padding: 60px;
+  min-height: 750px;
 }
