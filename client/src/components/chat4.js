@@ -291,6 +291,11 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       setMessages((messages) => [...messages, message]);
     });
 
+    // receive multiple messages at once (i.e. full history when joining a room)
+    socket.on("bulkMessage", (bulkMessages) => {
+      setMessages((messages) => [...messages, ...bulkMessages]);
+    });
+
     socket.on("notification", (message) => {
       console.log(message);
       setMessages((messages) => [

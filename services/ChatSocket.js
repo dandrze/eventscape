@@ -28,15 +28,12 @@ module.exports = (server) => {
   io.adapter(redisAdapter(keys.redisUrl));
 
   io.on("connection", function (socket) {
-    console.log("socket joined: " + process.pid);
     socket.on(
       "join",
       async (
         { userId, registrationId, uuid, room, isModerator, isInitialConnect },
         callback
       ) => {
-        console.log("is moderator?", isModerator);
-        console.log("initial connect", isInitialConnect);
         // if it's not the initial connection, it's a reconnection
         // Everything else was already initialized, so just rejoin the room
         if (!isInitialConnect) {
@@ -104,23 +101,24 @@ module.exports = (server) => {
         });*/
 
         //push the message history
-        messageHistory.forEach((message) => {
-          socket.emit("message", {
-            user: message.ChatUser.name,
-            text: message.text,
-            id: message.id,
-            deleted: message.deleted,
-            userId: message.ChatUser.id,
-          });
-        });
+        socket.emit(
+          "bulkMessage",
+          messageHistory.map((message) => {
+            return {
+              user: message.ChatUser.name,
+              text: message.text,
+              id: message.id,
+              deleted: message.deleted,
+              userId: message.ChatUser.id,
+            };
+          })
+        );
 
         if (isModerator) {
           const chatQuestions = await ChatQuestion.findAll({
             where: { ChatRoomId: room },
             include: { model: ChatUser, include: Registration },
           });
-
-          console.log("questions", chatQuestions);
 
           chatQuestions.forEach((chatQuestion) => {
             socket.emit("question", {
@@ -149,20 +147,19 @@ module.exports = (server) => {
         include: ChatUser,
       });
 
-      io.to(room.toString()).emit("notification", {
-        text: "You are now connected to room " + room,
-      });
-
       //push the message history
-      messageHistory.forEach((message) => {
-        io.to(room.toString()).emit("message", {
-          user: message.ChatUser.name,
-          text: message.text,
-          id: message.id,
-          deleted: message.deleted,
-          userId: message.ChatUser.id,
-        });
-      });
+      socket.emit(
+        "bulkMessage",
+        messageHistory.map((message) => {
+          return {
+            user: message.ChatUser.name,
+            text: message.text,
+            id: message.id,
+            deleted: message.deleted,
+            userId: message.ChatUser.id,
+          };
+        })
+      );
     });
 
     socket.on("setQuestionChecked", async ({ id, isChecked }) => {
@@ -172,14 +169,6 @@ module.exports = (server) => {
     socket.on(
       "sendMessage",
       async ({ chatUserId, room, message }, callback) => {
-        console.log(
-          "Message " +
-            message +
-            " sent on process: " +
-            process.pid +
-            " and port:  " +
-            process.env.PORT
-        );
         const chatUser = await ChatUser.findOne({ where: { id: chatUserId } });
 
         const chatMessage = await ChatMessage.create({
@@ -273,5 +262,7 @@ module.exports = (server) => {
     });
 
     socket.on("disconnect", (reason) => {});
+
+    const sendChatHistory = () => {};
   });
 };
