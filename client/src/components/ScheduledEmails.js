@@ -64,11 +64,10 @@ function ScheduledEmails(props) {
         ...email,
         sendDate:
           email.recipients === recipientsOptions.NEW_REGISTRANTS
-            ? "Upon Registration"
+            ? " Upon Registration"
             : sendDate.toLocaleString("en-us", {
                 timeZoneName: "short",
                 timeZone: props.event.timeZone,
-                weekday: "long",
                 year: "numeric",
                 month: "long",
                 day: "numeric",
@@ -95,6 +94,7 @@ function ScheduledEmails(props) {
     {
       title: "Scheduled Send",
       field: "sendDate",
+      defaultSort: "asc",
     },
     {
       title: "Status",

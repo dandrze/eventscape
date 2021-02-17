@@ -132,9 +132,6 @@ function RegistrationForm(props) {
         setIsLoading(false);
         if (res) {
           setRegComplete(true);
-          setFirstName("");
-          setLastName("");
-          setEmailAddress("");
         }
       }
     }
