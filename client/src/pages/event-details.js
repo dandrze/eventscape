@@ -128,8 +128,35 @@ function Event_Details({
   };
 
   const handleChangeEventLinkBlur = async (event) => {
-    const res = await isLinkAvailable(eventLink);
+    // offlimit subdomain names that we might want to use in the future
+    const offLimitValues = [
+      "app",
+      "www",
+      "blog",
+      "email",
+      "mail",
+      "help",
+      "support",
+      "dashboard",
+      "billing",
+      "contact",
+      "about",
+      "careers",
+      "affiliate",
+      "affiliates",
+    ];
 
+    // check if the event link is one of the offlimit names
+    if (offLimitValues.includes(eventLink)) {
+      setLinkUnavailable(true);
+      setLinkHelperText(
+        "This link name is unavailable. Please choose another one."
+      );
+      return;
+    }
+
+    // check if any other events already used this link name
+    const res = await isLinkAvailable(eventLink);
     if (res) {
       setLinkUnavailable(false);
       setLinkHelperText("");

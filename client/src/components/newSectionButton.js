@@ -62,6 +62,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const DesignBlockPreview = ({ src, handleClick }) => {
+  return (
+    <Tooltip title="Click to add">
+      <img src={src} id="designBlockThumbnail" onClick={handleClick} />
+    </Tooltip>
+  );
+};
+
 const NewSectionButton = (props) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
@@ -158,10 +166,9 @@ const NewSectionButton = (props) => {
                   <Grid container spacing={3}>
                     {/* Logo Header */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={logoHeader}
-                        id="designBlockThumbnail"
-                        onClick={() => {
+                        handleClick={() => {
                           handleClose();
                           handleAddSection(logoHeaderModel());
                         }}
@@ -174,10 +181,9 @@ const NewSectionButton = (props) => {
                   <Grid container spacing={3}>
                     {/* Registration Page Title */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={heroBanner}
-                        id="designBlockThumbnail"
-                        onClick={() => {
+                        handleClick={() => {
                           handleClose();
                           handleAddSection(heroBannerModel(props.event.title));
                         }}
@@ -186,10 +192,9 @@ const NewSectionButton = (props) => {
 
                     {/* Event page title */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={titleThumb}
-                        id="designBlockThumbnail"
-                        onClick={() => {
+                        handleClick={() => {
                           handleClose();
                           handleAddSection(
                             titleTimeModel(
@@ -208,12 +213,11 @@ const NewSectionButton = (props) => {
                   <Grid container spacing={3}>
                     {/* Description Registration */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={registrationHeaderThumb}
-                        id="designBlockThumbnail"
-                        onClick={async () => {
+                        handleClick={() => {
                           handleClose();
-                          await handleAddSection(
+                          handleAddSection(
                             registrationFormDescription(
                               props.event.startDate,
                               props.event.endDate,
@@ -228,10 +232,9 @@ const NewSectionButton = (props) => {
 
                     {/* Time Description */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={timeDescriptionThumb}
-                        id="designBlockThumbnail"
-                        onClick={() => {
+                        handleClick={() => {
                           handleClose();
                           handleAddSection(timeDescription());
                         }}
@@ -244,10 +247,9 @@ const NewSectionButton = (props) => {
                   <Grid container spacing={3}>
                     {/* Stream Chat */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={streamChatThumb}
-                        id="designBlockThumbnail"
-                        onClick={() => {
+                        handleClick={() => {
                           handleClose();
                           handleAddSection(null, true, streamChatReact);
                         }}
@@ -260,10 +262,9 @@ const NewSectionButton = (props) => {
                   <Grid container spacing={3}>
                     {/* Blank */}
                     <Grid item xs={12}>
-                      <img
+                      <DesignBlockPreview
                         src={blankThumb}
-                        id="designBlockThumbnail"
-                        onClick={() => {
+                        handleClick={() => {
                           handleClose();
                           handleAddSection("");
                         }}
