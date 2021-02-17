@@ -35,6 +35,8 @@ module.exports = (server) => {
         { userId, registrationId, uuid, room, isModerator, isInitialConnect },
         callback
       ) => {
+        console.log("is moderator?", isModerator);
+        console.log("initial connect", isInitialConnect);
         // if it's not the initial connection, it's a reconnection
         // Everything else was already initialized, so just rejoin the room
         if (!isInitialConnect) {
@@ -117,6 +119,8 @@ module.exports = (server) => {
             where: { ChatRoomId: room },
             include: { model: ChatUser, include: Registration },
           });
+
+          console.log("questions", chatQuestions);
 
           chatQuestions.forEach((chatQuestion) => {
             socket.emit("question", {
