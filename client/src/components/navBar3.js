@@ -38,7 +38,7 @@ import MenuItem from "@material-ui/core/MenuItem";
 import Button from "@material-ui/core/Button";
 
 /* Icons top bar */
-import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
+import EventscapeLogo from "../icons/eventscape-logo-eaeaea.svg";
 import Internet_icon from "../icons/internet.svg";
 import swap_icon from "../icons/swap.svg";
 import plus_icon from "../icons/plus.svg";
@@ -317,7 +317,7 @@ function NavBar3(props) {
                   className="eventscape-logo"
                   src={EventscapeLogo}
                   alt="eventscape-logo"
-                  height="18px"
+                  height="35px"
                 ></img>
               </Link>
             </Button>

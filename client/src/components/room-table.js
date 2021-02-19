@@ -73,6 +73,11 @@ const RoomTable = (props) => {
     if (!chatEnabled && !questionsEnabled) {
       toast.error("At least one tab must be enabled");
     } else {
+      console.log({
+        roomId: rowData.id,
+        chatEnabled,
+        questionsEnabled,
+      })
       const response = await api.put("/api/chatroom/tab-set-enabled", {
         roomId: rowData.id,
         chatEnabled,
@@ -80,7 +85,7 @@ const RoomTable = (props) => {
       });
 
       await props.fetchData();
-      props.triggerChatUpdate();
+      props.triggerSectionReactUpdate();
     }
 
     setLoadingCheckboxes(0);

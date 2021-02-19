@@ -1,10 +1,10 @@
-import React from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
+import React from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import AppBar from "@material-ui/core/AppBar";
+import Toolbar from "@material-ui/core/Toolbar";
 
 // Icons:
-import EventscapeLogo from "../icons/eventscape-logo-black.png";
+import EventscapeLogo from "../icons/eventscape-logo-black.svg";
 
 /* colour palette */
 const MenuText = "#EAEAEA";
@@ -41,12 +41,12 @@ export default function SimpleNavBar(props) {
     <div className={classes.root}>
       <AppBar position="fixed" className={classes.appBar}>
         <Toolbar>
-            <img
+          <img
             className="eventscape-logo"
             src={EventscapeLogo}
             alt="eventscape-logo"
-            height="20px"
-            ></img>
+            height="35px"
+          ></img>
         </Toolbar>
       </AppBar>
       <main className={classes.content}>

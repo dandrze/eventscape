@@ -86,6 +86,7 @@ function DesignBlockToolbar(props) {
   };
 
   const handleCloseSettings = () => {
+    props.triggerSectionReactUpdate();
     setOpenSettings(false);
   };
 
@@ -174,7 +175,7 @@ function DesignBlockToolbar(props) {
         </DialogActions>
       </Dialog>
 
-      {/*Stream Settings Modal: */}
+      {/*Section Settings Modal: */}
       <Modal1
         open={openSettings}
         onClose={handleCloseSettings}
