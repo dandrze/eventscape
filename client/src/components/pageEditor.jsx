@@ -81,15 +81,6 @@ const PageEditor = (props) => {
         continueText="Continue"
       />
 
-      <div className="cancel-bar">
-        <Tooltip title="Abandon Unsaved Changes" className="cancel-bar">
-          <img
-            src={Cancel}
-            className="cancel-bar-icon"
-            onClick={handleCancelChanges}
-          ></img>
-        </Tooltip>
-      </div>
       <div className="design">
         <div className="top-button-bar">
           <Link
@@ -111,13 +102,39 @@ const PageEditor = (props) => {
               <CircularProgress />
             </div>
           ) : (
-            <button
-              className="Button1 button-bar-right"
-              onClick={handleSave}
-              style={{ marginLeft: "auto" }}
-            >
-              Save
-            </button>
+            <div style={{ flexGrow: 1, textAlign: "right" }}>
+              {props.model.isUnsaved ? (
+                <>
+                  <button
+                    className="Button1"
+                    onClick={handleCancelChanges}
+                    style={{ marginLeft: "12px" }}
+                  >
+                    Discard Changes
+                  </button>
+
+                  <button
+                    className="Button1"
+                    onClick={handleSave}
+                    style={{ marginLeft: "12px" }}
+                  >
+                    Save
+                  </button>
+                </>
+              ) : (
+                <p
+                  style={{
+                    margin: "11px 16px",
+                    color: "#2f2f2f",
+                    fontSize: "18px",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                  }}
+                >
+                  Saved
+                </p>
+              )}
+            </div>
           )}
           <br></br>
         </div>
