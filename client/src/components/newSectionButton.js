@@ -23,6 +23,7 @@ import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
 import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png";
 import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
+import scheduleTable1Thumb from "./designBlockThumbnails/scheduleTable1.png";
 import {
   logoHeaderModel,
   heroBannerModel,
@@ -34,6 +35,7 @@ import {
   timeDescription,
   registrationFormReact,
   registrationFormDescription,
+  scheduleTable1,
 } from "../templates/designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -157,6 +159,7 @@ const NewSectionButton = (props) => {
                   <MenuItem value={"stream-messaging"}>
                     Stream/Messaging
                   </MenuItem>
+                  <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
                   <MenuItem value={"columns-blank"}>Columns (Blank)</MenuItem>
                 </Select>
               </FormControl>
@@ -252,6 +255,21 @@ const NewSectionButton = (props) => {
                         handleClick={() => {
                           handleClose();
                           handleAddSection(null, true, streamChatReact);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                )}
+
+                {blockCat === "schedule" && (
+                  <Grid container spacing={3}>
+                    {/*Schedule Table Option 1 */}
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={scheduleTable1Thumb}
+                        handleClick={() => {
+                          handleClose();
+                          handleAddSection(scheduleTable1());
                         }}
                       />
                     </Grid>

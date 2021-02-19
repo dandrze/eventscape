@@ -439,6 +439,88 @@ export const blankModel = () => {
     `;
 };
 
+export const scheduleTable1 = () => {
+  return `<div style="overflow: hidden;">
+  <h2 class="theme-color">Agenda</h2>
+    <table class="schedule-table">
+    <tbody>
+      <tr>
+        <td style="width: 35%;" >
+        <p>9:00AM - 11:00AM</p>
+        </td>
+        <td style="width: 65%;">
+        <h4>Introduction</h4>
+        <p>Speakers introduce themselves.</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="width: 35%;" >
+        <p>11:00AM - 2:00PM</p>
+        </td>
+        <td style="width: 65%;">
+        <h4>Workshop: How to build your own livestreaming website</h4>
+        <p>Learn how to build a website for your live stream event! 
+        <br> Speakers: 
+            <br>- Karen Johnson - EVP
+            <br>- Mike Chin - SVP</p>
+        </td>
+        </tr>
+    <tr>
+        <td style="width: 35%;" >
+        <p>2:00PM - 3:00PM</p>
+        </td>
+        <td style="width: 65%;">
+        <h4>Live Q&A Panel</h4>
+        <p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
+        </td>
+        </tr>
+    </tbody>
+  </table>
+      </div>
+      `;
+};
+
+export const scheduleTable2 = () => {
+  return `<div style="overflow: hidden;">
+    <h2 class="theme-color">Agenda</h2>
+      <table class="schedule-table">
+      <tbody>
+        <tr>
+          <td style="width: 35%;" >
+          <p>9:00AM - 11:00AM</p>
+          </td>
+          <td style="width: 65%;">
+          <h4>Introduction</h4>
+          <p>Speakers introduce themselves.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%;" >
+          <p>11:00AM - 2:00PM</p>
+          </td>
+          <td style="width: 65%;">
+          <h4>Workshop: How to build your own livestreaming website</h4>
+          <p>Learn how to build a website for your live stream event! 
+          <br> Speakers: 
+              <br>- Karen Johnson - EVP
+              <br>- Mike Chin - SVP</p>
+          </td>
+          </tr>
+      <tr>
+          <td style="width: 35%;" >
+          <p>2:00PM - 3:00PM</p>
+          </td>
+          <td style="width: 65%;">
+          <h4>Live Q&A Panel</h4>
+          <p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
+          </td>
+          </tr>
+      </tbody>
+    </table>
+        </div>
+        `;
+};
+
 export const streamChatReact = {
   name: "StreamChat",
   props: {

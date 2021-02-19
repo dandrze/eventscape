@@ -36,6 +36,8 @@ const Analytics = (props) => {
           loaded: true,
         });
 
+        console.log(visitors.history);
+
         // fetch data again in 10 seconds
         timeout = setTimeout(() => {
           fetchDataAsync();

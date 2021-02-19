@@ -32,6 +32,46 @@ export default (primaryColor) => {
         background-color: ${primaryColor} ;
         border-color: ${primaryColor} ;
       }
+
+      .schedule-table * {
+  font-size: 0.9em;
+}
+
+.schedule-table {
+  width: 80%;
+  margin: auto;
+  margin-bottom: 50px;
+}
+.schedule-table tbody tr td {
+  border-left: none;
+  border-right: none;
+  border-bottom: none;
+  padding: 12px 20px;
+}
+
+.schedule-table tbody tr:first-child td {
+  border-left: none;
+  border-right: none;
+  border-top: none;
+  padding: 12px 20px;
+}
+
+.schedule-table tbody tr td p {
+  margin-bottom: 0px;
+}
+
+.schedule-table tbody tr td:first-child {
+  text-align: right;
+}
+
+.schedule-table tbody tr td:first-child p {
+  font-weight: 500;
+  color: #404040;
+}
+
+.schedule-table tbody tr td:nth-child(2) {
+  text-align: left;
+}
 	
   `;
 };
