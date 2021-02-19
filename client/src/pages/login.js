@@ -4,8 +4,6 @@ import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import EventscapeLogo from "../icons/eventscape-logo-navbar.png";
 import SimpleNavBar from "../components/simpleNavBar";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 
