@@ -226,7 +226,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
     };
     fetchChatRoomData();
-  }, [room, settings.triggerChatUpdate]);
+  }, [room, settings.triggerSectionReactUpdate]);
 
   useEffect(() => {
     socket = io(ENDPOINT, {

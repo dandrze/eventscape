@@ -8,6 +8,8 @@ import "./react-form-builder2/dist/app.css";
 import Cancel from "../icons/cancel.svg";
 import api from "../api/server";
 import { toast } from "react-toastify";
+import "../pages/registrations.css"; //required for registration form builder to size properly
+
 
 const FormBuilder = (props) => {
   const [status, setStatus] = useState("Saved");

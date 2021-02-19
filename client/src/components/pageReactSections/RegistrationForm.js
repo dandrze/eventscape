@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegistrationForm(props) {
+function RegistrationForm({settings, event, model, standardFields, onSubmitCallback, fetchRegistration, registerText, prePopulatedValues, sectionIndex,isEditForm, addRegistration, resendRegistrationEmail, isLive}) {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -30,17 +30,17 @@ function RegistrationForm(props) {
   const [modalText, setModalText] = useState(false);
   const [formData, setFormData] = useState([]);
   const [emailAddress, setEmailAddress] = useState(
-    props.standardFields ? props.standardFields.email : ""
+    standardFields ? standardFields.email : ""
   );
   const [emailAddressReSend, setEmailAddressReSend] = useState("");
   const [emailFound, setEmailFound] = useState(false);
   const [emailNotFound, setEmailNotFound] = useState(false);
   const [emailError, setEmailError] = useState("");
   const [firstName, setFirstName] = useState(
-    props.standardFields ? props.standardFields.firstName : ""
+    standardFields ? standardFields.firstName : ""
   );
   const [lastName, setLastName] = useState(
-    props.standardFields ? props.standardFields.lastName : ""
+    standardFields ? standardFields.lastName : ""
   );
   const [emailErrorText, setEmailErrorText] = useState("");
   const [regComplete, setRegComplete] = useState(false);
@@ -48,7 +48,7 @@ function RegistrationForm(props) {
 
   useEffect(() => {
     fetchFormData();
-  }, []);
+  }, [settings.triggerSectionReactUpdate]);
 
   const closeModal = () => {
     setOpen(false);
@@ -67,11 +67,11 @@ function RegistrationForm(props) {
   };
 
   const fetchFormData = async () => {
-    const formData = await api.get("/api/form", {
-      params: { event: props.event.id },
+    const res = await api.get("/api/form", {
+      params: { event: event.id },
     });
-    if (formData.data) {
-      setFormData(formData.data);
+    if (res.data) {
+      setFormData(res.data);
     }
   };
 
@@ -110,20 +110,20 @@ function RegistrationForm(props) {
       setModalText("Please enter your last name");
       openModal();
     } else if (
-      !props.isEditForm &&
-      (await props.fetchRegistration(emailAddress, props.event.id))
+      !isEditForm &&
+      (await fetchRegistration(emailAddress, event.id))
     ) {
       setModalText("Registration already exists under email: " + emailAddress);
       openModal();
     } else {
       // If there is a custom callback (i.e. editting a registration) use that
-      if (props.onSubmitCallback) {
-        props.onSubmitCallback(values, emailAddress, firstName, lastName);
+      if (onSubmitCallback) {
+        onSubmitCallback(values, emailAddress, firstName, lastName);
       } else {
         setIsLoading(true);
         // else use the default workflow
-        const res = await props.addRegistration(
-          props.event.id,
+        const res = await addRegistration(
+          event.id,
           values,
           emailAddress,
           firstName,
@@ -143,25 +143,20 @@ function RegistrationForm(props) {
     if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
       setEmailErrorText("Please enter valid email address");
     } else {
-      const registration = await props.fetchRegistration(
+      const registration = await fetchRegistration(
         emailAddressReSend,
-        props.event.id
+        event.id
       );
 
       if (registration.emailAddress == emailAddressReSend) {
         setEmailFound(true);
         setEmailNotFound(false);
-        await props.resendRegistrationEmail(emailAddressReSend, props.event.id);
+        await resendRegistrationEmail(emailAddressReSend, event.id);
       } else {
         setEmailNotFound(true);
         setEmailFound(false);
       }
     }
-  };
-
-  const validateEmailFormat = (inputText) => {
-    const mailformat = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-    return inputText.value.match(mailformat);
   };
 
   return (
@@ -175,20 +170,20 @@ function RegistrationForm(props) {
       />
       <div className="container">
         {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
-        {!props.isEditForm ? (
+        {!isEditForm ? (
           <div className="form-editor-froala">
             {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
-            {props.isLive ? (
+            {isLive ? (
               <FroalaEditorView
-                model={props.model.sections[props.sectionIndex].html.replace(
+                model={model.sections[sectionIndex].html.replace(
                   `contenteditable="true"`,
                   `contenteditable="false"`
                 )}
               />
             ) : (
               <Froala
-                sectionIndex={props.sectionIndex}
-                html={props.model.sections[props.sectionIndex].html}
+                sectionIndex={sectionIndex}
+                html={model.sections[sectionIndex].html}
               />
             )}
           </div>
@@ -197,9 +192,9 @@ function RegistrationForm(props) {
           <CircularProgress className="margin-auto" />
         ) : (
           <div>
-            {regComplete && !props.isEditForm ? (
+            {regComplete && !isEditForm ? (
               <div className="margin-auto">
-                <div>Thank you for registering for {props.event.title}</div>
+                <div>Thank you for registering for {event.title}</div>
                 <br />
                 <div>
                   A confirmation email was sent to {emailAddress}. Please check
@@ -209,7 +204,7 @@ function RegistrationForm(props) {
             ) : (
               <div
                 className={
-                  "margin-auto" + !props.isEditForm ? "form-editor-react" : ""
+                  "margin-auto" + !isEditForm ? "form-editor-react" : ""
                 }
               >
                 {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
@@ -254,13 +249,13 @@ function RegistrationForm(props) {
                   <div className="errorMessage">{emailError}</div>
                 </div>
                 <ReactFormGenerator
-                  action_name={props.registerText || "Register now"}
+                  action_name={registerText || "Register now"}
                   onSubmit={handleSubmit}
                   data={formData}
-                  answer_data={props.prePopulatedValues}
+                  answer_data={prePopulatedValues}
                   className="form-editor-react"
                 />
-                {!props.isEditForm ? (
+                {!isEditForm ? (
                   <label>
                     <span>Already registered? Click </span>
                     <span
@@ -344,7 +339,7 @@ function RegistrationForm(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event, model: state.model };
+  return { event: state.event, model: state.model, settings: state.settings };
 };
 
 export default connect(mapStateToProps, actions)(RegistrationForm);

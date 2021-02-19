@@ -284,6 +284,7 @@ label {
   background-color: white;
   height: 100%;
   width: 100%;
+  min-width: fit-content;
   border: solid var(--box-border);
   border-width: 0 1px 1px 1px;
 }

@@ -2,7 +2,7 @@ import {
   SET_LOADED,
   SET_SIDE_DRAWER_OPEN,
   SET_S3HASH,
-  TRIGGER_CHAT_UPDATE,
+  TRIGGER_SECTION_REACT_UPDATE,
 } from "../actions/types";
 
 export default function (
@@ -11,7 +11,7 @@ export default function (
     sideDrawerOpen: true,
     formSaved: false,
     s3Hash: null,
-    triggerChatUpdate: true,
+    triggerSectionReactUpdate: true,
   },
   action
 ) {
@@ -22,9 +22,12 @@ export default function (
       return { ...state, sideDrawerOpen: action.payload };
     case SET_S3HASH:
       return { ...state, s3Hash: action.payload };
-    case TRIGGER_CHAT_UPDATE:
+    case TRIGGER_SECTION_REACT_UPDATE:
       // simple toggle to trigger the useEffect function within stream-chat
-      return { ...state, triggerChatUpdate: !state.triggerChatUpdate };
+      return {
+        ...state,
+        triggerSectionReactUpdate: !state.triggerSectionReactUpdate,
+      };
     default:
       return state;
   }
