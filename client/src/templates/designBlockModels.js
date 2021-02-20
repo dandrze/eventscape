@@ -440,9 +440,9 @@ export const blankModel = () => {
 };
 
 export const scheduleTable1 = () => {
-  return `<div style="overflow: hidden;">
+  return `<div class="container block-container" style="overflow: hidden;">
   <h2 class="theme-color">Agenda</h2>
-    <table class="schedule-table">
+    <table class="schedule-table schedule-table1">
     <tbody>
       <tr>
         <td style="width: 35%;" >
@@ -481,9 +481,9 @@ export const scheduleTable1 = () => {
 };
 
 export const scheduleTable2 = () => {
-  return `<div style="overflow: hidden;">
+  return `<div class="container block-container" style="overflow: hidden;">
     <h2 class="theme-color">Agenda</h2>
-      <table class="schedule-table">
+      <table class="schedule-table schedule-table2">
       <tbody>
         <tr>
           <td style="width: 35%;" >
@@ -519,6 +519,35 @@ export const scheduleTable2 = () => {
     </table>
         </div>
         `;
+};
+
+export const paragraph1 = () => {
+  return `<div class="container block-container" style="overflow: hidden;">
+  <div class="col">
+     <p>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+     </p>
+     </div>
+          </div>
+          `;
+};
+
+export const paragraph2 = () => {
+  return `<div class="container block-container" style="overflow: hidden;">
+  <div class="row">
+    <div class="col col-sm-12 col-md-6 col-mobile-margin">
+     <p>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+     </p>
+     </div>
+     <div class="col col-sm-12 col-md-6 col-mobile-margin">
+     <p>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+     </p>
+     </div>
+     </div>
+          </div>
+          `;
 };
 
 export const streamChatReact = {

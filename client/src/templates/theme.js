@@ -1,5 +1,30 @@
 export default (primaryColor) => {
   return `
+  @media (min-width: 768px) {
+    /* line 10, /Users/rsaethang/.rvm/gems/ruby-2.5.7/gems/bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/_grid.scss */
+    .block-container {
+      width: 750px;
+    }
+  }
+  @media (min-width: 992px) {
+    /* line 10, /Users/rsaethang/.rvm/gems/ruby-2.5.7/gems/bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/_grid.scss */
+    .block-container {
+      width: 970px;
+    }
+  }
+  @media (min-width: 1200px) {
+    /* line 10, /Users/rsaethang/.rvm/gems/ruby-2.5.7/gems/bootstrap-sass-3.4.1/assets/stylesheets/bootstrap/_grid.scss */
+    .block-container {
+      width: 1170px;
+    }
+  }
+ 
+  .block-container {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    max-width: 95%;
+  }
+
  	.fr-view button { 
 		background: ${primaryColor} !important;
 		border-color: ${primaryColor} !important;
@@ -42,17 +67,23 @@ export default (primaryColor) => {
   margin: auto;
   margin-bottom: 50px;
 }
-.schedule-table tbody tr td {
+
+.schedule-table1 tbody tr td {
   border-left: none;
   border-right: none;
   border-bottom: none;
   padding: 12px 20px;
 }
 
-.schedule-table tbody tr:first-child td {
+.schedule-table1 tbody tr:first-child td {
   border-left: none;
   border-right: none;
   border-top: none;
+  padding: 12px 20px;
+}
+
+.schedule-table2 tbody tr td {
+  border: none;
   padding: 12px 20px;
 }
 
@@ -64,6 +95,10 @@ export default (primaryColor) => {
   text-align: right;
 }
 
+.schedule-table2 tbody tr td:first-child {
+  vertical-align: top;
+}
+
 .schedule-table tbody tr td:first-child p {
   font-weight: 500;
   color: #404040;
@@ -72,6 +107,5 @@ export default (primaryColor) => {
 .schedule-table tbody tr td:nth-child(2) {
   text-align: left;
 }
-	
   `;
 };
