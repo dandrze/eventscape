@@ -235,7 +235,11 @@ const EmailEditor = (props) => {
             </FormControl>
           ) : null}
         </div>
-        <button className="Button1 button-bar-right" onClick={handleSave}>
+        <button
+          className="Button1 button-bar-right"
+          onClick={handleSave}
+          style={{ marginLeft: "24px" }}
+        >
           Save
         </button>
       </div>

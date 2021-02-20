@@ -20,6 +20,7 @@ const PageEditor = (props) => {
   const [location, setLocation] = useState(null);
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [discardOpen, setDiscardOpen] = useState(false);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -52,6 +53,15 @@ const PageEditor = (props) => {
     }
   };
 
+  const handleDiscardAlertClose = () => {
+    setDiscardOpen(false);
+  };
+
+  const handleDiscardAlertContinue = () => {
+    handleCancelChanges();
+    setDiscardOpen(false);
+  };
+
   const handleCancelChanges = async () => {
     const modelId =
       props.page === "event"
@@ -81,17 +91,17 @@ const PageEditor = (props) => {
         continueText="Continue"
       />
 
-      <div className="cancel-bar">
-        <Tooltip title="Abandon Unsaved Changes" className="cancel-bar">
-          <img
-            src={Cancel}
-            className="cancel-bar-icon"
-            onClick={handleCancelChanges}
-          ></img>
-        </Tooltip>
-      </div>
+      <AlertModal
+        open={discardOpen}
+        onClose={handleDiscardAlertClose}
+        onContinue={handleDiscardAlertContinue}
+        text="Are you sure you want to discard your changes?"
+        closeText="No"
+        continueText="Yes"
+      />
+
       <div className="design">
-        <div className="top-button-bar">
+        <div className="top-button-bar pt-5">
           <Link
             className="button-bar-left"
             to={() =>
@@ -111,13 +121,39 @@ const PageEditor = (props) => {
               <CircularProgress />
             </div>
           ) : (
-            <button
-              className="Button1 button-bar-right"
-              onClick={handleSave}
-              style={{ marginLeft: "auto" }}
-            >
-              Save
-            </button>
+            <div style={{ flexGrow: 1, textAlign: "right" }}>
+              {props.model.isUnsaved ? (
+                <>
+                  <button
+                    className="Button1"
+                    onClick={() => setDiscardOpen(true)}
+                    style={{ marginLeft: "12px" }}
+                  >
+                    Discard Changes
+                  </button>
+
+                  <button
+                    className="Button1"
+                    onClick={handleSave}
+                    style={{ marginLeft: "12px" }}
+                  >
+                    Save
+                  </button>
+                </>
+              ) : (
+                <p
+                  style={{
+                    margin: "11px 16px",
+                    color: "#2f2f2f",
+                    fontSize: "18px",
+                    fontWeight: 400,
+                    fontStyle: "italic",
+                  }}
+                >
+                  Saved
+                </p>
+              )}
+            </div>
           )}
           <br></br>
         </div>
