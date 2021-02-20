@@ -20,6 +20,7 @@ const PageEditor = (props) => {
   const [location, setLocation] = useState(null);
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
+  const [discardOpen, setDiscardOpen] = useState(false);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -52,6 +53,15 @@ const PageEditor = (props) => {
     }
   };
 
+  const handleDiscardAlertClose = () => {
+    setDiscardOpen(false);
+  };
+
+  const handleDiscardAlertContinue = () => {
+    handleCancelChanges();
+    setDiscardOpen(false);
+  };
+
   const handleCancelChanges = async () => {
     const modelId =
       props.page === "event"
@@ -81,6 +91,15 @@ const PageEditor = (props) => {
         continueText="Continue"
       />
 
+      <AlertModal
+        open={discardOpen}
+        onClose={handleDiscardAlertClose}
+        onContinue={handleDiscardAlertContinue}
+        text="Are you sure you want to discard your changes?"
+        closeText="No"
+        continueText="Yes"
+      />
+
       <div className="design">
         <div className="top-button-bar">
           <Link
@@ -107,7 +126,7 @@ const PageEditor = (props) => {
                 <>
                   <button
                     className="Button1"
-                    onClick={handleCancelChanges}
+                    onClick={() => setDiscardOpen(true)}
                     style={{ marginLeft: "12px" }}
                   >
                     Discard Changes
