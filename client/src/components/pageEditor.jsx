@@ -101,7 +101,7 @@ const PageEditor = (props) => {
       />
 
       <div className="design">
-        <div className="top-button-bar">
+        <div className="top-button-bar pt-5">
           <Link
             className="button-bar-left"
             to={() =>

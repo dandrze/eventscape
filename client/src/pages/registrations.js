@@ -159,24 +159,6 @@ const Registrations = (props) => {
         content={
           <div className="container-width">
             <div className="top-button-bar">
-              {/*
-              <div className="button-bar-left">
-                <Tooltip title="If registration is off, attendees will go directly to the event page and no registration data will be collected.">
-                  <FormGroup>
-                    <FormControlLabel
-                      control={
-                        <Switch1
-                          checked={regOn}
-                          onChange={handleChange}
-                          name="checked"
-                        />
-                      }
-                      label="Registration On"
-                    />
-                  </FormGroup>
-                </Tooltip>
-              </div>
-              */}
               <button
                 className="Button1 button-bar-right"
                 style={{ marginLeft: "auto" }}
