@@ -23,6 +23,8 @@ export default (primaryColor) => {
     padding-top: 50px;
     padding-bottom: 50px;
     max-width: 95%;
+    margin-left: auto;
+    margin-right: auto;
   }
 
  	.fr-view button { 

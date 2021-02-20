@@ -440,7 +440,7 @@ export const blankModel = () => {
 };
 
 export const scheduleTable1 = () => {
-  return `<div class="container block-container" style="overflow: hidden;">
+  return `<div class="block-container" style="overflow: hidden;">
   <h2 class="theme-color">Agenda</h2>
     <table class="schedule-table schedule-table1">
     <tbody>
@@ -481,7 +481,7 @@ export const scheduleTable1 = () => {
 };
 
 export const scheduleTable2 = () => {
-  return `<div class="container block-container" style="overflow: hidden;">
+  return `<div class="block-container" style="overflow: hidden;">
     <h2 class="theme-color">Agenda</h2>
       <table class="schedule-table schedule-table2">
       <tbody>
