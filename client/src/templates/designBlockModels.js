@@ -439,6 +439,117 @@ export const blankModel = () => {
     `;
 };
 
+export const scheduleTable1 = () => {
+  return `<div class="block-container" style="overflow: hidden;">
+  <h2 class="theme-color">Agenda</h2>
+    <table class="schedule-table schedule-table1">
+    <tbody>
+      <tr>
+        <td style="width: 35%;" >
+        <p>9:00AM - 11:00AM</p>
+        </td>
+        <td style="width: 65%;">
+        <h4>Introduction</h4>
+        <p>Speakers introduce themselves.</p>
+        </td>
+      </tr>
+      <tr>
+        <td style="width: 35%;" >
+        <p>11:00AM - 2:00PM</p>
+        </td>
+        <td style="width: 65%;">
+        <h4>Workshop: How to build your own livestreaming website</h4>
+        <p>Learn how to build a website for your live stream event! 
+        <br> Speakers: 
+            <br>- Karen Johnson - EVP
+            <br>- Mike Chin - SVP</p>
+        </td>
+        </tr>
+    <tr>
+        <td style="width: 35%;" >
+        <p>2:00PM - 3:00PM</p>
+        </td>
+        <td style="width: 65%;">
+        <h4>Live Q&A Panel</h4>
+        <p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
+        </td>
+        </tr>
+    </tbody>
+  </table>
+      </div>
+      `;
+};
+
+export const scheduleTable2 = () => {
+  return `<div class="block-container" style="overflow: hidden;">
+    <h2 class="theme-color">Agenda</h2>
+      <table class="schedule-table schedule-table2">
+      <tbody>
+        <tr>
+          <td style="width: 35%;" >
+          <p>9:00AM - 11:00AM</p>
+          </td>
+          <td style="width: 65%;">
+          <h4>Introduction</h4>
+          <p>Speakers introduce themselves.</p>
+          </td>
+        </tr>
+        <tr>
+          <td style="width: 35%;" >
+          <p>11:00AM - 2:00PM</p>
+          </td>
+          <td style="width: 65%;">
+          <h4>Workshop: How to build your own livestreaming website</h4>
+          <p>Learn how to build a website for your live stream event! 
+          <br> Speakers: 
+              <br>- Karen Johnson - EVP
+              <br>- Mike Chin - SVP</p>
+          </td>
+          </tr>
+      <tr>
+          <td style="width: 35%;" >
+          <p>2:00PM - 3:00PM</p>
+          </td>
+          <td style="width: 65%;">
+          <h4>Live Q&A Panel</h4>
+          <p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
+          </td>
+          </tr>
+      </tbody>
+    </table>
+        </div>
+        `;
+};
+
+export const paragraph1 = () => {
+  return `<div class="container block-container" style="overflow: hidden;">
+  <div class="col">
+     <p>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+     </p>
+     </div>
+          </div>
+          `;
+};
+
+export const paragraph2 = () => {
+  return `<div class="container block-container" style="overflow: hidden;">
+  <div class="row">
+    <div class="col col-sm-12 col-md-6 col-mobile-margin">
+     <p>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+     </p>
+     </div>
+     <div class="col col-sm-12 col-md-6 col-mobile-margin">
+     <p>
+     Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+     </p>
+     </div>
+     </div>
+          </div>
+          `;
+};
+
 export const streamChatReact = {
   name: "StreamChat",
   props: {

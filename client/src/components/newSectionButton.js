@@ -23,6 +23,10 @@ import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
 import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png";
 import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
+import scheduleTable1Thumb from "./designBlockThumbnails/scheduleTable1.png";
+import scheduleTable2Thumb from "./designBlockThumbnails/scheduleTable2.png";
+import paragraph1Thumb from "./designBlockThumbnails/paragraph1.png";
+import paragraph2Thumb from "./designBlockThumbnails/paragraph2.png";
 import {
   logoHeaderModel,
   heroBannerModel,
@@ -34,6 +38,10 @@ import {
   timeDescription,
   registrationFormReact,
   registrationFormDescription,
+  scheduleTable1,
+  scheduleTable2,
+  paragraph1,
+  paragraph2,
 } from "../templates/designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -157,6 +165,8 @@ const NewSectionButton = (props) => {
                   <MenuItem value={"stream-messaging"}>
                     Stream/Messaging
                   </MenuItem>
+                  <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
+                  <MenuItem value={"text"}>Text</MenuItem>
                   <MenuItem value={"columns-blank"}>Columns (Blank)</MenuItem>
                 </Select>
               </FormControl>
@@ -252,6 +262,54 @@ const NewSectionButton = (props) => {
                         handleClick={() => {
                           handleClose();
                           handleAddSection(null, true, streamChatReact);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                )}
+
+                {blockCat === "schedule" && (
+                  <Grid container spacing={3}>
+                    {/*Schedule Table Option 1 */}
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={scheduleTable1Thumb}
+                        handleClick={() => {
+                          handleClose();
+                          handleAddSection(scheduleTable1());
+                        }}
+                      />
+                    </Grid>
+                    {/*Schedule Table Option 2*/}
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={scheduleTable2Thumb}
+                        handleClick={() => {
+                          handleClose();
+                          handleAddSection(scheduleTable2());
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                )}
+
+                {blockCat === "text" && (
+                  <Grid container spacing={3}>
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={paragraph1Thumb}
+                        handleClick={() => {
+                          handleClose();
+                          handleAddSection(paragraph1());
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={paragraph2Thumb}
+                        handleClick={() => {
+                          handleClose();
+                          handleAddSection(paragraph2());
                         }}
                       />
                     </Grid>
