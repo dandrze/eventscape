@@ -592,6 +592,22 @@ function NavBar3(props) {
                 </ListItem>
               </Link>
             ) : null}
+            <Link to="/polls">
+              <ListItem
+                button
+                key="polls"
+                className={clsx({
+                  [classes.highlight]: highlight === "polls",
+                })}
+              >
+                <Tooltip title="Polls">
+                  <ListItemIcon>
+                    <img src={GraphIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Polls" />
+              </ListItem>
+            </Link>
             <Link to="/analytics">
               <ListItem
                 button
@@ -608,6 +624,7 @@ function NavBar3(props) {
                 <ListItemText primary="Analytics" />
               </ListItem>
             </Link>
+
             <Link to="/messaging">
               <ListItem
                 button

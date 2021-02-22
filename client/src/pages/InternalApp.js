@@ -21,6 +21,7 @@ import AccountSettingsContact from "./account-settings-contact";
 import AccountSettingsPassword from "./account-settings-password";
 import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
+import Polls from "./polls";
 
 const InternalApp = (props) => {
   return (
@@ -34,6 +35,7 @@ const InternalApp = (props) => {
           <Route exact path="/website-settings" component={WebsiteSettings} />
           <Route exact path="/communication" component={Communication} />
           <Route exact path="/registrations" component={Registrations} />
+          <Route exact path="/polls" component={Polls} />
           <Route exact path="/analytics" component={Analytics} />
           <Route exact path="/messaging" component={Messaging} />
           <Route exact path="/preview/:event/:model" component={Preview} />
