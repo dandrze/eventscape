@@ -38,13 +38,19 @@ const useStyles = makeStyles((theme) => ({
   removeOption: { margin: "10px", cursor: "pointer", color: "#b0281c" },
 }));
 
-const FormBuilder = ({ handleClose, event }) => {
+const FormBuilder = ({ handleClose, event, pollData, isAdd }) => {
   const classes = useStyles();
 
-  const [question, setQuestion] = useState("");
-  const [options, setOptions] = useState(["", ""]);
-  const [allowMultiple, setAllowMultiple] = useState(false);
-  const [allowShare, setAllowShare] = useState(false);
+  const [question, setQuestion] = useState(isAdd ? "" : pollData.question);
+  const [options, setOptions] = useState(
+    isAdd ? [{ text: "" }, { text: "" }] : pollData.PollOptions
+  );
+  const [allowMultiple, setAllowMultiple] = useState(
+    isAdd ? false : pollData.allowMultiple
+  );
+  const [allowShare, setAllowShare] = useState(
+    isAdd ? false : pollData.allowShare
+  );
   const [openAlert, setOpenAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
@@ -56,13 +62,13 @@ const FormBuilder = ({ handleClose, event }) => {
     const newValue = event.target.value;
     setOptions((options) =>
       options.map((option, i) => {
-        return i == index ? newValue : option;
+        return i == index ? { ...option, text: newValue } : { ...option };
       })
     );
   };
 
   const handleAddOption = () => {
-    setOptions((options) => [...options, ""]);
+    setOptions((options) => [...options, { text: "" }]);
   };
 
   const handleRemoveOption = (index) => {
@@ -97,19 +103,29 @@ const FormBuilder = ({ handleClose, event }) => {
     }
     // check for empty options
     for (let option of options) {
-      if (!option) {
+      if (!option.text) {
         return alert(
           "Please ensure all options contain text. Remove any empty options."
         );
       }
     }
-    const res = await api.post("/api/polling/create", {
-      question,
-      options,
-      allowMultiple,
-      allowShare,
-      eventId: event.id,
-    });
+    if (isAdd) {
+      const addResponse = await api.post("/api/polling/poll", {
+        question,
+        options,
+        allowMultiple,
+        allowShare,
+        eventId: event.id,
+      });
+    } else {
+      const editResponse = await api.put("/api/polling/poll", {
+        pollId: pollData.id,
+        question,
+        options,
+        allowMultiple,
+        allowShare,
+      });
+    }
     handleClose();
   };
 
@@ -136,7 +152,7 @@ const FormBuilder = ({ handleClose, event }) => {
               <div className={classes.optionContainer}>
                 <TextField
                   variant="outlined"
-                  value={options[index]}
+                  value={options[index].text}
                   placeholder={`Option ${index + 1}`}
                   onChange={(event) => handleChangeOptions(event, index)}
                   fullWidth

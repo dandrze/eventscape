@@ -12,10 +12,13 @@ import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
 import { CircularProgress } from "@material-ui/core";
+import api from "../api/server";
 
 const Polls = (props) => {
   const [open, setOpen] = useState(false);
   const [dataFetched, setDataFetched] = useState(true);
+  const [isAddPoll, setIsAddPoll] = useState(true);
+  const [pollData, setPollData] = useState({});
 
   useEffect(() => {
     fetchDatAsync();
@@ -31,6 +34,13 @@ const Polls = (props) => {
   };
 
   const handleAddPoll = () => {
+    setIsAddPoll(true);
+    setOpen(true);
+  };
+
+  const handleEditPoll = (rowData) => {
+    setPollData(rowData);
+    setIsAddPoll(false);
     setOpen(true);
   };
 
@@ -39,13 +49,24 @@ const Polls = (props) => {
     fetchDatAsync();
   };
 
+  const handleDeletePoll = async (pollId) => {
+    const res = await api.delete("/api/polling/poll", { params: { pollId } });
+    fetchDatAsync();
+  };
+
   return (
     <div>
       <Modal1
         open={open}
         onClose={handleCloseBuilder}
-        content={<PollBuilder handleClose={handleCloseBuilder} />}
-        title="Create a new poll"
+        content={
+          <PollBuilder
+            handleClose={handleCloseBuilder}
+            isAdd={isAddPoll}
+            pollData={pollData}
+          />
+        }
+        title={isAddPoll ? "Create a new poll" : "Edit poll"}
       />
 
       <NavBar3
@@ -54,7 +75,12 @@ const Polls = (props) => {
         content={
           <div className="container-width">
             {dataFetched ? (
-              <PollsTable handleAdd={handleAddPoll} data={props.polls} />
+              <PollsTable
+                handleAdd={handleAddPoll}
+                data={props.polls}
+                handleEdit={handleEditPoll}
+                handleDelete={handleDeletePoll}
+              />
             ) : (
               <CircularProgress />
             )}

@@ -52,9 +52,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-function PollsTable(props) {
-  const { data } = props;
-
+function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
   const columns = [
     {
       title: "Poll Question",
@@ -95,6 +93,7 @@ function PollsTable(props) {
       tooltip: "Edit Form",
       onClick: (event, rowData) => {
         console.log(rowData);
+        handleEdit(rowData);
       },
     },
     (rowData) => ({
@@ -109,7 +108,7 @@ function PollsTable(props) {
       tooltip: "Add Poll",
       isFreeAction: true,
       onClick: (event) => {
-        props.handleAdd();
+        handleAdd();
       },
     },
   ];
@@ -129,20 +128,15 @@ function PollsTable(props) {
         editable={{
           onRowDelete: (oldData) =>
             new Promise((resolve) => {
-              if (oldData.recipients == recipientsOptions.NEW_REGISTRANTS) {
-                toast.info(
-                  "The registration confirmation email cannot be duplicated"
-                );
-              } else {
-                props.handleDelete(oldData.id);
-              }
+              handleDelete(oldData.id);
+
               resolve();
             }),
         }}
         localization={{
           body: {
-            emptyDataSourceMessage: props.settings.loaded ? (
-              "No Polls Found"
+            emptyDataSourceMessage: settings.loaded ? (
+              "No Polls Found. Create a new poll by click the + icon in the top right."
             ) : (
               <div style={{ padding: "50px" }}>
                 <CircularProgress />
