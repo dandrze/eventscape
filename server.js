@@ -61,6 +61,7 @@ function start() {
   app.use(require("./routes/analyticsRoutes"));
   app.use(require("./routes/froalaRoutes"));
   app.use(require("./routes/testRoutes"));
+  app.use(require("./routes/pollingRoutes"));
 
   app.get("/loaderio-feb5ca360d9f5cdf226bcd9fb3240326", async (req, res) => {
     file = `${__dirname}/public/loaderio-verification.txt`;

@@ -60,9 +60,11 @@ export default function AlertModal(props) {
           <Button onClick={handleClose} color="primary">
             {closeText}
           </Button>
-          <Button onClick={handleContinue} color="primary">
-            {continueText}
-          </Button>
+          {continueText ? (
+            <Button onClick={handleContinue} color="primary">
+              {continueText}
+            </Button>
+          ) : null}
         </DialogActions>
       </Dialog>
     </div>

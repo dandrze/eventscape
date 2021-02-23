@@ -22,7 +22,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegistrationForm({settings, event, model, standardFields, onSubmitCallback, fetchRegistration, registerText, prePopulatedValues, sectionIndex,isEditForm, addRegistration, resendRegistrationEmail, isLive}) {
+function RegistrationForm({
+  settings,
+  event,
+  model,
+  standardFields,
+  onSubmitCallback,
+  fetchRegistration,
+  registerText,
+  prePopulatedValues,
+  sectionIndex,
+  isEditForm,
+  addRegistration,
+  resendRegistrationEmail,
+  isLive,
+}) {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
