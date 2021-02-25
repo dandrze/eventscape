@@ -13,9 +13,11 @@ import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
 import { CircularProgress } from "@material-ui/core";
 import api from "../api/server";
+import PollController from "../components/PollController";
 
 const Polls = (props) => {
   const [open, setOpen] = useState(false);
+  const [openPoll, setOpenPoll] = useState(false);
   const [dataFetched, setDataFetched] = useState(true);
   const [isAddPoll, setIsAddPoll] = useState(true);
   const [pollData, setPollData] = useState({});
@@ -54,6 +56,14 @@ const Polls = (props) => {
     fetchDatAsync();
   };
 
+  const handleLaunchPoll = () => {
+    setOpenPoll(true);
+  };
+
+  const handleClosePoll = () => {
+    setOpenPoll(false);
+  };
+
   return (
     <div>
       <Modal1
@@ -68,12 +78,26 @@ const Polls = (props) => {
         }
         title={isAddPoll ? "Create a new poll" : "Edit poll"}
       />
+      <Modal1
+        open={openPoll}
+        onClose={handleClosePoll}
+        content={<PollController handleClose={handleClosePoll} />}
+      />
 
       <NavBar3
         displaySideNav="true"
         highlight="polls"
         content={
           <div className="container-width">
+            <div className="top-button-bar">
+              <button
+                className="Button1 button-bar-right"
+                style={{ marginLeft: "auto" }}
+                onClick={handleLaunchPoll}
+              >
+                Launch Polll
+              </button>
+            </div>
             {dataFetched ? (
               <PollsTable
                 handleAdd={handleAddPoll}

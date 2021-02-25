@@ -59,8 +59,8 @@ function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
       field: "question",
     },
     {
-      title: "Type",
-      field: "type",
+      title: "Status",
+      field: "status",
     },
   ];
 
@@ -122,9 +122,6 @@ function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
         options={options}
         icons={tableIcons}
         actions={actions}
-        components={{
-          Container: (props) => <Paper {...props} elevation={0} />,
-        }}
         editable={{
           onRowDelete: (oldData) =>
             new Promise((resolve) => {

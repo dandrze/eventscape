@@ -17,11 +17,7 @@ const RegistrationForm = require("./models/RegistrationForm");
 const ChatQuestion = require("./models/ChatQuestion");
 const Poll = require("./models/Poll");
 const PollOption = require("./models/PollOption");
-const PollResponse = sequelize.define(
-  "Poll_Response",
-  {},
-  { timestamps: true }
-);
+const PollResponse = sequelize.define("PollResponse", {}, { timestamps: true });
 
 ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
@@ -79,8 +75,8 @@ Event.hasMany(Poll);
 PollOption.belongsTo(Poll);
 Poll.hasMany(PollOption);
 
-Poll.belongsToMany(SiteVisitor, { through: PollResponse });
-SiteVisitor.belongsToMany(Poll, { through: PollResponse });
+PollOption.belongsToMany(SiteVisitor, { through: PollResponse });
+SiteVisitor.belongsToMany(PollOption, { through: PollResponse });
 
 //sequelize.sync({ alter: true });
 /* Poll.sync({ alter: true });
@@ -125,5 +121,6 @@ module.exports = {
     ChatQuestion,
     Poll,
     PollOption,
+    PollResponse,
   },
 };

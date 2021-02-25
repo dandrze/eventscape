@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   removeOption: { margin: "10px", cursor: "pointer", color: "#b0281c" },
 }));
 
-const FormBuilder = ({ handleClose, event, pollData, isAdd }) => {
+const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
   const classes = useStyles();
 
   const [question, setQuestion] = useState(isAdd ? "" : pollData.question);
@@ -220,4 +220,4 @@ const mapStateToProps = (state) => {
   return { model: state.model, event: state.event, settings: state.settings };
 };
 
-export default connect(mapStateToProps, actions)(FormBuilder);
+export default connect(mapStateToProps, actions)(PollBuilder);

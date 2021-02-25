@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { Poll, PollOption } = require("../db").models;
+const { Poll, PollOption, PollResponse } = require("../db").models;
 
 const { clearCache } = require("../services/sequelizeRedis");
 
@@ -16,6 +16,39 @@ router.get("/api/polling/poll/all", async (req, res, next) => {
     });
 
     res.status(200).send(polls);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/api/polling/results", async (req, res, next) => {
+  `returns an object containing the results for each poll option for a given poll
+  
+  returns object
+  
+  example:
+  {
+    '10': 40,
+    '11': 50
+  }
+  40 responses for PollOption 10 and 50 responses for PollOption 11`;
+  const { pollId } = req.query;
+
+  try {
+    const pollOptions = await PollOption.findAll({ where: { PollId: pollId } });
+
+    let result = {};
+
+    for (let i = 0; i < pollOptions.length; i++) {
+      const PollOptionId = pollOptions[i].id;
+      const responsesCount = await PollResponse.count({
+        where: { PollOptionId },
+      });
+
+      result[PollOptionId] = responsesCount;
+    }
+
+    res.status(200).send(result);
   } catch (error) {
     next(error);
   }

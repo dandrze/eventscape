@@ -69,8 +69,10 @@ export default function Modal1(props) {
                   maxWidth: "95vw",
                 }}
               >
-                <div style={{ padding: "18px 60px 60px 60px" }}>
-                  <h2 className={classes.primaryColor}>{props.title}</h2>
+                <div style={{ padding: "18px 60px" }}>
+                  {props.title ? (
+                    <h2 className={classes.primaryColor}>{props.title}</h2>
+                  ) : null}
                   <div>{content}</div>
                 </div>
               </div>
