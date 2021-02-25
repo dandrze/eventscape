@@ -262,7 +262,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       );
     });
 
-    socket.on("reconnect", () => {
+    socket.io.on("reconnect", () => {
       console.log("reconnected!");
     });
     socket.on("reconnect_attempt", () => {

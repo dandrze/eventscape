@@ -68,11 +68,25 @@ const Published = (props) => {
     // if the pagetype is event, turn on analytics
     if (pageType == pageNames.EVENT) {
       socket = io(ENDPOINT, {
-        path: "/api/socket/analytics",
+        path: "/api/socket/event",
         transports: ["websocket"],
       });
 
-      socket.on("connect", () => {});
+      socket.io.on("reconnect", () => {
+        console.log("reconnected!");
+        console.log(socket);
+
+        socket.emit("rejoin", event.id);
+      });
+      console.log(socket);
+
+      socket.on("poll", ({ question, options }) => {
+        console.log({ question, options });
+      });
+
+      socket.on("pollClosed", () => {
+        console.log("Poll closed!");
+      });
 
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
 

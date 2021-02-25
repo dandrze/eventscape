@@ -11,10 +11,16 @@ import Divider from "@material-ui/core/Divider";
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import Select from "@material-ui/core/Select";
 import { HorizontalBar } from "react-chartjs-2";
+import io from "socket.io-client";
 
 import AlertModal from "./AlertModal";
 import * as actions from "../actions";
 import api from "../api/server";
+
+const ENDPOINT =
+  process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
+
+let socket;
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -40,6 +46,34 @@ const PollController = ({ polls, event }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
+  useEffect(() => {
+    socket = io(ENDPOINT, {
+      path: "/api/socket/event",
+      transports: ["websocket"],
+    });
+
+    socket.on("connect", () => {
+      console.log("connected");
+    });
+
+    socket.io.on("reconnect", () => {
+      console.log("reconnected!");
+      console.log(socket);
+
+      socket.emit("rejoin", event.id);
+    });
+    console.log(socket);
+
+    socket.on("poll", () => {
+      console.log("Poll received");
+    });
+
+    socket.emit("join", {
+      EventId: event.id,
+      isModerator: true,
+    });
+  }, []);
+
   const handleChangeSelectedPoll = (event) => {
     setSelectedPoll(event.target.value);
   };
@@ -53,10 +87,19 @@ const PollController = ({ polls, event }) => {
           setOpenAlert(true);
           return;
         }
+        // push the poll to guests
+        socket.emit("pushPoll", {
+          eventId: event.id,
+          question: selectedPoll.question,
+          options: selectedPoll.PollOptions,
+        });
         break;
 
       case 1:
-        return <PollInProgress poll={selectedPoll} eventId={event.id} />;
+        // Push an event to end the poll
+        socket.emit("closePoll", event.id);
+        return;
+        break;
     }
     setStep(step + 1);
   };

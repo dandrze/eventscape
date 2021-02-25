@@ -92,7 +92,7 @@ function start() {
   const server = http.createServer(app);
 
   require("./services/ChatSocket")(server);
-  require("./services/AnalyticsSocket")(server);
+  require("./services/EventSocket")(server);
 
   const exitHandler = terminate(server, {
     coredump: false,
