@@ -6,6 +6,7 @@ import {
   MOVE_SECTION,
   DELETE_SECTION,
   MODEL_ISSAVED,
+  FLAG_UPDATE,
   UPDATE_REACT_COMPONENT,
 } from "../actions/types";
 
@@ -14,6 +15,8 @@ export default function (
   action
 ) {
   switch (action.type) {
+    case FLAG_UPDATE:
+      return { ...state, isUnsaved: true };
     case UPDATE_SECTION:
       return {
         ...state,

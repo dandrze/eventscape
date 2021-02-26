@@ -42,11 +42,11 @@ import api from "../api/server";
 
 const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
-  const handleModelChange = (model) => {
-    // if the user clicked into the div, only then do we update the section
-    //the purpose of this check is sometimes froala makes small adjustments on loading which we don't need to treat as an "update"
-    if (userClicked) props.updateSection(props.sectionIndex, model);
-  };
+  const [model, setModel] = useState("");
+
+  useEffect(() => {
+    setModel(props.html);
+  }, []);
 
   // The entire useEffect hook below simply resets the user clicked state back to false after the model was updated
   // so if there are no further changes, we can navigate away from the page
@@ -54,9 +54,22 @@ const Froala = (props) => {
     setUserClicked(false);
   }, [props.model.isUnsaved]);
 
+  const handleModelChange = (model) => {
+    // if the user clicked into the div, only then do we update the section
+    //the purpose of this check is sometimes froala makes small adjustments on loading which we don't need to treat as an "update"
+    /* if (userClicked && !props.model.isUnsaved)
+      props.flagSectionUpdated(props.sectionIndex, model); */
+    setModel(model);
+  };
+
   const handleUserInput = (event) => {
     // when a user clicks on a froala component, we set the UserClicked value to be true so that any changes from now on prevent navigation away from the screen
     setUserClicked(true);
+  };
+
+  const handleOnComponentBlur = () => {
+    // When the user clicks away from this section, copy the state over to redux so it's ready for saving
+    props.updateSection(props.sectionIndex, model);
   };
 
   const config = {
@@ -220,10 +233,10 @@ const Froala = (props) => {
   });
 
   return (
-    <div onFocus={handleUserInput}>
+    <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
       <FroalaEditorComponent
         config={config}
-        model={props.html}
+        model={model}
         onModelChange={handleModelChange}
       />
     </div>

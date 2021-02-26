@@ -16,6 +16,7 @@ export const MODEL_ISSAVED = "MODEL_ISSAVED";
 export const ADD_SECTION = "add_section";
 export const UPDATE_SECTION = "update_section";
 export const FETCH_PUBLISHED_PAGE = "FETCH_PUBLISHED_PAGE";
+export const FLAG_UPDATE = "FLAG_UPDATE";
 
 export const SET_LOADED = "SET_LOADED";
 export const SET_SIDE_DRAWER_OPEN = "SET_SIDE_DRAWER_OPEN";

@@ -11,6 +11,7 @@ import {
   SAVE_EVENT_MODEL,
   MODEL_ISSAVED,
   UPDATE_REACT_COMPONENT,
+  FLAG_UPDATE,
 } from "./types";
 import { pageNames } from "../model/enums";
 
@@ -40,6 +41,10 @@ export const updateSection = (index, html) => {
     html,
   };
   return { type: UPDATE_SECTION, payload };
+};
+
+export const flagSectionUpdated = () => {
+  return { type: FLAG_UPDATE };
 };
 
 export const addSection = (
