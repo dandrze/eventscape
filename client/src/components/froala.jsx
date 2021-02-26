@@ -43,10 +43,26 @@ import api from "../api/server";
 const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
   const [model, setModel] = useState("");
+  const [s3Signature, setS3Signature] = useState(null);
 
   useEffect(() => {
     setModel(props.html);
+    getS3Signature();
+
+    const interval = setInterval(() => {
+      getS3Signature();
+    }, 5 * 60 * 1000);
+
+    return () => clearInterval(interval);
   }, []);
+
+  const getS3Signature = async () => {
+    const res = await api.get("/api/froala/get-s3-signature", {
+      params: { accountId: props.user.id },
+    });
+    console.log(res.data);
+    setS3Signature(res.data);
+  };
 
   // The entire useEffect hook below simply resets the user clicked state back to false after the model was updated
   // so if there are no further changes, we can navigate away from the page
@@ -57,8 +73,8 @@ const Froala = (props) => {
   const handleModelChange = (model) => {
     // if the user clicked into the div, only then do we update the section
     //the purpose of this check is sometimes froala makes small adjustments on loading which we don't need to treat as an "update"
-    /* if (userClicked && !props.model.isUnsaved)
-      props.flagSectionUpdated(props.sectionIndex, model); */
+    if (userClicked && !props.model.isUnsaved)
+      props.flagSectionUpdated(props.sectionIndex, model);
     setModel(model);
   };
 
@@ -185,7 +201,7 @@ const Froala = (props) => {
     ],
     key:
       "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
-    imageUploadToS3: props.settings.s3Hash,
+    imageUploadToS3: s3Signature,
     // By default all plugins are enabled
     /*pluginsEnabled: [
       "image", 
@@ -233,8 +249,10 @@ const Froala = (props) => {
   });
 
   return (
-    <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
+    // the key is set to config to force rerenders anytime the config updates (i.e. when we retrieve a fresh S3 signature)
+    <div onFocus={handleUserInput} onBlur={handleOnComponentBlur} key={config}>
       <FroalaEditorComponent
+        key={config}
         config={config}
         model={model}
         onModelChange={handleModelChange}
@@ -243,7 +261,7 @@ const Froala = (props) => {
   );
 };
 const mapStateToProps = (state) => {
-  return { model: state.model, settings: state.settings };
+  return { model: state.model, settings: state.settings, user: state.user };
 };
 
 export default connect(mapStateToProps, actions)(Froala);
