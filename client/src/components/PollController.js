@@ -5,8 +5,7 @@ import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import Button from "@material-ui/core/Button";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+
 import Divider from "@material-ui/core/Divider";
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import Select from "@material-ui/core/Select";
@@ -16,6 +15,7 @@ import io from "socket.io-client";
 import AlertModal from "./AlertModal";
 import * as actions from "../actions";
 import api from "../api/server";
+import PollBlock from "./PollBlock";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -66,6 +66,7 @@ const PollController = ({ polls, event }) => {
 
     socket.on("poll", () => {
       console.log("Poll received");
+      // Poll successfully received by all end points
     });
 
     socket.emit("join", {
@@ -104,6 +105,8 @@ const PollController = ({ polls, event }) => {
     setStep(step + 1);
   };
 
+  console.log(selectedPoll);
+
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -125,7 +128,7 @@ const PollController = ({ polls, event }) => {
       <AlertModal
         open={openAlert}
         onClose={() => setOpenAlert(false)}
-        text={alertText}
+        content={alertText}
         closeText="OK"
       />
       <div>{renderStep()}</div>
@@ -149,13 +152,6 @@ const PollController = ({ polls, event }) => {
 
 const SelectPoll = ({ polls, selectedPoll, handleChangeSelectedPoll }) => {
   const classes = useStyles();
-  const [checked, setChecked] = React.useState([]);
-
-  const handleChangeCheckbox = (event, index) => {
-    const _checked = checked;
-    _checked[index] = event.target.checked;
-    setChecked(_checked);
-  };
 
   return (
     <>
@@ -175,26 +171,11 @@ const SelectPoll = ({ polls, selectedPoll, handleChangeSelectedPoll }) => {
       {selectedPoll ? (
         <>
           <Divider className={classes.divider} variant="middle" />
-          {/* Previews the selected poll question*/}
-          <h5>{selectedPoll?.question}</h5>
-          {/* Previews the selected polls options. If multiple answers are allowed, then we display checkboxes, otherwise we display radio buttons*/}
-          <div>
-            {selectedPoll?.PollOptions.map((option, index) => {
-              return (
-                <FormControlLabel
-                  control={
-                    <Checkbox
-                      checked={checked[index]}
-                      onChange={(event) => handleChangeCheckbox(event, index)}
-                      color="primary"
-                    />
-                  }
-                  label={option.text}
-                  style={{ width: "100%" }}
-                />
-              );
-            })}
-          </div>
+          <PollBlock
+            question={selectedPoll.question}
+            pollOptions={selectedPoll.PollOptions}
+            readOnly={true}
+          />
         </>
       ) : null}
     </>
@@ -211,15 +192,13 @@ const PollInProgress = ({ poll, eventId }) => {
     fetchResults();
 
     // fetch the results after 3 seconds and every 3 seconds
-    /*
+
     const interval = setInterval(() => {
       fetchResults();
     }, 3000);
-    
 
     // clear the interval upon unmount
     return () => clearInterval(interval);
-    */
   }, []);
 
   const fetchResults = async () => {

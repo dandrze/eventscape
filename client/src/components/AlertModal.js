@@ -16,7 +16,7 @@ export default function AlertModal(props) {
     onClose,
     onContinue,
     open,
-    text,
+    content,
     closeText,
     continueText,
     textInputLabel,
@@ -40,7 +40,7 @@ export default function AlertModal(props) {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {text}
+            {content}
           </DialogContentText>
         </DialogContent>
         {textInputLabel ? (
@@ -58,7 +58,7 @@ export default function AlertModal(props) {
         ) : null}
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            {closeText}
+            {closeText || "Close"}
           </Button>
           {continueText ? (
             <Button onClick={handleContinue} color="primary">

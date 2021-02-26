@@ -8,7 +8,6 @@ import axios from "axios";
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { Helmet } from "react-helmet";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
@@ -16,6 +15,8 @@ import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
 import LongLoadingScreen from "../components/LongLoadingScreen";
+import Modal1 from "../components/Modal1";
+import PollBlock from "../components/PollBlock";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -27,6 +28,8 @@ const cookies = new Cookies();
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [openPoll, setOpenPoll] = useState(false);
+  const [poll, setPoll] = useState({ question: "", options: [] });
 
   useEffect(() => {
     fetchDataAsync();
@@ -78,14 +81,16 @@ const Published = (props) => {
 
         socket.emit("rejoin", event.id);
       });
-      console.log(socket);
 
       socket.on("poll", ({ question, options }) => {
         console.log({ question, options });
+        setPoll({ question, options });
+        setOpenPoll(true);
       });
 
       socket.on("pollClosed", () => {
         console.log("Poll closed!");
+        setOpenPoll(false);
       });
 
       if (!cookies.get("uuid")) cookies.set("uuid", uuid());
@@ -105,6 +110,15 @@ const Published = (props) => {
     }
 
     setIsLoaded(true);
+  };
+
+  const closePoll = () => {
+    setOpenPoll(false);
+  };
+
+  const handleSubmitPoll = (selectedOptions) => {
+    console.log("done", selectedOptions);
+    socket.emit("respondToPoll", selectedOptions);
   };
 
   // if there is a hash provided but no attendee found, display an error page
@@ -127,6 +141,20 @@ const Published = (props) => {
         <Helmet>
           <title>{props.event.title}</title>
         </Helmet>
+        <Modal1
+          open={openPoll}
+          onClose={closePoll}
+          content={
+            <>
+              <PollBlock
+                question={poll.question}
+                pollOptions={poll.options}
+                submitPoll={handleSubmitPoll}
+                closePoll={closePoll}
+              />
+            </>
+          }
+        />
         <style>{theme(props.event.primaryColor)}</style>
         <ul>
           {props.model.sections.map(function (section) {

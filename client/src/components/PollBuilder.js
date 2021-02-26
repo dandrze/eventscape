@@ -134,7 +134,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
       <AlertModal
         open={openAlert}
         onClose={handleCloseAlert}
-        text={alertText}
+        content={alertText}
         closeText="Cancel"
       />
       <FormControl variant="outlined" className={classes.formControl}>

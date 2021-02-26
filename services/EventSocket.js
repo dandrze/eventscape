@@ -1,7 +1,7 @@
 var socketIo = require("socket.io");
 const redisAdapter = require("socket.io-redis");
 
-const { SiteVisit, SiteVisitor } = require("../db").models;
+const { SiteVisit, SiteVisitor, PollResponse } = require("../db").models;
 const keys = require("../config/keys");
 
 module.exports = (server) => {
@@ -45,29 +45,35 @@ module.exports = (server) => {
           SiteVisitorId: siteVisitor.id,
         });
         socket.visitId = siteVisit.id;
+        socket.visitorId = siteVisitor.id;
 
         socket.join(EventId.toString());
-        console.log(
-          socket.id + "Joined " + EventId + " on process " + process.pid
-        );
       }
     );
 
     socket.on("rejoin", async (eventId) => {
-      console.log(
-        socket.id + " rejoined " + eventId + " on process " + process.pid
-      );
       socket.join(eventId.toString());
     });
 
     socket.on("pushPoll", async ({ eventId, question, options }) => {
-      console.log("Poll pushed to " + eventId);
+      console.log(options);
       io.to(eventId.toString()).emit("poll", { question, options });
     });
 
     socket.on("closePoll", async (eventId) => {
-      console.log("Poll ended for " + eventId);
       io.to(eventId.toString()).emit("pollClosed");
+    });
+
+    socket.on("respondToPoll", async (selectedOptions) => {
+      console.log(socket.visitorId);
+      console.log(selectedOptions);
+      for (let option of selectedOptions) {
+        console.log(option);
+        PollResponse.create({
+          PollOptionId: option.id,
+          SiteVisitorId: socket.visitorId,
+        });
+      }
     });
 
     socket.on("disconnect", async (reason) => {

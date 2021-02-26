@@ -86,7 +86,7 @@ const PageEditor = (props) => {
         onContinue={() => {
           handleNavAlertConfirm();
         }}
-        text="You have unsaved changes, are you sure you want to proceed?"
+        content="You have unsaved changes, are you sure you want to proceed?"
         closeText="Go back"
         continueText="Continue"
       />
@@ -95,7 +95,7 @@ const PageEditor = (props) => {
         open={discardOpen}
         onClose={handleDiscardAlertClose}
         onContinue={handleDiscardAlertContinue}
-        text="Are you sure you want to discard your changes?"
+        content="Are you sure you want to discard your changes?"
         closeText="No"
         continueText="Yes"
       />

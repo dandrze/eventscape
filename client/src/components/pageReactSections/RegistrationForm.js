@@ -179,7 +179,7 @@ function RegistrationForm({
         open={open}
         onClose={closeModal}
         onContinue={closeModal}
-        text={modalText}
+        content={modalText}
         continueText="OK"
       />
       <div className="container">

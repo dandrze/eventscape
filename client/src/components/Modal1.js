@@ -24,10 +24,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Modal1(props) {
+export default function Modal1({ onClose, open, content, title }) {
   const classes = useStyles();
-
-  const { onClose, open, content } = props;
 
   const handleClose = () => {
     onClose();
@@ -70,8 +68,8 @@ export default function Modal1(props) {
                 }}
               >
                 <div style={{ padding: "18px 60px" }}>
-                  {props.title ? (
-                    <h2 className={classes.primaryColor}>{props.title}</h2>
+                  {title ? (
+                    <h2 className={classes.primaryColor}>{title}</h2>
                   ) : null}
                   <div>{content}</div>
                 </div>
