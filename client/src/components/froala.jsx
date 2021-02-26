@@ -249,7 +249,6 @@ const Froala = (props) => {
   });
 
   return (
-    // the key is set to config to force rerenders anytime the config updates (i.e. when we retrieve a fresh S3 signature)
     <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
     <FroalaEditorComponent
     // key forces the editor to re instantiate whenever we update the s3 signature in the config. Important because the s3 signature expires. 
