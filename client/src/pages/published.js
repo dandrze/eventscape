@@ -121,6 +121,7 @@ const Published = (props) => {
 
   const handleSubmitPoll = (selectedOptions) => {
     socket.emit("respondToPoll", selectedOptions);
+    closePoll();
   };
 
   // if there is a hash provided but no attendee found, display an error page
@@ -151,7 +152,6 @@ const Published = (props) => {
               question={poll.question}
               pollOptions={poll.options}
               submitPoll={handleSubmitPoll}
-              closePoll={closePoll}
             />
           }
         />
