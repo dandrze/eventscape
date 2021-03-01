@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { toast } from "react-toastify";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -44,6 +45,7 @@ const PollController = ({ polls, event }) => {
   const [step, setStep] = useState(0);
   const [selectedPoll, setSelectedPoll] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
+  const [openRepeatAlert, setOpenRepeatAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const PollController = ({ polls, event }) => {
       console.log("reconnected!");
       console.log(socket);
 
-      socket.emit("rejoin", event.id);
+      socket.emit("rejoin", { eventId: event.id });
     });
     console.log(socket);
 
@@ -77,9 +79,39 @@ const PollController = ({ polls, event }) => {
 
   const handleChangeSelectedPoll = (event) => {
     setSelectedPoll(event.target.value);
+    console.log(selectedPoll);
   };
 
-  const goToNextStep = () => {
+  const pollLaunchedBefore = async () => {
+    // if there are results, that means the poll has already been launched before
+    const res = await api.get("/api/polling/results", {
+      params: { pollId: selectedPoll.id },
+    });
+
+    return Boolean(res.data);
+  };
+
+  const clearResultsAndContinue = async () => {
+    try {
+      const res = await api.delete("/api/polling/results", {
+        params: { pollId: selectedPoll.id },
+      });
+
+      // push the poll to guests
+      socket.emit("pushPoll", {
+        eventId: event.id,
+        question: selectedPoll.question,
+        options: selectedPoll.PollOptions,
+      });
+
+      // Go to next step (poll progress screen)
+      setStep(step + 1);
+    } catch (err) {
+      toast.error("Error when clearing previous results: " + err.toString());
+    }
+  };
+
+  const goToNextStep = async () => {
     // do checks to confirm if we can move to the next step
     switch (step) {
       case 0:
@@ -88,6 +120,13 @@ const PollController = ({ polls, event }) => {
           setOpenAlert(true);
           return;
         }
+        if (await pollLaunchedBefore()) {
+          // if the poll has been lauched before, open an alert alerting the user that they will need to clear the results of the previous poll to continue
+          setOpenRepeatAlert(true);
+          // exit the function
+          return;
+        }
+
         // push the poll to guests
         socket.emit("pushPoll", {
           eventId: event.id,
@@ -104,8 +143,6 @@ const PollController = ({ polls, event }) => {
     }
     setStep(step + 1);
   };
-
-  console.log(selectedPoll);
 
   const renderStep = () => {
     switch (step) {
@@ -130,6 +167,19 @@ const PollController = ({ polls, event }) => {
         onClose={() => setOpenAlert(false)}
         content={alertText}
         closeText="OK"
+      />
+      <AlertModal
+        open={openRepeatAlert}
+        onClose={() => setOpenRepeatAlert(false)}
+        onContinue={() => {
+          clearResultsAndContinue();
+          setOpenRepeatAlert(false);
+        }}
+        content={
+          "This poll has been launched before. To launch it again, you will need to clear the previous results"
+        }
+        closeText="Go Back"
+        continueText="Clear Results + Continue"
       />
       <div>{renderStep()}</div>
 

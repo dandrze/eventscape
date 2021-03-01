@@ -6,21 +6,20 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 
-export default function AlertModal(props) {
+export default function AlertModal({
+  onClose,
+  onContinue,
+  open,
+  content,
+  closeText,
+  continueText,
+  textInputLabel,
+}) {
   const [input, setInput] = useState("");
 
   const handleChangeInput = (event) => {
     setInput(event.target.value);
   };
-  const {
-    onClose,
-    onContinue,
-    open,
-    content,
-    closeText,
-    continueText,
-    textInputLabel,
-  } = props;
 
   const handleClose = () => {
     onClose();

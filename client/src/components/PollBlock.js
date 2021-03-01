@@ -4,28 +4,21 @@ import FormControlLabel from "@material-ui/core/FormControlLabel";
 import FormControl from "@material-ui/core/FormControl";
 import Button from "@material-ui/core/Button";
 
-const PollBlock = ({
-  question,
-  readOnly,
-  submitPoll,
-  closePoll,
-  pollOptions,
-}) => {
+const PollBlock = ({ question, readOnly, submitPoll, pollOptions }) => {
   // Make a local state of the options
-  const [options, setOptions] = useState(pollOptions);
+  const [checked, setChecked] = React.useState([]);
 
   const handleChangeCheckbox = (event, index) => {
-    if (!readOnly) {
-      const _options = [...options];
-      // add the checked flag to the selected option
-      _options[index].checked = true;
-      setOptions(_options);
-    }
+    const _checked = checked;
+    _checked[index] = event.target.checked;
+    setChecked(_checked);
   };
 
   const handleSubmitPoll = () => {
-    const selectedOptions = options.filter((option) => option.checked);
-    console.log(selectedOptions);
+    const selectedOptions = pollOptions.filter(
+      (pollOption, index) => checked[index]
+    );
+
     submitPoll(selectedOptions);
   };
 
@@ -35,12 +28,12 @@ const PollBlock = ({
       <h5>{question}</h5>
       {/* Previews the selected polls options. If multiple answers are allowed, then we display checkboxes, otherwise we display radio buttons*/}
       <div>
-        {options.map((option, index) => {
+        {pollOptions.map((option, index) => {
           return (
             <FormControlLabel
               control={
                 <Checkbox
-                  checked={options[index].checked}
+                  checked={checked[index]}
                   onChange={(event) => handleChangeCheckbox(event, index)}
                   color="primary"
                 />

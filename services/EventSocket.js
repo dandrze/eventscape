@@ -51,7 +51,15 @@ module.exports = (server) => {
       }
     );
 
-    socket.on("rejoin", async (eventId) => {
+    socket.on("rejoin", async ({ eventId, uuid }) => {
+      if (uuid) {
+        const siteVisitor = await SiteVisitor.findOne({ where: { uuid } });
+        const siteVisit = await SiteVisit.findOne({
+          where: { SiteVisitorId: siteVisitor.id },
+        });
+        socket.visitId = siteVisit.id;
+        socket.visitorId = siteVisitor.id;
+      }
       socket.join(eventId.toString());
     });
 
@@ -69,9 +77,13 @@ module.exports = (server) => {
       console.log(selectedOptions);
       for (let option of selectedOptions) {
         console.log(option);
+
         PollResponse.create({
           PollOptionId: option.id,
           SiteVisitorId: socket.visitorId,
+        }).catch(function (err) {
+          // #TODO add logging
+          console.log(err);
         });
       }
     });

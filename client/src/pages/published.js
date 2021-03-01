@@ -32,6 +32,7 @@ const Published = (props) => {
   const [poll, setPoll] = useState({ question: "", options: [] });
 
   useEffect(() => {
+    if (!cookies.get("uuid")) cookies.set("uuid", uuid());
     fetchDataAsync();
   }, []);
 
@@ -77,9 +78,13 @@ const Published = (props) => {
 
       socket.io.on("reconnect", () => {
         console.log("reconnected!");
-        console.log(socket);
 
-        socket.emit("rejoin", event.id);
+        console.log("cooke is:" + cookies.get("uuid"));
+
+        socket.emit("rejoin", {
+          eventId: event.id,
+          uuid: cookies.get("uuid") || "",
+        });
       });
 
       socket.on("poll", ({ question, options }) => {
@@ -92,8 +97,6 @@ const Published = (props) => {
         console.log("Poll closed!");
         setOpenPoll(false);
       });
-
-      if (!cookies.get("uuid")) cookies.set("uuid", uuid());
 
       socket.emit("join", {
         EventId: event.id,
@@ -117,7 +120,6 @@ const Published = (props) => {
   };
 
   const handleSubmitPoll = (selectedOptions) => {
-    console.log("done", selectedOptions);
     socket.emit("respondToPoll", selectedOptions);
   };
 
@@ -145,14 +147,12 @@ const Published = (props) => {
           open={openPoll}
           onClose={closePoll}
           content={
-            <>
-              <PollBlock
-                question={poll.question}
-                pollOptions={poll.options}
-                submitPoll={handleSubmitPoll}
-                closePoll={closePoll}
-              />
-            </>
+            <PollBlock
+              question={poll.question}
+              pollOptions={poll.options}
+              submitPoll={handleSubmitPoll}
+              closePoll={closePoll}
+            />
           }
         />
         <style>{theme(props.event.primaryColor)}</style>

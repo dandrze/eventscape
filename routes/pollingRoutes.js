@@ -54,6 +54,25 @@ router.get("/api/polling/results", async (req, res, next) => {
   }
 });
 
+router.delete("/api/polling/results", async (req, res, next) => {
+  `Clears all results for a given poll`;
+  const { pollId } = req.query;
+
+  try {
+    // Find all PollOptions under this poll
+    const pollOptions = await PollOption.findAll({ where: { PollId: pollId } });
+    // create an array of just their Ids
+    const pollOptionIds = pollOptions.map((pollOption) => {
+      return pollOption.id;
+    });
+    // delete all respones that contain these poll options
+    await PollResponse.destroy({ where: { PollOptionId: pollOptionIds } });
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.post("/api/polling/poll", async (req, res, next) => {
   const { eventId, question, options, allowMultiple, allowShare } = req.body;
 
