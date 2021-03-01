@@ -1,7 +1,13 @@
 var socketIo = require("socket.io");
 const redisAdapter = require("socket.io-redis");
 
-const { SiteVisit, SiteVisitor, PollResponse } = require("../db").models;
+const {
+  SiteVisit,
+  SiteVisitor,
+  PollResponse,
+  Poll,
+  PollOption,
+} = require("../db").models;
 const keys = require("../config/keys");
 
 module.exports = (server) => {
@@ -86,6 +92,35 @@ module.exports = (server) => {
           console.log(err);
         });
       }
+    });
+
+    socket.on("sharePollResults", async ({ eventId, pollId }) => {
+      // fetch a poll object
+      const poll = await Poll.findByPk(pollId);
+
+      // fetch a list of all the options for this poll
+      const pollOptions = await PollOption.findAll({
+        where: { PollId: pollId },
+      });
+
+      let results = [];
+
+      // for each poll option, count how many pollResponses there are for that poll option id
+      for (let i = 0; i < pollOptions.length; i++) {
+        const PollOptionId = pollOptions[i].id;
+        const responsesCount = await PollResponse.count({
+          where: { PollOptionId },
+        });
+        results.push({ text: pollOptions[i].text, responses: responsesCount });
+      }
+      io.to(eventId.toString()).emit("results", {
+        results,
+        question: poll.question,
+      });
+    });
+
+    socket.on("stopSharingPollResults", async (eventId) => {
+      io.to(eventId.toString()).emit("closeResults");
     });
 
     socket.on("disconnect", async (reason) => {

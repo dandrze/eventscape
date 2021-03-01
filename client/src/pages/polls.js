@@ -5,15 +5,15 @@ import Modal1 from "../components/Modal1";
 import "./registrations.css";
 
 import NavBar3 from "../components/navBar3.js";
-import PollsTable from "../components/PollsTable.js";
+import PollsTable from "../components/polling/PollsTable.js";
 import * as actions from "../actions";
-import PollBuilder from "../components/PollBuilder";
+import PollBuilder from "../components/polling/PollBuilder";
 import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
 import { CircularProgress } from "@material-ui/core";
 import api from "../api/server";
-import PollController from "../components/PollController";
+import PollController from "../components/polling/PollController";
 
 const Polls = (props) => {
   const [open, setOpen] = useState(false);

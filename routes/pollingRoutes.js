@@ -22,22 +22,26 @@ router.get("/api/polling/poll/all", async (req, res, next) => {
 });
 
 router.get("/api/polling/results", async (req, res, next) => {
-  `returns an object containing the results for each poll option for a given poll
+  `returns an array of objects containing the results for each poll option for a given poll
   
   returns object
   
   example:
-  {
-    '10': 40,
-    '11': 50
+  [{
+    text: "selected option text 2",
+    responses: 50
+  }, {
+    text: "selected option text 2",
+    responses: 50
   }
+]
   40 responses for PollOption 10 and 50 responses for PollOption 11`;
   const { pollId } = req.query;
 
   try {
     const pollOptions = await PollOption.findAll({ where: { PollId: pollId } });
 
-    let result = {};
+    let results = [];
 
     for (let i = 0; i < pollOptions.length; i++) {
       const PollOptionId = pollOptions[i].id;
@@ -45,10 +49,10 @@ router.get("/api/polling/results", async (req, res, next) => {
         where: { PollOptionId },
       });
 
-      result[PollOptionId] = responsesCount;
+      results.push({ text: pollOptions[i].text, responses: responsesCount });
     }
 
-    res.status(200).send(result);
+    res.status(200).send(results);
   } catch (error) {
     next(error);
   }

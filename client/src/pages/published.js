@@ -16,7 +16,8 @@ import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import Modal1 from "../components/Modal1";
-import PollBlock from "../components/PollBlock";
+import PollBlock from "../components/polling/PollBlock";
+import ResultsChart from "../components/polling/ResultsChart";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -30,6 +31,9 @@ const Published = (props) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const [openPoll, setOpenPoll] = useState(false);
   const [poll, setPoll] = useState({ question: "", options: [] });
+  const [openResults, setOpenResults] = useState(false);
+  const [resultsQuestion, setResultsQuestion] = useState("");
+  const [results, setResults] = useState([]);
 
   useEffect(() => {
     if (!cookies.get("uuid")) cookies.set("uuid", uuid());
@@ -98,6 +102,17 @@ const Published = (props) => {
         setOpenPoll(false);
       });
 
+      socket.on("closeResults", () => {
+        setOpenResults(false);
+      });
+
+      socket.on("results", ({ question, results }) => {
+        console.log("results: ", { question, results });
+        setResults(results);
+        setResultsQuestion(question);
+        setOpenResults(true);
+      });
+
       socket.emit("join", {
         EventId: event.id,
         uuid: cookies.get("uuid"),
@@ -153,6 +168,15 @@ const Published = (props) => {
               pollOptions={poll.options}
               submitPoll={handleSubmitPoll}
             />
+          }
+        />
+        <Modal1
+          open={openResults}
+          onClose={() => setOpenResults(false)}
+          content={
+            <div style={{ width: "600px" }}>
+              <ResultsChart question={resultsQuestion} results={results} />
+            </div>
           }
         />
         <style>{theme(props.event.primaryColor)}</style>

@@ -25,8 +25,8 @@ import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import ListIcon from "@material-ui/icons/List";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import * as actions from "../actions";
-import { recipientsOptions } from "../model/enums";
+import * as actions from "../../actions";
+import { recipientsOptions } from "../../model/enums";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),

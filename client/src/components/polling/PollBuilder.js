@@ -5,15 +5,15 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import AddIcon from "@material-ui/icons/Add";
 import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import Switch from "../components/switch";
+import Switch from "../switch";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Checkbox from "@material-ui/core/Checkbox";
 import Button from "@material-ui/core/Button";
-import AlertModal from "../components/AlertModal";
+import AlertModal from "../AlertModal";
 
-import * as actions from "../actions";
-import api from "../api/server";
+import * as actions from "../../actions";
+import api from "../../api/server";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
