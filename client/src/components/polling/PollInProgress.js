@@ -37,7 +37,7 @@ export default ({ poll, eventId, results, setResults }) => {
     });
 
     // set results to the new poll option with responses added to it
-    setResults(resultsRes.data);
+    setResults(resultsRes.data.results);
 
     // set the total number of responses
     var count = 0;

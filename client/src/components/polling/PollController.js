@@ -87,7 +87,7 @@ const PollController = ({ polls, event, handleClose }) => {
       params: { pollId: selectedPoll.id },
     });
 
-    return Boolean(res.data);
+    return Boolean(res.data.results);
   };
 
   const clearResultsAndContinue = async () => {
@@ -96,11 +96,14 @@ const PollController = ({ polls, event, handleClose }) => {
         params: { pollId: selectedPoll.id },
       });
 
+      console.log(selectedPoll);
+
       // push the poll to guests
       socket.emit("pushPoll", {
         eventId: event.id,
         question: selectedPoll.question,
         options: selectedPoll.PollOptions,
+        allowMultiple: selectedPoll.allowMultiple,
       });
 
       // Go to next step (poll progress screen)
@@ -128,6 +131,7 @@ const PollController = ({ polls, event, handleClose }) => {
       eventId: event.id,
       question: selectedPoll.question,
       options: selectedPoll.PollOptions,
+      allowMultiple: selectedPoll.allowMultiple,
     });
 
     setStep(step + 1);
@@ -143,7 +147,8 @@ const PollController = ({ polls, event, handleClose }) => {
   const shareResults = async () => {
     socket.emit("sharePollResults", {
       eventId: event.id,
-      pollId: selectedPoll.id,
+      poll: selectedPoll,
+      results,
     });
     setStep(step + 1);
   };

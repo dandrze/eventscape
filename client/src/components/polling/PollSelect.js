@@ -50,6 +50,7 @@ export default ({ polls, selectedPoll, handleChangeSelectedPoll }) => {
             question={selectedPoll.question}
             pollOptions={selectedPoll.PollOptions}
             readOnly={true}
+            allowMultiple={selectedPoll.allowMultiple}
           />
         </>
       ) : null}

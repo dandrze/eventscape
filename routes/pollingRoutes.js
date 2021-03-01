@@ -27,14 +27,15 @@ router.get("/api/polling/results", async (req, res, next) => {
   returns object
   
   example:
-  [{
-    text: "selected option text 2",
-    responses: 50
+  {results: [{
+    text: "poll option 10,
+    responses: 40
   }, {
-    text: "selected option text 2",
+    text: "poll option 11",
     responses: 50
   }
-]
+],
+responseCount= 90}
   40 responses for PollOption 10 and 50 responses for PollOption 11`;
   const { pollId } = req.query;
 
@@ -52,7 +53,9 @@ router.get("/api/polling/results", async (req, res, next) => {
       results.push({ text: pollOptions[i].text, responses: responsesCount });
     }
 
-    res.status(200).send(results);
+    const responseCount = 0;
+
+    res.status(200).send({ results, responseCount });
   } catch (error) {
     next(error);
   }
@@ -78,18 +81,18 @@ router.delete("/api/polling/results", async (req, res, next) => {
 });
 
 router.post("/api/polling/poll", async (req, res, next) => {
-  const { eventId, question, options, allowMultiple, allowShare } = req.body;
+  const { eventId, question, options, allowMultiple } = req.body;
 
   try {
     const poll = await Poll.create({
       EventId: eventId,
       question,
       allowMultiple,
-      allowShare,
+      //allowShare,
     });
 
     for (let option of options) {
-      let pollOption = await PollOption.create({
+      PollOption.create({
         PollId: poll.id,
         text: option.text,
       });

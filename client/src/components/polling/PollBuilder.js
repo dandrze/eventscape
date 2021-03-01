@@ -48,9 +48,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
   const [allowMultiple, setAllowMultiple] = useState(
     isAdd ? false : pollData.allowMultiple
   );
-  const [allowShare, setAllowShare] = useState(
-    isAdd ? false : pollData.allowShare
-  );
+  //const [allowShare, setAllowShare] = useState(isAdd ? false : pollData.allowShare);
   const [openAlert, setOpenAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
 
@@ -83,9 +81,11 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
     setAllowMultiple(event.target.checked);
   };
 
+  /*
   const handleAllowShareChange = (event) => {
     setAllowShare(event.target.checked);
   };
+  */
 
   const handleCloseAlert = () => {
     setOpenAlert(false);
@@ -114,7 +114,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
         question,
         options,
         allowMultiple,
-        allowShare,
+        //allowShare,
         eventId: event.id,
       });
     } else {
@@ -123,7 +123,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
         question,
         options,
         allowMultiple,
-        allowShare,
+        //allowShare,
       });
     }
     handleClose();
@@ -192,6 +192,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
             />
           </FormGroup>
         </div>
+        {/*}
         <FormControlLabel
           control={
             <Checkbox
@@ -201,7 +202,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
             />
           }
           label="Share results automatically after voting "
-        />
+        /> */}
         <Button
           variant="contained"
           color="primary"

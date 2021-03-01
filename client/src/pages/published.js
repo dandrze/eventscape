@@ -91,9 +91,9 @@ const Published = (props) => {
         });
       });
 
-      socket.on("poll", ({ question, options }) => {
+      socket.on("poll", ({ question, options, allowMultiple }) => {
         console.log({ question, options });
-        setPoll({ question, options });
+        setPoll({ question, options, allowMultiple });
         setOpenPoll(true);
       });
 
@@ -166,6 +166,7 @@ const Published = (props) => {
             <PollBlock
               question={poll.question}
               pollOptions={poll.options}
+              allowMultiple={poll.allowMultiple}
               submitPoll={handleSubmitPoll}
             />
           }
