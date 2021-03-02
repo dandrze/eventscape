@@ -2,7 +2,7 @@ const throng = require("throng");
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging")
   require("newrelic");
 
-const WORKERS = process.env.WEB_CONCURRENCY || 2;
+const WORKERS = process.env.WEB_CONCURRENCY || 1;
 const PORT = process.env.PORT || 5000;
 
 throng({

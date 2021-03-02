@@ -2,38 +2,7 @@ import React, { useEffect, useState } from "react";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ResultsChart from "./ResultsChart";
 
-export default ({ results, poll }) => {
-  const [totalResponses, setTotalResponses] = useState(0);
-
-  useEffect(() => {
-    // set the total number of responses
-    var count = 0;
-    for (let optionResults of results) {
-      count += optionResults.responses;
-    }
-    setTotalResponses(count);
-  }, []);
-
-  const labels = results.map((option) => {
-    return option.text;
-  });
-  const pollData = results.map((option) => {
-    return option.responses;
-  });
-
-  const data = {
-    labels,
-    datasets: [
-      {
-        backgroundColor: "rgba(255,99,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        hoverBorderColor: "rgba(255,99,132,1)",
-        data: pollData,
-      },
-    ],
-  };
+export default ({ poll, results, totalResponded }) => {
   return (
     <>
       <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -52,7 +21,7 @@ export default ({ results, poll }) => {
       >
         <label style={{ marginBottom: "0px" }}>Poll closed</label>
         <label style={{ marginLeft: "auto", marginBottom: "0px" }}>
-          {totalResponses} voted
+          {totalResponded} voted
         </label>
       </div>
       <ResultsChart results={results} question={poll.question} />

@@ -46,6 +46,7 @@ const PollController = ({ polls, event, handleClose }) => {
   const [openRepeatAlert, setOpenRepeatAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
   const [results, setResults] = useState([]);
+  const [totalResponded, setTotalResponded] = useState(0);
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -192,6 +193,8 @@ const PollController = ({ polls, event, handleClose }) => {
               eventId={event.id}
               results={results}
               setResults={setResults}
+              totalResponded={totalResponded}
+              setTotalResponded={setTotalResponded}
             />
             <Divider className={classes.divider} variant="middle" />
 
@@ -211,7 +214,11 @@ const PollController = ({ polls, event, handleClose }) => {
       case 2:
         return (
           <>
-            <PollComplete results={results} poll={selectedPoll} />
+            <PollComplete
+              results={results}
+              totalResponded={totalResponded}
+              poll={selectedPoll}
+            />
             <Divider className={classes.divider} variant="middle" />
             <FormControl
               variant="outlined"

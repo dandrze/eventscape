@@ -18,6 +18,7 @@ import LongLoadingScreen from "../components/LongLoadingScreen";
 import Modal1 from "../components/Modal1";
 import PollBlock from "../components/polling/PollBlock";
 import ResultsChart from "../components/polling/ResultsChart";
+import AlertModal from "../components/AlertModal";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -171,14 +172,16 @@ const Published = (props) => {
             />
           }
         />
-        <Modal1
+
+        <AlertModal
           open={openResults}
           onClose={() => setOpenResults(false)}
           content={
-            <div style={{ width: "600px" }}>
+            <div style={{ padding: "40px 30px 10px", width: "500px" }}>
               <ResultsChart question={resultsQuestion} results={results} />
             </div>
           }
+          closeText="Close"
         />
         <style>{theme(props.event.primaryColor)}</style>
         <ul>

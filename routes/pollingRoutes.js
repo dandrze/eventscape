@@ -40,22 +40,36 @@ responseCount= 90}
   const { pollId } = req.query;
 
   try {
-    const pollOptions = await PollOption.findAll({ where: { PollId: pollId } });
+    const pollOptions = await PollOption.findAll({
+      where: { PollId: pollId },
+      include: Poll,
+    });
 
     let results = [];
 
+    const pollOptionIds = pollOptions.map((pollOption) => pollOption.id);
+
+    // count the number of unique site visitors in poll responses for the poll options in this given poll
+    const totalResponded = await PollResponse.count({
+      where: { PollOptionId: pollOptionIds },
+      distinct: true,
+      col: "SiteVisitorId",
+    });
+
+    // iterate through each poll option and count how many total selections it received
     for (let i = 0; i < pollOptions.length; i++) {
       const PollOptionId = pollOptions[i].id;
-      const responsesCount = await PollResponse.count({
+      const pollSelections = await PollResponse.count({
         where: { PollOptionId },
       });
 
-      results.push({ text: pollOptions[i].text, responses: responsesCount });
+      results.push({
+        text: pollOptions[i].text,
+        selections: pollSelections,
+      });
     }
 
-    const responseCount = 0;
-
-    res.status(200).send({ results, responseCount });
+    res.status(200).send({ results, totalResponded });
   } catch (error) {
     next(error);
   }
@@ -69,9 +83,7 @@ router.delete("/api/polling/results", async (req, res, next) => {
     // Find all PollOptions under this poll
     const pollOptions = await PollOption.findAll({ where: { PollId: pollId } });
     // create an array of just their Ids
-    const pollOptionIds = pollOptions.map((pollOption) => {
-      return pollOption.id;
-    });
+    const pollOptionIds = pollOptions.map((pollOption) => pollOption.id);
     // delete all respones that contain these poll options
     await PollResponse.destroy({ where: { PollOptionId: pollOptionIds } });
     res.status(200).send();

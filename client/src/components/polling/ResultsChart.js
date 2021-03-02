@@ -6,7 +6,7 @@ export default ({ question, results }) => {
     return option.text;
   });
   const pollData = results.map((option) => {
-    return option.responses;
+    return option.selections;
   });
 
   const data = {

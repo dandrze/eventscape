@@ -3,7 +3,14 @@ import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import api from "../../api/server";
 import ResultsChart from "./ResultsChart";
 
-export default ({ poll, eventId, results, setResults }) => {
+export default ({
+  poll,
+  eventId,
+  results,
+  setResults,
+  totalResponded,
+  setTotalResponded,
+}) => {
   const [totalVisitors, setTotalVisitors] = useState(0);
   const [totalResponses, setTotalResponses] = useState(0);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
@@ -35,16 +42,14 @@ export default ({ poll, eventId, results, setResults }) => {
     const resultsRes = await api.get("/api/polling/results", {
       params: { pollId: poll.id },
     });
+    console.log(resultsRes);
+
+    const { results, totalResponded } = resultsRes.data;
 
     // set results to the new poll option with responses added to it
-    setResults(resultsRes.data.results);
+    setResults(results);
 
-    // set the total number of responses
-    var count = 0;
-    for (let result of resultsRes.data) {
-      count += result.responses;
-    }
-    setTotalResponses(count);
+    setTotalResponded(totalResponded);
 
     // get the total number of visitors
 
@@ -80,9 +85,9 @@ export default ({ poll, eventId, results, setResults }) => {
           Attendees are now viewing question
         </label>
         <label style={{ marginLeft: "auto", marginBottom: "0px" }}>
-          {totalResponses} of {totalVisitors} (
+          {totalResponded} of {totalVisitors} (
           {totalVisitors
-            ? Math.round((totalResponses / totalVisitors) * 100) + "%"
+            ? Math.round((totalResponded / totalVisitors) * 100) + "%"
             : "Error"}
           ) voted
         </label>
