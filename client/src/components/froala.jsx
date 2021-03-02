@@ -46,6 +46,7 @@ const Froala = (props) => {
   const [s3Signature, setS3Signature] = useState(null);
 
   useEffect(() => {
+    console.log("froala component rendered");
     setModel(props.html);
     getS3Signature();
 
@@ -250,8 +251,8 @@ const Froala = (props) => {
 
   return (
     <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
-    <FroalaEditorComponent
-    // key forces the editor to re instantiate whenever we update the s3 signature in the config. Important because the s3 signature expires. 
+      <FroalaEditorComponent
+        // key forces the editor to re instantiate whenever we update the s3 signature in the config. Important because the s3 signature expires.
         key={s3Signature}
         config={config}
         model={model}

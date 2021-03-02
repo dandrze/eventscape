@@ -7,6 +7,7 @@ export default function (state = {}, action) {
         ...action.payload,
       };
     case FETCH_EVENT:
+      console.log("event fetched");
       return {
         ...action.payload,
       };

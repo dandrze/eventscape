@@ -32,7 +32,6 @@ function App(props) {
   const fetchDataAsync = async () => {
     if (!dataFetched) {
       await props.fetchUser();
-      props.fetchEvent();
     }
 
     setDataFetched(true);

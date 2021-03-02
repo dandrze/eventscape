@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
@@ -23,6 +23,16 @@ import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
 
 const InternalApp = (props) => {
+  const [dataFetched, setDataFetched] = useState(false);
+
+  useEffect(() => {
+    fetchDataAsync();
+  }, []);
+
+  const fetchDataAsync = async () => {
+    props.fetchEvent();
+  };
+
   return (
     <div className="App">
       <header className="App-header">
