@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 
 import FroalaEditorComponent from "react-froala-wysiwyg";
@@ -44,9 +44,14 @@ const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
   const [model, setModel] = useState("");
   const [s3Signature, setS3Signature] = useState(null);
+  const s3SignatureRef = useRef(null);
 
   useEffect(() => {
-    console.log("froala component rendered");
+    // Point the reference to the updated s3Signature state
+    s3SignatureRef.current = s3Signature;
+  }, [s3Signature]);
+
+  useEffect(() => {
     setModel(props.html);
     getS3Signature();
 
@@ -61,7 +66,7 @@ const Froala = (props) => {
     const res = await api.get("/api/froala/get-s3-signature", {
       params: { accountId: props.user.id },
     });
-    console.log(res.data);
+
     setS3Signature(res.data);
   };
 
@@ -202,7 +207,6 @@ const Froala = (props) => {
     ],
     key:
       "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
-    imageUploadToS3: s3Signature,
     // By default all plugins are enabled
     /*pluginsEnabled: [
       "image", 
@@ -234,6 +238,9 @@ const Froala = (props) => {
         // if we want to permanently delete the image we can do it here
         //await api.post("/api/froala/delete-image", { src });
       },
+      "image.beforeUpload": function (imgList) {
+        this.opts.imageUploadToS3 = s3SignatureRef.current;
+      },
     },
   };
 
@@ -253,7 +260,6 @@ const Froala = (props) => {
     <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
       <FroalaEditorComponent
         // key forces the editor to re instantiate whenever we update the s3 signature in the config. Important because the s3 signature expires.
-        key={s3Signature}
         config={config}
         model={model}
         onModelChange={handleModelChange}

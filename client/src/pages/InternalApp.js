@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import * as actions from "../actions";
@@ -23,15 +22,9 @@ import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
 
 const InternalApp = (props) => {
-  const [dataFetched, setDataFetched] = useState(false);
-
   useEffect(() => {
-    fetchDataAsync();
-  }, []);
-
-  const fetchDataAsync = async () => {
     props.fetchEvent();
-  };
+  }, []);
 
   return (
     <div className="App">
