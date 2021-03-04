@@ -1,36 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import Modal1 from "../components/Modal1";
-
-import "./registrations.css";
-
+import AlertModal from "../components/AlertModal";
 import NavBar3 from "../components/navBar3.js";
 import PollsTable from "../components/polling/PollsTable.js";
 import * as actions from "../actions";
 import PollBuilder from "../components/polling/PollBuilder";
-import RegistrationForm from "../components/pageReactSections/RegistrationForm";
-import { toast } from "react-toastify";
-import ImportFile from "../components/ImportFile";
 import { CircularProgress } from "@material-ui/core";
 import api from "../api/server";
 import PollController from "../components/polling/PollController";
 
-const Polls = (props) => {
+const Polls = ({ event, polls, fetchPolls }) => {
   const [open, setOpen] = useState(false);
   const [openPoll, setOpenPoll] = useState(false);
   const [dataFetched, setDataFetched] = useState(true);
   const [isAddPoll, setIsAddPoll] = useState(true);
+  const [openAlert, setOpenAlert] = useState(false);
   const [pollData, setPollData] = useState({});
 
   useEffect(() => {
     fetchDatAsync();
-  }, [props.event]);
+  }, [event]);
 
   //Separated function because useEffect should not be an async function
   const fetchDatAsync = async () => {
     setDataFetched(false);
-    if (props.event.id) {
-      await props.fetchPolls(props.event.id);
+    if (event.id) {
+      await fetchPolls(event.id);
     }
     setDataFetched(true);
   };
@@ -57,7 +53,12 @@ const Polls = (props) => {
   };
 
   const handleLaunchPoll = () => {
-    setOpenPoll(true);
+    console.log(polls);
+    if (polls.length) {
+      setOpenPoll(true);
+    } else {
+      setOpenAlert(true);
+    }
   };
 
   const handleClosePoll = () => {
@@ -84,6 +85,22 @@ const Polls = (props) => {
         content={<PollController handleClose={handleClosePoll} />}
       />
 
+      <AlertModal
+        open={openAlert}
+        onClose={() => setOpenAlert(false)}
+        content={
+          <>
+            <div>Oops, it looks like you haven't created any polls yet! </div>
+            <br></br>
+            <div>
+              You can create a new poll by clicking on the icon in the top right
+              of the polls table.
+            </div>
+          </>
+        }
+        closeText="OK"
+      />
+
       <NavBar3
         displaySideNav="true"
         highlight="polls"
@@ -101,7 +118,7 @@ const Polls = (props) => {
             {dataFetched ? (
               <PollsTable
                 handleAdd={handleAddPoll}
-                data={props.polls}
+                data={polls}
                 handleEdit={handleEditPoll}
                 handleDelete={handleDeletePoll}
               />
