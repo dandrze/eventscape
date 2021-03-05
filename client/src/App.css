@@ -141,7 +141,7 @@ label {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
   font-size: calc(10px + 2vmin);
   color: black;
 }
@@ -454,7 +454,6 @@ select {
 .top-button-bar {
   display: flex;
   margin-bottom: 20px;
-  margin-top: 20px;
 }
 
 .button-bar-left {

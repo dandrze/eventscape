@@ -1,8 +1,30 @@
 import React, { useEffect, useState } from "react";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ResultsChart from "./ResultsChart";
+import api from "../../api/server"
 
-export default ({ poll, results, totalResponded }) => {
+export default ({ poll }) => {
+    const [results, setResults] = useState([]);
+  const [totalResponded, setTotalResponded] = useState(0);
+
+  useEffect(() => {
+    if (poll) fetchResults();
+  }, [poll]);
+
+  const fetchResults = async () => {
+    const resultsRes = await api.get("/api/polling/results", {
+      params: { pollId: poll.id },
+    });
+    console.log(resultsRes);
+
+    const { results, totalResponded } = resultsRes.data;
+
+    // set results to the new poll option with responses added to it
+    setResults(results);
+
+    setTotalResponded(totalResponded);
+  };
+
   return (
     <>
       <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -24,7 +46,11 @@ export default ({ poll, results, totalResponded }) => {
           {totalResponded} voted
         </label>
       </div>
-      <ResultsChart results={results} question={poll.question} />
+      <ResultsChart
+        results={results}
+        question={poll.question}
+        allowMultiple={poll.allowMultiple}
+      />
     </>
   );
 };

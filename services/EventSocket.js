@@ -10,6 +10,8 @@ const {
 } = require("../db").models;
 const keys = require("../config/keys");
 
+const { fetchPollResults } = require("./pollQueries");
+
 module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/event",
@@ -101,10 +103,13 @@ module.exports = (server) => {
       }
     });
 
-    socket.on("sharePollResults", async ({ eventId, results, poll }) => {
+    socket.on("sharePollResults", async ({ eventId, poll }) => {
+      const { results, totalResponded } = await fetchPollResults(poll.id);
       io.to(eventId.toString()).emit("results", {
         results,
+        totalResponded,
         question: poll.question,
+        allowMultiple: poll.allowMultiple,
       });
     });
 

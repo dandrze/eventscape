@@ -57,6 +57,7 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
+import PollIcon from "../icons/poll-1.svg";
 
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -131,7 +132,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     //padding: theme.spacing(3),
     padding: "0px",
-    margin: "0px",
+    margin: "100px 0px 0px 0px",
+    width: "calc(100vw - 240px)",
   },
   currentEvent: {
     display: "block",
@@ -602,7 +604,7 @@ function NavBar3(props) {
               >
                 <Tooltip title="Polls">
                   <ListItemIcon>
-                    <img src={GraphIcon} height="20px"></img>
+                    <img src={PollIcon} height="20px"></img>
                   </ListItemIcon>
                 </Tooltip>
                 <ListItemText primary="Polls" />
@@ -729,18 +731,8 @@ function NavBar3(props) {
           </List>
         </Drawer>
       )}
-      <main className={classes.content}>
-        <div className={classes.toolbar}></div>
-        {content}
-        <div className="force-width">
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          -
-        </div>
-      </main>
+      <div className={classes.content}>
+{content}</div>
     </div>
   );
 }

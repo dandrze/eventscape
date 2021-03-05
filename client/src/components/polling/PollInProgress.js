@@ -3,17 +3,12 @@ import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import api from "../../api/server";
 import ResultsChart from "./ResultsChart";
 
-export default ({
-  poll,
-  eventId,
-  results,
-  setResults,
-  totalResponded,
-  setTotalResponded,
-}) => {
+export default ({ poll, eventId }) => {
   const [totalVisitors, setTotalVisitors] = useState(0);
-  const [totalResponses, setTotalResponses] = useState(0);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
+  const [results, setResults] = useState([]);
+  const [totalResponded, setTotalResponded] = useState(0);
+
   useEffect(() => {
     // fetch the response results
     fetchResults();
@@ -30,7 +25,6 @@ export default ({
   // Create a timer that updates every second
   useEffect(() => {
     const timer = setInterval(() => {
-      console.log();
       setSecondsElapsed((secondsElapsed) => secondsElapsed + 1);
     }, 1000);
 
@@ -92,7 +86,11 @@ export default ({
           ) voted
         </label>
       </div>
-      <ResultsChart results={results} question={poll.question} />
+      <ResultsChart
+        results={results}
+        question={poll.question}
+        allowMultiple={poll.allowMultiple}
+      />
     </>
   );
 };

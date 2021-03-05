@@ -35,6 +35,7 @@ const Published = (props) => {
   const [openResults, setOpenResults] = useState(false);
   const [resultsQuestion, setResultsQuestion] = useState("");
   const [results, setResults] = useState([]);
+  const [allowMultiple, setAllowMultiple] = useState(false);
 
   useEffect(() => {
     if (!cookies.get("uuid")) cookies.set("uuid", uuid());
@@ -107,10 +108,11 @@ const Published = (props) => {
         setOpenResults(false);
       });
 
-      socket.on("results", ({ question, results }) => {
+      socket.on("results", ({ question, results, allowMultiple }) => {
         console.log("results: ", { question, results });
         setResults(results);
         setResultsQuestion(question);
+        setAllowMultiple(allowMultiple);
         setOpenResults(true);
       });
 

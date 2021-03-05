@@ -1,7 +1,7 @@
 import React from "react";
 import { HorizontalBar } from "react-chartjs-2";
 
-export default ({ question, results }) => {
+export default ({ question, results, allowMultiple }) => {
   const labels = results.map((option) => {
     return option.text;
   });
@@ -25,7 +25,9 @@ export default ({ question, results }) => {
 
   return (
     <>
-      <h5>{question}</h5>
+      <h5>
+        {question} {allowMultiple ? "(Select Multiple)" : "(Select One)"}
+      </h5>
       <div style={{ width: "100%", height: "250px" }}>
         <HorizontalBar
           data={data}

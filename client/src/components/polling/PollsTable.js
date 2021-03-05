@@ -2,8 +2,6 @@ import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
-import { Paper } from "@material-ui/core";
-import { toast } from "react-toastify";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -21,12 +19,12 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import ListIcon from "@material-ui/icons/List";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import TableAddButton from "../TableAddButton";
+
 import * as actions from "../../actions";
-import { recipientsOptions } from "../../model/enums";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -104,8 +102,7 @@ function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
       },
     }),
     {
-      icon: AddBox,
-      tooltip: "Add Poll",
+      icon: () => <TableAddButton label="New Poll" />,
       isFreeAction: true,
       onClick: (event) => {
         handleAdd();
@@ -133,7 +130,7 @@ function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
         localization={{
           body: {
             emptyDataSourceMessage: settings.loaded ? (
-              "No Polls Found. Create a new poll by click the + icon in the top right."
+              "No Polls Found. Create a new poll by click the + icon in the top right of the table"
             ) : (
               <div style={{ padding: "50px" }}>
                 <CircularProgress />

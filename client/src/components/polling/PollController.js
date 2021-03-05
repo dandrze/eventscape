@@ -45,8 +45,6 @@ const PollController = ({ polls, event, handleClose }) => {
   const [openAlert, setOpenAlert] = useState(false);
   const [openRepeatAlert, setOpenRepeatAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
-  const [results, setResults] = useState([]);
-  const [totalResponded, setTotalResponded] = useState(0);
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -79,7 +77,6 @@ const PollController = ({ polls, event, handleClose }) => {
 
   const handleChangeSelectedPoll = (event) => {
     setSelectedPoll(event.target.value);
-    console.log(selectedPoll);
   };
 
   const pollLaunchedBefore = async () => {
@@ -88,7 +85,8 @@ const PollController = ({ polls, event, handleClose }) => {
       params: { pollId: selectedPoll.id },
     });
 
-    return Boolean(res.data.results);
+    // return true if there are any responses. If there are no response, 0 returns false
+    return Boolean(res.data.totalResponded);
   };
 
   const clearResultsAndContinue = async () => {
@@ -96,8 +94,6 @@ const PollController = ({ polls, event, handleClose }) => {
       const res = await api.delete("/api/polling/results", {
         params: { pollId: selectedPoll.id },
       });
-
-      console.log(selectedPoll);
 
       // push the poll to guests
       socket.emit("pushPoll", {
@@ -108,7 +104,7 @@ const PollController = ({ polls, event, handleClose }) => {
       });
 
       // Go to next step (poll progress screen)
-      setStep(step + 1);
+      setStep(1);
     } catch (err) {
       toast.error("Error when clearing previous results: " + err.toString());
     }
@@ -135,29 +131,34 @@ const PollController = ({ polls, event, handleClose }) => {
       allowMultiple: selectedPoll.allowMultiple,
     });
 
-    setStep(step + 1);
+    setStep(1);
   };
 
   const endPoll = async () => {
     // Push an event to end the poll
     socket.emit("closePoll", event.id);
 
-    setStep(step + 1);
+    setStep(2);
   };
 
   const shareResults = async () => {
     socket.emit("sharePollResults", {
       eventId: event.id,
       poll: selectedPoll,
-      results,
     });
-    setStep(step + 1);
+    setStep(3);
   };
 
   const stopSharingResults = () => {
     socket.emit("stopSharingPollResults", event.id);
-    setStep(step - 1);
+    setStep(2);
   };
+
+  const handleNextPoll = () => {
+    setStep(0);
+  };
+
+  console.log(selectedPoll);
 
   const renderStep = () => {
     switch (step) {
@@ -188,14 +189,7 @@ const PollController = ({ polls, event, handleClose }) => {
       case 1:
         return (
           <>
-            <PollInProgress
-              poll={selectedPoll}
-              eventId={event.id}
-              results={results}
-              setResults={setResults}
-              totalResponded={totalResponded}
-              setTotalResponded={setTotalResponded}
-            />
+            <PollInProgress poll={selectedPoll} eventId={event.id} />
             <Divider className={classes.divider} variant="middle" />
 
             <FormControl variant="outlined" className={classes.formControl}>
@@ -214,11 +208,7 @@ const PollController = ({ polls, event, handleClose }) => {
       case 2:
         return (
           <>
-            <PollComplete
-              results={results}
-              totalResponded={totalResponded}
-              poll={selectedPoll}
-            />
+            <PollComplete poll={selectedPoll} />
             <Divider className={classes.divider} variant="middle" />
             <FormControl
               variant="outlined"
@@ -228,11 +218,11 @@ const PollController = ({ polls, event, handleClose }) => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={() => setStep(0)}
+                onClick={launchPoll}
                 class="Button1"
                 style={{ minWidth: "150px", marginLeft: "12px" }}
               >
-                Launch another poll
+                Relaunch poll
               </Button>
               <Button
                 variant="contained"
@@ -246,11 +236,11 @@ const PollController = ({ polls, event, handleClose }) => {
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleClose}
+                onClick={handleNextPoll}
                 class="Button1"
                 style={{ minWidth: "150px", marginLeft: "12px" }}
               >
-                Close
+                Next Poll
               </Button>
             </FormControl>
           </>
@@ -259,7 +249,7 @@ const PollController = ({ polls, event, handleClose }) => {
       case 3:
         return (
           <>
-            <PollShare results={results} poll={selectedPoll} />
+            <PollShare poll={selectedPoll} />
             <Divider className={classes.divider} variant="middle" />
 
             <FormControl variant="outlined" className={classes.formControl}>
