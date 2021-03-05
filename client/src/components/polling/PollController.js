@@ -38,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
   divider: { marginTop: "10px", marginBottom: "30px" },
 }));
 
-const PollController = ({ polls, event, handleClose }) => {
+const PollController = ({ polls, event, updatePreventClose }) => {
   const classes = useStyles();
   const [step, setStep] = useState(0);
   const [selectedPoll, setSelectedPoll] = useState(null);
@@ -103,6 +103,9 @@ const PollController = ({ polls, event, handleClose }) => {
         allowMultiple: selectedPoll.allowMultiple,
       });
 
+      // Prevent the modal from closing during live poll
+      updatePreventClose(true);
+
       // Go to next step (poll progress screen)
       setStep(1);
     } catch (err) {
@@ -131,6 +134,9 @@ const PollController = ({ polls, event, handleClose }) => {
       allowMultiple: selectedPoll.allowMultiple,
     });
 
+    // Prevent the modal from closing during live poll
+    updatePreventClose(true);
+
     setStep(1);
   };
 
@@ -138,6 +144,8 @@ const PollController = ({ polls, event, handleClose }) => {
     // Push an event to end the poll
     socket.emit("closePoll", event.id);
 
+    // Prevent the modal from closing during live poll
+    updatePreventClose(false);
     setStep(2);
   };
 
@@ -157,8 +165,6 @@ const PollController = ({ polls, event, handleClose }) => {
   const handleNextPoll = () => {
     setStep(0);
   };
-
-  console.log(selectedPoll);
 
   const renderStep = () => {
     switch (step) {

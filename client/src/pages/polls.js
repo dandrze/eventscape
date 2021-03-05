@@ -16,7 +16,10 @@ const Polls = ({ event, polls, fetchPolls }) => {
   const [dataFetched, setDataFetched] = useState(true);
   const [isAddPoll, setIsAddPoll] = useState(true);
   const [openAlert, setOpenAlert] = useState(false);
+  const [openPreventCloseAlert, setOpenPreventCloseAlert] = useState();
+
   const [pollData, setPollData] = useState({});
+  const [preventClose, setPreventClose] = useState(false);
 
   useEffect(() => {
     fetchDatAsync();
@@ -62,7 +65,15 @@ const Polls = ({ event, polls, fetchPolls }) => {
   };
 
   const handleClosePoll = () => {
-    setOpenPoll(false);
+    if (preventClose) {
+      setOpenPreventCloseAlert(true);
+    } else {
+      setOpenPoll(false);
+    }
+  };
+
+  const handleUpdatePreventClose = (_preventClose) => {
+    setPreventClose(_preventClose);
   };
 
   return (
@@ -82,7 +93,9 @@ const Polls = ({ event, polls, fetchPolls }) => {
       <Modal1
         open={openPoll}
         onClose={handleClosePoll}
-        content={<PollController handleClose={handleClosePoll} />}
+        content={
+          <PollController updatePreventClose={handleUpdatePreventClose} />
+        }
       />
 
       <AlertModal
@@ -98,6 +111,13 @@ const Polls = ({ event, polls, fetchPolls }) => {
             </div>
           </>
         }
+        closeText="OK"
+      />
+
+      <AlertModal
+        open={openPreventCloseAlert}
+        onClose={() => setOpenPreventCloseAlert(false)}
+        content="You currently have a poll open. Please end the poll first and then close the window."
         closeText="OK"
       />
 
