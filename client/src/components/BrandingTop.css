@@ -1,0 +1,9 @@
+.branding-top-container {
+    background-color: white;
+    display: flex;
+    align-items: center;
+    justify-content: end;
+    padding: 10px 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.15);
+    margin-bottom: -1px;
+}

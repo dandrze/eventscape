@@ -12,6 +12,8 @@ import { Link, withRouter } from "react-router-dom";
 import Cancel from "../icons/cancel.svg";
 import AlertModal from "./AlertModal";
 import { pageNames } from "../model/enums";
+import BrandingTop from "./BrandingTop";
+import BrandingBottom from "./BrandingBottom";
 
 const PageEditor = (props) => {
   const { history } = props;
@@ -102,6 +104,7 @@ const PageEditor = (props) => {
 
       <div className="design">
         <div className="top-button-bar pt-5">
+        <button className="Button1" style={{ marginRight: "15px" }}>Remove Eventscape Branding</button>
           <Link
             className="button-bar-left"
             to={() =>
@@ -158,15 +161,17 @@ const PageEditor = (props) => {
           <br></br>
         </div>
         <div id="designBoard">
-          <ul>
-            {props.model.sections.map(function (section, index) {
-              return (
-                <li key={section.id}>
-                  <PageSectionEditor section={section} sectionIndex={index} />
-                </li>
-              );
-            })}
-          </ul>
+          <BrandingTop />
+            <ul>
+              {props.model.sections.map(function (section, index) {
+                return (
+                  <li key={section.id}>
+                    <PageSectionEditor section={section} sectionIndex={index} />
+                  </li>
+                );
+              })}
+            </ul>
+          <BrandingBottom />
         </div>
       </div>
     </div>
