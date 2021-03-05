@@ -3,7 +3,7 @@ const router = express.Router();
 const { Poll, PollOption, PollResponse } = require("../db").models;
 
 const { clearCache } = require("../services/sequelizeRedis");
-const {fetchPollResults} = require("../services/pollQueries")
+const { fetchPollResults } = require("../services/pollQueries");
 
 router.get("/api/polling/poll/all", async (req, res, next) => {
   const { eventId } = req.query;
@@ -41,7 +41,7 @@ responseCount= 90}
   const { pollId } = req.query;
 
   try {
-    const {results, totalResponded} = await fetchPollResults(pollId)
+    const { results, totalResponded } = await fetchPollResults(pollId);
 
     res.status(200).send({ results, totalResponded });
   } catch (error) {

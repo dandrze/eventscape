@@ -104,12 +104,8 @@ module.exports = (server) => {
     });
 
     socket.on("sharePollResults", async ({ eventId, poll }) => {
-      const { results, totalResponded } = await fetchPollResults(poll.id);
       io.to(eventId.toString()).emit("results", {
-        results,
-        totalResponded,
-        question: poll.question,
-        allowMultiple: poll.allowMultiple,
+        poll,
       });
     });
 

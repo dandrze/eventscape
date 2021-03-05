@@ -50,7 +50,14 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
+function PollsTable({
+  handleEdit,
+  handleAdd,
+  handleDelete,
+  handleView,
+  data,
+  settings,
+}) {
   const columns = [
     {
       title: "Poll Question",
@@ -98,6 +105,7 @@ function PollsTable({ handleEdit, handleAdd, handleDelete, data, settings }) {
       icon: ListIcon,
       tooltip: "View Results",
       onClick: (event, rowData) => {
+        handleView(rowData);
         console.log(rowData);
       },
     }),
