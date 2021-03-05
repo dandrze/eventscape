@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Route, Switch } from "react-router-dom";
-import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 import * as actions from "../actions";
@@ -23,6 +22,10 @@ import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
 
 const InternalApp = (props) => {
+  useEffect(() => {
+    props.fetchEvent();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">

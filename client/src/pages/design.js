@@ -33,7 +33,7 @@ const Design = ({ event, model, fetchModel }) => {
           model.sections.length ? (
             <PageEditor key={model} page={page} />
           ) : (
-            <CircularProgress />
+            <CircularProgress style={{ marginTop: "30vh" }} />
           )
         }
       />

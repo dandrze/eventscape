@@ -132,6 +132,8 @@ const useStyles = makeStyles((theme) => ({
     //padding: theme.spacing(3),
     padding: "0px",
     margin: "0px",
+    overflowY: "scroll", // Added to fix froala cursor jumping bug
+    height: "100vh", // Added to fix froala cursor jumping bug
   },
   currentEvent: {
     display: "block",

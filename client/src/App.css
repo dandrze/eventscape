@@ -770,3 +770,8 @@ select:focus {
   text-decoration: line-through;
   color: red;
 }
+
+/* Temp fix for the insert */
+.fr-svg {
+  margin-top: -15px;
+}

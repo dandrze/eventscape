@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 
 import FroalaEditorComponent from "react-froala-wysiwyg";
@@ -26,6 +26,8 @@ import "froala-editor/js/plugins/forms.min.js";
 import "froala-editor/js/plugins/draggable.min.js";
 import "froala-editor/js/plugins/table.min.js";
 import "froala-editor/js/plugins/word_paste.min.js";
+import "froala-editor/js/plugins/quick_insert.min.js";
+//import "froala-editor/js/plugins/image_manager.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
@@ -35,7 +37,10 @@ import "froala-editor/css/plugins/file.min.css";
 import "froala-editor/css/plugins/code_view.min.css";
 import "froala-editor/css/plugins/image.min.css";
 //import "froala-editor/css/third_party/image_tui.min.css";
+import "froala-editor/css/plugins/draggable.min.css";
 import "froala-editor/css/plugins/table.min.css";
+import "froala-editor/css/plugins/quick_insert.min.css";
+//import "froala-editor/css/plugins/image_manager.min.css";
 
 import * as actions from "../actions";
 import api from "../api/server";
@@ -44,6 +49,12 @@ const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
   const [model, setModel] = useState("");
   const [s3Signature, setS3Signature] = useState(null);
+  const s3SignatureRef = useRef(null);
+
+  useEffect(() => {
+    // Point the reference to the updated s3Signature state
+    s3SignatureRef.current = s3Signature;
+  }, [s3Signature]);
 
   useEffect(() => {
     setModel(props.html);
@@ -60,7 +71,7 @@ const Froala = (props) => {
     const res = await api.get("/api/froala/get-s3-signature", {
       params: { accountId: props.user.id },
     });
-    console.log(res.data);
+
     setS3Signature(res.data);
   };
 
@@ -201,7 +212,6 @@ const Froala = (props) => {
     ],
     key:
       "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
-    imageUploadToS3: s3Signature,
     // By default all plugins are enabled
     /*pluginsEnabled: [
       "image", 
@@ -233,6 +243,9 @@ const Froala = (props) => {
         // if we want to permanently delete the image we can do it here
         //await api.post("/api/froala/delete-image", { src });
       },
+      "image.beforeUpload": function (imgList) {
+        this.opts.imageUploadToS3 = s3SignatureRef.current;
+      },
     },
   };
 
@@ -250,9 +263,8 @@ const Froala = (props) => {
 
   return (
     <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
-    <FroalaEditorComponent
-    // key forces the editor to re instantiate whenever we update the s3 signature in the config. Important because the s3 signature expires. 
-        key={s3Signature}
+      <FroalaEditorComponent
+        // key forces the editor to re instantiate whenever we update the s3 signature in the config. Important because the s3 signature expires.
         config={config}
         model={model}
         onModelChange={handleModelChange}
