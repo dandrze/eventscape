@@ -153,7 +153,7 @@ function Create_Account(props) {
             {isLoading ? (
               <CircularProgress />
             ) : (
-              <button className="Button1" type="submit" onClick={handleSubmit}>
+              <button className="Button1 gtag-create-account" type="submit" onClick={handleSubmit}>
                 Create My Account
               </button>
             )}
