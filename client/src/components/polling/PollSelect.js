@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+
 import Select from "@material-ui/core/Select";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -6,8 +8,8 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import Divider from "@material-ui/core/Divider";
 
-import api from "../../api/server";
 import ResultsChart from "./ResultsChart";
+import * as actions from "../../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -26,28 +28,20 @@ const useStyles = makeStyles((theme) => ({
   divider: { marginTop: "10px", marginBottom: "30px" },
 }));
 
-export default ({ polls, selectedPoll, handleChangeSelectedPoll }) => {
-  const [results, setResults] = useState([]);
-  const [totalResponded, setTotalResponded] = useState(0);
-
+const PollSelect = ({
+  polling: { selectedPollIndex, polls, results, totalResponded },
+  selectPollByIndex,
+  fetchPollResults,
+}) => {
   const classes = useStyles();
 
   useEffect(() => {
-    if (selectedPoll) fetchResults();
-  }, [selectedPoll]);
+    // each time we select a new poll, update the redux state with that polls results
+    if (polls[selectedPollIndex]) fetchPollResults();
+  }, [polls[selectedPollIndex]]);
 
-  const fetchResults = async () => {
-    const resultsRes = await api.get("/api/polling/results", {
-      params: { pollId: selectedPoll.id },
-    });
-    console.log(resultsRes);
-
-    const { results, totalResponded } = resultsRes.data;
-
-    // set results to the new poll option with responses added to it
-    setResults(results);
-
-    setTotalResponded(totalResponded);
+  const handleChangeSelectedPoll = (event) => {
+    selectPollByIndex(event.target.value);
   };
 
   return (
@@ -56,16 +50,16 @@ export default ({ polls, selectedPoll, handleChangeSelectedPoll }) => {
         <InputLabel id="select-poll-label">Select Poll</InputLabel>
         <Select
           labelId="select-poll-label"
-          value={selectedPoll}
+          value={selectedPollIndex}
           onChange={handleChangeSelectedPoll}
           label="Select Poll"
         >
-          {polls.map((poll) => {
-            return <MenuItem value={poll}>{poll.question}</MenuItem>;
+          {polls.map((poll, index) => {
+            return <MenuItem value={index}>{poll.question}</MenuItem>;
           })}
         </Select>
       </FormControl>
-      {selectedPoll ? (
+      {polls[selectedPollIndex] ? (
         <>
           <Divider className={classes.divider} variant="middle" />
           <div
@@ -92,15 +86,21 @@ export default ({ polls, selectedPoll, handleChangeSelectedPoll }) => {
             )}
           </div>
 
-          {results ? (
+          
             <ResultsChart
-              question={selectedPoll.question}
+              question={polls[selectedPollIndex].question}
               results={results}
-              allowMultiple={selectedPoll.allowMultiple}
+              allowMultiple={polls[selectedPollIndex].allowMultiple}
             />
-          ) : null}
+          
         </>
       ) : null}
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return { polling: state.polling, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(PollSelect);

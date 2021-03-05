@@ -11,7 +11,7 @@ import api from "../api/server";
 import PollController from "../components/polling/PollController";
 import ResultsChart from "../components/polling/ResultsChart";
 
-const Polls = ({ event, polls, fetchPolls }) => {
+const Polls = ({ event, polling, fetchPolls }) => {
   const [open, setOpen] = useState(false);
   const [openPoll, setOpenPoll] = useState(false);
   const [dataFetched, setDataFetched] = useState(true);
@@ -63,8 +63,7 @@ const Polls = ({ event, polls, fetchPolls }) => {
   };
 
   const handleLaunchPoll = () => {
-    console.log(polls);
-    if (polls.length) {
+    if (polling.polls.length) {
       setOpenPoll(true);
     } else {
       setOpenAlert(true);
@@ -156,7 +155,7 @@ const Polls = ({ event, polls, fetchPolls }) => {
             {dataFetched ? (
               <PollsTable
                 handleAdd={handleAddPoll}
-                data={polls}
+                data={polling.polls}
                 handleEdit={handleEditPoll}
                 handleDelete={handleDeletePoll}
                 handleView={handleViewPoll}
@@ -177,7 +176,7 @@ const mapStateToProps = (state) => {
     settings: state.settings,
     event: state.event,
     registration: state.registration,
-    polls: state.polls,
+    polling: state.polling,
   };
 };
 

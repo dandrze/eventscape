@@ -1,21 +1,28 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+
 import RadioButtonCheckedIcon from "@material-ui/icons/RadioButtonChecked";
 import api from "../../api/server";
 import ResultsChart from "./ResultsChart";
 
-export default ({ poll, eventId }) => {
+import * as actions from "../../actions";
+
+const PollInProgress = ({
+  polling: { selectedPollIndex, polls, results, totalResponded },
+  fetchPollResults,
+  event,
+}) => {
   const [totalVisitors, setTotalVisitors] = useState(0);
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const [results, setResults] = useState([]);
-  const [totalResponded, setTotalResponded] = useState(0);
 
   useEffect(() => {
     // fetch the response results
-    fetchResults();
+    fetchPollResults();
+    fetchTotalVisitors();
 
     // fetch the results after 3 seconds and every 3 seconds
     const interval = setInterval(() => {
-      fetchResults();
+      fetchPollResults();
     }, 3000);
 
     // clear the interval upon unmount
@@ -32,23 +39,11 @@ export default ({ poll, eventId }) => {
     return () => clearInterval(timer);
   }, []);
 
-  const fetchResults = async () => {
-    const resultsRes = await api.get("/api/polling/results", {
-      params: { pollId: poll.id },
-    });
-    console.log(resultsRes);
-
-    const { results, totalResponded } = resultsRes.data;
-
-    // set results to the new poll option with responses added to it
-    setResults(results);
-
-    setTotalResponded(totalResponded);
-
+  const fetchTotalVisitors = async () => {
     // get the total number of visitors
 
     const currentVisitorsRes = await api.get("api/analytics/current-visitors", {
-      params: { eventId },
+      params: { eventId: event.id },
     });
     setTotalVisitors(currentVisitorsRes.data.currentVisitors);
   };
@@ -88,9 +83,15 @@ export default ({ poll, eventId }) => {
       </div>
       <ResultsChart
         results={results}
-        question={poll.question}
-        allowMultiple={poll.allowMultiple}
+        question={polls[selectedPollIndex].question}
+        allowMultiple={polls[selectedPollIndex].allowMultiple}
       />
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return { polling: state.polling, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(PollInProgress);

@@ -20,5 +20,5 @@ export default combineReducers({
   registration: registrationReducer,
   email: emailReducer,
   attendee: attendeeReducer,
-  polls: pollingReducer,
+  polling: pollingReducer,
 });

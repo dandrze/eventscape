@@ -1,28 +1,12 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+
 import { HorizontalBar } from "react-chartjs-2";
 
-import api from "../../api/server";
+import * as actions from "../../actions";
 
-export default (props) => {
-  const [results, setResults] = useState(props.results || []);
-
-  useEffect(() => {
-    // if the poll is being called with data, populate that data
-    // if there is no results provided, then a pollId will be provided for us to fetch the results
-    if (!props.results) fetchResults();
-  }, []);
-
-  const fetchResults = async () => {
-    const resultsRes = await api.get("/api/polling/results", {
-      params: { pollId: props.pollId },
-    });
-
-    const { results, totalResponded } = resultsRes.data;
-
-    // set results to the new poll option with responses added to it
-    setResults(results);
-  };
-
+const ResultsChart = ({ results, question, allowMultiple }) => {
+  console.log(results);
   const labels = results.map((option) => {
     return option.text;
   });
@@ -49,8 +33,7 @@ export default (props) => {
   return (
     <>
       <h5>
-        {props.question}{" "}
-        {props.allowMultiple ? "(Select Multiple)" : "(Select One)"}
+        {question} {allowMultiple ? "(Select Multiple)" : "(Select One)"}
       </h5>
       <div style={{ width: "100%", height: "250px" }}>
         <HorizontalBar
@@ -68,3 +51,9 @@ export default (props) => {
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return { polling: state.polling, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(ResultsChart);

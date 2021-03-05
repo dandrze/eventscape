@@ -38,10 +38,13 @@ const useStyles = makeStyles((theme) => ({
   divider: { marginTop: "10px", marginBottom: "30px" },
 }));
 
-const PollController = ({ polls, event, updatePreventClose }) => {
+const PollController = ({
+  polling: { selectedPollIndex, polls, results, totalResponded },
+  event,
+  updatePreventClose,
+}) => {
   const classes = useStyles();
   const [step, setStep] = useState(0);
-  const [selectedPoll, setSelectedPoll] = useState(null);
   const [openAlert, setOpenAlert] = useState(false);
   const [openRepeatAlert, setOpenRepeatAlert] = useState(false);
   const [alertText, setAlertText] = useState("");
@@ -62,7 +65,6 @@ const PollController = ({ polls, event, updatePreventClose }) => {
 
       socket.emit("rejoin", { eventId: event.id });
     });
-    console.log(socket);
 
     socket.on("poll", () => {
       console.log("Poll received");
@@ -75,14 +77,10 @@ const PollController = ({ polls, event, updatePreventClose }) => {
     });
   }, []);
 
-  const handleChangeSelectedPoll = (event) => {
-    setSelectedPoll(event.target.value);
-  };
-
   const pollLaunchedBefore = async () => {
     // if there are results, that means the poll has already been launched before
     const res = await api.get("/api/polling/results", {
-      params: { pollId: selectedPoll.id },
+      params: { pollId: polls[selectedPollIndex].id },
     });
 
     // return true if there are any responses. If there are no response, 0 returns false
@@ -92,15 +90,15 @@ const PollController = ({ polls, event, updatePreventClose }) => {
   const clearResultsAndContinue = async () => {
     try {
       const res = await api.delete("/api/polling/results", {
-        params: { pollId: selectedPoll.id },
+        params: { pollId: polls[selectedPollIndex].id },
       });
 
       // push the poll to guests
       socket.emit("pushPoll", {
         eventId: event.id,
-        question: selectedPoll.question,
-        options: selectedPoll.PollOptions,
-        allowMultiple: selectedPoll.allowMultiple,
+        question: polls[selectedPollIndex].question,
+        options: polls[selectedPollIndex].PollOptions,
+        allowMultiple: polls[selectedPollIndex].allowMultiple,
       });
 
       // Prevent the modal from closing during live poll
@@ -114,11 +112,6 @@ const PollController = ({ polls, event, updatePreventClose }) => {
   };
 
   const launchPoll = async () => {
-    if (!selectedPoll) {
-      setAlertText("Please select a poll to launch");
-      setOpenAlert(true);
-      return;
-    }
     if (await pollLaunchedBefore()) {
       // if the poll has been lauched before, open an alert alerting the user that they will need to clear the results of the previous poll to continue
       setOpenRepeatAlert(true);
@@ -129,9 +122,9 @@ const PollController = ({ polls, event, updatePreventClose }) => {
     // push the poll to guests
     socket.emit("pushPoll", {
       eventId: event.id,
-      question: selectedPoll.question,
-      options: selectedPoll.PollOptions,
-      allowMultiple: selectedPoll.allowMultiple,
+      question: polls[selectedPollIndex].question,
+      options: polls[selectedPollIndex].PollOptions,
+      allowMultiple: polls[selectedPollIndex].allowMultiple,
     });
 
     // Prevent the modal from closing during live poll
@@ -152,7 +145,7 @@ const PollController = ({ polls, event, updatePreventClose }) => {
   const shareResults = async () => {
     socket.emit("sharePollResults", {
       eventId: event.id,
-      poll: selectedPoll,
+      poll: polls[selectedPollIndex],
     });
     setStep(3);
   };
@@ -172,12 +165,7 @@ const PollController = ({ polls, event, updatePreventClose }) => {
         // First page is the poll selection
         return (
           <>
-            <PollSelect
-              polls={polls}
-              selectedPoll={selectedPoll}
-              handleChangeSelectedPoll={handleChangeSelectedPoll}
-            />
-            <Divider className={classes.divider} variant="middle" />
+            <PollSelect />
 
             <FormControl variant="outlined" className={classes.formControl}>
               <Button
@@ -195,7 +183,7 @@ const PollController = ({ polls, event, updatePreventClose }) => {
       case 1:
         return (
           <>
-            <PollInProgress poll={selectedPoll} eventId={event.id} />
+            <PollInProgress />
             <Divider className={classes.divider} variant="middle" />
 
             <FormControl variant="outlined" className={classes.formControl}>
@@ -214,7 +202,7 @@ const PollController = ({ polls, event, updatePreventClose }) => {
       case 2:
         return (
           <>
-            <PollComplete poll={selectedPoll} />
+            <PollComplete poll={polls[selectedPollIndex]} />
             <Divider className={classes.divider} variant="middle" />
             <FormControl
               variant="outlined"
@@ -255,7 +243,7 @@ const PollController = ({ polls, event, updatePreventClose }) => {
       case 3:
         return (
           <>
-            <PollShare poll={selectedPoll} />
+            <PollShare poll={polls[selectedPollIndex]} />
             <Divider className={classes.divider} variant="middle" />
 
             <FormControl variant="outlined" className={classes.formControl}>
@@ -301,7 +289,7 @@ const PollController = ({ polls, event, updatePreventClose }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { polls: state.polls, event: state.event };
+  return { polling: state.polling, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(PollController);

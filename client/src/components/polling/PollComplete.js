@@ -1,30 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
+import { connect } from "react-redux";
+
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ResultsChart from "./ResultsChart";
-import api from "../../api/server"
+import * as actions from "../../actions";
 
-export default ({ poll }) => {
-    const [results, setResults] = useState([]);
-  const [totalResponded, setTotalResponded] = useState(0);
-
-  useEffect(() => {
-    if (poll) fetchResults();
-  }, [poll]);
-
-  const fetchResults = async () => {
-    const resultsRes = await api.get("/api/polling/results", {
-      params: { pollId: poll.id },
-    });
-    console.log(resultsRes);
-
-    const { results, totalResponded } = resultsRes.data;
-
-    // set results to the new poll option with responses added to it
-    setResults(results);
-
-    setTotalResponded(totalResponded);
-  };
-
+const PollComplete = ({
+  polling: { selectedPollIndex, polls, results, totalResponded },
+}) => {
   return (
     <>
       <div style={{ display: "flex", alignItems: "baseline" }}>
@@ -48,9 +31,15 @@ export default ({ poll }) => {
       </div>
       <ResultsChart
         results={results}
-        question={poll.question}
-        allowMultiple={poll.allowMultiple}
+        question={polls[selectedPollIndex].question}
+        allowMultiple={polls[selectedPollIndex].allowMultiple}
       />
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return { polling: state.polling, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(PollComplete);

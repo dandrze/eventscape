@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
+import { connect } from "react-redux";
+
 import PlayCircleFilledIcon from "@material-ui/icons/PlayCircleFilled";
 import ResultsChart from "./ResultsChart";
 
-import api from "../../api/server";
+import * as actions from "../../actions";
 
-export default ({ poll }) => {
+const PollShare = ({
+  polling: { selectedPollIndex, polls, results, totalResponded },
+}) => {
   const [secondsElapsed, setSecondsElapsed] = useState(0);
-  const [results, setResults] = useState([]);
-  const [totalResponded, setTotalResponded] = useState(0);
 
   // Create a timer that updates every second
   useEffect(() => {
@@ -18,23 +20,6 @@ export default ({ poll }) => {
     // Clear timeout if the component is unmounted
     return () => clearInterval(timer);
   }, []);
-
-  useEffect(() => {
-    if (poll) fetchResults();
-  }, [poll]);
-
-  const fetchResults = async () => {
-    const resultsRes = await api.get("/api/polling/results", {
-      params: { pollId: poll.id },
-    });
-
-    const { results, totalResponded } = resultsRes.data;
-
-    // set results to the new poll option with responses added to it
-    setResults(results);
-
-    setTotalResponded(totalResponded);
-  };
 
   return (
     <>
@@ -65,9 +50,15 @@ export default ({ poll }) => {
       {/* Previews the selected poll question*/}
       <ResultsChart
         results={results}
-        question={poll.question}
-        allowMultiple={poll.allowMultiple}
+        question={polls[selectedPollIndex].question}
+        allowMultiple={polls[selectedPollIndex].allowMultiple}
       />
     </>
   );
 };
+
+const mapStateToProps = (state) => {
+  return { polling: state.polling, event: state.event };
+};
+
+export default connect(mapStateToProps, actions)(PollShare);
