@@ -41,13 +41,11 @@ const useStyles = makeStyles((theme) => ({
 const PollController = ({
   polling: { selectedPollIndex, polls, results, totalResponded },
   event,
-  updatePreventClose,
+  updatePreventCloseText,
 }) => {
   const classes = useStyles();
   const [step, setStep] = useState(0);
-  const [openAlert, setOpenAlert] = useState(false);
   const [openRepeatAlert, setOpenRepeatAlert] = useState(false);
-  const [alertText, setAlertText] = useState("");
 
   useEffect(() => {
     socket = io(ENDPOINT, {
@@ -101,9 +99,6 @@ const PollController = ({
         allowMultiple: polls[selectedPollIndex].allowMultiple,
       });
 
-      // Prevent the modal from closing during live poll
-      updatePreventClose(true);
-
       // Go to next step (poll progress screen)
       setStep(1);
     } catch (err) {
@@ -127,9 +122,6 @@ const PollController = ({
       allowMultiple: polls[selectedPollIndex].allowMultiple,
     });
 
-    // Prevent the modal from closing during live poll
-    updatePreventClose(true);
-
     setStep(1);
   };
 
@@ -137,8 +129,6 @@ const PollController = ({
     // Push an event to end the poll
     socket.emit("closePoll", event.id);
 
-    // Prevent the modal from closing during live poll
-    updatePreventClose(false);
     setStep(2);
   };
 
@@ -162,6 +152,9 @@ const PollController = ({
   const renderStep = () => {
     switch (step) {
       case 0:
+        // Allow the modal to close on this step
+        updatePreventCloseText("");
+
         // First page is the poll selection
         return (
           <>
@@ -181,6 +174,12 @@ const PollController = ({
           </>
         );
       case 1:
+        // Prevent the modal from closing during live poll
+        updatePreventCloseText(
+          "There is a live poll in progress. Please end the poll before exiting."
+        );
+
+        // second step is the live poll
         return (
           <>
             <PollInProgress />
@@ -200,6 +199,11 @@ const PollController = ({
           </>
         );
       case 2:
+        //Allow the modal to close during this step
+
+        updatePreventCloseText("");
+
+        // third step is the complete poll screen
         return (
           <>
             <PollComplete poll={polls[selectedPollIndex]} />
@@ -241,6 +245,13 @@ const PollController = ({
         );
 
       case 3:
+        // Prevent the modal from closing during sharing results
+
+        updatePreventCloseText(
+          "You are currently sharing results with users. Please stop sharing the results before exiting."
+        );
+
+        // third step is the sharing screen
         return (
           <>
             <PollShare poll={polls[selectedPollIndex]} />
@@ -264,12 +275,6 @@ const PollController = ({
 
   return (
     <div style={{ width: "650px" }}>
-      <AlertModal
-        open={openAlert}
-        onClose={() => setOpenAlert(false)}
-        content={alertText}
-        closeText="OK"
-      />
       <AlertModal
         open={openRepeatAlert}
         onClose={() => setOpenRepeatAlert(false)}
