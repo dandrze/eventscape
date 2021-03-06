@@ -109,7 +109,7 @@ const Published = (props) => {
       });
 
       socket.on("results", ({ question, results, allowMultiple }) => {
-        console.log("results: ", { question, results });
+        console.log("results: ", { question, results, allowMultiple });
         setResults(results);
         setResultsQuestion(question);
         setAllowMultiple(allowMultiple);

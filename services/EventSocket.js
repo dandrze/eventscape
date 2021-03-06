@@ -74,7 +74,6 @@ module.exports = (server) => {
     socket.on(
       "pushPoll",
       async ({ eventId, question, options, allowMultiple }) => {
-        console.log(options);
         io.to(eventId.toString()).emit("poll", {
           question,
           options,
@@ -103,11 +102,17 @@ module.exports = (server) => {
       }
     });
 
-    socket.on("sharePollResults", async ({ eventId, poll }) => {
-      io.to(eventId.toString()).emit("results", {
-        poll,
-      });
-    });
+    socket.on(
+      "sharePollResults",
+      async ({ eventId, poll, results, totalResponded }) => {
+        console.log({ eventId, poll, results, totalResponded });
+        io.to(eventId.toString()).emit("results", {
+          question: poll.question,
+          results,
+          allowMultiple: poll.allowMultiple,
+        });
+      }
+    );
 
     socket.on("stopSharingPollResults", async (eventId) => {
       io.to(eventId.toString()).emit("closeResults");

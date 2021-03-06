@@ -14,6 +14,7 @@ router.get("/api/polling/poll/all", async (req, res, next) => {
         EventId: eventId,
       },
       include: PollOption,
+      order: [["id", "ASC"]],
     });
 
     res.status(200).send(polls);
@@ -60,6 +61,20 @@ router.delete("/api/polling/results", async (req, res, next) => {
     const pollOptionIds = pollOptions.map((pollOption) => pollOption.id);
     // delete all respones that contain these poll options
     await PollResponse.destroy({ where: { PollOptionId: pollOptionIds } });
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/api/polling/poll", async (req, res, next) => {
+  const { pollId } = req.body;
+
+  try {
+    const poll = await Poll.findByPk(pollId);
+    poll.isLaunched = true;
+    poll.save();
+
     res.status(200).send();
   } catch (error) {
     next(error);

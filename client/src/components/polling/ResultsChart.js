@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { connect } from "react-redux";
 
 import { HorizontalBar } from "react-chartjs-2";
 
 import * as actions from "../../actions";
 
-const ResultsChart = ({ results, question, allowMultiple }) => {
-  console.log(results);
+const ResultsChart = ({ event, results, question, allowMultiple }) => {
   const labels = results.map((option) => {
     return option.text;
   });
@@ -14,24 +13,51 @@ const ResultsChart = ({ results, question, allowMultiple }) => {
     return option.selections;
   });
 
+  const setOpacity = (hex, alpha) =>
+    `${hex}${Math.floor(alpha * 255)
+      .toString(16)
+      .padStart(2, 0)}`;
+
   const data = {
     labels,
     datasets: [
       {
-        backgroundColor: "rgba(255,99,132,0.2)",
-        borderColor: "rgba(255,99,132,1)",
-        borderWidth: 1,
-        hoverBackgroundColor: "rgba(255,99,132,0.4)",
-        hoverBorderColor: "rgba(255,99,132,1)",
+        backgroundColor: "#b0281c",
+        maxBarThickness: 20,
+        hoverBackgroundColor: setOpacity("#b0281c", 0.5),
+        hoverBorderColor: "#b0281c",
         data: pollData,
       },
     ],
   };
 
-  console.log(results);
+  const options = {
+    maintainAspectRatio: false,
+    legend: {
+      display: false,
+    },
+    scales: {
+      yAxes: [
+        {
+          gridLines: {
+            display: false,
+          },
+        },
+      ],
+      xAxes: [
+        {
+          ticks: {
+            beginAtZero: true,
+
+            stepSize: 1,
+          },
+        },
+      ],
+    },
+  };
 
   return (
-    <>
+    <div style={{ marginBottom: "25px", minWidth: "450px" }}>
       <h5>
         {question} {allowMultiple ? "(Select Multiple)" : "(Select One)"}
       </h5>
@@ -40,15 +66,10 @@ const ResultsChart = ({ results, question, allowMultiple }) => {
           data={data}
           // width={100}
           //height={"20px"}
-          options={{
-            maintainAspectRatio: false,
-            legend: {
-              display: false,
-            },
-          }}
+          options={options}
         />
       </div>
-    </>
+    </div>
   );
 };
 

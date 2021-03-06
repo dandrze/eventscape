@@ -11,7 +11,6 @@ import io from "socket.io-client";
 import AlertModal from "../AlertModal";
 import * as actions from "../../actions";
 import api from "../../api/server";
-import PollComplete from "./PollComplete";
 import PollSelect from "./PollSelect";
 import PollInProgress from "./PollInProgress";
 import PollShare from "./PollShare";
@@ -42,6 +41,7 @@ const PollController = ({
   polling: { selectedPollIndex, polls, results, totalResponded },
   event,
   updatePreventCloseText,
+  closeWindow,
 }) => {
   const classes = useStyles();
   const [step, setStep] = useState(0);
@@ -91,19 +91,29 @@ const PollController = ({
         params: { pollId: polls[selectedPollIndex].id },
       });
 
-      // push the poll to guests
-      socket.emit("pushPoll", {
-        eventId: event.id,
-        question: polls[selectedPollIndex].question,
-        options: polls[selectedPollIndex].PollOptions,
-        allowMultiple: polls[selectedPollIndex].allowMultiple,
-      });
-
-      // Go to next step (poll progress screen)
-      setStep(1);
+      completePollLaunch();
     } catch (err) {
       toast.error("Error when clearing previous results: " + err.toString());
     }
+  };
+
+  const completePollLaunch = async () => {
+    // push the poll to guests
+    socket.emit("pushPoll", {
+      eventId: event.id,
+      question: polls[selectedPollIndex].question,
+      options: polls[selectedPollIndex].PollOptions,
+      allowMultiple: polls[selectedPollIndex].allowMultiple,
+    });
+    try {
+      const res = await api.put("/api/polling/poll", {
+        pollId: polls[selectedPollIndex].id,
+      });
+    } catch (err) {
+      toast.error("Error when launching poll " + err.toString());
+    }
+
+    setStep(1);
   };
 
   const launchPoll = async () => {
@@ -114,15 +124,7 @@ const PollController = ({
       return;
     }
 
-    // push the poll to guests
-    socket.emit("pushPoll", {
-      eventId: event.id,
-      question: polls[selectedPollIndex].question,
-      options: polls[selectedPollIndex].PollOptions,
-      allowMultiple: polls[selectedPollIndex].allowMultiple,
-    });
-
-    setStep(1);
+    completePollLaunch();
   };
 
   const endPoll = async () => {
@@ -136,6 +138,8 @@ const PollController = ({
     socket.emit("sharePollResults", {
       eventId: event.id,
       poll: polls[selectedPollIndex],
+      results,
+      totalResponded,
     });
     setStep(3);
   };
@@ -143,10 +147,6 @@ const PollController = ({
   const stopSharingResults = () => {
     socket.emit("stopSharingPollResults", event.id);
     setStep(2);
-  };
-
-  const handleNextPoll = () => {
-    setStep(0);
   };
 
   const renderStep = () => {
@@ -206,22 +206,12 @@ const PollController = ({
         // third step is the complete poll screen
         return (
           <>
-            <PollComplete poll={polls[selectedPollIndex]} />
-            <Divider className={classes.divider} variant="middle" />
+            <PollSelect />
             <FormControl
               variant="outlined"
               className={classes.formControl}
               style={{ flexDirection: "row", justifyContent: "flex-end" }}
             >
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={launchPoll}
-                class="Button1"
-                style={{ minWidth: "150px", marginLeft: "12px" }}
-              >
-                Relaunch poll
-              </Button>
               <Button
                 variant="contained"
                 color="primary"
@@ -234,11 +224,20 @@ const PollController = ({
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleNextPoll}
+                onClick={launchPoll}
                 class="Button1"
                 style={{ minWidth: "150px", marginLeft: "12px" }}
               >
-                Next Poll
+                Launch poll
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={closeWindow}
+                class="Button1"
+                style={{ minWidth: "150px", marginLeft: "12px" }}
+              >
+                Close
               </Button>
             </FormControl>
           </>

@@ -70,6 +70,9 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
   };
 
   const handleRemoveOption = (index) => {
+    if (options.length <= 2) {
+      return alert("You must provide at least 2 options");
+    }
     setOptions((options) =>
       options.filter((val, i) => {
         return i != index;
@@ -100,6 +103,9 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
     // check for empty question
     if (!question) {
       return alert("Please enter a poll question.");
+    }
+    if (options.length < 2) {
+      return alert("Please add at least 2 options.");
     }
     // check for empty options
     for (let option of options) {

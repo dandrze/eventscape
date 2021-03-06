@@ -64,8 +64,8 @@ function PollsTable({
       field: "question",
     },
     {
-      title: "Status",
-      field: "status",
+      title: "Poll Launched",
+      render: (rowData) => <span>{rowData.isLaunched ? "Yes" : "No"}</span>,
     },
   ];
 
@@ -103,6 +103,7 @@ function PollsTable({
     },
     (rowData) => ({
       icon: ListIcon,
+      disabled: !rowData.isLaunched,
       tooltip: "View Results",
       onClick: (event, rowData) => {
         handleView(rowData);

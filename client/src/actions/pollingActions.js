@@ -19,7 +19,7 @@ export const selectPollByIndex = (index) => {
   return { type: SELECT_POLL_BY_INDEX, payload: index };
 };
 
-export const fetchPollResults = (eventId) => async (dispatch, getState) => {
+export const fetchPollResults = () => async (dispatch, getState) => {
   // call the api and return the polls in json
 
   const { polls, selectedPollIndex } = getState().polling;
@@ -27,6 +27,28 @@ export const fetchPollResults = (eventId) => async (dispatch, getState) => {
   try {
     const resultsRes = await api.get("/api/polling/results", {
       params: { pollId: polls[selectedPollIndex].id },
+    });
+
+    const { results, totalResponded } = resultsRes.data;
+
+    dispatch({ type: FETCH_RESULTS, payload: { results, totalResponded } });
+
+    return true;
+  } catch (err) {
+    toast.error("Error when fetching polls: " + err.toString());
+    return false;
+  }
+};
+
+export const fetchPollResultsFromId = (pollId) => async (
+  dispatch,
+  getState
+) => {
+  // call the api and return the polls in json
+
+  try {
+    const resultsRes = await api.get("/api/polling/results", {
+      params: { pollId },
     });
 
     const { results, totalResponded } = resultsRes.data;

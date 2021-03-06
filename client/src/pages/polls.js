@@ -11,7 +11,7 @@ import api from "../api/server";
 import PollController from "../components/polling/PollController";
 import ResultsChart from "../components/polling/ResultsChart";
 
-const Polls = ({ event, polling, fetchPolls }) => {
+const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
   const [open, setOpen] = useState(false);
   const [openPoll, setOpenPoll] = useState(false);
   const [dataFetched, setDataFetched] = useState(true);
@@ -47,7 +47,8 @@ const Polls = ({ event, polling, fetchPolls }) => {
     setOpen(true);
   };
 
-  const handleViewPoll = (rowData) => {
+  const handleViewPoll = async (rowData) => {
+    await fetchPollResultsFromId(rowData.id);
     setPollData(rowData);
     setOpenPollResults(true);
   };
@@ -102,6 +103,7 @@ const Polls = ({ event, polling, fetchPolls }) => {
         content={
           <PollController
             updatePreventCloseText={handleUpdatePreventCloseText}
+            closeWindow={handleClosePoll}
           />
         }
       />
@@ -111,7 +113,7 @@ const Polls = ({ event, polling, fetchPolls }) => {
         content={
           <ResultsChart
             question={pollData.question}
-            pollId={pollData.id}
+            results={polling.results}
             allowMultiple={pollData.allowMultiple}
           />
         }

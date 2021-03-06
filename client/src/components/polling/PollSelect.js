@@ -32,6 +32,8 @@ const PollSelect = ({
   polling: { selectedPollIndex, polls, results, totalResponded },
   selectPollByIndex,
   fetchPollResults,
+  fetchPolls,
+  event,
 }) => {
   const classes = useStyles();
 
@@ -40,9 +42,15 @@ const PollSelect = ({
     if (polls[selectedPollIndex]) fetchPollResults();
   }, [polls[selectedPollIndex]]);
 
+  useEffect(() => {
+    // each time this page is rendered, refresh the polls to update the isLaunched property
+    fetchPolls(event.id);
+  }, []);
+
   const handleChangeSelectedPoll = (event) => {
     selectPollByIndex(event.target.value);
   };
+  console.log(polls);
 
   return (
     <>
@@ -61,7 +69,6 @@ const PollSelect = ({
       </FormControl>
       {polls[selectedPollIndex] ? (
         <>
-          <Divider className={classes.divider} variant="middle" />
           <div
             style={{
               display: "flex",
@@ -72,7 +79,7 @@ const PollSelect = ({
               marginBottom: "2rem",
             }}
           >
-            {totalResponded ? (
+            {polls[selectedPollIndex].isLaunched ? (
               <>
                 <label style={{ marginBottom: "0px" }}>Poll complete</label>
                 <label style={{ marginLeft: "auto", marginBottom: "0px" }}>
@@ -86,13 +93,11 @@ const PollSelect = ({
             )}
           </div>
 
-          
-            <ResultsChart
-              question={polls[selectedPollIndex].question}
-              results={results}
-              allowMultiple={polls[selectedPollIndex].allowMultiple}
-            />
-          
+          <ResultsChart
+            question={polls[selectedPollIndex].question}
+            results={results}
+            allowMultiple={polls[selectedPollIndex].allowMultiple}
+          />
         </>
       ) : null}
     </>
