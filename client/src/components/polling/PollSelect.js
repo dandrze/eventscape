@@ -34,7 +34,6 @@ const PollSelect = ({
   fetchPollResults,
   fetchPolls,
   event,
-  pollChanged,
 }) => {
   const classes = useStyles();
 
@@ -50,7 +49,6 @@ const PollSelect = ({
 
   const handleChangeSelectedPoll = (event) => {
     selectPollByIndex(event.target.value);
-    pollChanged();
   };
 
   return (

@@ -131,7 +131,7 @@ const PollController = ({
     // Push an event to end the poll
     socket.emit("closePoll", event.id);
 
-    setStep(2);
+    setStep(0);
   };
 
   const shareResults = async () => {
@@ -141,16 +141,12 @@ const PollController = ({
       results,
       totalResponded,
     });
-    setStep(3);
+    setStep(2);
   };
 
   const stopSharingResults = () => {
     socket.emit("stopSharingPollResults", event.id);
-    setStep(2);
-  };
-
-  const handlePollChanged = () => {
-    if (step === 2) setStep(0);
+    setStep(0);
   };
 
   const renderStep = () => {
@@ -162,19 +158,49 @@ const PollController = ({
         // First page is the poll selection
         return (
           <>
-            <PollSelect pollChanged={handlePollChanged} />
+            <PollSelect />
 
-            <FormControl variant="outlined" className={classes.formControl}>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={launchPoll}
-                class="Button1"
-                style={{ width: "150px", alignSelf: "flex-end" }}
+            {polls[selectedPollIndex].isLaunched ? (
+              <FormControl
+                variant="outlined"
+                className={classes.formControl}
+                style={{ flexDirection: "row", justifyContent: "flex-end" }}
               >
-                Launch Poll
-              </Button>
-            </FormControl>
+                <div
+                  style={{
+                    cursor: "pointer",
+                    padding: "16px 24px",
+                    fontWeight: 600,
+                    color: "#b0281c",
+                    textDecoration: "underline",
+                  }}
+                  onClick={launchPoll}
+                >
+                  Relaunch poll
+                </div>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={shareResults}
+                  class="Button1"
+                  style={{ minWidth: "150px", marginLeft: "12px" }}
+                >
+                  Share Results
+                </Button>
+              </FormControl>
+            ) : (
+              <FormControl variant="outlined" className={classes.formControl}>
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={launchPoll}
+                  class="Button1"
+                  style={{ width: "150px", alignSelf: "flex-end" }}
+                >
+                  Launch Poll
+                </Button>
+              </FormControl>
+            )}
           </>
         );
       case 1:
@@ -202,46 +228,8 @@ const PollController = ({
             </FormControl>
           </>
         );
+
       case 2:
-        //Allow the modal to close during this step
-
-        updatePreventCloseText("");
-
-        // third step is the complete poll screen
-        return (
-          <>
-            <PollSelect pollChanged={handlePollChanged} />
-            <FormControl
-              variant="outlined"
-              className={classes.formControl}
-              style={{ flexDirection: "row", justifyContent: "flex-end" }}
-            >
-              <div
-                style={{
-                  cursor: "pointer",
-                  padding: "16px 24px",
-                  fontWeight: 600,
-                  color: "#b0281c",
-                  textDecoration: "underline",
-                }}
-                onClick={launchPoll}
-              >
-                Relaunch poll
-              </div>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={shareResults}
-                class="Button1"
-                style={{ minWidth: "150px", marginLeft: "12px" }}
-              >
-                Share Results
-              </Button>
-            </FormControl>
-          </>
-        );
-
-      case 3:
         // Prevent the modal from closing during sharing results
 
         updatePreventCloseText(

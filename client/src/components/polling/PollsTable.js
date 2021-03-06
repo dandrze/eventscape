@@ -21,6 +21,7 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import ListIcon from "@material-ui/icons/List";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import BarChartIcon from "@material-ui/icons/BarChart";
 
 import TableAddButton from "../TableAddButton";
 
@@ -102,7 +103,7 @@ function PollsTable({
       },
     },
     (rowData) => ({
-      icon: ListIcon,
+      icon: BarChartIcon,
       disabled: !rowData.isLaunched,
       tooltip: "View Results",
       onClick: (event, rowData) => {
@@ -111,7 +112,14 @@ function PollsTable({
       },
     }),
     {
-      icon: () => <TableAddButton label="New Poll" />,
+      icon: () => <TableAddButton label="New Poll" type="add" />,
+      isFreeAction: true,
+      onClick: (event) => {
+        handleAdd();
+      },
+    },
+    {
+      icon: () => <TableAddButton label="View Data" type="data" />,
       isFreeAction: true,
       onClick: (event) => {
         handleAdd();
