@@ -216,15 +216,18 @@ const PollController = ({
               className={classes.formControl}
               style={{ flexDirection: "row", justifyContent: "flex-end" }}
             >
-              <Button
-                variant="contained"
-                color="primary"
+              <div
+                style={{
+                  cursor: "pointer",
+                  padding: "16px 24px",
+                  fontWeight: 600,
+                  color: "#b0281c",
+                  textDecoration: "underline",
+                }}
                 onClick={launchPoll}
-                class="Button1"
-                style={{ minWidth: "150px", marginLeft: "12px" }}
               >
                 Relaunch poll
-              </Button>
+              </div>
               <Button
                 variant="contained"
                 color="primary"
