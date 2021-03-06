@@ -24,14 +24,7 @@ import Collapse from "@material-ui/core/Collapse";
 
 import "./navBar3.css";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-
 import * as actions from "../actions";
-import AlertModal from "./AlertModal";
-import { pageNames } from "../model/enums";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -58,6 +51,7 @@ import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
 import PollIcon from "../icons/poll-1.svg";
+import CharChartIcon from "../icons/bar-chart.svg";
 
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -604,7 +598,7 @@ function NavBar3(props) {
               >
                 <Tooltip title="Polls">
                   <ListItemIcon>
-                    <img src={PollIcon} height="20px"></img>
+                    <img src={CharChartIcon} height="25px"></img>
                   </ListItemIcon>
                 </Tooltip>
                 <ListItemText primary="Polls" />
@@ -731,8 +725,7 @@ function NavBar3(props) {
           </List>
         </Drawer>
       )}
-      <div className={classes.content}>
-{content}</div>
+      <div className={classes.content}>{content}</div>
     </div>
   );
 }
