@@ -149,6 +149,10 @@ const PollController = ({
     setStep(2);
   };
 
+  const handlePollChanged = () => {
+    if (step === 2) setStep(0);
+  };
+
   const renderStep = () => {
     switch (step) {
       case 0:
@@ -158,7 +162,7 @@ const PollController = ({
         // First page is the poll selection
         return (
           <>
-            <PollSelect />
+            <PollSelect pollChanged={handlePollChanged} />
 
             <FormControl variant="outlined" className={classes.formControl}>
               <Button
@@ -206,7 +210,7 @@ const PollController = ({
         // third step is the complete poll screen
         return (
           <>
-            <PollSelect />
+            <PollSelect pollChanged={handlePollChanged} />
             <FormControl
               variant="outlined"
               className={classes.formControl}
@@ -215,29 +219,20 @@ const PollController = ({
               <Button
                 variant="contained"
                 color="primary"
+                onClick={launchPoll}
+                class="Button1"
+                style={{ minWidth: "150px", marginLeft: "12px" }}
+              >
+                Relaunch poll
+              </Button>
+              <Button
+                variant="contained"
+                color="primary"
                 onClick={shareResults}
                 class="Button1"
                 style={{ minWidth: "150px", marginLeft: "12px" }}
               >
                 Share Results
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={launchPoll}
-                class="Button1"
-                style={{ minWidth: "150px", marginLeft: "12px" }}
-              >
-                Launch poll
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={closeWindow}
-                class="Button1"
-                style={{ minWidth: "150px", marginLeft: "12px" }}
-              >
-                Close
               </Button>
             </FormControl>
           </>
