@@ -1,5 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
+
 import * as actions from "../actions";
 import PlusDropIcon from "../icons/plus-drop.svg";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -41,6 +43,8 @@ import {
   paragraph2,
   sponsorGrid,
 } from "../templates/designBlockModels";
+import { Button } from "@material-ui/core";
+import Modal1 from "./Modal1";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -63,6 +67,10 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px 0px",
     minWidth: "100%",
   },
+  gridSelectors: {
+    margin: "0px 1% 20px",
+    minWidth: "30%",
+  },
   selectEmpty: {
     marginTop: theme.spacing(2),
   },
@@ -73,6 +81,123 @@ const DesignBlockPreview = ({ src, handleClick }) => {
     <Tooltip title="Click to add">
       <img src={src} id="designBlockThumbnail" onClick={handleClick} />
     </Tooltip>
+  );
+};
+
+const GridSelector = ({ addSection }) => {
+  const classes = useStyles();
+
+  const [columns, setColumns] = useState(3);
+  const [rows, setRows] = useState(2);
+  const [boxStyle, setBoxStyle] = useState("box");
+
+  const htmlOutput = sponsorGrid(columns, rows, boxStyle === "box");
+
+  const handleChangeColumns = (event) => {
+    setColumns(event.target.value);
+  };
+
+  const handleChangeRows = (event) => {
+    setRows(event.target.value);
+  };
+
+  const handleChangeStyle = (event) => {
+    setBoxStyle(event.target.value);
+  };
+
+  const handleSubmit = () => {
+    console.log({ columns, rows, boxStyle, htmlOutput });
+    addSection(htmlOutput);
+  };
+
+  return (
+    <div>
+      <div>
+        <FormControl
+          variant="outlined"
+          className={classes.gridSelectors}
+          style={{ width: "30%" }}
+        >
+          <InputLabel id="columns-select-label" className="mui-select-css-fix">
+            Columns
+          </InputLabel>
+
+          <Select
+            labelId="columns-select-label"
+            variant="outlined"
+            value={columns}
+            onChange={handleChangeColumns}
+          >
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => {
+              return <MenuItem value={index}>{index}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+
+        <FormControl
+          variant="outlined"
+          className={classes.gridSelectors}
+          style={{ width: "30%" }}
+        >
+          <InputLabel id="rows-select-label" className="mui-select-css-fix">
+            Rows
+          </InputLabel>
+          <Select
+            labelId="rows-select-label"
+            variant="outlined"
+            value={rows}
+            onChange={handleChangeRows}
+          >
+            {[1, 2, 3, 4, 5].map((index) => {
+              return <MenuItem value={index}>{index}</MenuItem>;
+            })}
+          </Select>
+        </FormControl>
+        <FormControl
+          variant="outlined"
+          className={classes.gridSelectors}
+          style={{ width: "30%" }}
+        >
+          <InputLabel id="rows-select-label" className="mui-select-css-fix">
+            Type
+          </InputLabel>
+          <Select
+            labelId="rows-select-label"
+            variant="outlined"
+            value={boxStyle}
+            onChange={handleChangeStyle}
+          >
+            <MenuItem value="box">Box</MenuItem>;
+            <MenuItem value="none">None</MenuItem>;
+          </Select>
+        </FormControl>
+      </div>
+      <div>
+        <div>Preview</div>
+        <FroalaEditorView
+          model={htmlOutput.replace(
+            `contenteditable="true"`,
+            `contenteditable="false"`
+          )}
+        />
+      </div>
+      <div
+        style={{
+          justifyContent: "flex-end",
+          flexDirection: "row",
+          display: "flex",
+        }}
+      >
+        <Button
+          onClick={handleSubmit}
+          variant="contained"
+          color="primary"
+          class="Button1"
+        >
+          Add Block
+        </Button>
+      </div>
+    </div>
   );
 };
 
@@ -95,7 +220,7 @@ const NewSectionButton = (props) => {
     isReact = false,
     reactComponent = null
   ) => {
-    props.addSection(props.prevIndex, html, isReact, reactComponent);
+    await props.addSection(props.prevIndex, html, isReact, reactComponent);
   };
 
   const handleChangeBlockCat = (event) => {
@@ -115,30 +240,11 @@ const NewSectionButton = (props) => {
         </Tooltip>
       </button>
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
+      <Modal1
         open={open}
         onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        disableAutoFocus={true}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <div className="cancel-bar">
-              <Tooltip title="Close">
-                <img
-                  src={Cancel}
-                  className="cancel-bar-icon"
-                  onClick={handleClose}
-                ></img>
-              </Tooltip>
-            </div>
+        content={
+          <>
             <div className="block-picker-container">
               <h3>Choose a Design Block Template</h3>
               <FormControl
@@ -319,12 +425,10 @@ const NewSectionButton = (props) => {
                   <Grid container spacing={3}>
                     {/* Stream Chat */}
                     <Grid item xs={12}>
-                      <DesignBlockPreview
-                        src={streamChatThumb}
-                        handleClick={() => {
+                      <GridSelector
+                        addSection={(html) => {
                           handleClose();
-                          console.log(sponsorGrid(3, 3, true));
-                          handleAddSection(sponsorGrid(3, 3, true));
+                          handleAddSection(html);
                         }}
                       />
                     </Grid>
@@ -347,9 +451,9 @@ const NewSectionButton = (props) => {
                 )}
               </div>
             </div>
-          </div>
-        </Fade>
-      </Modal>
+          </>
+        }
+      />
     </div>
   );
 };
