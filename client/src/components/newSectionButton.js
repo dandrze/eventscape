@@ -30,10 +30,7 @@ import paragraph2Thumb from "./designBlockThumbnails/paragraph2.png";
 import {
   logoHeaderModel,
   heroBannerModel,
-  descriptionRegistrationModel,
   titleTimeModel,
-  streamChatModel,
-  blankModel,
   streamChatReact,
   timeDescription,
   registrationFormReact,
@@ -42,6 +39,7 @@ import {
   scheduleTable2,
   paragraph1,
   paragraph2,
+  sponsorGrid,
 } from "../templates/designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
@@ -166,6 +164,7 @@ const NewSectionButton = (props) => {
                     Stream/Messaging
                   </MenuItem>
                   <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
+                  <MenuItem value={"sponsors"}>Sponsors</MenuItem>
                   <MenuItem value={"text"}>Text</MenuItem>
                   <MenuItem value={"columns-blank"}>Columns (Blank)</MenuItem>
                 </Select>
@@ -310,6 +309,22 @@ const NewSectionButton = (props) => {
                         handleClick={() => {
                           handleClose();
                           handleAddSection(paragraph2());
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                )}
+
+                {blockCat === "sponsors" && (
+                  <Grid container spacing={3}>
+                    {/* Stream Chat */}
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={streamChatThumb}
+                        handleClick={() => {
+                          handleClose();
+                          console.log(sponsorGrid(3, 3, true));
+                          handleAddSection(sponsorGrid(3, 3, true));
                         }}
                       />
                     </Grid>

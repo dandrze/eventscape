@@ -778,3 +778,20 @@ select:focus {
 .form-group .label-required {
   margin-left: 5px;
 }
+
+/* for sponsor block */
+.sponsor-box-border {
+  margin: 15px;
+  padding: 15px 5px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+}
+
+.sponsor-box {
+  margin: 0px;
+}
+
+.registration-col {
+  margin: 20px;
+}
