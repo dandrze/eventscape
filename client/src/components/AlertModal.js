@@ -6,21 +6,20 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import TextField from "@material-ui/core/TextField";
 
-export default function AlertModal(props) {
+export default function AlertModal({
+  onClose,
+  onContinue,
+  open,
+  content,
+  closeText,
+  continueText,
+  textInputLabel,
+}) {
   const [input, setInput] = useState("");
 
   const handleChangeInput = (event) => {
     setInput(event.target.value);
   };
-  const {
-    onClose,
-    onContinue,
-    open,
-    text,
-    closeText,
-    continueText,
-    textInputLabel,
-  } = props;
 
   const handleClose = () => {
     onClose();
@@ -40,7 +39,7 @@ export default function AlertModal(props) {
       >
         <DialogContent>
           <DialogContentText id="alert-dialog-description">
-            {text}
+            {content}
           </DialogContentText>
         </DialogContent>
         {textInputLabel ? (
@@ -58,11 +57,13 @@ export default function AlertModal(props) {
         ) : null}
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            {closeText}
+            {closeText || "Close"}
           </Button>
-          <Button onClick={handleContinue} color="primary">
-            {continueText}
-          </Button>
+          {continueText ? (
+            <Button onClick={handleContinue} color="primary">
+              {continueText}
+            </Button>
+          ) : null}
         </DialogActions>
       </Dialog>
     </div>

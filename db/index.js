@@ -15,6 +15,9 @@ const Communication = require("./models/Communication");
 const EmailListRecipient = require("./models/EmailListRecipient");
 const RegistrationForm = require("./models/RegistrationForm");
 const ChatQuestion = require("./models/ChatQuestion");
+const Poll = require("./models/Poll");
+const PollOption = require("./models/PollOption");
+const PollResponse = require("./models/PollResponse");
 
 ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
@@ -66,7 +69,21 @@ Communication.hasMany(EmailListRecipient);
 RegistrationForm.belongsTo(Event);
 Event.hasMany(RegistrationForm);
 
+Poll.belongsTo(Event);
+Event.hasMany(Poll);
+
+PollOption.belongsTo(Poll);
+Poll.hasMany(PollOption);
+
+PollResponse.belongsTo(SiteVisitor);
+PollResponse.belongsTo(PollOption);
+
 //sequelize.sync({ alter: true });
+/* Poll.sync({ alter: true });
+PollOption.sync({ alter: true });
+PollResponse.sync({ alter: true });
+SiteVisitor.sync({ alter: true }); */
+
 //Registration.sync({ alter: true });
 /*
 ChatUser.sync({ alter: true });
@@ -102,5 +119,8 @@ module.exports = {
     EmailListRecipient,
     RegistrationForm,
     ChatQuestion,
+    Poll,
+    PollOption,
+    PollResponse,
   },
 };

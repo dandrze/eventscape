@@ -24,14 +24,7 @@ import Collapse from "@material-ui/core/Collapse";
 
 import "./navBar3.css";
 
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-
 import * as actions from "../actions";
-import AlertModal from "./AlertModal";
-import { pageNames } from "../model/enums";
 import Tooltip from "@material-ui/core/Tooltip";
 import Menu from "@material-ui/core/Menu";
 import MenuItem from "@material-ui/core/MenuItem";
@@ -57,6 +50,8 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
+import PollIcon from "../icons/poll-1.svg";
+import CharChartIcon from "../icons/bar-chart.svg";
 
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -594,6 +589,22 @@ function NavBar3(props) {
                 </ListItem>
               </Link>
             ) : null}
+            <Link to="/polls">
+              <ListItem
+                button
+                key="polls"
+                className={clsx({
+                  [classes.highlight]: highlight === "polls",
+                })}
+              >
+                <Tooltip title="Polls">
+                  <ListItemIcon>
+                    <img src={CharChartIcon} height="25px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Polls" />
+              </ListItem>
+            </Link>
             <Link to="/analytics">
               <ListItem
                 button
@@ -610,6 +621,7 @@ function NavBar3(props) {
                 <ListItemText primary="Analytics" />
               </ListItem>
             </Link>
+
             <Link to="/messaging">
               <ListItem
                 button
@@ -714,18 +726,7 @@ function NavBar3(props) {
           </List>
         </Drawer>
       )}
-      <main className={classes.content}>
-        <div className={classes.toolbar}></div>
-        {content}
-        <div className="force-width">
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-          -
-        </div>
-      </main>
+      <div className={classes.content}>{content}</div>
     </div>
   );
 }

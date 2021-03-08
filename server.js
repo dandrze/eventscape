@@ -2,7 +2,7 @@ const throng = require("throng");
 if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging")
   require("newrelic");
 
-const WORKERS = process.env.WEB_CONCURRENCY || 2;
+const WORKERS = process.env.WEB_CONCURRENCY || 1;
 const PORT = process.env.PORT || 5000;
 
 throng({
@@ -61,6 +61,7 @@ function start() {
   app.use(require("./routes/analyticsRoutes"));
   app.use(require("./routes/froalaRoutes"));
   app.use(require("./routes/testRoutes"));
+  app.use(require("./routes/pollingRoutes"));
 
   app.get("/loaderio-feb5ca360d9f5cdf226bcd9fb3240326", async (req, res) => {
     file = `${__dirname}/public/loaderio-verification.txt`;
@@ -91,7 +92,7 @@ function start() {
   const server = http.createServer(app);
 
   require("./services/ChatSocket")(server);
-  require("./services/AnalyticsSocket")(server);
+  require("./services/EventSocket")(server);
 
   const exitHandler = terminate(server, {
     coredump: false,

@@ -275,7 +275,7 @@ function Event_Details({
         open={openModal}
         onClose={closeModal}
         onContinue={closeModal}
-        text={modalText}
+        content={modalText}
         closeText="Cancel"
         continueText="OK"
       />

@@ -251,7 +251,7 @@ const ModeratorDashboard = ({
               onContinue={() => {
                 handleDeleteAllMessages();
               }}
-              text="Are you sure you want to delete all chat messages?"
+              content="Are you sure you want to delete all chat messages?"
               closeText="Go back"
               continueText="Yes, Delete"
             />

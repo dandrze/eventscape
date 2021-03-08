@@ -1,9 +1,7 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
-import { Paper } from "@material-ui/core";
-import { toast } from "react-toastify";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -21,12 +19,11 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
-import * as actions from "../actions";
-import { recipientsOptions } from "../model/enums";
-import TableAddButton from "./TableAddButton";
+import api from "../../api/server";
+
+import * as actions from "../../actions";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -52,61 +49,60 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-function ScheduledEmails(props) {
-  const [data, setData] = React.useState([]);
-
+function PollDataTable({ settings, event }) {
+  const [data, setData] = useState([]);
   useEffect(() => {
-    const formattedEmailList = props.email.map((email) => {
-      // start with the event start date. Then modify if by adding the minutesFromEvent
-      const sendDate = new Date(props.event.startDate);
-      sendDate.setMinutes(sendDate.getMinutes() + email.minutesFromEvent);
+    fetchData();
+  }, []);
 
-      return {
-        ...email,
-        sendDate:
-          email.recipients === recipientsOptions.NEW_REGISTRANTS
-            ? " Upon Registration"
-            : sendDate.toLocaleString("en-us", {
-                timeZoneName: "short",
-                timeZone: props.event.timeZone,
-                year: "numeric",
-                month: "long",
-                day: "numeric",
-                hour: "numeric",
-                minute: "2-digit",
-                timeZoneName: "short",
-              }),
-
-        status: email.status.charAt(0).toUpperCase() + email.status.slice(1),
-      };
+  const fetchData = async () => {
+    const res = await api.get("/api/polling/data", {
+      params: { eventId: event.id },
     });
-    setData(formattedEmailList);
-  }, [props.email]);
+    setData(res.data);
+  };
 
   const columns = [
     {
-      title: "Subject",
-      field: "subject",
-    },
-    {
-      title: "To",
-      field: "recipients",
-    },
-    {
-      title: "Scheduled Send",
-      field: "sendDate",
+      title: "Poll",
+      field: "PollOption.Poll.question",
       defaultSort: "asc",
     },
     {
-      title: "Status",
-      field: "status",
+      title: "Poll Option",
+      field: "PollOption.text",
+    },
+    {
+      title: "First Name",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.firstName"] || "Anonymous"}
+        </span>
+      ),
+    },
+    {
+      title: "Last Name",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.lastName"] || "Anonymous"}
+        </span>
+      ),
+    },
+    {
+      title: "Email Address",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.emailAddress"] || "Anonymous"}
+        </span>
+      ),
     },
   ];
 
   const options = {
     actionsColumnIndex: -1,
-    search: false,
-    paging: false,
+    search: true,
+    exportButton: true,
+    exportAllData: true,
 
     headerStyle: {
       backgroundColor: "#F0F1F4",
@@ -126,62 +122,18 @@ function ScheduledEmails(props) {
     },
   };
 
-  const actions = [
-    {
-      icon: Edit,
-      tooltip: "Edit Email",
-      onClick: (event, rowData) => {
-        props.handleEdit(rowData);
-      },
-    },
-    (rowData) => ({
-      icon: LibraryAdd,
-      tooltip: "Duplicate Email",
-      onClick: (event, rowData) => {
-        props.handleDuplicate(rowData);
-      },
-      disabled: rowData.recipients === recipientsOptions.NEW_REGISTRANTS,
-    }),
-    {
-      icon: () => <TableAddButton label="New Email" type="add" />,
-      isFreeAction: true,
-      onClick: (event) => {
-        props.handleAdd();
-      },
-    },
-  ];
-
   return (
-    <div className="shadow-border container-width">
+    <div className="shadow-border container-width" style={{ width: "700px" }}>
       <MaterialTable
-        title="Scheduled Emails"
+        title="Poll Responses"
         columns={columns}
         data={data}
         options={options}
         icons={tableIcons}
-        actions={actions}
-        components={{
-          Container: (props) => <Paper {...props} elevation={0} />,
-        }}
-        editable={{
-          isDeletable: (rowData) =>
-            rowData.recipients != recipientsOptions.NEW_REGISTRANTS,
-          onRowDelete: (oldData) =>
-            new Promise((resolve) => {
-              if (oldData.recipients == recipientsOptions.NEW_REGISTRANTS) {
-                toast.info(
-                  "The registration confirmation email cannot be duplicated"
-                );
-              } else {
-                props.handleDelete(oldData.id);
-              }
-              resolve();
-            }),
-        }}
         localization={{
           body: {
-            emptyDataSourceMessage: props.settings.loaded ? (
-              "No Emails Found"
+            emptyDataSourceMessage: settings.loaded ? (
+              "No poll responses."
             ) : (
               <div style={{ padding: "50px" }}>
                 <CircularProgress />
@@ -198,4 +150,4 @@ const mapStateToProps = (state) => {
   return { email: state.email, settings: state.settings, event: state.event };
 };
 
-export default connect(mapStateToProps, actions)(ScheduledEmails);
+export default connect(mapStateToProps, actions)(PollDataTable);

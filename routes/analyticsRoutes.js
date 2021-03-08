@@ -65,6 +65,23 @@ router.get("/api/analytics/visitor-data", async (req, res, next) => {
   }
 });
 
+router.get("/api/analytics/current-visitors", async (req, res, next) => {
+  const { eventId } = req.query;
+
+  try {
+    const currentVisitors = await SiteVisit.count({
+      where: {
+        loggedOutAt: null,
+        EventId: eventId,
+      },
+    });
+
+    res.status(200).send({ currentVisitors });
+  } catch (error) {
+    next(error);
+  }
+});
+
 const createVisitHistory = async (visitData, EventId) => {
   // create a cleaner array for the time chart to use with just start time and end times
   const visitTimes = visitData.map((visit) => {

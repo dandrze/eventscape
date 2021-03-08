@@ -22,7 +22,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegistrationForm({settings, event, model, standardFields, onSubmitCallback, fetchRegistration, registerText, prePopulatedValues, sectionIndex,isEditForm, addRegistration, resendRegistrationEmail, isLive}) {
+function RegistrationForm({
+  settings,
+  event,
+  model,
+  standardFields,
+  onSubmitCallback,
+  fetchRegistration,
+  registerText,
+  prePopulatedValues,
+  sectionIndex,
+  isEditForm,
+  addRegistration,
+  resendRegistrationEmail,
+  isLive,
+}) {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -165,7 +179,7 @@ function RegistrationForm({settings, event, model, standardFields, onSubmitCallb
         open={open}
         onClose={closeModal}
         onContinue={closeModal}
-        text={modalText}
+        content={modalText}
         continueText="OK"
       />
       <div className="container">

@@ -128,6 +128,7 @@ const Registrations = (props) => {
       <Modal1
         open={openImport}
         onClose={handleCloseImport}
+        title="Import registrations from a CSV"
         content={
           <ImportFile
             handleClose={handleCloseImport}
@@ -138,11 +139,13 @@ const Registrations = (props) => {
       <Modal1
         open={openForm}
         onClose={handleCloseForm}
+        title="Edit registration form"
         content={<FormBuilder handleClose={handleCloseForm} />}
       />
       <Modal1
         open={openReg}
         onClose={handleCloseReg}
+        title="Add a new registration"
         content={
           <RegistrationForm
             registerText={regButtonText}

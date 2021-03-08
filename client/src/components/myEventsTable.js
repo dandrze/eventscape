@@ -236,7 +236,7 @@ const Table = (props) => {
           open={openModal}
           onClose={closeModal}
           onContinue={onContinue}
-          text={modalText}
+          content={modalText}
           closeText="Cancel"
           continueText="Continue"
           textInputLabel={textInputLabel}

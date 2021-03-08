@@ -8,6 +8,7 @@ import eventListReducer from "./eventListReducer";
 import registrationReducer from "./registrationReducer";
 import emailReducer from "./emailReducer";
 import attendeeReducer from "./attendeeReducer";
+import pollingReducer from "./pollingReducer";
 
 export default combineReducers({
   user: userReducer,
@@ -19,4 +20,5 @@ export default combineReducers({
   registration: registrationReducer,
   email: emailReducer,
   attendee: attendeeReducer,
+  polling: pollingReducer,
 });
