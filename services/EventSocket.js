@@ -10,8 +10,6 @@ const {
 } = require("../db").models;
 const keys = require("../config/keys");
 
-const { fetchPollResults } = require("./pollQueries");
-
 module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/event",

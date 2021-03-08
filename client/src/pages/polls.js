@@ -10,6 +10,7 @@ import { CircularProgress } from "@material-ui/core";
 import api from "../api/server";
 import PollController from "../components/polling/PollController";
 import ResultsChart from "../components/polling/ResultsChart";
+import PollDataTable from "../components/polling/PollDataTable";
 
 const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
   const [open, setOpen] = useState(false);
@@ -21,6 +22,7 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
   const [openPreventCloseAlert, setOpenPreventCloseAlert] = useState(false);
 
   const [openPollResults, setOpenPollResults] = useState(false);
+  const [openPollData, setOpenPollData] = useState(false);
   const [pollData, setPollData] = useState({});
 
   useEffect(() => {
@@ -56,6 +58,10 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
   const handleCloseBuilder = () => {
     setOpen(false);
     fetchDatAsync();
+  };
+
+  const handleOpenData = () => {
+    setOpenPollData(true);
   };
 
   const handleDeletePoll = async (pollId) => {
@@ -118,6 +124,11 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
           />
         }
       />
+      <Modal1
+        open={openPollData}
+        onClose={() => setOpenPollData(false)}
+        content={<PollDataTable />}
+      />
 
       <AlertModal
         open={openAlert}
@@ -163,6 +174,7 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
                 handleEdit={handleEditPoll}
                 handleDelete={handleDeletePoll}
                 handleView={handleViewPoll}
+                openData={handleOpenData}
               />
             ) : (
               <CircularProgress />

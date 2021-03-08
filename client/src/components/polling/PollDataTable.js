@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
@@ -19,11 +19,9 @@ import Remove from "@material-ui/icons/Remove";
 import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import ListIcon from "@material-ui/icons/List";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import BarChartIcon from "@material-ui/icons/BarChart";
 
-import TableAddButton from "../TableAddButton";
+import api from "../../api/server";
 
 import * as actions from "../../actions";
 
@@ -51,30 +49,60 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-function PollsTable({
-  handleEdit,
-  handleAdd,
-  handleDelete,
-  handleView,
-  openData,
-  data,
-  settings,
-}) {
+function PollDataTable({ settings, event }) {
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const res = await api.get("/api/polling/data", {
+      params: { eventId: event.id },
+    });
+    setData(res.data);
+  };
+
   const columns = [
     {
-      title: "Poll Question",
-      field: "question",
+      title: "Poll",
+      field: "PollOption.Poll.question",
+      defaultSort: "asc",
     },
     {
-      title: "Poll Launched",
-      render: (rowData) => <span>{rowData.isLaunched ? "Yes" : "No"}</span>,
+      title: "Poll Option",
+      field: "PollOption.text",
+    },
+    {
+      title: "First Name",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.firstName"] || "Anonymous"}
+        </span>
+      ),
+    },
+    {
+      title: "Last Name",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.lastName"] || "Anonymous"}
+        </span>
+      ),
+    },
+    {
+      title: "Email Address",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.emailAddress"] || "Anonymous"}
+        </span>
+      ),
     },
   ];
 
   const options = {
     actionsColumnIndex: -1,
-    search: false,
-    paging: false,
+    search: true,
+    exportButton: true,
+    exportAllData: true,
 
     headerStyle: {
       backgroundColor: "#F0F1F4",
@@ -94,61 +122,18 @@ function PollsTable({
     },
   };
 
-  const actions = [
-    {
-      icon: Edit,
-      tooltip: "Edit Form",
-      onClick: (event, rowData) => {
-        console.log(rowData);
-        handleEdit(rowData);
-      },
-    },
-    (rowData) => ({
-      icon: BarChartIcon,
-      disabled: !rowData.isLaunched,
-      tooltip: "View Results",
-      onClick: (event, rowData) => {
-        handleView(rowData);
-        console.log(rowData);
-      },
-    }),
-    {
-      icon: () => <TableAddButton label="View Data" type="data" />,
-      isFreeAction: true,
-      onClick: (event) => {
-        openData();
-      },
-    },
-    {
-      icon: () => <TableAddButton label="New Poll" type="add" />,
-      isFreeAction: true,
-      onClick: (event) => {
-        handleAdd();
-      },
-    },
-  ];
-
   return (
-    <div className="shadow-border container-width">
+    <div className="shadow-border container-width" style={{ width: "700px" }}>
       <MaterialTable
-        title="Polls"
+        title="Poll Responses"
         columns={columns}
         data={data}
         options={options}
         icons={tableIcons}
-        actions={actions}
-        editable={{
-          onRowDelete: (oldData) =>
-            new Promise((resolve) => {
-              handleDelete(oldData.id);
-
-              resolve();
-            }),
-        }}
         localization={{
           body: {
             emptyDataSourceMessage: settings.loaded ? (
-              "No Polls Found. Create a new poll by click the + icon in the top right of the table"
+              "No poll responses."
             ) : (
               <div style={{ padding: "50px" }}>
                 <CircularProgress />
@@ -165,4 +150,4 @@ const mapStateToProps = (state) => {
   return { email: state.email, settings: state.settings, event: state.event };
 };
 
-export default connect(mapStateToProps, actions)(PollsTable);
+export default connect(mapStateToProps, actions)(PollDataTable);

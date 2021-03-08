@@ -1,6 +1,12 @@
 const express = require("express");
 const router = express.Router();
-const { Poll, PollOption, PollResponse } = require("../db").models;
+const {
+  Poll,
+  PollOption,
+  PollResponse,
+  SiteVisitor,
+  Registration,
+} = require("../db").models;
 
 const { clearCache } = require("../services/sequelizeRedis");
 const { fetchPollResults } = require("../services/pollQueries");
@@ -18,6 +24,31 @@ router.get("/api/polling/poll/all", async (req, res, next) => {
     });
 
     res.status(200).send(polls);
+  } catch (error) {
+    next(error);
+  }
+});
+router.get("/api/polling/data", async (req, res, next) => {
+  const { eventId } = req.query;
+  try {
+    const pollResponses = await PollResponse.findAll({
+      raw: true,
+      include: [
+        {
+          model: PollOption,
+          include: {
+            model: Poll,
+          },
+        },
+
+        { model: SiteVisitor, include: Registration },
+      ],
+      where: {
+        "$PollOption.Poll.EventId$": eventId,
+      },
+    });
+
+    res.status(200).send(pollResponses);
   } catch (error) {
     next(error);
   }
@@ -42,7 +73,34 @@ responseCount= 90}
   const { pollId } = req.query;
 
   try {
-    const { results, totalResponded } = await fetchPollResults(pollId);
+    const pollOptions = await PollOption.findAll({
+      where: { PollId: pollId },
+      include: Poll,
+    });
+
+    let results = [];
+
+    const pollOptionIds = pollOptions.map((pollOption) => pollOption.id);
+
+    // count the number of unique site visitors in poll responses for the poll options in this given poll
+    const totalResponded = await PollResponse.count({
+      where: { PollOptionId: pollOptionIds },
+      distinct: true,
+      col: "SiteVisitorId",
+    });
+
+    // iterate through each poll option and count how many total selections it received
+    for (let i = 0; i < pollOptions.length; i++) {
+      const PollOptionId = pollOptions[i].id;
+      const pollSelections = await PollResponse.count({
+        where: { PollOptionId },
+      });
+
+      results.push({
+        text: pollOptions[i].text,
+        selections: pollSelections,
+      });
+    }
 
     res.status(200).send({ results, totalResponded });
   } catch (error) {
