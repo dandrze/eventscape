@@ -769,3 +769,7 @@ select:focus {
   text-decoration: line-through;
   color: red;
 }
+
+.form-group .label-required {
+  margin-left: 5px;
+}
