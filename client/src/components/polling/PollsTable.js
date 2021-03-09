@@ -129,7 +129,7 @@ function PollsTable({
   ];
 
   return (
-    <div className="shadow-border container-width">
+    <div className="shadow-border">
       <MaterialTable
         title="Polls"
         columns={columns}

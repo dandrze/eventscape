@@ -164,7 +164,7 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
                 style={{ marginLeft: "auto" }}
                 onClick={handleLaunchPoll}
               >
-                Launch Polll
+                Launch Poll
               </button>
             </div>
             {dataFetched ? (
