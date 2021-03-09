@@ -188,6 +188,7 @@ function Event_Details({
   };
 
   const copyLink = () => {
+    console.log("copied");
     navigator.clipboard.writeText(eventLink + ".eventscape.io");
     toast.success("Copied to clipboard!", {
       autoClose: 1500,
@@ -306,7 +307,7 @@ function Event_Details({
                 endAdornment: (
                   <InputAdornment position="end">
                     .eventscape.io
-                    <Tooltip title="Copy to clipboard">
+                    <Tooltip title="Copy to clipboard" onClick={copyLink}>
                       <FileCopyIcon
                         onClick={copyLink}
                         style={{ marginLeft: "12px", cursor: "pointer" }}
