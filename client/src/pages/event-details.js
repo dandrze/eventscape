@@ -188,7 +188,6 @@ function Event_Details({
   };
 
   const copyLink = () => {
-    console.log("copied");
     navigator.clipboard.writeText(eventLink + ".eventscape.io");
     toast.success("Copied to clipboard!", {
       autoClose: 1500,

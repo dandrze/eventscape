@@ -69,7 +69,8 @@ function DesignBlockToolbar(props) {
       props.section.reactComponent.name == "RegistrationForm");
 
   const handleClickDelete = () => {
-    setDeleteConfirmOpen(true);
+    if(props.model.sections.length >= 2) setDeleteConfirmOpen(true);
+    
   };
 
   const handleCloseDelete = () => {
@@ -193,7 +194,7 @@ function DesignBlockToolbar(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event };
+  return { event: state.event, model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(DesignBlockToolbar);

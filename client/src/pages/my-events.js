@@ -21,7 +21,7 @@ const My_Events = (props) => {
 
   return (
     <div>
-      <NavBar3 displaySideNav="false" openBlocked="true" />
+      <NavBar3 displaySideNav="false" openBlocked="true" content={
       <div className="my-events-container">
         <div className="top-button-bar">
           <h1 className="button-bar-left my-events-title">My Events</h1>
@@ -47,7 +47,7 @@ const My_Events = (props) => {
             </div>
           </div>
         </Tabs>
-      </div>
+      </div>}/>
     </div>
   );
 };
