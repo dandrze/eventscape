@@ -57,7 +57,8 @@ const Published = (props) => {
 
     // Get user geo location
     try {
-      const geoData = await axios.get("https://ipapi.co//187.252.203.71/json");
+      const geoData = await axios.get("https://ipapi.co/json");
+      console.log(geoData)
 
       var {
         latitude,

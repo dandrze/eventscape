@@ -192,7 +192,7 @@ const GridSelector = ({ addSection }) => {
           onClick={handleSubmit}
           variant="contained"
           color="primary"
-          class="Button1"
+          className="Button1"
         >
           Add Block
         </Button>

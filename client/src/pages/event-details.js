@@ -99,11 +99,9 @@ function Event_Details({
       startDate.setHours(18);
       startDate.setMinutes(0);
       setSelectedStartDate(startDate);
-    }
 
-    if (!event.startDate) {
       const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 7);
+      endDate.setDate(endDate.getDate() + 8);
       endDate.setHours(21);
       endDate.setMinutes(0);
       setSelectedEndDate(endDate);
@@ -170,6 +168,15 @@ function Event_Details({
 
   const handleStartDateChange = (date) => {
     setSelectedStartDate(date);
+
+    // if the new date is after the end date, push the end date 1 day after this new start date
+    if (date > selectedEndDate) {
+      const pushedDate = new Date();
+      pushedDate.setDate(date.getDate() + 1);
+      pushedDate.setHours(date.getHours());
+      pushedDate.setMinutes(date.getMinutes());
+      setSelectedEndDate(pushedDate);
+    }
   };
   const handleEndDateChange = (date) => {
     setSelectedEndDate(date);
@@ -185,6 +192,14 @@ function Event_Details({
 
   const handleChangeregistrationRequired = (event) => {
     setRegistrationRequired(event.target.checked);
+  };
+
+  const copyLink = () => {
+    navigator.clipboard.writeText(eventLink + ".eventscape.io");
+    toast.success("Copied to clipboard!", {
+      autoClose: 1500,
+      pauseOnHover: false,
+    });
   };
 
   const handleSubmit = async () => {
@@ -261,14 +276,6 @@ function Event_Details({
     return <LongLoadingScreen text="Hang tight! We are building your event." />;
   }
 
-  function copyLink() {
-    navigator.clipboard.writeText(eventLink + ".eventscape.io");
-    toast.success("Copied to clipboard!", {
-      autoClose: 1500,
-      pauseOnHover: false,
-    });
-  }
-
   return (
     <div>
       <AlertModal
@@ -306,7 +313,7 @@ function Event_Details({
                 endAdornment: (
                   <InputAdornment position="end">
                     .eventscape.io
-                    <Tooltip title="Copy to clipboard">
+                    <Tooltip title="Copy to clipboard" onClick={copyLink}>
                       <FileCopyIcon
                         onClick={copyLink}
                         style={{ marginLeft: "12px", cursor: "pointer" }}

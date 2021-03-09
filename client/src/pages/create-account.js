@@ -91,6 +91,10 @@ function Create_Account(props) {
     setLastNameErrorText("");
   };
 
+  const handleKeypressSubmit = (event) => {
+    if (event.key === "Enter") handleSubmit();
+  };
+
   return (
     <div>
       <SimpleNavBar
@@ -115,6 +119,7 @@ function Create_Account(props) {
                 value={firstName}
                 onChange={handleChangeFirstName}
                 helperText={firstNameErrorText}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -127,6 +132,7 @@ function Create_Account(props) {
                 value={lastName}
                 onChange={handleChangeLastName}
                 helperText={lastNameErrorText}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -139,6 +145,7 @@ function Create_Account(props) {
                 value={emailAddress}
                 onChange={handleChangeEmail}
                 helperText={emailErrorText}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -147,13 +154,18 @@ function Create_Account(props) {
               password={password}
               onChange={handleChangePassword}
               helperText={passwordErrorText}
+              onKeyPress={handleKeypressSubmit}
             />
 
             <br></br>
             {isLoading ? (
               <CircularProgress />
             ) : (
-              <button className="Button1 gtag-create-account" type="submit" onClick={handleSubmit}>
+              <button
+                className="Button1 gtag-create-account"
+                type="submit"
+                onClick={handleSubmit}
+              >
                 Create My Account
               </button>
             )}

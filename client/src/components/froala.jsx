@@ -65,7 +65,7 @@ const Froala = (props) => {
     }, 5 * 60 * 1000);
 
     return () => clearInterval(interval);
-  }, []);
+  }, [props.html]);
 
   const getS3Signature = async () => {
     const res = await api.get("/api/froala/get-s3-signature", {

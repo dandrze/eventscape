@@ -795,3 +795,9 @@ select:focus {
 .registration-col {
   margin: 20px;
 }
+
+/* UL formatting within froala block */
+
+.fr-view ul {
+  list-style: disc;
+}
