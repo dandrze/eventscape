@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
@@ -21,7 +21,6 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props) {
   const classes = useStyles();
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsloading] = useState(false);
@@ -43,6 +42,10 @@ function Login(props) {
     }
   };
 
+  const handleKeypressSubmit = (event) => {
+    if (event.key === "Enter") handleSubmit();
+  };
+
   if (isLoading) {
     return <LongLoadingScreen text="Signing In..." />;
   }
@@ -61,6 +64,7 @@ function Login(props) {
                 variant="outlined"
                 value={email}
                 onChange={handleChangeEmail}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -72,10 +76,11 @@ function Login(props) {
                 variant="outlined"
                 value={password}
                 onChange={handleChangePassword}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
-            <button className="Button1" type="submit" onClick={handleSubmit}>
+            <button className="Button1" type="submit" onSubmit={handleSubmit}>
               Sign In
             </button>
             <p className="subtext" style={{ marginTop: "8px" }}>

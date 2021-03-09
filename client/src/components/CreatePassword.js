@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ password, onChange, helperText }) => {
+export default ({ password, onChange, helperText, onKeyPress }) => {
   const [showPassword, setShowPassword] = useState(false);
   const classes = useStyles();
 
@@ -33,6 +33,7 @@ export default ({ password, onChange, helperText }) => {
           value={password}
           onChange={onChange}
           helperText={helperText}
+          onKeyPress={onKeyPress}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
