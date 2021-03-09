@@ -80,7 +80,7 @@ function Login(props) {
               />
             </FormControl>
             <br></br>
-            <button className="Button1" type="submit" onSubmit={handleSubmit}>
+            <button className="Button1" type="submit" onClick={handleSubmit}>
               Sign In
             </button>
             <p className="subtext" style={{ marginTop: "8px" }}>
