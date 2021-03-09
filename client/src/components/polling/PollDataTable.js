@@ -16,10 +16,10 @@ import FilterList from "@material-ui/icons/FilterList";
 import FirstPage from "@material-ui/icons/FirstPage";
 import LastPage from "@material-ui/icons/LastPage";
 import Remove from "@material-ui/icons/Remove";
-import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import TableActionButton from "../TableActionButton";
 
 import api from "../../api/server";
 
@@ -34,7 +34,9 @@ const tableIcons = {
     <ChevronRight {...props} ref={ref} />
   )),
   Edit: forwardRef((props, ref) => <Edit {...props} ref={ref} />),
-  Export: forwardRef((props, ref) => <SaveAlt {...props} ref={ref} />),
+  Export: forwardRef((props, ref) => (
+    <TableActionButton {...props} ref={ref} type="export" label="Export" />
+  )),
   Filter: forwardRef((props, ref) => <FilterList {...props} ref={ref} />),
   FirstPage: forwardRef((props, ref) => <FirstPage {...props} ref={ref} />),
   LastPage: forwardRef((props, ref) => <LastPage {...props} ref={ref} />),
@@ -62,7 +64,54 @@ function PollDataTable({ settings, event }) {
     setData(res.data);
   };
 
+  console.log(data);
+
   const columns = [
+    {
+      title: "Visitor Id",
+      field: "SiteVisitor.id",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "First Name",
+      field: "SiteVisitor.Registration.firstName",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "Last Name",
+      field: "SiteVisitor.Registration.lastName",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "Email Address",
+      field: "SiteVisitor.Registration.emailAddress",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "First Name",
+      render: (rowData) => (
+        <span>
+          {rowData["SiteVisitor.Registration.firstName"] ||
+            "Guest " + rowData["SiteVisitor.id"]}
+        </span>
+      ),
+    },
+    {
+      title: "Last Name",
+      render: (rowData) => (
+        <span>{rowData["SiteVisitor.Registration.lastName"] || "n/a"}</span>
+      ),
+    },
+    {
+      title: "Email Address",
+      render: (rowData) => (
+        <span>{rowData["SiteVisitor.Registration.emailAddress"] || "n/a"}</span>
+      ),
+    },
     {
       title: "Poll",
       field: "PollOption.Poll.question",
@@ -71,30 +120,6 @@ function PollDataTable({ settings, event }) {
     {
       title: "Poll Option",
       field: "PollOption.text",
-    },
-    {
-      title: "First Name",
-      render: (rowData) => (
-        <span>
-          {rowData["SiteVisitor.Registration.firstName"] || "Anonymous"}
-        </span>
-      ),
-    },
-    {
-      title: "Last Name",
-      render: (rowData) => (
-        <span>
-          {rowData["SiteVisitor.Registration.lastName"] || "Anonymous"}
-        </span>
-      ),
-    },
-    {
-      title: "Email Address",
-      render: (rowData) => (
-        <span>
-          {rowData["SiteVisitor.Registration.emailAddress"] || "Anonymous"}
-        </span>
-      ),
     },
   ];
 

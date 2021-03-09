@@ -23,7 +23,7 @@ import ListIcon from "@material-ui/icons/List";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import BarChartIcon from "@material-ui/icons/BarChart";
 
-import TableAddButton from "../TableAddButton";
+import TableActionButton from "../TableActionButton";
 
 import * as actions from "../../actions";
 
@@ -113,14 +113,14 @@ function PollsTable({
       },
     }),
     {
-      icon: () => <TableAddButton label="View Data" type="data" />,
+      icon: () => <TableActionButton label="View Data" type="data" />,
       isFreeAction: true,
       onClick: (event) => {
         openData();
       },
     },
     {
-      icon: () => <TableAddButton label="New Poll" type="add" />,
+      icon: () => <TableActionButton label="New Poll" type="add" />,
       isFreeAction: true,
       onClick: (event) => {
         handleAdd();
