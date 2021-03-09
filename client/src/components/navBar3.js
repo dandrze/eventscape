@@ -708,7 +708,7 @@ function NavBar3(props) {
             </Link>
 
             {/* Billing and Payments */}
-            <Link to="/account-settings-payments">
+            {/*<Link to="/account-settings-payments">
               <ListItem
                 button
                 key="payments"
@@ -723,7 +723,7 @@ function NavBar3(props) {
                 </Tooltip>
                 <ListItemText primary="Billing and Payments" />
               </ListItem>
-            </Link>
+            </Link>*/}
           </List>
         </Drawer>
       )}
