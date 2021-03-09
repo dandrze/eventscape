@@ -187,6 +187,14 @@ function Event_Details({
     setRegistrationRequired(event.target.checked);
   };
 
+  const copyLink = () => {
+    navigator.clipboard.writeText(eventLink + ".eventscape.io");
+    toast.success("Copied to clipboard!", {
+      autoClose: 1500,
+      pauseOnHover: false,
+    });
+  };
+
   const handleSubmit = async () => {
     if (linkUnavailable) {
       setModalText(
@@ -259,14 +267,6 @@ function Event_Details({
 
   if (isLoading && !isEventUpdate) {
     return <LongLoadingScreen text="Hang tight! We are building your event." />;
-  }
-
-  function copyLink() {
-    navigator.clipboard.writeText(eventLink + ".eventscape.io");
-    toast.success("Copied to clipboard!", {
-      autoClose: 1500,
-      pauseOnHover: false,
-    });
   }
 
   return (
