@@ -1,5 +1,5 @@
 var socketIo = require("socket.io");
-const redisAdapter = require("socket.io-redis");
+const redisAdapter = require("./socketioRedisAdapter");
 
 const {
   SiteVisit,
@@ -8,7 +8,6 @@ const {
   Poll,
   PollOption,
 } = require("../db").models;
-const keys = require("../config/keys");
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -20,7 +19,7 @@ module.exports = (server) => {
     },
   });
 
-  io.adapter(redisAdapter(keys.redisUrl));
+  io.adapter(redisAdapter);
 
   io.on("connection", (socket) => {
     socket.on(

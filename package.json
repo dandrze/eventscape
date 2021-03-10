@@ -51,6 +51,7 @@
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
     "redis": "^2.8.0",
+    "redis-connection-pool": "^1.7.2",
     "sequelize": "^6.3.5",
     "sequelize-redis": "^1.0.12",
     "socket.io": "^3.0.4",

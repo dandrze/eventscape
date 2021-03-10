@@ -1,5 +1,5 @@
 var socketIo = require("socket.io");
-const redisAdapter = require("socket.io-redis");
+const redisAdapter = require("./socketioRedisAdapter");
 
 const {
   ChatRoom,
@@ -25,7 +25,7 @@ module.exports = (server) => {
     transports: ["websocket"],
   });
 
-  io.adapter(redisAdapter(keys.redisUrl));
+  io.adapter(redisAdapter);
 
   io.on("connection", function (socket) {
     socket.on(
