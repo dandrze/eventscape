@@ -58,12 +58,16 @@ module.exports = (server) => {
 
     socket.on("rejoin", async ({ eventId, uuid }) => {
       if (uuid) {
-        const siteVisitor = await SiteVisitor.findOne({ where: { uuid } });
-        const siteVisit = await SiteVisit.findOne({
-          where: { SiteVisitorId: siteVisitor.id },
-        });
-        socket.visitId = siteVisit.id;
-        socket.visitorId = siteVisitor.id;
+        try {
+          const siteVisitor = await SiteVisitor.findOne({ where: { uuid } });
+          const siteVisit = await SiteVisit.findOne({
+            where: { SiteVisitorId: siteVisitor.id },
+          });
+          socket.visitId = siteVisit.id;
+          socket.visitorId = siteVisitor.id;
+        } catch {
+          console.log("Site visitor doesn't exist");
+        }
       }
       socket.join(eventId.toString());
     });
