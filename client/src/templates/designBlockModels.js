@@ -554,7 +554,7 @@ export const sponsorGrid = (columns, rows, box) => {
   let column = 0;
   let row = 0;
   let html = `<div class="container block-container">`;
-  const columnClass = box ? "sponsor-box-border" : "sponsor-box";
+  const columnClass = box ? "sponsor-box-border" : "sponsor-box-no-border";
   while (row < rows) {
     html += `<div class="row">`;
     while (column < columns) {
