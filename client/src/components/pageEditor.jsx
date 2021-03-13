@@ -159,13 +159,18 @@ const PageEditor = (props) => {
         </div>
         <div id="designBoard">
           <ul>
-            {props.model.sections.map(function (section, index) {
-              return (
-                <li key={section.id}>
-                  <PageSectionEditor section={section} sectionIndex={index} />
-                </li>
-              );
-            })}
+            {props.model.sections.length === 0
+              ? null
+              : props.model.sections.map(function (section, index) {
+                  return (
+                    <li key={section.id}>
+                      <PageSectionEditor
+                        section={section}
+                        sectionIndex={index}
+                      />
+                    </li>
+                  );
+                })}
           </ul>
         </div>
       </div>

@@ -1,5 +1,6 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
+import ErrorScreen from "./ErrorScreen";
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -13,21 +14,13 @@ class ErrorBoundary extends React.Component {
   }
 
   componentDidCatch(error, errorInfo) {
-    // You can also log the error to an error reporting service
+    //  log the error
     console.log(error, errorInfo);
   }
 
   render() {
     if (this.state.hasError) {
-      // You can render any custom fallback UI
-      return (
-        <Redirect
-          to={{
-            pathname: "/login",
-            state: { from: this.props.location },
-          }}
-        />
-      );
+      return <ErrorScreen />;
     }
 
     return this.props.children;
