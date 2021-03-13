@@ -801,3 +801,9 @@ select:focus {
 .fr-view ul {
   list-style: disc;
 }
+
+/* Code Mirror Styling */
+.CodeMirror-code {
+  text-align: start;
+  font-size: 0.9rem;
+}
