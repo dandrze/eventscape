@@ -4,40 +4,10 @@ import * as actions from "../actions";
 import { ReactFormGenerator } from "../components/react-form-builder2/lib";
 import "./test.css";
 import api from "../api/server";
-import Chat from "../components/chat4";
+import ErrorScreen from "../components/ErrorScreen";
 
 const Test = (props) => {
-  const [formData, setFormData] = useState([]);
-
-  useEffect(() => {
-    fetchFormData();
-  }, []);
-  const items = [
-    {
-      key: "Header",
-      name: "Header Text",
-      icon: "fa fa-header",
-      static: true,
-      content: "Placeholder Text...",
-    },
-    {
-      key: "Paragraph",
-      name: "Paragraph",
-      static: true,
-      icon: "fa fa-paragraph",
-      content: "Placeholder Text...",
-    },
-  ];
-
-  const fetchFormData = async () => {
-    const formData = await api.get("/api/form", {
-      params: { event: 136 },
-    });
-
-    setFormData(formData.data.data);
-  };
-
-  return <Chat />;
+  return <ErrorScreen />;
 };
 
 const mapStateToProps = (state) => {

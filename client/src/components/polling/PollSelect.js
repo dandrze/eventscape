@@ -62,7 +62,12 @@ const PollSelect = ({
           label="Select Poll"
         >
           {polls.map((poll, index) => {
-            return <MenuItem value={index}>{poll.question}</MenuItem>;
+            return (
+              <MenuItem value={index}>
+                {poll.question.slice(0, 80)}
+                {poll.question.length > 80 ? "..." : ""}
+              </MenuItem>
+            );
           })}
         </Select>
       </FormControl>

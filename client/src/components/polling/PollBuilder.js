@@ -57,6 +57,8 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
   };
 
   const handleChangeOptions = (event, index) => {
+    if (event.target.value.length > 140)
+      return alert("Your option responses must be less than 140 characters.");
     const newValue = event.target.value;
     setOptions((options) =>
       options.map((option, i) => {
@@ -164,6 +166,7 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
                   fullWidth
                   style={{ margin: "5px 0px" }}
                 />
+
                 <div
                   onClick={() => handleRemoveOption(index)}
                   className={classes.removeOption}
