@@ -129,7 +129,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "100px 0px 0px 0px",
     width: "calc(100vw - 240px)",
     overflowY: "scroll", // Added to fix froala cursor jumping bug
-    height: "100vh", // Added to fix froala cursor jumping bug
+    height: "calc(100vh - 100px)", // Added to fix froala cursor jumping bug
   },
   currentEvent: {
     display: "block",
