@@ -480,6 +480,31 @@ router.put("/api/event/chat-moderator", async (req, res, next) => {
   }
 });
 
+router.post("/api/event/permissions", async (req, res, next) => {
+  const { eventId, emailAddress } = req.body;
+
+  try {
+    const [account, created] = await Account.findOrCreate({
+      where: { emailAddress },
+    });
+
+    const permission = await Permission.create({
+      AccountId: account.id,
+      EventId: eventId,
+      role: "collaborator",
+    });
+
+    if (created) {
+      // send an invitation email from services/AccountCreator
+      console.log("account created with " + emailAddress);
+    }
+
+    res.status(200).send(permission);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/api/event/permissions", async (req, res, next) => {
   const { eventId } = req.query;
 

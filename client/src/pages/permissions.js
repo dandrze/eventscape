@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, forwardRef } from "react";
 import { connect } from "react-redux";
 
 import NavBar3 from "../components/navBar3.js";
 import MaterialTable from "material-table";
-import { forwardRef } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+
 import { Paper } from "@material-ui/core";
 import { toast } from "react-toastify";
 
@@ -27,15 +28,32 @@ import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import CircularProgress from "@material-ui/core/CircularProgress";
 
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+
 import * as actions from "../actions";
 import api from "../api/server";
 import Modal1 from "../components/Modal1";
 import TableActionButton from "../components/TableActionButton";
 
+const useStyles = makeStyles((theme) => ({
+  formControl: {
+    margin: "20px 0px",
+    minWidth: "100%",
+  },
+}));
+
 const Permissions = (props) => {
+  const classes = useStyles();
+
   const [data, setData] = useState([]);
-  const [openEditor, setOpenEditor] = useState(false);
+  const [openAddModal, setOpenAddModal] = useState(false);
   const [collaborator, setCollaborator] = useState({});
+  const [
+    newCollaboratorEmailAddress,
+    setNewCollaboratorEmailAddress,
+  ] = useState("");
 
   useEffect(() => {
     if (props.event.id) fetchData();
@@ -188,7 +206,6 @@ const Permissions = (props) => {
       onClick: (event, rowData) => {
         console.log(rowData);
         setCollaborator(rowData);
-        setOpenEditor(true);
       },
     },
 
@@ -196,17 +213,17 @@ const Permissions = (props) => {
       icon: () => <TableActionButton label="Add collaborator" type="add" />,
       isFreeAction: true,
       onClick: (event) => {
-        //handleAdd();
+        setOpenAddModal(true);
       },
     },
   ];
 
-  const handleCloseEditor = () => {
-    setOpenEditor(false);
+  const handleCloseAddModal = () => {
+    setOpenAddModal(false);
   };
 
   const handleSubmitEditor = async () => {
-    setOpenEditor(false);
+    setOpenAddModal(false);
   };
 
   const handleChangeCheckbox = async (event, rowData) => {
@@ -220,13 +237,49 @@ const Permissions = (props) => {
     await fetchData();
   };
 
+  const handleAddCollaborator = async (emailAddress) => {
+    console.log(newCollaboratorEmailAddress);
+    const res = await api.post("/api/event/permissions", {
+      eventId: props.event.id,
+      emailAddress: newCollaboratorEmailAddress,
+    });
+    console.log(res.data);
+    setOpenAddModal(false);
+    await fetchData();
+  };
+
+  const handleChangeNewCollaboratorEmailAddress = (event) => {
+    setNewCollaboratorEmailAddress(event.target.value);
+  };
+
   return (
     <div className="shadow-border container-width">
       <Modal1
-        open={openEditor}
-        onClose={handleCloseEditor}
-        title="Edit collaborator"
-        content={<div>hola</div>}
+        open={openAddModal}
+        onClose={() => setOpenAddModal(false)}
+        title="New collaborator"
+        content={
+          <div style={{ width: "400px" }}>
+            <FormControl variant="outlined" className={classes.formControl}>
+              <TextField
+                label="Email Address"
+                variant="outlined"
+                value={newCollaboratorEmailAddress}
+                onChange={handleChangeNewCollaboratorEmailAddress}
+              />
+            </FormControl>
+            <div style={{ height: "40px" }} />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleAddCollaborator}
+              class="Button1"
+              style={{ width: "150px", alignSelf: "flex-end" }}
+            >
+              Save
+            </Button>
+          </div>
+        }
       />
       <NavBar3
         displaySideNav="true"
