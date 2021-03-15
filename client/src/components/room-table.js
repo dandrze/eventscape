@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { makeStyles } from "@material-ui/core/styles";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
 import { Paper } from "@material-ui/core";
@@ -77,7 +76,7 @@ const RoomTable = (props) => {
         roomId: rowData.id,
         chatEnabled,
         questionsEnabled,
-      })
+      });
       const response = await api.put("/api/chatroom/tab-set-enabled", {
         roomId: rowData.id,
         chatEnabled,

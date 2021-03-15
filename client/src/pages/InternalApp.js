@@ -21,6 +21,7 @@ import AccountSettingsPassword from "./account-settings-password";
 import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
 import Polls from "./polls";
+import Permissions from "./permissions";
 import Test from "./test";
 
 const InternalApp = (props) => {
@@ -58,6 +59,7 @@ const InternalApp = (props) => {
             path="/account-settings-payments"
             component={AccountSettingsPayments}
           />
+          <Route exact path="/permissions" component={Permissions} />
           {/*<Route exact path="/test" component={Test} />*/}
           {/* Because we're using a switch, only one route will load. If the route doesn't match any of the routes above, display a page not found */}
           <Route component={PageNotFound} />

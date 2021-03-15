@@ -18,14 +18,13 @@ const Communication = (props) => {
     fetchData();
   }, [props.event]);
 
-  const fetchData = async () => {
-    props.setLoaded(false);
-    props.setLoaded(true);
+  const fetchData = async () => {  
     if (props.event.id) {
       props.setLoaded(false);
       await props.fetchCommunicationList(props.event.id);
       props.setLoaded(true);
     }
+
   };
 
   const handleCloseEditor = () => {

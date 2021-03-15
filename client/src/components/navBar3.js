@@ -424,6 +424,14 @@ function NavBar3(props) {
                 <ListItemText primary="My Events" />
               </StyledMenuItem>
             </Link>
+            <Link to="/permissions">
+              <StyledMenuItem>
+                <ListItemIcon>
+                  <SettingsIcon fontSize="small" />
+                </ListItemIcon>
+                <ListItemText primary="Collaborators" />
+              </StyledMenuItem>
+            </Link>
 
             <Link to="/account-settings-contact">
               <StyledMenuItem>

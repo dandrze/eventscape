@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { memo } from "react";
 import { VectorMap } from "react-jvectormap";
 
 const WorldMap = ({ data }) => {
@@ -59,4 +59,4 @@ const WorldMap = ({ data }) => {
   );
 };
 
-export default WorldMap;
+export default memo(WorldMap);

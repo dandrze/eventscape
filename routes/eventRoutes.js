@@ -11,6 +11,8 @@ const {
   PageModel,
   PageSection,
   Communication,
+  Permission,
+  Account,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 
@@ -473,6 +475,66 @@ router.put("/api/event/chat-moderator", async (req, res, next) => {
     chatUser.save();
 
     res.status(200).send(chatUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/api/event/permissions", async (req, res, next) => {
+  const { eventId } = req.query;
+
+  try {
+    const permissions = await Permission.findAll({
+      where: {
+        EventId: eventId,
+      },
+      include: Account,
+    });
+
+    res.status(200).send(permissions);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/api/event/permissions", async (req, res, next) => {
+  const { type, checked, accountId, eventId } = req.body;
+
+  try {
+    const permission = await Permission.findOne({
+      where: {
+        AccountId: accountId,
+        EventId: eventId,
+      },
+    });
+
+    switch (type) {
+      case "eventDetails":
+        permission.eventDetails = checked;
+        break;
+      case "design":
+        permission.design = checked;
+        break;
+      case "communication":
+        permission.communication = checked;
+        break;
+      case "registration":
+        permission.registration = checked;
+        break;
+      case "polls":
+        permission.polls = checked;
+        break;
+      case "analytics":
+        permission.analytics = checked;
+        break;
+      case "messaging":
+        permission.messaging = checked;
+        break;
+    }
+
+    permission.save();
+
+    res.status(200).send(permission);
   } catch (error) {
     next(error);
   }
