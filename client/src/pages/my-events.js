@@ -21,33 +21,38 @@ const My_Events = (props) => {
 
   return (
     <div>
-      <NavBar3 displaySideNav="false" openBlocked="true" content={
-      <div className="my-events-container">
-        <div className="top-button-bar">
-          <h1 className="button-bar-left my-events-title">My Events</h1>
-          <br></br>
-          <Link to="/event-details" className="button-bar-right">
-            <button className="Button1">Create New Event</button>
-          </Link>
-        </div>
-        <Tabs>
-          <div label="Upcoming">
-            <div className="table1">
-              <Table tab="upcoming"></Table>
+      <NavBar3
+        displaySideNav="false"
+        openBlocked="true"
+        content={
+          <div className="my-events-container">
+            <div className="top-button-bar">
+              <h1 className="button-bar-left my-events-title">My Events</h1>
+              <br></br>
+              <Link to="/create-event" className="button-bar-right">
+                <button className="Button1">Create New Event</button>
+              </Link>
             </div>
+            <Tabs>
+              <div label="Upcoming">
+                <div className="table1">
+                  <Table tab="upcoming"></Table>
+                </div>
+              </div>
+              <div label="Past">
+                <div className="table1">
+                  <Table tab="past"></Table>
+                </div>
+              </div>
+              <div label="Deleted">
+                <div className="table1">
+                  <Table tab="deleted"></Table>
+                </div>
+              </div>
+            </Tabs>
           </div>
-          <div label="Past">
-            <div className="table1">
-              <Table tab="past"></Table>
-            </div>
-          </div>
-          <div label="Deleted">
-            <div className="table1">
-              <Table tab="deleted"></Table>
-            </div>
-          </div>
-        </Tabs>
-      </div>}/>
+        }
+      />
     </div>
   );
 };

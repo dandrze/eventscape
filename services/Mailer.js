@@ -13,8 +13,11 @@ const sendEmail = async (email = { to: "", subject: "", html: "" }) => {
     html,
   };
 
+  console.log(msg);
+
   try {
     const response = await sgMail.send(msg);
+    console.log(response);
     return true;
   } catch (error) {
     return false;
@@ -101,5 +104,4 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
   return { success, failed };
 };
 
-exports.sendEmail = sendEmail;
-exports.mapVariablesAndSendEmail = mapVariablesAndSendEmail;
+module.exports = { sendEmail, mapVariablesAndSendEmail };

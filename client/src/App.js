@@ -85,7 +85,11 @@ function App(props) {
           >
             <Switch>
               <Route exact path="/login" component={Login} />
-              <Route exact path="/create-account" component={Create_Account} />
+              <Route
+                exact
+                path="/create-account/:email?"
+                component={Create_Account}
+              />
               <Route exact path="/reset-password" component={ResetPassword} />
               <Route exact path="/ScotiabankGillerPrize" component={Giller} />
               <Route

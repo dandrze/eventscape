@@ -8,6 +8,7 @@ import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
 import "../components/fonts.css";
 import { pageNames } from "../model/enums";
+import MissingPermissionsScreen from "../components/MissingPermissionsScreen";
 
 const Design = ({ event, model, fetchModel }) => {
   const page = useParams().page || "event";
@@ -31,7 +32,11 @@ const Design = ({ event, model, fetchModel }) => {
         highlight="design"
         content={
           model.sections.length ? (
-            <PageEditor key={model} page={page} />
+            event.permissions?.design ? (
+              <PageEditor key={model} page={page} />
+            ) : (
+              <MissingPermissionsScreen />
+            )
           ) : (
             <CircularProgress style={{ marginTop: "30vh" }} />
           )

@@ -29,6 +29,12 @@ passport.use(
       return done(null, false, { message: "Incorrect username." });
     }
 
+    if (!user.registrationComplete) {
+      return done(null, false, {
+        message: "Please create an account to complete your registration",
+      });
+    }
+
     // compare the password against the hashed password stored in postgres
     const match = await bcrypt.compare(password, user.password);
 

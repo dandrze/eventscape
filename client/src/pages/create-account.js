@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -24,11 +24,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Create_Account(props) {
+  const { email } = useParams();
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
+  const [emailAddress, setEmailAddress] = useState(email || "");
   const [password, setPassword] = useState("");
 
   const [emailErrorText, setEmailErrorText] = useState(false);
@@ -77,8 +78,15 @@ function Create_Account(props) {
       });
 
       const auth = await props.signInLocal(emailAddress, password);
-      setIsLoading(false);
-      props.history.push("/event-details");
+      const eventList = await props.fetchEventList();
+      if (eventList.length === 0) {
+        setIsLoading(false);
+        props.history.push("/create-event");
+      } else {
+        const res = await props.setCurrentEvent(eventList[0].id);
+        setIsLoading(false);
+        props.history.push("/");
+      }
     }
   };
   const handleChangeFirstName = (event) => {
@@ -146,6 +154,8 @@ function Create_Account(props) {
                 onChange={handleChangeEmail}
                 helperText={emailErrorText}
                 onKeyPress={handleKeypressSubmit}
+                // if there is an email passed through url, don't allow edits
+                disabled={email}
               />
             </FormControl>
             <br></br>

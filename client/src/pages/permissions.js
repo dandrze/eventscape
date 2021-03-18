@@ -60,11 +60,15 @@ const Permissions = (props) => {
   }, [props.event]);
 
   const fetchData = async () => {
-    const res = await api.get("/api/event/permissions", {
-      params: { eventId: props.event.id },
-    });
-    console.log(res);
-    setData(res.data);
+    try {
+      const res = await api.get("/api/event/permissions", {
+        params: { eventId: props.event.id },
+      });
+      console.log(res);
+      setData(res.data);
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
   };
 
   const tableIcons = {
@@ -111,6 +115,7 @@ const Permissions = (props) => {
           checked={rowData.eventDetails}
           name="eventDetails"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -121,6 +126,7 @@ const Permissions = (props) => {
           checked={rowData.design}
           name="design"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -131,6 +137,7 @@ const Permissions = (props) => {
           checked={rowData.communication}
           name="communication"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -141,6 +148,7 @@ const Permissions = (props) => {
           checked={rowData.registration}
           name="registration"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -151,6 +159,7 @@ const Permissions = (props) => {
           checked={rowData.polls}
           name="polls"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -161,6 +170,7 @@ const Permissions = (props) => {
           checked={rowData.analytics}
           name="analytics"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -171,6 +181,7 @@ const Permissions = (props) => {
           checked={rowData.messaging}
           name="messaging"
           onChange={(event) => handleChangeCheckbox(event, rowData)}
+          disabled={rowData.role === "owner"}
         />
       ),
     },
@@ -201,15 +212,6 @@ const Permissions = (props) => {
 
   const actions = [
     {
-      icon: Edit,
-      tooltip: "Edit collaborator",
-      onClick: (event, rowData) => {
-        console.log(rowData);
-        setCollaborator(rowData);
-      },
-    },
-
-    {
       icon: () => <TableActionButton label="Add collaborator" type="add" />,
       isFreeAction: true,
       onClick: (event) => {
@@ -228,22 +230,39 @@ const Permissions = (props) => {
 
   const handleChangeCheckbox = async (event, rowData) => {
     // update the checkbox in the database
-    const res = await api.put("/api/event/permissions", {
-      type: event.target.name,
-      checked: event.target.checked,
-      accountId: rowData.id,
-      eventId: props.event.id,
-    });
-    await fetchData();
+    try {
+      const res = await api.put("/api/event/permissions", {
+        type: event.target.name,
+        checked: event.target.checked,
+        permissionId: rowData.id,
+      });
+      await fetchData();
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
   };
 
   const handleAddCollaborator = async (emailAddress) => {
-    console.log(newCollaboratorEmailAddress);
-    const res = await api.post("/api/event/permissions", {
-      eventId: props.event.id,
-      emailAddress: newCollaboratorEmailAddress,
-    });
-    console.log(res.data);
+    try {
+      const res = await api.post("/api/event/permissions", {
+        eventId: props.event.id,
+        emailAddress: newCollaboratorEmailAddress,
+      });
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
+    setOpenAddModal(false);
+    await fetchData();
+  };
+
+  const handleDeleteCollaborator = async (permissionId) => {
+    try {
+      const res = await api.delete("/api/event/permissions", {
+        params: { permissionId },
+      });
+    } catch (err) {
+      toast.error(err.response.data.message);
+    }
     setOpenAddModal(false);
     await fetchData();
   };
@@ -283,7 +302,7 @@ const Permissions = (props) => {
       />
       <NavBar3
         displaySideNav="true"
-        highlight="communication"
+        highlight="permissions"
         content={
           <div>
             <MaterialTable
@@ -293,6 +312,14 @@ const Permissions = (props) => {
               data={data}
               options={options}
               icons={tableIcons}
+              editable={{
+                isDeletable: (rowData) => rowData.AccountId != props.user.id,
+                onRowDelete: (oldData) =>
+                  new Promise(async (resolve) => {
+                    await handleDeleteCollaborator(oldData.id);
+                    resolve();
+                  }),
+              }}
               components={{
                 Container: (props) => <Paper {...props} elevation={0} />,
               }}
@@ -305,7 +332,7 @@ const Permissions = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { email: state.email, event: state.event };
+  return { email: state.email, event: state.event, user: state.user };
 };
 
 export default connect(mapStateToProps, actions)(Permissions);

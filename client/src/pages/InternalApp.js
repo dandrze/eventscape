@@ -8,14 +8,13 @@ import * as actions from "../actions";
 import Design from "./design";
 
 import Dashboard from "./dashboard";
-import Event_Details from "./event-details";
 import My_Events from "./my-events";
 import Communication from "./communication";
 import Registrations from "./registrations";
 import Analytics from "./analytics";
 import Messaging from "./messaging";
 import Preview from "./preview";
-import WebsiteSettings from "./websiteSettings";
+import EventDetailsPage from "./EventDetailsPage";
 import AccountSettingsContact from "./account-settings-contact";
 import AccountSettingsPassword from "./account-settings-password";
 import AccountSettingsPayments from "./account-settings-payments";
@@ -23,21 +22,33 @@ import PageNotFound from "./PageNotFound";
 import Polls from "./polls";
 import Permissions from "./permissions";
 import Test from "./test";
+import LongLoadingScreen from "../components/LongLoadingScreen";
+import CreateEvent from "./CreateEvent";
 
 const InternalApp = (props) => {
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
   useEffect(() => {
-    props.fetchEvent();
+    fetchEventData();
   }, []);
+
+  const fetchEventData = async () => {
+    if (targetEventId) {
+      await props.setCurrentEvent(targetEventId);
+    }
+
+    props.fetchEvent();
+  };
 
   return (
     <div className="App">
       <header className="App-header">
         <Switch>
           <Route exact path="/" component={Design} />
-          <Route exact path="/event-details" component={Event_Details} />
+          <Route exact path="/create-event" component={CreateEvent} />
           <Route exact path="/my-events" component={My_Events} />
           <Route exact path="/design/:page?" component={Design} />
-          <Route exact path="/website-settings" component={WebsiteSettings} />
+          <Route exact path="/event-details" component={EventDetailsPage} />
           <Route exact path="/communication" component={Communication} />
           <Route exact path="/registrations" component={Registrations} />
           <Route exact path="/polls" component={Polls} />

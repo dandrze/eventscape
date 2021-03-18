@@ -52,6 +52,7 @@ import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
 import PollIcon from "../icons/poll-1.svg";
 import CharChartIcon from "../icons/bar-chart.svg";
+import TeamIcon from "../icons/team.svg";
 
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -357,7 +358,7 @@ function NavBar3(props) {
           )}
 
           <Tooltip title="Create a new event">
-            <Button className={classes.addEvent} href="/event-details">
+            <Button className={classes.addEvent} href="/create-event">
               <img
                 className="profile"
                 src={plus_icon}
@@ -424,14 +425,6 @@ function NavBar3(props) {
                 <ListItemText primary="My Events" />
               </StyledMenuItem>
             </Link>
-            <Link to="/permissions">
-              <StyledMenuItem>
-                <ListItemIcon>
-                  <SettingsIcon fontSize="small" />
-                </ListItemIcon>
-                <ListItemText primary="Collaborators" />
-              </StyledMenuItem>
-            </Link>
 
             <Link to="/account-settings-contact">
               <StyledMenuItem>
@@ -485,102 +478,126 @@ function NavBar3(props) {
           </div>
           <Divider />
           <List>
-            <Link to="/website-settings">
-              <ListItem
-                button
-                key="event-details"
-                className={clsx({
-                  [classes.highlight]: highlight === "event-details",
-                })}
-              >
-                <Tooltip title="Event Details">
-                  <ListItemIcon>
-                    <img src={ListMinimalIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Event Details" />
-              </ListItem>
-            </Link>
-
-            {/* Design */}
-            {props.event.registrationRequired ? (
-              <>
+            {props.event.permissions?.eventDetails ? (
+              <Link to="/event-details">
                 <ListItem
                   button
-                  onClick={handleClickDesignNested}
+                  key="event-details"
                   className={clsx({
-                    [classes.highlight]: highlight === "design",
+                    [classes.highlight]: highlight === "event-details",
                   })}
                 >
-                  <ListItemIcon>
-                    <img src={PenIcon} height="20px"></img>
-                  </ListItemIcon>
-                  <ListItemText primary="Design" />
-                  {openDesignNested ? <ExpandLess /> : <ExpandMore />}
-                </ListItem>
-                {/* Design Nested Menu */}
-                <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
-                  <List component="div" disablePadding>
-                    {/* Registration Page */}
-                    <Link to="/design/registration">
-                      <ListItem
-                        button
-                        className={classes.nested}
-                        onClick={handleClickNestedItem}
-                      >
-                        <ListItemText secondary="Registration Page" />
-                      </ListItem>
-                    </Link>
-
-                    {/* Event Page */}
-                    <Link to="/design/event">
-                      <ListItem
-                        button
-                        className={classes.nested}
-                        onClick={handleClickNestedItem}
-                      >
-                        <ListItemText secondary="Event Page" />
-                      </ListItem>
-                    </Link>
-                  </List>
-                </Collapse>{" "}
-              </>
-            ) : (
-              <Link to="/design">
-                <ListItem
-                  button
-                  key="design"
-                  className={clsx({
-                    [classes.highlight]: highlight === "design",
-                  })}
-                >
-                  <Tooltip title="Design">
+                  <Tooltip title="Event Details">
                     <ListItemIcon>
-                      <img src={GraphIcon} height="20px"></img>
+                      <img src={ListMinimalIcon} height="20px"></img>
                     </ListItemIcon>
                   </Tooltip>
-                  <ListItemText primary="Design" />
+                  <ListItemText primary="Event Details" />
                 </ListItem>
               </Link>
-            )}
+            ) : null}
 
-            <Link to="/communication">
-              <ListItem
-                button
-                key="communicate"
-                className={clsx({
-                  [classes.highlight]: highlight === "communication",
-                })}
-              >
-                <Tooltip title="Communicate">
-                  <ListItemIcon>
-                    <img src={EnvelopeIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Communicate" />
-              </ListItem>
-            </Link>
-            {props.event.registrationRequired ? (
+            {/* Design */}
+            {props.event.permissions?.design ? (
+              props.event.registrationRequired ? (
+                <>
+                  <ListItem
+                    button
+                    onClick={handleClickDesignNested}
+                    className={clsx({
+                      [classes.highlight]: highlight === "design",
+                    })}
+                  >
+                    <ListItemIcon>
+                      <img src={PenIcon} height="20px"></img>
+                    </ListItemIcon>
+                    <ListItemText primary="Design" />
+                    {openDesignNested ? <ExpandLess /> : <ExpandMore />}
+                  </ListItem>
+                  {/* Design Nested Menu */}
+                  <Collapse in={openDesignNested} timeout="auto" unmountOnExit>
+                    <List component="div" disablePadding>
+                      {/* Registration Page */}
+                      <Link to="/design/registration">
+                        <ListItem
+                          button
+                          className={classes.nested}
+                          onClick={handleClickNestedItem}
+                        >
+                          <ListItemText secondary="Registration Page" />
+                        </ListItem>
+                      </Link>
+
+                      {/* Event Page */}
+                      <Link to="/design/event">
+                        <ListItem
+                          button
+                          className={classes.nested}
+                          onClick={handleClickNestedItem}
+                        >
+                          <ListItemText secondary="Event Page" />
+                        </ListItem>
+                      </Link>
+                    </List>
+                  </Collapse>{" "}
+                </>
+              ) : (
+                <Link to="/design">
+                  <ListItem
+                    button
+                    key="design"
+                    className={clsx({
+                      [classes.highlight]: highlight === "design",
+                    })}
+                  >
+                    <Tooltip title="Design">
+                      <ListItemIcon>
+                        <img src={GraphIcon} height="20px"></img>
+                      </ListItemIcon>
+                    </Tooltip>
+                    <ListItemText primary="Design" />
+                  </ListItem>
+                </Link>
+              )
+            ) : null}
+            {props.event.permissions?.communication ? (
+              <Link to="/communication">
+                <ListItem
+                  button
+                  key="communicate"
+                  className={clsx({
+                    [classes.highlight]: highlight === "communication",
+                  })}
+                >
+                  <Tooltip title="Communicate">
+                    <ListItemIcon>
+                      <img src={EnvelopeIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Communicate" />
+                </ListItem>
+              </Link>
+            ) : null}
+            {props.event.permissions?.role === "owner" ? (
+              <Link to="/permissions">
+                <ListItem
+                  button
+                  key="permissions"
+                  className={clsx({
+                    [classes.highlight]: highlight === "permissions",
+                  })}
+                >
+                  <Tooltip title="Assign Permissions to Team">
+                    <ListItemIcon>
+                      <img src={TeamIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Collaborate" />
+                </ListItem>
+              </Link>
+            ) : null}
+            {props.event.registrationRequired &&
+            props.event.permissions?.registration ? (
               <Link to="/registrations">
                 <ListItem
                   button
@@ -598,55 +615,60 @@ function NavBar3(props) {
                 </ListItem>
               </Link>
             ) : null}
-            <Link to="/polls">
-              <ListItem
-                button
-                key="polls"
-                className={clsx({
-                  [classes.highlight]: highlight === "polls",
-                })}
-              >
-                <Tooltip title="Polls">
-                  <ListItemIcon>
-                    <img src={CharChartIcon} height="25px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Polls" />
-              </ListItem>
-            </Link>
-            <Link to="/analytics">
-              <ListItem
-                button
-                key="analytics"
-                className={clsx({
-                  [classes.highlight]: highlight === "analytics",
-                })}
-              >
-                <Tooltip title="Analytics">
-                  <ListItemIcon>
-                    <img src={GraphIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Analytics" />
-              </ListItem>
-            </Link>
-
-            <Link to="/messaging">
-              <ListItem
-                button
-                key="messaging"
-                className={clsx({
-                  [classes.highlight]: highlight === "messaging",
-                })}
-              >
-                <Tooltip title="Messaging">
-                  <ListItemIcon>
-                    <img src={ChatIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Messaging" />
-              </ListItem>
-            </Link>
+            {props.event.permissions?.polls ? (
+              <Link to="/polls">
+                <ListItem
+                  button
+                  key="polls"
+                  className={clsx({
+                    [classes.highlight]: highlight === "polls",
+                  })}
+                >
+                  <Tooltip title="Polls">
+                    <ListItemIcon>
+                      <img src={CharChartIcon} height="25px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Polls" />
+                </ListItem>
+              </Link>
+            ) : null}
+            {props.event.permissions?.analytics ? (
+              <Link to="/analytics">
+                <ListItem
+                  button
+                  key="analytics"
+                  className={clsx({
+                    [classes.highlight]: highlight === "analytics",
+                  })}
+                >
+                  <Tooltip title="Analytics">
+                    <ListItemIcon>
+                      <img src={GraphIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Analytics" />
+                </ListItem>
+              </Link>
+            ) : null}
+            {props.event.permissions?.messaging ? (
+              <Link to="/messaging">
+                <ListItem
+                  button
+                  key="messaging"
+                  className={clsx({
+                    [classes.highlight]: highlight === "messaging",
+                  })}
+                >
+                  <Tooltip title="Messaging">
+                    <ListItemIcon>
+                      <img src={ChatIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Messaging" />
+                </ListItem>
+              </Link>
+            ) : null}
           </List>
         </Drawer>
       )}

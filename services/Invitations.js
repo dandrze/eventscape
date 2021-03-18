@@ -1,0 +1,67 @@
+const { sendEmail } = require("./Mailer");
+
+const inviteUser = (
+  emailAddress,
+  inviterFirstName,
+  inviterLastName,
+  eventTitle,
+  eventId
+) => {
+  const html = `
+    <p style="text-align: left">Hello there,</p>
+    <p style="text-align: left">Great news! ${inviterFirstName} ${inviterLastName} has invited you to collaborate on their event, "${eventTitle}"</p>
+    <p style="text-align: left;" >
+        <a href="https://app.eventscape.io/?eventid=${eventId}">
+        <button style="
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: bold;
+            font-size: 20;
+            color: white;
+            background-color: #b0281c;
+            padding: 16px;
+            border-width: 2px;
+            border-radius: 6px;
+            border-color: #b0281c;
+            border-style: solid;
+            height: min-content;
+            text-align: left;
+        ">
+            View Event
+        </button>
+        </a>
+    </p>
+    <p style="text-align: left;" >If you do not have an Eventscape account already, create one by clicking the button below</p>
+    <p style="text-align: left;" >
+        <a href="https://app.eventscape.io/create-account/${emailAddress}">
+        <button style="
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: bold;
+            font-size: 20;
+            color: white;
+            background-color: #b0281c;
+            padding: 16px;
+            border-width: 2px;
+            border-radius: 6px;
+            border-color: #b0281c;
+            border-style: solid;
+            height: min-content;
+            text-align: left;
+        ">
+            Create Account
+        </button>
+        </a>
+    </p>
+    <p style="text-align: left">Good luck on your event,</p>
+    <p style="text-align: left">The Eventscape Team</p>
+    <a href="https://www.eventscape.io"><p style="text-align: left">https://www.eventscape.io</p></a>
+    `;
+
+  sendEmail({
+    to: emailAddress,
+    subject:
+      "You've been invited to collaborate on an Eventscape virtual event",
+    html,
+  });
+};
+
+module.exports = { inviteUser };
