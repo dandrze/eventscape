@@ -9,6 +9,7 @@ import * as actions from "../actions";
 import { blankEmail } from "../templates/emailTemplates";
 import { statusOptions } from "../model/enums";
 import Modal1 from "../components/Modal1";
+import AccessDeniedScreen from "../components/AccessDeniedScreen.js";
 
 const Communication = (props) => {
   const [openEditor, setOpenEditor] = useState(false);
@@ -18,13 +19,12 @@ const Communication = (props) => {
     fetchData();
   }, [props.event]);
 
-  const fetchData = async () => {  
+  const fetchData = async () => {
     if (props.event.id) {
       props.setLoaded(false);
       await props.fetchCommunicationList(props.event.id);
       props.setLoaded(true);
     }
-
   };
 
   const handleCloseEditor = () => {
@@ -77,14 +77,21 @@ const Communication = (props) => {
         displaySideNav="true"
         highlight="communication"
         content={
-          <div>
-            <ScheduledEmails
-              handleAdd={handleAddEmail}
-              handleDelete={handleDeleteEmail}
-              handleEdit={handleEditEmail}
-              handleDuplicate={handleDuplicateEmail}
+          props.event.permissions?.communication ? (
+            <div>
+              <ScheduledEmails
+                handleAdd={handleAddEmail}
+                handleDelete={handleDeleteEmail}
+                handleEdit={handleEditEmail}
+                handleDuplicate={handleDuplicateEmail}
+              />
+            </div>
+          ) : (
+            <AccessDeniedScreen
+              message="Please contact the event owner to add you as a collaborator for this
+        event."
             />
-          </div>
+          )
         }
       />
     </div>

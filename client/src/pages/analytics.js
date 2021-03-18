@@ -9,6 +9,7 @@ import LoginsTable from "../components/LoginsTables";
 import WorldMap from "../components/worldMap";
 import "./analytics.css";
 import * as actions from "../actions";
+import AccessDeniedScreen from "../components/AccessDeniedScreen";
 
 const Analytics = (props) => {
   const [data, setData] = useState({
@@ -61,7 +62,7 @@ const Analytics = (props) => {
         displaySideNav="true"
         highlight={"analytics"}
         content={
-          true ? (
+          props.event.permissions?.analytics ? (
             <div className="boxes-main-container container-width">
               <div className="UVContainer">
                 <div className="form-box shadow-border currentUV">
@@ -122,9 +123,10 @@ const Analytics = (props) => {
               </div>
             </div>
           ) : (
-            <div>
-              <CircularProgress />
-            </div>
+            <AccessDeniedScreen
+              message="Please contact the event owner to add you as a collaborator for this
+          event."
+            />
           )
         }
       />

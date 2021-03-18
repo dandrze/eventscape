@@ -11,6 +11,7 @@ import FormBuilder from "../components/FormBuilder";
 import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
+import AccessDeniedScreen from "../components/AccessDeniedScreen";
 
 const Registrations = (props) => {
   {
@@ -160,38 +161,45 @@ const Registrations = (props) => {
         displaySideNav="true"
         highlight="registrations"
         content={
-          <div className="container-width">
-            <div className="top-button-bar">
-              <button
-                className="Button1 button-bar-right"
-                style={{ marginLeft: "auto" }}
-                onClick={handleOpenForm}
-              >
-                Edit Registration Form
-              </button>
+          props.event.permissions?.registration ? (
+            <div className="container-width">
+              <div className="top-button-bar">
+                <button
+                  className="Button1 button-bar-right"
+                  style={{ marginLeft: "auto" }}
+                  onClick={handleOpenForm}
+                >
+                  Edit Registration Form
+                </button>
 
-              <button
-                className="Button1"
-                style={{ marginLeft: "20px" }}
-                onClick={handleImport}
-              >
-                Import Registrations from CSV
-              </button>
+                <button
+                  className="Button1"
+                  style={{ marginLeft: "20px" }}
+                  onClick={handleImport}
+                >
+                  Import Registrations from CSV
+                </button>
 
-              <button
-                className="Button1"
-                onClick={handleAddReg}
-                style={{ marginLeft: "20px" }}
-              >
-                Add Registration
-              </button>
+                <button
+                  className="Button1"
+                  onClick={handleAddReg}
+                  style={{ marginLeft: "20px" }}
+                >
+                  Add Registration
+                </button>
+              </div>
+              <RegistrationTable2
+                handleAddReg={handleAddReg}
+                handleEditReg={handleEditReg}
+                handleDeleteReg={handleDeleteReg}
+              />
             </div>
-            <RegistrationTable2
-              handleAddReg={handleAddReg}
-              handleEditReg={handleEditReg}
-              handleDeleteReg={handleDeleteReg}
+          ) : (
+            <AccessDeniedScreen
+              message="Please contact the event owner to add you as a collaborator for this
+        event."
             />
-          </div>
+          )
         }
       />
     </div>

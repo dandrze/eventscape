@@ -11,6 +11,7 @@ import api from "../api/server";
 import PollController from "../components/polling/PollController";
 import ResultsChart from "../components/polling/ResultsChart";
 import PollDataTable from "../components/polling/PollDataTable";
+import AccessDeniedScreen from "../components/AccessDeniedScreen";
 
 const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
   const [open, setOpen] = useState(false);
@@ -157,29 +158,36 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
         displaySideNav="true"
         highlight="polls"
         content={
-          <div className="container-width">
-            <div className="top-button-bar">
-              <button
-                className="Button1 button-bar-right"
-                style={{ marginLeft: "auto" }}
-                onClick={handleLaunchPoll}
-              >
-                Launch Poll
-              </button>
+          event.permissions?.polls ? (
+            <div className="container-width">
+              <div className="top-button-bar">
+                <button
+                  className="Button1 button-bar-right"
+                  style={{ marginLeft: "auto" }}
+                  onClick={handleLaunchPoll}
+                >
+                  Launch Poll
+                </button>
+              </div>
+              {dataFetched ? (
+                <PollsTable
+                  handleAdd={handleAddPoll}
+                  data={polling.polls}
+                  handleEdit={handleEditPoll}
+                  handleDelete={handleDeletePoll}
+                  handleView={handleViewPoll}
+                  openData={handleOpenData}
+                />
+              ) : (
+                <CircularProgress />
+              )}
             </div>
-            {dataFetched ? (
-              <PollsTable
-                handleAdd={handleAddPoll}
-                data={polling.polls}
-                handleEdit={handleEditPoll}
-                handleDelete={handleDeletePoll}
-                handleView={handleViewPoll}
-                openData={handleOpenData}
-              />
-            ) : (
-              <CircularProgress />
-            )}
-          </div>
+          ) : (
+            <AccessDeniedScreen
+              message="Please contact the event owner to add you as a collaborator for this
+        event."
+            />
+          )
         }
       />
     </div>

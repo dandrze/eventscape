@@ -36,6 +36,7 @@ import * as actions from "../actions";
 import api from "../api/server";
 import Modal1 from "../components/Modal1";
 import TableActionButton from "../components/TableActionButton";
+import AccessDeniedScreen from "../components/AccessDeniedScreen.js";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -304,27 +305,31 @@ const Permissions = (props) => {
         displaySideNav="true"
         highlight="permissions"
         content={
-          <div>
-            <MaterialTable
-              title=""
-              columns={columns}
-              actions={actions}
-              data={data}
-              options={options}
-              icons={tableIcons}
-              editable={{
-                isDeletable: (rowData) => rowData.AccountId != props.user.id,
-                onRowDelete: (oldData) =>
-                  new Promise(async (resolve) => {
-                    await handleDeleteCollaborator(oldData.id);
-                    resolve();
-                  }),
-              }}
-              components={{
-                Container: (props) => <Paper {...props} elevation={0} />,
-              }}
-            />
-          </div>
+          props.event.permissions?.role === "owner" ? (
+            <div>
+              <MaterialTable
+                title=""
+                columns={columns}
+                actions={actions}
+                data={data}
+                options={options}
+                icons={tableIcons}
+                editable={{
+                  isDeletable: (rowData) => rowData.AccountId != props.user.id,
+                  onRowDelete: (oldData) =>
+                    new Promise(async (resolve) => {
+                      await handleDeleteCollaborator(oldData.id);
+                      resolve();
+                    }),
+                }}
+                components={{
+                  Container: (props) => <Paper {...props} elevation={0} />,
+                }}
+              />
+            </div>
+          ) : (
+            <AccessDeniedScreen message="You must be an event owner to access permissions." />
+          )
         }
       />
     </div>

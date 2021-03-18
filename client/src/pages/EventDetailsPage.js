@@ -4,7 +4,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import NavBar3 from "../components/navBar3.js";
 import EventDetailsForm from "../components/EventDetailsForm";
-import MissingPermissionsScreen from "../components/MissingPermissionsScreen";
+import AccessDeniedScreen from "../components/AccessDeniedScreen";
 
 class WebsiteSettings extends React.Component {
   render() {
@@ -20,7 +20,10 @@ class WebsiteSettings extends React.Component {
                   <EventDetailsForm isEventUpdate={true} />
                 </div>
               ) : (
-                <MissingPermissionsScreen />
+                <AccessDeniedScreen
+                  message="Please contact the event owner to add you as a collaborator for this
+                event."
+                />
               )
             ) : (
               <CircularProgress style={{ marginTop: "30vh" }} />
