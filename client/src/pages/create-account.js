@@ -38,6 +38,9 @@ function Create_Account(props) {
   const [passwordErrorText, setPasswordErrorText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
+
   const handleChangeEmail = (event) => {
     setEmailAddress(event.target.value);
     setEmailErrorText("");
@@ -81,7 +84,11 @@ function Create_Account(props) {
       const eventList = await props.fetchEventList();
       if (eventList.length === 0) {
         setIsLoading(false);
-        props.history.push("/create-event");
+        if (targetEventId) {
+          props.history.push(`/?eventid=${targetEventId}`);
+        } else {
+          props.history.push("/create-event");
+        }
       } else {
         const res = await props.setCurrentEvent(eventList[0].id);
         setIsLoading(false);

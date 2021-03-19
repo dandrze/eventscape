@@ -539,15 +539,15 @@ router.post("/api/event/permissions", async (req, res, next) => {
 
     const event = await Event.findByPk(eventId);
 
-    //if (accountCreated) {
-    // send an invitation email from services/AccountCreator
     inviteUser(
       emailAddress,
       account.firstName,
       account.lastName,
       event.title,
-      event.id
+      event.id,
+      accountCreated
     );
+
     console.log("account created with " + emailAddress);
     // }
 

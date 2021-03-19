@@ -38,24 +38,24 @@ const Messaging = (props) => {
         displaySideNav="true"
         highlight="messaging"
         content={
-          props.event.permissions?.messaging ? (
-            <div className="mainWrapper container-width">
-              {chatRooms.length ? (
-                chatRooms.map((chatRoom) => {
-                  return <ModeratorDashboard room={chatRoom} />;
-                })
-              ) : (
-                <div className="form-box shadow-border">
-                  <CircularProgress />
-                </div>
-              )}
-            </div>
-          ) : (
-            <AccessDeniedScreen
-              message="Please contact the event owner to add you as a collaborator for this
-          event."
-            />
-          )
+          // only display content once the event is loaded
+          props.event.id ? (
+            props.event.permissions?.messaging ? (
+              <div className="mainWrapper container-width">
+                {chatRooms.length ? (
+                  chatRooms.map((chatRoom) => {
+                    return <ModeratorDashboard room={chatRoom} />;
+                  })
+                ) : (
+                  <div className="form-box shadow-border">
+                    <CircularProgress />
+                  </div>
+                )}
+              </div>
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
+          ) : null
         }
       />
     </div>

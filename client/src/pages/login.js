@@ -25,6 +25,10 @@ function Login(props) {
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsloading] = useState(false);
 
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
+  const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/";
+
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
   };
@@ -38,7 +42,7 @@ function Login(props) {
     const isAuth = await props.signInLocal(email, password);
     setIsloading(false);
     if (isAuth.success) {
-      props.history.push("/design");
+      props.history.push(targetUrl);
     }
   };
 

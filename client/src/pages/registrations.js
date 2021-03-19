@@ -161,45 +161,45 @@ const Registrations = (props) => {
         displaySideNav="true"
         highlight="registrations"
         content={
-          props.event.permissions?.registration ? (
-            <div className="container-width">
-              <div className="top-button-bar">
-                <button
-                  className="Button1 button-bar-right"
-                  style={{ marginLeft: "auto" }}
-                  onClick={handleOpenForm}
-                >
-                  Edit Registration Form
-                </button>
+          // only display content once the event is loaded
+          props.event.id ? (
+            props.event.permissions?.registration ? (
+              <div className="container-width">
+                <div className="top-button-bar">
+                  <button
+                    className="Button1 button-bar-right"
+                    style={{ marginLeft: "auto" }}
+                    onClick={handleOpenForm}
+                  >
+                    Edit Registration Form
+                  </button>
 
-                <button
-                  className="Button1"
-                  style={{ marginLeft: "20px" }}
-                  onClick={handleImport}
-                >
-                  Import Registrations from CSV
-                </button>
+                  <button
+                    className="Button1"
+                    style={{ marginLeft: "20px" }}
+                    onClick={handleImport}
+                  >
+                    Import Registrations from CSV
+                  </button>
 
-                <button
-                  className="Button1"
-                  onClick={handleAddReg}
-                  style={{ marginLeft: "20px" }}
-                >
-                  Add Registration
-                </button>
+                  <button
+                    className="Button1"
+                    onClick={handleAddReg}
+                    style={{ marginLeft: "20px" }}
+                  >
+                    Add Registration
+                  </button>
+                </div>
+                <RegistrationTable2
+                  handleAddReg={handleAddReg}
+                  handleEditReg={handleEditReg}
+                  handleDeleteReg={handleDeleteReg}
+                />
               </div>
-              <RegistrationTable2
-                handleAddReg={handleAddReg}
-                handleEditReg={handleEditReg}
-                handleDeleteReg={handleDeleteReg}
-              />
-            </div>
-          ) : (
-            <AccessDeniedScreen
-              message="Please contact the event owner to add you as a collaborator for this
-        event."
-            />
-          )
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
+          ) : null
         }
       />
     </div>

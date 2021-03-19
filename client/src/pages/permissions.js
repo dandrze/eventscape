@@ -305,31 +305,35 @@ const Permissions = (props) => {
         displaySideNav="true"
         highlight="permissions"
         content={
-          props.event.permissions?.role === "owner" ? (
-            <div>
-              <MaterialTable
-                title=""
-                columns={columns}
-                actions={actions}
-                data={data}
-                options={options}
-                icons={tableIcons}
-                editable={{
-                  isDeletable: (rowData) => rowData.AccountId != props.user.id,
-                  onRowDelete: (oldData) =>
-                    new Promise(async (resolve) => {
-                      await handleDeleteCollaborator(oldData.id);
-                      resolve();
-                    }),
-                }}
-                components={{
-                  Container: (props) => <Paper {...props} elevation={0} />,
-                }}
-              />
-            </div>
-          ) : (
-            <AccessDeniedScreen message="You must be an event owner to access permissions." />
-          )
+          // only display content once the event is loaded
+          props.event.id ? (
+            props.event.permissions?.role === "owner" ? (
+              <div>
+                <MaterialTable
+                  title=""
+                  columns={columns}
+                  actions={actions}
+                  data={data}
+                  options={options}
+                  icons={tableIcons}
+                  editable={{
+                    isDeletable: (rowData) =>
+                      rowData.AccountId != props.user.id,
+                    onRowDelete: (oldData) =>
+                      new Promise(async (resolve) => {
+                        await handleDeleteCollaborator(oldData.id);
+                        resolve();
+                      }),
+                  }}
+                  components={{
+                    Container: (props) => <Paper {...props} elevation={0} />,
+                  }}
+                />
+              </div>
+            ) : (
+              <AccessDeniedScreen message="You must be an event owner to access permissions." />
+            )
+          ) : null
         }
       />
     </div>

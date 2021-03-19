@@ -77,21 +77,21 @@ const Communication = (props) => {
         displaySideNav="true"
         highlight="communication"
         content={
-          props.event.permissions?.communication ? (
-            <div>
-              <ScheduledEmails
-                handleAdd={handleAddEmail}
-                handleDelete={handleDeleteEmail}
-                handleEdit={handleEditEmail}
-                handleDuplicate={handleDuplicateEmail}
-              />
-            </div>
-          ) : (
-            <AccessDeniedScreen
-              message="Please contact the event owner to add you as a collaborator for this
-        event."
-            />
-          )
+          // only display content once the event is loaded
+          props.event.id ? (
+            props.event.permissions?.communication ? (
+              <div>
+                <ScheduledEmails
+                  handleAdd={handleAddEmail}
+                  handleDelete={handleDeleteEmail}
+                  handleEdit={handleEditEmail}
+                  handleDuplicate={handleDuplicateEmail}
+                />
+              </div>
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
+          ) : null
         }
       />
     </div>

@@ -5,9 +5,10 @@ const inviteUser = (
   inviterFirstName,
   inviterLastName,
   eventTitle,
-  eventId
+  eventId,
+  isNewAccount
 ) => {
-  const html = `
+  const existingUserHtml = `
     <p style="text-align: left">Hello there,</p>
     <p style="text-align: left">Great news! ${inviterFirstName} ${inviterLastName} has invited you to collaborate on their event, "${eventTitle}"</p>
     <p style="text-align: left;" >
@@ -30,9 +31,17 @@ const inviteUser = (
         </button>
         </a>
     </p>
-    <p style="text-align: left;" >If you do not have an Eventscape account already, create one by clicking the button below</p>
+    <p style="text-align: left">Good luck on your event,</p>
+    <p style="text-align: left">The Eventscape Team</p>
+    <a href="https://www.eventscape.io"><p style="text-align: left">https://www.eventscape.io</p></a>
+    `;
+
+  const newUserHtml = `
+    <p style="text-align: left">Hello there,</p>
+    <p style="text-align: left">Great news! ${inviterFirstName} ${inviterLastName} has invited you to collaborate on their event, "${eventTitle}" on EventScape.</p>
+    <p style="text-align: left">To get started, create an Eventscape account by clicking the button below. You will automatically be added to the event when you complete registration.</p>
     <p style="text-align: left;" >
-        <a href="https://app.eventscape.io/create-account/${emailAddress}">
+        <a href="https://app.eventscape.io/create-account/${emailAddress}/?eventid=${eventId}">
         <button style="
             font-family: Helvetica, Arial, sans-serif;
             font-weight: bold;
@@ -47,7 +56,7 @@ const inviteUser = (
             height: min-content;
             text-align: left;
         ">
-            Create Account
+            Accept Invitation
         </button>
         </a>
     </p>
@@ -60,7 +69,7 @@ const inviteUser = (
     to: emailAddress,
     subject:
       "You've been invited to collaborate on an Eventscape virtual event",
-    html,
+    html: isNewAccount ? newUserHtml : existingUserHtml,
   });
 };
 

@@ -158,36 +158,36 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
         displaySideNav="true"
         highlight="polls"
         content={
-          event.permissions?.polls ? (
-            <div className="container-width">
-              <div className="top-button-bar">
-                <button
-                  className="Button1 button-bar-right"
-                  style={{ marginLeft: "auto" }}
-                  onClick={handleLaunchPoll}
-                >
-                  Launch Poll
-                </button>
+          // only display content once the event is loaded
+          event.id ? (
+            event.permissions?.polls ? (
+              <div className="container-width">
+                <div className="top-button-bar">
+                  <button
+                    className="Button1 button-bar-right"
+                    style={{ marginLeft: "auto" }}
+                    onClick={handleLaunchPoll}
+                  >
+                    Launch Poll
+                  </button>
+                </div>
+                {dataFetched ? (
+                  <PollsTable
+                    handleAdd={handleAddPoll}
+                    data={polling.polls}
+                    handleEdit={handleEditPoll}
+                    handleDelete={handleDeletePoll}
+                    handleView={handleViewPoll}
+                    openData={handleOpenData}
+                  />
+                ) : (
+                  <CircularProgress />
+                )}
               </div>
-              {dataFetched ? (
-                <PollsTable
-                  handleAdd={handleAddPoll}
-                  data={polling.polls}
-                  handleEdit={handleEditPoll}
-                  handleDelete={handleDeletePoll}
-                  handleView={handleViewPoll}
-                  openData={handleOpenData}
-                />
-              ) : (
-                <CircularProgress />
-              )}
-            </div>
-          ) : (
-            <AccessDeniedScreen
-              message="Please contact the event owner to add you as a collaborator for this
-        event."
-            />
-          )
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
+          ) : null
         }
       />
     </div>

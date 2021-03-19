@@ -62,36 +62,65 @@ const Analytics = (props) => {
         displaySideNav="true"
         highlight={"analytics"}
         content={
-          props.event.permissions?.analytics ? (
-            <div className="boxes-main-container container-width">
-              <div className="UVContainer">
-                <div className="form-box shadow-border currentUV">
-                  <h3>Current Unique Viewers</h3>
-                  <h2>
+          // only display content once the event is loaded
+          props.event.id ? (
+            props.event.permissions?.analytics ? (
+              <div className="boxes-main-container container-width">
+                <div className="UVContainer">
+                  <div className="form-box shadow-border currentUV">
+                    <h3>Current Unique Viewers</h3>
+                    <h2>
+                      {data.loaded ? (
+                        data.current
+                      ) : (
+                        <CircularProgress size={30} />
+                      )}
+                    </h2>
+                  </div>
+                  <div className="form-box shadow-border totalUV">
+                    <h3>Total Unique Viewers</h3>
+                    <h2>
+                      {data.loaded ? (
+                        data.unique
+                      ) : (
+                        <CircularProgress size={30} />
+                      )}
+                    </h2>
+                  </div>
+                </div>
+                <div className="form-box shadow-border" id="uniqueViewersTable">
+                  <h3>Unique Viewers over Time</h3>
+                  <br></br>
+                  <div className="uniqueViewersChart">
                     {data.loaded ? (
-                      data.current
+                      <LineChart
+                        data={data.history}
+                        title="Unique Viewers"
+                        color="#B0281C"
+                      />
                     ) : (
-                      <CircularProgress size={30} />
+                      <div style={{ textAlign: "center" }}>
+                        <CircularProgress size={40} className="margin-auto" />
+                      </div>
                     )}
-                  </h2>
+                  </div>
                 </div>
-                <div className="form-box shadow-border totalUV">
-                  <h3>Total Unique Viewers</h3>
-                  <h2>
-                    {data.loaded ? data.unique : <CircularProgress size={30} />}
-                  </h2>
+                <div className="shadow-border viewerLocation">
+                  <div id="viewerLocationHeader">
+                    <h3>Viewer Location</h3>
+                  </div>
+                  {!data.loaded ? (
+                    <div style={{ textAlign: "center" }}>
+                      <CircularProgress size={40} />
+                    </div>
+                  ) : data.visitorData ? (
+                    <WorldMap data={data.visitorData} className="margin-auto" />
+                  ) : null}
                 </div>
-              </div>
-              <div className="form-box shadow-border" id="uniqueViewersTable">
-                <h3>Unique Viewers over Time</h3>
-                <br></br>
-                <div className="uniqueViewersChart">
+                <div className="form-box shadow-border table-box">
+                  <h3>Logins</h3>
                   {data.loaded ? (
-                    <LineChart
-                      data={data.history}
-                      title="Unique Viewers"
-                      color="#B0281C"
-                    />
+                    <LoginsTable data={data.visitorData} />
                   ) : (
                     <div style={{ textAlign: "center" }}>
                       <CircularProgress size={40} className="margin-auto" />
@@ -99,35 +128,10 @@ const Analytics = (props) => {
                   )}
                 </div>
               </div>
-              <div className="shadow-border viewerLocation">
-                <div id="viewerLocationHeader">
-                  <h3>Viewer Location</h3>
-                </div>
-                {!data.loaded ? (
-                  <div style={{ textAlign: "center" }}>
-                    <CircularProgress size={40} />
-                  </div>
-                ) : data.visitorData ? (
-                  <WorldMap data={data.visitorData} className="margin-auto" />
-                ) : null}
-              </div>
-              <div className="form-box shadow-border table-box">
-                <h3>Logins</h3>
-                {data.loaded ? (
-                  <LoginsTable data={data.visitorData} />
-                ) : (
-                  <div style={{ textAlign: "center" }}>
-                    <CircularProgress size={40} className="margin-auto" />
-                  </div>
-                )}
-              </div>
-            </div>
-          ) : (
-            <AccessDeniedScreen
-              message="Please contact the event owner to add you as a collaborator for this
-          event."
-            />
-          )
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
+          ) : null
         }
       />
     </div>

@@ -35,10 +35,7 @@ const Design = ({ event, model, fetchModel }) => {
             event.permissions?.design ? (
               <PageEditor key={model} page={page} />
             ) : (
-              <AccessDeniedScreen
-                message="Please contact the event owner to add you as a collaborator for this
-              event."
-              />
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
             )
           ) : (
             <CircularProgress style={{ marginTop: "30vh" }} />

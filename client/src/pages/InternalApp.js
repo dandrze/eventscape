@@ -33,6 +33,7 @@ const InternalApp = (props) => {
   }, []);
 
   const fetchEventData = async () => {
+    console.log(targetEventId);
     if (targetEventId) {
       await props.setCurrentEvent(targetEventId);
     }
