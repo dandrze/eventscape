@@ -23,7 +23,7 @@ import Permissions from "./permissions";
 import Test from "./test";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
-import Dashboard from "./Dashboard";
+import Dashboard from "./dashboard";
 
 const InternalApp = (props) => {
   const urlParams = new URLSearchParams(window.location.search);
