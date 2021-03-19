@@ -15,6 +15,7 @@ import Communication from "./communication";
 import Registrations from "./registrations";
 import Analytics from "./analytics";
 import Messaging from "./messaging";
+import Plan from "./plan";
 import Preview from "./preview";
 import WebsiteSettings from "./websiteSettings";
 import AccountSettingsContact from "./account-settings-contact";
@@ -36,6 +37,7 @@ const InternalApp = (props) => {
           <Route exact path="/registrations" component={Registrations} />
           <Route exact path="/analytics" component={Analytics} />
           <Route exact path="/messaging" component={Messaging} />
+          <Route exact path="/plan" component={Plan} />
           <Route exact path="/preview/:event/:model" component={Preview} />
           <Route
             exact
