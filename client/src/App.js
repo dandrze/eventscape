@@ -49,9 +49,8 @@ function App(props) {
       return (
         <Redirect
           to={{
-            pathname: targetEventId
-              ? `/login?eventid=${targetEventId}`
-              : "/login",
+            pathname: "/login",
+            search: `?eventid=${targetEventId}`,
             state: { from: props.location },
           }}
         />

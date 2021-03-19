@@ -29,6 +29,8 @@ function Login(props) {
   const targetEventId = urlParams.get("eventid");
   const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/";
 
+  console.log(targetUrl);
+
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
   };

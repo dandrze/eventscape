@@ -7,7 +7,6 @@ import * as actions from "../actions";
 
 import Design from "./design";
 
-import Dashboard from "./dashboard";
 import My_Events from "./my-events";
 import Communication from "./communication";
 import Registrations from "./registrations";
@@ -24,6 +23,7 @@ import Permissions from "./permissions";
 import Test from "./test";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
+import Dashboard from "./Dashboard";
 
 const InternalApp = (props) => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -45,7 +45,7 @@ const InternalApp = (props) => {
     <div className="App">
       <header className="App-header">
         <Switch>
-          <Route exact path="/" component={Design} />
+          <Route exact path="/" component={Dashboard} />
           <Route exact path="/create-event" component={CreateEvent} />
           <Route exact path="/my-events" component={My_Events} />
           <Route exact path="/design/:page?" component={Design} />

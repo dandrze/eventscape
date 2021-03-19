@@ -478,6 +478,22 @@ function NavBar3(props) {
           </div>
           <Divider />
           <List>
+            <Link to="/">
+              <ListItem
+                button
+                key="dashboard"
+                className={clsx({
+                  [classes.highlight]: highlight === "dashboard",
+                })}
+              >
+                <Tooltip title="Dashboard">
+                  <ListItemIcon>
+                    <img src={ListMinimalIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Dashboard" />
+              </ListItem>
+            </Link>
             {props.event.permissions?.eventDetails ? (
               <Link to="/event-details">
                 <ListItem
