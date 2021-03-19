@@ -1,10 +1,12 @@
 import React, { useEffect, useState, forwardRef } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 
 import NavBar3 from "../components/navBar3.js";
 import MaterialTable from "material-table";
 import { makeStyles } from "@material-ui/core/styles";
-
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 import { Paper } from "@material-ui/core";
 import { toast } from "react-toastify";
 
@@ -43,27 +45,32 @@ const useStyles = makeStyles((theme) => ({
     margin: "20px 0px",
     minWidth: "100%",
   },
+  dropDown: {
+    width: "100%",
+  },
 }));
 
-const Permissions = (props) => {
+const Permissions = ({ event, user }) => {
   const classes = useStyles();
 
   const [data, setData] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
-  const [collaborator, setCollaborator] = useState({});
+  const [openTransferModal, setOpenTransferModal] = useState(false);
+  const [transferTarget, setTransferTarget] = useState({});
+  const [transferStatus, setTransferStatus] = useState("Not Started");
   const [
     newCollaboratorEmailAddress,
     setNewCollaboratorEmailAddress,
   ] = useState("");
 
   useEffect(() => {
-    if (props.event.id) fetchData();
-  }, [props.event]);
+    if (event.id) fetchData();
+  }, [event]);
 
   const fetchData = async () => {
     try {
       const res = await api.get("/api/event/permissions", {
-        params: { eventId: props.event.id },
+        params: { eventId: event.id },
       });
       console.log(res);
       setData(res.data);
@@ -246,7 +253,7 @@ const Permissions = (props) => {
   const handleAddCollaborator = async (emailAddress) => {
     try {
       const res = await api.post("/api/event/permissions", {
-        eventId: props.event.id,
+        eventId: event.id,
         emailAddress: newCollaboratorEmailAddress,
       });
     } catch (err) {
@@ -270,6 +277,25 @@ const Permissions = (props) => {
 
   const handleChangeNewCollaboratorEmailAddress = (event) => {
     setNewCollaboratorEmailAddress(event.target.value);
+  };
+
+  const handleClickTransfer = () => {
+    setOpenTransferModal(true);
+  };
+
+  const handleChangeTransferTarget = (event) => {
+    setTransferTarget(event.target.value);
+  };
+
+  const handleTransferOwnership = async () => {
+    setTransferStatus("Loading");
+    const res = await api.post("/api/event/transfer-ownership", {
+      eventId: event.id,
+      oldAccountId: user.id,
+      newAccountId: transferTarget.AccountId,
+    });
+
+    setTransferStatus("Complete");
   };
 
   return (
@@ -301,14 +327,73 @@ const Permissions = (props) => {
           </div>
         }
       />
+      <Modal1
+        open={openTransferModal}
+        onClose={() => setOpenTransferModal(false)}
+        title="Transfer Ownership"
+        content={
+          transferStatus === "Not Started" ? (
+            <div style={{ width: "400px" }}>
+              <Select
+                variant="outlined"
+                value={transferTarget}
+                onChange={handleChangeTransferTarget}
+                className={classes.dropDown}
+              >
+                {data.map((user, index) => {
+                  return (
+                    <MenuItem value={user}>
+                      {user.Account.emailAddress}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+              <div style={{ height: "40px" }} />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleTransferOwnership}
+                class="Button1"
+                style={{ width: "150px", alignSelf: "flex-end" }}
+              >
+                Transfer
+              </Button>
+            </div>
+          ) : transferStatus === "Loading" ? (
+            <CircularProgress />
+          ) : transferStatus === "Complete" ? (
+            <div style={{ width: "400px" }}>
+              <p>Your transfer is complete.</p>
+              <div style={{ height: "40px" }} />
+              <a href="/">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  class="Button1"
+                  style={{ width: "150px", alignSelf: "flex-end" }}
+                >
+                  Finish
+                </Button>
+              </a>
+            </div>
+          ) : (
+            <p>Unexpected error. Please close the popup and try again.</p>
+          )
+        }
+      />
       <NavBar3
         displaySideNav="true"
         highlight="permissions"
         content={
           // only display content once the event is loaded
-          props.event.id ? (
-            props.event.permissions?.role === "owner" ? (
+          event.id ? (
+            event.permissions?.role === "owner" ? (
               <div>
+                <div className="top-button-bar">
+                  <button className="Button1" onClick={handleClickTransfer}>
+                    Transfer Ownership
+                  </button>
+                </div>
                 <MaterialTable
                   title=""
                   columns={columns}
@@ -317,8 +402,7 @@ const Permissions = (props) => {
                   options={options}
                   icons={tableIcons}
                   editable={{
-                    isDeletable: (rowData) =>
-                      rowData.AccountId != props.user.id,
+                    isDeletable: (rowData) => rowData.AccountId != user.id,
                     onRowDelete: (oldData) =>
                       new Promise(async (resolve) => {
                         await handleDeleteCollaborator(oldData.id);
@@ -341,7 +425,7 @@ const Permissions = (props) => {
 };
 
 const mapStateToProps = (state) => {
-  return { email: state.email, event: state.event, user: state.user };
+  return { event: state.event, user: state.user };
 };
 
 export default connect(mapStateToProps, actions)(Permissions);

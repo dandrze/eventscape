@@ -557,6 +557,35 @@ router.post("/api/event/permissions", async (req, res, next) => {
   }
 });
 
+router.post("/api/event/transfer-ownership", async (req, res, next) => {
+  console.log(req.body);
+  const { eventId, oldAccountId, newAccountId } = req.body;
+
+  try {
+    const event = await Event.findByPk(eventId);
+    event.OwnerId = newAccountId;
+    console.log(event);
+    event.save();
+
+    const oldPermission = await Permission.findOne({
+      where: { EventId: eventId, AccountId: oldAccountId },
+    });
+    oldPermission.role = "collaborator";
+    oldPermission.save();
+
+    const newPermission = await Permission.findOne({
+      where: { EventId: eventId, AccountId: newAccountId },
+    });
+    console.log(newPermission);
+    newPermission.role = "owner";
+    newPermission.save();
+
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/api/event/permissions", async (req, res, next) => {
   const { eventId } = req.query;
 
