@@ -624,6 +624,22 @@ function NavBar3(props) {
                 <ListItemText primary="Messaging" />
               </ListItem>
             </Link>
+            <Link to="/plan">
+              <ListItem
+                button
+                key="plan"
+                className={clsx({
+                  [classes.highlight]: highlight === "plan",
+                })}
+              >
+                <Tooltip title="Plan">
+                  <ListItemIcon>
+                    <img src={ChatIcon} height="20px"></img>
+                  </ListItemIcon>
+                </Tooltip>
+                <ListItemText primary="Plan" />
+              </ListItem>
+            </Link>
           </List>
         </Drawer>
       )}
