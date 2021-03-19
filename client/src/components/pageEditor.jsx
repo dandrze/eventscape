@@ -23,6 +23,7 @@ const PageEditor = (props) => {
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [discardOpen, setDiscardOpen] = useState(false);
+  const [removeLogoErrorOpen, setRemoveLogoErrorOpen] = useState(false);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -64,6 +65,19 @@ const PageEditor = (props) => {
     setDiscardOpen(false);
   };
 
+  const handleRemoveLogoError = () => {
+    setRemoveLogoErrorOpen(true);
+  };
+
+  const handleRemoveLogoErrorClose = () => {
+    setRemoveLogoErrorOpen(false);
+  };
+
+  const handleRemoveLogoErrorContinue = () => {
+    setRemoveLogoErrorOpen(false);
+    // insert redirect to plan page
+  };
+
   const handleCancelChanges = async () => {
     const modelId =
       props.page === "event"
@@ -102,9 +116,18 @@ const PageEditor = (props) => {
         continueText="Yes"
       />
 
+      <AlertModal
+        open={removeLogoErrorOpen}
+        onClose={handleRemoveLogoErrorClose}
+        onContinue={handleRemoveLogoErrorContinue}
+        text="The remove logo option is available for events on a Pro plan. Please upgrade to continue."
+        closeText="Close"
+        continueText="Upgrade Now"
+      />
+
       <div className="design">
         <div className="top-button-bar pt-5">
-        <button className="Button1" style={{ marginRight: "15px" }}>Remove Eventscape Branding</button>
+        <button className="Button1" onClick={handleRemoveLogoError} style={{ marginRight: "15px" }}>Remove Eventscape Logo</button>
           <Link
             className="button-bar-left"
             to={() =>
