@@ -53,6 +53,7 @@ import ChatIcon from "../icons/chat.svg";
 import PollIcon from "../icons/poll-1.svg";
 import CharChartIcon from "../icons/bar-chart.svg";
 import TeamIcon from "../icons/team.svg";
+import DashboardIcon from "../icons/dashboard.svg";
 
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -488,7 +489,7 @@ function NavBar3(props) {
               >
                 <Tooltip title="Dashboard">
                   <ListItemIcon>
-                    <img src={ListMinimalIcon} height="20px"></img>
+                    <img src={DashboardIcon} height="20px"></img>
                   </ListItemIcon>
                 </Tooltip>
                 <ListItemText primary="Dashboard" />

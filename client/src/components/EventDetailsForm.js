@@ -255,6 +255,8 @@ function Event_Details({
         color,
         registrationRequired
       );
+
+      console.log(response);
     } else {
       response = await createEvent(
         eventTitle,

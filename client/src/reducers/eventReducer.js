@@ -7,8 +7,11 @@ export default function (state = {}, action) {
         ...action.payload,
       };
     case UPDATE_EVENT:
+      // update the event in reducer
+      // keep original permissions
       return {
         ...action.payload,
+        permissions: state.permissions,
       };
     default:
       return state;

@@ -564,7 +564,6 @@ router.post("/api/event/transfer-ownership", async (req, res, next) => {
   try {
     const event = await Event.findByPk(eventId);
     event.OwnerId = newAccountId;
-    console.log(event);
     event.save();
 
     const oldPermission = await Permission.findOne({
@@ -576,8 +575,14 @@ router.post("/api/event/transfer-ownership", async (req, res, next) => {
     const newPermission = await Permission.findOne({
       where: { EventId: eventId, AccountId: newAccountId },
     });
-    console.log(newPermission);
     newPermission.role = "owner";
+    newPermission.eventDetails = true;
+    newPermission.design = true;
+    newPermission.polls = true;
+    newPermission.analytics = true;
+    newPermission.messaging = true;
+    newPermission.communication = true;
+    newPermission.registration = true;
     newPermission.save();
 
     res.status(200).send();

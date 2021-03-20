@@ -79,6 +79,8 @@ const Permissions = ({ event, user }) => {
     }
   };
 
+  console.log(data);
+
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
     Check: forwardRef((props, ref) => <Check {...props} ref={ref} />),
@@ -114,7 +116,8 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Role",
-      render: (rowData) => rowData.role,
+      defaultSort: "desc",
+      field: "role",
     },
     {
       title: "Event Details",
