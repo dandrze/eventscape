@@ -8,6 +8,7 @@ import { toast } from "react-toastify";
 import Modal1 from "./Modal1";
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import AlertModal from './AlertModal';
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -31,6 +32,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import api from "../api/server";
+import { props } from "bluebird";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -143,7 +145,7 @@ const BillingTable = (props) => {
       <Modal1
         open={openPricingMatrix}
         onClose={handleClosePricingMatrix}
-        content={<Sliders />}
+        content={<Sliders onClose={handleClosePricingMatrix}/>}
       />
       <MaterialTable
         title=""
@@ -158,6 +160,11 @@ const BillingTable = (props) => {
     </div>
   );
 };
+
+
+
+
+
 
 const useStyles = makeStyles({
   root: {
@@ -243,60 +250,119 @@ function valueLabelFormatTime(value) {
   return value + ' h';
 };
 
-const handleUpdatePlan = () => {
-  console.log(valuetextViewers);
-};
+
+
+
+
+
+
+
+
 
 const Sliders = (props) => {
   const classes = useStyles();
 
+  const [viewers, setViewers] = React.useState(
+    500
+  );
+
+  const [streamingTime, setStreamingTime] = React.useState(
+    1
+  );
+
+  const [essentialsAlertOpen, setEssentialsAlertOpen] = React.useState(false);
+
+  const handleChangeViewers = (event, newValue) => {
+    setViewers(newValue);
+  };
+
+  const handleChangeStreamingTime = (event, newValue) => {
+    setStreamingTime(newValue);
+  };
+
+  const handleUpdatePlan = () => {
+    props.onClose();
+    // insert save to db here
+  };
+
+  const openEssentialsAlert = () => {
+    setEssentialsAlertOpen(true);
+  };
+
+  const closeEssentialsAlert = () => {
+    setEssentialsAlertOpen(false);
+  };
+
+  const handleCancelPro = () => {
+    setEssentialsAlertOpen(false);
+    props.onClose();
+    // insert change db back to Essentials at $0
+  };
+
+  //Price Calculation:
+  const fixedPrice = 250; // Fixed price per event. Covers support time and other costs.
+  const variablePrice = .15 // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs. 
+  const Price = fixedPrice + (viewers * streamingTime * variablePrice); // Price formula
+
   return (
     <>
-    <div className={classes.root}>
-      <Typography id="unique-viewers-slider" align="center" gutterBottom>
-        Unique Viewers
-      </Typography>
-      <br></br>
-      <br></br>
-      <Slider
-        defaultValue={500}
-        valueLabelFormat={valueLabelFormatViewers}
-        getAriaValueText={valuetextViewers}
-        aria-labelledby="unique-viewers-slider"
-        min={500}
-        max={5000}
-        step={null}
-        valueLabelDisplay="on"
-        marks={marksViewers}
+      <AlertModal
+        open={essentialsAlertOpen}
+        onClose={handleCancelPro}
+        onContinue={closeEssentialsAlert}
+        text="If you cancel your Pro plan, you will lose access to advanced features such as the ability to control branding, custom registration fields, advanced analytics, and more. Are you sure you want to cancel? "
+        closeText="Cancel Pro Plan"
+        continueText="Go Back"
       />
-      <br></br>
-      <br></br>
+      <div className={classes.root}>
+        <Typography id="unique-viewers-slider" align="center" gutterBottom>
+          Unique Viewers
+        </Typography>
+        <br></br>
+        <br></br>
+        <Slider
+          value={viewers}
+          onChange={handleChangeViewers}
+          valueLabelFormat={viewers} // previously valueLabelFormatViewers
+          getAriaValueText={valuetextViewers}
+          aria-labelledby="unique-viewers-slider"
+          min={500}
+          max={5000}
+          step={null}
+          valueLabelDisplay="on"
+          marks={marksViewers}
+        />
+        <br></br>
+        <br></br>
 
-      <Typography id="streaming-time-slider" align="center" gutterBottom>
-        Streaming Time
-      </Typography>
-      <br></br>
-      <br></br>
-      <Slider
-        defaultValue={1}
-        valueLabelFormat={valueLabelFormatTime}
-        getAriaValueText={valuetextTime}
-        aria-labelledby="streaming-time-slider"
-        min={1}
-        max={10}
-        step={null}
-        valueLabelDisplay="on"
-        marks={marksTime}
-      />
-    </div>
-    <div style={{ textAlign: 'center' }}>
-      <br></br>
-      <p>{'Price: $400 USD ' + {45} }</p>
-      <br></br>
-      <div>
-        <button className="Button1" onClick={handleUpdatePlan}>Update Plan</button>
+        <Typography id="streaming-time-slider" align="center" gutterBottom>
+          Streaming Time
+        </Typography>
+        <br></br>
+        <br></br>
+        <Slider
+          value={streamingTime}
+          onChange={handleChangeStreamingTime}
+          valueLabelFormat={valueLabelFormatTime}
+          getAriaValueText={valuetextTime}
+          aria-labelledby="streaming-time-slider"
+          min={1}
+          max={10}
+          step={null}
+          valueLabelDisplay="on"
+          marks={marksTime}
+        />
       </div>
-    </div>
+      <div style={{ textAlign: 'center' }}>
+        <br></br>
+        <p>{viewers + ' viewers for ' + streamingTime + ' hour(s)'}</p>
+        <p>{'$' + Price + ' USD'}</p>
+        <br></br>
+        <button className="Button1" onClick={handleUpdatePlan}>Update Plan</button>
+        <br></br>
+        <br></br>
+        <div className="link1" onClick={openEssentialsAlert}>Cancel Pro Plan</div>
+      </div>
     </>
   );
 };
