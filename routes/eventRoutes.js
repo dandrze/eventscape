@@ -520,13 +520,13 @@ router.post("/api/event/permissions", async (req, res, next) => {
   try {
     // if an account exists, we will add permissions to that account
     // if an account doesn't exist, we will create one with registrationComplete set to false. The user will need to complete registration
-    const [account, accountCreated] = await Account.findOrCreate({
+    const [targetAccount, targetAccountCreated] = await Account.findOrCreate({
       where: { emailAddress },
     });
 
     const [permission, permissionCreated] = await Permission.findOrCreate({
       where: {
-        AccountId: account.id,
+        AccountId: targetAccount.id,
         EventId: eventId,
       },
     });
@@ -545,7 +545,7 @@ router.post("/api/event/permissions", async (req, res, next) => {
       account.lastName,
       event.title,
       event.id,
-      accountCreated
+      targetAccountCreated
     );
 
     console.log("account created with " + emailAddress);

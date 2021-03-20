@@ -13,6 +13,8 @@ import { checkEmailExists } from "../actions";
 import CreatePassword from "../components/CreatePassword";
 import { CircularProgress } from "@material-ui/core";
 
+import { isValidEmailFormat } from "../hooks/validation";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
@@ -63,6 +65,8 @@ function Create_Account(props) {
       setLastNameErrorText("Please enter a last name");
     } else if (!emailAddress) {
       setEmailErrorText("Please enter your email address");
+    } else if (!isValidEmailFormat(emailAddress)) {
+      setEmailErrorText("Please enter a valid email address");
     } else if (await emailExists()) {
       setEmailErrorText(
         "Account already exists with this email address. Please login or contact support."

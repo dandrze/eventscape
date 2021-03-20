@@ -40,6 +40,8 @@ import Modal1 from "../components/Modal1";
 import TableActionButton from "../components/TableActionButton";
 import AccessDeniedScreen from "../components/AccessDeniedScreen.js";
 
+import { isValidEmailFormat } from "../hooks/validation";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
@@ -62,6 +64,7 @@ const Permissions = ({ event, user }) => {
     newCollaboratorEmailAddress,
     setNewCollaboratorEmailAddress,
   ] = useState("");
+  const [newEmailErrorText, setNewEmailErrorText] = useState("");
 
   useEffect(() => {
     if (event.id) fetchData();
@@ -72,14 +75,11 @@ const Permissions = ({ event, user }) => {
       const res = await api.get("/api/event/permissions", {
         params: { eventId: event.id },
       });
-      console.log(res);
       setData(res.data);
     } catch (err) {
       toast.error(err.response.data.message);
     }
   };
-
-  console.log(data);
 
   const tableIcons = {
     Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -231,14 +231,6 @@ const Permissions = ({ event, user }) => {
     },
   ];
 
-  const handleCloseAddModal = () => {
-    setOpenAddModal(false);
-  };
-
-  const handleSubmitEditor = async () => {
-    setOpenAddModal(false);
-  };
-
   const handleChangeCheckbox = async (event, rowData) => {
     // update the checkbox in the database
     try {
@@ -253,7 +245,12 @@ const Permissions = ({ event, user }) => {
     }
   };
 
-  const handleAddCollaborator = async (emailAddress) => {
+  const handleAddCollaborator = async () => {
+    if (!isValidEmailFormat(newCollaboratorEmailAddress)) {
+      return setNewEmailErrorText("Please enter a valid email address.");
+    } else {
+      setNewEmailErrorText("");
+    }
     try {
       const res = await api.post("/api/event/permissions", {
         eventId: event.id,
@@ -262,6 +259,7 @@ const Permissions = ({ event, user }) => {
     } catch (err) {
       toast.error(err.response.data.message);
     }
+    setNewCollaboratorEmailAddress("");
     setOpenAddModal(false);
     await fetchData();
   };
@@ -316,6 +314,7 @@ const Permissions = ({ event, user }) => {
                 value={newCollaboratorEmailAddress}
                 onChange={handleChangeNewCollaboratorEmailAddress}
               />
+              <div className="errorMessage">{newEmailErrorText}</div>
             </FormControl>
             <div style={{ height: "40px" }} />
             <Button

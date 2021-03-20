@@ -90,17 +90,18 @@ export const fetchEvent = () => async (dispatch, getState) => {
   try {
     const event = await api.get("/api/event/current");
 
-    const permissions = await api.get("/api/event/permissions", {
-      params: { eventId: event.data.id },
-    });
+    // if an event exists, get the permissions and update redux
+    if (event.data) {
+      const permissions = await api.get("/api/event/permissions", {
+        params: { eventId: event.data.id },
+      });
 
-    const accountId = getState().user.id;
+      const accountId = getState().user.id;
 
-    const currentUserPermissions = permissions.data.filter(
-      (permission) => permission.AccountId === accountId
-    );
+      const currentUserPermissions = permissions.data.filter(
+        (permission) => permission.AccountId === accountId
+      );
 
-    if (event) {
       dispatch({
         type: FETCH_EVENT,
         payload: { ...event.data, permissions: currentUserPermissions[0] },
