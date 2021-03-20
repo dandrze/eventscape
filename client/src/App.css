@@ -770,3 +770,7 @@ select:focus {
   text-decoration: line-through;
   color: red;
 }
+
+.rotate90 {
+  transform: rotate(-90deg);
+}
