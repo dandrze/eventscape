@@ -241,7 +241,7 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
       event = await Event.findByPk(account.currentEventId);
     } else {
       // else just fetch the first event they are an owner of as a fallback
-      event = await Event.findOne({ where: { ownerId: accountId } });
+      event = await Event.findOne({ where: { OwnerId: accountId } });
     }
 
     res.status(200).send(event);
