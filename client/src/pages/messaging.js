@@ -33,6 +33,9 @@ const Messaging = (props) => {
 
   return (
     <div>
+      <div id="accountId" style={{ display: "none" }}>
+        123
+      </div>
       <NavBar3
         displaySideNav="true"
         highlight="messaging"
