@@ -22,6 +22,8 @@ const InternalApp = lazy(() => import("./pages/InternalApp"));
 
 function App(props) {
   const path = window.location.host.split(".");
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
 
   const [dataFetched, setDataFetched] = useState(false);
 
@@ -48,6 +50,7 @@ function App(props) {
         <Redirect
           to={{
             pathname: "/login",
+            search: `?eventid=${targetEventId}`,
             state: { from: props.location },
           }}
         />
@@ -85,7 +88,11 @@ function App(props) {
           >
             <Switch>
               <Route exact path="/login" component={Login} />
-              <Route exact path="/create-account" component={Create_Account} />
+              <Route
+                exact
+                path="/create-account/:email?"
+                component={Create_Account}
+              />
               <Route exact path="/reset-password" component={ResetPassword} />
               <Route exact path="/ScotiabankGillerPrize" component={Giller} />
               <Route

@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import api from "../api/server";
-import { FETCH_EVENT, CREATE_EVENT, UPDATE_EVENT } from "./types";
+import { FETCH_EVENT, UPDATE_EVENT } from "./types";
 import { saveModel } from "./modelActions";
 import {
   regPageModelTemplate,
@@ -38,10 +38,7 @@ export const createEvent = (
       communications: emaillistTemplate(startDate),
     });
 
-    await dispatch({
-      type: CREATE_EVENT,
-      payload: res.data,
-    });
+    await dispatch(fetchEvent());
     return true;
   } catch (err) {
     toast.error("Error when creating new event: " + err.response.data.message);
@@ -88,12 +85,27 @@ export const updateEvent = (
   }
 };
 
-export const fetchEvent = () => async (dispatch) => {
+export const fetchEvent = () => async (dispatch, getState) => {
   // call the api and return the event in json
   try {
     const event = await api.get("/api/event/current");
-    if (event) {
-      dispatch({ type: FETCH_EVENT, payload: event.data });
+
+    // if an event exists, get the permissions and update redux
+    if (event.data) {
+      const permissions = await api.get("/api/event/permissions", {
+        params: { eventId: event.data.id },
+      });
+
+      const accountId = getState().user.id;
+
+      const currentUserPermissions = permissions.data.filter(
+        (permission) => permission.AccountId === accountId
+      );
+
+      dispatch({
+        type: FETCH_EVENT,
+        payload: { ...event.data, permissions: currentUserPermissions[0] },
+      });
       return event;
     } else {
       return null;

@@ -13,7 +13,7 @@ export const fetchEventList = () => async (dispatch) => {
       dispatch({ type: FETCH_EVENT_LIST, payload: eventList.data });
     }
 
-    return true;
+    return eventList.data;
   } catch (err) {
     toast.error("Error fetching event list: " + err.toString());
     return false;
@@ -45,10 +45,15 @@ export const deleteEvent = (id) => async (dispatch) => {
   }
 };
 
-export const setCurrentEvent = (id) => async (dispatch) => {
-  const res = await api.put("/api/event/id/make-current", { id });
+export const setCurrentEvent = (eventId) => async (dispatch) => {
+  try {
+    const response = await api.put("/api/event/id/make-current", { eventId });
 
-  return true;
+    return true;
+  } catch (err) {
+    toast.error(err.response.data.message, { autoClose: 5000 });
+    return false;
+  }
 };
 
 export const restoreEvent = (id) => async (dispatch) => {

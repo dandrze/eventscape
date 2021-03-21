@@ -27,7 +27,6 @@ export const signInLocal = (username, password) => async (dispatch) => {
 export const fetchUser = () => async (dispatch) => {
   try {
     const res = await api.get("/auth/current-user");
-    console.log(res.data);
 
     dispatch({ type: FETCH_USER, payload: res.data });
 

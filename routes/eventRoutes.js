@@ -11,8 +11,11 @@ const {
   PageModel,
   PageSection,
   Communication,
+  Permission,
+  Account,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
+const { inviteUser } = require("../services/Invitations");
 
 const { clearCache } = require("../services/sequelizeRedis");
 
@@ -33,12 +36,9 @@ router.post("/api/event", async (req, res, next) => {
     communications,
   } = req.body;
 
-  const AccountId = req.user.id;
+  const accountId = req.user.id;
 
   try {
-    // set all other events isCurrent to false so we can make our new event current
-    await Event.update({ isCurrent: false }, { where: { AccountId } });
-
     // Store a new model in the model table for the registration page
     const dbRegModel = await PageModel.create();
 
@@ -54,12 +54,11 @@ router.post("/api/event", async (req, res, next) => {
       endDate,
       timeZone,
       primaryColor,
-      isCurrent: true,
-      AccountId,
       RegPageModelId: dbRegModel.id,
       EventPageModelId: dbEventModel.id,
       status: statusOptions.ACTIVE,
       registrationRequired,
+      OwnerId: accountId,
     });
 
     // create a default chatroom
@@ -117,6 +116,25 @@ router.post("/api/event", async (req, res, next) => {
       });
     }
 
+    // set this event as the currently editing event for this account
+    const account = await Account.findByPk(accountId);
+    account.currentEventId = event.id;
+    account.save();
+
+    // add a permission in the permissions table for the event creator
+    await Permission.create({
+      EventId: event.id,
+      AccountId: accountId,
+      role: "owner",
+      eventDetails: true,
+      communication: true,
+      registration: true,
+      analytics: true,
+      messaging: true,
+      design: true,
+      polls: true,
+    });
+
     res.status(200).send(event);
   } catch (error) {
     next(error);
@@ -147,7 +165,6 @@ router.post("/api/event/duplicate", async (req, res, next) => {
       endDate: originalEvent.endDate,
       timeZone: originalEvent.timeZone,
       primaryColor: originalEvent.primaryColor,
-      isCurrent: false,
       AccountId: originalEvent.AccountId,
       RegPageModelId: dbRegModel.id,
       EventPageModelId: dbEventModel.id,
@@ -214,11 +231,18 @@ router.post("/api/event/duplicate", async (req, res, next) => {
 });
 
 router.get("/api/event/current", requireAuth, async (req, res, next) => {
-  const AccountId = req.user.id;
+  const accountId = req.user.id;
   try {
-    const event = await Event.findOne({
-      where: { AccountId, isCurrent: true },
-    });
+    const account = await Account.findByPk(accountId);
+
+    var event;
+    // if the account has an event they are currently editting, then fetch that event
+    if (account.currentEventId) {
+      event = await Event.findByPk(account.currentEventId);
+    } else {
+      // else just fetch the first event they are an owner of as a fallback
+      event = await Event.findOne({ where: { OwnerId: accountId } });
+    }
 
     res.status(200).send(event);
   } catch (error) {
@@ -227,28 +251,41 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
 });
 
 router.put("/api/event/id/make-current", async (req, res, next) => {
-  const AccountId = req.user.id;
-  const { id } = req.body;
+  const accountId = req.user.id;
+  const { eventId } = req.body;
 
   try {
-    await Event.update({ isCurrent: false }, { where: { AccountId } });
+    const permission = await Permission.findOne({
+      where: { AccountId: accountId, EventId: eventId },
+    });
+    if (permission) {
+      const account = await Account.findByPk(accountId);
+      account.currentEventId = eventId;
+      await account.save();
 
-    const event = await Event.findByPk(id);
-    event.isCurrent = true;
-    await event.save();
-    clearCache(`Event:link:${event.link}`);
-
-    res.status(200).send();
+      res.status(200).send();
+    } else {
+      const event = await Event.findByPk(eventId);
+      res.status(400).send({
+        message: `You do not have permissions for the event titled: ${event.title}. Please contact the owner of this event to give you permissions.`,
+      });
+    }
   } catch (error) {
     next(error);
   }
 });
 
 router.get("/api/event/all", async (req, res, next) => {
-  const AccountId = req.user.id;
+  const accountId = req.user.id;
+  const events = [];
 
   try {
-    const events = await Event.findAll({ where: { AccountId } });
+    const permissions = await Permission.findAll({
+      where: { AccountId: accountId },
+    });
+    for (let permission of permissions) {
+      events.push(await Event.findByPk(permission.EventId));
+    }
 
     res.status(200).send(events);
   } catch (error) {
@@ -302,7 +339,7 @@ router.put("/api/event/id/status", async (req, res, next) => {
 });
 
 router.put("/api/event", async (req, res, next) => {
-  const userId = req.user.id;
+  const accountId = req.user.id;
 
   const {
     title,
@@ -317,9 +354,9 @@ router.put("/api/event", async (req, res, next) => {
   } = req.body;
 
   try {
-    const event = await Event.findOne({
-      where: { AccountId: userId, isCurrent: true },
-    });
+    const account = await Account.findByPk(accountId);
+    const event = await Event.findByPk(account.currentEventId);
+
     clearCache(`Event:link:${event.link}`);
 
     event.title = title;
@@ -333,8 +370,6 @@ router.put("/api/event", async (req, res, next) => {
     event.registrationRequired = registrationRequired;
 
     await event.save();
-
-    console.log(event);
 
     res.send(event);
   } catch (error) {
@@ -473,6 +508,155 @@ router.put("/api/event/chat-moderator", async (req, res, next) => {
     chatUser.save();
 
     res.status(200).send(chatUser);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/api/event/permissions", async (req, res, next) => {
+  const { eventId, emailAddress } = req.body;
+  const account = req.user;
+
+  try {
+    // if an account exists, we will add permissions to that account
+    // if an account doesn't exist, we will create one with registrationComplete set to false. The user will need to complete registration
+    const [targetAccount, targetAccountCreated] = await Account.findOrCreate({
+      where: { emailAddress },
+    });
+
+    const [permission, permissionCreated] = await Permission.findOrCreate({
+      where: {
+        AccountId: targetAccount.id,
+        EventId: eventId,
+      },
+    });
+
+    if (!permissionCreated) {
+      return res
+        .status(400)
+        .send({ message: "This user already has permissions to this event" });
+    }
+
+    const event = await Event.findByPk(eventId);
+
+    inviteUser(
+      emailAddress,
+      account.firstName,
+      account.lastName,
+      event.title,
+      event.id,
+      targetAccountCreated
+    );
+
+    console.log("account created with " + emailAddress);
+    // }
+
+    res.status(200).send(permission);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/api/event/transfer-ownership", async (req, res, next) => {
+  console.log(req.body);
+  const { eventId, oldAccountId, newAccountId } = req.body;
+
+  try {
+    const event = await Event.findByPk(eventId);
+    event.OwnerId = newAccountId;
+    event.save();
+
+    const oldPermission = await Permission.findOne({
+      where: { EventId: eventId, AccountId: oldAccountId },
+    });
+    oldPermission.role = "collaborator";
+    oldPermission.save();
+
+    const newPermission = await Permission.findOne({
+      where: { EventId: eventId, AccountId: newAccountId },
+    });
+    newPermission.role = "owner";
+    newPermission.eventDetails = true;
+    newPermission.design = true;
+    newPermission.polls = true;
+    newPermission.analytics = true;
+    newPermission.messaging = true;
+    newPermission.communication = true;
+    newPermission.registration = true;
+    newPermission.save();
+
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get("/api/event/permissions", async (req, res, next) => {
+  const { eventId } = req.query;
+
+  try {
+    const permissions = await Permission.findAll({
+      where: {
+        EventId: eventId,
+      },
+      include: Account,
+    });
+
+    res.status(200).send(permissions);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.delete("/api/event/permissions", async (req, res, next) => {
+  const { permissionId } = req.query;
+
+  try {
+    const response = await Permission.destroy({
+      where: {
+        id: permissionId,
+      },
+    });
+
+    res.status(200).send();
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.put("/api/event/permissions", async (req, res, next) => {
+  const { type, checked, permissionId } = req.body;
+
+  try {
+    const permission = await Permission.findByPk(permissionId);
+
+    switch (type) {
+      case "eventDetails":
+        permission.eventDetails = checked;
+        break;
+      case "design":
+        permission.design = checked;
+        break;
+      case "communication":
+        permission.communication = checked;
+        break;
+      case "registration":
+        permission.registration = checked;
+        break;
+      case "polls":
+        permission.polls = checked;
+        break;
+      case "analytics":
+        permission.analytics = checked;
+        break;
+      case "messaging":
+        permission.messaging = checked;
+        break;
+    }
+
+    permission.save();
+
+    res.status(200).send(permission);
   } catch (error) {
     next(error);
   }

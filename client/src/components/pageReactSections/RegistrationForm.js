@@ -15,6 +15,8 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Modal1 from "../Modal1";
 
+import { isValidEmailFormat } from "../../hooks/validation";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
@@ -98,10 +100,10 @@ function RegistrationForm({
   };
 
   const handleEmailBlur = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
     setEmailError(
-      re.test(emailAddress) ? "" : "Please enter a valid email address"
+      isValidEmailFormat(emailAddress)
+        ? ""
+        : "Please enter a valid email address"
     );
   };
 
@@ -152,9 +154,7 @@ function RegistrationForm({
   };
 
   const handleResendEmailClick = async () => {
-    const mailFormat = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
+    if (!emailAddressReSend || !isValidEmailFormat(emailAddressReSend)) {
       setEmailErrorText("Please enter valid email address");
     } else {
       const registration = await fetchRegistration(

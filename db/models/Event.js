@@ -8,7 +8,6 @@ const Event = sequelize.define("Event", {
   category: Sequelize.TEXT,
   timeZone: Sequelize.TEXT,
   primaryColor: Sequelize.TEXT,
-  isCurrent: Sequelize.BOOLEAN,
   startDate: Sequelize.DATE,
   endDate: Sequelize.DATE,
   registrationRequired: Sequelize.BOOLEAN,

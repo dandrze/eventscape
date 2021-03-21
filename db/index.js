@@ -18,6 +18,7 @@ const ChatQuestion = require("./models/ChatQuestion");
 const Poll = require("./models/Poll");
 const PollOption = require("./models/PollOption");
 const PollResponse = require("./models/PollResponse");
+const Permission = require("./models/Permission");
 
 ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
@@ -51,8 +52,14 @@ SiteVisitor.belongsTo(Registration);
 Event.hasMany(Registration);
 Registration.belongsTo(Event);
 
+// Old 1-1 mapping, to delete after new mapping in place
 Event.belongsTo(Account);
 Account.hasMany(Event);
+
+// new multi account mapping
+Permission.belongsTo(Event);
+Permission.belongsTo(Account);
+Event.belongsTo(Account, { as: "Owner" });
 
 Event.belongsTo(PageModel, { as: "EventPageModel" });
 Event.belongsTo(PageModel, { as: "RegPageModel" });
@@ -79,6 +86,10 @@ PollResponse.belongsTo(SiteVisitor);
 PollResponse.belongsTo(PollOption);
 
 //sequelize.sync({ alter: true });
+//Permission.sync({ alter: true });
+//Account.sync({ alter: true });
+//Event.sync({ alter: true });
+
 /* Poll.sync({ alter: true });
 PollOption.sync({ alter: true });
 PollResponse.sync({ alter: true });
@@ -122,5 +133,6 @@ module.exports = {
     Poll,
     PollOption,
     PollResponse,
+    Permission,
   },
 };
