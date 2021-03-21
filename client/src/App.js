@@ -28,8 +28,6 @@ function App({ user, location, fetchUser, attendee }) {
 
   const isApp = path[0] === "app";
 
-  const tawkPropertyIdForEvent = "60577b5cf7ce182709325cc4";
-  const tawkKeyForEvent = process.env.REACT_APP_TAWK_KEY_EVENT;
   const tawkPropertyIdForApp = "60560b08f7ce182709322202";
   const tawkKeyForApp = process.env.REACT_APP_TAWK_KEY_APP;
 
