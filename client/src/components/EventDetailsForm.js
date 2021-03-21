@@ -170,11 +170,9 @@ function Event_Details({
     setSelectedStartDate(date);
 
     // if the new date is after the end date, push the end date 1 day after this new start date
-    if (date > selectedEndDate) {
+    if (date > new Date(selectedEndDate)) {
       const pushedDate = new Date();
-      pushedDate.setDate(date.getDate() + 1);
-      pushedDate.setHours(date.getHours());
-      pushedDate.setMinutes(date.getMinutes());
+      pushedDate.setTime(date.getTime() + 1000 * 60 * 60 * 24);
       setSelectedEndDate(pushedDate);
     }
   };
