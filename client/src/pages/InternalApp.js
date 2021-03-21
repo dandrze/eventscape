@@ -29,6 +29,8 @@ const InternalApp = ({ fetchEvent, user }) => {
     initTawk();
   }, [user]);
 
+  console.log(process.env.REACT_APP_TAWK_URL);
+
   const initTawk = () => {
     // initializes the tawk.to chat support widget
     if (!window) {
