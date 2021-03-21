@@ -61,9 +61,9 @@ const FormBuilder = (props) => {
     {
       key: "RadioButtons",
       canHaveAnswer: true,
-      name: "Multiple Choice",
+      name: "Radio Buttons",
       icon: "far fa-dot-circle",
-      label: "Multiple Choice Label",
+      label: "Radio Buttons Label",
       field_name: "radiobuttons_",
       options: [],
     },
