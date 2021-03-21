@@ -57,6 +57,7 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
+import InvoiceIcon from "../icons/invoice3.svg";
 
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
@@ -634,7 +635,7 @@ function NavBar3(props) {
               >
                 <Tooltip title="Plan">
                   <ListItemIcon>
-                    <img src={ChatIcon} height="20px"></img>
+                    <img src={InvoiceIcon} height="20px"></img>
                   </ListItemIcon>
                 </Tooltip>
                 <ListItemText primary="Plan" />

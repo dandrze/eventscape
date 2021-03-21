@@ -75,7 +75,7 @@ const PageEditor = (props) => {
 
   const handleRemoveLogoErrorContinue = () => {
     setRemoveLogoErrorOpen(false);
-    // insert redirect to plan page
+    props.history.push("/plan")
   };
 
   const handleCancelChanges = async () => {

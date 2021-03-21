@@ -10,6 +10,7 @@ import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import AlertModal from './AlertModal';
 
+
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -201,6 +202,10 @@ const marksViewers = [
     value: 5000,
     //label: '5000',
   },
+  {
+    value: 5500,
+    //label: '5000',
+  },
 ];
 
 function valuetextViewers(value) {
@@ -208,7 +213,11 @@ function valuetextViewers(value) {
 };
 
 function valueLabelFormatViewers(value) {
-  return value;
+  if (value <= 5000) {
+    return value;
+  } else {
+    return '5k+'
+  }
 };
 
 const marksTime = [
@@ -237,7 +246,7 @@ const marksTime = [
     //label: '8 h',
   },
   {
-    value: 10,
+    value: 9,
     //label: '8+ h',
   },
 ];
@@ -247,7 +256,11 @@ function valuetextTime(value) {
 };
 
 function valueLabelFormatTime(value) {
-  return value + ' h';
+  if (value <= 8) {
+    return value + ' h';
+  } else {
+    return '8+ h'
+  }
 };
 
 
@@ -301,8 +314,9 @@ const Sliders = (props) => {
 
   //Price Calculation:
   const fixedPrice = 250; // Fixed price per event. Covers support time and other costs.
-  const variablePrice = .15 // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs. 
+  const variablePrice = 0.10 // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs. 
   const Price = fixedPrice + (viewers * streamingTime * variablePrice); // Price formula
+  const contactUs = (viewers > 5000) || (streamingTime > 8); // Contact us for events with over 5000 viewers or 8 hours of streaming time. 
 
   return (
     <>
@@ -316,18 +330,18 @@ const Sliders = (props) => {
       />
       <div className={classes.root}>
         <Typography id="unique-viewers-slider" align="center" gutterBottom>
-          Unique Viewers
+          Maximum Viewers
         </Typography>
         <br></br>
         <br></br>
         <Slider
           value={viewers}
           onChange={handleChangeViewers}
-          valueLabelFormat={viewers} // previously valueLabelFormatViewers
+          valueLabelFormat={valueLabelFormatViewers} // previously valueLabelFormatViewers
           getAriaValueText={valuetextViewers}
           aria-labelledby="unique-viewers-slider"
           min={500}
-          max={5000}
+          max={5500}
           step={null}
           valueLabelDisplay="on"
           marks={marksViewers}
@@ -347,7 +361,7 @@ const Sliders = (props) => {
           getAriaValueText={valuetextTime}
           aria-labelledby="streaming-time-slider"
           min={1}
-          max={10}
+          max={9}
           step={null}
           valueLabelDisplay="on"
           marks={marksTime}
@@ -355,10 +369,27 @@ const Sliders = (props) => {
       </div>
       <div style={{ textAlign: 'center' }}>
         <br></br>
-        <p>{viewers + ' viewers for ' + streamingTime + ' hour(s)'}</p>
-        <p>{'$' + Price + ' USD'}</p>
-        <br></br>
-        <button className="Button1" onClick={handleUpdatePlan}>Update Plan</button>
+        <p>{valueLabelFormatViewers(viewers) + ' viewers for ' + valueLabelFormatTime(streamingTime) + 'our(s)'}</p>
+        {contactUs === false && (
+          <>
+            <p>{'$' + Price + ' USD'}</p>
+            <span style={{ color: 'grey' }}>
+              *additional viewers or time will be billed <br></br>at $.01 per viewer per minute.
+            </span>
+            <br></br>
+            <br></br>
+            <button className="Button1" onClick={handleUpdatePlan}>Update Plan</button>
+          </>
+        )}
+        {contactUs === true && (
+          <>
+          <p>Contact us for a price!</p>
+          <br></br> 
+          <br></br>
+          <br></br>
+          <button className="Button1" >Contact Us</button>
+          </>
+        )}
         <br></br>
         <br></br>
         <div className="link1" onClick={openEssentialsAlert}>Cancel Pro Plan</div>
