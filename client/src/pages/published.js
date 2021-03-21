@@ -16,6 +16,8 @@ import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
 import LongLoadingScreen from "../components/LongLoadingScreen";
+import BrandingTop from "../components/BrandingTop";
+import BrandingBottom from "../components/BrandingBottom";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -114,6 +116,7 @@ const Published = (props) => {
           <title>{props.event.title}</title>
         </Helmet>
         <style>{theme(props.event.primaryColor)}</style>
+        <BrandingTop />
         <ul>
           {props.model.sections.map(function (section) {
             return section.isReact ? (
@@ -133,6 +136,7 @@ const Published = (props) => {
             );
           })}
         </ul>
+        <BrandingBottom />
       </div>
     );
   }

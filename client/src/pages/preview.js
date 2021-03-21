@@ -6,6 +6,8 @@ import { useParams } from "react-router-dom";
 import "froala-editor/css/froala_style.min.css";
 import mapReactComponent from "../components/mapReactComponent";
 import theme from "../templates/theme";
+import BrandingTop from "../components/BrandingTop";
+import BrandingBottom from "../components/BrandingBottom";
 
 const Preview = (props) => {
   const { event, model } = useParams();
@@ -23,6 +25,7 @@ const Preview = (props) => {
   return (
     <div className="fr-view live-page-container">
       <style>{theme(props.event.primaryColor)}</style>
+      <BrandingTop />
       <ul>
         {props.model.sections.map(function (section) {
           return section.isReact ? (
@@ -41,6 +44,7 @@ const Preview = (props) => {
           );
         })}
       </ul>
+      <BrandingBottom />
     </div>
   );
 };
