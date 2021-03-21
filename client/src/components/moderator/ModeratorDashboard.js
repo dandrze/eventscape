@@ -111,6 +111,8 @@ const ModeratorDashboard = ({
       params: { roomId: room.id },
     });
 
+    console.log(chatMessages);
+
     const history = chatMessages.data.map((chatMessage) => {
       return {
         Message: chatMessage.text,
@@ -118,8 +120,7 @@ const ModeratorDashboard = ({
           dateStyle: "long",
           timeStyle: "long",
         }),
-        "First Name": chatMessage.ChatUser.Registration?.firstName || "",
-        "Last Name": chatMessage.ChatUser.Registration?.lastName || "",
+        Name: chatMessage.ChatUser.name || "",
         "Email Address": chatMessage.ChatUser.Registration?.emailAddress || "",
       };
     });
@@ -139,7 +140,7 @@ const ModeratorDashboard = ({
           dateStyle: "long",
           timeStyle: "long",
         }),
-        Answered: question.isChecked,
+        Checked: question.isChecked,
         "First Name": question.ChatUser.Registration?.firstName || "",
         "Last Name": question.ChatUser.Registration?.lastName || "",
         "Email Address": question.ChatUser.Registration?.emailAddress || "",

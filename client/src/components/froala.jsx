@@ -145,12 +145,11 @@ const Froala = (props) => {
           "emoticons",
           "insertVideo",
           //"insertTable", // Not currenlty allowing input into the table
-          "html",
         ],
         buttonsVisible: 3,
       },
       moreMisc: {
-        buttons: ["undo", "redo"],
+        buttons: ["undo", "redo", "html"],
         buttonsVisible: 3,
       },
     },
