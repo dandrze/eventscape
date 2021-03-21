@@ -32,8 +32,18 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Dashboard = ({ event }) => {
+const Dashboard = ({ event, registration, fetchRegistrations }) => {
   const classes = useStyles();
+
+  useEffect(() => {
+    fetchDataAsync();
+  }, [event]);
+
+  const fetchDataAsync = async () => {
+    if (event.id) {
+      fetchRegistrations(event.id);
+    }
+  };
 
   return (
     <div className="shadow-border container-width">
@@ -74,11 +84,7 @@ const Dashboard = ({ event }) => {
               <div style={{ display: "flex", margin: "1rem 0px" }}>
                 <div className={"shadow-border " + classes.halfCard}>
                   <h3>Total Registrations</h3>
-                  <h2>12</h2>
-                </div>
-                <div className={"shadow-border " + classes.halfCard}>
-                  <h3>Total Unique Viewers</h3>
-                  <h2>15</h2>
+                  <h2>{registration.data.length}</h2>
                 </div>
               </div>
               <div>Event Checklist</div>
@@ -109,7 +115,12 @@ const Dashboard = ({ event }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { email: state.email, event: state.event, user: state.user };
+  return {
+    email: state.email,
+    event: state.event,
+    user: state.user,
+    registration: state.registration,
+  };
 };
 
 export default connect(mapStateToProps, actions)(Dashboard);
