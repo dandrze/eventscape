@@ -4,11 +4,19 @@ import { FETCH_USER } from "./types";
 import Cookies from "universal-cookie";
 
 export const signInLocal = (username, password) => async (dispatch) => {
-  // response is {user, error}
+  const cookies = new Cookies();
+
   try {
     const res = await api.post("/auth/login/local", {
       username,
       password,
+    });
+
+    cookies.set("user", {
+      emailAddress: res.data.emailAddress,
+      id: res.data.id,
+      firstName: res.data.firstName,
+      lastName: res.data.lastName,
     });
 
     dispatch({ type: FETCH_USER, payload: res.data.user });
@@ -30,9 +38,13 @@ export const fetchUser = () => async (dispatch) => {
 
   try {
     const res = await api.get("/auth/current-user");
-    console.log(res.data);
 
-    cookies.set("accountId", res.data.id);
+    cookies.set("user", {
+      emailAddress: res.data.emailAddress,
+      id: res.data.id,
+      firstName: res.data.firstName,
+      lastName: res.data.lastName,
+    });
 
     dispatch({ type: FETCH_USER, payload: res.data });
 
