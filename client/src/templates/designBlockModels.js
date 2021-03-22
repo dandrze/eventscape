@@ -2,7 +2,9 @@ import { format } from "date-fns-tz";
 import { isSameDay } from "date-fns";
 
 export const heroBannerModel = (eventTitle = "default") => {
-  return `<div style="overflow: hidden;"><h1 class="title" >${eventTitle}</h1></div>
+  return `<div style="overflow: hidden">
+  <div class="hero-background" ><h1 class="title">${eventTitle}</h1></div>
+  </div>
 
     <style>
         .title {
@@ -10,15 +12,41 @@ export const heroBannerModel = (eventTitle = "default") => {
             font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
             font-weight: 300;
             font-size: 96px;
-            line-height: 1;
-            margin-left: 5%;
-            margin-right: 5%;
-            margin-top: 3%;
-            margin-bottom: 3%;
-            text-align: center;
         }
+        .hero-background {
+            background-image: url(https://s3.amazonaws.com/eventscape-assets/froala-uploads%2Faccount-1%2F1616366013302-background+orange.jpeg);
+            background-position: center;
+            height: 300px;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
     </style>
 `;
+};
+
+export const heroBannerModel1 = (eventTitle = "default") => {
+  return `<div style="overflow: hidden">
+    <img src="https://s3.amazonaws.com/eventscape-assets/froala-uploads%2Faccount-1%2F1616366013302-background+orange.jpeg" />
+    <div class="hero-title" style="position: absolute" ><h1 class="title">${eventTitle}</h1></div>
+    </div>
+  
+      <style>
+          .title {
+              padding: 0;
+              font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+              font-weight: 300;
+              font-size: 96px;
+          }
+          .hero-title {
+              position: absolute;
+              top: calc(50% - 48px);
+              text-align: center;
+              width: 100%;
+            }
+      </style>
+  `;
 };
 
 export const logoHeaderModel = () => {

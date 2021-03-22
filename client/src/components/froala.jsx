@@ -27,7 +27,7 @@ import "froala-editor/js/plugins/draggable.min.js";
 import "froala-editor/js/plugins/table.min.js";
 import "froala-editor/js/plugins/word_paste.min.js";
 import "froala-editor/js/plugins/quick_insert.min.js";
-//import "froala-editor/js/plugins/image_manager.min.js";
+import "froala-editor/js/plugins/image_manager.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
@@ -44,6 +44,7 @@ import "froala-editor/css/plugins/quick_insert.min.css";
 
 import * as actions from "../actions";
 import api from "../api/server";
+import { resolve } from "bluebird";
 
 const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
@@ -149,8 +150,8 @@ const Froala = (props) => {
         buttonsVisible: 3,
       },
       moreMisc: {
-        buttons: ["undo", "redo", "html"],
-        buttonsVisible: 3,
+        buttons: ["undo", "redo", "html", "updateHeroImage"],
+        buttonsVisible: 4,
       },
     },
     fontFamily: {
@@ -249,16 +250,33 @@ const Froala = (props) => {
   };
 
   // Custom button to add variables (WIP)
-  FroalaEditor.DefineIcon("startDate", { NAME: "plus", SVG_KEY: "add" });
-  FroalaEditor.RegisterCommand("startDate", {
-    title: "Insert Start Date",
+  FroalaEditor.DefineIcon("updateHeroImage", { NAME: "plus", SVG_KEY: "add" });
+  FroalaEditor.RegisterCommand("updateHeroImage", {
+    title: "Update Hero Image",
     focus: true,
     undo: true,
     refreshAfterCallback: true,
-    callback: function () {
-      this.html.insert("Event start date");
+    callback: async function () {
+      //this.html.insert("Event start date");
+      const oldHtml = this.html.get();
+      const newUrl = await imageManager(this);
+
+      console.log(newUrl);
+
+      const newHtml = oldHtml.replace(/url\(.*?\)/, newUrl);
+      this.html.set(newHtml);
     },
   });
+
+  const imageManager = (editor) => {
+    return new Promise(async (resolve, reject) => {
+      console.log(editor);
+
+      const result = await editor.imageManager.show((res) => console.log(res));
+      console.log(result);
+      resolve(123);
+    });
+  };
 
   return (
     <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>

@@ -14,6 +14,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import * as actions from "../actions";
 import Modal1 from "./Modal1";
 import DesignBlockSettings from "./designBlockSettings";
+import BackgroundImageSelector from "./BackgroundImageSelector";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,6 +42,7 @@ function DesignBlockToolbar(props) {
   const classes = useStyles();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const [openSettings, setOpenSettings] = React.useState(false);
+  const [openBackgroundImage, setOpenBackgroundImage] = React.useState(false);
   const [sectionTooltip, setSectionTooltip] = React.useState("");
 
   // UseEffect mimicks OnComponentDidMount
@@ -69,8 +71,7 @@ function DesignBlockToolbar(props) {
       props.section.reactComponent.name == "RegistrationForm");
 
   const handleClickDelete = () => {
-    if(props.model.sections.length >= 2) setDeleteConfirmOpen(true);
-    
+    if (props.model.sections.length >= 2) setDeleteConfirmOpen(true);
   };
 
   const handleCloseDelete = () => {
@@ -89,6 +90,10 @@ function DesignBlockToolbar(props) {
   const handleCloseSettings = () => {
     props.triggerSectionReactUpdate();
     setOpenSettings(false);
+  };
+
+  const handleClickEditBackgroundImage = () => {
+    setOpenBackgroundImage(true);
   };
 
   const handleClickMove = (offset) => {
@@ -127,6 +132,14 @@ function DesignBlockToolbar(props) {
             <div
               className="design-block-toolbar-button"
               onClick={handleClickDelete}
+            >
+              <DeleteOutlined />
+            </div>
+          </Tooltip>
+          <Tooltip title="Edit Background image">
+            <div
+              className="design-block-toolbar-button"
+              onClick={handleClickEditBackgroundImage}
             >
               <DeleteOutlined />
             </div>
@@ -184,6 +197,18 @@ function DesignBlockToolbar(props) {
           <DesignBlockSettings
             reactComponent={props.section.reactComponent}
             isReact={props.section.isReact}
+            sectionIndex={props.sectionIndex}
+            onClose={handleCloseSettings}
+          />
+        }
+      />
+
+      {/*Background Image Modal: */}
+      <Modal1
+        open={openBackgroundImage}
+        onClose={() => setOpenBackgroundImage(false)}
+        content={
+          <BackgroundImageSelector
             sectionIndex={props.sectionIndex}
             onClose={handleCloseSettings}
           />

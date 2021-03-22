@@ -1,5 +1,6 @@
 const express = require("express");
 const FroalaEditor = require("wysiwyg-editor-node-sdk/lib/froalaEditor.js");
+const AWS = require("aws-sdk");
 
 const keys = require("../config/keys");
 
@@ -28,6 +29,26 @@ router.get("/api/froala/get-s3-signature", async (req, res, next) => {
   var s3Hash = FroalaEditor.S3.getHash(configs);
 
   res.send(s3Hash);
+});
+
+router.get("/api/s3url", async (req, res, ext) => {
+  const s3 = new AWS.S3();
+  AWS.config.update({
+    accessKeyId: keys.awsAccessKey,
+    secretAccessKey: keys.awsSecretKey,
+  });
+
+  const myBucket = "eventscape-assets";
+  const myKey = "backgroundImages";
+  const signedUrlExpireSeconds = 60 * 5;
+
+  const url = s3.getSignedUrl("putObject", {
+    Bucket: myBucket,
+    Key: myKey,
+    Expires: signedUrlExpireSeconds,
+  });
+
+  res.status(200).send(url);
 });
 
 router.post("/api/froala/delete-image", async (req, res, next) => {

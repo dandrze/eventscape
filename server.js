@@ -69,6 +69,13 @@ function start() {
     res.download(file);
   });
 
+  app.use(
+    "/api/s3",
+    require("react-s3-uploader/s3router")({
+      bucket: "eventscape-assets",
+    })
+  );
+
   // universal error handling for all database calls
   app.use((err, req, res, next) => {
     logger.error(err.message);
