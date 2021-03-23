@@ -11,6 +11,7 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import CropOriginalIcon from "@material-ui/icons/CropOriginal";
 import * as actions from "../actions";
 import Modal1 from "./Modal1";
 import DesignBlockSettings from "./designBlockSettings";
@@ -141,7 +142,7 @@ function DesignBlockToolbar(props) {
               className="design-block-toolbar-button"
               onClick={handleClickEditBackgroundImage}
             >
-              <DeleteOutlined />
+              <CropOriginalIcon />
             </div>
           </Tooltip>
           {showSettings ? (
@@ -207,6 +208,7 @@ function DesignBlockToolbar(props) {
       <Modal1
         open={openBackgroundImage}
         onClose={() => setOpenBackgroundImage(false)}
+        title="Change Background Image"
         content={
           <BackgroundImageSelector
             sectionIndex={props.sectionIndex}

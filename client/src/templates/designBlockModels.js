@@ -15,7 +15,7 @@ export const heroBannerModel = (eventTitle = "default") => {
         }
         .hero-background {
             background-image: url(https://s3.amazonaws.com/eventscape-assets/froala-uploads%2Faccount-1%2F1616366013302-background+orange.jpeg);
-            background-position: center;
+            background-position: bottom;
             height: 300px;
             background-size: cover;
             display: flex;
