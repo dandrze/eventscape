@@ -87,7 +87,8 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                   <h2>{registration.data.length}</h2>
                 </div>
               </div>
-              <div>Event Checklist</div>
+
+              {/*  <div>Event Checklist</div>
               <div className={"shadow-border " + classes.fullCard}>
                 <h3>Prepare your registration emails.</h3>
                 <div className={classes.paragraphText}>
@@ -105,7 +106,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
               </div>
               <div className={"shadow-border " + classes.fullCard}>
                 Checklist item
-              </div>
+              </div> */}
             </div>
           ) : null
         }
