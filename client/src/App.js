@@ -71,7 +71,7 @@ function App({ user, location, fetchUser, attendee }) {
           to={{
             pathname: "/login",
             search: `?eventid=${targetEventId}`,
-            state: { from: props.location },
+            state: { from: location },
           }}
         />
       );
