@@ -2,8 +2,8 @@ import { format } from "date-fns-tz";
 import { isSameDay } from "date-fns";
 
 export const heroBannerModel = (eventTitle = "default") => {
-  return `<div style="overflow: hidden">
-  <div class="hero-background" ><h1 class="title">${eventTitle}</h1></div>
+  return `<div style="overflow: hidden" class="hero-background" >
+  <h1 class="title">${eventTitle}</h1>
   </div>
 
     <style>
