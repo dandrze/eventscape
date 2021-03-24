@@ -15,9 +15,6 @@ node_modules
 # our keys will be here in plain text, so make sure this isn't pushed to git
 dev.js
 
-.env
-client/.env
-
 combined.log
 error.log
 newrelic_agent.log
