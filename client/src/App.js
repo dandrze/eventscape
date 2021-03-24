@@ -31,7 +31,7 @@ function App({ user, location, fetchUser, attendee }) {
   const isApp = path[0] === "app";
 
   const tawkPropertyIdForApp = "60560b08f7ce182709322202";
-  const tawkKeyForApp = process.env.REACT_APP_TAWK_KEY_APP;
+  const tawkKeyForApp = "1f181m7nl";
 
   useEffect(() => {
     if (!user.id) fetchDataAsync();
