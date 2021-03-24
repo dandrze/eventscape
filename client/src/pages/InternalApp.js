@@ -43,6 +43,9 @@ const InternalApp = (props) => {
 
   return (
     <div className="App">
+      <div id="accountId" style={{ display: "none" }}>
+        123
+      </div>
       <header className="App-header">
         <Switch>
           <Route exact path="/" component={Dashboard} />
