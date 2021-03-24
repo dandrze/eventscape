@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
+    "aws-sdk": "^2.868.0",
     "bcrypt": "^5.0.0",
     "bluebird": "^3.5.1",
     "body-parser": "^1.19.0",
@@ -50,6 +51,7 @@
     "react-favicon": "^0.0.18",
     "react-ga": "^3.3.0",
     "react-helmet": "^6.1.0",
+    "react-s3-uploader": "^5.0.0",
     "redis": "^2.8.0",
     "redis-connection-pool": "^1.7.2",
     "sequelize": "^6.3.5",

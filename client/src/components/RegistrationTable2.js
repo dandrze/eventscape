@@ -90,9 +90,7 @@ const RegistrationTable2 = (props) => {
     // map the column data from the react-form-builder2 format to the material format
     const columns = props.registration.columns
       .map((column) => {
-        if (inputElements.includes(column.element)) {
-          return { title: column.label, field: column.field_name };
-        }
+        return { title: column.label, field: column.field_name };
       })
       .filter(Boolean);
 

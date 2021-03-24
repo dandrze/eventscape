@@ -86,7 +86,7 @@ PollResponse.belongsTo(SiteVisitor);
 PollResponse.belongsTo(PollOption);
 
 //sequelize.sync({ alter: true });
-//Permission.sync({ alter: true });
+PageSection.sync({ alter: true });
 //Account.sync({ alter: true });
 //Event.sync({ alter: true });
 

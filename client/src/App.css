@@ -819,3 +819,15 @@ select:focus {
 .color-on-hover:hover {
   color: var(--main-color);
 }
+
+.file-upload-section {
+  width: 400px;
+  border-radius: 15px;
+  height: 100px;
+  border: 1px solid #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f7;
+  cursor: pointer;
+}
