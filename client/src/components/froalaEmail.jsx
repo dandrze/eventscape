@@ -34,7 +34,10 @@ import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/third_party/image_tui.min.css";
 import "froala-editor/css/plugins/quick_insert.min.css";
 
-const FroalaEmail = (props) => {
+const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
+  const cleanedHtml = html
+    ? html.replace(/href=\".*?\"/, `href="#disabled_during_editting"`)
+    : "";
   const config = {
     toolbarButtons: {
       moreText: {
@@ -118,7 +121,7 @@ const FroalaEmail = (props) => {
     ],
     key:
       "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
-    imageUploadToS3: props.settings.s3Hash,
+    imageUploadToS3: settings.s3Hash,
     //pluginsEnabled: ["image", "link", "draggable", ""],
     dragInline: false,
   };
@@ -127,8 +130,8 @@ const FroalaEmail = (props) => {
     <div>
       <FroalaEditor
         config={config}
-        model={props.html}
-        onModelChange={props.handleHtmlChange}
+        model={cleanedHtml}
+        onModelChange={handleHtmlChange}
       />
     </div>
   );

@@ -116,7 +116,7 @@ const Registrations = (props) => {
   };
 
   const handleDeleteReg = async (id) => {
-    props.deleteRegistration(id);
+    await props.deleteRegistration(id);
     fetchRegistrations();
   };
 

@@ -148,7 +148,7 @@ module.exports = (server) => {
       });
 
       //push the message history
-      socket.emit(
+      io.to(room.toString()).emit(
         "bulkMessage",
         messageHistory.map((message) => {
           return {
@@ -262,7 +262,5 @@ module.exports = (server) => {
     });
 
     socket.on("disconnect", (reason) => {});
-
-    const sendChatHistory = () => {};
   });
 };
