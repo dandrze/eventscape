@@ -111,8 +111,6 @@ const ModeratorDashboard = ({
       params: { roomId: room.id },
     });
 
-    console.log(chatMessages);
-
     const history = chatMessages.data.map((chatMessage) => {
       return {
         Message: chatMessage.text,

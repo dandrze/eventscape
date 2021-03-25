@@ -58,7 +58,6 @@ const Published = (props) => {
     // Get user geo location
     try {
       const geoData = await axios.get("https://ipapi.co/json");
-      console.log(geoData)
 
       var {
         latitude,
@@ -86,8 +85,6 @@ const Published = (props) => {
       socket.io.on("reconnect", () => {
         console.log("reconnected!");
 
-        console.log("cooke is:" + cookies.get("uuid"));
-
         socket.emit("rejoin", {
           eventId: event.id,
           uuid: cookies.get("uuid") || "",
@@ -95,13 +92,11 @@ const Published = (props) => {
       });
 
       socket.on("poll", ({ question, options, allowMultiple }) => {
-        console.log({ question, options });
         setPoll({ question, options, allowMultiple });
         setOpenPoll(true);
       });
 
       socket.on("pollClosed", () => {
-        console.log("Poll closed!");
         setOpenPoll(false);
       });
 
@@ -110,7 +105,6 @@ const Published = (props) => {
       });
 
       socket.on("results", ({ question, results, allowMultiple }) => {
-        console.log("results: ", { question, results, allowMultiple });
         setResults(results);
         setResultsQuestion(question);
         setAllowMultiple(allowMultiple);
