@@ -8,3 +8,4 @@ export * from "./accountActions";
 export * from "./liveEventPageActions";
 export * from "./chatRoomActions";
 export * from "./analyticsActions";
+export * from "./pollingActions";

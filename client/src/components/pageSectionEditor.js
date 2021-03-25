@@ -21,7 +21,12 @@ const PageSectionEditor = (props) => {
   return (
     <div>
       <style>{theme(props.event.primaryColor)}</style>
-      <div onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+      <div
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+        // relative position ensures that the design block toolbar moves with the design block
+        style={{ position: "relative" }}
+      >
         <DesignBlockToolbar
           displayToolbar={isHovering}
           section={props.model.sections[props.sectionIndex]}

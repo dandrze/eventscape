@@ -61,12 +61,20 @@ function start() {
   app.use(require("./routes/analyticsRoutes"));
   app.use(require("./routes/froalaRoutes"));
   app.use(require("./routes/testRoutes"));
+  app.use(require("./routes/pollingRoutes"));
 
   app.get("/loaderio-feb5ca360d9f5cdf226bcd9fb3240326", async (req, res) => {
     file = `${__dirname}/public/loaderio-verification.txt`;
 
     res.download(file);
   });
+
+  app.use(
+    "/api/s3",
+    require("react-s3-uploader/s3router")({
+      bucket: "eventscape-assets",
+    })
+  );
 
   // universal error handling for all database calls
   app.use((err, req, res, next) => {
@@ -91,7 +99,7 @@ function start() {
   const server = http.createServer(app);
 
   require("./services/ChatSocket")(server);
-  require("./services/AnalyticsSocket")(server);
+  require("./services/EventSocket")(server);
 
   const exitHandler = terminate(server, {
     coredump: false,

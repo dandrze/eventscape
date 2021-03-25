@@ -2,7 +2,9 @@ import { format } from "date-fns-tz";
 import { isSameDay } from "date-fns";
 
 export const heroBannerModel = (eventTitle = "default") => {
-  return `<div style="overflow: hidden;"><h1 class="title" >${eventTitle}</h1></div>
+  return `<div style="overflow: hidden" class="hero-background" >
+  <h1 class="title">${eventTitle}</h1>
+  </div>
 
     <style>
         .title {
@@ -10,15 +12,41 @@ export const heroBannerModel = (eventTitle = "default") => {
             font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
             font-weight: 300;
             font-size: 96px;
-            line-height: 1;
-            margin-left: 5%;
-            margin-right: 5%;
-            margin-top: 3%;
-            margin-bottom: 3%;
-            text-align: center;
         }
+        .hero-background {
+            background-image: url(https://s3.amazonaws.com/eventscape-assets/froala-uploads%2Faccount-1%2F1616366013302-background+orange.jpeg);
+            background-position: bottom;
+            height: 300px;
+            background-size: cover;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+          }
     </style>
 `;
+};
+
+export const heroBannerModel1 = (eventTitle = "default") => {
+  return `<div style="overflow: hidden">
+    <img src="https://s3.amazonaws.com/eventscape-assets/froala-uploads%2Faccount-1%2F1616366013302-background+orange.jpeg" />
+    <div class="hero-title" style="position: absolute" ><h1 class="title">${eventTitle}</h1></div>
+    </div>
+  
+      <style>
+          .title {
+              padding: 0;
+              font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+              font-weight: 300;
+              font-size: 96px;
+          }
+          .hero-title {
+              position: absolute;
+              top: calc(50% - 48px);
+              text-align: center;
+              width: 100%;
+            }
+      </style>
+  `;
 };
 
 export const logoHeaderModel = () => {
@@ -535,12 +563,12 @@ export const paragraph1 = () => {
 export const paragraph2 = () => {
   return `<div class="container block-container" style="overflow: hidden;">
   <div class="row">
-    <div class="col col-sm-12 col-md-6 col-mobile-margin">
+    <div class="col-md-6 col-mobile-margin">
      <p>
      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
      </p>
      </div>
-     <div class="col col-sm-12 col-md-6 col-mobile-margin">
+     <div class="col-md-6 col-mobile-margin">
      <p>
      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
      </p>
@@ -548,6 +576,29 @@ export const paragraph2 = () => {
      </div>
           </div>
           `;
+};
+
+export const sponsorGrid = (columns, rows, box) => {
+  let column = 0;
+  let row = 0;
+  let html = `<div class="container block-container">`;
+  const columnClass = box ? "sponsor-box-border" : "sponsor-box-no-border";
+  while (row < rows) {
+    html += `<div class="row">`;
+    while (column < columns) {
+      html += `<div class="col-lg ${columnClass}">
+                <img src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
+            </div>`;
+      column += 1;
+    }
+    html += `</div>`;
+    row += 1;
+    // reset column counter back to 0 for the next row
+    column = 0;
+  }
+  html += `</div>`;
+
+  return html;
 };
 
 export const streamChatReact = {

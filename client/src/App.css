@@ -82,7 +82,7 @@ p {
 
 .link1 {
   color: var(--main-color);
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 .link1:hover {
@@ -141,7 +141,7 @@ label {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+
   font-size: calc(10px + 2vmin);
   color: black;
 }
@@ -186,6 +186,10 @@ label {
 
 .theme-button:hover {
   opacity: 0.7;
+}
+
+.theme-color {
+  color: #b0281c;
 }
 
 .Button2 {
@@ -454,7 +458,6 @@ select {
 .top-button-bar {
   display: flex;
   margin-bottom: 20px;
-  margin-top: 20px;
 }
 
 .button-bar-left {
@@ -773,4 +776,61 @@ select:focus {
 
 .rotate90 {
   transform: rotate(-90deg);
+}
+/* Temp fix for the insert */
+.fr-svg {
+  margin-top: -15px;
+}
+
+.form-group .label-required {
+  margin-left: 5px;
+}
+
+/* for sponsor block */
+.sponsor-box-border {
+  margin: 15px;
+  padding: 15px 5px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+}
+
+.sponsor-box-no-border {
+  margin: 0px;
+}
+
+.registration-col {
+  margin: 20px;
+}
+
+/* UL formatting within froala block */
+
+.fr-view ul {
+  list-style: disc;
+}
+
+/* Code Mirror Styling */
+.CodeMirror-code {
+  text-align: start;
+  font-size: 0.9rem;
+}
+
+.color-on-hover {
+  color: #7d7a7a;
+}
+
+.color-on-hover:hover {
+  color: var(--main-color);
+}
+
+.file-upload-section {
+  width: 400px;
+  border-radius: 15px;
+  height: 100px;
+  border: 1px solid #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f7f7f7;
+  cursor: pointer;
 }

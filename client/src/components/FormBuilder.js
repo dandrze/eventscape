@@ -10,7 +10,6 @@ import api from "../api/server";
 import { toast } from "react-toastify";
 import "../pages/registrations.css"; //required for registration form builder to size properly
 
-
 const FormBuilder = (props) => {
   const [status, setStatus] = useState("Saved");
   const items = [
@@ -62,9 +61,9 @@ const FormBuilder = (props) => {
     {
       key: "RadioButtons",
       canHaveAnswer: true,
-      name: "Multiple Choice",
+      name: "Radio Buttons",
       icon: "far fa-dot-circle",
-      label: "Multiple Choice Label",
+      label: "Radio Buttons Label",
       field_name: "radiobuttons_",
       options: [],
     },
@@ -147,7 +146,12 @@ const FormBuilder = (props) => {
           </span>
         </div>
       </div>
-      <ReactFormBuilder onPost={onPost} onLoad={onLoad} toolbarItems={items} />
+      <ReactFormBuilder
+        onPost={onPost}
+        onLoad={onLoad}
+        toolbarItems={items}
+        isRegistration={true}
+      />
     </div>
   );
 };

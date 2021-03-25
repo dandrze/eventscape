@@ -29,7 +29,10 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     //padding: theme.spacing(3),
     padding: "0px",
-    margin: "0px",
+    margin: "65px 0px",
+    height: "calc(100vh - 65px)",
+    display: "flex",
+    alignItems: "center"
   },
 }));
 
@@ -50,7 +53,6 @@ export default function SimpleNavBar(props) {
         </Toolbar>
       </AppBar>
       <main className={classes.content}>
-        <div className={classes.toolbar}></div>
         {content}
       </main>
     </div>

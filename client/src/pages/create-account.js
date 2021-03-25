@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -13,6 +13,8 @@ import { checkEmailExists } from "../actions";
 import CreatePassword from "../components/CreatePassword";
 import { CircularProgress } from "@material-ui/core";
 
+import { isValidEmailFormat } from "../hooks/validation";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
@@ -24,11 +26,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 function Create_Account(props) {
+  const { email } = useParams();
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
+  const [emailAddress, setEmailAddress] = useState(email || "");
   const [password, setPassword] = useState("");
 
   const [emailErrorText, setEmailErrorText] = useState(false);
@@ -36,6 +39,9 @@ function Create_Account(props) {
   const [lastNameErrorText, setLastNameErrorText] = useState("");
   const [passwordErrorText, setPasswordErrorText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
 
   const handleChangeEmail = (event) => {
     setEmailAddress(event.target.value);
@@ -59,6 +65,8 @@ function Create_Account(props) {
       setLastNameErrorText("Please enter a last name");
     } else if (!emailAddress) {
       setEmailErrorText("Please enter your email address");
+    } else if (!isValidEmailFormat(emailAddress)) {
+      setEmailErrorText("Please enter a valid email address");
     } else if (await emailExists()) {
       setEmailErrorText(
         "Account already exists with this email address. Please login or contact support."
@@ -77,8 +85,19 @@ function Create_Account(props) {
       });
 
       const auth = await props.signInLocal(emailAddress, password);
-      setIsLoading(false);
-      props.history.push("/event-details");
+      const eventList = await props.fetchEventList();
+      if (eventList.length === 0) {
+        setIsLoading(false);
+        if (targetEventId) {
+          props.history.push(`/?eventid=${targetEventId}`);
+        } else {
+          props.history.push("/create-event");
+        }
+      } else {
+        const res = await props.setCurrentEvent(eventList[0].id);
+        setIsLoading(false);
+        props.history.push("/");
+      }
     }
   };
   const handleChangeFirstName = (event) => {
@@ -89,6 +108,10 @@ function Create_Account(props) {
   const handleChangeLastName = (event) => {
     setLastName(event.target.value);
     setLastNameErrorText("");
+  };
+
+  const handleKeypressSubmit = (event) => {
+    if (event.key === "Enter") handleSubmit();
   };
 
   return (
@@ -115,6 +138,7 @@ function Create_Account(props) {
                 value={firstName}
                 onChange={handleChangeFirstName}
                 helperText={firstNameErrorText}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -127,6 +151,7 @@ function Create_Account(props) {
                 value={lastName}
                 onChange={handleChangeLastName}
                 helperText={lastNameErrorText}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -139,6 +164,9 @@ function Create_Account(props) {
                 value={emailAddress}
                 onChange={handleChangeEmail}
                 helperText={emailErrorText}
+                onKeyPress={handleKeypressSubmit}
+                // if there is an email passed through url, don't allow edits
+                disabled={email}
               />
             </FormControl>
             <br></br>
@@ -147,13 +175,18 @@ function Create_Account(props) {
               password={password}
               onChange={handleChangePassword}
               helperText={passwordErrorText}
+              onKeyPress={handleKeypressSubmit}
             />
 
             <br></br>
             {isLoading ? (
               <CircularProgress />
             ) : (
-              <button className="Button1" type="submit" onClick={handleSubmit}>
+              <button
+                className="Button1 gtag-create-account"
+                type="submit"
+                onClick={handleSubmit}
+              >
                 Create My Account
               </button>
             )}

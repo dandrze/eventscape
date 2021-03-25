@@ -8,6 +8,7 @@ import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
 import "../components/fonts.css";
 import { pageNames } from "../model/enums";
+import AccessDeniedScreen from "../components/AccessDeniedScreen";
 
 const Design = ({ event, model, fetchModel }) => {
   const page = useParams().page || "event";
@@ -31,9 +32,13 @@ const Design = ({ event, model, fetchModel }) => {
         highlight="design"
         content={
           model.sections.length ? (
-            <PageEditor key={model} page={page} />
+            event.permissions?.design ? (
+              <PageEditor key={model} page={page} />
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
           ) : (
-            <CircularProgress />
+            <CircularProgress style={{ marginTop: "30vh" }} />
           )
         }
       />

@@ -11,9 +11,11 @@ import Dialog from "@material-ui/core/Dialog";
 import DialogActions from "@material-ui/core/DialogActions";
 import DialogTitle from "@material-ui/core/DialogTitle";
 import { makeStyles } from "@material-ui/core/styles";
+import CropOriginalIcon from "@material-ui/icons/CropOriginal";
 import * as actions from "../actions";
 import Modal1 from "./Modal1";
 import DesignBlockSettings from "./designBlockSettings";
+import BackgroundImageSelector from "./BackgroundImageSelector";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,6 +43,7 @@ function DesignBlockToolbar(props) {
   const classes = useStyles();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
   const [openSettings, setOpenSettings] = React.useState(false);
+  const [openBackgroundImage, setOpenBackgroundImage] = React.useState(false);
   const [sectionTooltip, setSectionTooltip] = React.useState("");
 
   // UseEffect mimicks OnComponentDidMount
@@ -69,7 +72,7 @@ function DesignBlockToolbar(props) {
       props.section.reactComponent.name == "RegistrationForm");
 
   const handleClickDelete = () => {
-    setDeleteConfirmOpen(true);
+    if (props.model.sections.length >= 2) setDeleteConfirmOpen(true);
   };
 
   const handleCloseDelete = () => {
@@ -88,6 +91,10 @@ function DesignBlockToolbar(props) {
   const handleCloseSettings = () => {
     props.triggerSectionReactUpdate();
     setOpenSettings(false);
+  };
+
+  const handleClickEditBackgroundImage = () => {
+    setOpenBackgroundImage(true);
   };
 
   const handleClickMove = (offset) => {
@@ -128,6 +135,14 @@ function DesignBlockToolbar(props) {
               onClick={handleClickDelete}
             >
               <DeleteOutlined />
+            </div>
+          </Tooltip>
+          <Tooltip title="Edit Background image">
+            <div
+              className="design-block-toolbar-button"
+              onClick={handleClickEditBackgroundImage}
+            >
+              <CropOriginalIcon />
             </div>
           </Tooltip>
           {showSettings ? (
@@ -188,12 +203,25 @@ function DesignBlockToolbar(props) {
           />
         }
       />
+
+      {/*Background Image Modal: */}
+      <Modal1
+        open={openBackgroundImage}
+        onClose={() => setOpenBackgroundImage(false)}
+        title="Change Background Image"
+        content={
+          <BackgroundImageSelector
+            sectionIndex={props.sectionIndex}
+            onClose={handleCloseSettings}
+          />
+        }
+      />
     </div>
   );
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event };
+  return { event: state.event, model: state.model };
 };
 
 export default connect(mapStateToProps, actions)(DesignBlockToolbar);

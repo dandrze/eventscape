@@ -1,19 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
+
 import * as actions from "../actions";
 import PlusDropIcon from "../icons/plus-drop.svg";
 import Tooltip from "@material-ui/core/Tooltip";
 import { makeStyles } from "@material-ui/core/styles";
-import Modal from "@material-ui/core/Modal";
-import Backdrop from "@material-ui/core/Backdrop";
-import Fade from "@material-ui/core/Fade";
 import Grid from "@material-ui/core/Grid";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import "./newSectionButton.css";
-import Cancel from "../icons/cancel.svg";
 
 /* Design Block Thumbnails: */
 import logoHeader from "./designBlockThumbnails/logoHeader.png";
@@ -30,10 +27,7 @@ import paragraph2Thumb from "./designBlockThumbnails/paragraph2.png";
 import {
   logoHeaderModel,
   heroBannerModel,
-  descriptionRegistrationModel,
   titleTimeModel,
-  streamChatModel,
-  blankModel,
   streamChatReact,
   timeDescription,
   registrationFormReact,
@@ -43,6 +37,8 @@ import {
   paragraph1,
   paragraph2,
 } from "../templates/designBlockModels";
+import Modal1 from "./Modal1";
+import GridSelector from "./GridSelector";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -64,6 +60,10 @@ const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
     minWidth: "100%",
+  },
+  gridSelectors: {
+    margin: "0px 1% 20px",
+    minWidth: "30%",
   },
   selectEmpty: {
     marginTop: theme.spacing(2),
@@ -97,7 +97,7 @@ const NewSectionButton = (props) => {
     isReact = false,
     reactComponent = null
   ) => {
-    props.addSection(props.prevIndex, html, isReact, reactComponent);
+    await props.addSection(props.prevIndex, html, isReact, reactComponent);
   };
 
   const handleChangeBlockCat = (event) => {
@@ -117,30 +117,11 @@ const NewSectionButton = (props) => {
         </Tooltip>
       </button>
 
-      <Modal
-        aria-labelledby="transition-modal-title"
-        aria-describedby="transition-modal-description"
-        className={classes.modal}
+      <Modal1
         open={open}
         onClose={handleClose}
-        closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 500,
-        }}
-        disableAutoFocus={true}
-      >
-        <Fade in={open}>
-          <div className={classes.paper}>
-            <div className="cancel-bar">
-              <Tooltip title="Close">
-                <img
-                  src={Cancel}
-                  className="cancel-bar-icon"
-                  onClick={handleClose}
-                ></img>
-              </Tooltip>
-            </div>
+        content={
+          <>
             <div className="block-picker-container">
               <h3>Choose a Design Block Template</h3>
               <FormControl
@@ -166,6 +147,7 @@ const NewSectionButton = (props) => {
                     Stream/Messaging
                   </MenuItem>
                   <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
+                  <MenuItem value={"sponsors"}>Sponsors</MenuItem>
                   <MenuItem value={"text"}>Text</MenuItem>
                   <MenuItem value={"columns-blank"}>Columns (Blank)</MenuItem>
                 </Select>
@@ -316,6 +298,20 @@ const NewSectionButton = (props) => {
                   </Grid>
                 )}
 
+                {blockCat === "sponsors" && (
+                  <Grid container spacing={3}>
+                    {/* Stream Chat */}
+                    <Grid item xs={12}>
+                      <GridSelector
+                        addSection={(html) => {
+                          handleClose();
+                          handleAddSection(html);
+                        }}
+                      />
+                    </Grid>
+                  </Grid>
+                )}
+
                 {blockCat === "columns-blank" && (
                   <Grid container spacing={3}>
                     {/* Blank */}
@@ -332,9 +328,9 @@ const NewSectionButton = (props) => {
                 )}
               </div>
             </div>
-          </div>
-        </Fade>
-      </Modal>
+          </>
+        }
+      />
     </div>
   );
 };

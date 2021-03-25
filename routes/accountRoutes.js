@@ -28,13 +28,32 @@ router.post("/api/account", async (req, res, next) => {
 
   const hashedPassword = await bcrypt.hashSync(password, saltRounds);
 
+  let account;
+
   try {
-    const account = await Account.create({
-      emailAddress: emailAddress.toLowerCase(),
-      firstName,
-      lastName,
-      password: hashedPassword,
+    // check to see if there is an unregistered account
+    // an unregistered account happens when a user adds an email address as a collaborator but that user hasn't created an account yet
+    const unregisteredAccount = await Account.findOne({
+      where: { emailAddress: emailAddress.toLowerCase() },
     });
+    if (unregisteredAccount) {
+      unregisteredAccount.firstName = firstName;
+      unregisteredAccount.lastName = lastName;
+      unregisteredAccount.password = hashedPassword;
+      unregisteredAccount.registrationComplete = true;
+      await unregisteredAccount.save();
+      account = unregisteredAccount;
+    } else {
+      account = await Account.create({
+        emailAddress: emailAddress.toLowerCase(),
+        firstName,
+        lastName,
+        password: hashedPassword,
+        registrationComplete: true,
+      });
+    }
+
+    clearCache(`Account:id:${account.id}`);
 
     res.status(200).send(account);
   } catch (error) {
@@ -46,7 +65,9 @@ router.get("/api/account/email", async (req, res, next) => {
   const { emailAddress } = req.query;
 
   try {
-    const account = await Account.findOne({ where: { emailAddress } });
+    const account = await Account.findOne({
+      where: { emailAddress, registrationComplete: true },
+    });
 
     res.status(200).send(account);
   } catch (error) {

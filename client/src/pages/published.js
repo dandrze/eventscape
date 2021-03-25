@@ -8,7 +8,6 @@ import axios from "axios";
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { Helmet } from "react-helmet";
-import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
@@ -18,6 +17,10 @@ import { pageNames } from "../model/enums";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import BrandingTop from "../components/BrandingTop";
 import BrandingBottom from "../components/BrandingBottom";
+import Modal1 from "../components/Modal1";
+import PollBlock from "../components/polling/PollBlock";
+import ResultsChart from "../components/polling/ResultsChart";
+import AlertModal from "../components/AlertModal";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -29,8 +32,15 @@ const cookies = new Cookies();
 const Published = (props) => {
   const { hash } = useParams();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [openPoll, setOpenPoll] = useState(false);
+  const [poll, setPoll] = useState({ question: "", options: [] });
+  const [openResults, setOpenResults] = useState(false);
+  const [resultsQuestion, setResultsQuestion] = useState("");
+  const [results, setResults] = useState([]);
+  const [allowMultiple, setAllowMultiple] = useState(false);
 
   useEffect(() => {
+    if (!cookies.get("uuid")) cookies.set("uuid", uuid());
     fetchDataAsync();
   }, []);
 
@@ -49,7 +59,7 @@ const Published = (props) => {
 
     // Get user geo location
     try {
-      const geoData = await axios.get("https://ipapi.co//187.252.203.71/json");
+      const geoData = await axios.get("https://ipapi.co/json");
 
       var {
         latitude,
@@ -70,13 +80,38 @@ const Published = (props) => {
     // if the pagetype is event, turn on analytics
     if (pageType == pageNames.EVENT) {
       socket = io(ENDPOINT, {
-        path: "/api/socket/analytics",
+        path: "/api/socket/event",
         transports: ["websocket"],
       });
 
-      socket.on("connect", () => {});
+      socket.io.on("reconnect", () => {
+        console.log("reconnected!");
 
-      if (!cookies.get("uuid")) cookies.set("uuid", uuid());
+        socket.emit("rejoin", {
+          eventId: event.id,
+          uuid: cookies.get("uuid") || "",
+        });
+      });
+
+      socket.on("poll", ({ question, options, allowMultiple }) => {
+        setPoll({ question, options, allowMultiple });
+        setOpenPoll(true);
+      });
+
+      socket.on("pollClosed", () => {
+        setOpenPoll(false);
+      });
+
+      socket.on("closeResults", () => {
+        setOpenResults(false);
+      });
+
+      socket.on("results", ({ question, results, allowMultiple }) => {
+        setResults(results);
+        setResultsQuestion(question);
+        setAllowMultiple(allowMultiple);
+        setOpenResults(true);
+      });
 
       socket.emit("join", {
         EventId: event.id,
@@ -93,6 +128,15 @@ const Published = (props) => {
     }
 
     setIsLoaded(true);
+  };
+
+  const closePoll = () => {
+    setOpenPoll(false);
+  };
+
+  const handleSubmitPoll = (selectedOptions) => {
+    socket.emit("respondToPoll", selectedOptions);
+    closePoll();
   };
 
   // if there is a hash provided but no attendee found, display an error page
@@ -115,6 +159,29 @@ const Published = (props) => {
         <Helmet>
           <title>{props.event.title}</title>
         </Helmet>
+        <Modal1
+          open={openPoll}
+          onClose={closePoll}
+          content={
+            <PollBlock
+              question={poll.question}
+              pollOptions={poll.options}
+              allowMultiple={poll.allowMultiple}
+              submitPoll={handleSubmitPoll}
+            />
+          }
+        />
+
+        <AlertModal
+          open={openResults}
+          onClose={() => setOpenResults(false)}
+          content={
+            <div style={{ padding: "40px 30px 10px", width: "500px" }}>
+              <ResultsChart question={resultsQuestion} results={results} />
+            </div>
+          }
+          closeText="Close"
+        />
         <style>{theme(props.event.primaryColor)}</style>
         <BrandingTop />
         <ul>

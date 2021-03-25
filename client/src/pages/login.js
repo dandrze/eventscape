@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
@@ -21,10 +21,15 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props) {
   const classes = useStyles();
-
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [isLoading, setIsloading] = useState(false);
+
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
+  const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/";
+
+  console.log(targetUrl);
 
   const handleChangeEmail = (event) => {
     setEmail(event.target.value);
@@ -39,8 +44,12 @@ function Login(props) {
     const isAuth = await props.signInLocal(email, password);
     setIsloading(false);
     if (isAuth.success) {
-      props.history.push("/design");
+      props.history.push(targetUrl);
     }
+  };
+
+  const handleKeypressSubmit = (event) => {
+    if (event.key === "Enter") handleSubmit();
   };
 
   if (isLoading) {
@@ -61,6 +70,7 @@ function Login(props) {
                 variant="outlined"
                 value={email}
                 onChange={handleChangeEmail}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>
@@ -72,6 +82,7 @@ function Login(props) {
                 variant="outlined"
                 value={password}
                 onChange={handleChangePassword}
+                onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
             <br></br>

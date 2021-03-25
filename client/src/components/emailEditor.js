@@ -3,33 +3,20 @@ import { connect } from "react-redux";
 import { toast } from "react-toastify";
 import "./emailEditor.css";
 import BootstrapInput from "../components/selectInput";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
+import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 
 import TextField from "@material-ui/core/TextField";
-import EmailList from "../components/emailList";
 import SendTestEmail from "../components/sendTestEmail";
 import "date-fns";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardTimePicker,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 import FroalaEmail from "../components/froalaEmail";
 import Tooltip from "@material-ui/core/Tooltip";
-import Cancel from "../icons/cancel.svg";
 
 import * as actions from "../actions";
-import {
-  recipientsOptions,
-  statusOptions,
-  requiresScheduledSend,
-} from "../model/enums";
-import { nominalTypeHack } from "prop-types";
+import { recipientsOptions, statusOptions } from "../model/enums";
 
 const EmailEditor = (props) => {
   const classes = useStyles();
@@ -47,7 +34,9 @@ const EmailEditor = (props) => {
   const [preposition, setPreposition] = useState(
     props.data.minutesFromEvent <= 0 ? -1 : 1
   );
-  const [html, setHtml] = useState(props.data.html || "");
+  const [html, setHtml] = useState(
+    props.data.html.replace(/{primary_color}/g, props.event.primaryColor) || ""
+  );
   const [status, setStatus] = useState(
     props.data.status || statusOptions.DRAFT
   );

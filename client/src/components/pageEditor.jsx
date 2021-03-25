@@ -75,7 +75,7 @@ const PageEditor = (props) => {
 
   const handleRemoveLogoErrorContinue = () => {
     setRemoveLogoErrorOpen(false);
-    props.history.push("/plan")
+    props.history.push("/plan");
   };
 
   const handleCancelChanges = async () => {
@@ -102,7 +102,7 @@ const PageEditor = (props) => {
         onContinue={() => {
           handleNavAlertConfirm();
         }}
-        text="You have unsaved changes, are you sure you want to proceed?"
+        content="You have unsaved changes, are you sure you want to proceed?"
         closeText="Go back"
         continueText="Continue"
       />
@@ -111,7 +111,7 @@ const PageEditor = (props) => {
         open={discardOpen}
         onClose={handleDiscardAlertClose}
         onContinue={handleDiscardAlertContinue}
-        text="Are you sure you want to discard your changes?"
+        content="Are you sure you want to discard your changes?"
         closeText="No"
         continueText="Yes"
       />
@@ -127,7 +127,13 @@ const PageEditor = (props) => {
 
       <div className="design">
         <div className="top-button-bar pt-5">
-        <button className="Button1" onClick={handleRemoveLogoError} style={{ marginRight: "15px" }}>Remove Eventscape Logo</button>
+          <button
+            className="Button1"
+            onClick={handleRemoveLogoError}
+            style={{ marginRight: "15px" }}
+          >
+            Remove Eventscape Logo
+          </button>
           <Link
             className="button-bar-left"
             to={() =>
@@ -185,15 +191,20 @@ const PageEditor = (props) => {
         </div>
         <div id="designBoard">
           <BrandingTop />
-            <ul>
-              {props.model.sections.map(function (section, index) {
-                return (
-                  <li key={section.id}>
-                    <PageSectionEditor section={section} sectionIndex={index} />
-                  </li>
-                );
-              })}
-            </ul>
+          <ul>
+            {props.model.sections.length === 0
+              ? null
+              : props.model.sections.map(function (section, index) {
+                  return (
+                    <li key={section.id}>
+                      <PageSectionEditor
+                        section={section}
+                        sectionIndex={index}
+                      />
+                    </li>
+                  );
+                })}
+          </ul>
           <BrandingBottom />
         </div>
       </div>

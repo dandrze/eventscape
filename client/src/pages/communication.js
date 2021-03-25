@@ -9,6 +9,7 @@ import * as actions from "../actions";
 import { blankEmail } from "../templates/emailTemplates";
 import { statusOptions } from "../model/enums";
 import Modal1 from "../components/Modal1";
+import AccessDeniedScreen from "../components/AccessDeniedScreen.js";
 
 const Communication = (props) => {
   const [openEditor, setOpenEditor] = useState(false);
@@ -19,8 +20,6 @@ const Communication = (props) => {
   }, [props.event]);
 
   const fetchData = async () => {
-    props.setLoaded(false);
-    props.setLoaded(true);
     if (props.event.id) {
       props.setLoaded(false);
       await props.fetchCommunicationList(props.event.id);
@@ -78,14 +77,21 @@ const Communication = (props) => {
         displaySideNav="true"
         highlight="communication"
         content={
-          <div>
-            <ScheduledEmails
-              handleAdd={handleAddEmail}
-              handleDelete={handleDeleteEmail}
-              handleEdit={handleEditEmail}
-              handleDuplicate={handleDuplicateEmail}
-            />
-          </div>
+          // only display content once the event is loaded
+          props.event.id ? (
+            props.event.permissions?.communication ? (
+              <div>
+                <ScheduledEmails
+                  handleAdd={handleAddEmail}
+                  handleDelete={handleDeleteEmail}
+                  handleEdit={handleEditEmail}
+                  handleDuplicate={handleDuplicateEmail}
+                />
+              </div>
+            ) : (
+              <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
+            )
+          ) : null
         }
       />
     </div>

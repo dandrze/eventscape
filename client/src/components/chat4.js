@@ -220,7 +220,6 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       const chatRoom = await api.get("/api/chatroom/id", {
         params: { roomId: room },
       });
-      console.log(chatRoom.data);
 
       setChatTabEnabled(chatRoom.data.chatEnabled);
       setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
@@ -262,7 +261,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       );
     });
 
-    socket.on("reconnect", () => {
+    socket.io.on("reconnect", () => {
       console.log("reconnected!");
     });
     socket.on("reconnect_attempt", () => {
@@ -297,7 +296,6 @@ const Chat = ({ room, userId, registrationId, settings }) => {
     });
 
     socket.on("notification", (message) => {
-      console.log(message);
       setMessages((messages) => [
         ...messages,
         { ...message, isNotification: true },

@@ -9,6 +9,7 @@ import "./App.css";
 import "./components/fonts.css";
 import LongLoadingScreen from "./components/LongLoadingScreen";
 import * as actions from "./actions";
+import initTawk from "./utils/tawk";
 
 // lazy loading is used so only the relevant component is loaded rather than all components
 const Landing = lazy(() => import("./pages/landing"));
@@ -20,19 +21,39 @@ const ResetPassword = lazy(() => import("./pages/password-reset"));
 const ChangePassword = lazy(() => import("./pages/change-password"));
 const InternalApp = lazy(() => import("./pages/InternalApp"));
 
-function App(props) {
+function App({ user, location, fetchUser, attendee }) {
   const path = window.location.host.split(".");
+  const urlParams = new URLSearchParams(window.location.search);
+  const targetEventId = urlParams.get("eventid");
 
   const [dataFetched, setDataFetched] = useState(false);
 
+  const isApp = path[0] === "app";
+
+  const tawkPropertyIdForApp = "60560b08f7ce182709322202";
+  const tawkKeyForApp = "1f181m7nl";
+
   useEffect(() => {
-    if (!props.user) fetchDataAsync();
+    if (!user.id) fetchDataAsync();
   }, []);
+
+  useEffect(() => {
+    if (isApp) {
+      initTawk(
+        user.emailAddress || "",
+        user.firstName || "guest",
+        user.lastName || "",
+        tawkPropertyIdForApp,
+        tawkKeyForApp
+      );
+    } else {
+      // can initialize a chat app on the event page if needed
+    }
+  }, [user, attendee]);
 
   const fetchDataAsync = async () => {
     if (!dataFetched) {
-      await props.fetchUser();
-      props.fetchEvent();
+      await fetchUser();
     }
 
     setDataFetched(true);
@@ -43,13 +64,14 @@ function App(props) {
     if (!dataFetched) {
       // if data is not done fetching during this rerender, don't return anything
       return <LongLoadingScreen text="Fetching your account..." />;
-    } else if (!props.user) {
+    } else if (!user.id) {
       // if data fetching is complete and there is no user (from the cookie) redirect to the login
       return (
         <Redirect
           to={{
             pathname: "/login",
-            state: { from: props.location },
+            search: `?eventid=${targetEventId}`,
+            state: { from: location },
           }}
         />
       );
@@ -68,7 +90,8 @@ function App(props) {
     }
   };
 
-  if (path[0] === "app") {
+  if (isApp) {
+    // it's an app (rather than an event page) so render the app components
     return (
       <div className="App">
         <ToastContainer position="top-right" autoClose={3000} />
@@ -86,7 +109,11 @@ function App(props) {
           >
             <Switch>
               <Route exact path="/login" component={Login} />
-              <Route exact path="/create-account" component={Create_Account} />
+              <Route
+                exact
+                path="/create-account/:email?"
+                component={Create_Account}
+              />
               <Route exact path="/reset-password" component={ResetPassword} />
               <Route exact path="/ScotiabankGillerPrize" component={Giller} />
               <Route
@@ -108,6 +135,7 @@ function App(props) {
       </div>
     );
   } else {
+    // is not the app, therefore is an event
     return (
       <div className="App">
         <ToastContainer position="top-right" autoClose={3000} />
@@ -140,7 +168,7 @@ function App(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { user: state.user };
+  return { user: state.user, attendee: state.attendee };
 };
 
 export default connect(mapStateToProps, actions)(App);

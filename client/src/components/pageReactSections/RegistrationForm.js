@@ -15,6 +15,8 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import Modal1 from "../Modal1";
 
+import { isValidEmailFormat } from "../../hooks/validation";
+
 const useStyles = makeStyles((theme) => ({
   formControl: {
     margin: "20px 0px",
@@ -22,7 +24,21 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function RegistrationForm({settings, event, model, standardFields, onSubmitCallback, fetchRegistration, registerText, prePopulatedValues, sectionIndex,isEditForm, addRegistration, resendRegistrationEmail, isLive}) {
+function RegistrationForm({
+  settings,
+  event,
+  model,
+  standardFields,
+  onSubmitCallback,
+  fetchRegistration,
+  registerText,
+  prePopulatedValues,
+  sectionIndex,
+  isEditForm,
+  addRegistration,
+  resendRegistrationEmail,
+  isLive,
+}) {
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -84,10 +100,10 @@ function RegistrationForm({settings, event, model, standardFields, onSubmitCallb
   };
 
   const handleEmailBlur = () => {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
     setEmailError(
-      re.test(emailAddress) ? "" : "Please enter a valid email address"
+      isValidEmailFormat(emailAddress)
+        ? ""
+        : "Please enter a valid email address"
     );
   };
 
@@ -138,9 +154,7 @@ function RegistrationForm({settings, event, model, standardFields, onSubmitCallb
   };
 
   const handleResendEmailClick = async () => {
-    const mailFormat = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-
-    if (!emailAddressReSend || !mailFormat.test(emailAddressReSend)) {
+    if (!emailAddressReSend || !isValidEmailFormat(emailAddressReSend)) {
       setEmailErrorText("Please enter valid email address");
     } else {
       const registration = await fetchRegistration(
@@ -165,116 +179,118 @@ function RegistrationForm({settings, event, model, standardFields, onSubmitCallb
         open={open}
         onClose={closeModal}
         onContinue={closeModal}
-        text={modalText}
+        content={modalText}
         continueText="OK"
       />
-      <div className="container">
-        {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
-        {!isEditForm ? (
-          <div className="form-editor-froala">
-            {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
-            {isLive ? (
-              <FroalaEditorView
-                model={model.sections[sectionIndex].html.replace(
-                  `contenteditable="true"`,
-                  `contenteditable="false"`
-                )}
-              />
-            ) : (
-              <Froala
-                sectionIndex={sectionIndex}
-                html={model.sections[sectionIndex].html}
-              />
-            )}
-          </div>
-        ) : null}
-        {isLoading ? (
-          <CircularProgress className="margin-auto" />
-        ) : (
-          <div>
-            {regComplete && !isEditForm ? (
-              <div className="margin-auto">
-                <div>Thank you for registering for {event.title}</div>
-                <br />
-                <div>
-                  A confirmation email was sent to {emailAddress}. Please check
-                  your spam if you don't see it in your inbox.
-                </div>
-              </div>
-            ) : (
-              <div
-                className={
-                  "margin-auto" + !isEditForm ? "form-editor-react" : ""
-                }
-              >
-                {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
-                <div className="form-group">
-                  <label>
-                    <span>First Name</span>
-                    <span className="label-required badge badge-danger">
-                      Required
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={firstName}
-                    onChange={handleFirstNameChange}
-                  />
-                  <label>
-                    <span>Last Name</span>
-                    <span className="label-required badge badge-danger">
-                      Required
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={lastName}
-                    onChange={handleLastNameChange}
-                  />
-                  <label>
-                    <span>Email Address</span>
-                    <span className="label-required badge badge-danger">
-                      Required
-                    </span>
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    value={emailAddress}
-                    onChange={handleEmailChange}
-                    onBlur={handleEmailBlur}
-                  />
-                  <div className="errorMessage">{emailError}</div>
-                </div>
-                <ReactFormGenerator
-                  action_name={registerText || "Register now"}
-                  onSubmit={handleSubmit}
-                  data={formData}
-                  answer_data={prePopulatedValues}
-                  className="form-editor-react"
+      <div className="container block-container">
+        <div className="row">
+          {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
+          {!isEditForm ? (
+            <div className="form-editor-froala col-lg registration-col">
+              {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
+              {isLive ? (
+                <FroalaEditorView
+                  model={model.sections[sectionIndex].html.replace(
+                    `contenteditable="true"`,
+                    `contenteditable="false"`
+                  )}
                 />
-                {!isEditForm ? (
-                  <label>
-                    <span>Already registered? Click </span>
-                    <span
-                      className="theme-color"
-                      onClick={openReSendLinkModal}
-                      style={{
-                        cursor: "pointer",
-                        textDecoration: "underline",
-                      }}
-                    >
-                      here
-                    </span>
-                    <span> to re-send your event link.</span>
-                  </label>
-                ) : null}
-              </div>
-            )}
-          </div>
-        )}
+              ) : (
+                <Froala
+                  sectionIndex={sectionIndex}
+                  html={model.sections[sectionIndex].html}
+                />
+              )}
+            </div>
+          ) : null}
+          {isLoading ? (
+            <CircularProgress className="margin-auto" />
+          ) : (
+            <div className="col-lg registration-col">
+              {regComplete && !isEditForm ? (
+                <div className="margin-auto">
+                  <div>Thank you for registering for {event.title}</div>
+                  <br />
+                  <div>
+                    A confirmation email was sent to {emailAddress}. Please
+                    check your spam if you don't see it in your inbox.
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className={
+                    "margin-auto" + !isEditForm ? "form-editor-react" : ""
+                  }
+                >
+                  {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
+                  <div className="form-group">
+                    <label>
+                      <span>First Name</span>
+                      <span className="label-required badge badge-danger">
+                        Required
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={firstName}
+                      onChange={handleFirstNameChange}
+                    />
+                    <label>
+                      <span>Last Name</span>
+                      <span className="label-required badge badge-danger">
+                        Required
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={lastName}
+                      onChange={handleLastNameChange}
+                    />
+                    <label>
+                      <span>Email Address</span>
+                      <span className="label-required badge badge-danger">
+                        Required
+                      </span>
+                    </label>
+                    <input
+                      type="text"
+                      className="form-control"
+                      value={emailAddress}
+                      onChange={handleEmailChange}
+                      onBlur={handleEmailBlur}
+                    />
+                    <div className="errorMessage">{emailError}</div>
+                  </div>
+                  <ReactFormGenerator
+                    action_name={registerText || "Register now"}
+                    onSubmit={handleSubmit}
+                    data={formData}
+                    answer_data={prePopulatedValues}
+                    className="form-editor-react"
+                  />
+                  {!isEditForm ? (
+                    <label>
+                      <span>Already registered? Click </span>
+                      <span
+                        className="theme-color"
+                        onClick={openReSendLinkModal}
+                        style={{
+                          cursor: "pointer",
+                          textDecoration: "underline",
+                        }}
+                      >
+                        here
+                      </span>
+                      <span> to re-send your event link.</span>
+                    </label>
+                  ) : null}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
       </div>
       {/* Re-send event link modal */}
       <Modal1

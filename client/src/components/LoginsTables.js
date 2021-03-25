@@ -45,7 +45,39 @@ const tableIcons = {
 };
 
 export default function LoginsTable({ data }) {
+  console.log(data);
   const columns = [
+    {
+      title: "First Name",
+      field: "Registration.firstName",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "Last Name",
+      field: "Registration.lastName",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "Last Name",
+      field: "Registration.emailAddress",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+    {
+      title: "First Login",
+      field: "createdAt",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
+
+    {
+      title: "Total Time Viewed (in miliseconds)",
+      field: "timeViewed",
+      headerStyle: { display: "none" },
+      cellStyle: { display: "none" },
+    },
     {
       title: "First Name",
       render: (rowData) => (
@@ -60,7 +92,9 @@ export default function LoginsTable({ data }) {
     },
     {
       title: "Email",
-      field: "Registration.emailAddress",
+      render: (rowData) => (
+        <span>{rowData["Registration.emailAddress"] || "n/a"}</span>
+      ),
     },
     {
       title: "First Login",
