@@ -120,6 +120,13 @@ const Permissions = ({ event, user }) => {
       field: "role",
     },
     {
+      title: "Status",
+      render: (rowData) =>
+        rowData.Account.registrationComplete
+          ? "Active"
+          : "Pending Account Creation",
+    },
+    {
       title: "Event Details",
       render: (rowData) => (
         <Checkbox

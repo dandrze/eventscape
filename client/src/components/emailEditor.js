@@ -34,7 +34,9 @@ const EmailEditor = (props) => {
   const [preposition, setPreposition] = useState(
     props.data.minutesFromEvent <= 0 ? -1 : 1
   );
-  const [html, setHtml] = useState(props.data.html || "");
+  const [html, setHtml] = useState(
+    props.data.html.replace(/{primary_color}/g, props.event.primaryColor) || ""
+  );
   const [status, setStatus] = useState(
     props.data.status || statusOptions.DRAFT
   );

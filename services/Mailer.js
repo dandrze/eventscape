@@ -54,6 +54,7 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
     recipient.last_name = recipient.lastName;
     recipient.email_address = recipient.emailAddress;
     recipient.event_name = recipient.Event.title;
+    recipient.primary_color = recipient.Event.primaryColor;
     recipient.start_date = recipient.Event.startDate.toLocaleString(
       "en-us",
       dateFormatOptions
