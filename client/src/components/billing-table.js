@@ -6,10 +6,9 @@ import { forwardRef } from "react";
 import { Paper, Tooltip } from "@material-ui/core";
 import { toast } from "react-toastify";
 import Modal1 from "./Modal1";
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
-import AlertModal from './AlertModal';
-
+import Typography from "@material-ui/core/Typography";
+import Slider from "@material-ui/core/Slider";
+import AlertModal from "./AlertModal";
 
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
@@ -33,7 +32,6 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import api from "../api/server";
-import { props } from "bluebird";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -59,46 +57,99 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BillingTable = (props) => {
+const BillingTable = ({ event }) => {
   const [openPricingMatrix, setOpenPricingMatrix] = React.useState(false);
+  const [data, setData] = useState([
+    {
+      description: null,
+      amount: null,
+      actions: null,
+    },
+  ]);
+
+  const [plan, setPlan] = useState({ viewers: 0, streamingTime: 0 });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  const fetchData = async () => {
+    const res = await api.get("/api/invoice", {
+      params: { eventId: event.id },
+    });
+
+    const invoice = res.data;
+    var totalCost = 0;
+
+    console.log(invoice);
+
+    const lineItems = invoice.InvoiceLineItems.map((lineItem) => {
+      if (lineItem.type === "plan") {
+        const totalPlanCost =
+          lineItem.Plan.PlanType.fixedPrice +
+          lineItem.Plan.viewers *
+            lineItem.Plan.streamingTime *
+            lineItem.Plan.PlanType.pricePerViewerHour;
+
+        totalCost += totalPlanCost;
+
+        return {
+          description: (
+            <div>
+              {lineItem.Plan.PlanType.name} ({lineItem.Plan.viewers} viewers,{" "}
+              {lineItem.Plan.streamingTime}h)
+              <br></br>
+              <br></br>
+              <span className="billing-subtext">
+                *additional viewers or time will be billed at $
+                {lineItem.Plan.PlanType.pricePerViewerHour} per viewer per hour.
+              </span>
+            </div>
+          ),
+          amount: `$${totalPlanCost}`,
+          actions: (
+            <button className="Button1" onClick={handleOpenPricingMatrix}>
+              Change Plan
+            </button>
+          ),
+        };
+      } else {
+        const totalCustomCost =
+          lineItem.CustomLineItem.cost * lineItem.CustomLineItem.quantity;
+
+        totalCost += totalCustomCost;
+        return {
+          description: `${lineItem.CustomLineItem.description} (${lineItem.CustomLineItem.quantity} ${lineItem.CustomLineItem.unitType})`,
+          amount: `$${totalCustomCost}`,
+        };
+      }
+    });
+
+    const totalLine = [
+      {
+        description: <strong>TOTAL</strong>,
+        amount: <strong>${totalCost}</strong>,
+        actions: "",
+      },
+    ];
+
+    setPlan(invoice.Plan);
+    setData(lineItems.concat(totalLine));
+  };
 
   const handleClosePricingMatrix = () => {
     setOpenPricingMatrix(false);
+    fetchData();
   };
 
-  const handleOpenPricingMatrix = () => {
+  const handleOpenPricingMatrix = (event, rowData) => {
+    console.log(rowData);
     setOpenPricingMatrix(true);
   };
 
   const handleClickMatrixBlock = () => {
     setOpenPricingMatrix(false);
   };
-
-
-
-  const [data, setData] = useState([
-    { 
-      description: 
-        <div>
-          Pro (1000 viewers, 2h)
-          <br></br>
-          <br></br>
-          <span className="billing-subtext">
-            *additional viewers or time will be billed at $.01 per viewer per minute.
-          </span>
-        </div>, 
-      amount: '$832.00', 
-      actions: 
-        <button 
-          className='Button1' 
-          onClick={handleOpenPricingMatrix}
-        >
-          Change Plan
-        </button>
-    },
-    { description: 'Web Development (4h)', amount: '$500.00', actions: ''},
-    { description: <strong>TOTAL</strong>, amount: <strong>$1332.00</strong>, actions: ''}
-  ]);
 
   const columns = [
     { field: "id", defaultSort: "asc", hidden: true },
@@ -146,7 +197,13 @@ const BillingTable = (props) => {
       <Modal1
         open={openPricingMatrix}
         onClose={handleClosePricingMatrix}
-        content={<Sliders onClose={handleClosePricingMatrix}/>}
+        content={
+          <Sliders
+            onClose={handleClosePricingMatrix}
+            event={event}
+            currentPlan={plan}
+          />
+        }
       />
       <MaterialTable
         title=""
@@ -161,11 +218,6 @@ const BillingTable = (props) => {
     </div>
   );
 };
-
-
-
-
-
 
 const useStyles = makeStyles({
   root: {
@@ -210,15 +262,15 @@ const marksViewers = [
 
 function valuetextViewers(value) {
   return `${value} Viewers`;
-};
+}
 
 function valueLabelFormatViewers(value) {
   if (value <= 5000) {
     return value;
   } else {
-    return '5k+'
+    return "5k+";
   }
-};
+}
 
 const marksTime = [
   {
@@ -253,34 +305,23 @@ const marksTime = [
 
 function valuetextTime(value) {
   return value;
-};
+}
 
 function valueLabelFormatTime(value) {
   if (value <= 8) {
-    return value + ' h';
+    return value + " h";
   } else {
-    return '8+ h'
+    return "8+ h";
   }
-};
+}
 
-
-
-
-
-
-
-
-
-
-const Sliders = (props) => {
+const Sliders = ({ onClose, event, currentPlan }) => {
   const classes = useStyles();
 
-  const [viewers, setViewers] = React.useState(
-    500
-  );
+  const [viewers, setViewers] = React.useState(currentPlan.viewers || 0);
 
   const [streamingTime, setStreamingTime] = React.useState(
-    1
+    currentPlan.streamingTime || 0
   );
 
   const [essentialsAlertOpen, setEssentialsAlertOpen] = React.useState(false);
@@ -293,8 +334,13 @@ const Sliders = (props) => {
     setStreamingTime(newValue);
   };
 
-  const handleUpdatePlan = () => {
-    props.onClose();
+  const handleUpdatePlan = async () => {
+    const res = await api.put("/api/invoice/plan", {
+      eventId: event.id,
+      viewers,
+      streamingTime,
+    });
+    onClose();
     // insert save to db here
   };
 
@@ -308,15 +354,15 @@ const Sliders = (props) => {
 
   const handleCancelPro = () => {
     setEssentialsAlertOpen(false);
-    props.onClose();
+    onClose();
     // insert change db back to Essentials at $0
   };
 
   //Price Calculation:
   const fixedPrice = 250; // Fixed price per event. Covers support time and other costs.
-  const variablePrice = 0.10 // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs. 
-  const Price = fixedPrice + (viewers * streamingTime * variablePrice); // Price formula
-  const contactUs = (viewers > 5000) || (streamingTime > 8); // Contact us for events with over 5000 viewers or 8 hours of streaming time. 
+  const variablePrice = 0.1; // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs.
+  const Price = fixedPrice + viewers * streamingTime * variablePrice; // Price formula
+  const contactUs = viewers > 5000 || streamingTime > 8; // Contact us for events with over 5000 viewers or 8 hours of streaming time.
 
   return (
     <>
@@ -340,7 +386,7 @@ const Sliders = (props) => {
           valueLabelFormat={valueLabelFormatViewers} // previously valueLabelFormatViewers
           getAriaValueText={valuetextViewers}
           aria-labelledby="unique-viewers-slider"
-          min={500}
+          min={0}
           max={5500}
           step={null}
           valueLabelDisplay="on"
@@ -360,39 +406,49 @@ const Sliders = (props) => {
           valueLabelFormat={valueLabelFormatTime}
           getAriaValueText={valuetextTime}
           aria-labelledby="streaming-time-slider"
-          min={1}
+          min={0}
           max={9}
           step={null}
           valueLabelDisplay="on"
           marks={marksTime}
         />
       </div>
-      <div style={{ textAlign: 'center' }}>
+      <div style={{ textAlign: "center" }}>
         <br></br>
-        <p>{valueLabelFormatViewers(viewers) + ' viewers for ' + valueLabelFormatTime(streamingTime) + 'our(s)'}</p>
+        <p>
+          {valueLabelFormatViewers(viewers) +
+            " viewers for " +
+            valueLabelFormatTime(streamingTime) +
+            "our(s)"}
+        </p>
         {contactUs === false && (
           <>
-            <p>{'$' + Price + ' USD'}</p>
-            <span style={{ color: 'grey' }}>
-              *additional viewers or time will be billed <br></br>at $.01 per viewer per minute.
+            <p>{"$" + Price + " USD"}</p>
+            <span style={{ color: "grey" }}>
+              *additional viewers or time will be billed <br></br>at $.01 per
+              viewer per minute.
             </span>
             <br></br>
             <br></br>
-            <button className="Button1" onClick={handleUpdatePlan}>Update Plan</button>
+            <button className="Button1" onClick={handleUpdatePlan}>
+              Update Plan
+            </button>
           </>
         )}
         {contactUs === true && (
           <>
-          <p>Contact us for a price!</p>
-          <br></br> 
-          <br></br>
-          <br></br>
-          <button className="Button1" >Contact Us</button>
+            <p>Contact us for a price!</p>
+            <br></br>
+            <br></br>
+            <br></br>
+            <button className="Button1">Contact Us</button>
           </>
         )}
         <br></br>
         <br></br>
-        <div className="link1" onClick={openEssentialsAlert}>Cancel Pro Plan</div>
+        <div className="link1" onClick={openEssentialsAlert}>
+          Cancel Pro Plan
+        </div>
       </div>
     </>
   );

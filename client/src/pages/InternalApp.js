@@ -26,7 +26,7 @@ import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
 import Dashboard from "./dashboard";
 
-const InternalApp = (props) => {
+const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const targetEventId = urlParams.get("eventid");
   useEffect(() => {
@@ -34,19 +34,15 @@ const InternalApp = (props) => {
   }, []);
 
   const fetchEventData = async () => {
-    console.log(targetEventId);
     if (targetEventId) {
-      await props.setCurrentEvent(targetEventId);
+      await setCurrentEvent(targetEventId);
     }
 
-    props.fetchEvent();
+    fetchEvent();
   };
 
-  return (
+  return event.id ? (
     <div className="App">
-      <div id="accountId" style={{ display: "none" }}>
-        123
-      </div>
       <header className="App-header">
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -83,11 +79,11 @@ const InternalApp = (props) => {
         </Switch>
       </header>
     </div>
-  );
+  ) : null;
 };
 
 const mapStateToProps = (state) => {
-  return { user: state.user };
+  return { user: state.user, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(InternalApp);
