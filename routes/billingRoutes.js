@@ -87,18 +87,15 @@ router.post("/api/plan/upgrade", async (req, res, next) => {
 });
 
 router.put("/api/invoice/plan", async (req, res, next) => {
-  const { eventId, viewers, streamingTime } = req.body;
+  const { planId, viewers, streamingTime } = req.body;
 
   try {
-    const invoice = await Invoice.findOne({
-      where: { EventId: eventId },
-      include: Plan,
-    });
+    const plan = await Plan.findByPk(planId);
 
-    invoice.Plan.viewers = viewers;
-    invoice.Plan.streamingTime = streamingTime;
+    plan.viewers = viewers;
+    plan.streamingTime = streamingTime;
 
-    await invoice.Plan.save();
+    await plan.save();
 
     res.json();
   } catch (error) {

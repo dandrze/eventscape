@@ -6,7 +6,7 @@ const PlanType = sequelize.define("PlanType", {
   fixedPrice: { type: Sequelize.FLOAT, defaultValue: 250 },
   pricePerViewerHour: { type: Sequelize.FLOAT, defaultValue: 0.1 },
   description: { type: Sequelize.TEXT, defaultValue: "Default" },
-  isFreeDefaultPlan: { type: Sequelize.BOOLEAN, defaultValue: false },
+  type: { type: Sequelize.TEXT },
 });
 
 module.exports = PlanType;

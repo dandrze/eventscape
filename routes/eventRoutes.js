@@ -16,6 +16,7 @@ const {
   Invoice,
   Plan,
   PlanType,
+  InvoiceLineItem,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const { inviteUser } = require("../services/Invitations");
@@ -138,14 +139,18 @@ router.post("/api/event", async (req, res, next) => {
       polls: true,
     });
 
-    // Create a new billing plan for this event
-    // First find the default plan type
-    const defaultPlan = await PlanType.findOne({ where: { isDefault: true } });
+    // create a default plan and invoice
+    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
 
-    // Then create a new plan with the default PlanType
-    const newPlan = await Plan.create({
-      PlanTypeId: defaultPlan.id,
+    const invoice = await Invoice.create({ EventId: event.id });
+    const plan = await Plan.create({
       EventId: event.id,
+      PlanTypeId: defaultFreePlan.id,
+    });
+    const invoiceLineItem = await InvoiceLineItem.create({
+      InvoiceId: invoice.id,
+      type: "plan",
+      PlanId: plan.id,
     });
 
     res.json(event);
