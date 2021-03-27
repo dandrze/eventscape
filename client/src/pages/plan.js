@@ -25,6 +25,7 @@ const Plan = ({ event }) => {
   }, []);
 
   const fetchDataAsync = async () => {
+    console.log(event);
     const res = await api.get("/api/plan", {
       params: { eventId: event.id },
     });

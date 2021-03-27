@@ -42,7 +42,7 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
     fetchEvent();
   };
 
-  return event ? (
+  return event.id ? (
     <div className="App">
       <header className="App-header">
         <Switch>
