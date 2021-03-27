@@ -25,6 +25,7 @@ import Test from "./test";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
 import Dashboard from "./dashboard";
+import { CircularProgress } from "@material-ui/core";
 
 const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -41,7 +42,7 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
     fetchEvent();
   };
 
-  return event.id ? (
+  return event ? (
     <div className="App">
       <header className="App-header">
         <Switch>
@@ -79,7 +80,9 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
         </Switch>
       </header>
     </div>
-  ) : null;
+  ) : (
+    <CircularProgress />
+  );
 };
 
 const mapStateToProps = (state) => {
