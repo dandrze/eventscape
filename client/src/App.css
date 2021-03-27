@@ -834,3 +834,10 @@ select:focus {
   background: #f7f7f7;
   cursor: pointer;
 }
+
+/*For Pricing Table */
+
+.feature-list li {
+  font-size: 1rem;
+  margin: 16px 0px;
+}

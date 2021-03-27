@@ -18,7 +18,7 @@ router.get("/api/attendee/hash", async (req, res, next) => {
       attendee = await Registration.findOne({ where: { hash, EventId } });
     }
 
-    res.status(200).send(attendee);
+    res.json(attendee);
   } catch (error) {
     next(error);
   }

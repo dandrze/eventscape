@@ -19,7 +19,7 @@ router.put("/api/account", async (req, res) => {
   account.save();
   clearCache(`Account:id:${account.id}`);
 
-  res.status(200).send(account);
+  res.json(account);
 });
 
 router.post("/api/account", async (req, res, next) => {
@@ -55,7 +55,7 @@ router.post("/api/account", async (req, res, next) => {
 
     clearCache(`Account:id:${account.id}`);
 
-    res.status(200).send(account);
+    res.json(account);
   } catch (error) {
     next(error);
   }
@@ -69,7 +69,7 @@ router.get("/api/account/email", async (req, res, next) => {
       where: { emailAddress, registrationComplete: true },
     });
 
-    res.status(200).send(account);
+    res.json(account);
   } catch (error) {
     next(error);
   }

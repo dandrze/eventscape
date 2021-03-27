@@ -57,10 +57,6 @@ SiteVisitor.belongsTo(Registration);
 Event.hasMany(Registration);
 Registration.belongsTo(Event);
 
-// Old 1-1 mapping, to delete after new mapping in place
-Event.belongsTo(Account);
-Account.hasMany(Event);
-
 // new multi account mapping
 Permission.belongsTo(Event);
 Permission.belongsTo(Account);
@@ -96,13 +92,13 @@ InvoiceLineItem.belongsTo(CustomLineItem);
 InvoiceLineItem.belongsTo(Invoice);
 Invoice.hasMany(InvoiceLineItem);
 
-Invoice.belongsTo(Plan);
-
 Plan.belongsTo(PlanType);
 PlanType.hasMany(Plan);
 
 Invoice.belongsTo(Event);
 Event.hasMany(Invoice);
+
+Plan.belongsTo(Event);
 
 //sequelize.sync({ alter: true });
 //PageSection.sync({ alter: true });

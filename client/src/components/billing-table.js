@@ -57,7 +57,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BillingTable = ({ event }) => {
+const BillingTable = ({ event, plan }) => {
   const [openPricingMatrix, setOpenPricingMatrix] = React.useState(false);
   const [data, setData] = useState([
     {
@@ -66,8 +66,6 @@ const BillingTable = ({ event }) => {
       actions: null,
     },
   ]);
-
-  const [plan, setPlan] = useState({ viewers: 0, streamingTime: 0 });
 
   useEffect(() => {
     fetchData();
@@ -80,8 +78,6 @@ const BillingTable = ({ event }) => {
 
     const invoice = res.data;
     var totalCost = 0;
-
-    console.log(invoice);
 
     const lineItems = invoice.InvoiceLineItems.map((lineItem) => {
       if (lineItem.type === "plan") {
@@ -133,7 +129,6 @@ const BillingTable = ({ event }) => {
       },
     ];
 
-    setPlan(invoice.Plan);
     setData(lineItems.concat(totalLine));
   };
 
@@ -143,7 +138,6 @@ const BillingTable = ({ event }) => {
   };
 
   const handleOpenPricingMatrix = (event, rowData) => {
-    console.log(rowData);
     setOpenPricingMatrix(true);
   };
 

@@ -150,9 +150,11 @@ export const publishPage = () => async (dispatch, getState) => {
 export const isLinkAvailable = (link) => async (dispatch) => {
   const res = await api.get("/api/event/link", { params: { link } });
 
-  if (res.data.length === 0) {
-    return true;
-  } else {
+  console.log(res);
+
+  if (res.data) {
     return false;
+  } else {
+    return true;
   }
 };
