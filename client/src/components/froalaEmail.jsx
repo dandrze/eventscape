@@ -39,6 +39,7 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
     ? html.replace(/href=\".*?\"/, `href="#disabled_during_editting"`)
     : "";
   const config = {
+    enter: FroalaEditor.ENTER_DIV,
     toolbarButtons: {
       moreText: {
         buttons: [
@@ -78,11 +79,9 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
         buttons: [
           "insertLink",
           "insertImage",
-          "insertVideo",
           "insertTable",
           "emoticons",
           "specialCharacters",
-          "insertFile",
           "insertHR",
         ],
       },
@@ -124,6 +123,18 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
     imageUploadToS3: settings.s3Hash,
     //pluginsEnabled: ["image", "link", "draggable", ""],
     dragInline: false,
+    fontFamily: {
+      "Roboto, Verdana, sans-serif": "Roboto",
+      "Ariel, sans-serif": "Ariel",
+      "'Courier New', monospace": "Courier New",
+      "Verdana, sans-serif": "Verdana",
+      "Helvetica, Ariel, sans-serif": "Helvetica",
+      "Times, 'Times New Roman', serif": "Times",
+      "Georgia, serif": "Georgia",
+      "Tahoma, Geneva, sans-serif": "Tahoma",
+      "Lucida, sans-serif": "Lucida",
+      "Trebuchet, sans-serif": "Trebuchet",
+    },
   };
 
   return (
