@@ -25,19 +25,23 @@ const Plan = ({ event }) => {
   }, []);
 
   const fetchDataAsync = async () => {
-    console.log(event);
-    const res = await api.get("/api/plan", {
+    const res = await api.get("/api/billing/plan", {
       params: { eventId: event.id },
     });
-    console.log(res.data);
+
+    console.log(res);
 
     setPlan(res.data);
   };
 
-  const handleClickUpgrade = () => {
-    setOpenUpgradeModal(true);
-    //setOpenPricingMatrix(true);
-    api.post("/api/plan/upgrade", { eventId: event.id });
+  const handleClickUpdate = () => {
+    setOpenPricingMatrix(true);
+  };
+
+  const handleClosePricingMatrix = () => {
+    fetchDataAsync();
+    setOpenPricingMatrix(false);
+    console.log("close matrix and fetch data");
   };
 
   return (
@@ -48,17 +52,17 @@ const Plan = ({ event }) => {
         content={`Thank you for upgrading to professional. An Eventscape agent will contact you shortly to complete your upgrade.`}
         closeText="OK"
       />
-      {/* <Modal1
+      <Modal1
         open={openPricingMatrix}
         onClose={() => setOpenPricingMatrix(false)}
         content={
           <PlanSliders
-            onClose={() => setOpenPricingMatrix(false)}
+            closeAndUpdate={handleClosePricingMatrix}
             event={event}
             currentPlan={plan}
           />
         }
-      /> */}
+      />
       <NavBar3
         displaySideNav="true"
         highlight="plan"
@@ -119,7 +123,7 @@ const Plan = ({ event }) => {
                     <button
                       style={{ marginBottom: "30px" }}
                       className="Button1"
-                      onClick={handleClickUpgrade}
+                      onClick={handleClickUpdate}
                     >
                       Upgrade to Professional
                     </button>
@@ -142,7 +146,10 @@ const Plan = ({ event }) => {
                   </div>
                 </div>
               ) : (
-                <BillingTable plan={plan} />
+                <BillingTable
+                  plan={plan}
+                  handleClickUpdate={handleClickUpdate}
+                />
               )
             ) : (
               <CircularProgress />

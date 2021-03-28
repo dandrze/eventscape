@@ -5,14 +5,13 @@ import AlertModal from "./AlertModal";
 
 import api from "../api/server";
 
-export default ({ onClose, event, currentPlan }) => {
+export default ({ closeAndUpdate, event, currentPlan }) => {
   const [viewers, setViewers] = React.useState(currentPlan.viewers || 0);
+  const [essentialsAlertOpen, setEssentialsAlertOpen] = React.useState(false);
 
   const [streamingTime, setStreamingTime] = React.useState(
     currentPlan.streamingTime || 0
   );
-
-  console.log(currentPlan);
 
   const marksViewers = [
     {
@@ -103,8 +102,6 @@ export default ({ onClose, event, currentPlan }) => {
       return "8+ h";
     }
   }
-  const [essentialsAlertOpen, setEssentialsAlertOpen] = React.useState(false);
-
   const handleChangeViewers = (event, newValue) => {
     setViewers(newValue);
   };
@@ -113,14 +110,19 @@ export default ({ onClose, event, currentPlan }) => {
     setStreamingTime(newValue);
   };
 
-  const handleUpdatePlan = async () => {
-    const res = await api.put("/api/invoice/plan", {
+  const handleUpdatePlan = async (changePlanType) => {
+    const res = await api.put("/api/billing/plan", {
+      eventId: event.id,
       planId: currentPlan.id,
       viewers,
       streamingTime,
+      isUpgrade: changePlanType === "upgrade",
+      isCancel: changePlanType === "cancel",
     });
-    onClose();
-    // insert save to db here
+
+    console.log("update called");
+
+    closeAndUpdate();
   };
 
   const openEssentialsAlert = () => {
@@ -132,9 +134,8 @@ export default ({ onClose, event, currentPlan }) => {
   };
 
   const handleCancelPro = () => {
+    handleUpdatePlan("cancel");
     setEssentialsAlertOpen(false);
-    onClose();
-    // insert change db back to Essentials at $0
   };
 
   //Price Calculation:
@@ -147,13 +148,13 @@ export default ({ onClose, event, currentPlan }) => {
     <>
       <AlertModal
         open={essentialsAlertOpen}
-        onClose={handleCancelPro}
-        onContinue={closeEssentialsAlert}
-        text="If you cancel your Pro plan, you will lose access to advanced features such as the ability to control branding, custom registration fields, advanced analytics, and more. Are you sure you want to cancel? "
-        closeText="Cancel Pro Plan"
-        continueText="Go Back"
+        onClose={closeEssentialsAlert}
+        onContinue={() => handleUpdatePlan("cancel")}
+        content="If you cancel your Pro plan, you will lose access to advanced features such as the ability to control branding, custom registration fields, advanced analytics, and more. Are you sure you want to cancel? "
+        closeText="Go Back"
+        continueText="Cancel Pro Plan"
       />
-      <div style={{ width: "300px" }}>
+      <div>
         <Typography id="unique-viewers-slider" align="center" gutterBottom>
           Maximum Viewers
         </Typography>
@@ -192,8 +193,8 @@ export default ({ onClose, event, currentPlan }) => {
           marks={marksTime}
         />
       </div>
-      <div style={{ textAlign: "center" }}>
-        <br></br>
+      <div style={{ textAlign: "center", width: "450px" }}>
+        <br />
         <p>
           {valueLabelFormatViewers(viewers) +
             " viewers for " +
@@ -204,14 +205,30 @@ export default ({ onClose, event, currentPlan }) => {
           <>
             <p>{"$" + Price + " USD"}</p>
             <span style={{ color: "grey" }}>
+              Create now, pay later. You will be billed after your event is
+              complete.
+            </span>
+            <br />
+            <br />
+            <span style={{ color: "grey" }}>
               *additional viewers or time will be billed <br></br>at $.01 per
               viewer per minute.
             </span>
-            <br></br>
-            <br></br>
-            <button className="Button1" onClick={handleUpdatePlan}>
-              Update Plan
-            </button>
+            <br />
+            <br />
+
+            {currentPlan.PlanType.type === "free" ? (
+              <button
+                className="Button1"
+                onClick={() => handleUpdatePlan("upgrade")}
+              >
+                Upgrade Plan
+              </button>
+            ) : (
+              <button className="Button1" onClick={() => handleUpdatePlan()}>
+                Update Plan
+              </button>
+            )}
           </>
         )}
         {contactUs === true && (
@@ -223,11 +240,15 @@ export default ({ onClose, event, currentPlan }) => {
             <button className="Button1">Contact Us</button>
           </>
         )}
-        <br></br>
-        <br></br>
-        <div className="link1" onClick={openEssentialsAlert}>
-          Cancel Pro Plan
-        </div>
+        {currentPlan.PlanType.type === "free" ? null : (
+          <>
+            <br></br>
+            <br></br>
+            <div className="link1" onClick={openEssentialsAlert}>
+              Cancel Pro Plan
+            </div>
+          </>
+        )}
       </div>
     </>
   );

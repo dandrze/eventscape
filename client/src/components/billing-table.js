@@ -32,7 +32,7 @@ import CircularProgress from "@material-ui/core/CircularProgress";
 
 import * as actions from "../actions";
 import api from "../api/server";
-import PlanSliders from "./PlanSliders"
+import PlanSliders from "./PlanSliders";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -58,8 +58,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BillingTable = ({ event, plan }) => {
-  const [openPricingMatrix, setOpenPricingMatrix] = React.useState(false);
+const BillingTable = ({ event, plan, handleClickUpdate }) => {
   const [data, setData] = useState([
     {
       description: null,
@@ -70,10 +69,10 @@ const BillingTable = ({ event, plan }) => {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [plan]);
 
   const fetchData = async () => {
-    const res = await api.get("/api/invoice", {
+    const res = await api.get("/api/billing/invoice", {
       params: { eventId: event.id },
     });
 
@@ -105,7 +104,7 @@ const BillingTable = ({ event, plan }) => {
           ),
           amount: `$${totalPlanCost}`,
           actions: (
-            <button className="Button1" onClick={handleOpenPricingMatrix}>
+            <button className="Button1" onClick={handleClickUpdate}>
               Change Plan
             </button>
           ),
@@ -131,19 +130,6 @@ const BillingTable = ({ event, plan }) => {
     ];
 
     setData(lineItems.concat(totalLine));
-  };
-
-  const handleClosePricingMatrix = () => {
-    setOpenPricingMatrix(false);
-    fetchData();
-  };
-
-  const handleOpenPricingMatrix = (event, rowData) => {
-    setOpenPricingMatrix(true);
-  };
-
-  const handleClickMatrixBlock = () => {
-    setOpenPricingMatrix(false);
   };
 
   const columns = [
@@ -189,17 +175,6 @@ const BillingTable = ({ event, plan }) => {
 
   return (
     <div>
-      <Modal1
-        open={openPricingMatrix}
-        onClose={handleClosePricingMatrix}
-        content={
-          <PlanSliders
-            onClose={handleClosePricingMatrix}
-            event={event}
-            currentPlan={plan}
-          />
-        }
-      />
       <MaterialTable
         title=""
         columns={columns}

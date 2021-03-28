@@ -15,7 +15,7 @@ const {
 
 const { sendEmail } = require("../services/Mailer");
 
-router.get("/api/invoice", async (req, res, next) => {
+router.get("/api/billing/invoice", async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
@@ -35,7 +35,7 @@ router.get("/api/invoice", async (req, res, next) => {
   }
 });
 
-router.get("/api/plan", async (req, res, next) => {
+router.get("/api/billing/plan", async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
@@ -50,7 +50,7 @@ router.get("/api/plan", async (req, res, next) => {
   }
 });
 
-router.post("/api/plan/upgrade", async (req, res, next) => {
+router.post("/api/billing/plan/upgrade", async (req, res, next) => {
   const { eventId } = req.body;
 
   try {
@@ -86,8 +86,15 @@ router.post("/api/plan/upgrade", async (req, res, next) => {
   }
 });
 
-router.put("/api/invoice/plan", async (req, res, next) => {
-  const { planId, viewers, streamingTime } = req.body;
+router.put("/api/billing/plan", async (req, res, next) => {
+  const {
+    planId,
+    viewers,
+    streamingTime,
+    isUpgrade,
+    isCancel,
+    eventId,
+  } = req.body;
 
   try {
     const plan = await Plan.findByPk(planId);
@@ -95,9 +102,22 @@ router.put("/api/invoice/plan", async (req, res, next) => {
     plan.viewers = viewers;
     plan.streamingTime = streamingTime;
 
-    await plan.save();
+    if (isUpgrade) {
+      const paidPlan = await PlanType.findOne({ where: { type: "paid" } });
 
-    res.json();
+      // point the plan to the new paid plan
+      plan.PlanTypeId = paidPlan.id;
+    }
+
+    if (isCancel) {
+      const freePlan = await PlanType.findOne({ where: { type: "free" } });
+
+      plan.PlanTypeId = freePlan.id;
+    }
+
+    const savedPlan = await plan.save();
+
+    res.json(savedPlan);
   } catch (error) {
     next(error);
   }
