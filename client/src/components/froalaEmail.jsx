@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import FroalaEditor from "react-froala-wysiwyg";
+import FroalaEditorComponent from "react-froala-wysiwyg";
+import FroalaEditor from "froala-editor";
 
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import "froala-editor/css/froala_style.min.css";
@@ -139,7 +140,7 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
 
   return (
     <div>
-      <FroalaEditor
+      <FroalaEditorComponent
         config={config}
         model={cleanedHtml}
         onModelChange={handleHtmlChange}
