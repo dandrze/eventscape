@@ -107,12 +107,34 @@ router.put("/api/billing/plan", async (req, res, next) => {
 
       // point the plan to the new paid plan
       plan.PlanTypeId = paidPlan.id;
+
+      sendEmail({
+        to: "kevin.richardson@eventscape.io",
+        subject: "A user upgraded their event to premium",
+        html: `<p>Event Id ${eventId} has upgraded their plan to premium. <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
+      });
+      sendEmail({
+        to: "david.andrzejewski@eventscape.io",
+        subject: "A user upgraded their event to premium",
+        html: `<p>Event Id ${eventId} has upgraded their plan to premium. <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
+      });
     }
 
     if (isCancel) {
       const freePlan = await PlanType.findOne({ where: { type: "free" } });
 
       plan.PlanTypeId = freePlan.id;
+
+      sendEmail({
+        to: "kevin.richardson@eventscape.io",
+        subject: "A user downgraded their event to essentials",
+        html: `<p>Event Id ${eventId} has downgraded their plan to essentials.`,
+      });
+      sendEmail({
+        to: "david.andrzejewski@eventscape.io",
+        subject: "A user downgraded their event to essentials",
+        html: `<p>Event Id ${eventId} has downgraded their plan to essentials.`,
+      });
     }
 
     const savedPlan = await plan.save();
