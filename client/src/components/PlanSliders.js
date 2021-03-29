@@ -5,13 +5,16 @@ import AlertModal from "./AlertModal";
 
 import api from "../api/server";
 
-export default ({ closeAndUpdate, event, currentPlan }) => {
+export default ({ closeAndUpdate, event, currentPlan, pricing }) => {
   const [viewers, setViewers] = React.useState(currentPlan.viewers || 0);
   const [essentialsAlertOpen, setEssentialsAlertOpen] = React.useState(false);
-
   const [streamingTime, setStreamingTime] = React.useState(
     currentPlan.streamingTime || 0
   );
+
+  const premiumPricing = pricing.filter(
+    (planType) => planType.type === "paid"
+  )[0];
 
   const marksViewers = [
     {
@@ -139,8 +142,8 @@ export default ({ closeAndUpdate, event, currentPlan }) => {
   };
 
   //Price Calculation:
-  const fixedPrice = 250; // Fixed price per event. Covers support time and other costs.
-  const variablePrice = 0.1; // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs.
+  const fixedPrice = premiumPricing.fixedPrice; // Fixed price per event. Covers support time and other costs.
+  const variablePrice = premiumPricing.pricePerViewerHour; // Variable price per viewer per hour. Covers CDN streaming costs and other variable costs.
   const Price = fixedPrice + viewers * streamingTime * variablePrice; // Price formula
   const contactUs = viewers > 5000 || streamingTime > 8; // Contact us for events with over 5000 viewers or 8 hours of streaming time.
 

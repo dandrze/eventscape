@@ -17,6 +17,7 @@ import PlanSliders from "../components/PlanSliders";
 
 const Plan = ({ event }) => {
   const [plan, setPlan] = useState(null);
+  const [pricing, setPricing] = useState(null);
   const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
   const [openPricingMatrix, setOpenPricingMatrix] = React.useState(false);
 
@@ -25,13 +26,14 @@ const Plan = ({ event }) => {
   }, []);
 
   const fetchDataAsync = async () => {
-    const res = await api.get("/api/billing/plan", {
+    const planRes = await api.get("/api/billing/plan", {
       params: { eventId: event.id },
     });
 
-    console.log(res);
+    const pricingRes = await api.get("/api/billing/pricing");
 
-    setPlan(res.data);
+    setPlan(planRes.data);
+    setPricing(pricingRes.data);
   };
 
   const handleClickUpdate = () => {
@@ -56,11 +58,19 @@ const Plan = ({ event }) => {
         open={openPricingMatrix}
         onClose={() => setOpenPricingMatrix(false)}
         content={
-          <PlanSliders
-            closeAndUpdate={handleClosePricingMatrix}
-            event={event}
-            currentPlan={plan}
-          />
+          pricing ? (
+            <PlanSliders
+              closeAndUpdate={handleClosePricingMatrix}
+              event={event}
+              currentPlan={plan}
+              pricing={pricing}
+            />
+          ) : (
+            <div>
+              Could not retrieve pricing from server. Please refresh the page
+              and try again
+            </div>
+          )
         }
       />
       <NavBar3

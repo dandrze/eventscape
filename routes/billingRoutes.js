@@ -35,6 +35,16 @@ router.get("/api/billing/invoice", async (req, res, next) => {
   }
 });
 
+router.get("/api/billing/pricing", async (req, res, next) => {
+  try {
+    const planTypes = await PlanType.findAll();
+
+    res.json(planTypes);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.get("/api/billing/plan", async (req, res, next) => {
   const { eventId } = req.query;
 
