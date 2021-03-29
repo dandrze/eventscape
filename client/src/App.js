@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CookieConsent from "react-cookie-consent";
 
 import "./App.css";
 import "./components/fonts.css";
@@ -94,6 +95,10 @@ function App({ user, location, fetchUser, attendee }) {
     // it's an app (rather than an event page) so render the app components
     return (
       <div className="App">
+        <CookieConsent>
+          This website uses cookies to enhance the user experience.
+        </CookieConsent>
+
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
           <Suspense
@@ -138,6 +143,9 @@ function App({ user, location, fetchUser, attendee }) {
     // is not the app, therefore is an event
     return (
       <div className="App">
+        <CookieConsent>
+          This website uses cookies to enhance the user experience.
+        </CookieConsent>
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
           <Suspense
