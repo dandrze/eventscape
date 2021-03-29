@@ -70,7 +70,7 @@ function App({ user, location, fetchUser, attendee }) {
         <Redirect
           to={{
             pathname: "/login",
-            search: `?eventid=${targetEventId}`,
+            search: targetEventId ? `?eventid=${targetEventId}` : "",
             state: { from: location },
           }}
         />
