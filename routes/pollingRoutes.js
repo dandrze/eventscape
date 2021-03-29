@@ -23,7 +23,7 @@ router.get("/api/polling/poll/all", async (req, res, next) => {
       order: [["id", "ASC"]],
     });
 
-    res.status(200).send(polls);
+    res.json(polls);
   } catch (error) {
     next(error);
   }
@@ -48,7 +48,7 @@ router.get("/api/polling/data", async (req, res, next) => {
       },
     });
 
-    res.status(200).send(pollResponses);
+    res.json(pollResponses);
   } catch (error) {
     next(error);
   }
@@ -102,7 +102,7 @@ responseCount= 90}
       });
     }
 
-    res.status(200).send({ results, totalResponded });
+    res.json({ results, totalResponded });
   } catch (error) {
     next(error);
   }
@@ -119,7 +119,7 @@ router.delete("/api/polling/results", async (req, res, next) => {
     const pollOptionIds = pollOptions.map((pollOption) => pollOption.id);
     // delete all respones that contain these poll options
     await PollResponse.destroy({ where: { PollOptionId: pollOptionIds } });
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -133,7 +133,7 @@ router.put("/api/polling/poll", async (req, res, next) => {
     poll.isLaunched = true;
     poll.save();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -156,7 +156,7 @@ router.post("/api/polling/poll", async (req, res, next) => {
         text: option.text,
       });
     }
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -169,7 +169,7 @@ router.delete("/api/polling/poll", async (req, res, next) => {
     const poll = await Poll.findByPk(pollId);
     if (poll) await poll.destroy();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -215,7 +215,7 @@ router.put("/api/polling/poll", async (req, res, next) => {
       }
     }
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }

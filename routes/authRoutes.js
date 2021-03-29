@@ -80,9 +80,9 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
         html,
       });
 
-      return res.status(200).send(true);
+      return res.json(true);
     } else {
-      return res.status(200).send(false);
+      return res.json(false);
     }
   } catch (error) {
     next(error);
@@ -127,7 +127,7 @@ router.post("/auth/change-password-with-token", async (req, res, next) => {
     await account.save();
     clearCache(`Account:${account.id}:pk`);
 
-    return res.status(200).send(true);
+    return res.json(true);
   } catch {
     return res.status(400).json({ message: "Invalid password reset link" });
   }
@@ -154,7 +154,7 @@ router.put("/auth/change-password", async (req, res, next) => {
     account.save();
     clearCache(`Account:id:${account.id}`);
 
-    res.status(200).send(account);
+    res.json(account);
   } catch (error) {
     next(error);
   }

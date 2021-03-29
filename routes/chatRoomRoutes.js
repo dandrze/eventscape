@@ -27,7 +27,7 @@ router.get("/api/chatroom/default", async (req, res, next) => {
       await newRoom.save();
     }
 
-    res.status(200).send({ id: newRoom.id });
+    res.json({ id: newRoom.id });
   } catch (error) {
     next(error);
   }
@@ -39,7 +39,7 @@ router.get("/api/chatroom/id", async (req, res, next) => {
   try {
     const chatRoom = await ChatRoom.findByPk(roomId);
 
-    res.status(200).send(chatRoom);
+    res.json(chatRoom);
   } catch (error) {
     next(error);
   }
@@ -54,7 +54,7 @@ router.get("/api/chatroom/export/chat", async (req, res, next) => {
       include: { model: ChatUser, include: Registration },
     });
 
-    res.status(200).send(chatMessages);
+    res.json(chatMessages);
   } catch (error) {
     next(error);
   }
@@ -69,7 +69,7 @@ router.get("/api/chatroom/export/questions", async (req, res, next) => {
       include: { model: ChatUser, include: Registration },
     });
 
-    res.status(200).send(chatQuestions);
+    res.json(chatQuestions);
   } catch (error) {
     next(error);
   }
@@ -84,7 +84,7 @@ router.get("/api/chatroom/all", async (req, res) => {
       },
     });
 
-    res.status(200).send(chatRooms);
+    res.json(chatRooms);
   } catch (error) {
     next(error);
   }
@@ -105,7 +105,7 @@ router.put("/api/chatroom", async (req, res, next) => {
     dbRoom.name = name;
     dbRoom.save();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -125,7 +125,7 @@ router.put("/api/chatuser", async (req, res, next) => {
     dbUser.name = name;
     dbUser.save();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -147,7 +147,7 @@ router.get("/api/chatuser", async (req, res, next) => {
       await dbUser.save();
     }
 
-    res.status(200).send(dbUser);
+    res.json(dbUser);
   } catch (error) {
     next(error);
   }
@@ -170,7 +170,7 @@ router.delete("/api/chatroom", async (req, res, next) => {
 
     if (chatRoom) await chatRoom.destroy();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -183,7 +183,7 @@ router.post("/api/chatroom", async (req, res, next) => {
   try {
     const newRoom = await ChatRoom.create({ name: room.name, event });
 
-    res.status(200).send(newRoom);
+    res.json(newRoom);
   } catch (error) {
     next(error);
   }
@@ -200,7 +200,7 @@ router.put("/api/chatroom/tab-set-enabled", async (req, res, next) => {
     await chatRoom.save();
     clearCache(`ChatRoom:id:${chatRoom.id}`);
 
-    res.status(200).send(chatRoom);
+    res.json(chatRoom);
   } catch (error) {
     next(error);
   }

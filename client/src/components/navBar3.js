@@ -50,6 +50,7 @@ import EnvelopeIcon from "../icons/envelope.svg";
 import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
+import InvoiceIcon from "../icons/invoice3.svg";
 import PollIcon from "../icons/poll-1.svg";
 import CharChartIcon from "../icons/bar-chart.svg";
 import TeamIcon from "../icons/team.svg";
@@ -683,6 +684,24 @@ function NavBar3(props) {
                     </ListItemIcon>
                   </Tooltip>
                   <ListItemText primary="Messaging" />
+                </ListItem>
+              </Link>
+            ) : null}
+            {props.event.permissions?.role === "owner" ? (
+              <Link to="/plan">
+                <ListItem
+                  button
+                  key="plan"
+                  className={clsx({
+                    [classes.highlight]: highlight === "plan",
+                  })}
+                >
+                  <Tooltip title="Plan">
+                    <ListItemIcon>
+                      <img src={InvoiceIcon} height="20px"></img>
+                    </ListItemIcon>
+                  </Tooltip>
+                  <ListItemText primary="Plan" />
                 </ListItem>
               </Link>
             ) : null}

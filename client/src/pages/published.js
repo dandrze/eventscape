@@ -15,6 +15,8 @@ import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
 import LongLoadingScreen from "../components/LongLoadingScreen";
+import BrandingTop from "../components/BrandingTop";
+import BrandingBottom from "../components/BrandingBottom";
 import Modal1 from "../components/Modal1";
 import PollBlock from "../components/polling/PollBlock";
 import ResultsChart from "../components/polling/ResultsChart";
@@ -181,6 +183,7 @@ const Published = (props) => {
           closeText="Close"
         />
         <style>{theme(props.event.primaryColor)}</style>
+        <BrandingTop />
         <ul>
           {props.model.sections.map(function (section) {
             return section.isReact ? (
@@ -200,6 +203,7 @@ const Published = (props) => {
             );
           })}
         </ul>
+        <BrandingBottom />
       </div>
     );
   }

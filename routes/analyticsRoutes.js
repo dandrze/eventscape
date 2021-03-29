@@ -59,7 +59,7 @@ router.get("/api/analytics/visitor-data", async (req, res, next) => {
 
     const history = await createVisitHistory(visitData, EventId);
 
-    res.status(200).send({ currentCount, uniqueCount, visitorData, history });
+    res.json({ currentCount, uniqueCount, visitorData, history });
   } catch (error) {
     next(error);
   }
@@ -76,7 +76,7 @@ router.get("/api/analytics/current-visitors", async (req, res, next) => {
       },
     });
 
-    res.status(200).send({ currentVisitors });
+    res.json({ currentVisitors });
   } catch (error) {
     next(error);
   }

@@ -48,7 +48,7 @@ router.get("/api/s3url", async (req, res, ext) => {
     Expires: signedUrlExpireSeconds,
   });
 
-  res.status(200).send(url);
+  res.json(url);
 });
 
 router.post("/api/froala/delete-image", async (req, res, next) => {

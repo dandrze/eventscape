@@ -19,6 +19,11 @@ const Poll = require("./models/Poll");
 const PollOption = require("./models/PollOption");
 const PollResponse = require("./models/PollResponse");
 const Permission = require("./models/Permission");
+const Plan = require("./models/Plan");
+const PlanType = require("./models/PlanType");
+const InvoiceLineItem = require("./models/InvoiceLineItem");
+const Invoice = require("./models/Invoice");
+const CustomLineItem = require("./models/CustomLineItem");
 
 ChatMessage.belongsTo(ChatUser);
 ChatMessage.belongsTo(ChatRoom);
@@ -52,10 +57,6 @@ SiteVisitor.belongsTo(Registration);
 Event.hasMany(Registration);
 Registration.belongsTo(Event);
 
-// Old 1-1 mapping, to delete after new mapping in place
-Event.belongsTo(Account);
-Account.hasMany(Event);
-
 // new multi account mapping
 Permission.belongsTo(Event);
 Permission.belongsTo(Account);
@@ -84,6 +85,20 @@ Poll.hasMany(PollOption);
 
 PollResponse.belongsTo(SiteVisitor);
 PollResponse.belongsTo(PollOption);
+
+InvoiceLineItem.belongsTo(Plan);
+InvoiceLineItem.belongsTo(CustomLineItem);
+
+InvoiceLineItem.belongsTo(Invoice);
+Invoice.hasMany(InvoiceLineItem);
+
+Plan.belongsTo(PlanType);
+PlanType.hasMany(Plan);
+
+Invoice.belongsTo(Event);
+Event.hasMany(Invoice);
+
+Plan.belongsTo(Event);
 
 //sequelize.sync({ alter: true });
 //PageSection.sync({ alter: true });
@@ -134,5 +149,10 @@ module.exports = {
     PollOption,
     PollResponse,
     Permission,
+    PlanType,
+    Plan,
+    InvoiceLineItem,
+    Invoice,
+    CustomLineItem,
   },
 };

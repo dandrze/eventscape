@@ -58,7 +58,7 @@ router.post("/api/registration", async (req, res, next) => {
     }
 
     //if no errors were triggered and sent (res.status.(500).send()) then everything worked and send the new regsitration
-    res.status(200).send(registration);
+    res.json(registration);
   } catch (error) {
     next(error);
   }
@@ -76,7 +76,7 @@ router.put("/api/registration", async (req, res, next) => {
 
     registration.save();
 
-    res.status(200).send(registration);
+    res.json(registration);
   } catch (error) {
     next(error);
   }
@@ -100,7 +100,7 @@ router.post("/api/registration/bulk", async (req, res, next) => {
       result.save();
     }
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -116,7 +116,7 @@ router.get("/api/registration/event", async (req, res, next) => {
       },
     });
 
-    res.status(200).send(registrations);
+    res.json(registrations);
   } catch (error) {
     next(error);
   }
@@ -134,7 +134,7 @@ router.get("/api/registration/email", async (req, res, next) => {
       },
     });
 
-    res.status(200).send(registration);
+    res.json(registration);
   } catch (error) {
     next(error);
   }
@@ -176,7 +176,7 @@ router.post("/api/registration/email/resend", async (req, res, next) => {
       }
     }
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -188,7 +188,7 @@ router.delete("/api/registration/id", async (req, res, next) => {
     const registration = await Registration.findByPk(id);
     await registration.destroy();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -205,7 +205,7 @@ router.post("/api/form", async (req, res, next) => {
     registrationForm.data = data;
     await registrationForm.save();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -219,7 +219,7 @@ router.get("/api/form", async (req, res, next) => {
       where: { EventId: event },
     });
 
-    res.status(200).send((registrationForm && registrationForm.data) || []);
+    res.json((registrationForm && registrationForm.data) || []);
   } catch (error) {
     next(error);
   }

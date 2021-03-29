@@ -16,7 +16,7 @@ router.get("/api/model/id", async (req, res, next) => {
       order: [["index", "ASC"]],
     });
 
-    res.status(200).send(pageSections);
+    res.json(pageSections);
   } catch (error) {
     next(error);
   }
@@ -28,11 +28,11 @@ router.get("/api/model/id/uncached", async (req, res, next) => {
     const pageSections = await PageSection.findAll({
       where: { PageModelId: id },
       order: [["index", "ASC"]],
-    })
+    });
 
-    console.log(pageSections)
+    console.log(pageSections);
 
-    res.status(200).send(pageSections);
+    res.json(pageSections);
   } catch (error) {
     next(error);
   }
@@ -62,7 +62,7 @@ router.put("/api/model", async (req, res, next) => {
       });
     }
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }

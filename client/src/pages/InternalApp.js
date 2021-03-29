@@ -12,6 +12,7 @@ import Communication from "./communication";
 import Registrations from "./registrations";
 import Analytics from "./analytics";
 import Messaging from "./messaging";
+import Plan from "./plan";
 import Preview from "./preview";
 import EventDetailsPage from "./EventDetailsPage";
 import AccountSettingsContact from "./account-settings-contact";
@@ -24,8 +25,9 @@ import Test from "./test";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
 import Dashboard from "./dashboard";
+import { CircularProgress } from "@material-ui/core";
 
-const InternalApp = (props) => {
+const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const targetEventId = urlParams.get("eventid");
   useEffect(() => {
@@ -33,19 +35,15 @@ const InternalApp = (props) => {
   }, []);
 
   const fetchEventData = async () => {
-    console.log(targetEventId);
     if (targetEventId) {
-      await props.setCurrentEvent(targetEventId);
+      await setCurrentEvent(targetEventId);
     }
 
-    props.fetchEvent();
+    fetchEvent();
   };
 
-  return (
+  return event.id ? (
     <div className="App">
-      <div id="accountId" style={{ display: "none" }}>
-        123
-      </div>
       <header className="App-header">
         <Switch>
           <Route exact path="/" component={Dashboard} />
@@ -58,6 +56,7 @@ const InternalApp = (props) => {
           <Route exact path="/polls" component={Polls} />
           <Route exact path="/analytics" component={Analytics} />
           <Route exact path="/messaging" component={Messaging} />
+          <Route exact path="/plan" component={Plan} />
           <Route exact path="/preview/:event/:model" component={Preview} />
           <Route
             exact
@@ -81,11 +80,13 @@ const InternalApp = (props) => {
         </Switch>
       </header>
     </div>
+  ) : (
+    <CircularProgress />
   );
 };
 
 const mapStateToProps = (state) => {
-  return { user: state.user };
+  return { user: state.user, event: state.event };
 };
 
 export default connect(mapStateToProps, actions)(InternalApp);

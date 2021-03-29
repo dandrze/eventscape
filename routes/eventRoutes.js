@@ -13,6 +13,10 @@ const {
   Communication,
   Permission,
   Account,
+  Invoice,
+  Plan,
+  PlanType,
+  InvoiceLineItem,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const { inviteUser } = require("../services/Invitations");
@@ -135,7 +139,21 @@ router.post("/api/event", async (req, res, next) => {
       polls: true,
     });
 
-    res.status(200).send(event);
+    // create a default plan and invoice
+    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
+
+    const invoice = await Invoice.create({ EventId: event.id });
+    const plan = await Plan.create({
+      EventId: event.id,
+      PlanTypeId: defaultFreePlan.id,
+    });
+    const invoiceLineItem = await InvoiceLineItem.create({
+      InvoiceId: invoice.id,
+      type: "plan",
+      PlanId: plan.id,
+    });
+
+    res.json(event);
   } catch (error) {
     next(error);
   }
@@ -224,7 +242,7 @@ router.post("/api/event/duplicate", async (req, res, next) => {
       });
     }
 
-    res.status(200).send(event);
+    res.json(event);
   } catch (error) {
     next(error);
   }
@@ -244,7 +262,7 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
       event = await Event.findOne({ where: { OwnerId: accountId } });
     }
 
-    res.status(200).send(event);
+    res.json(event);
   } catch (error) {
     next(error);
   }
@@ -263,7 +281,7 @@ router.put("/api/event/id/make-current", async (req, res, next) => {
       account.currentEventId = eventId;
       await account.save();
 
-      res.status(200).send();
+      res.json();
     } else {
       const event = await Event.findByPk(eventId);
       res.status(400).send({
@@ -287,7 +305,7 @@ router.get("/api/event/all", async (req, res, next) => {
       events.push(await Event.findByPk(permission.EventId));
     }
 
-    res.status(200).send(events);
+    res.json(events);
   } catch (error) {
     next(error);
   }
@@ -317,7 +335,7 @@ router.get("/api/event/link", async (req, res, next) => {
       }
     );
 
-    res.status(200).send(event);
+    res.json(event);
   } catch (error) {
     next(error);
   }
@@ -394,7 +412,7 @@ router.get("/api/chatroom/default", async (req, res, next) => {
       await newRoom.save();
     }
 
-    res.status(200).send({ id: newRoom.id });
+    res.json({ id: newRoom.id });
   } catch (error) {
     next(error);
   }
@@ -410,7 +428,7 @@ router.get("/api/chatroom/all", async (req, res, next) => {
       },
     });
 
-    res.status(200).send(chatRooms);
+    res.json(chatRooms);
   } catch (error) {
     next(error);
   }
@@ -431,7 +449,7 @@ router.put("/api/chatroom", async (req, res, next) => {
     dbRoom.name = name;
     dbRoom.save();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -452,7 +470,7 @@ router.delete("/api/chatroom", async (req, res, next) => {
         .send({ message: "You cannot delete the primary chat room." });
     if (chatRoom) await chatRoom.destroy();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -465,7 +483,7 @@ router.post("/api/chatroom", async (req, res, next) => {
   try {
     const newRoom = await ChatRoom.create({ name: room.name, event });
 
-    res.status(200).send(newRoom);
+    res.json(newRoom);
   } catch (error) {
     next(error);
   }
@@ -485,7 +503,7 @@ router.get("/api/event/chat-moderator", async (req, res, next) => {
     if (created) chatUser.name = "Moderator";
     chatUser.save();
 
-    res.status(200).send(chatUser);
+    res.json(chatUser);
   } catch (error) {
     next(error);
   }
@@ -507,7 +525,7 @@ router.put("/api/event/chat-moderator", async (req, res, next) => {
     chatUser.name = name;
     chatUser.save();
 
-    res.status(200).send(chatUser);
+    res.json(chatUser);
   } catch (error) {
     next(error);
   }
@@ -551,7 +569,7 @@ router.post("/api/event/permissions", async (req, res, next) => {
     console.log("account created with " + emailAddress);
     // }
 
-    res.status(200).send(permission);
+    res.json(permission);
   } catch (error) {
     next(error);
   }
@@ -585,7 +603,7 @@ router.post("/api/event/transfer-ownership", async (req, res, next) => {
     newPermission.registration = true;
     newPermission.save();
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -602,7 +620,7 @@ router.get("/api/event/permissions", async (req, res, next) => {
       include: Account,
     });
 
-    res.status(200).send(permissions);
+    res.json(permissions);
   } catch (error) {
     next(error);
   }
@@ -618,7 +636,7 @@ router.delete("/api/event/permissions", async (req, res, next) => {
       },
     });
 
-    res.status(200).send();
+    res.json();
   } catch (error) {
     next(error);
   }
@@ -656,7 +674,7 @@ router.put("/api/event/permissions", async (req, res, next) => {
 
     permission.save();
 
-    res.status(200).send(permission);
+    res.json(permission);
   } catch (error) {
     next(error);
   }

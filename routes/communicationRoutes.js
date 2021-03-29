@@ -70,7 +70,7 @@ router.delete("/api/communication", async (req, res, next) => {
   try {
     const response = await Communication.destroy({ where: { id } });
 
-    res.status(200).send({ response });
+    res.json({ response });
   } catch (error) {
     next(error);
   }
@@ -136,7 +136,7 @@ router.get("/api/communication-list", async (req, res, next) => {
       where: { CommunicationId: emailId },
     });
 
-    res.status(200).send(emailListRecipients);
+    res.json(emailListRecipients);
   } catch (error) {
     next(error);
   }
@@ -159,7 +159,7 @@ router.post("/api/communication-list", async (req, res, next) => {
 
     await emailListRecipient.save();
 
-    res.status(200).send(emailListRecipient);
+    res.json(emailListRecipient);
   } catch (error) {
     next(error);
   }
@@ -178,7 +178,7 @@ router.put("/api/communication-list", async (req, res, next) => {
     emailListRecipient.email = email;
     await emailListRecipient.save();
 
-    res.status(200).send(emailListRecipient);
+    res.json(emailListRecipient);
   } catch (error) {
     next(error);
   }
@@ -191,7 +191,7 @@ router.delete("/api/communication-list", async (req, res, next) => {
     const emailListRecipient = await EmailListRecipient.findByPk(id);
     const response = await emailListRecipient.destroy();
 
-    res.status(200).send({ response });
+    res.json({ response });
   } catch (error) {
     next(error);
   }
@@ -222,7 +222,7 @@ router.post("/api/communication/test", async (req, res, next) => {
     );
 
     if (success) {
-      res.status(200).send();
+      res.json();
     } else {
       res.status(400).send();
     }
