@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 
-import FroalaEditor from "react-froala-wysiwyg";
+import FroalaEditorComponent from "react-froala-wysiwyg";
+import FroalaEditor from "froala-editor";
 
 import "froala-editor/js/froala_editor.pkgd.min.js";
 import "froala-editor/css/froala_style.min.css";
@@ -39,6 +40,7 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
     ? html.replace(/href=\".*?\"/, `href="#disabled_during_editting"`)
     : "";
   const config = {
+    enter: FroalaEditor.ENTER_DIV,
     toolbarButtons: {
       moreText: {
         buttons: [
@@ -78,11 +80,9 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
         buttons: [
           "insertLink",
           "insertImage",
-          "insertVideo",
           "insertTable",
           "emoticons",
           "specialCharacters",
-          "insertFile",
           "insertHR",
         ],
       },
@@ -124,11 +124,23 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
     imageUploadToS3: settings.s3Hash,
     //pluginsEnabled: ["image", "link", "draggable", ""],
     dragInline: false,
+    fontFamily: {
+      "Roboto, Verdana, sans-serif": "Roboto",
+      "Ariel, sans-serif": "Ariel",
+      "'Courier New', monospace": "Courier New",
+      "Verdana, sans-serif": "Verdana",
+      "Helvetica, Ariel, sans-serif": "Helvetica",
+      "Times, 'Times New Roman', serif": "Times",
+      "Georgia, serif": "Georgia",
+      "Tahoma, Geneva, sans-serif": "Tahoma",
+      "Lucida, sans-serif": "Lucida",
+      "Trebuchet, sans-serif": "Trebuchet",
+    },
   };
 
   return (
     <div>
-      <FroalaEditor
+      <FroalaEditorComponent
         config={config}
         model={cleanedHtml}
         onModelChange={handleHtmlChange}
