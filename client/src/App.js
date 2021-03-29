@@ -95,8 +95,15 @@ function App({ user, location, fetchUser, attendee }) {
     // it's an app (rather than an event page) so render the app components
     return (
       <div className="App">
-        <CookieConsent>
-          This website uses cookies to enhance the user experience.
+        <CookieConsent
+          location="bottom"
+          buttonText="I accept"
+          cookieName="CookieConsent"
+          style={{ background: "#b0281c" }}
+          buttonStyle={{ color: "#ffffff", fontSize: "13px" }}
+        >
+          This website uses cookies to enhance the user experience such as
+          providing a secure login.
         </CookieConsent>
 
         <ToastContainer position="top-right" autoClose={3000} />
@@ -143,8 +150,15 @@ function App({ user, location, fetchUser, attendee }) {
     // is not the app, therefore is an event
     return (
       <div className="App">
-        <CookieConsent>
-          This website uses cookies to enhance the user experience.
+        <CookieConsent
+          location="bottom"
+          buttonText="I accept"
+          cookieName="CookieConsent"
+          style={{ background: "#b0281c" }}
+          buttonStyle={{ color: "#ffffff", fontSize: "13px" }}
+        >
+          This website uses cookies to provide a consistent experience in the
+          chat, Q&A and other event elements.
         </CookieConsent>
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
