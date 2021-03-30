@@ -4,6 +4,7 @@ const { Registration } = require("../db").models;
 
 const router = express.Router();
 
+// publically accessible route
 router.get("/api/attendee/hash", async (req, res, next) => {
   const { hash, EventId } = req.query;
 

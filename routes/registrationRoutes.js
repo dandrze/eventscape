@@ -10,7 +10,9 @@ const {
   sequelize,
   models: { Registration, Communication, Event, RegistrationForm },
 } = require("../db");
+const requireAuth = require("../middlewares/requireAuth");
 
+// publicly accessible endpoint
 router.post("/api/registration", async (req, res, next) => {
   const { EventId, values, emailAddress, firstName, lastName } = req.body;
 
@@ -64,7 +66,7 @@ router.post("/api/registration", async (req, res, next) => {
   }
 });
 
-router.put("/api/registration", async (req, res, next) => {
+router.put("/api/registration", requireAuth, async (req, res, next) => {
   const { id, values, emailAddress, firstName, lastName } = req.body;
 
   try {
@@ -82,7 +84,7 @@ router.put("/api/registration", async (req, res, next) => {
   }
 });
 
-router.post("/api/registration/bulk", async (req, res, next) => {
+router.post("/api/registration/bulk", requireAuth, async (req, res, next) => {
   const { registrations, eventId } = req.body;
 
   try {
@@ -106,7 +108,7 @@ router.post("/api/registration/bulk", async (req, res, next) => {
   }
 });
 
-router.get("/api/registration/event", async (req, res, next) => {
+router.get("/api/registration/event", requireAuth, async (req, res, next) => {
   const { event } = req.query;
 
   try {
@@ -122,6 +124,7 @@ router.get("/api/registration/event", async (req, res, next) => {
   }
 });
 
+// publicly accessible endpoint
 router.get("/api/registration/email", async (req, res, next) => {
   const { emailAddress, EventId } = req.query;
 
@@ -140,6 +143,7 @@ router.get("/api/registration/email", async (req, res, next) => {
   }
 });
 
+// public endpoint
 router.post("/api/registration/email/resend", async (req, res, next) => {
   const { emailAddress, EventId } = req.body;
 
@@ -182,7 +186,7 @@ router.post("/api/registration/email/resend", async (req, res, next) => {
   }
 });
 
-router.delete("/api/registration/id", async (req, res, next) => {
+router.delete("/api/registration/id", requireAuth, async (req, res, next) => {
   const { id } = req.query;
   try {
     const registration = await Registration.findByPk(id);
@@ -194,7 +198,7 @@ router.delete("/api/registration/id", async (req, res, next) => {
   }
 });
 
-router.post("/api/form", async (req, res, next) => {
+router.post("/api/form", requireAuth, async (req, res, next) => {
   const { event, data } = req.body;
 
   try {
@@ -211,7 +215,7 @@ router.post("/api/form", async (req, res, next) => {
   }
 });
 
-router.get("/api/form", async (req, res, next) => {
+router.get("/api/form", requireAuth, async (req, res, next) => {
   const { event } = req.query;
 
   try {

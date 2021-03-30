@@ -1,9 +1,11 @@
 const express = require("express");
 const { PageSection, PageSectionCached } = require("../db").models;
 const { clearCache } = require("../services/sequelizeRedis");
+const requireAuth = require("../middlewares/requireAuth");
 
 const router = express.Router();
 
+// publicly accessible route
 router.get("/api/model/id", async (req, res, next) => {
   const { id } = req.query;
   try {
@@ -22,6 +24,7 @@ router.get("/api/model/id", async (req, res, next) => {
   }
 });
 
+// publicly accessible route
 router.get("/api/model/id/uncached", async (req, res, next) => {
   const { id } = req.query;
   try {
@@ -38,7 +41,7 @@ router.get("/api/model/id/uncached", async (req, res, next) => {
   }
 });
 
-router.put("/api/model", async (req, res, next) => {
+router.put("/api/model", requireAuth, async (req, res, next) => {
   const { model } = req.body;
   const PageModelId = model[0].PageModelId;
 

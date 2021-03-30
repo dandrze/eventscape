@@ -7,8 +7,9 @@ const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 const { Communication, EmailListRecipient, Event } = require("../db").models;
 const Registration = require("../db/models/Registration");
+const requireAuth = require("../middlewares/requireAuth");
 
-router.get("/api/communication/all", async (req, res, next) => {
+router.get("/api/communication/all", requireAuth, async (req, res, next) => {
   const { EventId } = req.query;
 
   try {
@@ -22,7 +23,7 @@ router.get("/api/communication/all", async (req, res, next) => {
   }
 });
 
-router.post("/api/communication", async (req, res, next) => {
+router.post("/api/communication", requireAuth, async (req, res, next) => {
   const { EventId, email } = req.body;
   const {
     recipients,
@@ -65,7 +66,7 @@ router.post("/api/communication", async (req, res, next) => {
   }
 });
 
-router.delete("/api/communication", async (req, res, next) => {
+router.delete("/api/communication", requireAuth, async (req, res, next) => {
   const { id } = req.query;
   try {
     const response = await Communication.destroy({ where: { id } });
@@ -76,7 +77,7 @@ router.delete("/api/communication", async (req, res, next) => {
   }
 });
 
-router.put("/api/communication", async (req, res, next) => {
+router.put("/api/communication", requireAuth, async (req, res, next) => {
   const { id, email } = req.body;
   const { recipients, status, subject, minutesFromEvent, html } = email;
 
@@ -118,17 +119,17 @@ router.put("/api/communication", async (req, res, next) => {
   }
 });
 
-router.get("/api/communication/jobs", async (req, res) => {
+router.get("/api/communication/jobs", requireAuth, async (req, res) => {
   res.send(Scheduler.scheduledJobs());
 });
 
-router.post("/api/communication/jobs/cancel", async (req, res) => {
+router.post("/api/communication/jobs/cancel", requireAuth, async (req, res) => {
   const { id } = req.body;
 
   Scheduler.cancelSend(id);
 });
 
-router.get("/api/communication-list", async (req, res, next) => {
+router.get("/api/communication-list", requireAuth, async (req, res, next) => {
   const { emailId } = req.query;
 
   try {
@@ -142,7 +143,7 @@ router.get("/api/communication-list", async (req, res, next) => {
   }
 });
 
-router.post("/api/communication-list", async (req, res, next) => {
+router.post("/api/communication-list", requireAuth, async (req, res, next) => {
   const { data, emailId } = req.body;
 
   const { firstName, lastName, email } = data;
@@ -165,7 +166,7 @@ router.post("/api/communication-list", async (req, res, next) => {
   }
 });
 
-router.put("/api/communication-list", async (req, res, next) => {
+router.put("/api/communication-list", requireAuth, async (req, res, next) => {
   const { data, id } = req.body;
 
   const { firstName, lastName, email } = data;
@@ -184,20 +185,24 @@ router.put("/api/communication-list", async (req, res, next) => {
   }
 });
 
-router.delete("/api/communication-list", async (req, res, next) => {
-  const { id } = req.query;
+router.delete(
+  "/api/communication-list",
+  requireAuth,
+  async (req, res, next) => {
+    const { id } = req.query;
 
-  try {
-    const emailListRecipient = await EmailListRecipient.findByPk(id);
-    const response = await emailListRecipient.destroy();
+    try {
+      const emailListRecipient = await EmailListRecipient.findByPk(id);
+      const response = await emailListRecipient.destroy();
 
-    res.json({ response });
-  } catch (error) {
-    next(error);
+      res.json({ response });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.post("/api/communication/test", async (req, res, next) => {
+router.post("/api/communication/test", requireAuth, async (req, res, next) => {
   const {
     EventId,
     email: { emailAddress, firstName, lastName, subject, html },

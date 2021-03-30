@@ -3,12 +3,13 @@ const bcrypt = require("bcrypt");
 
 const { Account } = require("../db").models;
 const { clearCache } = require("../services/sequelizeRedis");
+const requireAuth = require("../middlewares/requireAuth");
 
 const saltRounds = 10;
 
 const router = express.Router();
 
-router.put("/api/account", async (req, res) => {
+router.put("/api/account", requireAuth, async (req, res) => {
   const { userId, contactData } = req.body;
   const { firstName, lastName, emailAddress } = contactData;
 
@@ -22,6 +23,7 @@ router.put("/api/account", async (req, res) => {
   res.json(account);
 });
 
+// public endpoint
 router.post("/api/account", async (req, res, next) => {
   const { userData } = req.body;
   const { emailAddress, firstName, lastName, password } = userData;
@@ -61,7 +63,8 @@ router.post("/api/account", async (req, res, next) => {
   }
 });
 
-router.get("/api/account/email", async (req, res, next) => {
+// public endpoint
+router.get("/api/account/email-exists", async (req, res, next) => {
   const { emailAddress } = req.query;
 
   try {
@@ -69,7 +72,7 @@ router.get("/api/account/email", async (req, res, next) => {
       where: { emailAddress, registrationComplete: true },
     });
 
-    res.json(account);
+    res.json(Boolean(account));
   } catch (error) {
     next(error);
   }
