@@ -1,86 +1,95 @@
 const express = require("express");
 const { SiteVisit, Registration, SiteVisitor, Event } = require("../db").models;
+const requireAuth = require("../middlewares/requireAuth");
 
 const router = express.Router();
 
-router.get("/api/analytics/visitor-data", async (req, res, next) => {
-  const { EventId } = req.query;
+router.get(
+  "/api/analytics/visitor-data",
+  requireAuth,
+  async (req, res, next) => {
+    const { EventId } = req.query;
 
-  try {
-    const currentCount = await SiteVisit.count({
-      where: {
-        loggedOutAt: null,
-        EventId,
-      },
-    });
+    try {
+      const currentCount = await SiteVisit.count({
+        where: {
+          loggedOutAt: null,
+          EventId,
+        },
+      });
 
-    const uniqueCount = await SiteVisit.count({
-      where: {
-        EventId,
-      },
-      col: "SiteVisitorId",
-      distinct: true,
-    });
+      const uniqueCount = await SiteVisit.count({
+        where: {
+          EventId,
+        },
+        col: "SiteVisitorId",
+        distinct: true,
+      });
 
-    const visitData = await SiteVisit.findAll({
-      where: {
-        EventId,
-      },
-      raw: true,
-      order: [
-        "id",
-      ] /* ensures that the latest visit shows up last, required for mapping functions*/,
-    });
+      const visitData = await SiteVisit.findAll({
+        where: {
+          EventId,
+        },
+        raw: true,
+        order: [
+          "id",
+        ] /* ensures that the latest visit shows up last, required for mapping functions*/,
+      });
 
-    const siteVisitors = await SiteVisitor.findAll({
-      where: {
-        EventId,
-      },
-      include: Registration,
-      raw: true,
-    });
+      const siteVisitors = await SiteVisitor.findAll({
+        where: {
+          EventId,
+        },
+        include: Registration,
+        raw: true,
+      });
 
-    const visitorData = siteVisitors.map((visitor) => {
-      let timeViewed = 0;
-      let lastLogout = null;
-      for (let visit of visitData) {
-        if (visit.SiteVisitorId === visitor.id) {
-          if (visit.loggedOutAt) {
-            lastLogout = Math.max(lastLogout, visit.loggedOutAt);
-            timeViewed += visit.loggedOutAt - visit.createdAt;
-          } else {
-            lastLogout = null;
-            timeViewed += new Date() - visit.createdAt;
+      const visitorData = siteVisitors.map((visitor) => {
+        let timeViewed = 0;
+        let lastLogout = null;
+        for (let visit of visitData) {
+          if (visit.SiteVisitorId === visitor.id) {
+            if (visit.loggedOutAt) {
+              lastLogout = Math.max(lastLogout, visit.loggedOutAt);
+              timeViewed += visit.loggedOutAt - visit.createdAt;
+            } else {
+              lastLogout = null;
+              timeViewed += new Date() - visit.createdAt;
+            }
           }
         }
-      }
-      return { ...visitor, timeViewed, lastLogout };
-    });
+        return { ...visitor, timeViewed, lastLogout };
+      });
 
-    const history = await createVisitHistory(visitData, EventId);
+      const history = await createVisitHistory(visitData, EventId);
 
-    res.json({ currentCount, uniqueCount, visitorData, history });
-  } catch (error) {
-    next(error);
+      res.json({ currentCount, uniqueCount, visitorData, history });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.get("/api/analytics/current-visitors", async (req, res, next) => {
-  const { eventId } = req.query;
+router.get(
+  "/api/analytics/current-visitors",
+  requireAuth,
+  async (req, res, next) => {
+    const { eventId } = req.query;
 
-  try {
-    const currentVisitors = await SiteVisit.count({
-      where: {
-        loggedOutAt: null,
-        EventId: eventId,
-      },
-    });
+    try {
+      const currentVisitors = await SiteVisit.count({
+        where: {
+          loggedOutAt: null,
+          EventId: eventId,
+        },
+      });
 
-    res.json({ currentVisitors });
-  } catch (error) {
-    next(error);
+      res.json({ currentVisitors });
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
 const createVisitHistory = async (visitData, EventId) => {
   // create a cleaner array for the time chart to use with just start time and end times

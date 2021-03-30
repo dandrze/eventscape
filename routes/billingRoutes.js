@@ -15,7 +15,7 @@ const {
 
 const { sendEmail } = require("../services/Mailer");
 
-router.get("/api/billing/invoice", async (req, res, next) => {
+router.get("/api/billing/invoice", requireAuth, async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
@@ -35,6 +35,7 @@ router.get("/api/billing/invoice", async (req, res, next) => {
   }
 });
 
+// public route
 router.get("/api/billing/pricing", async (req, res, next) => {
   try {
     const planTypes = await PlanType.findAll();
@@ -45,7 +46,7 @@ router.get("/api/billing/pricing", async (req, res, next) => {
   }
 });
 
-router.get("/api/billing/plan", async (req, res, next) => {
+router.get("/api/billing/plan", requireAuth, async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
@@ -60,43 +61,7 @@ router.get("/api/billing/plan", async (req, res, next) => {
   }
 });
 
-router.post("/api/billing/plan/upgrade", async (req, res, next) => {
-  const { eventId } = req.body;
-
-  try {
-    const eventDetails = await Event.findOne({
-      where: { id: eventId },
-      include: "Owner",
-    });
-
-    const to = "andrzejewski.d@gmail.com";
-    const subject = "Request to upgrade Eventscape to Premium";
-    const html = `
-    <div>
-    ${eventDetails.Owner.firstName} ${eventDetails.Owner.lastName} has requested an upgrade to the professional plan for their event.
-    <br/><br/>
-    Event Id: ${eventDetails.id}
-    <br/>
-    Event Name: ${eventDetails.title}
-    <br/>
-    <br/>
-    Owner Id: ${eventDetails.Owner.id}
-    <br/>
-    Owner Name: ${eventDetails.Owner.firstName} ${eventDetails.Owner.lastName}
-    <br/>
-    Owner Email Address: ${eventDetails.Owner.emailAddress}
-    <div>
-    `;
-
-    sendEmail({ to, subject, html });
-
-    res.status(200).send();
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/api/billing/plan", async (req, res, next) => {
+router.put("/api/billing/plan", requireAuth, async (req, res, next) => {
   const {
     planId,
     viewers,

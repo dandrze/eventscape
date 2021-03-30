@@ -24,7 +24,7 @@ const { inviteUser } = require("../services/Invitations");
 
 const { clearCache } = require("../services/sequelizeRedis");
 
-router.post("/api/event", async (req, res, next) => {
+router.post("/api/event", requireAuth, async (req, res, next) => {
   const {
     event: {
       title,
@@ -160,7 +160,7 @@ router.post("/api/event", async (req, res, next) => {
   }
 });
 
-router.post("/api/event/duplicate", async (req, res, next) => {
+router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
   const { EventId, link } = req.body;
 
   const accountId = req.user.id;
@@ -187,7 +187,7 @@ router.post("/api/event/duplicate", async (req, res, next) => {
       OwnerId: originalEvent.AccountId,
       RegPageModelId: dbRegModel.id,
       EventPageModelId: dbEventModel.id,
-      registrationRequired: dbEventModel.registrationRequired,
+      registrationRequired: originalEvent.registrationRequired,
       status: originalEvent.status,
     });
 
@@ -324,32 +324,36 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
   }
 });
 
-router.put("/api/event/id/make-current", async (req, res, next) => {
-  const accountId = req.user.id;
-  const { eventId } = req.body;
+router.put(
+  "/api/event/id/make-current",
+  requireAuth,
+  async (req, res, next) => {
+    const accountId = req.user.id;
+    const { eventId } = req.body;
 
-  try {
-    const permission = await Permission.findOne({
-      where: { AccountId: accountId, EventId: eventId },
-    });
-    if (permission) {
-      const account = await Account.findByPk(accountId);
-      account.currentEventId = eventId;
-      await account.save();
-
-      res.json();
-    } else {
-      const event = await Event.findByPk(eventId);
-      res.status(400).send({
-        message: `You do not have permissions for the event titled: ${event.title}. Please contact the owner of this event to give you permissions.`,
+    try {
+      const permission = await Permission.findOne({
+        where: { AccountId: accountId, EventId: eventId },
       });
-    }
-  } catch (error) {
-    next(error);
-  }
-});
+      if (permission) {
+        const account = await Account.findByPk(accountId);
+        account.currentEventId = eventId;
+        await account.save();
 
-router.get("/api/event/all", async (req, res, next) => {
+        res.json();
+      } else {
+        const event = await Event.findByPk(eventId);
+        res.status(400).send({
+          message: `You do not have permissions for the event titled: ${event.title}. Please contact the owner of this event to give you permissions.`,
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
+router.get("/api/event/all", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
   const events = [];
 
@@ -367,7 +371,7 @@ router.get("/api/event/all", async (req, res, next) => {
   }
 });
 
-router.get("/api/event/id", async (req, res, next) => {
+router.get("/api/event/id", requireAuth, async (req, res, next) => {
   const { id } = req.query;
 
   try {
@@ -379,6 +383,7 @@ router.get("/api/event/id", async (req, res, next) => {
   }
 });
 
+// publically accessible endpoint
 router.get("/api/event/link", async (req, res, next) => {
   const { link } = req.query;
 
@@ -397,7 +402,7 @@ router.get("/api/event/link", async (req, res, next) => {
   }
 });
 
-router.put("/api/event/id/status", async (req, res, next) => {
+router.put("/api/event/id/status", requireAuth, async (req, res, next) => {
   const { id, status } = req.body;
 
   try {
@@ -412,7 +417,7 @@ router.put("/api/event/id/status", async (req, res, next) => {
   }
 });
 
-router.put("/api/event", async (req, res, next) => {
+router.put("/api/event", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
 
   const {
@@ -451,143 +456,7 @@ router.put("/api/event", async (req, res, next) => {
   }
 });
 
-router.get("/api/chatroom/default", async (req, res, next) => {
-  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
-  const { event } = req.query;
-
-  try {
-    const [newRoom, created] = await ChatRoom.findOrCreate({
-      where: {
-        event,
-        isDefault: true,
-      },
-    });
-
-    if (created) {
-      newRoom.name = "Main Room (Default)";
-      await newRoom.save();
-    }
-
-    res.json({ id: newRoom.id });
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get("/api/chatroom/all", async (req, res, next) => {
-  const { event } = req.query;
-
-  try {
-    const chatRooms = await ChatRoom.findAll({
-      where: {
-        event,
-      },
-    });
-
-    res.json(chatRooms);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/api/chatroom", async (req, res, next) => {
-  const {
-    room: { id, name },
-  } = req.body;
-
-  try {
-    const dbRoom = await ChatRoom.findOne({
-      where: {
-        id,
-      },
-    });
-
-    dbRoom.name = name;
-    dbRoom.save();
-
-    res.json();
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.delete("/api/chatroom", async (req, res, next) => {
-  const { id } = req.query;
-
-  try {
-    const chatRoom = await ChatRoom.findOne({
-      where: {
-        id,
-      },
-    });
-    if (chatRoom.isDefault)
-      return res
-        .status(400)
-        .send({ message: "You cannot delete the primary chat room." });
-    if (chatRoom) await chatRoom.destroy();
-
-    res.json();
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.post("/api/chatroom", async (req, res, next) => {
-  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
-  const { room, event } = req.body;
-
-  try {
-    const newRoom = await ChatRoom.create({ name: room.name, event });
-
-    res.json(newRoom);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get("/api/event/chat-moderator", async (req, res, next) => {
-  const { AccountId, ChatRoomId } = req.query;
-
-  try {
-    const [chatUser, created] = await ChatUser.findOrCreate({
-      where: {
-        AccountId,
-        ChatRoomId,
-      },
-    });
-
-    if (created) chatUser.name = "Moderator";
-    chatUser.save();
-
-    res.json(chatUser);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/api/event/chat-moderator", async (req, res, next) => {
-  const {
-    user: { AccountId, name, ChatRoomId },
-  } = req.body;
-
-  try {
-    const chatUser = await ChatUser.findOne({
-      where: {
-        AccountId,
-        ChatRoomId,
-      },
-    });
-
-    chatUser.name = name;
-    chatUser.save();
-
-    res.json(chatUser);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.post("/api/event/permissions", async (req, res, next) => {
+router.post("/api/event/permissions", requireAuth, async (req, res, next) => {
   const { eventId, emailAddress } = req.body;
   const account = req.user;
 
@@ -631,41 +500,45 @@ router.post("/api/event/permissions", async (req, res, next) => {
   }
 });
 
-router.post("/api/event/transfer-ownership", async (req, res, next) => {
-  console.log(req.body);
-  const { eventId, oldAccountId, newAccountId } = req.body;
+router.post(
+  "/api/event/transfer-ownership",
+  requireAuth,
+  async (req, res, next) => {
+    console.log(req.body);
+    const { eventId, oldAccountId, newAccountId } = req.body;
 
-  try {
-    const event = await Event.findByPk(eventId);
-    event.OwnerId = newAccountId;
-    event.save();
+    try {
+      const event = await Event.findByPk(eventId);
+      event.OwnerId = newAccountId;
+      event.save();
 
-    const oldPermission = await Permission.findOne({
-      where: { EventId: eventId, AccountId: oldAccountId },
-    });
-    oldPermission.role = "collaborator";
-    oldPermission.save();
+      const oldPermission = await Permission.findOne({
+        where: { EventId: eventId, AccountId: oldAccountId },
+      });
+      oldPermission.role = "collaborator";
+      oldPermission.save();
 
-    const newPermission = await Permission.findOne({
-      where: { EventId: eventId, AccountId: newAccountId },
-    });
-    newPermission.role = "owner";
-    newPermission.eventDetails = true;
-    newPermission.design = true;
-    newPermission.polls = true;
-    newPermission.analytics = true;
-    newPermission.messaging = true;
-    newPermission.communication = true;
-    newPermission.registration = true;
-    newPermission.save();
+      const newPermission = await Permission.findOne({
+        where: { EventId: eventId, AccountId: newAccountId },
+      });
+      newPermission.role = "owner";
+      newPermission.eventDetails = true;
+      newPermission.design = true;
+      newPermission.polls = true;
+      newPermission.analytics = true;
+      newPermission.messaging = true;
+      newPermission.communication = true;
+      newPermission.registration = true;
+      newPermission.save();
 
-    res.json();
-  } catch (error) {
-    next(error);
+      res.json();
+    } catch (error) {
+      next(error);
+    }
   }
-});
+);
 
-router.get("/api/event/permissions", async (req, res, next) => {
+router.get("/api/event/permissions", requireAuth, async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
@@ -682,7 +555,7 @@ router.get("/api/event/permissions", async (req, res, next) => {
   }
 });
 
-router.delete("/api/event/permissions", async (req, res, next) => {
+router.delete("/api/event/permissions", requireAuth, async (req, res, next) => {
   const { permissionId } = req.query;
 
   try {
@@ -698,7 +571,7 @@ router.delete("/api/event/permissions", async (req, res, next) => {
   }
 });
 
-router.put("/api/event/permissions", async (req, res, next) => {
+router.put("/api/event/permissions", requireAuth, async (req, res, next) => {
   const { type, checked, permissionId } = req.body;
 
   try {

@@ -59,12 +59,12 @@ export const createAccount = (userData) => async (dispatch) => {
 
 export const checkEmailExists = (emailAddress) => async (dispatch) => {
   try {
-    const res = await api.get("/api/account/email", {
+    const res = await api.get("/api/account/email-exists", {
       params: { emailAddress },
     });
 
     // if it's empty, send false, if it exists, send true
-    return Boolean(res.data);
+    return res.data;
   } catch (err) {
     toast.error(
       "Server error when checking if email exists: " + err.toString()

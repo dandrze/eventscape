@@ -10,8 +10,9 @@ const {
 
 const { clearCache } = require("../services/sequelizeRedis");
 const { fetchPollResults } = require("../services/pollQueries");
+const requireAuth = require("../middlewares/requireAuth");
 
-router.get("/api/polling/poll/all", async (req, res, next) => {
+router.get("/api/polling/poll/all", requireAuth, async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
@@ -28,7 +29,7 @@ router.get("/api/polling/poll/all", async (req, res, next) => {
     next(error);
   }
 });
-router.get("/api/polling/data", async (req, res, next) => {
+router.get("/api/polling/data", requireAuth, async (req, res, next) => {
   const { eventId } = req.query;
   try {
     const pollResponses = await PollResponse.findAll({
@@ -54,7 +55,7 @@ router.get("/api/polling/data", async (req, res, next) => {
   }
 });
 
-router.get("/api/polling/results", async (req, res, next) => {
+router.get("/api/polling/results", requireAuth, async (req, res, next) => {
   `returns an array of objects containing the results for each poll option for a given poll
   
   returns object
@@ -108,7 +109,7 @@ responseCount= 90}
   }
 });
 
-router.delete("/api/polling/results", async (req, res, next) => {
+router.delete("/api/polling/results", requireAuth, async (req, res, next) => {
   `Clears all results for a given poll`;
   const { pollId } = req.query;
 
@@ -125,7 +126,7 @@ router.delete("/api/polling/results", async (req, res, next) => {
   }
 });
 
-router.put("/api/polling/poll", async (req, res, next) => {
+router.put("/api/polling/poll", requireAuth, async (req, res, next) => {
   const { pollId } = req.body;
 
   try {
@@ -139,7 +140,7 @@ router.put("/api/polling/poll", async (req, res, next) => {
   }
 });
 
-router.post("/api/polling/poll", async (req, res, next) => {
+router.post("/api/polling/poll", requireAuth, async (req, res, next) => {
   const { eventId, question, options, allowMultiple } = req.body;
 
   try {
@@ -162,7 +163,7 @@ router.post("/api/polling/poll", async (req, res, next) => {
   }
 });
 
-router.delete("/api/polling/poll", async (req, res, next) => {
+router.delete("/api/polling/poll", requireAuth, async (req, res, next) => {
   const { pollId } = req.query;
 
   try {
@@ -175,7 +176,7 @@ router.delete("/api/polling/poll", async (req, res, next) => {
   }
 });
 
-router.put("/api/polling/poll", async (req, res, next) => {
+router.put("/api/polling/poll", requireAuth, async (req, res, next) => {
   const { pollId, question, options, allowMultiple, allowShare } = req.body;
 
   try {

@@ -34,7 +34,7 @@ export const updateChatRoom = (room) => async (dispatch) => {
 };
 
 export const updateChatModerator = (user) => async (dispatch) => {
-  const response = await api.put("/api/event/chat-moderator", {
+  const response = await api.put("/api/chatroom/chat-moderator", {
     user,
   });
 
@@ -42,7 +42,7 @@ export const updateChatModerator = (user) => async (dispatch) => {
 };
 
 export const getChatModerator = (AccountId, ChatRoomId) => async (dispatch) => {
-  const response = await api.get("/api/event/chat-moderator", {
+  const response = await api.get("/api/chatroom/chat-moderator", {
     params: {
       AccountId,
       ChatRoomId,

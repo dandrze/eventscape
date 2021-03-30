@@ -203,93 +203,92 @@ function RegistrationForm({
               )}
             </div>
           ) : null}
-          {isLoading ? (
-            <CircularProgress className="margin-auto" />
-          ) : (
-            <div className="col-lg registration-col">
-              {regComplete && !isEditForm ? (
-                <div className="margin-auto">
-                  <div>Thank you for registering for {event.title}</div>
-                  <br />
-                  <div>
-                    A confirmation email was sent to {emailAddress}. Please
-                    check your spam if you don't see it in your inbox.
-                  </div>
+
+          <div className="col-lg registration-col">
+            {isLoading ? (
+              <CircularProgress className="margin-auto" />
+            ) : regComplete && !isEditForm ? (
+              <div className="margin-auto">
+                <div>Thank you for registering for {event.title}</div>
+                <br />
+                <div>
+                  A confirmation email was sent to {emailAddress}. Please check
+                  your spam if you don't see it in your inbox.
                 </div>
-              ) : (
-                <div
-                  className={
-                    "margin-auto" + !isEditForm ? "form-editor-react" : ""
-                  }
-                >
-                  {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
-                  <div className="form-group">
-                    <label>
-                      <span>First Name</span>
-                      <span className="label-required badge badge-danger">
-                        Required
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={firstName}
-                      onChange={handleFirstNameChange}
-                    />
-                    <label>
-                      <span>Last Name</span>
-                      <span className="label-required badge badge-danger">
-                        Required
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={lastName}
-                      onChange={handleLastNameChange}
-                    />
-                    <label>
-                      <span>Email Address</span>
-                      <span className="label-required badge badge-danger">
-                        Required
-                      </span>
-                    </label>
-                    <input
-                      type="text"
-                      className="form-control"
-                      value={emailAddress}
-                      onChange={handleEmailChange}
-                      onBlur={handleEmailBlur}
-                    />
-                    <div className="errorMessage">{emailError}</div>
-                  </div>
-                  <ReactFormGenerator
-                    action_name={registerText || "Register now"}
-                    onSubmit={handleSubmit}
-                    data={formData}
-                    answer_data={prePopulatedValues}
-                    className="form-editor-react"
+              </div>
+            ) : (
+              <div
+                className={
+                  "margin-auto" + !isEditForm ? "form-editor-react" : ""
+                }
+              >
+                {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
+                <div className="form-group">
+                  <label>
+                    <span>First Name</span>
+                    <span className="label-required badge badge-danger">
+                      Required
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={firstName}
+                    onChange={handleFirstNameChange}
                   />
-                  {!isEditForm ? (
-                    <label>
-                      <span>Already registered? Click </span>
-                      <span
-                        className="theme-color"
-                        onClick={openReSendLinkModal}
-                        style={{
-                          cursor: "pointer",
-                          textDecoration: "underline",
-                        }}
-                      >
-                        here
-                      </span>
-                      <span> to re-send your event link.</span>
-                    </label>
-                  ) : null}
+                  <label>
+                    <span>Last Name</span>
+                    <span className="label-required badge badge-danger">
+                      Required
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={lastName}
+                    onChange={handleLastNameChange}
+                  />
+                  <label>
+                    <span>Email Address</span>
+                    <span className="label-required badge badge-danger">
+                      Required
+                    </span>
+                  </label>
+                  <input
+                    type="text"
+                    className="form-control"
+                    value={emailAddress}
+                    onChange={handleEmailChange}
+                    onBlur={handleEmailBlur}
+                  />
+                  <div className="errorMessage">{emailError}</div>
                 </div>
-              )}
-            </div>
-          )}
+                <ReactFormGenerator
+                  action_name={registerText || "Register now"}
+                  onSubmit={handleSubmit}
+                  data={formData}
+                  answer_data={prePopulatedValues}
+                  className="form-editor-react"
+                />
+                {!isEditForm ? (
+                  <label>
+                    <span>Already registered? Click </span>
+                    <span
+                      className="theme-color"
+                      onClick={openReSendLinkModal}
+                      style={{
+                        cursor: "pointer",
+                        textDecoration: "underline",
+                      }}
+                    >
+                      here
+                    </span>
+                    <span> to re-send your event link.</span>
+                  </label>
+                ) : null}
+              </div>
+            )}
+          </div>
         </div>
       </div>
       {/* Re-send event link modal */}
