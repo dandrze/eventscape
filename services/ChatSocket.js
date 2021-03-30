@@ -96,9 +96,9 @@ module.exports = (server) => {
         // push the hidden state (true or false)
         if (chatRoom) socket.emit("chatHidden", chatRoom.chatHidden);
 
-        /*socket.emit("notification", {
+        /*       socket.emit("notification", {
           text: "You are now connected to room " + room,
-        });*/
+        }); */
 
         //push the message history
         socket.emit(

@@ -17,6 +17,7 @@ const {
   Plan,
   PlanType,
   InvoiceLineItem,
+  Poll,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const { inviteUser } = require("../services/Invitations");
@@ -162,7 +163,7 @@ router.post("/api/event", async (req, res, next) => {
 router.post("/api/event/duplicate", async (req, res, next) => {
   const { EventId, link } = req.body;
 
-  const AccountId = req.user.id;
+  const accountId = req.user.id;
 
   try {
     // Store a new model in the model table for the registration page
@@ -174,7 +175,7 @@ router.post("/api/event/duplicate", async (req, res, next) => {
     // fetch data from the original event
     const originalEvent = await Event.findByPk(EventId);
 
-    // add the event to the event table. Make it the current event
+    // Create a new event with the desired link, the original name + copy, and all the rest of the original details
     const event = await Event.create({
       title: originalEvent.title + " Copy",
       link,
@@ -183,13 +184,14 @@ router.post("/api/event/duplicate", async (req, res, next) => {
       endDate: originalEvent.endDate,
       timeZone: originalEvent.timeZone,
       primaryColor: originalEvent.primaryColor,
-      AccountId: originalEvent.AccountId,
+      OwnerId: originalEvent.AccountId,
       RegPageModelId: dbRegModel.id,
       EventPageModelId: dbEventModel.id,
       registrationRequired: dbEventModel.registrationRequired,
+      status: originalEvent.status,
     });
 
-    // create a default chatroom
+    // create a new default chatroom
     const chatRoom = await ChatRoom.create({
       event: event.id,
       isDefault: true,
@@ -202,6 +204,11 @@ router.post("/api/event/duplicate", async (req, res, next) => {
     });
 
     for (let section of originalRegPageModel) {
+      // update the chatroom (in case one exists) to the newly created chatroom
+      if (section.isReact && section.reactComponent.name == "StreamChat") {
+        section.reactComponent.props.chatRoom = chatRoom.id;
+      }
+
       await PageSection.create({
         PageModelId: dbRegModel.id,
         index: section.index,
@@ -217,6 +224,11 @@ router.post("/api/event/duplicate", async (req, res, next) => {
     });
 
     for (let section of originalEventPageModel) {
+      // update the chatroom to the newly created chatroom
+      if (section.isReact && section.reactComponent.name == "StreamChat") {
+        section.reactComponent.props.chatRoom = chatRoom.id;
+      }
+
       await PageSection.create({
         PageModelId: dbEventModel.id,
         index: section.index,
@@ -226,11 +238,11 @@ router.post("/api/event/duplicate", async (req, res, next) => {
       });
     }
 
+    // add the emails for this event
     const originalCommunications = await Communication.findAll({
       where: { EventId },
     });
 
-    // add the emails for this event
     for (var communication of originalCommunications) {
       await Communication.create({
         subject: communication.subject,
@@ -241,6 +253,50 @@ router.post("/api/event/duplicate", async (req, res, next) => {
         status: communication.status,
       });
     }
+
+    // copy over permissions
+    const permissions = await Permission.findAll({ where: { EventId } });
+
+    for (var permission of permissions) {
+      Permission.create({
+        EventId: event.id,
+        AccountId: permission.AccountId,
+        role: permission.role,
+        eventDetails: permission.eventDetails,
+        communication: permission.communication,
+        registration: permission.registration,
+        analytics: permission.analytics,
+        messaging: permission.messaging,
+        design: permission.design,
+        polls: permission.polls,
+      });
+    }
+
+    // copy over poll questions
+    const polls = await Poll.findAll({ where: { EventId } });
+
+    for (var poll of polls) {
+      Poll.create({
+        EventId: event.id,
+        question: poll.question,
+        allowMultiple: poll.allowMultiple,
+        isLaunched: false,
+      });
+    }
+
+    // create a default plan and invoice
+    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
+
+    const invoice = await Invoice.create({ EventId: event.id });
+    const plan = await Plan.create({
+      EventId: event.id,
+      PlanTypeId: defaultFreePlan.id,
+    });
+    InvoiceLineItem.create({
+      InvoiceId: invoice.id,
+      type: "plan",
+      PlanId: plan.id,
+    });
 
     res.json(event);
   } catch (error) {
