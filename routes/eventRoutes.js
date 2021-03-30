@@ -371,7 +371,8 @@ router.get("/api/event/all", requireAuth, async (req, res, next) => {
   }
 });
 
-router.get("/api/event/id", requireAuth, async (req, res, next) => {
+// public endpoint
+router.get("/api/event/id", async (req, res, next) => {
   const { id } = req.query;
 
   try {
@@ -383,7 +384,7 @@ router.get("/api/event/id", requireAuth, async (req, res, next) => {
   }
 });
 
-// publically accessible endpoint
+// public endpoint
 router.get("/api/event/link", async (req, res, next) => {
   const { link } = req.query;
 
