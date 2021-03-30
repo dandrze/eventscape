@@ -99,11 +99,16 @@ function App({ user, location, fetchUser, attendee }) {
           location="bottom"
           buttonText="I accept"
           cookieName="CookieConsent"
-          style={{ background: "#b0281c" }}
-          buttonStyle={{ color: "#ffffff", fontSize: "13px" }}
+          style={{ padding: "0px 100px" }}
+          buttonStyle={{
+            color: "#ffffff",
+            backgroundColor: "#b0281c",
+            fontSize: "13px",
+          }}
         >
-          This website uses cookies to enhance the user experience such as
-          providing a secure login.
+          By continuing to use this site, or by clicking "I Accept", you
+          acknowledge and agree to this website's use of cookies to improve the
+          user experience and to track performance and analytics.
         </CookieConsent>
 
         <ToastContainer position="top-right" autoClose={3000} />
@@ -154,11 +159,16 @@ function App({ user, location, fetchUser, attendee }) {
           location="bottom"
           buttonText="I accept"
           cookieName="CookieConsent"
-          style={{ background: "#b0281c" }}
-          buttonStyle={{ color: "#ffffff", fontSize: "13px" }}
+          style={{ padding: "0px 100px" }}
+          buttonStyle={{
+            color: "#ffffff",
+            backgroundColor: "#b0281c",
+            fontSize: "13px",
+          }}
         >
-          This website uses cookies to provide a consistent experience in the
-          chat, Q&A and other event elements.
+          By continuing to use this site, or by clicking "I Accept", you
+          acknowledge and agree to this website's use of cookies to improve the
+          user experience and to track performance and analytics.
         </CookieConsent>
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
