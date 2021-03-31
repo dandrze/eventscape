@@ -42,46 +42,62 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
     fetchEvent();
   };
 
-  return event.id ? (
+  return (
     <div className="App">
       <header className="App-header">
         <Switch>
-          <Route exact path="/" component={Dashboard} />
-          <Route exact path="/create-event" component={CreateEvent} />
-          <Route exact path="/my-events" component={My_Events} />
-          <Route exact path="/design/:page?" component={Design} />
-          <Route exact path="/event-details" component={EventDetailsPage} />
-          <Route exact path="/communication" component={Communication} />
-          <Route exact path="/registrations" component={Registrations} />
-          <Route exact path="/polls" component={Polls} />
-          <Route exact path="/analytics" component={Analytics} />
-          <Route exact path="/messaging" component={Messaging} />
-          <Route exact path="/plan" component={Plan} />
-          <Route exact path="/preview/:event/:model" component={Preview} />
-          <Route
-            exact
-            path="/account-settings-contact"
-            component={AccountSettingsContact}
-          />
-          <Route
-            exact
-            path="/account-settings-password"
-            component={AccountSettingsPassword}
-          />
-          <Route
-            exact
-            path="/account-settings-payments"
-            component={AccountSettingsPayments}
-          />
-          <Route exact path="/permissions" component={Permissions} />
           {/*<Route exact path="/test" component={Test} />*/}
-          {/* Because we're using a switch, only one route will load. If the route doesn't match any of the routes above, display a page not found */}
-          <Route component={PageNotFound} />
+          <Route exact path="/create-event" component={CreateEvent} />
         </Switch>
+        {/*the routes below all require an event to to render, so display a circular progress until it loads*/}
+        {event.id ? (
+          <Switch>
+            <Route exact path="/" component={Dashboard} />
+            <Route exact path="/my-events" component={My_Events} />
+            <Route exact path="/design/:page?" component={Design} />
+            <Route exact path="/event-details" component={EventDetailsPage} />
+            <Route exact path="/communication" component={Communication} />
+            <Route exact path="/registrations" component={Registrations} />
+            <Route exact path="/polls" component={Polls} />
+            <Route exact path="/analytics" component={Analytics} />
+            <Route exact path="/messaging" component={Messaging} />
+            <Route exact path="/plan" component={Plan} />
+            <Route exact path="/preview/:event/:model" component={Preview} />
+            <Route
+              exact
+              path="/account-settings-contact"
+              component={AccountSettingsContact}
+            />
+            <Route
+              exact
+              path="/account-settings-password"
+              component={AccountSettingsPassword}
+            />
+            <Route
+              exact
+              path="/account-settings-payments"
+              component={AccountSettingsPayments}
+            />
+            <Route exact path="/permissions" component={Permissions} />
+            {/* Because we're using a switch, only one route will load. If the route doesn't match any of the routes above, display a page not found */}
+
+            <Route component={PageNotFound} />
+          </Switch>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              width: "100vw",
+              height: "100vh",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <CircularProgress />
+          </div>
+        )}
       </header>
     </div>
-  ) : (
-    <CircularProgress />
   );
 };
 

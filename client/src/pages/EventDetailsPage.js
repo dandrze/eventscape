@@ -14,7 +14,7 @@ class WebsiteSettings extends React.Component {
           displaySideNav="true"
           highlight="event-details"
           content={
-            this.props.event.id ? (
+            this.props.event ? (
               this.props.event.permissions?.eventDetails ? (
                 <div className="form-width">
                   <EventDetailsForm isEventUpdate={true} />
