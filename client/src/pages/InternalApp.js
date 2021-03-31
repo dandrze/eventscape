@@ -83,8 +83,9 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
 
             <Route component={PageNotFound} />
           </Switch>
-        ) : (
-          <div
+        ) : null
+
+        /*       <div
             style={{
               display: "flex",
               width: "100vw",
@@ -94,8 +95,8 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
             }}
           >
             <CircularProgress />
-          </div>
-        )}
+          </div> */
+        }
       </header>
     </div>
   );
