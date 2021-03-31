@@ -84,7 +84,7 @@ function App({ user, location, fetchUser, attendee }) {
             <LongLoadingScreen text="Hang tight! We're getting everything ready for you..." />
           }
         >
-          <InternalApp />{" "}
+          <InternalApp />
         </Suspense>
       );
     }
