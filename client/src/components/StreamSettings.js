@@ -141,8 +141,8 @@ const StreamSettings = ({
                         />
                       </FormControl>
                       <p>
-                        Need help? Click here for instructions on setting up a
-                        YouTube Live stream.
+                        Need help? Click Need help? Click here for instructions
+                        on setting up a YouTube Live stream.
                       </p>
                       <p>
                         Heads up! YouTube may take down any streams containing
