@@ -14,7 +14,7 @@ export const heroBannerModel = (eventTitle = "default") => {
             font-size: 96px;
         }
         .hero-background {
-            background-image: url(https://s3.amazonaws.com/eventscape-assets/froala-uploads%2Faccount-1%2F1616366013302-background+orange.jpeg);
+            background-image: url(https://eventscape-assets.s3.amazonaws.com/free-images/abstract-1779605_1920.png);
             background-position: bottom;
             height: 300px;
             background-size: cover;

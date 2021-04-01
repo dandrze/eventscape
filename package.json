@@ -23,6 +23,7 @@
   },
   "dependencies": {
     "@sendgrid/mail": "^7.4.0",
+    "aws-amplify": "^3.3.26",
     "aws-sdk": "^2.868.0",
     "bcrypt": "^5.0.0",
     "bluebird": "^3.5.1",

@@ -148,6 +148,16 @@ form {
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
 }
 
+.variable-bubble::selection {
+  /* fixes automatic highlighting when clicked */
+  background: none; /* WebKit/Blink Browsers */
+}
+
+.variable-bubble::-moz-selection {
+  /* fixes automatic highlighting when clicked */
+  background: none; /* Gecko Browsers */
+}
+
 .disabled-text {
   color: grey;
 }

@@ -1,41 +1,63 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import ReactS3Uploader from "react-s3-uploader";
 import PublishIcon from "@material-ui/icons/Publish";
+import Button from "@material-ui/core/Button";
+
+/* Tabs */
+import PropTypes from "prop-types";
+import Tabs from "@material-ui/core/Tabs";
+import Tab from "@material-ui/core/Tab";
+import { makeStyles, withStyles } from "@material-ui/core/styles";
+
 import * as actions from "../actions";
+import api from "../api/server";
+import { CircularProgress, Select } from "@material-ui/core";
 
 const BackgroundImageSelector = ({
-  onClose,
+  event,
+  handleClose,
   user,
   sectionIndex,
   model,
   updateSection,
 }) => {
-  const [status, setStatus] = useState("");
-  const [percent, setPercent] = useState("");
-  const [imageUrl, setImageUrl] = useState("");
-  const handleClose = () => {
-    onClose();
-  };
   const [step, setStep] = useState("start");
+  const [freeImageUrls, setFreeImageUrls] = useState([]);
+  const [userImageUrls, setUserImageUrls] = useState([]);
+
+  useEffect(() => {
+    fetchFreeImageUrls();
+  }, []);
+
+  const fetchFreeImageUrls = async () => {
+    const res = await api.get("/api/aws/s3/background-images", {
+      params: { userId: user.id },
+    });
+
+    console.log(res);
+
+    // returns a list of free images and user images. Both lists start with an empty object so they need to be sliced when displaying
+    const { freeImages, userImages } = res.data;
+
+    setFreeImageUrls(freeImages);
+    setUserImageUrls(userImages);
+  };
 
   const matchBackgroundImageUrl = model.sections[sectionIndex].html.match(
-    /url\(\"(.*?)\"\)/
+    /url\((.*?)\)/
   );
 
   const currentBackgroundImageURL = matchBackgroundImageUrl
     ? matchBackgroundImageUrl[1]
     : "";
 
-  const handleProgress = (percentComplete, uploadStatus) => {
-    setPercent(percentComplete);
-    setStatus(uploadStatus === "Waiting" ? "Preparing File" : uploadStatus);
+  const handleClickSelectImage = () => {
+    setStep("select");
   };
 
-  const handleFinish = (result) => {
+  const setBackgroundImage = (url) => {
     var newHtml = "";
-    const url = `https://eventscape-assets.s3.amazonaws.com/${result.filename}`;
-    setImageUrl(url);
 
     if (currentBackgroundImageURL) {
       // find and replace the existing background image css
@@ -52,86 +74,272 @@ const BackgroundImageSelector = ({
     }
 
     updateSection(sectionIndex, newHtml);
-
-    // wait for a moment for the user to read the status as "upload complete", and for the new image to load, then go back to the replace image step
-    setTimeout(function () {
-      setStep("start");
-      setPercent(0);
-      setStatus("");
-    }, 1500);
+    handleClose();
   };
 
-  const handleClickUploadImage = () => {
-    setStep("upload");
+  const handleClickRemoveImage = () => {
+    const updatedHtml = model.sections[sectionIndex].html.replace(
+      /url\(.*?\)/,
+      ""
+    );
+
+    updateSection(sectionIndex, updatedHtml);
   };
 
   return (
     <div>
-      {step === "upload" ? (
-        <>
-          <div>Choose image from file</div>
-
-          <div style={{ height: "30px" }}></div>
-          <label>
-            <div className="file-upload-section">
-              {status ? (
-                <div>
-                  <label style={{ display: "block" }}>{status}</label>
-                  {percent === 100 ? null : <label>{percent}% Complete</label>}
-                </div>
-              ) : (
-                <div>
-                  <PublishIcon />
-                  <span style={{ margin: "15px" }}>Upload Image File</span>
-                </div>
-              )}
-            </div>
-            <ReactS3Uploader
-              style={{ display: "none" }}
-              onProgress={handleProgress}
-              onError={console.log}
-              onFinish={handleFinish}
-              signingUrl="/api/s3/sign"
-              signingUrlMethod="GET"
-              accept="image/*"
-              s3path={`uploads/${user.id}/`}
-              uploadRequestHeaders={{ "x-amz-acl": "public-read" }} // this is the default
-              contentDisposition="auto"
-              scrubFilename={(filename) =>
-                filename.replace(/[^\w\d_\-.]+/gi, "")
-              }
-              autoUpload={true}
-            />
-          </label>
-          <div style={{ height: "30px" }}></div>
-        </>
+      {step === "select" ? (
+        <SelectImage
+          user={user}
+          setBackgroundImage={setBackgroundImage}
+          freeImageUrls={freeImageUrls}
+          userImageUrls={userImageUrls}
+        />
       ) : (
-        <div>
+        <Preview
+          currentBackgroundImageURL={currentBackgroundImageURL}
+          handleClickSelectImage={handleClickSelectImage}
+          handleClickRemoveImage={handleClickRemoveImage}
+        />
+      )}
+    </div>
+  );
+};
+
+const UploadImage = ({ user, setBackgroundImage }) => {
+  const [status, setStatus] = useState("");
+  const [percent, setPercent] = useState("");
+
+  const handleProgress = (percentComplete, uploadStatus) => {
+    console.log(percentComplete);
+    setPercent(percentComplete);
+    setStatus(uploadStatus === "Waiting" ? "Preparing File" : uploadStatus);
+  };
+
+  const handleFinish = (result) => {
+    const url = `https://eventscape-assets.s3.amazonaws.com/${result.filename}`;
+
+    setBackgroundImage(url);
+  };
+
+  return (
+    <div>
+      <div style={{ height: "30px" }}></div>
+      <div style={{ fontWeight: "bold" }}>Choose image from file</div>
+      <div style={{ height: "30px" }}></div>
+      <label>
+        <div className="file-upload-section">
+          {status ? (
+            <div>
+              <label style={{ display: "block" }}>{status}</label>
+              {percent === 100 ? null : <label>{percent}% Complete</label>}
+            </div>
+          ) : (
+            <div>
+              <PublishIcon />
+              <span style={{ margin: "15px" }}>Upload Image File</span>
+            </div>
+          )}
+        </div>
+        <ReactS3Uploader
+          style={{ display: "none" }}
+          onProgress={handleProgress}
+          onError={console.log}
+          onFinish={handleFinish}
+          signingUrl="/api/s3/sign"
+          signingUrlMethod="GET"
+          accept="image/*"
+          s3path={`user-uploads/user-${user.id}/`}
+          contentDisposition="auto"
+          scrubFilename={(filename) => filename.replace(/[^\w\d_\-.]+/gi, "")}
+          autoUpload={true}
+        />
+      </label>
+      <div style={{ height: "30px" }}></div>
+    </div>
+  );
+};
+
+const SearchImages = ({
+  freeImageUrls,
+  userImageUrls,
+  setBackgroundImage,
+  type,
+  handleClickUpload,
+}) => {
+  const handleClickImage = (event) => {
+    setBackgroundImage(event.target.src);
+  };
+
+  console.log(type);
+
+  return (
+    <div>
+      <div style={{ height: "30px" }}></div>
+      <div style={{ fontWeight: "bold" }}>
+        {type === "user"
+          ? "Select one of your previously uploaded images below."
+          : "Select one of our free images below."}
+      </div>
+      <div style={{ height: "30px" }}></div>
+      <div
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        {
+          // if free images is empty, that means the client is still waiting for the response from the server, display loading spinner
+          freeImageUrls.length === 0 ? (
+            <CircularProgress />
+          ) : // if the selected tab is user, display the users images
+          type === "user" ? (
+            // if the user image array is empty, the user has not uploaded any images
+            userImageUrls.length === 0 ? (
+              <div>
+                You have no uploaded images. Upload an image{" "}
+                <span
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    color: "#b0281c",
+                  }}
+                  onClick={handleClickUpload}
+                >
+                  here
+                </span>
+              </div>
+            ) : (
+              // display all the images in the user image array
+              userImageUrls.map((url, index) => (
+                <img
+                  onClick={handleClickImage}
+                  src={url}
+                  height="200px"
+                  width="400px"
+                  className="image-selector"
+                  alt={`background-image-${index}`}
+                  style={{ objectPosition: "bottom", objectFit: "cover" }}
+                />
+              ))
+            )
+          ) : (
+            // display all the images in the free image url array
+            freeImageUrls.map((url, index) => (
+              <img
+                onClick={handleClickImage}
+                src={url}
+                height="200px"
+                width="400px"
+                className="image-selector"
+                alt={`background-image-${index}`}
+                style={{ objectPosition: "bottom", objectFit: "cover" }}
+              />
+            ))
+          )
+        }
+      </div>
+    </div>
+  );
+};
+
+const SelectImage = ({
+  user,
+  freeImageUrls,
+  setBackgroundImage,
+  userImageUrls,
+}) => {
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleChangeTab = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  const handleClickUpload = () => {
+    setTabValue(0);
+  };
+
+  return (
+    <div>
+      <Tabs
+        value={tabValue}
+        indicatorColor="primary"
+        onChange={handleChangeTab}
+      >
+        <Tab className="fix-outline" label="Upload Image" />
+        <Tab className="fix-outline" label="Your Images" />
+        <Tab className="fix-outline" label="Free Images" />
+      </Tabs>
+
+      {tabValue === 0 ? (
+        <UploadImage user={user} setBackgroundImage={setBackgroundImage} />
+      ) : (
+        <SearchImages
+          freeImageUrls={freeImageUrls}
+          userImageUrls={userImageUrls}
+          setBackgroundImage={setBackgroundImage}
+          type={tabValue === 1 ? "user" : "free"}
+          handleClickUpload={handleClickUpload}
+        />
+      )}
+    </div>
+  );
+};
+
+const Preview = ({
+  currentBackgroundImageURL,
+  handleClickSelectImage,
+  handleClickRemoveImage,
+}) => {
+  return (
+    <div>
+      {currentBackgroundImageURL ? (
+        <>
           <div
             style={{
               width: "400px",
               height: "150px",
-              backgroundColor: "#f7f7f7",
-              border: "1px solid #cccccc",
-              backgroundImage: `url("${currentBackgroundImageURL}")`,
+              backgroundImage: `url(${currentBackgroundImageURL})`,
               backgroundPosition: "bottom",
               backgroundSize: "cover",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
             }}
-          >
-            <button
-              className="Button2"
-              style={{ padding: "15px 30px" }}
-              onClick={handleClickUploadImage}
+          ></div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              style={{ padding: "15px 30px", color: "#000000" }}
+              onClick={handleClickSelectImage}
             >
-              {currentBackgroundImageURL ? "Replace Image" : "Upload Image"}
-            </button>
+              Replace Image
+            </Button>
+            <Button
+              color="primary"
+              style={{ padding: "15px 30px" }}
+              onClick={handleClickRemoveImage}
+            >
+              Remove Image
+            </Button>
           </div>
-          <div style={{ height: "30px" }}></div>
+        </>
+      ) : (
+        <div
+          onClick={handleClickSelectImage}
+          style={{
+            width: "400px",
+            height: "150px",
+            backgroundColor: "#f7f7f7",
+            border: "1px solid #cccccc",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+        >
+          <PublishIcon style={{ margin: "3px", color: "#828282" }} />
+          <span style={{ margin: "3px", color: "#828282" }}>ADD AN IMAGE</span>
         </div>
       )}
+      <div style={{ height: "30px" }}></div>
     </div>
   );
 };

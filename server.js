@@ -63,6 +63,7 @@ function start() {
   app.use(require("./routes/testRoutes"));
   app.use(require("./routes/pollingRoutes"));
   app.use(require("./routes/billingRoutes"));
+  app.use(require("./routes/awsRoutes"));
 
   app.get("/loaderio-feb5ca360d9f5cdf226bcd9fb3240326", async (req, res) => {
     file = `${__dirname}/public/loaderio-verification.txt`;
@@ -74,6 +75,7 @@ function start() {
     "/api/s3",
     require("react-s3-uploader/s3router")({
       bucket: "eventscape-assets",
+      ACL: "public-read",
     })
   );
 

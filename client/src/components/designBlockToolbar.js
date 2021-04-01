@@ -93,6 +93,11 @@ function DesignBlockToolbar(props) {
     setOpenSettings(false);
   };
 
+  const handleCloseBackgroundSettings = () => {
+    props.triggerSectionReactUpdate();
+    setOpenBackgroundImage(false);
+  };
+
   const handleClickEditBackgroundImage = () => {
     setOpenBackgroundImage(true);
   };
@@ -137,14 +142,17 @@ function DesignBlockToolbar(props) {
               <DeleteOutlined />
             </div>
           </Tooltip>
-          <Tooltip title="Edit Background image">
-            <div
-              className="design-block-toolbar-button"
-              onClick={handleClickEditBackgroundImage}
-            >
-              <CropOriginalIcon />
-            </div>
-          </Tooltip>
+          {props.section.isReact ? null : (
+            // Only show if it is not a react section (it is a froala section)
+            <Tooltip title="Edit Background image">
+              <div
+                className="design-block-toolbar-button"
+                onClick={handleClickEditBackgroundImage}
+              >
+                <CropOriginalIcon />
+              </div>
+            </Tooltip>
+          )}
           {showSettings ? (
             <>
               <Tooltip title="Settings">
@@ -204,15 +212,16 @@ function DesignBlockToolbar(props) {
         }
       />
 
-      {/*Background Image Modal: */}
+      {/*Background Image Modal. */}
+
       <Modal1
         open={openBackgroundImage}
-        onClose={() => setOpenBackgroundImage(false)}
+        onClose={handleCloseBackgroundSettings}
         title="Change Background Image"
         content={
           <BackgroundImageSelector
             sectionIndex={props.sectionIndex}
-            onClose={handleCloseSettings}
+            handleClose={handleCloseBackgroundSettings}
           />
         }
       />
