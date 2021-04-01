@@ -4,6 +4,7 @@ import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import CircularProgress from "@material-ui/core/CircularProgress";
+import CookieConsent from "react-cookie-consent";
 
 import "./App.css";
 import "./components/fonts.css";
@@ -94,6 +95,22 @@ function App({ user, location, fetchUser, attendee }) {
     // it's an app (rather than an event page) so render the app components
     return (
       <div className="App">
+        <CookieConsent
+          location="bottom"
+          buttonText="I accept"
+          cookieName="CookieConsent"
+          style={{ padding: "0px 100px" }}
+          buttonStyle={{
+            color: "#ffffff",
+            backgroundColor: "#b0281c",
+            fontSize: "13px",
+          }}
+        >
+          By continuing to use this site, or by clicking "I Accept", you
+          acknowledge and agree to this website's use of cookies to improve the
+          user experience and to track performance and analytics.
+        </CookieConsent>
+
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
           <Suspense
@@ -138,6 +155,21 @@ function App({ user, location, fetchUser, attendee }) {
     // is not the app, therefore is an event
     return (
       <div className="App">
+        <CookieConsent
+          location="bottom"
+          buttonText="I accept"
+          cookieName="CookieConsent"
+          style={{ padding: "0px 100px" }}
+          buttonStyle={{
+            color: "#ffffff",
+            backgroundColor: "#b0281c",
+            fontSize: "13px",
+          }}
+        >
+          By continuing to use this site, or by clicking "I Accept", you
+          acknowledge and agree to this website's use of cookies to improve the
+          user experience and to track performance and analytics.
+        </CookieConsent>
         <ToastContainer position="top-right" autoClose={3000} />
         <header className="App-header">
           <Suspense
