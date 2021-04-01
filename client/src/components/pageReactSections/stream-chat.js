@@ -6,13 +6,25 @@ import "../pageEditor.css";
 import "./stream-chat.css";
 import Chat from "../chat4.js";
 
-const StreamChat = (props) => {
-  const displayStream = () => {
-    const youtubeSrc =
-      props.link +
-      "?rel=0;&modestbranding=1&showinfo=0&autoplay=1&mute=1&loop=1";
+const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
+  const createEmbedLink = (youtubeLink) => {
+    const splitLink = youtubeLink.split("/");
+    var streamCode = splitLink[splitLink.length - 1];
 
-    switch (props.content) {
+    // strip away the watch portion if exists
+    streamCode = streamCode.replace("watch?v=", "");
+
+    // strip away any additional params after the stream code
+    streamCode = streamCode.split("?")[0];
+    streamCode = streamCode.split("&")[0];
+
+    return `https://www.youtube.com/embed/${streamCode}?rel=0;&modestbranding=1&showinfo=0&autoplay=1&mute=1&loop=1`;
+  };
+
+  const displayStream = () => {
+    const youtubeSrc = createEmbedLink(link);
+
+    switch (content) {
       case "youtube-live":
         return (
           <iframe
@@ -24,7 +36,7 @@ const StreamChat = (props) => {
           ></iframe>
         );
       case "custom-embed":
-        return ReactHtmlParser(props.html);
+        return ReactHtmlParser(html);
       default:
         return <p>Unknown Error</p>;
     }
@@ -40,9 +52,9 @@ const StreamChat = (props) => {
           <div className="chat-responsive">
             <div className="video-responsive-iframe">
               <Chat
-                room={props.chatRoom}
+                room={chatRoom}
                 isModerator={false}
-                registrationId={props.attendee.id}
+                registrationId={attendee.id}
               />
             </div>
           </div>
