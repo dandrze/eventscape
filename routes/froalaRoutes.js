@@ -20,7 +20,7 @@ router.get(
       region: "us-east-1",
 
       // The folder where to upload the images.
-      keyStart: "froala-uploads/account-" + accountId + "/",
+      keyStart: "user-uploads/user-" + accountId + "/",
 
       // File access.
       acl: "public-read",

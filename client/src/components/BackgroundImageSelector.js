@@ -12,9 +12,10 @@ import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import * as actions from "../actions";
 import api from "../api/server";
-import { CircularProgress } from "@material-ui/core";
+import { CircularProgress, Select } from "@material-ui/core";
 
 const BackgroundImageSelector = ({
+  event,
   handleClose,
   user,
   sectionIndex,
@@ -23,17 +24,24 @@ const BackgroundImageSelector = ({
 }) => {
   const [step, setStep] = useState("start");
   const [freeImageUrls, setFreeImageUrls] = useState([]);
+  const [userImageUrls, setUserImageUrls] = useState([]);
 
   useEffect(() => {
     fetchFreeImageUrls();
   }, []);
 
   const fetchFreeImageUrls = async () => {
-    const res = await api.get("/api/aws/s3/free-images");
+    const res = await api.get("/api/aws/s3/background-images", {
+      params: { userId: user.id },
+    });
 
     console.log(res);
 
-    setFreeImageUrls(res.data);
+    // returns a list of free images and user images. Both lists start with an empty object so they need to be sliced when displaying
+    const { freeImages, userImages } = res.data;
+
+    setFreeImageUrls(freeImages);
+    setUserImageUrls(userImages);
   };
 
   const matchBackgroundImageUrl = model.sections[sectionIndex].html.match(
@@ -44,12 +52,8 @@ const BackgroundImageSelector = ({
     ? matchBackgroundImageUrl[1]
     : "";
 
-  const handleClickUploadImage = () => {
-    setStep("upload");
-  };
-
-  const handleClickSearch = () => {
-    setStep("search");
+  const handleClickSelectImage = () => {
+    setStep("select");
   };
 
   const setBackgroundImage = (url) => {
@@ -73,27 +77,36 @@ const BackgroundImageSelector = ({
     handleClose();
   };
 
+  const handleClickRemoveImage = () => {
+    const updatedHtml = model.sections[sectionIndex].html.replace(
+      /url\(.*?\)/,
+      ""
+    );
+
+    updateSection(sectionIndex, updatedHtml);
+  };
+
   return (
     <div>
-      {step === "upload" ? (
-        <UploadStep user={user} setBackgroundImage={setBackgroundImage} />
-      ) : step === "search" ? (
-        <SearchStep
-          freeImageUrls={freeImageUrls}
+      {step === "select" ? (
+        <SelectImage
+          user={user}
           setBackgroundImage={setBackgroundImage}
+          freeImageUrls={freeImageUrls}
+          userImageUrls={userImageUrls}
         />
       ) : (
-        <MainStep
+        <Preview
           currentBackgroundImageURL={currentBackgroundImageURL}
-          handleClickSearch={handleClickSearch}
-          handleClickUploadImage={handleClickUploadImage}
+          handleClickSelectImage={handleClickSelectImage}
+          handleClickRemoveImage={handleClickRemoveImage}
         />
       )}
     </div>
   );
 };
 
-const UploadStep = ({ user, setBackgroundImage }) => {
+const UploadImage = ({ user, setBackgroundImage }) => {
   const [status, setStatus] = useState("");
   const [percent, setPercent] = useState("");
 
@@ -110,9 +123,9 @@ const UploadStep = ({ user, setBackgroundImage }) => {
   };
 
   return (
-    <>
-      <div>Choose image from file</div>
-
+    <div>
+      <div style={{ height: "30px" }}></div>
+      <div style={{ fontWeight: "bold" }}>Choose image from file</div>
       <div style={{ height: "30px" }}></div>
       <label>
         <div className="file-upload-section">
@@ -136,95 +149,196 @@ const UploadStep = ({ user, setBackgroundImage }) => {
           signingUrl="/api/s3/sign"
           signingUrlMethod="GET"
           accept="image/*"
-          s3path={`uploads/${user.id}/`}
-          uploadRequestHeaders={{ "x-amz-acl": "public-read" }} // this is the default
+          s3path={`user-uploads/user-${user.id}/`}
           contentDisposition="auto"
           scrubFilename={(filename) => filename.replace(/[^\w\d_\-.]+/gi, "")}
           autoUpload={true}
         />
       </label>
       <div style={{ height: "30px" }}></div>
-    </>
+    </div>
   );
 };
 
-const SearchStep = ({ freeImageUrls, setBackgroundImage }) => {
-  const [value, setValue] = React.useState(0);
-
-  const handleChangeTab = (event, newValue) => {
-    setValue(newValue);
-  };
-
+const SearchImages = ({
+  freeImageUrls,
+  userImageUrls,
+  setBackgroundImage,
+  type,
+  handleClickUpload,
+}) => {
   const handleClickImage = (event) => {
     setBackgroundImage(event.target.src);
   };
 
+  console.log(type);
+
   return (
     <div>
-      <Tabs value={value} indicatorColor="primary" onChange={handleChangeTab}>
-        <Tab label="Upload Image" />
-        <Tab label="Free Images" />
-      </Tabs>
+      <div style={{ height: "30px" }}></div>
+      <div style={{ fontWeight: "bold" }}>
+        {type === "user"
+          ? "Select one of your previously uploaded images below."
+          : "Select one of our free images below."}
+      </div>
+      <div style={{ height: "30px" }}></div>
       <div
         style={{
           display: "flex",
           flexWrap: "wrap",
           justifyContent: "center",
-          margin: "20px 0px",
         }}
       >
-        {freeImageUrls.length === 0 ? (
-          <CircularProgress />
-        ) : (
-          freeImageUrls.map((url, index) => (
-            <img
-              onClick={handleClickImage}
-              src={url}
-              height="200px"
-              width="400px"
-              className="image-selector"
-              alt={`background-image-${index}`}
-            />
-          ))
-        )}
+        {
+          // if free images is empty, that means the client is still waiting for the response from the server, display loading spinner
+          freeImageUrls.length === 0 ? (
+            <CircularProgress />
+          ) : // if the selected tab is user, display the users images
+          type === "user" ? (
+            // if the user image array is empty, the user has not uploaded any images
+            userImageUrls.length === 0 ? (
+              <div>
+                You have no uploaded images. Upload an image{" "}
+                <span
+                  style={{
+                    cursor: "pointer",
+                    textDecoration: "underline",
+                    color: "#b0281c",
+                  }}
+                  onClick={handleClickUpload}
+                >
+                  here
+                </span>
+              </div>
+            ) : (
+              // display all the images in the user image array
+              userImageUrls.map((url, index) => (
+                <img
+                  onClick={handleClickImage}
+                  src={url}
+                  height="200px"
+                  width="400px"
+                  className="image-selector"
+                  alt={`background-image-${index}`}
+                  style={{ objectPosition: "bottom", objectFit: "cover" }}
+                />
+              ))
+            )
+          ) : (
+            // display all the images in the free image url array
+            freeImageUrls.map((url, index) => (
+              <img
+                onClick={handleClickImage}
+                src={url}
+                height="200px"
+                width="400px"
+                className="image-selector"
+                alt={`background-image-${index}`}
+                style={{ objectPosition: "bottom", objectFit: "cover" }}
+              />
+            ))
+          )
+        }
       </div>
     </div>
   );
 };
 
-const MainStep = ({
+const SelectImage = ({
+  user,
+  freeImageUrls,
+  setBackgroundImage,
+  userImageUrls,
+}) => {
+  const [tabValue, setTabValue] = useState(0);
+
+  const handleChangeTab = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
+  const handleClickUpload = () => {
+    setTabValue(0);
+  };
+
+  return (
+    <div>
+      <Tabs
+        value={tabValue}
+        indicatorColor="primary"
+        onChange={handleChangeTab}
+      >
+        <Tab className="fix-outline" label="Upload Image" />
+        <Tab className="fix-outline" label="Your Images" />
+        <Tab className="fix-outline" label="Free Images" />
+      </Tabs>
+
+      {tabValue === 0 ? (
+        <UploadImage user={user} setBackgroundImage={setBackgroundImage} />
+      ) : (
+        <SearchImages
+          freeImageUrls={freeImageUrls}
+          userImageUrls={userImageUrls}
+          setBackgroundImage={setBackgroundImage}
+          type={tabValue === 1 ? "user" : "free"}
+          handleClickUpload={handleClickUpload}
+        />
+      )}
+    </div>
+  );
+};
+
+const Preview = ({
   currentBackgroundImageURL,
-  handleClickSearch,
-  handleClickUploadImage,
+  handleClickSelectImage,
+  handleClickRemoveImage,
 }) => {
   return (
     <div>
-      <div
-        style={{
-          width: "400px",
-          height: "150px",
-          backgroundColor: "#f7f7f7",
-          border: "1px solid #cccccc",
-          backgroundImage: `url(${currentBackgroundImageURL})`,
-          backgroundPosition: "bottom",
-          backgroundSize: "cover",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-        }}
-      >
-        <button
-          className="Button2"
-          style={{ padding: "15px 30px" }}
-          onClick={handleClickUploadImage}
+      {currentBackgroundImageURL ? (
+        <>
+          <div
+            style={{
+              width: "400px",
+              height: "150px",
+              backgroundImage: `url(${currentBackgroundImageURL})`,
+              backgroundPosition: "bottom",
+              backgroundSize: "cover",
+            }}
+          ></div>
+          <div style={{ display: "flex", justifyContent: "space-between" }}>
+            <Button
+              style={{ padding: "15px 30px", color: "#000000" }}
+              onClick={handleClickSelectImage}
+            >
+              Replace Image
+            </Button>
+            <Button
+              color="primary"
+              style={{ padding: "15px 30px" }}
+              onClick={handleClickRemoveImage}
+            >
+              Remove Image
+            </Button>
+          </div>
+        </>
+      ) : (
+        <div
+          onClick={handleClickSelectImage}
+          style={{
+            width: "400px",
+            height: "150px",
+            backgroundColor: "#f7f7f7",
+            border: "1px solid #cccccc",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
         >
-          {currentBackgroundImageURL ? "Replace Image" : "Upload Image"}
-        </button>
-      </div>
-      <div style={{ height: "30px" }}></div>
-      <Button onClick={handleClickSearch} color="primary">
-        Search for Image
-      </Button>
+          <PublishIcon style={{ margin: "3px", color: "#828282" }} />
+          <span style={{ margin: "3px", color: "#828282" }}>ADD AN IMAGE</span>
+        </div>
+      )}
       <div style={{ height: "30px" }}></div>
     </div>
   );

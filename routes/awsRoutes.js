@@ -12,8 +12,10 @@ const bucketParams = {
   Bucket: "eventscape-assets",
 };
 
-router.get("/api/aws/s3/free-images", async (req, res, next) => {
-  //const { eventId } = req.query;
+router.get("/api/aws/s3/background-images", async (req, res, next) => {
+  const { userId } = req.query;
+
+  console.log(userId);
 
   try {
     // Call S3 to obtain a list of the objects in the bucket
@@ -29,13 +31,28 @@ router.get("/api/aws/s3/free-images", async (req, res, next) => {
           (key) => key.split("/")[0] === "free-images"
         );
 
+        // filter based on images in the folder: user-uploads/user-{userid}
+        const userImageKeys = imageKeys.filter(
+          (key) =>
+            key.split("/")[0] === `user-uploads` &&
+            key.split("/")[1] === `user-${userId}`
+        );
+
         // append the aws s3 link to the start of the key to create a complete url
         const freeImageUrls = freeImageKeys.map(
           (key) => `https://eventscape-assets.s3.amazonaws.com/${key}`
         );
 
-        //first item in the array is the root of the folder so only return images
-        res.json(freeImageUrls.slice(1));
+        const userImageUrls = userImageKeys.map(
+          (key) => `https://eventscape-assets.s3.amazonaws.com/${key}`
+        );
+
+        //first item in the free array is the root of the folder so only return images
+        res.json({
+          freeImages: freeImageUrls.slice(1),
+          userImages: userImageUrls,
+          all: imageKeys,
+        });
       }
     });
   } catch (error) {

@@ -75,6 +75,7 @@ function start() {
     "/api/s3",
     require("react-s3-uploader/s3router")({
       bucket: "eventscape-assets",
+      ACL: "public-read",
     })
   );
 

@@ -843,7 +843,7 @@ select:focus {
 }
 
 .image-selector {
-  background: #ffffff;
+  background: #f7f7f7;
   margin: 6px;
   padding: 6px;
   cursor: pointer;
@@ -851,4 +851,10 @@ select:focus {
 
 .image-selector:hover {
   border: 2px solid var(--main-color);
+}
+
+/* Fixes outline and other unwanted styling issues when clicking on an element*/
+
+.fix-outline:focus {
+  outline: none;
 }
