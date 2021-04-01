@@ -93,6 +93,11 @@ function DesignBlockToolbar(props) {
     setOpenSettings(false);
   };
 
+  const handleCloseBackgroundSettings = () => {
+    props.triggerSectionReactUpdate();
+    setOpenBackgroundImage(false);
+  };
+
   const handleClickEditBackgroundImage = () => {
     setOpenBackgroundImage(true);
   };
@@ -207,12 +212,12 @@ function DesignBlockToolbar(props) {
       {/*Background Image Modal: */}
       <Modal1
         open={openBackgroundImage}
-        onClose={() => setOpenBackgroundImage(false)}
+        onClose={handleCloseBackgroundSettings}
         title="Change Background Image"
         content={
           <BackgroundImageSelector
             sectionIndex={props.sectionIndex}
-            onClose={handleCloseSettings}
+            handleClose={handleCloseBackgroundSettings}
           />
         }
       />

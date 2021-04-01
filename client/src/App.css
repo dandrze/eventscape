@@ -841,3 +841,14 @@ select:focus {
   font-size: 1rem;
   margin: 16px 0px;
 }
+
+.image-selector {
+  background: #ffffff;
+  margin: 6px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.image-selector:hover {
+  border: 2px solid var(--main-color);
+}
