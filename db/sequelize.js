@@ -2,7 +2,8 @@ const Sequelize = require("sequelize");
 
 var logging;
 if (process.env.NODE_ENV === "production") {
-  logging = false;
+  //logging = false;
+  logging = console.log;
 } else {
   logging = console.log;
 }
