@@ -3,7 +3,11 @@ const redis = require("redis");
 
 const keys = require("../config/keys");
 
-const pubClient = redis.createClient(keys.redisUrl);
+const pubClient = redis.createClient(keys.redisUrl, {
+  tls: {
+    rejectUnauthorized: false,
+  },
+});
 const subClient = pubClient.duplicate();
 
 console.log("socket client created");
