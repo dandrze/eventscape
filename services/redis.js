@@ -7,11 +7,17 @@ const keys = require("../config/keys");
 bluebird.promisifyAll(redis.RedisClient.prototype);
 bluebird.promisifyAll(redis.Multi.prototype);
 
-const redisClient = redis.createClient(keys.redisUrl, {
-  tls: {
-    rejectUnauthorized: false,
-  },
-});
+var redisClient;
+
+if (process.env.NODE_ENV === "production") {
+  redisClient = redis.createClient(keys.redisUrl, {
+    tls: {
+      rejectUnauthorized: false,
+    },
+  });
+} else {
+  redisClient = redis.createClient(keys.redisUrl);
+}
 console.log("seq client created");
 
 module.exports = redisClient;

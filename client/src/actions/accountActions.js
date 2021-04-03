@@ -34,8 +34,6 @@ export const signInLocal = (username, password) => async (dispatch) => {
 };
 
 export const fetchUser = () => async (dispatch) => {
-  const cookies = new Cookies();
-
   try {
     const res = await api.get("/auth/current-user");
 
