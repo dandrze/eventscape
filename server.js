@@ -81,6 +81,8 @@ function start() {
 
   // universal error handling for all database calls
   app.use((err, req, res, next) => {
+    console.log(err);
+
     logger.error(err.message);
     logger.error(err.stack);
     handleError(err, res);
