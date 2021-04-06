@@ -22,9 +22,15 @@ const useStyles = makeStyles((theme) => ({
     boxShadow: theme.shadows[5],
     padding: "0px",
   },
+
+  sideModal: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+  },
 }));
 
-export default function Modal1({ onClose, open, content, title }) {
+export default function Modal1({ onClose, open, content, title, isSideModal }) {
   const classes = useStyles();
 
   const handleClose = () => {
@@ -45,9 +51,14 @@ export default function Modal1({ onClose, open, content, title }) {
           timeout: 500,
         }}
         disableAutoFocus={true}
+        hideBackdrop={isSideModal}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
+          <div
+            className={`${classes.paper} ${
+              isSideModal ? classes.sideModal : ""
+            }`}
+          >
             <div>
               <div className="cancel-bar">
                 <Tooltip title="Close">

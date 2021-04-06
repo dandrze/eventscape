@@ -6,6 +6,7 @@ import Button from "@material-ui/core/Button";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import Slider from "@material-ui/core/Slider";
 import Typography from "@material-ui/core/Typography";
+import Modal1 from "./Modal1";
 
 /* Tabs */
 import PropTypes from "prop-types";
@@ -25,11 +26,12 @@ const BackgroundImageSelector = ({
   model,
   updateSection,
 }) => {
-  const [step, setStep] = useState("start");
+  const [openSelectImage, setOpenSelectImage] = useState(false);
   const [freeImageUrls, setFreeImageUrls] = useState([]);
   const [userImageUrls, setUserImageUrls] = useState([]);
   const [color, setColor] = useState("#ffffff");
-  const [opacity, setOpacity] = useState(0);
+  const [opacity, setOpacity] = useState(100);
+  const [tabValue, setTabValue] = useState(0);
 
   useEffect(() => {
     fetchFreeImageUrls();
@@ -40,8 +42,6 @@ const BackgroundImageSelector = ({
       params: { userId: user.id },
     });
 
-    console.log(res);
-
     // returns a list of free images and user images. Both lists start with an empty object so they need to be sliced when displaying
     const { freeImages, userImages } = res.data;
 
@@ -49,42 +49,49 @@ const BackgroundImageSelector = ({
     setUserImageUrls(userImages);
   };
 
-  const matchBackgroundImageUrl = model.sections[sectionIndex].html.match(
-    /url\((.*?)\)/
-  );
-
-  const currentBackgroundImageURL = matchBackgroundImageUrl
-    ? matchBackgroundImageUrl[1]
+  var currentBackgroundImageURL = model.sections[sectionIndex].html.includes(
+    "url("
+  )
+    ? model.sections[sectionIndex].html.split("url(")[1].split(")")[0]
     : "";
 
+  currentBackgroundImageURL = currentBackgroundImageURL.replace(/&quot;/g, "");
+
+  console.log(currentBackgroundImageURL);
+
+  const handleChangeTab = (event, newValue) => {
+    setTabValue(newValue);
+  };
+
   const handleClickSelectImage = () => {
-    setStep("select");
+    setOpenSelectImage(true);
   };
 
   const setBackgroundImage = (url) => {
-    console.log(model.sections[sectionIndex].html);
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
     const background = newHtml.getElementsByTagName("div")[0];
 
-    console.log(background);
-
-    background.style.backgroundImage = `url("${url}")`;
+    background.style.backgroundImage = `url(${url})`;
     // ensure the background is positioned center and cover
     background.style.backgroundPosition = `center`;
     background.style.backgroundSize = `cover`;
+    console.log(background.style.backgroundImage);
 
     updateSection(sectionIndex, newHtml.innerHTML);
+    setOpenSelectImage(false);
   };
 
   const handleClickRemoveImage = () => {
-    const updatedHtml = model.sections[sectionIndex].html.replace(
-      /url\(.*?\)/,
-      ""
-    );
+    const newHtml = document.createElement("div");
+    newHtml.innerHTML = model.sections[sectionIndex].html;
 
-    updateSection(sectionIndex, updatedHtml);
+    const background = newHtml.getElementsByTagName("div")[0];
+
+    background.style.backgroundImage = "";
+
+    updateSection(sectionIndex, newHtml.innerHTML);
   };
 
   const handleChangeOpacity = (event, newValue) => {
@@ -99,55 +106,73 @@ const BackgroundImageSelector = ({
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
+    // get a reference to the base div
     const background = newHtml.getElementsByTagName("div")[0];
-    console.log(background.style);
 
+    // create a hex that includes opacity
     const overlayHex = color + Math.floor((opacity / 100) * 255).toString(16);
 
+    // Modify the styling of the base div with a large box shadow to act as the image overlay
+    // This code modifies the original newHTML object
     background.style.boxShadow = `inset 0 0 0 5000px ${overlayHex}`;
 
-    console.log(background.style.boxShadow);
-
-    console.log(newHtml.innerHTML);
-
+    // update the section with the new html
     updateSection(sectionIndex, newHtml.innerHTML);
   };
 
   return (
     <div>
-      <div>
-        {step === "select" ? (
+      <Modal1
+        open={openSelectImage}
+        onClose={() => setOpenSelectImage(false)}
+        content={
           <SelectImage
             user={user}
             setBackgroundImage={setBackgroundImage}
             freeImageUrls={freeImageUrls}
             userImageUrls={userImageUrls}
           />
-        ) : (
+        }
+      />
+      <Tabs
+        value={tabValue}
+        indicatorColor="primary"
+        onChange={handleChangeTab}
+      >
+        <Tab className="fix-outline" label="Image" />
+        <Tab className="fix-outline" label="Color Overlay" />
+      </Tabs>
+      <div>
+        {tabValue === 0 ? (
           <Preview
             currentBackgroundImageURL={currentBackgroundImageURL}
             handleClickSelectImage={handleClickSelectImage}
             handleClickRemoveImage={handleClickRemoveImage}
           />
+        ) : (
+          <div>
+            <label>Background Color Overlay</label>
+            <HexColorPicker
+              color={color}
+              onChange={setColor}
+              id="event-color"
+            />
+            <HexColorInput color={color} onChange={setColor} id="hex-input" />
+            <div>
+              <label>Opacity</label>
+            </div>
+            <Slider
+              value={opacity}
+              onChange={handleChangeOpacity}
+              min={0}
+              max={100}
+              valueLabelFormat={opacityFormat}
+              valueLabelDisplay="on"
+              style={{ marginTop: "40px" }}
+            />
+            <button onClick={handleUpdateOverlay}>Update Color Overlay</button>
+          </div>
         )}
-      </div>
-      <div>
-        <label>Background Color Overlay</label>
-        <HexColorPicker color={color} onChange={setColor} id="event-color" />
-        <HexColorInput color={color} onChange={setColor} id="hex-input" />
-        <div>
-          <label>Opacity</label>
-        </div>
-        <Slider
-          value={opacity}
-          onChange={handleChangeOpacity}
-          min={0}
-          max={100}
-          valueLabelFormat={opacityFormat}
-          valueLabelDisplay="on"
-          style={{ marginTop: "40px" }}
-        />
-        <button onClick={handleUpdateOverlay}>Update Color Overlay</button>
       </div>
     </div>
   );
@@ -217,8 +242,6 @@ const SearchImages = ({
   const handleClickImage = (event) => {
     setBackgroundImage(event.target.src);
   };
-
-  console.log(type);
 
   return (
     <div>
@@ -339,6 +362,7 @@ const Preview = ({
   handleClickSelectImage,
   handleClickRemoveImage,
 }) => {
+  console.log(currentBackgroundImageURL);
   return (
     <div>
       {currentBackgroundImageURL ? (
