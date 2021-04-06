@@ -3,6 +3,9 @@ import { connect } from "react-redux";
 import ReactS3Uploader from "react-s3-uploader";
 import PublishIcon from "@material-ui/icons/Publish";
 import Button from "@material-ui/core/Button";
+import { HexColorPicker, HexColorInput } from "react-colorful";
+import Slider from "@material-ui/core/Slider";
+import Typography from "@material-ui/core/Typography";
 
 /* Tabs */
 import PropTypes from "prop-types";
@@ -25,6 +28,8 @@ const BackgroundImageSelector = ({
   const [step, setStep] = useState("start");
   const [freeImageUrls, setFreeImageUrls] = useState([]);
   const [userImageUrls, setUserImageUrls] = useState([]);
+  const [color, setColor] = useState("#ffffff");
+  const [opacity, setOpacity] = useState(0);
 
   useEffect(() => {
     fetchFreeImageUrls();
@@ -57,24 +62,20 @@ const BackgroundImageSelector = ({
   };
 
   const setBackgroundImage = (url) => {
-    var newHtml = "";
+    console.log(model.sections[sectionIndex].html);
+    const newHtml = document.createElement("div");
+    newHtml.innerHTML = model.sections[sectionIndex].html;
 
-    if (currentBackgroundImageURL) {
-      // find and replace the existing background image css
-      newHtml = model.sections[sectionIndex].html.replace(
-        /url\(.*?\)/,
-        `url("${url}")`
-      );
-    } else {
-      // otherwise add a background image into the first div (primary container)
-      newHtml = model.sections[sectionIndex].html.replace(
-        "<div",
-        `<div style='background-image: url("${url}");background-position: center;background-size: cover;'`
-      );
-    }
+    const background = newHtml.getElementsByTagName("div")[0];
 
-    updateSection(sectionIndex, newHtml);
-    handleClose();
+    console.log(background);
+
+    background.style.backgroundImage = `url("${url}")`;
+    // ensure the background is positioned center and cover
+    background.style.backgroundPosition = `center`;
+    background.style.backgroundSize = `cover`;
+
+    updateSection(sectionIndex, newHtml.innerHTML);
   };
 
   const handleClickRemoveImage = () => {
@@ -86,22 +87,68 @@ const BackgroundImageSelector = ({
     updateSection(sectionIndex, updatedHtml);
   };
 
+  const handleChangeOpacity = (event, newValue) => {
+    setOpacity(newValue);
+  };
+
+  const opacityFormat = (value) => {
+    return value + "%";
+  };
+
+  const handleUpdateOverlay = () => {
+    const newHtml = document.createElement("div");
+    newHtml.innerHTML = model.sections[sectionIndex].html;
+
+    const background = newHtml.getElementsByTagName("div")[0];
+    console.log(background.style);
+
+    const overlayHex = color + Math.floor((opacity / 100) * 255).toString(16);
+
+    background.style.boxShadow = `inset 0 0 0 5000px ${overlayHex}`;
+
+    console.log(background.style.boxShadow);
+
+    console.log(newHtml.innerHTML);
+
+    updateSection(sectionIndex, newHtml.innerHTML);
+  };
+
   return (
     <div>
-      {step === "select" ? (
-        <SelectImage
-          user={user}
-          setBackgroundImage={setBackgroundImage}
-          freeImageUrls={freeImageUrls}
-          userImageUrls={userImageUrls}
+      <div>
+        {step === "select" ? (
+          <SelectImage
+            user={user}
+            setBackgroundImage={setBackgroundImage}
+            freeImageUrls={freeImageUrls}
+            userImageUrls={userImageUrls}
+          />
+        ) : (
+          <Preview
+            currentBackgroundImageURL={currentBackgroundImageURL}
+            handleClickSelectImage={handleClickSelectImage}
+            handleClickRemoveImage={handleClickRemoveImage}
+          />
+        )}
+      </div>
+      <div>
+        <label>Background Color Overlay</label>
+        <HexColorPicker color={color} onChange={setColor} id="event-color" />
+        <HexColorInput color={color} onChange={setColor} id="hex-input" />
+        <div>
+          <label>Opacity</label>
+        </div>
+        <Slider
+          value={opacity}
+          onChange={handleChangeOpacity}
+          min={0}
+          max={100}
+          valueLabelFormat={opacityFormat}
+          valueLabelDisplay="on"
+          style={{ marginTop: "40px" }}
         />
-      ) : (
-        <Preview
-          currentBackgroundImageURL={currentBackgroundImageURL}
-          handleClickSelectImage={handleClickSelectImage}
-          handleClickRemoveImage={handleClickRemoveImage}
-        />
-      )}
+        <button onClick={handleUpdateOverlay}>Update Color Overlay</button>
+      </div>
     </div>
   );
 };
