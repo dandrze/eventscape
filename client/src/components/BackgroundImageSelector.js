@@ -150,7 +150,7 @@ const BackgroundImageSelector = ({
             handleClickRemoveImage={handleClickRemoveImage}
           />
         ) : (
-          <div>
+          <div style={{ padding: "18px" }}>
             <label>Background Color Overlay</label>
             <HexColorPicker
               color={color}
@@ -170,7 +170,9 @@ const BackgroundImageSelector = ({
               valueLabelDisplay="on"
               style={{ marginTop: "40px" }}
             />
-            <button onClick={handleUpdateOverlay}>Update Color Overlay</button>
+            <Button onClick={handleUpdateOverlay} color="primary">
+              Update Color Overlay
+            </Button>
           </div>
         )}
       </div>
@@ -364,13 +366,13 @@ const Preview = ({
 }) => {
   console.log(currentBackgroundImageURL);
   return (
-    <div>
+    <div style={{ padding: "18px" }}>
       {currentBackgroundImageURL ? (
         <>
           <div
             style={{
-              width: "400px",
-              height: "150px",
+              width: "284px",
+              height: "160px",
               backgroundImage: `url(${currentBackgroundImageURL})`,
               backgroundPosition: "bottom",
               backgroundSize: "cover",
@@ -378,14 +380,14 @@ const Preview = ({
           ></div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Button
-              style={{ padding: "15px 30px", color: "#000000" }}
+              style={{ padding: "15px  15px", color: "#000000" }}
               onClick={handleClickSelectImage}
             >
               Replace Image
             </Button>
             <Button
               color="primary"
-              style={{ padding: "15px 30px" }}
+              style={{ padding: "15px 15px" }}
               onClick={handleClickRemoveImage}
             >
               Remove Image
@@ -393,24 +395,28 @@ const Preview = ({
           </div>
         </>
       ) : (
-        <div
-          onClick={handleClickSelectImage}
-          style={{
-            width: "400px",
-            height: "150px",
-            backgroundColor: "#f7f7f7",
-            border: "1px solid #cccccc",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            cursor: "pointer",
-          }}
-        >
-          <PublishIcon style={{ margin: "3px", color: "#828282" }} />
-          <span style={{ margin: "3px", color: "#828282" }}>ADD AN IMAGE</span>
-        </div>
+        <>
+          <div
+            onClick={handleClickSelectImage}
+            style={{
+              width: "284px",
+              height: "160px",
+              backgroundColor: "#f7f7f7",
+              border: "1px solid #cccccc",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+          >
+            <PublishIcon style={{ margin: "3px", color: "#828282" }} />
+            <span style={{ margin: "3px", color: "#828282" }}>
+              ADD AN IMAGE
+            </span>
+          </div>
+          <div style={{ height: "45px" }} />
+        </>
       )}
-      <div style={{ height: "30px" }}></div>
     </div>
   );
 };

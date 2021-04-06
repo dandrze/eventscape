@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    border: "1px solid #000",
     boxShadow: theme.shadows[5],
     padding: "0px",
   },
@@ -27,7 +27,9 @@ const useStyles = makeStyles((theme) => ({
     position: "absolute",
     right: 0,
     bottom: 0,
+    padding: "18px",
   },
+  centerModal: { padding: "18px 60px" },
 }));
 
 export default function Modal1({ onClose, open, content, title, isSideModal }) {
@@ -56,19 +58,21 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
         <Fade in={open}>
           <div
             className={`${classes.paper} ${
-              isSideModal ? classes.sideModal : ""
+              isSideModal ? classes.sideModal : classes.centerModal
             }`}
           >
             <div>
-              <div className="cancel-bar">
-                <Tooltip title="Close">
-                  <img
-                    src={Cancel}
-                    className="cancel-bar-icon"
-                    onClick={handleClose}
-                  ></img>
-                </Tooltip>
-              </div>
+              {isSideModal ? null : (
+                <div className="cancel-bar">
+                  <Tooltip title="Close">
+                    <img
+                      src={Cancel}
+                      className="cancel-bar-icon"
+                      onClick={handleClose}
+                    ></img>
+                  </Tooltip>
+                </div>
+              )}
 
               <div
                 style={{
@@ -78,7 +82,7 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
                   maxWidth: "95vw",
                 }}
               >
-                <div style={{ padding: "18px 60px" }}>
+                <div>
                   {title ? (
                     <h2 className={classes.primaryColor}>{title}</h2>
                   ) : null}
