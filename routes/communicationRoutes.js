@@ -2,11 +2,15 @@ const express = require("express");
 const router = express.Router();
 const md5 = require("md5");
 
-const Scheduler = require("../services/Scheduler");
+const {
+  scheduleSend,
+  cancelSend,
+  scheduledJobs,
+} = require("../services/Scheduler");
+
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
 const { Communication, EmailListRecipient, Event } = require("../db").models;
-const Registration = require("../db/models/Registration");
 const requireAuth = require("../middlewares/requireAuth");
 
 router.get("/api/communication/all", requireAuth, async (req, res, next) => {
@@ -48,14 +52,13 @@ router.post("/api/communication", requireAuth, async (req, res, next) => {
       status === statusOptions.ACTIVE &&
       recipients != recipientsOptions.NEW_REGISTRANTS
     ) {
-      const to = [];
-
       const event = await Event.findByPk(EventId);
 
-      scheduleJob(
+      scheduleSend(
         communication.id,
         { subject, html, recipients },
-        event,
+        event.id,
+        event.startDate,
         minutesFromEvent
       );
     }
@@ -85,16 +88,13 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
     const communication = await Communication.findByPk(id);
 
     if (status === "Active" && recipients != "New Registrants") {
-      // delete the old job because it could have stale data
-      Scheduler.cancelSend(id.toString());
-      // create a new job with fresh data
-
       const event = await Event.findByPk(communication.EventId);
 
-      scheduleJob(
+      scheduleSend(
         id.toString(),
         { subject, html, recipients },
-        event,
+        event.id,
+        event.startDate,
         minutesFromEvent
       );
     } else if (
@@ -102,7 +102,7 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
       communication.recipients != "New Registrants"
     ) {
       // if either of these two conditions is true, then there might be an existing job we need to cancel
-      Scheduler.cancelSend(id.toString());
+      cancelSend(id.toString());
     }
 
     communication.recipients = recipients;
@@ -120,13 +120,13 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
 });
 
 router.get("/api/communication/jobs", async (req, res) => {
-  res.send(Scheduler.scheduledJobs());
+  res.send(scheduledJobs());
 });
 
 router.post("/api/communication/jobs/cancel", requireAuth, async (req, res) => {
   const { id } = req.body;
 
-  Scheduler.cancelSend(id);
+  cancelSend(id);
 });
 
 router.get("/api/communication-list", requireAuth, async (req, res, next) => {
@@ -235,22 +235,5 @@ router.post("/api/communication/test", requireAuth, async (req, res, next) => {
     next(error);
   }
 });
-
-// HELPER FUNCTIONS
-
-const scheduleJob = async (jobName, email, event, minutesFromEvent) => {
-  const { subject, html, recipients } = email;
-
-  const sendDate = new Date(event.startDate);
-
-  sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
-
-  Scheduler.scheduleSend(
-    jobName,
-    { to: "andrzejewski.d@gmail.com", subject, html, recipients },
-    sendDate,
-    event.id
-  );
-};
 
 module.exports = router;

@@ -21,8 +21,8 @@ const {
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const { inviteUser } = require("../services/Invitations");
-
 const { clearCache } = require("../services/sequelizeRedis");
+const { scheduleSend } = require("../services/Scheduler");
 
 router.post("/api/event", requireAuth, async (req, res, next) => {
   const {
@@ -110,15 +110,34 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
     }
 
     // add the emails for this event
-    for (var communication of communications) {
-      await Communication.create({
-        subject: communication.subject,
-        recipients: communication.recipients,
-        minutesFromEvent: communication.minutesFromEvent,
-        html: communication.html,
+    for (var communicationDetails of communications) {
+      const communication = await Communication.create({
+        subject: communicationDetails.subject,
+        recipients: communicationDetails.recipients,
+        minutesFromEvent: communicationDetails.minutesFromEvent,
+        html: communicationDetails.html,
         EventId: event.id,
-        status: communication.status,
+        status: communicationDetails.status,
       });
+
+      // schedule the email job if it's a scheduled email
+
+      if (
+        communication.status === statusOptions.ACTIVE &&
+        communication.recipients != recipientsOptions.NEW_REGISTRANTS
+      ) {
+        scheduleSend(
+          communication.id,
+          {
+            subject: communication.subject,
+            html: communication.html,
+            recipients: communication.recipients,
+          },
+          event.id,
+          event.startDate,
+          communication.minutesFromEvent
+        );
+      }
     }
 
     // set this event as the currently editing event for this account
@@ -243,15 +262,29 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       where: { EventId },
     });
 
-    for (var communication of originalCommunications) {
-      await Communication.create({
-        subject: communication.subject,
-        recipients: communication.recipients,
-        minutesFromEvent: communication.minutesFromEvent,
-        html: communication.html,
+    for (var communicationDetails of originalCommunications) {
+      const communication = await Communication.create({
+        subject: communicationDetails.subject,
+        recipients: communicationDetails.recipients,
+        minutesFromEvent: communicationDetails.minutesFromEvent,
+        html: communicationDetails.html,
         EventId: event.id,
-        status: communication.status,
+        status: communicationDetails.status,
       });
+
+      // schedule the email job if it's a scheduled email
+      if (
+        communication.status === statusOptions.ACTIVE &&
+        communication.recipients != recipientsOptions.NEW_REGISTRANTS
+      ) {
+        scheduleSend(
+          communication.id,
+          { subject, html, recipients },
+          event.id,
+          event.startDate,
+          communication.minutesFromEvent
+        );
+      }
     }
 
     // copy over permissions
@@ -436,9 +469,11 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
   try {
     const account = await Account.findByPk(accountId);
     const event = await Event.findByPk(account.currentEventId);
+    const eventTimeChanged = event.startDate != startDate;
 
     clearCache(`Event:link:${event.link}`);
 
+    // update event attributes
     event.title = title;
     event.link = link;
     event.category = category;
@@ -450,6 +485,33 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     event.registrationRequired = registrationRequired;
 
     await event.save();
+
+    // update scheduled emails if the event time changed
+    if (eventTimeChanged) {
+      const communications = await Communication.findAll({
+        where: { EventId: event.id },
+      });
+
+      for (let communication of communications) {
+        // for each active communication, update the scheduled job
+        if (
+          communication.status === statusOptions.ACTIVE &&
+          communication.recipients != recipientsOptions.NEW_REGISTRANTS
+        ) {
+          scheduleSend(
+            communication.id,
+            {
+              subject: communication.subject,
+              html: communication.html,
+              recipients: communication.recipients,
+            },
+            event.id,
+            startDate, // new start date
+            communication.minutesFromEvent
+          );
+        }
+      }
+    }
 
     res.send(event);
   } catch (error) {

@@ -9,8 +9,22 @@ const {
   EmailListRecipient,
 } = require("../db").models;
 
-const scheduleSend = async (emailId, email, sendDate, EventId) => {
-  const { to, subject, html, recipients, emailList } = email;
+const scheduleSend = async (
+  emailId,
+  email,
+  eventId,
+  eventStartDate,
+  minutesFromEvent
+) => {
+  console.log({ emailId, email, eventId, eventStartDate, minutesFromEvent });
+  const { subject, html, recipients } = email;
+
+  const sendDate = new Date(eventStartDate);
+
+  // delete the old job if it exists because it could have stale data
+  await cancelSend(emailId);
+
+  sendDate.setMinutes(sendDate.getMinutes() + minutesFromEvent);
 
   const newJob = schedule.scheduleJob(
     emailId.toString(),
@@ -23,12 +37,12 @@ const scheduleSend = async (emailId, email, sendDate, EventId) => {
       // get recipients either from the registration list, or use the email list provided
       if (recipients === recipientsOptions.ALL_REGISTRANTS) {
         recipientsList = await Registration.findAll({
-          where: { EventId },
+          where: { EventId: eventId },
           include: Event,
         });
       } else if (recipients === recipientsOptions.EMAIL_LIST) {
         recipientsList = await EmailListRecipient.findAll({
-          where: { EventId },
+          where: { EventId: eventId },
           include: Event,
         });
       }
