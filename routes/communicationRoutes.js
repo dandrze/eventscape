@@ -119,7 +119,7 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
   }
 });
 
-router.get("/api/communication/jobs", requireAuth, async (req, res) => {
+router.get("/api/communication/jobs", async (req, res) => {
   res.send(Scheduler.scheduledJobs());
 });
 
