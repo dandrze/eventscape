@@ -217,7 +217,7 @@ function DesignBlockToolbar(props) {
       <Modal1
         open={openBackgroundImage}
         onClose={handleCloseBackgroundSettings}
-        title="Change Background Image"
+        isSideModal={true}
         content={
           <BackgroundImageSelector
             sectionIndex={props.sectionIndex}

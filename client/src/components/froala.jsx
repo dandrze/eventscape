@@ -28,6 +28,7 @@ import "froala-editor/js/plugins/table.min.js";
 import "froala-editor/js/plugins/word_paste.min.js";
 import "froala-editor/js/plugins/quick_insert.min.js";
 import "froala-editor/js/plugins/image_manager.min.js";
+import "froala-editor/js/plugins/inline_class.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
