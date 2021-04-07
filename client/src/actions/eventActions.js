@@ -68,8 +68,6 @@ export const updateEvent = (
     status: getState().event.status,
   };
 
-  console.log(updatedEvent);
-
   try {
     const res = await api.put("/api/event", updatedEvent);
 
@@ -108,6 +106,11 @@ export const fetchEvent = () => async (dispatch, getState) => {
       });
       return event;
     } else {
+      // else return an empty event with loaded: true. This is used to determine if the page should display a spinner or event not found
+      dispatch({
+        type: FETCH_EVENT,
+        payload: { loaded: true },
+      });
       return null;
     }
   } catch (err) {
