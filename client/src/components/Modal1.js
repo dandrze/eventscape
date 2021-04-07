@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: "1px solid #000",
+    border: "1px solid #c7c7c7",
     boxShadow: theme.shadows[5],
     padding: "0px",
   },
@@ -51,9 +51,9 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
+          invisible: isSideModal,
         }}
         disableAutoFocus={true}
-        hideBackdrop={isSideModal}
       >
         <Fade in={open}>
           <div

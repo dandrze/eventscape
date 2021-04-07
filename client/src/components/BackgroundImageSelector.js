@@ -121,7 +121,7 @@ const BackgroundImageSelector = ({
   };
 
   return (
-    <div>
+    <div style={{ paddingBottom: "30px" }}>
       <Modal1
         open={openSelectImage}
         onClose={() => setOpenSelectImage(false)}
@@ -202,7 +202,20 @@ const UploadImage = ({ user, setBackgroundImage }) => {
       <div style={{ fontWeight: "bold" }}>Choose image from file</div>
       <div style={{ height: "30px" }}></div>
       <label>
-        <div className="file-upload-section">
+        <div
+          style={{
+            width: "400px",
+            borderRadius: "15px",
+            height: "100px",
+            border: "1px solid #cccccc",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            background: "#f7f7f7",
+            cursor: "pointer",
+            margin: "0px 40px",
+          }}
+        >
           {status ? (
             <div>
               <label style={{ display: "block" }}>{status}</label>
