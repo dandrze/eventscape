@@ -858,3 +858,9 @@ select:focus {
 .fix-outline:focus {
   outline: none;
 }
+
+.internal-link {
+  color: var(--main-color);
+  text-decoration: underline;
+  font-weight: 500;
+}

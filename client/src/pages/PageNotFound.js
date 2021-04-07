@@ -6,7 +6,9 @@ export default () => {
     <div className="form-box shadow-border">
       <p>Page Not Found</p>
       <p>
-        <Link to="/">Click here to return to App</Link>
+        <Link to="/" className="internal-link">
+          Click here to return to App
+        </Link>
       </p>
     </div>
   );

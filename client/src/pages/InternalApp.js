@@ -19,6 +19,7 @@ import AccountSettingsContact from "./account-settings-contact";
 import AccountSettingsPassword from "./account-settings-password";
 import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
+import EventNotFound from "./EventNotFound";
 import Polls from "./polls";
 import Permissions from "./permissions";
 import Test from "./test";
@@ -43,9 +44,12 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   };
 
   const requireEvent = (component) => {
+    console.log(event);
     // Doesn't render the component until the event is loaded into redux. This avoids any rendering errors with an empty event object.
     if (event.id) {
       return createElement(component);
+    } else if (event.loaded) {
+      return <EventNotFound />;
     } else {
       return (
         <div
