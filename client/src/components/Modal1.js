@@ -18,13 +18,21 @@ const useStyles = makeStyles((theme) => ({
   },
   paper: {
     backgroundColor: theme.palette.background.paper,
-    border: "2px solid #000",
+    border: "1px solid #c7c7c7",
     boxShadow: theme.shadows[5],
     padding: "0px",
   },
+
+  sideModal: {
+    position: "absolute",
+    right: 0,
+    bottom: 0,
+    padding: "18px",
+  },
+  centerModal: { padding: "18px 60px" },
 }));
 
-export default function Modal1({ onClose, open, content, title }) {
+export default function Modal1({ onClose, open, content, title, isSideModal }) {
   const classes = useStyles();
 
   const handleClose = () => {
@@ -43,21 +51,28 @@ export default function Modal1({ onClose, open, content, title }) {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
+          invisible: isSideModal,
         }}
         disableAutoFocus={true}
       >
         <Fade in={open}>
-          <div className={classes.paper}>
+          <div
+            className={`${classes.paper} ${
+              isSideModal ? classes.sideModal : classes.centerModal
+            }`}
+          >
             <div>
-              <div className="cancel-bar">
-                <Tooltip title="Close">
-                  <img
-                    src={Cancel}
-                    className="cancel-bar-icon"
-                    onClick={handleClose}
-                  ></img>
-                </Tooltip>
-              </div>
+              {isSideModal ? null : (
+                <div className="cancel-bar">
+                  <Tooltip title="Close">
+                    <img
+                      src={Cancel}
+                      className="cancel-bar-icon"
+                      onClick={handleClose}
+                    ></img>
+                  </Tooltip>
+                </div>
+              )}
 
               <div
                 style={{
@@ -67,7 +82,7 @@ export default function Modal1({ onClose, open, content, title }) {
                   maxWidth: "95vw",
                 }}
               >
-                <div style={{ padding: "18px 60px" }}>
+                <div>
                   {title ? (
                     <h2 className={classes.primaryColor}>{title}</h2>
                   ) : null}
