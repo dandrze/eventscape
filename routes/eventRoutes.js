@@ -128,11 +128,7 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       ) {
         scheduleSend(
           communication.id,
-          {
-            subject: communication.subject,
-            html: communication.html,
-            recipients: communication.recipients,
-          },
+
           event.id,
           event.startDate,
           communication.minutesFromEvent
@@ -279,7 +275,6 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       ) {
         scheduleSend(
           communication.id,
-          { subject, html, recipients },
           event.id,
           event.startDate,
           communication.minutesFromEvent
@@ -500,11 +495,7 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
         ) {
           scheduleSend(
             communication.id,
-            {
-              subject: communication.subject,
-              html: communication.html,
-              recipients: communication.recipients,
-            },
+
             event.id,
             startDate, // new start date
             communication.minutesFromEvent
