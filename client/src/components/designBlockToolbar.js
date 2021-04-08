@@ -144,7 +144,7 @@ function DesignBlockToolbar(props) {
           </Tooltip>
           {props.section.isReact ? null : (
             // Only show if it is not a react section (it is a froala section)
-            <Tooltip title="Edit Background image">
+            <Tooltip title="Edit Block Background">
               <div
                 className="design-block-toolbar-button"
                 onClick={handleClickEditBackgroundImage}

@@ -26,7 +26,9 @@ export const heroBannerModel = (eventTitle = "default") => {
 };
 
 export const logoHeaderModel = () => {
-  return `<div style="overflow: hidden;">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 20px; display: block;">
             <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
@@ -35,7 +37,9 @@ export const logoHeaderModel = () => {
 };
 
 export const logoHeaderRightModel = () => {
-  return `<div style="overflow: hidden;">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 20px; display: block;">
             <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
         </div>
@@ -44,9 +48,13 @@ export const logoHeaderRightModel = () => {
 };
 
 export const timeDescription = () => {
-  return `<div style="max-width: 1300px; margin: 0 auto; padding: 60px 20px;" contenteditable="true">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <div style="max-width: 1300px; margin: 0 auto; padding: 60px 20px;" contenteditable="true">
   <p style="margin-top: 0; text-align: left;"><strong><span style="font-size: 30px; text-align: left;">Register For Event</span></strong></p>
   <p style="text-align: left;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+</div>
 </div>`;
 };
 
@@ -435,7 +443,9 @@ export const streamChatModel = () => {
 };
 
 export const blankModel = () => {
-  return `<div style="overflow: hidden;" contenteditable="false">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 1rem; display: block;">
             <div contenteditable="true" style="text-align: left;"></div>
         </div>
@@ -444,7 +454,10 @@ export const blankModel = () => {
 };
 
 export const scheduleTable1 = () => {
-  return `<div class="block-container" style="overflow: hidden;">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <div class="block-container" style="overflow: hidden;">
   <h2 class="theme-color">Agenda</h2>
     <table class="schedule-table schedule-table1">
     <tbody>
@@ -481,11 +494,15 @@ export const scheduleTable1 = () => {
     </tbody>
   </table>
       </div>
+      </div>
       `;
 };
 
 export const scheduleTable2 = () => {
-  return `<div class="block-container" style="overflow: hidden;">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <div class="block-container" style="overflow: hidden;">
     <h2 class="theme-color">Agenda</h2>
       <table class="schedule-table schedule-table2">
       <tbody>
@@ -522,22 +539,29 @@ export const scheduleTable2 = () => {
       </tbody>
     </table>
         </div>
+        </div>
         `;
 };
 
 export const paragraph1 = () => {
-  return `<div class="container block-container" style="overflow: hidden;">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." ><div class="container block-container" style="overflow: hidden;">
   <div class="col">
      <p>
      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
      </p>
      </div>
           </div>
+          </div>
           `;
 };
 
 export const paragraph2 = () => {
-  return `<div class="container block-container" style="overflow: hidden;">
+  return `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <div class="container block-container" style="overflow: hidden;">
   <div class="row">
     <div class="col-md-6 col-mobile-margin">
      <p>
@@ -551,13 +575,17 @@ export const paragraph2 = () => {
      </div>
      </div>
           </div>
+          </div>
           `;
 };
 
 export const sponsorGrid = (columns, rows, box) => {
   let column = 0;
   let row = 0;
-  let html = `<div class="container block-container">`;
+  let html = `<div style="background-position: bottom;
+  background-size: cover;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <div class="container block-container">`;
   const columnClass = box ? "sponsor-box-border" : "sponsor-box-no-border";
   while (row < rows) {
     html += `<div class="row">`;
@@ -572,7 +600,7 @@ export const sponsorGrid = (columns, rows, box) => {
     // reset column counter back to 0 for the next row
     column = 0;
   }
-  html += `</div>`;
+  html += `</div></div>`;
 
   return html;
 };
