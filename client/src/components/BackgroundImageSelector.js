@@ -57,8 +57,6 @@ const BackgroundImageSelector = ({
 
   currentBackgroundImageURL = currentBackgroundImageURL.replace(/&quot;/g, "");
 
-  console.log(currentBackgroundImageURL);
-
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
   };
@@ -94,15 +92,23 @@ const BackgroundImageSelector = ({
     updateSection(sectionIndex, newHtml.innerHTML);
   };
 
-  const handleChangeOpacity = (event, newValue) => {
-    setOpacity(newValue);
+  const handleChangeOpacity = (event, newOpacity) => {
+    setOpacity(newOpacity);
+    // update the overlay with the new opacity and current state of color
+    handleUpdateOverlay(color, newOpacity);
   };
 
   const opacityFormat = (value) => {
     return value + "%";
   };
 
-  const handleUpdateOverlay = () => {
+  const handleChangeColorOverlay = (newColor) => {
+    setColor(newColor);
+    // update the overlay with the new color and current state of opacity
+    handleUpdateOverlay(newColor, opacity);
+  };
+
+  const handleUpdateOverlay = (color, opacity) => {
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
@@ -121,7 +127,7 @@ const BackgroundImageSelector = ({
   };
 
   return (
-    <div style={{ paddingBottom: "30px" }}>
+    <div>
       <Modal1
         open={openSelectImage}
         onClose={() => setOpenSelectImage(false)}
@@ -154,7 +160,7 @@ const BackgroundImageSelector = ({
             <label>Background Color Overlay</label>
             <HexColorPicker
               color={color}
-              onChange={setColor}
+              onChange={handleChangeColorOverlay}
               id="event-color"
             />
             <HexColorInput color={color} onChange={setColor} id="hex-input" />

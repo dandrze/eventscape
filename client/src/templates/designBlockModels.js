@@ -19,6 +19,7 @@ export const heroBannerModel = (eventTitle = "default") => {
             font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
             font-weight: 300;
             font-size: 96px;
+            color: #ffffff;
         }
      
     </style>
