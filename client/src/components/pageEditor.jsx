@@ -120,7 +120,7 @@ const PageEditor = (props) => {
         open={removeLogoErrorOpen}
         onClose={handleRemoveLogoErrorClose}
         onContinue={handleRemoveLogoErrorContinue}
-        text="The remove logo option is available for events on a Pro plan. Please upgrade to continue."
+        content="The remove logo option is available for events on a Pro plan. Please upgrade to continue."
         closeText="Close"
         continueText="Upgrade Now"
       />

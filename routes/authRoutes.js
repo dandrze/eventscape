@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const keys = require("../config/keys");
 const { sendEmail } = require("../services/Mailer");
 const { Account } = require("../db").models;
+const { clearCache } = require("../services/sequelizeRedis");
 
 const router = express.Router();
 const saltRounds = 10;

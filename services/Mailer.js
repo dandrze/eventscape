@@ -13,11 +13,8 @@ const sendEmail = async (email = { to: "", subject: "", html: "" }) => {
     html,
   };
 
-  console.log(msg);
-
   try {
     const response = await sgMail.send(msg);
-    console.log(response);
     return true;
   } catch (error) {
     return false;
@@ -30,78 +27,83 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
   const htmlVariables = html.match(/[^{\}]+(?=})/g);
   let success = 0;
   let failed = 0;
-  const dateFormatOptions = {
-    timeZoneName: "short",
-    timeZone: recipientsList[0].Event.timeZone,
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    timeZoneName: "short",
-  };
 
-  //Iterate through the recipientsList and send an email to each recipient with variables replaced with database values
-  for (const recipient of recipientsList) {
-    // for each recipient, reset the subject to the original with {variable_names}
-    var updatedSubject = subject;
-    var updatedHtml = html;
+  if (recipientsList.length > 0) {
+    const dateFormatOptions = {
+      timeZoneName: "short",
+      timeZone: recipientsList[0].Event.timeZone,
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+      hour: "numeric",
+      minute: "2-digit",
+      timeZoneName: "short",
+    };
 
-    // creates snake case versions of camelcase varaibles
+    //Iterate through the recipientsList and send an email to each recipient with variables replaced with database values
+    for (const recipient of recipientsList) {
+      // for each recipient, reset the subject to the original with {variable_names}
+      var updatedSubject = subject;
+      var updatedHtml = html;
 
-    recipient.first_name = recipient.firstName;
-    recipient.last_name = recipient.lastName;
-    recipient.email_address = recipient.emailAddress;
-    recipient.event_name = recipient.Event.title;
-    recipient.primary_color = recipient.Event.primaryColor;
-    recipient.start_date = recipient.Event.startDate.toLocaleString(
-      "en-us",
-      dateFormatOptions
-    );
-    recipient.end_date = recipient.Event.endDate.toLocaleString(
-      "en-us",
-      dateFormatOptions
-    );
+      // creates snake case versions of camelcase varaibles
 
-    // the event_link variable is created using the event link and the recipient hash which uniquely identifies the recipient
-    if (recipient.hash) {
-      recipient.event_link =
-        "https://" + recipient.Event.link + ".eventscape.io/" + recipient.hash;
-    }
+      recipient.first_name = recipient.firstName;
+      recipient.last_name = recipient.lastName;
+      recipient.email_address = recipient.emailAddress;
+      recipient.event_name = recipient.Event.title;
+      recipient.primary_color = recipient.Event.primaryColor;
+      recipient.start_date = recipient.Event.startDate.toLocaleString(
+        "en-us",
+        dateFormatOptions
+      );
+      recipient.end_date = recipient.Event.endDate.toLocaleString(
+        "en-us",
+        dateFormatOptions
+      );
 
-    //for each variable in the subjectVariables array, replace it with the value from the database value. If the array is empty, skip it
-    if (subjectVariables) {
-      for (var i = 0; i < subject.length; i++) {
-        updatedSubject = updatedSubject.replace(
-          new RegExp("{" + subjectVariables[i] + "}", "gi"),
-          recipient[subjectVariables[i]]
-        );
+      // the event_link variable is created using the event link and the recipient hash which uniquely identifies the recipient
+      if (recipient.hash) {
+        recipient.event_link =
+          "https://" +
+          recipient.Event.link +
+          ".eventscape.io/" +
+          recipient.hash;
       }
-    }
 
-    //for each variable in the htmlVariables array, replace it with the value from the database value. If the the array is empty, skip it
-    if (htmlVariables) {
-      for (var i = 0; i < html.length; i++) {
-        updatedHtml = updatedHtml.replace(
-          new RegExp("{" + htmlVariables[i] + "}", "gi"),
-          recipient[htmlVariables[i]]
-        );
+      //for each variable in the subjectVariables array, replace it with the value from the database value. If the array is empty, skip it
+      if (subjectVariables) {
+        for (var i = 0; i < subject.length; i++) {
+          updatedSubject = updatedSubject.replace(
+            new RegExp("{" + subjectVariables[i] + "}", "gi"),
+            recipient[subjectVariables[i]]
+          );
+        }
       }
-    }
 
-    const isSuccessful = await sendEmail({
-      to: recipient.emailAddress,
-      subject: updatedSubject,
-      html: updatedHtml,
-    });
-    if (isSuccessful) {
-      success++;
-    } else {
-      failed++;
+      //for each variable in the htmlVariables array, replace it with the value from the database value. If the the array is empty, skip it
+      if (htmlVariables) {
+        for (var i = 0; i < html.length; i++) {
+          updatedHtml = updatedHtml.replace(
+            new RegExp("{" + htmlVariables[i] + "}", "gi"),
+            recipient[htmlVariables[i]]
+          );
+        }
+      }
+
+      const isSuccessful = await sendEmail({
+        to: recipient.emailAddress,
+        subject: updatedSubject,
+        html: updatedHtml,
+      });
+      if (isSuccessful) {
+        success++;
+      } else {
+        failed++;
+      }
     }
   }
-
   return { success, failed };
 };
 

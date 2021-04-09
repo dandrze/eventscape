@@ -409,7 +409,7 @@ function NavBar3(props) {
             <Divider />
 
             {displaySideNav === "false" && (
-              <Link to="/design/event">
+              <Link to="/">
                 <StyledMenuItem>
                   <ListItemIcon>
                     <ArrowBackIcon fontSize="small" />

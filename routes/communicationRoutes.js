@@ -56,7 +56,6 @@ router.post("/api/communication", requireAuth, async (req, res, next) => {
 
       scheduleSend(
         communication.id,
-        { subject, html, recipients },
         event.id,
         event.startDate,
         minutesFromEvent
@@ -90,13 +89,7 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
     if (status === "Active" && recipients != "New Registrants") {
       const event = await Event.findByPk(communication.EventId);
 
-      scheduleSend(
-        id.toString(),
-        { subject, html, recipients },
-        event.id,
-        event.startDate,
-        minutesFromEvent
-      );
+      scheduleSend(id.toString(), event.id, event.startDate, minutesFromEvent);
     } else if (
       communication.status === "Active" ||
       communication.recipients != "New Registrants"

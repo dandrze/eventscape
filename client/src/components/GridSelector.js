@@ -38,7 +38,6 @@ export default ({ addSection }) => {
   };
 
   const handleSubmit = () => {
-    console.log({ columns, rows, boxStyle, htmlOutput });
     addSection(htmlOutput);
   };
 
@@ -91,7 +90,7 @@ export default ({ addSection }) => {
           style={{ width: "30%" }}
         >
           <InputLabel id="rows-select-label" className="mui-select-css-fix">
-            Type
+            Border
           </InputLabel>
           <Select
             labelId="rows-select-label"

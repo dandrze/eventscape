@@ -269,7 +269,7 @@ function Event_Details({
     }
     setIsloading(false);
 
-    if (response && !isEventUpdate) history.push("/");
+    if (response && !isEventUpdate) history.push("/design");
   };
 
   if (isLoading && !isEventUpdate) {
