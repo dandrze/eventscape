@@ -104,16 +104,23 @@ const cancelSend = async (emailId) => {
   }
 };
 
-const scheduledJobs = () => {
+const scheduledJobs = async () => {
   var jobs = [];
   for (let jobName in schedule.scheduledJobs) {
     let job = schedule.scheduledJobs[jobName];
+    const communication = await Communication.findOne({
+      where: { id: job.name },
+      include: Event,
+    });
+
     jobs.push({
       name: job.name,
-      nextInvocation: job.nextInvocation(),
-      triggeredJobs: job.triggeredJobs(),
+      communication,
     });
   }
+
+  console.log(jobs);
+
   return jobs;
 };
 

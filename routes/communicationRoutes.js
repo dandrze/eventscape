@@ -112,8 +112,9 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
   }
 });
 
-router.get("/api/communication/jobs", async (req, res) => {
-  res.send(scheduledJobs());
+router.get("/api/communication/jobs", requireAuth, async (req, res) => {
+  const jobs = await scheduledJobs();
+  res.json(jobs);
 });
 
 router.post("/api/communication/jobs/cancel", requireAuth, async (req, res) => {
