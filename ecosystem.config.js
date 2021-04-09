@@ -9,7 +9,7 @@ module.exports = {
     {
       name: "replica",
       script: "./server.js",
-      instances: "-1",
+      instances: "1",
       exec_mode: "cluster",
     },
   ],
