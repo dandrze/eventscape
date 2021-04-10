@@ -21,7 +21,6 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 console.log(`server process is: ${process.pid}`);
-console.log(process.env);
 console.log(`Dyno is: ${process.env.DYNO}`);
 console.log(`PM2 id is: ${process.env.pm_id}`);
 console.log(`PM2 name is: ${process.env.name}`);
@@ -111,9 +110,16 @@ process.on("unhandledRejection", exitHandler(1, "Unhandled Promise"));
 process.on("SIGTERM", exitHandler(0, "SIGTERM"));
 process.on("SIGINT", exitHandler(0, "SIGINT"));
 
+const retrieveJobs = () => {};
+
 // starts a cron job to check for new scheduled jobs every 5 minutes
 if ((process.env.DYNO = "web.1" && process.env.pm_id == 0)) {
-  console.log("SCHEDULER");
+  // retrieve all jobs as soon as the server starts
+  retrieveJobs();
+  cron.schedule("* 5 * * * *", () => {
+    // retrieve all jobs every 5 minutes
+    retrieveJobs();
+  });
 }
 
 server.listen(PORT, () => {

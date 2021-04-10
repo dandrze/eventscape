@@ -578,7 +578,8 @@ function NavBar3(props) {
                 </Link>
               )
             ) : null}
-            {props.event.permissions?.communication ? (
+            {props.event.permissions?.communication &&
+            props.event.registrationRequired ? (
               <Link to="/communication">
                 <ListItem
                   button
