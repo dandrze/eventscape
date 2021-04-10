@@ -110,7 +110,9 @@ process.on("unhandledRejection", exitHandler(1, "Unhandled Promise"));
 process.on("SIGTERM", exitHandler(0, "SIGTERM"));
 process.on("SIGINT", exitHandler(0, "SIGINT"));
 
-const retrieveJobs = () => {};
+const retrieveJobs = () => {
+  console.log("retrieving jobs");
+};
 
 // starts a cron job to check for new scheduled jobs every 5 minutes
 if ((process.env.DYNO = "web.1" && process.env.pm_id == 0)) {
