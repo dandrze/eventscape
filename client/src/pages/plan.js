@@ -15,7 +15,7 @@ import api from "../api/server";
 import Modal1 from "../components/Modal1";
 import PlanSliders from "../components/PlanSliders";
 
-const Plan = ({ event }) => {
+const Plan = ({ event, fetchEvent }) => {
   const [plan, setPlan] = useState(null);
   const [pricing, setPricing] = useState(null);
   const [openUpgradeModal, setOpenUpgradeModal] = useState(false);
@@ -41,6 +41,7 @@ const Plan = ({ event }) => {
   };
 
   const handleClosePricingMatrix = () => {
+    fetchEvent();
     fetchDataAsync();
     setOpenPricingMatrix(false);
     console.log("close matrix and fetch data");

@@ -25,7 +25,7 @@ const Preview = (props) => {
   return (
     <div className="fr-view live-page-container">
       <style>{theme(props.event.primaryColor)}</style>
-      <BrandingTop />
+      {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
       <ul>
         {props.model.sections.map(function (section) {
           return section.isReact ? (

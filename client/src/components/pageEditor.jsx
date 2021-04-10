@@ -190,7 +190,7 @@ const PageEditor = (props) => {
           <br></br>
         </div>
         <div id="designBoard">
-          <BrandingTop />
+          {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
           <ul>
             {props.model.sections.length === 0
               ? null

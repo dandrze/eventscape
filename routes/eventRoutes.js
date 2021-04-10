@@ -343,10 +343,24 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
       event = await Event.findByPk(account.currentEventId);
     } else {
       // else just fetch the first event they are an owner of as a fallback
-      event = await Event.findOne({ where: { OwnerId: accountId } });
+      event = await Event.findOne({
+        where: { OwnerId: accountId },
+      });
     }
 
-    res.json(event);
+    const plan = await Plan.findOne({
+      where: { EventId: event.id },
+      include: PlanType,
+    });
+
+    const permissions = await Permission.findAll({
+      where: {
+        EventId: event.id,
+      },
+      include: Account,
+    });
+
+    res.json({ ...event.dataValues, plan, permissions });
   } catch (error) {
     next(error);
   }
@@ -406,7 +420,12 @@ router.get("/api/event/id", async (req, res, next) => {
   try {
     const event = await Event.findByPk(id);
 
-    res.send(event);
+    const plan = await Plan.findOne({
+      where: { EventId: event.id },
+      include: PlanType,
+    });
+
+    res.json({ ...event.dataValues, plan });
   } catch (error) {
     next(error);
   }
@@ -425,7 +444,14 @@ router.get("/api/event/link", async (req, res, next) => {
       }
     );
 
-    res.json(event);
+    console.log(eventCacheHit);
+
+    const plan = await Plan.findOne({
+      where: { EventId: event.id },
+      include: PlanType,
+    });
+
+    res.json({ ...event.dataValues, plan });
   } catch (error) {
     next(error);
   }

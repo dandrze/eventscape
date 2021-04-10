@@ -99,6 +99,7 @@ Invoice.belongsTo(Event);
 Event.hasMany(Invoice);
 
 Plan.belongsTo(Event);
+Event.hasOne(Plan);
 
 //sequelize.sync({ alter: true });
 //PageSection.sync({ alter: true });
