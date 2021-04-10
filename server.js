@@ -6,6 +6,8 @@ const secure = require("express-force-https");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
 const http = require("http");
+const cron = require("node-cron");
+
 const keys = require("./config/keys");
 require("./services/passport");
 const terminate = require("./terminate");
@@ -20,6 +22,9 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 console.log(`server process is: ${process.pid}`);
 console.log(process.env);
+console.log(`Dyno is: ${process.env.DYNO}`);
+console.log(`PM2 id is: ${process.env.pm_id}`);
+console.log(`PM2 name is: ${process.env.name}`);
 
 // Force HTTPS
 if (process.env.NODE_ENV === "production") app.use(secure);
@@ -105,6 +110,11 @@ process.on("uncaughtException", exitHandler(1, "Unexpected Error"));
 process.on("unhandledRejection", exitHandler(1, "Unhandled Promise"));
 process.on("SIGTERM", exitHandler(0, "SIGTERM"));
 process.on("SIGINT", exitHandler(0, "SIGINT"));
+
+// starts a cron job to check for new scheduled jobs every 5 minutes
+if ((process.env.DYNO = "web.1" && process.env.pm_id == 0)) {
+  console.log("SCHEDULER");
+}
 
 server.listen(PORT, () => {
   console.log("listening on port " + PORT);
