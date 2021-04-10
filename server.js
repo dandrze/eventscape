@@ -19,6 +19,7 @@ const PORT = process.env.PORT || 5000;
 
 const app = express();
 console.log(`server process is: ${process.pid}`);
+console.log(process.env);
 
 // Force HTTPS
 if (process.env.NODE_ENV === "production") app.use(secure);
