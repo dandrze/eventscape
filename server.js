@@ -6,6 +6,8 @@ const secure = require("express-force-https");
 const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
 const http = require("http");
+const cron = require("node-cron");
+
 const keys = require("./config/keys");
 require("./services/passport");
 const terminate = require("./terminate");
@@ -107,6 +109,8 @@ process.on("uncaughtException", exitHandler(1, "Unexpected Error"));
 process.on("unhandledRejection", exitHandler(1, "Unhandled Promise"));
 process.on("SIGTERM", exitHandler(0, "SIGTERM"));
 process.on("SIGINT", exitHandler(0, "SIGINT"));
+
+// starts a cron job to check for new scheduled jobs every 5 minutes
 
 server.listen(PORT, () => {
   console.log("listening on port " + PORT);
