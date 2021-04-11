@@ -13,6 +13,7 @@ const MenuBackground = "white";
 const useStyles = makeStyles((theme) => ({
   root: {
     flexGrow: 1,
+    backgroundColor: "#f8f8f8",
   },
   appBar: {
     backgroundColor: MenuBackground,
@@ -30,9 +31,9 @@ const useStyles = makeStyles((theme) => ({
     //padding: theme.spacing(3),
     padding: "0px",
     margin: "65px 0px",
-    height: "calc(100vh - 65px)",
+    minHeight: "calc(100vh - 65px)",
     display: "flex",
-    alignItems: "center"
+    alignItems: "center",
   },
 }));
 
@@ -52,9 +53,7 @@ export default function SimpleNavBar(props) {
           ></img>
         </Toolbar>
       </AppBar>
-      <main className={classes.content}>
-        {content}
-      </main>
+      <main className={classes.content}>{content}</main>
     </div>
   );
 }

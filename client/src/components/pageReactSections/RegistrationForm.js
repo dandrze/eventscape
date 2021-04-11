@@ -162,7 +162,7 @@ function RegistrationForm({
         event.id
       );
 
-      if (registration.emailAddress == emailAddressReSend) {
+      if (registration && registration.emailAddress == emailAddressReSend) {
         setEmailFound(true);
         setEmailNotFound(false);
         await resendRegistrationEmail(emailAddressReSend, event.id);
