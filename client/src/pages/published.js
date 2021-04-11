@@ -95,6 +95,8 @@ const Published = (props) => {
       });
 
       socket.on("poll", ({ question, options, allowMultiple }) => {
+        // If a user is in full screen, take them out of it so they can see the poll
+        exitFullScreen();
         setPoll({ question, options, allowMultiple });
         setOpenPoll(true);
       });
@@ -134,6 +136,10 @@ const Published = (props) => {
 
   const closePoll = () => {
     setOpenPoll(false);
+  };
+
+  const exitFullScreen = () => {
+    document.exitFullscreen().catch((err) => Promise.resolve(err));
   };
 
   const handleSubmitPoll = (selectedOptions) => {
