@@ -46,7 +46,7 @@ module.exports = () => {
   ) {
     // retrieve all jobs as soon as the server starts
     retrieveJobs();
-    cron.schedule("*/10 * * * * *", () => {
+    cron.schedule("*/5 * * * *", () => {
       // retrieve all jobs every 5 minutes
       retrieveJobs();
     });
