@@ -31,7 +31,7 @@ const useStyles = makeStyles((theme) => ({
     //padding: theme.spacing(3),
     padding: "0px",
     margin: "65px 0px",
-    height: "calc(100vh - 65px)",
+    minHeight: "calc(100vh - 65px)",
     display: "flex",
     alignItems: "center",
   },
