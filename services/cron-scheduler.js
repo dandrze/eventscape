@@ -22,8 +22,6 @@ const retrieveJobs = async () => {
 
   const currentJobs = scheduledJobIds();
 
-  console.log(currentJobs);
-
   for (let communication of activeCommunications) {
     scheduleSend(
       communication.id,

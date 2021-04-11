@@ -124,8 +124,6 @@ const scheduledJobDetails = async () => {
     });
   }
 
-  console.log(jobs);
-
   return jobs;
 };
 
