@@ -14,13 +14,13 @@ import mapReactComponent from "../components/mapReactComponent";
 import theme from "../templates/theme";
 import RegistrationNotFound from "../components/RegistrationNotFound";
 import { pageNames } from "../model/enums";
-import LongLoadingScreen from "../components/LongLoadingScreen";
 import BrandingTop from "../components/BrandingTop";
 import BrandingBottom from "../components/BrandingBottom";
 import Modal1 from "../components/Modal1";
 import PollBlock from "../components/polling/PollBlock";
 import ResultsChart from "../components/polling/ResultsChart";
 import AlertModal from "../components/AlertModal";
+import SimpleLoadingScreen from "../components/SimpleLoadingScreen";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -38,6 +38,7 @@ const Published = (props) => {
   const [resultsQuestion, setResultsQuestion] = useState("");
   const [results, setResults] = useState([]);
   const [allowMultiple, setAllowMultiple] = useState(false);
+  const [page, setPage] = useState("");
 
   useEffect(() => {
     if (!cookies.get("uuid")) cookies.set("uuid", uuid());
@@ -127,6 +128,7 @@ const Published = (props) => {
       });
     }
 
+    setPage(pageType);
     setIsLoaded(true);
   };
 
@@ -140,10 +142,8 @@ const Published = (props) => {
   };
 
   // if there is a hash provided but no attendee found, display an error page
-  if (!isLoaded) {
-    return (
-      <LongLoadingScreen text="Hang tight! You are now joining the event..." />
-    );
+  if (true) {
+    return <SimpleLoadingScreen />;
   } else if (!props.event.id) {
     return (
       <>
