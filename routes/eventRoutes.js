@@ -420,12 +420,16 @@ router.get("/api/event/id", async (req, res, next) => {
   try {
     const event = await Event.findByPk(id);
 
-    const plan = await Plan.findOne({
-      where: { EventId: event.id },
-      include: PlanType,
-    });
+    if (event) {
+      const plan = await Plan.findOne({
+        where: { EventId: event.id },
+        include: PlanType,
+      });
 
-    res.json({ ...event.dataValues, plan });
+      res.json({ ...event.dataValues, plan });
+    } else {
+      res.json();
+    }
   } catch (error) {
     next(error);
   }
@@ -444,14 +448,14 @@ router.get("/api/event/link", async (req, res, next) => {
       }
     );
 
-    console.log(eventCacheHit);
+    if (event) {
+      const plan = await Plan.findOne({
+        where: { EventId: event.id },
+        include: PlanType,
+      });
 
-    const plan = await Plan.findOne({
-      where: { EventId: event.id },
-      include: PlanType,
-    });
-
-    res.json({ ...event.dataValues, plan });
+      res.json({ ...event.dataValues, plan });
+    } else res.json();
   } catch (error) {
     next(error);
   }
