@@ -95,13 +95,13 @@ function Event_Details({
   useEffect(() => {
     if (!event.startDate) {
       const startDate = new Date();
-      startDate.setDate(startDate.getDate() + 7);
-      startDate.setHours(18);
+      startDate.setMonth(startDate.getMonth() + 1);
+      startDate.setHours(19);
       startDate.setMinutes(0);
       setSelectedStartDate(startDate);
 
       const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 8);
+      endDate.setMonth(endDate.getMonth() + 1);
       endDate.setHours(21);
       endDate.setMinutes(0);
       setSelectedEndDate(endDate);
