@@ -142,7 +142,7 @@ const Published = (props) => {
   };
 
   // if there is a hash provided but no attendee found, display an error page
-  if (true) {
+  if (!isLoaded) {
     return <SimpleLoadingScreen />;
   } else if (!props.event.id) {
     return (
