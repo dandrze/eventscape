@@ -104,7 +104,11 @@ const cancelSend = async (emailId) => {
   }
 };
 
-const scheduledJobs = async () => {
+const scheduledJobIds = () => {
+  return Object.keys(schedule.scheduledJobs);
+};
+
+const scheduledJobDetails = async () => {
   var jobs = [];
   for (let jobName in schedule.scheduledJobs) {
     let job = schedule.scheduledJobs[jobName];
@@ -115,6 +119,7 @@ const scheduledJobs = async () => {
 
     jobs.push({
       name: job.name,
+      sendDate: job.nextInvocation(),
       communication,
     });
   }
@@ -125,5 +130,6 @@ const scheduledJobs = async () => {
 };
 
 exports.scheduleSend = scheduleSend;
-exports.scheduledJobs = scheduledJobs;
+exports.scheduledJobIds = scheduledJobIds;
 exports.cancelSend = cancelSend;
+exports.scheduledJobDetails = scheduledJobDetails;

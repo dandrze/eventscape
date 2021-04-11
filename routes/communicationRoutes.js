@@ -2,11 +2,7 @@ const express = require("express");
 const router = express.Router();
 const md5 = require("md5");
 
-const {
-  scheduleSend,
-  cancelSend,
-  scheduledJobs,
-} = require("../services/Scheduler");
+const { scheduledJobDetails } = require("../services/Scheduler");
 
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const Mailer = require("../services/Mailer");
@@ -48,20 +44,6 @@ router.post("/api/communication", requireAuth, async (req, res, next) => {
       html,
     });
 
-    if (
-      status === statusOptions.ACTIVE &&
-      recipients != recipientsOptions.NEW_REGISTRANTS
-    ) {
-      const event = await Event.findByPk(EventId);
-
-      scheduleSend(
-        communication.id,
-        event.id,
-        event.startDate,
-        minutesFromEvent
-      );
-    }
-
     res.send(communication);
   } catch (error) {
     next(error);
@@ -86,18 +68,6 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
   try {
     const communication = await Communication.findByPk(id);
 
-    if (status === "Active" && recipients != "New Registrants") {
-      const event = await Event.findByPk(communication.EventId);
-
-      scheduleSend(id.toString(), event.id, event.startDate, minutesFromEvent);
-    } else if (
-      communication.status === "Active" ||
-      communication.recipients != "New Registrants"
-    ) {
-      // if either of these two conditions is true, then there might be an existing job we need to cancel
-      cancelSend(id.toString());
-    }
-
     communication.recipients = recipients;
     communication.status = status;
     communication.subject = subject;
@@ -113,14 +83,8 @@ router.put("/api/communication", requireAuth, async (req, res, next) => {
 });
 
 router.get("/api/communication/jobs", requireAuth, async (req, res) => {
-  const jobs = await scheduledJobs();
+  const jobs = await scheduledJobDetails();
   res.json(jobs);
-});
-
-router.post("/api/communication/jobs/cancel", requireAuth, async (req, res) => {
-  const { id } = req.body;
-
-  cancelSend(id);
 });
 
 router.get("/api/communication-list", requireAuth, async (req, res, next) => {
