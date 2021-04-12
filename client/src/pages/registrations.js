@@ -16,9 +16,6 @@ import AlertModal from "../components/AlertModal";
 
 
 const Registrations = (props) => {
-  {
-    /*const [regOn, setRegOn] = useState(false);*/
-  }
   const [openForm, setOpenForm] = useState(false);
   const [openReg, setOpenReg] = useState(false);
   const [openImport, setOpenImport] = useState(false);

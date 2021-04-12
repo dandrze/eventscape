@@ -1,12 +1,10 @@
-import React, { memo } from "react";
+import React, { useEffect, useState, memo } from "react";
 import LockSharpIcon from '@material-ui/icons/LockSharp';
 import { VectorMap } from "react-jvectormap";
 import { Link } from "react-router-dom";
 
 
-const WorldMap = ({ data, disabled }) => {
-  console.log(data);
-
+const WorldMap = memo(({ data, disabled }) => {
   const visitorLocations = data
     .map((visitor) => {
       if (visitor.lat) {
@@ -20,7 +18,6 @@ const WorldMap = ({ data, disabled }) => {
     })
     .filter((location) => location != null);
 
-  console.log(visitorLocations);
 
   return (
     <div style={{ width: "100%", height: 550, position: "relative" }}>
@@ -63,6 +60,6 @@ const WorldMap = ({ data, disabled }) => {
     alignItems: "center", flexDirection: "column"}}><LockSharpIcon style={{color: "#fff", margin: "20px", fontSize: "60px"}}/><div  style={{color: "#fff", textShadow: "1px 1px 4px #757575"}}>Upgrade to premium to access this feature.</div> </div></Link> : null}
     </div>
   );
-};
+});
 
-export default memo(WorldMap);
+export default WorldMap;

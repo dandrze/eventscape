@@ -45,7 +45,6 @@ const tableIcons = {
 };
 
 export default function LoginsTable({ data }) {
-  console.log(data);
   const columns = [
     {
       title: "First Name",
