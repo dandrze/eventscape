@@ -19,9 +19,12 @@ const Analytics = (props) => {
     history: [],
     loaded: false,
   });
+  const [mapData, setMapData] = useState([])
 
   useEffect(() => {
     var timeout;
+    var preventMapUpdateTimeout;
+    var preventMapUpdate = false
     // refresh the data on the dashboard
     const fetchDataAsync = async () => {
       // check to make sure the event was loaded (will crash otherwise)
@@ -36,6 +39,16 @@ const Analytics = (props) => {
           history: visitors.history,
           loaded: true,
         });
+
+        // code below prevents the map from rerendering more than every 60 seconds to improve the UX when zooming in on the map
+        if(!preventMapUpdate) {
+          setMapData(visitors.visitorData)
+          preventMapUpdate = true
+          preventMapUpdateTimeout = setTimeout(() => {
+            preventMapUpdate = false
+          }, 60000)
+        }
+        
 
         // fetch data again in 10 seconds
         timeout = setTimeout(() => {
@@ -55,6 +68,8 @@ const Analytics = (props) => {
       clearTimeout(timeout);
     };
   }, [props.event.id]);
+
+  
 
   return (
     <div>
@@ -114,7 +129,7 @@ const Analytics = (props) => {
                       <CircularProgress size={40} />
                     </div>
                   ) : data.visitorData ? (
-                    <WorldMap data={data.visitorData} className="margin-auto" />
+                    <WorldMap data={mapData} className="margin-auto" disabled={props.event.plan.PlanType.type === "free"} />
                   ) : null}
                 </div>
                 <div className="form-box shadow-border table-box">
