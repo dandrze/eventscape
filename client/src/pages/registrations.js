@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
+
 import Modal1 from "../components/Modal1";
-
 import "./registrations.css";
-
 import NavBar3 from "../components/navBar3.js";
 import RegistrationTable2 from "../components/RegistrationTable2.js";
 import * as actions from "../actions";
@@ -12,26 +12,29 @@ import RegistrationForm from "../components/pageReactSections/RegistrationForm";
 import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
+import AlertModal from "../components/AlertModal";
+
 
 const Registrations = (props) => {
   {
-    /*const [regOn, setRegOn] = React.useState(false);*/
+    /*const [regOn, setRegOn] = useState(false);*/
   }
-  const [openForm, setOpenForm] = React.useState(false);
-  const [openReg, setOpenReg] = React.useState(false);
-  const [openImport, setOpenImport] = React.useState(false);
-  const [regButtonText, setRegButtonText] = React.useState("Edit Registration");
-  const [edittingValues, setEdittingValues] = React.useState([]);
-  const [standardFields, setStandardFields] = React.useState({
+  const [openForm, setOpenForm] = useState(false);
+  const [openReg, setOpenReg] = useState(false);
+  const [openImport, setOpenImport] = useState(false);
+  const [regButtonText, setRegButtonText] = useState("Edit Registration");
+  const [edittingValues, setEdittingValues] = useState([]);
+  const [standardFields, setStandardFields] = useState({
     firstName: "",
     lastName: "",
     email: "",
   });
-  const [edittingRowId, setEdittingRowId] = React.useState(null);
+  const [edittingRowId, setEdittingRowId] = useState(null);
   const [
     triggerFetchRegistrations,
     setTriggerFetchRegistrations,
-  ] = React.useState(false);
+  ] = useState(false);
+  const [editFormErrorOpen, setEditFormErrorOpen] = useState(false)
 
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
@@ -54,8 +57,16 @@ const Registrations = (props) => {
   };
 
   const handleOpenForm = () => {
+    if(props.event.plan.PlanType.type === "free"){
+      setEditFormErrorOpen(true)
+    } else {
     setOpenForm(true);
+    }
   };
+
+  const handleGoToPlan = () => {
+    props.history.push("/plan")
+  }
 
   const handleCloseReg = () => {
     fetchRegistrations();
@@ -140,7 +151,7 @@ const Registrations = (props) => {
       <Modal1
         open={openForm}
         onClose={handleCloseForm}
-        title="Edit registration form"
+        title="Edit Registration Form"
         content={<FormBuilder handleClose={handleCloseForm} />}
       />
       <Modal1
@@ -156,6 +167,14 @@ const Registrations = (props) => {
             isEditForm={true}
           />
         }
+      />
+       <AlertModal
+        open={editFormErrorOpen}
+        onClose={() => setEditFormErrorOpen(false)}
+        onContinue={handleGoToPlan}
+        content="The edit registration form option is available for events on a Pro plan. Please upgrade to continue."
+        closeText="Close"
+        continueText="Upgrade Now"
       />
       <NavBar3
         displaySideNav="true"
@@ -215,4 +234,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(Registrations);
+export default connect(mapStateToProps, actions)(withRouter(Registrations));
