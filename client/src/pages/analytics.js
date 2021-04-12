@@ -114,7 +114,7 @@ const Analytics = (props) => {
                       <CircularProgress size={40} />
                     </div>
                   ) : data.visitorData ? (
-                    <WorldMap data={data.visitorData} className="margin-auto" />
+                    <WorldMap data={data.visitorData} className="margin-auto" disabled={props.event.plan.PlanType.type === "free"} />
                   ) : null}
                 </div>
                 <div className="form-box shadow-border table-box">
