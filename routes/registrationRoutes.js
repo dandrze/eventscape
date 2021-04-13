@@ -215,8 +215,10 @@ router.post("/api/form", requireAuth, async (req, res, next) => {
   }
 });
 
-router.get("/api/form", requireAuth, async (req, res, next) => {
+// public endpoint. Required to populate custom fields.
+router.get("/api/form", async (req, res, next) => {
   const { event } = req.query;
+
 
   try {
     const registrationForm = await RegistrationForm.findOne({
