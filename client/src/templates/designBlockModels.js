@@ -10,7 +10,9 @@ export const heroBannerModel = (eventTitle = "default") => {
   justify-content: center;
   align-items: center;
   overflow: hidden" data-info="background image/color. Do not modify." >
+  <div>
   <h1 class="title">${eventTitle}</h1>
+  </div>
   </div>
 
     <style>
