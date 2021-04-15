@@ -18,27 +18,25 @@ export default ({ closeAndUpdate, event, currentPlan, pricing }) => {
 
   const marksViewers = [
     {
-      value: 500,
-      //label: '500',
+      value: 50,
     },
     {
-      value: 1000,
-      //label: '1000',
+      value: 100,
     },
     {
-      value: 1500,
+      value: 250,
       //label: '1500',
     },
     {
-      value: 2000,
+      value: 500,
       //label: '2000',
     },
     {
-      value: 3000,
+      value: 1000,
       //label: '3000',
     },
     {
-      value: 4000,
+      value: 2500,
       //label: '4000',
     },
     {
