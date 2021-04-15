@@ -31,9 +31,7 @@ export default (primaryColor) => {
 		background: ${primaryColor} !important;
 		border-color: ${primaryColor} !important;
 	 } 
-	 .fr-view h1 {
-		 color: ${primaryColor};
-	 }
+
 	 .infoBar {
 		background: ${primaryColor};
 	 }

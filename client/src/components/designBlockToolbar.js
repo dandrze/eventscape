@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
+import { withRouter } from "react-router-dom";
 import DeleteOutlined from "@material-ui/icons/DeleteOutlined";
 import KeyboardArrowUpIcon from "@material-ui/icons/KeyboardArrowUp";
 import KeyboardArrowDownIcon from "@material-ui/icons/KeyboardArrowDown";
@@ -16,6 +17,7 @@ import * as actions from "../actions";
 import Modal1 from "./Modal1";
 import DesignBlockSettings from "./designBlockSettings";
 import BackgroundImageSelector from "./BackgroundImageSelector";
+import AlertModal from "../components/AlertModal";
 
 const useStyles = makeStyles(() => ({
   root: {
@@ -41,10 +43,12 @@ const useStyles = makeStyles(() => ({
 
 function DesignBlockToolbar(props) {
   const classes = useStyles();
-  const [deleteConfirmOpen, setDeleteConfirmOpen] = React.useState(false);
-  const [openSettings, setOpenSettings] = React.useState(false);
-  const [openBackgroundImage, setOpenBackgroundImage] = React.useState(false);
-  const [sectionTooltip, setSectionTooltip] = React.useState("");
+  const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
+  const [openSettings, setOpenSettings] = useState(false);
+  const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
+  const [sectionTooltip, setSectionTooltip] = useState("");
+      const [editFormErrorOpen, setEditFormErrorOpen] = useState(false)
+
 
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
@@ -85,7 +89,12 @@ function DesignBlockToolbar(props) {
 
   // Settings:
   const handleOpenSettings = () => {
-    setOpenSettings(true);
+    if(props.section.reactComponent.name ==="RegistrationForm" && props.event.plan.PlanType.type === "free"){
+      setEditFormErrorOpen(true)
+    } else {
+          setOpenSettings(true);
+
+    }
   };
 
   const handleCloseSettings = () => {
@@ -111,8 +120,20 @@ function DesignBlockToolbar(props) {
     }
   };
 
+    const handleGoToPlan = () => {
+    props.history.push("/plan")
+  }
+
   return (
     <div>
+    <AlertModal
+        open={editFormErrorOpen}
+        onClose={() => setEditFormErrorOpen(false)}
+        onContinue={handleGoToPlan}
+        content="The edit registration form option is available for events on a Pro plan. Please upgrade to continue."
+        closeText="Close"
+        continueText="Upgrade Now"
+      />
       {/* Toolbar */}
       {(props.displayToolbar === true) &
       (openSettings === false) &
@@ -233,4 +254,4 @@ const mapStateToProps = (state) => {
   return { event: state.event, model: state.model };
 };
 
-export default connect(mapStateToProps, actions)(DesignBlockToolbar);
+export default connect(mapStateToProps, actions)(withRouter(DesignBlockToolbar));
