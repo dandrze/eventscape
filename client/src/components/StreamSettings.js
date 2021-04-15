@@ -141,7 +141,7 @@ const StreamSettings = ({
                         />
                       </FormControl>
                       <p>
-                        Need help? Click here for instructions on setting up a
+                        Need help? Click <a style={{textDecoration:"underline", color: "#b0281c"}} target="_blank" href="https://www.eventscape.io/youtube-live-setup/">here</a> for instructions on setting up a
                         YouTube Live stream.
                       </p>
                       <p>
