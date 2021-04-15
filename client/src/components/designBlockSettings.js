@@ -1,22 +1,34 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router-dom";
+import { connect } from "react-redux";
+
 import FormBuilder from "./FormBuilder";
 import StreamSettings from "./StreamSettings";
+
 
 function DesignBlockSettings({
   reactComponent,
   isReact,
   onClose,
   sectionIndex,
+  event,
+  history
 }) {
   // set required settings based on design block name:
   const showStreamChatSettings = isReact && reactComponent.name == "StreamChat";
-
+  
   const showRegistrationSettings =
     isReact && reactComponent.name == "RegistrationForm";
+
+    
 
   const handleClose = () => {
     onClose();
   };
+
+
+
+ 
 
   return (
     <div>
@@ -27,9 +39,16 @@ function DesignBlockSettings({
           sectionIndex={sectionIndex}
         />
       )}
-      {showRegistrationSettings === true && <FormBuilder />}
+      {showRegistrationSettings === true &&  <FormBuilder />}
     </div>
   );
 }
 
-export default DesignBlockSettings;
+const mapStateToProps = (state) => {
+  return {
+    event: state.event,
+  };
+};
+
+export default connect(mapStateToProps)(withRouter(DesignBlockSettings));
+
