@@ -101,7 +101,7 @@ Event.hasMany(Invoice);
 Plan.belongsTo(Event);
 Event.hasOne(Plan);
 
-//sequelize.sync({ alter: true });
+//Plan.sync({ alter: true });
 //PageSection.sync({ alter: true });
 //Account.sync({ alter: true });
 //Event.sync({ alter: true });
