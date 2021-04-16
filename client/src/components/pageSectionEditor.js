@@ -37,6 +37,7 @@ const PageSectionEditor = (props) => {
           createElement(mapReactComponent[props.section.reactComponent.name], {
             ...props.section.reactComponent.props,
             sectionIndex: props.sectionIndex,
+            editMode: true,
           })
         ) : (
           <Froala

@@ -222,8 +222,8 @@ function RegistrationForm({
                 className={
                   `margin-auto ${!isEditForm ? "form-editor-react" : ""}`
                 }
-                onMouseEnter={() => setDisplayEditMessage(true)}
-                onMouseLeave={() => setDisplayEditMessage(false)}
+                onMouseEnter={isLive ? null : () => setDisplayEditMessage(true)}
+                onMouseLeave={isLive ? null : () => setDisplayEditMessage(false)}
               >
                 {displayEditMessage ? <div style={{    position: "absolute",
     width: "100%",
