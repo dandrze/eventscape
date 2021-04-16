@@ -777,81 +777,6 @@ select:focus {
 .rotate90 {
   transform: rotate(-90deg);
 }
-/* Temp fix for the insert */
-.fr-svg {
-  margin-top: -15px;
-}
-
-.form-group .label-required {
-  margin-left: 5px;
-}
-
-/* for sponsor block */
-.sponsor-box-border {
-  margin: 15px;
-  padding: 15px 5px;
-  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
-  border: 1px solid #eaeaea;
-  border-radius: 10px;
-}
-
-.sponsor-box-no-border {
-  margin: 0px;
-}
-
-.registration-col {
-  margin: 20px;
-}
-
-/* UL formatting within froala block */
-
-.fr-view ul {
-  list-style: disc;
-}
-
-/* Code Mirror Styling */
-.CodeMirror-code {
-  text-align: start;
-  font-size: 0.9rem;
-}
-
-.color-on-hover {
-  color: #7d7a7a;
-}
-
-.color-on-hover:hover {
-  color: var(--main-color);
-}
-
-/*For Pricing Table */
-
-.feature-list li {
-  font-size: 1rem;
-  margin: 16px 0px;
-}
-
-.image-selector {
-  background: #f7f7f7;
-  margin: 6px;
-  padding: 6px;
-  cursor: pointer;
-}
-
-.image-selector:hover {
-  border: 2px solid var(--main-color);
-}
-
-/* Fixes outline and other unwanted styling issues when clicking on an element*/
-
-.fix-outline:focus {
-  outline: none;
-}
-
-.internal-link {
-  color: var(--main-color);
-  text-decoration: underline;
-  font-weight: 500;
-}
 
 /* folding cube spinner */
 
@@ -962,3 +887,93 @@ select:focus {
     opacity: 0;
   }
 }
+
+
+
+/* Temp fix for the insert */
+.fr-svg {
+  margin-top: -15px;
+}
+
+.form-group .label-required {
+  margin-left: 5px;
+}
+
+/* Fixes outline and other unwanted styling issues when clicking on an element*/
+
+.fix-outline:focus {
+  outline: none;
+}
+
+.internal-link {
+  color: var(--main-color);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+
+/* **************************** START CSS FOR DESIGN BLOCKS *******************************************/
+/* for sponsor block */
+.sponsor-box-border {
+  margin: 15px;
+  padding: 15px 5px;
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+  border: 1px solid #eaeaea;
+  border-radius: 10px;
+}
+
+.sponsor-box-no-border {
+  margin: 0px;
+}
+
+.registration-col {
+  margin: 20px;
+}
+
+/* UL formatting within froala block */
+
+.fr-view ul {
+  list-style: disc;
+}
+
+/* Code Mirror Styling */
+.CodeMirror-code {
+  text-align: start;
+  font-size: 0.9rem;
+}
+
+.color-on-hover {
+  color: #7d7a7a;
+}
+
+.color-on-hover:hover {
+  color: var(--main-color);
+}
+
+/*For Pricing Table */
+
+.feature-list li {
+  font-size: 1rem;
+  margin: 16px 0px;
+}
+
+.image-selector {
+  background: #f7f7f7;
+  margin: 6px;
+  padding: 6px;
+  cursor: pointer;
+}
+
+.image-selector:hover {
+  border: 2px solid var(--main-color);
+}
+
+/* For hero banner */
+
+.hero-banner * {color: #ffffff}
+
+.hero-banner p {font-size: 24px}
+
+
+/* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
+

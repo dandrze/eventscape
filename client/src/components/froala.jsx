@@ -151,7 +151,7 @@ const Froala = (props) => {
         buttonsVisible: 3,
       },
       moreMisc: {
-        buttons: ["undo", "redo", "html", "updateHeroImage"],
+        buttons: ["undo", "redo", "html", "inlineClass"],
         buttonsVisible: 4,
       },
     },

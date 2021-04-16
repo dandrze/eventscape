@@ -4,14 +4,17 @@ import { isSameDay } from "date-fns";
 export const heroBannerModel = (eventTitle = "default") => {
   return `<div style=" background-image: url(https://eventscape-assets.s3.amazonaws.com/free-images/premium-dots.jpg);
   background-position: bottom;
-  height: 300px;
+  height: auto;
   background-size: cover;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 150px 20px;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div>
+  <span class="hero-banner">
   <h1 class="title">${eventTitle}</h1>
+  </span>
   </div>
   </div>
 
