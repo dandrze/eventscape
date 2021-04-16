@@ -975,5 +975,15 @@ select:focus {
 .hero-banner p {font-size: 24px}
 
 
+/* For registration block */
+
+.form-editor-react.edit-mode:hover {
+
+  box-shadow:  0px 0px 0px 3px #c3c3c3;
+  cursor: pointer;
+
+}
+
+
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
 

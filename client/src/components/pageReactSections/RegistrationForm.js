@@ -61,6 +61,7 @@ function RegistrationForm({
   const [emailErrorText, setEmailErrorText] = useState("");
   const [regComplete, setRegComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [displayEditMessage, setDisplayEditMessage] = useState(false)
 
   useEffect(() => {
     fetchFormData();
@@ -219,9 +220,17 @@ function RegistrationForm({
             ) : (
               <div
                 className={
-                  "margin-auto" + !isEditForm ? "form-editor-react" : ""
+                  `margin-auto ${!isEditForm ? "form-editor-react" : ""}`
                 }
+                onMouseEnter={() => setDisplayEditMessage(true)}
+                onMouseLeave={() => setDisplayEditMessage(false)}
               >
+                {displayEditMessage ? <div style={{    position: "absolute",
+    width: "100%",
+    height: "100%",
+    background: "rgba(1,1,1,0.4)",
+    color: "#fff",
+    padding: "86px 40px"}}>Click the gears in the top left of the section to edit the registration form.</div> : null}
                 {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
                 <div className="form-group">
                   <label>
