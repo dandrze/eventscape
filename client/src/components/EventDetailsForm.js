@@ -9,7 +9,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
-  KeyboardDateTimePicker
+  KeyboardDateTimePicker,
 } from "@material-ui/pickers";
 import "./EventDetailsForm.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -378,8 +378,7 @@ function Event_Details({
                     className={classes.formControl}
                   >
                     <KeyboardDateTimePicker
-                            variant="inline"
-
+                      variant="inline"
                       label="Start Date"
                       disableToolbar
                       inputVariant="outlined"
@@ -401,9 +400,8 @@ function Event_Details({
                     variant="outlined"
                     className={classes.formControl}
                   >
-                   <KeyboardDateTimePicker
-                           variant="inline"
-
+                    <KeyboardDateTimePicker
+                      variant="inline"
                       label="End Date"
                       disableToolbar
                       inputVariant="outlined"
@@ -420,8 +418,6 @@ function Event_Details({
                 </div>
               </Grid>
             </Grid>
-
-           
           </MuiPickersUtilsProvider>
 
           <FormControl variant="outlined" className={classes.formControl}>
