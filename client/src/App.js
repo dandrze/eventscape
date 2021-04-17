@@ -1,4 +1,10 @@
-import React, { lazy, Suspense, useState, useEffect, createElement } from "react";
+import React, {
+  lazy,
+  Suspense,
+  useState,
+  useEffect,
+  createElement,
+} from "react";
 import { Route, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
@@ -93,10 +99,10 @@ function App({ user, location, fetchUser, attendee }) {
   };
 
   const requireAdmin = (component) => {
-    if(user.type === "admin"){
+    if (user.type === "admin") {
       return createElement(component);
     }
-  }
+  };
 
   if (isApp) {
     // it's an app (rather than an event page) so render the app components
@@ -151,7 +157,7 @@ function App({ user, location, fetchUser, attendee }) {
                 render={(props) => <Published {...props} subdomain="test" />}
               />
 
-              <Route exact path="/admin" render={() => requireAdmin(Admin)}/>
+              <Route exact path="/admin" render={() => requireAdmin(Admin)} />
 
               {/* Because we're using a switch, only one route will load. If the route doesn't match any of the public routes, then go to the internal app*/}
               <Route component={requireAuth} />
