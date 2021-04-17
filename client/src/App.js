@@ -93,8 +93,6 @@ function App({ user, location, fetchUser, attendee }) {
   };
 
   const requireAdmin = (component) => {
-
-    console.log(user)
     if(user.type === "admin"){
       return createElement(component);
     }

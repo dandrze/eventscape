@@ -13,8 +13,9 @@ passport.serializeUser((user, done) => {
 });
 
 passport.deserializeUser(async (id, done) => {
-  const cacheKey = `Account:id:${id}`;
-  const [user, cacheHit] = await AccountCached.findByPkCached(cacheKey, id);
+  //const cacheKey = `Account:id:${id}`;
+  //const [user, cacheHit] = await AccountCached.findByPkCached(cacheKey, id);
+  const user = await Account.findByPk(id)
 
   done(null, user);
 });
