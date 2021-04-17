@@ -33,8 +33,8 @@ router.get("/auth/fail", async (req, res) => {
 
 router.get("/auth/current-user", async (req, res) => {
   if (req.user) {
-    const { firstName, lastName, emailAddress, id } = req.user;
-    res.send({ firstName, lastName, emailAddress, id });
+    const { firstName, lastName, emailAddress, id, type } = req.user;
+    res.send({ firstName, lastName, emailAddress, id, type });
   } else {
     res.send(null);
   }

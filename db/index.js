@@ -101,27 +101,7 @@ Event.hasMany(Invoice);
 Plan.belongsTo(Event);
 Event.hasOne(Plan);
 
-//sequelize.sync({ alter: true });
-//PageSection.sync({ alter: true });
 //Account.sync({ alter: true });
-//Event.sync({ alter: true });
-
-/* Poll.sync({ alter: true });
-PollOption.sync({ alter: true });
-PollResponse.sync({ alter: true });
-SiteVisitor.sync({ alter: true }); */
-
-//Registration.sync({ alter: true });
-/*
-ChatUser.sync({ alter: true });
-ChatRoom.sync({ alter: true });
-ChatMessage.sync({ alter: true });
-*/
-/*
-SiteVisit.sync({ alter: true });
-SiteVisitor.sync({ alter: true });
-Registration.sync({ alter: true });
-*/
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
