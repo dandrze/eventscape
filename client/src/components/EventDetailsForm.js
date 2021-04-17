@@ -9,6 +9,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardTimePicker,
   KeyboardDatePicker,
+  KeyboardDateTimePicker,
 } from "@material-ui/pickers";
 import "./EventDetailsForm.css";
 import { makeStyles } from "@material-ui/core/styles";
@@ -376,11 +377,12 @@ function Event_Details({
                     variant="outlined"
                     className={classes.formControl}
                   >
-                    <KeyboardDatePicker
+                    <KeyboardDateTimePicker
+                      variant="inline"
                       label="Start Date"
                       disableToolbar
                       inputVariant="outlined"
-                      format="MM/dd/yyyy"
+                      format="MM/dd/yyyy hh:mm a"
                       margin="none"
                       id="event-start-date"
                       value={selectedStartDate}
@@ -398,61 +400,18 @@ function Event_Details({
                     variant="outlined"
                     className={classes.formControl}
                   >
-                    <KeyboardTimePicker
-                      label="Start Time"
-                      margin="none"
-                      id="event-start-time"
-                      inputVariant="outlined"
-                      value={selectedStartDate}
-                      onChange={handleStartDateChange}
-                      KeyboardButtonProps={{
-                        "aria-label": "change time",
-                      }}
-                    />
-                  </FormControl>
-                </div>
-              </Grid>
-            </Grid>
-
-            {/* End Date & Time */}
-            <Grid container spacing={0}>
-              <Grid item xs={6} id="date-time-container">
-                <div id="date-left">
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    <KeyboardDatePicker
+                    <KeyboardDateTimePicker
+                      variant="inline"
                       label="End Date"
                       disableToolbar
                       inputVariant="outlined"
-                      format="MM/dd/yyyy"
+                      format="MM/dd/yyyy hh:mm a"
                       margin="none"
-                      id="event-end-date"
+                      id="event-start-date"
                       value={selectedEndDate}
                       onChange={handleEndDateChange}
                       KeyboardButtonProps={{
                         "aria-label": "change date",
-                      }}
-                    />
-                  </FormControl>
-                </div>
-              </Grid>
-              <Grid item xs={6} id="date-time-container">
-                <div id="date-right">
-                  <FormControl
-                    variant="outlined"
-                    className={classes.formControl}
-                  >
-                    <KeyboardTimePicker
-                      label="End Time"
-                      margin="none"
-                      id="event-end-time"
-                      inputVariant="outlined"
-                      value={selectedEndDate}
-                      onChange={handleEndDateChange}
-                      KeyboardButtonProps={{
-                        "aria-label": "change time",
                       }}
                     />
                   </FormControl>

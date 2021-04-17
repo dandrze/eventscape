@@ -127,13 +127,14 @@ const PageEditor = (props) => {
 
       <div className="design">
         <div className="top-button-bar pt-5">
+        {props.event.plan.PlanType.type === "free" ? 
           <button
             className="Button1"
             onClick={handleRemoveLogoError}
             style={{ marginRight: "15px" }}
           >
             Remove Eventscape Logo
-          </button>
+          </button> : null}
           <Link
             className="button-bar-left"
             to={() =>
