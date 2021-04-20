@@ -11,8 +11,9 @@ import { pageNames } from "../model/enums";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
 import Tour from "../components/Tour";
 
-const Design = ({ event, model, fetchModel }) => {
-  const [openTour, setOpenTour] = useState(true);
+const Design = ({ event, model, fetchModel, user }) => {
+  // open the tour if the user has not completed the tour
+  const [openTour, setOpenTour] = useState(!user.tourComplete);
   const page = useParams().page || "event";
 
   useEffect(() => {
@@ -54,7 +55,12 @@ const Design = ({ event, model, fetchModel }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { event: state.event, model: state.model, settings: state.settings };
+  return {
+    event: state.event,
+    model: state.model,
+    settings: state.settings,
+    user: state.user,
+  };
 };
 
 export default connect(mapStateToProps, actions)(Design);

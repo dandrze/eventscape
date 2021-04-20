@@ -36,7 +36,7 @@ const getSteps = () => {
   return ["Upload CSV", "Verify Columns", "Confirm"];
 };
 
-const Tour = ({ closeTour, simulateHover }) => {
+const Tour = ({ closeTour, simulateHover, setTourCompleted }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const steps = getSteps();
@@ -51,6 +51,11 @@ const Tour = ({ closeTour, simulateHover }) => {
 
   const handleNext = async () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const completeTour = () => {
+    setTourCompleted();
+    closeTour();
   };
 
   const getStepWithReg = (step) => {
@@ -235,7 +240,7 @@ const Tour = ({ closeTour, simulateHover }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
-                onClick={closeTour}
+                onClick={completeTour}
                 color="primary"
                 disableFocusRipple
                 className="disable-focus"
