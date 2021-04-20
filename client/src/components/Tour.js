@@ -265,7 +265,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted }) => {
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
-          classes: activeStep === 0 ? null : { root: classes.backdrop },
+          //classes: activeStep === 0 ? null : { root: classes.backdrop },
+          invisible: activeStep != 0,
         }}
         disableAutoFocus={true}
       >
