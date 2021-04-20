@@ -4,6 +4,8 @@ const bcrypt = require("bcrypt");
 const { Account } = require("../db").models;
 const { clearCache } = require("../services/sequelizeRedis");
 const requireAuth = require("../middlewares/requireAuth");
+const { scheduleJob } = require("../services/Scheduler");
+const { sendEmail } = require("../services/Mailer");
 
 const saltRounds = 10;
 
@@ -56,6 +58,35 @@ router.post("/api/account", async (req, res, next) => {
     }
 
     clearCache(`Account:id:${account.id}`);
+
+    var welcomeSendDate = new Date();
+    welcomeSendDate.setMinutes(welcomeSendDate.getMinutes() + 27);
+
+    scheduleJob(`${account.id} welcome`, welcomeSendDate, () =>
+      sendEmail(
+        {
+          to: account.emailAddress,
+          subject: "Thank you for choosing Eventscape",
+          html: `<p>Hi ${account.firstName},</p>
+
+          <p>Thank you for choosing Eventscape for your event! </p>
+          
+          <p>My name is David and I am the co-founder of Eventscape. I wanted to formally introduce myself as I will be your primary point of contact as you build and launch your event.</p> 
+          
+          <p>May I ask what brought you to our app? I will ensure you have everything you need to accomplish your goal. </p>
+          
+          <p>Kind regards,</p>
+          
+          <p>David Andrzejewski</p>
+          <p>Co-Founder</p>
+          <p>Eventscape</p>`,
+        },
+        {
+          email: "david.andrzejewski@eventscape.io",
+          name: "David Andrzejewski",
+        }
+      )
+    );
 
     res.json(account);
   } catch (error) {

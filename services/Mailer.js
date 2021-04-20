@@ -3,11 +3,14 @@ const keys = require("../config/keys");
 
 sgMail.setApiKey(keys.sendGridKey);
 
-const sendEmail = async (email = { to: "", subject: "", html: "" }) => {
+const sendEmail = async (
+  email = { to: "", subject: "", html: "" },
+  from = { email: "notifications@eventscape.io", name: "Eventscape" }
+) => {
   const { to, subject, html } = email;
   const msg = {
     to,
-    from: { email: "notifications@eventscape.io", name: "Eventscape" },
+    from,
     subject,
     text: html,
     html,

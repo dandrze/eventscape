@@ -127,7 +127,13 @@ const scheduledJobDetails = async () => {
   return jobs;
 };
 
+const scheduleJob = (name, date, fn) => {
+  console.log({ name, date, fn });
+  schedule.scheduleJob(name, date, fn);
+};
+
 exports.scheduleSend = scheduleSend;
 exports.scheduledJobIds = scheduledJobIds;
 exports.cancelSend = cancelSend;
 exports.scheduledJobDetails = scheduledJobDetails;
+exports.scheduleJob = scheduleJob;

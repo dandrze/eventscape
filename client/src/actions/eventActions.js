@@ -114,6 +114,7 @@ export const fetchEvent = () => async (dispatch, getState) => {
       return null;
     }
   } catch (err) {
+    console.log(err);
     toast.error("Error when fetching events: " + err.response.data.message);
     return false;
   }
