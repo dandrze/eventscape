@@ -70,7 +70,7 @@ const Tour = ({ closeTour, simulateHover }) => {
               registered through a unique link.
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} color="primary">
+              <Button onClick={handleNext} color="primary" disableFocusRipple>
                 Continue
               </Button>
             </div>
@@ -89,7 +89,11 @@ const Tour = ({ closeTour, simulateHover }) => {
                 ask questions.
               </DialogContentText>
               <div className={classes.buttonContainer}>
-                <Button onClick={handleNext} className="tour-button">
+                <Button
+                  onClick={handleNext}
+                  className="tour-button disable-focus"
+                  disableFocusRipple
+                >
                   Continue
                 </Button>
               </div>
@@ -107,7 +111,10 @@ const Tour = ({ closeTour, simulateHover }) => {
               live site here
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} className="tour-button">
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
                 Continue
               </Button>
             </div>
@@ -124,7 +131,10 @@ const Tour = ({ closeTour, simulateHover }) => {
               with your own.
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} className="tour-button">
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
                 Continue
               </Button>
             </div>
@@ -144,7 +154,10 @@ const Tour = ({ closeTour, simulateHover }) => {
               here. (link)
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} className="tour-button">
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
                 Continue
               </Button>
             </div>
@@ -161,7 +174,10 @@ const Tour = ({ closeTour, simulateHover }) => {
               your event.
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} className="tour-button">
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
                 Continue
               </Button>
             </div>
@@ -177,7 +193,10 @@ const Tour = ({ closeTour, simulateHover }) => {
               The Analytics tab shows you data on your event viewers.
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} className="tour-button">
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
                 Continue
               </Button>
             </div>
@@ -194,7 +213,10 @@ const Tour = ({ closeTour, simulateHover }) => {
               through the chat window as well as view your attendee questions.
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} className="tour-button">
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
                 Continue
               </Button>
             </div>

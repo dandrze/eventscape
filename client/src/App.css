@@ -11,6 +11,10 @@ button:focus {
   outline: 1px dotted;
 }
 
+.disable-focus:focus {
+  outline: 0px !important;
+}
+
 body {
   /* Colour Pallete */
   --main-bg-color: #f8f8f8;
