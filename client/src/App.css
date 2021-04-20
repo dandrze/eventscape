@@ -888,8 +888,6 @@ select:focus {
   }
 }
 
-
-
 /* Temp fix for the insert */
 .fr-svg {
   margin-top: -15px;
@@ -911,6 +909,97 @@ select:focus {
   font-weight: 500;
 }
 
+/* arrow boxes for product tour */
+
+.tour-box {
+  width: 500px;
+  background-color: #1cb04b;
+  color: #fff;
+  padding: 20px;
+  position: relative;
+  margin: 40px;
+  float: left;
+  border-radius: 5px;
+}
+
+.tour-button {
+  border: 1px solid #fff !important;
+  color: #fff !important;
+}
+
+.tour-box p {
+  color: #fff;
+}
+
+.tour-box.arrow-top {
+  margin-top: 40px;
+}
+
+.tour-box.arrow-top:after {
+  content: " ";
+  position: absolute;
+  right: 30px;
+  top: -15px;
+  border-top: none;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-bottom: 15px solid #1cb04b;
+}
+
+.tour-box.arrow-right:after {
+  content: " ";
+  position: absolute;
+  right: -15px;
+  top: 15px;
+  border-top: 15px solid transparent;
+  border-right: none;
+  border-left: 15px solid #1cb04b;
+  border-bottom: 15px solid transparent;
+}
+
+.tour-box.arrow-bottom:after {
+  content: " ";
+  position: absolute;
+  right: 30px;
+  bottom: -15px;
+  border-top: 15px solid #1cb04b;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-bottom: none;
+}
+
+.tour-box.arrow-bottom-left:after {
+  content: " ";
+  position: absolute;
+  left: 30px;
+  bottom: -15px;
+  border-top: 15px solid #1cb04b;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-bottom: none;
+}
+
+.tour-box.arrow-left:after {
+  content: " ";
+  position: absolute;
+  left: -15px;
+  top: 15px;
+  border-top: 15px solid transparent;
+  border-right: 15px solid #1cb04b;
+  border-left: none;
+  border-bottom: 15px solid transparent;
+}
+
+.tour-box.arrow-left-bottom:after {
+  content: " ";
+  position: absolute;
+  left: -15px;
+  bottom: 15px;
+  border-top: 15px solid transparent;
+  border-right: 15px solid #1cb04b;
+  border-left: none;
+  border-bottom: 15px solid transparent;
+}
 
 /* **************************** START CSS FOR DESIGN BLOCKS *******************************************/
 /* for sponsor block */
@@ -970,20 +1059,19 @@ select:focus {
 
 /* For hero banner */
 
-.hero-banner * {color: #ffffff}
+.hero-banner * {
+  color: #ffffff;
+}
 
-.hero-banner p {font-size: 24px}
-
+.hero-banner p {
+  font-size: 24px;
+}
 
 /* For registration block */
 
 .form-editor-react.edit-mode:hover {
-
-  box-shadow:  0px 0px 0px 3px #c3c3c3;
+  box-shadow: 0px 0px 0px 3px #c3c3c3;
   cursor: pointer;
-
 }
 
-
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
-

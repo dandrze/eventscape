@@ -1,16 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import Modal1 from "../components/Modal1";
 import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
 import "../components/fonts.css";
 import { pageNames } from "../model/enums";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
+import Tour from "../components/Tour";
 
 const Design = ({ event, model, fetchModel }) => {
+  const [openTour, setOpenTour] = useState(true);
   const page = useParams().page || "event";
 
   useEffect(() => {
@@ -25,8 +27,13 @@ const Design = ({ event, model, fetchModel }) => {
     }
   }, [event, page]);
 
+  const handleCloseTour = () => {
+    setOpenTour(false);
+  };
+
   return (
     <div>
+      {openTour ? <Tour closeTour={handleCloseTour} /> : null}
       <NavBar3
         displaySideNav="true"
         highlight="design"
