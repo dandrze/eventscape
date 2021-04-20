@@ -223,9 +223,27 @@ const Tour = ({ closeTour, simulateHover }) => {
           </div>
         );
       default:
-        closeTour();
-        // return an empty div to not throw an error
-        return <div></div>;
+        return (
+          <div className={classes.content} style={{ marginTop: "30vh" }}>
+            <DialogContentText style={{ width: "100%" }}>
+              You're all set!
+              <br />
+              <br />
+              Feel free to send a message by clicking on the chat icon in the
+              bottom right if you need any help!
+            </DialogContentText>
+            <div className={classes.buttonContainer}>
+              <Button
+                onClick={closeTour}
+                color="primary"
+                disableFocusRipple
+                className="disable-focus"
+              >
+                Exit
+              </Button>
+            </div>
+          </div>
+        );
     }
   };
 
