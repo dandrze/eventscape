@@ -8,6 +8,7 @@ import DialogContentText from "@material-ui/core/DialogContentText";
 import Button from "@material-ui/core/Button";
 import { shadows } from "@material-ui/system";
 import Box from "@material-ui/core/Box";
+import SyncAltIcon from "@material-ui/icons/SyncAlt";
 
 import * as actions from "../actions";
 
@@ -124,10 +125,10 @@ const Tour = ({ closeTour, simulateHover }) => {
         return (
           <div
             className="tour-box arrow-bottom"
-            style={{ position: "absolute", top: 40, right: 75 }}
+            style={{ position: "absolute", top: 80, right: 75 }}
           >
             <DialogContentText style={{ width: "100%" }}>
-              Click on any image, and then click the [arrow icon] to replace it
+              Click on any image, and then click <SyncAltIcon /> to replace it
               with your own.
             </DialogContentText>
             <div className={classes.buttonContainer}>
@@ -144,7 +145,7 @@ const Tour = ({ closeTour, simulateHover }) => {
         return (
           <div
             className="tour-box arrow-left-bottom"
-            style={{ position: "absolute", top: 175, left: 430 }}
+            style={{ position: "absolute", top: 225, left: 430 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Below is your livestream window. To replace the placeholder with
