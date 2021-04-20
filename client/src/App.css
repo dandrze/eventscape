@@ -922,15 +922,13 @@ select:focus {
   padding: 20px;
   position: relative;
   margin: 40px;
-  float: left;
   border-radius: 5px;
   box-shadow: 0 10px 6px -6px #777;
-  background: #7d1d13;
 }
 
 .tour-button {
   /*border: 1px solid #fff !important;*/
-  color: #7d1d13 !important;
+  color: #fc7468 !important;
   background: #ffffff !important;
 }
 
@@ -950,7 +948,7 @@ select:focus {
   border-top: none;
   border-right: 15px solid transparent;
   border-left: 15px solid transparent;
-  border-bottom: 15px solid #7d1d13;
+  border-bottom: 15px solid #fc7468;
 }
 
 .tour-box.arrow-right:after {
@@ -960,7 +958,7 @@ select:focus {
   top: 15px;
   border-top: 15px solid transparent;
   border-right: none;
-  border-left: 15px solid #7d1d13;
+  border-left: 15px solid #fc7468;
   border-bottom: 15px solid transparent;
 }
 
@@ -969,7 +967,7 @@ select:focus {
   position: absolute;
   right: 30px;
   bottom: -15px;
-  border-top: 15px solid #7d1d13;
+  border-top: 15px solid #fc7468;
   border-right: 15px solid transparent;
   border-left: 15px solid transparent;
   border-bottom: none;
@@ -980,7 +978,7 @@ select:focus {
   position: absolute;
   left: 30px;
   bottom: -15px;
-  border-top: 15px solid #7d1d13;
+  border-top: 15px solid #fc7468;
   border-right: 15px solid transparent;
   border-left: 15px solid transparent;
   border-bottom: none;
@@ -992,7 +990,7 @@ select:focus {
   left: -15px;
   top: 15px;
   border-top: 15px solid transparent;
-  border-right: 15px solid #7d1d13;
+  border-right: 15px solid #fc7468;
   border-left: none;
   border-bottom: 15px solid transparent;
 }
@@ -1003,7 +1001,7 @@ select:focus {
   left: -15px;
   bottom: 15px;
   border-top: 15px solid transparent;
-  border-right: 15px solid #7d1d13;
+  border-right: 15px solid #fc7468;
   border-left: none;
   border-bottom: 15px solid transparent;
 }
