@@ -270,7 +270,7 @@ function Event_Details({
     }
     setIsloading(false);
 
-    if (response && !isEventUpdate) history.push("/design");
+    if (response && !isEventUpdate) history.push("/design?tour=true");
   };
 
   if (isLoading && !isEventUpdate) {

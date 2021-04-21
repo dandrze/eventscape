@@ -12,8 +12,12 @@ import AccessDeniedScreen from "../components/AccessDeniedScreen";
 import Tour from "../components/Tour";
 
 const Design = ({ event, model, fetchModel, user }) => {
-  // open the tour if the user has not completed the tour
-  const [openTour, setOpenTour] = useState(!user.tourComplete);
+  // fetch the tour param from the url. If it's a new event, tourRequired will be set to the string "true", otherwise it will be null (falsey)
+  const tourRequired = new URLSearchParams(window.location.search).get("tour");
+  // open the tour if the user has not completed the tour and if a tour is required
+  const [openTour, setOpenTour] = useState(
+    !user.tourComplete && Boolean(tourRequired)
+  );
   const page = useParams().page || "event";
 
   useEffect(() => {
