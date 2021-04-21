@@ -46,7 +46,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
   };
 
   return (
-    <div className="shadow-border container-width">
+    <div className="container-width">
       <NavBar3
         displaySideNav="true"
         highlight="dashboard"
