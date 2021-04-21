@@ -50,7 +50,7 @@ function App({ user, location, fetchUser, attendee }) {
     if (isApp) {
       initTawk(
         user.emailAddress || "",
-        user.firstName || "guest",
+        user.firstName || "",
         user.lastName || "",
         tawkPropertyIdForApp,
         tawkKeyForApp
