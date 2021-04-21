@@ -1028,6 +1028,17 @@ select:focus {
 
 .fr-view ul {
   list-style: disc;
+  font-weight: 300;
+  font-size: calc(20px + 0.09vw);
+  line-height: 1.65;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+}
+
+.fr-view ol {
+  font-weight: 300;
+  font-size: calc(20px + 0.09vw);
+  line-height: 1.65;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
 }
 
 /* Code Mirror Styling */
