@@ -167,18 +167,23 @@ function Event_Details({
     }
   };
 
-  const handleStartDateChange = (date) => {
-    setSelectedStartDate(date);
+  const handleStartDateChange = (startDate) => {
+    setSelectedStartDate(startDate);
 
     // if the new date is after the end date, push the end date 1 day after this new start date
-    if (date > new Date(selectedEndDate)) {
+    if (startDate > new Date(selectedEndDate)) {
       const pushedDate = new Date();
-      pushedDate.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+      pushedDate.setTime(startDate.getTime() + 1000 * 60 * 60 * 2);
       setSelectedEndDate(pushedDate);
     }
   };
-  const handleEndDateChange = (date) => {
-    setSelectedEndDate(date);
+  const handleEndDateChange = (endDate) => {
+    if (endDate < new Date(selectedStartDate)) {
+      setModalText("End date cannot be before the start date.");
+      setOpenModal(true);
+    } else {
+      setSelectedEndDate(endDate);
+    }
   };
   const handleChangeTimeZone = (event) => {
     setEventTimeZone(event.target.value);
