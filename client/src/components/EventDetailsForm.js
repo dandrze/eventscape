@@ -274,7 +274,7 @@ function Event_Details({
   };
 
   if (isLoading && !isEventUpdate) {
-    return <LongLoadingScreen text="Hang tight! We are building your event." />;
+    return <LongLoadingScreen text="Building your event..." />;
   }
 
   return (
