@@ -88,7 +88,9 @@ function App({ user, location, fetchUser, attendee }) {
       // if the data is fetched and there is a user logged in (from the cookie) display the component
       // While the app loads, display the long loading screen
       return (
-        <Suspense fallback={<LongLoadingScreen text="Loading your event..." />}>
+        <Suspense
+          fallback={<LongLoadingScreen text="Fetching your event data..." />}
+        >
           <InternalApp />
         </Suspense>
       );
