@@ -36,7 +36,7 @@ export const logoHeaderModel = () => {
   background-size: cover;
   overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 20px; display: block;">
-            <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
+            <img src="https://eventscape-assets.s3.amazonaws.com/logos/Eventscape-your-logo-bw-2.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
     </div>
     `;
@@ -47,7 +47,7 @@ export const logoHeaderRightModel = () => {
   background-size: cover;
   overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 20px; display: block;">
-            <img src="https://i.ibb.co/gF3vTXb/Eventscape-your-logo-bw.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
+            <img src="https://eventscape-assets.s3.amazonaws.com/logos/Eventscape-your-logo-bw-2.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
         </div>
     </div>
     `;
