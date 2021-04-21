@@ -32,7 +32,9 @@ const PageSectionEditor = (props) => {
         style={{ position: "relative" }}
       >
         <DesignBlockToolbar
-          displayToolbar={isHovering}
+          displayToolbar={
+            isHovering || props.model.simulateHover === props.sectionIndex
+          }
           section={props.model.sections[props.sectionIndex]}
           sectionIndex={props.sectionIndex}
           maxIndex={props.model.sections.length}

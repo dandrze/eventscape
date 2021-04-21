@@ -109,4 +109,19 @@ router.get("/api/account/email-exists", async (req, res, next) => {
   }
 });
 
+router.post("/api/account/tour-complete", async (req, res, next) => {
+  try {
+    const userId = req.user.id;
+
+    const account = await Account.findByPk(userId);
+
+    account.tourComplete = true;
+    await account.save();
+
+    res.send(true);
+  } catch (error) {
+    next(error);
+  }
+});
+
 module.exports = router;

@@ -8,10 +8,16 @@ import {
   MODEL_ISSAVED,
   FLAG_UPDATE,
   UPDATE_REACT_COMPONENT,
+  SIMULATE_HOVER,
 } from "../actions/types";
 
 export default function (
-  state = { isUnsaved: false, status: "draft", sections: [] },
+  state = {
+    isUnsaved: false,
+    status: "draft",
+    sections: [],
+    simulateHover: null,
+  },
   action
 ) {
   switch (action.type) {
@@ -75,6 +81,8 @@ export default function (
           return section;
         }),
       };
+    case SIMULATE_HOVER:
+      return { ...state, simulateHover: action.payload };
     default:
       return state;
   }

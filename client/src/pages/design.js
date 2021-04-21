@@ -1,16 +1,19 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
 import CircularProgress from "@material-ui/core/CircularProgress";
-
+import Modal1 from "../components/Modal1";
 import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
 import "../components/fonts.css";
 import { pageNames } from "../model/enums";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
+import Tour from "../components/Tour";
 
-const Design = ({ event, model, fetchModel }) => {
+const Design = ({ event, model, fetchModel, user }) => {
+  // open the tour if the user has not completed the tour
+  const [openTour, setOpenTour] = useState(!user.tourComplete);
   const page = useParams().page || "event";
 
   useEffect(() => {
@@ -25,8 +28,13 @@ const Design = ({ event, model, fetchModel }) => {
     }
   }, [event, page]);
 
+  const handleCloseTour = () => {
+    setOpenTour(false);
+  };
+
   return (
     <div>
+      {openTour ? <Tour closeTour={handleCloseTour} /> : null}
       <NavBar3
         displaySideNav="true"
         highlight="design"
@@ -47,7 +55,12 @@ const Design = ({ event, model, fetchModel }) => {
 };
 
 const mapStateToProps = (state) => {
-  return { event: state.event, model: state.model, settings: state.settings };
+  return {
+    event: state.event,
+    model: state.model,
+    settings: state.settings,
+    user: state.user,
+  };
 };
 
 export default connect(mapStateToProps, actions)(Design);

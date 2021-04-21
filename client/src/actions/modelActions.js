@@ -12,6 +12,7 @@ import {
   MODEL_ISSAVED,
   UPDATE_REACT_COMPONENT,
   FLAG_UPDATE,
+  SIMULATE_HOVER,
 } from "./types";
 import { pageNames } from "../model/enums";
 
@@ -133,4 +134,9 @@ export const saveStreamSettings = (index, updatedProps) => async (
     type: UPDATE_REACT_COMPONENT,
     payload: { index, reactComponent: reactComponent },
   });
+};
+
+export const simulateHover = (index) => async (dispatch) => {
+  console.log(index);
+  dispatch({ type: SIMULATE_HOVER, payload: index });
 };

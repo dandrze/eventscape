@@ -105,3 +105,9 @@ export const updatePassword = (userId, oldPassword, newPassword) => async (
     return false;
   }
 };
+
+export const setTourCompleted = () => async (dispatch) => {
+  const res = await api.post("/api/account/tour-complete");
+
+  dispatch(fetchUser());
+};

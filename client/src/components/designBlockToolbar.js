@@ -47,13 +47,12 @@ function DesignBlockToolbar(props) {
   const [openSettings, setOpenSettings] = useState(false);
   const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
   const [sectionTooltip, setSectionTooltip] = useState("");
-      const [editFormErrorOpen, setEditFormErrorOpen] = useState(false)
-
+  const [editFormErrorOpen, setEditFormErrorOpen] = useState(false);
 
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
-    // set the section tooltip if it's a section that requires one
-    if (props.section.isReact) {
+    // set the section tooltip if it's a section that requires one, and if it's not a tour
+    if (props.section.isReact && props.model.simulateHover) {
       switch (props.section.reactComponent.name) {
         case "StreamChat":
           setSectionTooltip(
@@ -89,11 +88,13 @@ function DesignBlockToolbar(props) {
 
   // Settings:
   const handleOpenSettings = () => {
-    if(props.section.reactComponent.name ==="RegistrationForm" && props.event.plan.PlanType.type === "free"){
-      setEditFormErrorOpen(true)
+    if (
+      props.section.reactComponent.name === "RegistrationForm" &&
+      props.event.plan.PlanType.type === "free"
+    ) {
+      setEditFormErrorOpen(true);
     } else {
-          setOpenSettings(true);
-
+      setOpenSettings(true);
     }
   };
 
@@ -120,13 +121,13 @@ function DesignBlockToolbar(props) {
     }
   };
 
-    const handleGoToPlan = () => {
-    props.history.push("/plan")
-  }
+  const handleGoToPlan = () => {
+    props.history.push("/plan");
+  };
 
   return (
     <div>
-    <AlertModal
+      <AlertModal
         open={editFormErrorOpen}
         onClose={() => setEditFormErrorOpen(false)}
         onContinue={handleGoToPlan}
@@ -254,4 +255,7 @@ const mapStateToProps = (state) => {
   return { event: state.event, model: state.model };
 };
 
-export default connect(mapStateToProps, actions)(withRouter(DesignBlockToolbar));
+export default connect(
+  mapStateToProps,
+  actions
+)(withRouter(DesignBlockToolbar));

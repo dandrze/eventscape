@@ -71,10 +71,7 @@ export const updateEvent = (
   try {
     const res = await api.put("/api/event", updatedEvent);
 
-    await dispatch({
-      type: UPDATE_EVENT,
-      payload: res.data,
-    });
+    await dispatch(fetchEvent());
     toast.success("Event successfully saved.");
     return true;
   } catch (err) {
@@ -141,10 +138,7 @@ export const publishPage = () => async (dispatch, getState) => {
   try {
     const res = await api.put("/api/event", newEvent);
 
-    await dispatch({
-      type: UPDATE_EVENT,
-      payload: res.data,
-    });
+    await dispatch(fetchEvent());
     toast.success("Page successfully published");
   } catch (err) {
     toast.error("Error when saving: " + err.response.data.message);
