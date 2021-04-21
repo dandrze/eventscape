@@ -5,18 +5,16 @@ import PublishIcon from "@material-ui/icons/Publish";
 import Button from "@material-ui/core/Button";
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import Slider from "@material-ui/core/Slider";
-import Typography from "@material-ui/core/Typography";
 import Modal1 from "./Modal1";
 
 /* Tabs */
-import PropTypes from "prop-types";
 import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
-import { makeStyles, withStyles } from "@material-ui/core/styles";
 
 import * as actions from "../actions";
 import api from "../api/server";
-import { CircularProgress, Select } from "@material-ui/core";
+
+import FoldingCube from "./FoldingCube";
 
 const BackgroundImageSelector = ({
   event,
@@ -283,7 +281,7 @@ const SearchImages = ({
         {
           // if free images is empty, that means the client is still waiting for the response from the server, display loading spinner
           freeImageUrls.length === 0 ? (
-            <CircularProgress />
+            <FoldingCube />
           ) : // if the selected tab is user, display the users images
           type === "user" ? (
             // if the user image array is empty, the user has not uploaded any images
@@ -358,19 +356,19 @@ const SelectImage = ({
         indicatorColor="primary"
         onChange={handleChangeTab}
       >
-        <Tab className="fix-outline" label="Upload Image" />
         <Tab className="fix-outline" label="Your Images" />
         <Tab className="fix-outline" label="Free Images" />
+        <Tab className="fix-outline" label="Upload Image" />
       </Tabs>
 
-      {tabValue === 0 ? (
+      {tabValue === 2 ? (
         <UploadImage user={user} setBackgroundImage={setBackgroundImage} />
       ) : (
         <SearchImages
           freeImageUrls={freeImageUrls}
           userImageUrls={userImageUrls}
           setBackgroundImage={setBackgroundImage}
-          type={tabValue === 1 ? "user" : "free"}
+          type={tabValue === 0 ? "user" : "free"}
           handleClickUpload={handleClickUpload}
         />
       )}
