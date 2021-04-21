@@ -7,16 +7,19 @@ export default (userEmail, userFirstName, userLastName, propertyId, key) => {
   window.Tawk_API = window.Tawk_API || {};
   window.Tawk_LoadStart = new Date();
 
+  console.log({ userEmail, userFirstName, userLastName, propertyId, key });
+
   const tawk = document.getElementById("tawkId");
   if (tawk) {
     // Prevent TawkTo to create root script if it already exists
+
+    // update the user email and name
+    window.Tawk_API.visitor = {
+      email: userEmail || "",
+      name: userFirstName ? `${userFirstName} ${userLastName}` : "",
+    };
     return window.Tawk_API;
   }
-
-  window.Tawk_API.visitor = {
-    email: userEmail || "",
-    name: userFirstName ? `${userFirstName} ${userLastName}` : "",
-  };
 
   const script = document.createElement("script");
   script.id = "tawkId";

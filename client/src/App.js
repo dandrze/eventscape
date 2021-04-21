@@ -46,6 +46,7 @@ function App({ user, location, fetchUser, attendee }) {
   }, []);
 
   useEffect(() => {
+    console.log(user);
     if (isApp) {
       initTawk(
         user.emailAddress || "",
