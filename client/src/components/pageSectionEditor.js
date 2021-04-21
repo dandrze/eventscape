@@ -21,6 +21,10 @@ const PageSectionEditor = (props) => {
   return (
     <div>
       <style>{theme(props.event.primaryColor)}</style>
+      {
+        // add section button before the first design block
+        props.sectionIndex === 0 ? <NewSectionButton prevIndex={-1} /> : null
+      }
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}

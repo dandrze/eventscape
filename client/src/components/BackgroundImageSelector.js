@@ -28,7 +28,7 @@ const BackgroundImageSelector = ({
   const [freeImageUrls, setFreeImageUrls] = useState([]);
   const [userImageUrls, setUserImageUrls] = useState([]);
   const [color, setColor] = useState("#ffffff");
-  const [opacity, setOpacity] = useState(100);
+  const [opacity, setOpacity] = useState(50);
   const [tabValue, setTabValue] = useState(0);
 
   useEffect(() => {
@@ -174,9 +174,6 @@ const BackgroundImageSelector = ({
               valueLabelDisplay="on"
               style={{ marginTop: "40px" }}
             />
-            <Button onClick={handleUpdateOverlay} color="primary">
-              Update Color Overlay
-            </Button>
           </div>
         )}
       </div>
