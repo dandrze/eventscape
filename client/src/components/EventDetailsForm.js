@@ -51,6 +51,7 @@ function Event_Details({
   createEvent,
   updateEvent,
   isLinkAvailable,
+  eventType,
 }) {
   const classes = useStyles();
   const defaultTimeZone = momentTZ.tz.guess();
@@ -83,7 +84,11 @@ function Event_Details({
   );
 
   const [registrationRequired, setRegistrationRequired] = React.useState(
-    isEventUpdate && event.registrationRequired != undefined
+    eventType === "private"
+      ? true
+      : eventType === "public"
+      ? false
+      : isEventUpdate && event.registrationRequired != undefined
       ? event.registrationRequired
       : true
   );
@@ -292,8 +297,8 @@ function Event_Details({
         closeText="Cancel"
         continueText="OK"
       />
-      <div>
-        <h1 className="title">My Event Details</h1>
+      <div style={{ maxWidth: "750px" }}>
+        <h1 className="title">Event Details</h1>
         <div className="form-box shadow-border event-details-box">
           <FormControl variant="outlined" className={classes.formControl}>
             {/* Event Title */}
@@ -1089,22 +1094,26 @@ function Event_Details({
           <br></br>
           <br></br>
 
-          {/* Registration Required Checkbox */}
-          <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics.">
-            <FormGroup>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={registrationRequired}
-                    onChange={handleChangeregistrationRequired}
-                    name="registrationRequired"
+          {/* Registration Required Checkbox. Hidden during event creation because it's selected on the event type page */}
+          {isEventUpdate ? (
+            <>
+              <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics.">
+                <FormGroup>
+                  <FormControlLabel
+                    control={
+                      <Checkbox
+                        checked={registrationRequired}
+                        onChange={handleChangeregistrationRequired}
+                        name="registrationRequired"
+                      />
+                    }
+                    label="Registration Required"
                   />
-                }
-                label="Registration Required"
-              />
-            </FormGroup>
-          </Tooltip>
-          <br></br>
+                </FormGroup>
+              </Tooltip>
+              <br></br>
+            </>
+          ) : null}
 
           {/* Primary Color */}
           <label htmlFor="primary-color">Primary Color</label>
