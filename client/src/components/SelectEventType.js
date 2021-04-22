@@ -6,6 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
 import Modal1 from "./Modal1";
+import Divider from "@material-ui/core/Divider";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -53,6 +54,7 @@ const SelectEventType = () => {
         >
           <div>
             <h2 style={{ color: "#b0281c" }}>Private</h2>
+            <Divider />
             <div
               style={{
                 display: "flex",
@@ -60,9 +62,12 @@ const SelectEventType = () => {
                 flexDirection: "column",
               }}
             >
-              <p style={{ color: "#b0281c", fontWeight: 400 }}>
+              <p
+                style={{ color: "#b0281c", fontWeight: 400, marginTop: "16px" }}
+              >
                 Choose this option if your event required registration
               </p>
+
               <p style={{}}>
                 Your guests will register on the event page. Then they will be
                 sent an invitation email with a unique link to access your
@@ -73,6 +78,7 @@ const SelectEventType = () => {
               style={{
                 display: "flex",
                 flexDirection: "row",
+                marginTop: "16px",
               }}
             >
               <div
@@ -156,6 +162,8 @@ const SelectEventType = () => {
                 />
               </div>
             </div>
+            <Divider />
+
             <button
               className="Button1"
               style={{ width: "200px", margin: "30px auto" }}
@@ -170,16 +178,18 @@ const SelectEventType = () => {
             className="form-box shadow-border event-details-box"
             style={{ width: "950px" }}
           >
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                flexDirection: "column",
-              }}
-            >
+            <div>
               <h2 style={{ color: "#b0281c" }}>Public</h2>
+              <Divider />
+
               <div>
-                <p style={{ color: "#b0281c", fontWeight: 400 }}>
+                <p
+                  style={{
+                    color: "#b0281c",
+                    fontWeight: 400,
+                    marginTop: "16px",
+                  }}
+                >
                   Choose this option if your event is open to everyone
                 </p>
                 <p style={{}}>
@@ -193,6 +203,7 @@ const SelectEventType = () => {
                 style={{
                   position: "relative",
                   width: "430px",
+                  margin: "16px auto 0px",
                 }}
               >
                 {displayEventText ? (
@@ -227,6 +238,8 @@ const SelectEventType = () => {
                   }}
                 />
               </div>
+              <Divider />
+
               <button
                 className="Button1"
                 style={{ width: "200px", margin: "30px auto" }}
