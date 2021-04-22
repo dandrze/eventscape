@@ -195,7 +195,6 @@ const StreamSettings = ({
               <Grid container spacing={3}>
                 <Grid item xs={12}>
                   <p>
-                    {" "}
                     If you would like to have multiple independent chat/question
                     windows, you can create and assign new rooms below.
                   </p>
