@@ -18,7 +18,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SelectEventType = () => {
+const SelectEventType = ({ handleContinue }) => {
   const classes = useStyles();
 
   const [displayRegText, setDisplayRegText] = useState(false);
@@ -87,6 +87,7 @@ const SelectEventType = () => {
                 style={{
                   position: "relative",
                   width: "430px",
+                  height: "400px",
                 }}
               >
                 {displayRegText ? (
@@ -127,6 +128,7 @@ const SelectEventType = () => {
                 style={{
                   position: "relative",
                   width: "430px",
+                  height: "400px",
                 }}
               >
                 {displayEventText ? (
@@ -167,6 +169,7 @@ const SelectEventType = () => {
             <button
               className="Button1"
               style={{ width: "200px", margin: "30px auto" }}
+              onClick={() => handleContinue("Private")}
             >
               Continue
             </button>
@@ -225,7 +228,7 @@ const SelectEventType = () => {
                       )
                     }
                   >
-                    Event Page
+                    Public Event Page
                   </div>
                 ) : null}
                 <img
@@ -243,6 +246,7 @@ const SelectEventType = () => {
               <button
                 className="Button1"
                 style={{ width: "200px", margin: "30px auto" }}
+                onClick={() => handleContinue("public")}
               >
                 Continue
               </button>

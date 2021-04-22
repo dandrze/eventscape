@@ -7,12 +7,24 @@ import SelectEventType from "../components/SelectEventType";
 import * as actions from "../actions";
 
 function CreateEvent(props) {
+  const [eventType, setEventType] = useState("");
+  const [step, setStep] = useState("type");
+
+  const handleContinue = (type) => {
+    window.scrollTo(0, 0);
+    setEventType(type);
+    setStep("details");
+  };
+
   return (
     <SimpleNavBar
       content={
         <div style={{ alignSelf: "baseline" }}>
-          {/*<EventDetailsForm />*/}
-          <SelectEventType />
+          {step === "type" ? (
+            <SelectEventType handleContinue={handleContinue} />
+          ) : (
+            <EventDetailsForm eventType={eventType} />
+          )}
         </div>
       }
     />
