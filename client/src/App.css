@@ -168,7 +168,7 @@ label {
 
 .Button1:hover {
   color: var(--main-color);
-  background-color: transparent;
+  background-color: #ffffff;
   cursor: pointer;
 }
 
@@ -180,6 +180,7 @@ label {
 
 .theme-button {
   color: #fff !important;
+
   text-decoration: none;
   padding: 16px; /* was 20px */
   display: inline-block;
