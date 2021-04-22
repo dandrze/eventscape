@@ -141,8 +141,18 @@ const StreamSettings = ({
                         />
                       </FormControl>
                       <p>
-                        Need help? Click <a style={{textDecoration:"underline", color: "#b0281c"}} target="_blank" href="https://www.eventscape.io/youtube-live-setup/">here</a> for instructions on setting up a
-                        YouTube Live stream.
+                        Need help? Click{" "}
+                        <a
+                          style={{
+                            textDecoration: "underline",
+                            color: "#b0281c",
+                          }}
+                          target="_blank"
+                          href="https://www.eventscape.io/youtube-live-setup/"
+                        >
+                          here
+                        </a>{" "}
+                        for instructions on setting up a YouTube Live stream.
                       </p>
                       <p>
                         Heads up! YouTube may take down any streams containing
@@ -184,6 +194,13 @@ const StreamSettings = ({
             <div className={classes.root}>
               <Grid container spacing={3}>
                 <Grid item xs={12}>
+                  <p>
+                    {" "}
+                    If you would like to have multiple independent chat/question
+                    windows, you can create and assign new rooms below.
+                  </p>
+                </Grid>
+                <Grid item xs={12}>
                   <FormControl
                     variant="outlined"
                     className={classes.formControl}
@@ -209,13 +226,7 @@ const StreamSettings = ({
                     </Select>
                   </FormControl>
                 </Grid>
-                <Grid item xs={12}>
-                  <p>
-                    {" "}
-                    If you would like to have multiple independent chat/question
-                    windows, you can create and assign new rooms below.
-                  </p>
-                </Grid>
+
                 <Grid item xs={12}>
                   <RoomTable
                     rooms={rooms}
