@@ -24,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
   },
   buttonContainer: {
     display: "flex",
-    justifyContent: "flex-end",
+    justifyContent: "space-between",
   },
   backdrop: {
     color: "#fff",
@@ -76,7 +76,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               website to your needs. Let's get started!
             </DialogContentText>
             <div className={classes.buttonContainer}>
-              <Button onClick={handleNext} color="primary" disableFocusRipple>
+              <Button
+                onClick={handleNext}
+                color="primary"
+                disableFocusRipple
+                style={{ margin: "auto", width: "150px" }}
+              >
                 Continue
               </Button>
             </div>
@@ -95,6 +100,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
                 ask questions.
               </DialogContentText>
               <div className={classes.buttonContainer}>
+                <Button
+                  onClick={closeTour}
+                  className="skip-tour-button disable-focus"
+                >
+                  Skip Tour
+                </Button>
                 <Button
                   onClick={handleNext}
                   className="tour-button disable-focus"
@@ -118,6 +129,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -137,6 +154,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               with your own.
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -161,6 +184,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -180,6 +209,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               Design and selecting the Registration Page
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -202,6 +237,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -221,6 +262,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               well as manually add your own registrations.
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -243,6 +290,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -261,6 +314,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               The Analytics tab shows you data on your event viewers.
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -282,6 +341,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -301,6 +366,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               bottom right if you need any help!
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={completeTour}
                 className="tour-button disable-focus"
@@ -325,6 +396,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               event website to your needs. Let's get started!
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button onClick={handleNext} color="primary" disableFocusRipple>
                 Continue
               </Button>
@@ -344,6 +421,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
                 ask questions.
               </DialogContentText>
               <div className={classes.buttonContainer}>
+                <Button
+                  onClick={closeTour}
+                  className="skip-tour-button disable-focus"
+                >
+                  Skip Tour
+                </Button>
                 <Button
                   onClick={handleNext}
                   className="tour-button disable-focus"
@@ -367,6 +450,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -386,6 +475,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               with your own.
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -410,6 +505,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -430,6 +531,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
               >
@@ -448,6 +555,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               The Analytics tab shows you data on your event viewers.
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -468,6 +581,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               through the chat window as well as view your attendee questions.
             </DialogContentText>
             <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
               <Button
                 onClick={handleNext}
                 className="tour-button disable-focus"
@@ -490,6 +609,12 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             <div className={classes.buttonContainer}>
               <Button
                 onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
+                onClick={completeTour}
                 className="tour-button disable-focus"
               >
                 Exit
@@ -507,7 +632,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
         aria-describedby="transition-modal-description"
         className={classes.modal}
         open={true}
-        onClose={closeTour}
+        onClose={handleNext}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{

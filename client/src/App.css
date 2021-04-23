@@ -933,6 +933,10 @@ select:focus {
   background: #ffffff !important;
 }
 
+.skip-tour-button * {
+  color: #ffffff;
+}
+
 .tour-box p {
   color: #fff;
 }
