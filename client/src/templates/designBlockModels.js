@@ -622,7 +622,7 @@ export const streamChatReact = {
   name: "StreamChat",
   props: {
     content: "youtube-live",
-    link: "https://www.youtube.com/embed/X9llog6QNVM",
+    link: "https://www.youtube.com/embed/rvr3Ey8TpcM",
     html: "",
     chatRoom: null,
   },
