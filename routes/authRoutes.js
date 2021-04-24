@@ -79,6 +79,7 @@ router.post("/auth/request-password-reset", async (req, res, next) => {
         to: account.emailAddress,
         subject: "Create a new password",
         html,
+        useTemplate: true,
       });
 
       return res.json(true);

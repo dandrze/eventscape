@@ -9,6 +9,9 @@ const { sendEmail } = require("../services/Mailer");
 
 const saltRounds = 10;
 
+const jwt = require("jwt-simple");
+const keys = require("../config/keys");
+
 const router = express.Router();
 
 router.put("/api/account", requireAuth, async (req, res) => {
@@ -59,6 +62,40 @@ router.post("/api/account", async (req, res, next) => {
 
     clearCache(`Account:id:${account.id}`);
 
+    // send confirmation link
+    // create a hash with the users account id. Only need 1 salt round as it doesn't need to be secure
+    const payload = { userId: account.id };
+    const secret = keys.jwtSecretKey;
+    const verifyToken = jwt.encode(payload, secret);
+
+    sendEmail(
+      {
+        to: account.emailAddress,
+        subject: "Eventscape - Confirm Your Email Address",
+        html: `<p>Hello ${account.firstName}</p>
+    <p>Please confirm your email address to activate your account.</p>
+    <div contenteditable="false" style="text-align: left;"><a href="https://app.eventscape.io/account/confirmation/${verifyToken}"><button style="
+					font-family: Helvetica, Arial, sans-serif;
+					font-weight: bold;
+					font-size: 20;
+					color: white;
+					background-color: #b0281c;
+					padding: 16px;
+          cursor: pointer;
+					border-width: 2px;
+					border-radius: 6px;
+					border-color: #b0281c;
+					border-style: solid;
+					height: min-content;
+					text-align: left;">Join Now</button></a></div>
+    <p>You may also use this link: https://app.eventscape.io/account/confirmation/${verifyToken} </p>`,
+        useTemplate: true,
+      },
+      { email: "notifications@eventscape.io", name: "Eventscape" }
+    );
+
+    // send welcome email
+
     var welcomeSendDate = new Date();
     welcomeSendDate.setMinutes(welcomeSendDate.getMinutes() + 27);
 
@@ -80,6 +117,7 @@ router.post("/api/account", async (req, res, next) => {
           <p>David Andrzejewski</p>
           <p>Co-Founder</p>
           <p>Eventscape</p>`,
+          useTemplate: true,
         },
         {
           email: "david.andrzejewski@eventscape.io",
@@ -116,6 +154,22 @@ router.post("/api/account/tour-complete", async (req, res, next) => {
     const account = await Account.findByPk(userId);
 
     account.tourComplete = true;
+    await account.save();
+
+    res.send(true);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/api/account/verify-email", async (req, res, next) => {
+  try {
+    const { token } = req.body;
+
+    const { userId } = jwt.decode(token, keys.jwtSecretKey);
+
+    const account = await Account.findByPk(userId);
+    account.emailVerified = true;
     await account.save();
 
     res.send(true);

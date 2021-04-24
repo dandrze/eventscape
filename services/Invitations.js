@@ -57,6 +57,7 @@ const inviteUser = (
     subject:
       "You've been invited to collaborate on an Eventscape virtual event",
     html: isNewAccount ? newUserHtml : existingUserHtml,
+    useTemplate: true,
   });
 };
 

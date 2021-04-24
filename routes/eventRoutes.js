@@ -591,7 +591,12 @@ router.post(
 
       `;
 
-      sendEmail({ to: newOwnerAccount.emailAddress, subject, html });
+      sendEmail({
+        to: newOwnerAccount.emailAddress,
+        subject,
+        html,
+        useTemplate: true,
+      });
 
       res.json();
     } catch (error) {

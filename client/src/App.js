@@ -28,6 +28,7 @@ const ResetPassword = lazy(() => import("./pages/password-reset"));
 const ChangePassword = lazy(() => import("./pages/change-password"));
 const InternalApp = lazy(() => import("./pages/InternalApp"));
 const Admin = lazy(() => import("./pages/Admin"));
+const ConfirmAccount = lazy(() => import("./pages/ConfirmAccount"));
 
 function App({ user, location, fetchUser, attendee }) {
   const path = window.location.host.split(".");
@@ -142,6 +143,11 @@ function App({ user, location, fetchUser, attendee }) {
                 exact
                 path="/create-account/:email?"
                 component={Create_Account}
+              />
+              <Route
+                exact
+                path="/account/confirmation/:token"
+                component={ConfirmAccount}
               />
               <Route exact path="/reset-password" component={ResetPassword} />
               <Route exact path="/ScotiabankGillerPrize" component={Giller} />

@@ -58,7 +58,7 @@ export const registrationConfirmation = {
 				<br>
 				<div style="text-align: left;">A few minutes before the event begins, please click the following button to join.</div>
 				<br>
-				<div contenteditable="false" style="text-align: left;"><a href="{event_link}">&nbsp;<button style="
+				<div contenteditable="false" style="text-align: left;"><a href="{event_link}"><button style="
 					font-family: Helvetica, Arial, sans-serif;
 					font-weight: bold;
 					font-size: 20;
@@ -126,7 +126,7 @@ export const reminderOneDay = {
 				<br>
 				<div style="text-align: left;">A few minutes before the event begins, please click the following button to join.</div>
 				<br>
-				<div contenteditable="false" style="text-align: left;"><a href="{event_link}">&nbsp;<button style="
+				<div contenteditable="false" style="text-align: left;"><a href="{event_link}"><button style="
 					font-family: Helvetica, Arial, sans-serif;
 					font-weight: bold;
 					font-size: 20;
@@ -194,7 +194,7 @@ export const reminderOneHour = {
 <br>
 <div style="text-align: left;">A few minutes before the event begins, please click the following button to join.</div>
 <br>
-<div contenteditable="false" style="text-align: left;"><a href="{event_link}">&nbsp;<button style="
+<div contenteditable="false" style="text-align: left;"><a href="{event_link}"><button style="
 font-family: Helvetica, Arial, sans-serif;
 font-weight: bold;
 font-size: 20;

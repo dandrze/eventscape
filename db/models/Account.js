@@ -10,6 +10,7 @@ const Account = sequelize.define("Account", {
   registrationComplete: { type: Sequelize.BOOLEAN, defaultValue: false },
   type: { type: Sequelize.TEXT, defaultValue: "user" },
   tourComplete: { type: Sequelize.BOOLEAN, defaultValue: false },
+  emailVerified: { type: Sequelize.BOOLEAN, defaultValue: false },
 });
 
 module.exports = Account;
