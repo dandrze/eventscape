@@ -30,10 +30,8 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     //padding: theme.spacing(3),
     padding: "0px",
-    margin: "65px 0px",
-    minHeight: "calc(100vh - 65px)",
+    margin: "25% 0px",
     display: "flex",
-    alignItems: "center",
   },
 }));
 

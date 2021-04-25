@@ -15,7 +15,7 @@ passport.serializeUser((user, done) => {
 passport.deserializeUser(async (id, done) => {
   //const cacheKey = `Account:id:${id}`;
   //const [user, cacheHit] = await AccountCached.findByPkCached(cacheKey, id);
-  const user = await Account.findByPk(id)
+  const user = await Account.findByPk(id);
 
   done(null, user);
 });
@@ -36,13 +36,22 @@ passport.use(
       });
     }
 
-    // compare the password against the hashed password stored in postgres
-    const match = await bcrypt.compare(password, user.password);
+    const codeExpired = new Date() > new Date(user.loginCodeExpiration);
 
-    if (match) {
+    console.log({
+      codeExpired,
+      password,
+      code: user.loginCode,
+      codeDate: new Date(user.loginCodeExpiration),
+      currentDate: new Date(),
+    });
+
+    if (password.toString() === user.loginCode.toString() && !codeExpired) {
       return done(null, user);
     } else {
-      return done(null, false, { message: "Incorrect password." });
+      return done(null, false, {
+        message: "Code is invalid or expired. Please request a new one.",
+      });
     }
   })
 );

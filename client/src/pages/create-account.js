@@ -30,27 +30,17 @@ function Create_Account(props) {
   const classes = useStyles();
 
   const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [emailAddress, setEmailAddress] = useState(email || "");
-  const [password, setPassword] = useState("");
 
   const [emailErrorText, setEmailErrorText] = useState(false);
   const [firstNameErrorText, setFirstNameErrorText] = useState("");
-  const [lastNameErrorText, setLastNameErrorText] = useState("");
-  const [passwordErrorText, setPasswordErrorText] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   const urlParams = new URLSearchParams(window.location.search);
-  const targetEventId = urlParams.get("eventid");
 
   const handleChangeEmail = (event) => {
     setEmailAddress(event.target.value);
     setEmailErrorText("");
-  };
-
-  const handleChangePassword = (event) => {
-    setPassword(event.target.value);
-    setPasswordErrorText("");
   };
 
   const emailExists = async () => {
@@ -61,8 +51,6 @@ function Create_Account(props) {
   const handleSubmit = async () => {
     if (!firstName) {
       setFirstNameErrorText("Please enter a first name");
-    } else if (!lastName) {
-      setLastNameErrorText("Please enter a last name");
     } else if (!emailAddress) {
       setEmailErrorText("Please enter your email address");
     } else if (!isValidEmailFormat(emailAddress)) {
@@ -71,43 +59,19 @@ function Create_Account(props) {
       setEmailErrorText(
         "Account already exists with this email address. Please login or contact support."
       );
-    } else if (!password) {
-      setPasswordErrorText("Please enter a password");
-    } else if (password.length < 8) {
-      setPasswordErrorText("Password must be at least 8 characters");
     } else {
       setIsLoading(true);
       const res = await props.createAccount({
         emailAddress,
-        password,
         firstName,
-        lastName,
       });
 
-      const auth = await props.signInLocal(emailAddress, password);
-      const eventList = await props.fetchEventList();
-      if (eventList.length === 0) {
-        setIsLoading(false);
-        if (targetEventId) {
-          props.history.push(`/?eventid=${targetEventId}`);
-        } else {
-          props.history.push("/create-event");
-        }
-      } else {
-        const res = await props.setCurrentEvent(eventList[0].id);
-        setIsLoading(false);
-        props.history.push("/");
-      }
+      props.history.push({ pathname: "/code", state: { emailAddress } });
     }
   };
   const handleChangeFirstName = (event) => {
     setFirstName(event.target.value);
     setFirstNameErrorText("");
-  };
-
-  const handleChangeLastName = (event) => {
-    setLastName(event.target.value);
-    setLastNameErrorText("");
   };
 
   const handleKeypressSubmit = (event) => {
@@ -129,6 +93,7 @@ function Create_Account(props) {
             <h1>
               Create your<br></br>free account to<br></br>continue.
             </h1>
+            <p>Enter your name and email to receive a login code.</p>
             <FormControl variant="outlined" className={classes.formControl}>
               <TextField
                 type="text"
@@ -141,19 +106,7 @@ function Create_Account(props) {
                 onKeyPress={handleKeypressSubmit}
               />
             </FormControl>
-            <br></br>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="text"
-                id="l-name"
-                label="Last Name"
-                variant="outlined"
-                value={lastName}
-                onChange={handleChangeLastName}
-                helperText={lastNameErrorText}
-                onKeyPress={handleKeypressSubmit}
-              />
-            </FormControl>
+
             <br></br>
             <FormControl variant="outlined" className={classes.formControl}>
               <TextField
@@ -169,14 +122,6 @@ function Create_Account(props) {
                 disabled={email}
               />
             </FormControl>
-            <br></br>
-
-            <CreatePassword
-              password={password}
-              onChange={handleChangePassword}
-              helperText={passwordErrorText}
-              onKeyPress={handleKeypressSubmit}
-            />
 
             <br></br>
             {isLoading ? (
@@ -187,7 +132,7 @@ function Create_Account(props) {
                 type="submit"
                 onClick={handleSubmit}
               >
-                Create My Account
+                Get login code
               </button>
             )}
             <p className="subtext" style={{ marginTop: "8px" }}>
