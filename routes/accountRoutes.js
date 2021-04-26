@@ -17,7 +17,7 @@ const router = express.Router();
 
 router.put("/api/account", requireAuth, async (req, res) => {
   const { userId, contactData } = req.body;
-  const { firstName, lastName, emailAddress } = contactData;
+  const { firstName, emailAddress } = contactData;
 
   const account = await Account.findByPk(userId);
   account.firstName = firstName;

@@ -576,10 +576,10 @@ router.post(
       const oldOwnerAccount = await Account.findByPk(oldAccountId);
       const newOwnerAccount = await Account.findByPk(newAccountId);
 
-      const subject = `${oldOwnerAccount.firstName} ${oldOwnerAccount.lastName} has transferred ownership of an event to you`;
+      const subject = `${oldOwnerAccount.firstName}  has transferred ownership of an event to you`;
       const html = `
       <p style="text-align: left">Hello ${newOwnerAccount.firstName}, </p>
-      <p style="text-align: left">${oldOwnerAccount.firstName} ${oldOwnerAccount.lastName} has transferred ownership of the event "${event.title}" to you. </p>
+      <p style="text-align: left">${oldOwnerAccount.firstName} has transferred ownership of the event "${event.title}" to you. </p>
 
       <p style="text-align: left">You may view the event using the link below:</p>
       <a href="https://app.eventscape.io/?eventid=${eventId}"><p style="text-align: left">https://app.eventscape.io/?eventid=${eventId}</p></a>
