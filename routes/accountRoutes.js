@@ -6,6 +6,7 @@ const { clearCache } = require("../services/sequelizeRedis");
 const requireAuth = require("../middlewares/requireAuth");
 const { scheduleJob } = require("../services/Scheduler");
 const { sendEmail } = require("../services/Mailer");
+const { sendCode } = require("../services/LoginCode");
 
 const saltRounds = 10;
 
@@ -34,11 +35,6 @@ router.post("/api/account", async (req, res, next) => {
 
   let account;
 
-  // Create a 6 digit login code that expires in 15 minutes
-  const loginCode = Math.floor(100000 + Math.random() * 900000);
-  const loginCodeExpiration = new Date();
-  loginCodeExpiration.setMinutes(loginCodeExpiration.getMinutes() + 15);
-
   try {
     // check to see if there is an unregistered account
     // an unregistered account happens when a user adds an email address as a collaborator but that user hasn't created an account yet
@@ -48,8 +44,6 @@ router.post("/api/account", async (req, res, next) => {
     if (unregisteredAccount) {
       unregisteredAccount.firstName = firstName;
       unregisteredAccount.registrationComplete = true;
-      unregisteredAccount.loginCode = loginCode;
-      unregisteredAccount.loginCodeExpiration = loginCodeExpiration;
       await unregisteredAccount.save();
       account = unregisteredAccount;
     } else {
@@ -57,29 +51,13 @@ router.post("/api/account", async (req, res, next) => {
         emailAddress: emailAddress.toLowerCase(),
         firstName,
         registrationComplete: true,
-        loginCode,
-        loginCodeExpiration,
       });
     }
 
     clearCache(`Account:id:${account.id}`);
 
-    // send confirmation link
-    // create a hash with the users account id. Only need 1 salt round as it doesn't need to be secure
-
-    sendEmail(
-      {
-        to: account.emailAddress,
-        subject: "Eventscape Login Code",
-        html: `<p>Hello!</p>
-    <p>here is your login code for Eventscape:</p>
-    <p>${loginCode}</p>
-    <p>This code expires after 15 minutes</p>
-    <p>If you did not request a login from EventScape, please ignore this email. </p>`,
-        useTemplate: true,
-      },
-      { email: "notifications@eventscape.io", name: "Eventscape" }
-    );
+    // send a login code for the next step
+    sendCode(account.emailAddress);
 
     // send welcome email
 

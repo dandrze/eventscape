@@ -1,15 +1,10 @@
 const express = require("express");
 const passport = require("passport");
-const jwt = require("jwt-simple");
-const bcrypt = require("bcrypt");
-
-const keys = require("../config/keys");
-const { sendEmail } = require("../services/Mailer");
+const { sendCode } = require("../services/LoginCode");
 const { Account } = require("../db").models;
 const { clearCache } = require("../services/sequelizeRedis");
 
 const router = express.Router();
-const saltRounds = 10;
 
 router.post(
   "/auth/login/local",
@@ -45,6 +40,18 @@ router.get("/auth/logout", (req, res) => {
 
   req.logout();
   res.redirect("/" + target);
+});
+
+router.post("/auth/send-code", async (req, res, next) => {
+  try {
+    const { emailAddress } = req.body;
+
+    sendCode(emailAddress);
+
+    res.status(200).send(true);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

@@ -28,7 +28,7 @@ const ResetPassword = lazy(() => import("./pages/password-reset"));
 const ChangePassword = lazy(() => import("./pages/change-password"));
 const InternalApp = lazy(() => import("./pages/InternalApp"));
 const Admin = lazy(() => import("./pages/Admin"));
-const EnterCode = lazy(() => import("./pages/enter-code"));
+const EnterCode = lazy(() => import("./pages/EnterCode"));
 
 function App({ user, location, fetchUser, attendee }) {
   const path = window.location.host.split(".");
@@ -47,12 +47,11 @@ function App({ user, location, fetchUser, attendee }) {
   }, []);
 
   useEffect(() => {
-    console.log(user);
+    console.log(isApp);
     if (isApp) {
       initTawk(
         user.emailAddress || "",
         user.firstName || "",
-        user.lastName || "",
         tawkPropertyIdForApp,
         tawkKeyForApp
       );

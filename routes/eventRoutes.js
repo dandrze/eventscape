@@ -528,7 +528,6 @@ router.post("/api/event/permissions", requireAuth, async (req, res, next) => {
     inviteUser(
       emailAddress,
       account.firstName,
-      account.lastName,
       event.title,
       event.id,
       targetAccountCreated

@@ -16,13 +16,11 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
       emailAddress: res.data.emailAddress,
       id: res.data.id,
       firstName: res.data.firstName,
-      lastName: res.data.lastName,
     });
 
     dispatch({ type: FETCH_USER, payload: res.data.user });
 
     if (res.data.error) {
-      toast.error("Error when signing in: " + res.data.error[0]);
       return { error: res.data.error[0] };
     } else {
       return { success: true };

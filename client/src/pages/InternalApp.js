@@ -73,11 +73,7 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
         <Switch>
           <Route exact path="/create-event" component={CreateEvent} />
           <Route exact path="/" render={() => requireEvent(Dashboard)} />
-          <Route
-            exact
-            path="/my-events"
-            render={() => requireEvent(My_Events)}
-          />
+          <Route exact path="/my-events" component={My_Events} />
           <Route
             exact
             path="/design/:page?"

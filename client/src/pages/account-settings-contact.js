@@ -21,7 +21,6 @@ function AccountSettings(props) {
   const classes = useStyles();
 
   const [fName, setFName] = React.useState(props.user.firstName || "");
-  const [lName, setLName] = React.useState(props.user.lastName || "");
   const [emailAddress, setEmailAddress] = React.useState(
     props.user.emailAddress || ""
   );
@@ -34,14 +33,9 @@ function AccountSettings(props) {
     setFName(event.target.value);
   };
 
-  const handleChangeLName = (event) => {
-    setLName(event.target.value);
-  };
-
   const handleUpdate = () => {
     props.updateAccountContact(props.user.id, {
       firstName: fName,
-      lastName: lName,
       emailAddress,
     });
   };
@@ -67,17 +61,7 @@ function AccountSettings(props) {
               />
             </FormControl>
             <br></br>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="text"
-                id="l-name"
-                label="Last Name"
-                variant="outlined"
-                value={lName}
-                onChange={handleChangeLName}
-              />
-            </FormControl>
-            <br></br>
+
             <FormControl variant="outlined" className={classes.formControl}>
               <TextField
                 type="email"
