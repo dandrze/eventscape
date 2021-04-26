@@ -26,10 +26,7 @@ router.get("/auth/fail", async (req, res) => {
 
 router.get("/auth/current-user", async (req, res) => {
   if (req.user) {
-    // retrieve all values except for password
-    const { password, ...user } = req.user.dataValues;
-
-    res.send(user);
+    res.send(req.user);
   } else {
     res.send(null);
   }

@@ -16,7 +16,6 @@ import Plan from "./plan";
 import Preview from "./preview";
 import EventDetailsPage from "./EventDetailsPage";
 import AccountSettingsContact from "./account-settings-contact";
-import AccountSettingsPassword from "./account-settings-password";
 import AccountSettingsPayments from "./account-settings-payments";
 import PageNotFound from "./PageNotFound";
 import EventNotFound from "./EventNotFound";
@@ -116,11 +115,6 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
             exact
             path="/account-settings-contact"
             render={() => requireEvent(AccountSettingsContact)}
-          />
-          <Route
-            exact
-            path="/account-settings-password"
-            render={() => requireEvent(AccountSettingsPassword)}
           />
           <Route
             exact

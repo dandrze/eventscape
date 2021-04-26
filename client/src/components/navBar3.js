@@ -755,25 +755,6 @@ function NavBar3(props) {
               </ListItem>
             </Link>
 
-            {/* Password */}
-            <Link to="/account-settings-password">
-              <ListItem
-                button
-                key="password"
-                component="a"
-                className={clsx({
-                  [classes.highlight]: highlight === "password",
-                })}
-              >
-                <Tooltip title="Password">
-                  <ListItemIcon>
-                    <img src={KeyIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Password" />
-              </ListItem>
-            </Link>
-
             {/* Billing and Payments */}
             {/*<Link to="/account-settings-payments">
               <ListItem

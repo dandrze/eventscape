@@ -16,7 +16,7 @@ export default function BrandingTop(props) {
         ></img>
       </a>
       <a
-        href="https://app.eventscape.io/create-account"
+        href="https://app.eventscape.io/signup"
         style={{ marginLeft: "auto", fontSize: "16px" }}
         className="branding-button"
       >

@@ -27,7 +27,7 @@ const inviteUser = (
     <p style="text-align: left">Great news! ${inviterFirstName} has invited you to collaborate on their event, "${eventTitle}" on EventScape.</p>
     <p style="text-align: left">To get started, create an Eventscape account by clicking the button below. You will automatically be added to the event when you complete registration.</p>
     <p style="text-align: left;" >
-        <a href="https://app.eventscape.io/create-account/${emailAddress}/?eventid=${eventId}">
+        <a href="https://app.eventscape.io/signup/${emailAddress}/?eventid=${eventId}">
         <button style="
             font-family: Helvetica, Arial, sans-serif;
             font-weight: bold;

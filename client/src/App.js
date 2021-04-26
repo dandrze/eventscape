@@ -20,12 +20,10 @@ import initTawk from "./utils/tawk";
 
 // lazy loading is used so only the relevant component is loaded rather than all components
 const Landing = lazy(() => import("./pages/landing"));
-const Create_Account = lazy(() => import("./pages/create-account"));
+const SignUp = lazy(() => import("./pages/signup"));
 const Published = lazy(() => import("./pages/published"));
 const Giller = lazy(() => import("./pages/Giller"));
 const Login = lazy(() => import("./pages/login"));
-const ResetPassword = lazy(() => import("./pages/password-reset"));
-const ChangePassword = lazy(() => import("./pages/change-password"));
 const InternalApp = lazy(() => import("./pages/InternalApp"));
 const Admin = lazy(() => import("./pages/Admin"));
 const EnterCode = lazy(() => import("./pages/EnterCode"));
@@ -138,19 +136,9 @@ function App({ user, location, fetchUser, attendee }) {
           >
             <Switch>
               <Route exact path="/login" component={Login} />
-              <Route
-                exact
-                path="/create-account/:email?"
-                component={Create_Account}
-              />
+              <Route exact path="/signup/:email?" component={SignUp} />
               <Route exact path="/code" component={EnterCode} />
-              <Route exact path="/reset-password" component={ResetPassword} />
               <Route exact path="/ScotiabankGillerPrize" component={Giller} />
-              <Route
-                exact
-                path="/change-password/:token"
-                component={ChangePassword}
-              />
               <Route
                 exact
                 path="/testlivepage"

@@ -9,6 +9,7 @@ import LongLoadingScreen from "../components/LongLoadingScreen";
 
 import * as actions from "../actions";
 import api from "../api/server";
+import { isValidEmailFormat } from "../hooks/validation";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -22,8 +23,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props) {
   const classes = useStyles();
-  const [emailAddress, setEmailAddress] = React.useState("");
-  const [isLoading, setIsloading] = useState(false);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [error, setError] = useState("");
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetEventId = urlParams.get("eventid");
@@ -35,18 +36,35 @@ function Login(props) {
     setEmailAddress(event.target.value);
   };
 
+  const emailExists = async () => {
+    const response = await props.checkEmailExists(emailAddress);
+    return response;
+  };
+
   const handleSubmit = async () => {
-    api.post("/auth/send-code", { emailAddress });
-    props.history.push({ pathname: "/code", state: { emailAddress } });
+    if (!isValidEmailFormat(emailAddress)) {
+      setError("Please enter a valid email address");
+    } else if (!(await emailExists())) {
+      setError(
+        <p style={{ fontSize: "0.75rem", color: "#f44336" }}>
+          Account does not exist.{" "}
+          <a
+            href="/signup"
+            style={{ fontWeight: 500, textDecoration: "underline" }}
+          >
+            Create an account
+          </a>
+        </p>
+      );
+    } else {
+      api.post("/auth/send-code", { emailAddress });
+      props.history.push({ pathname: "/code", state: { emailAddress } });
+    }
   };
 
   const handleKeypressSubmit = (event) => {
     if (event.key === "Enter") handleSubmit();
   };
-
-  if (isLoading) {
-    return <LongLoadingScreen text="Signing In..." />;
-  }
 
   return (
     <div>
@@ -67,6 +85,8 @@ function Login(props) {
                 value={emailAddress}
                 onChange={handleChangeEmail}
                 onKeyPress={handleKeypressSubmit}
+                helperText={error}
+                error={error}
               />
             </FormControl>
             <br></br>
@@ -76,7 +96,7 @@ function Login(props) {
             </button>
             <p className="subtext" style={{ marginTop: "8px" }}>
               Don't have an account yet?{" "}
-              <Link to="/create-account" className="link1">
+              <Link to="/signup" className="link1">
                 Create an account
               </Link>
             </p>

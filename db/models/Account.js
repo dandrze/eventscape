@@ -4,7 +4,6 @@ const { Sequelize } = sequelize;
 const Account = sequelize.define("Account", {
   firstName: Sequelize.TEXT,
   emailAddress: Sequelize.TEXT,
-  password: Sequelize.TEXT,
   currentEventId: Sequelize.INTEGER,
   registrationComplete: { type: Sequelize.BOOLEAN, defaultValue: false },
   type: { type: Sequelize.TEXT, defaultValue: "user" },
