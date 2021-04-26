@@ -20,7 +20,7 @@ import initTawk from "./utils/tawk";
 
 // lazy loading is used so only the relevant component is loaded rather than all components
 const Landing = lazy(() => import("./pages/landing"));
-const SignUp = lazy(() => import("./pages/signup"));
+const SignUp = lazy(() => import("./pages/SignUp"));
 const Published = lazy(() => import("./pages/published"));
 const Giller = lazy(() => import("./pages/Giller"));
 const Login = lazy(() => import("./pages/login"));

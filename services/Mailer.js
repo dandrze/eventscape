@@ -25,10 +25,13 @@ const sendEmail = async (
       <table width="600px" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFF">
           <tr >
               <td align="center" valign="top" style="padding: 20px; border-bottom: 1px solid #e2e2e2;">
+                  <a href="https://www.eventscape.io">
                     <img src="https://eventscape-assets.s3.amazonaws.com/logos/eventscape-logo.png" width="200px" />
-                    </td>
+                    </a>
+                </td>
           </tr>
-          <tr><td style="padding: 20px;">${html}</td></tr>
+          <tr><td style="padding: 20px; border-bottom: 1px solid #e2e2e2;">${html}</td></tr>
+          <tr><td align="center"  style="padding: 20px;"><a href="https://www.eventscape.io">eventscape.io</a></td></tr>
       </table>
     </center>
   </body>
