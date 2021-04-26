@@ -3,14 +3,13 @@ const { sendEmail } = require("./Mailer");
 const inviteUser = (
   emailAddress,
   inviterFirstName,
-  inviterLastName,
   eventTitle,
   eventId,
   isNewAccount
 ) => {
   const existingUserHtml = `
     <p style="text-align: left">Hello there,</p>
-    <p style="text-align: left">Great news! ${inviterFirstName} ${inviterLastName} has invited you to collaborate on their event, "${eventTitle}"</p>
+    <p style="text-align: left">Great news! ${inviterFirstName} has invited you to collaborate on their event, "${eventTitle}"</p>
  
         <a href="https://app.eventscape.io/?eventid=${eventId}">
          <p style="text-align: left;" >
@@ -25,10 +24,10 @@ const inviteUser = (
 
   const newUserHtml = `
     <p style="text-align: left">Hello there,</p>
-    <p style="text-align: left">Great news! ${inviterFirstName} ${inviterLastName} has invited you to collaborate on their event, "${eventTitle}" on EventScape.</p>
+    <p style="text-align: left">Great news! ${inviterFirstName} has invited you to collaborate on their event, "${eventTitle}" on EventScape.</p>
     <p style="text-align: left">To get started, create an Eventscape account by clicking the button below. You will automatically be added to the event when you complete registration.</p>
     <p style="text-align: left;" >
-        <a href="https://app.eventscape.io/create-account/${emailAddress}/?eventid=${eventId}">
+        <a href="https://app.eventscape.io/signup/${emailAddress}/?eventid=${eventId}">
         <button style="
             font-family: Helvetica, Arial, sans-serif;
             font-weight: bold;
@@ -57,6 +56,7 @@ const inviteUser = (
     subject:
       "You've been invited to collaborate on an Eventscape virtual event",
     html: isNewAccount ? newUserHtml : existingUserHtml,
+    useTemplate: true,
   });
 };
 

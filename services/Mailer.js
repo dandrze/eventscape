@@ -4,16 +4,45 @@ const keys = require("../config/keys");
 sgMail.setApiKey(keys.sendGridKey);
 
 const sendEmail = async (
-  email = { to: "", subject: "", html: "" },
+  email = { to: "", subject: "", html: "", useTemplate: false },
   from = { email: "notifications@eventscape.io", name: "Eventscape" }
 ) => {
-  const { to, subject, html } = email;
+  const { to, subject, html, useTemplate } = email;
+  const template = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  <html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+    <title></title>
+  
+    <style type="text/css">
+    </style>    
+  </head>
+  <body style="margin:0; padding:0; background-color:#F2F2F2;">
+    <center>
+      <table width="600px" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFF">
+          <tr >
+              <td align="center" valign="top" style="padding: 20px; border-bottom: 1px solid #e2e2e2;">
+                  <a href="https://www.eventscape.io">
+                    <img src="https://eventscape-assets.s3.amazonaws.com/logos/eventscape-logo.png" width="200px" />
+                    </a>
+                </td>
+          </tr>
+          <tr><td style="padding: 20px; border-bottom: 1px solid #e2e2e2;">${html}</td></tr>
+          <tr><td align="center"  style="padding: 20px;"><a href="https://www.eventscape.io">eventscape.io</a></td></tr>
+      </table>
+    </center>
+  </body>
+  </html>`;
+
   const msg = {
     to,
     from,
     subject,
-    text: html,
-    html,
+    //text: emailContent.replace(/(<([^>]+)>)/gi, ""),
+    html: useTemplate ? template : html,
   };
 
   try {
@@ -99,6 +128,7 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
         to: recipient.emailAddress,
         subject: updatedSubject,
         html: updatedHtml,
+        useTemplate: true,
       });
       if (isSuccessful) {
         success++;

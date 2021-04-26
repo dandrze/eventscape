@@ -6,8 +6,12 @@ const { clearCache } = require("../services/sequelizeRedis");
 const requireAuth = require("../middlewares/requireAuth");
 const { scheduleJob } = require("../services/Scheduler");
 const { sendEmail } = require("../services/Mailer");
+const { sendCode } = require("../services/LoginCode");
 
 const saltRounds = 10;
+
+const jwt = require("jwt-simple");
+const keys = require("../config/keys");
 
 const router = express.Router();
 
@@ -17,7 +21,6 @@ router.put("/api/account", requireAuth, async (req, res) => {
 
   const account = await Account.findByPk(userId);
   account.firstName = firstName;
-  account.lastName = lastName;
   account.emailAddress = emailAddress;
   account.save();
   clearCache(`Account:id:${account.id}`);
@@ -28,9 +31,7 @@ router.put("/api/account", requireAuth, async (req, res) => {
 // public endpoint
 router.post("/api/account", async (req, res, next) => {
   const { userData } = req.body;
-  const { emailAddress, firstName, lastName, password } = userData;
-
-  const hashedPassword = await bcrypt.hashSync(password, saltRounds);
+  const { emailAddress, firstName } = userData;
 
   let account;
 
@@ -42,8 +43,6 @@ router.post("/api/account", async (req, res, next) => {
     });
     if (unregisteredAccount) {
       unregisteredAccount.firstName = firstName;
-      unregisteredAccount.lastName = lastName;
-      unregisteredAccount.password = hashedPassword;
       unregisteredAccount.registrationComplete = true;
       await unregisteredAccount.save();
       account = unregisteredAccount;
@@ -51,13 +50,16 @@ router.post("/api/account", async (req, res, next) => {
       account = await Account.create({
         emailAddress: emailAddress.toLowerCase(),
         firstName,
-        lastName,
-        password: hashedPassword,
         registrationComplete: true,
       });
     }
 
     clearCache(`Account:id:${account.id}`);
+
+    // send a login code for the next step
+    sendCode(account.emailAddress);
+
+    // send welcome email
 
     var welcomeSendDate = new Date();
     welcomeSendDate.setMinutes(welcomeSendDate.getMinutes() + 27);
@@ -66,20 +68,21 @@ router.post("/api/account", async (req, res, next) => {
       sendEmail(
         {
           to: account.emailAddress,
-          subject: "Thank you for choosing Eventscape",
-          html: `<p>Hi ${account.firstName},</p>
+          subject: "Your Event Support Manager",
+          html: `<p>Hello!</p>
 
           <p>Thank you for choosing Eventscape for your event! </p>
           
-          <p>My name is David and I am the co-founder of Eventscape. I wanted to formally introduce myself as I will be your primary point of contact as you build and launch your event.</p> 
+          <p>My name is David and I am your Event Support Manager. I will be your primary point of contact as you build and launch your event.</p> 
           
-          <p>May I ask what brought you to our app? I will ensure you have everything you need to accomplish your goal. </p>
+          <p>May I ask what type of event are you looking to create? I will ensure you have everything you need to accomplish your goal. </p>
           
           <p>Kind regards,</p>
           
           <p>David Andrzejewski</p>
-          <p>Co-Founder</p>
+          <p>Event Support Manager</p>
           <p>Eventscape</p>`,
+          useTemplate: true,
         },
         {
           email: "david.andrzejewski@eventscape.io",

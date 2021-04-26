@@ -379,7 +379,7 @@ function NavBar3(props) {
             >
               <div className={classes.root}>
                 <Avatar className={`${classes.greyWhite} ${classes.large}`}>
-                  {props.user.firstName[0] + props.user.lastName[0]}
+                  {props.user.firstName[0]}
                 </Avatar>
               </div>
             </Button>
@@ -396,12 +396,12 @@ function NavBar3(props) {
               <ListItemIcon>
                 <div className={classes.root}>
                   <Avatar className={`${classes.greyWhite} ${classes.large}`}>
-                    {props.user.firstName[0] + props.user.lastName[0]}
+                    {props.user.firstName[0]}
                   </Avatar>
                 </div>
               </ListItemIcon>
               <ListItemText
-                primary={props.user.firstName + " " + props.user.lastName}
+                primary={props.user.firstName}
                 secondary={props.user.emailAddress}
               />
             </StyledMenuItemNoButton>
@@ -752,25 +752,6 @@ function NavBar3(props) {
                   </ListItemIcon>
                 </Tooltip>
                 <ListItemText primary="Contact" />
-              </ListItem>
-            </Link>
-
-            {/* Password */}
-            <Link to="/account-settings-password">
-              <ListItem
-                button
-                key="password"
-                component="a"
-                className={clsx({
-                  [classes.highlight]: highlight === "password",
-                })}
-              >
-                <Tooltip title="Password">
-                  <ListItemIcon>
-                    <img src={KeyIcon} height="20px"></img>
-                  </ListItemIcon>
-                </Tooltip>
-                <ListItemText primary="Password" />
               </ListItem>
             </Link>
 

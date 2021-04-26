@@ -1,4 +1,4 @@
-export default (userEmail, userFirstName, userLastName, propertyId, key) => {
+export default (userEmail, userFirstName, propertyId, key) => {
   // initializes the tawk.to chat support widget
   if (!window) {
     throw new Error("DOM is unavailable");
@@ -7,8 +7,6 @@ export default (userEmail, userFirstName, userLastName, propertyId, key) => {
   window.Tawk_API = window.Tawk_API || {};
   window.Tawk_LoadStart = new Date();
 
-  console.log({ userEmail, userFirstName, userLastName, propertyId, key });
-
   const tawk = document.getElementById("tawkId");
   if (tawk) {
     // Prevent TawkTo to create root script if it already exists
@@ -16,7 +14,7 @@ export default (userEmail, userFirstName, userLastName, propertyId, key) => {
     // update the user email and name
     window.Tawk_API.visitor = {
       email: userEmail || "",
-      name: userFirstName ? `${userFirstName} ${userLastName}` : "",
+      name: userFirstName || "",
     };
     return window.Tawk_API;
   }

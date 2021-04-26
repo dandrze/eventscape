@@ -252,6 +252,17 @@ const Table = (props) => {
             Container: (props) => <Paper {...props} elevation={0} />,
           }}
           key={props.eventList}
+          localization={{
+            body: {
+              emptyDataSourceMessage: (
+                <>
+                  You have not created any events yet. Create your first event
+                  by clicking "Create New Event" in the top right corner of the
+                  page.
+                </>
+              ),
+            },
+          }}
         />
       </div>
     );

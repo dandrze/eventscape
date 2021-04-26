@@ -8,6 +8,8 @@ import SimpleNavBar from "../components/simpleNavBar";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 
 import * as actions from "../actions";
+import api from "../api/server";
+import { isValidEmailFormat } from "../hooks/validation";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -21,9 +23,8 @@ const useStyles = makeStyles((theme) => ({
 
 function Login(props) {
   const classes = useStyles();
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const [isLoading, setIsloading] = useState(false);
+  const [emailAddress, setEmailAddress] = useState("");
+  const [error, setError] = useState("");
 
   const urlParams = new URLSearchParams(window.location.search);
   const targetEventId = urlParams.get("eventid");
@@ -32,19 +33,32 @@ function Login(props) {
   console.log(targetUrl);
 
   const handleChangeEmail = (event) => {
-    setEmail(event.target.value);
+    setEmailAddress(event.target.value);
   };
 
-  const handleChangePassword = (event) => {
-    setPassword(event.target.value);
+  const emailExists = async () => {
+    const response = await props.checkEmailExists(emailAddress);
+    return response;
   };
 
   const handleSubmit = async () => {
-    setIsloading(true);
-    const isAuth = await props.signInLocal(email, password);
-    setIsloading(false);
-    if (isAuth.success) {
-      props.history.push(targetUrl);
+    if (!isValidEmailFormat(emailAddress)) {
+      setError("Please enter a valid email address");
+    } else if (!(await emailExists())) {
+      setError(
+        <p style={{ fontSize: "0.75rem", color: "#f44336" }}>
+          Account does not exist.{" "}
+          <a
+            href="/signup"
+            style={{ fontWeight: 500, textDecoration: "underline" }}
+          >
+            Create an account
+          </a>
+        </p>
+      );
+    } else {
+      api.post("/auth/send-code", { emailAddress });
+      props.history.push({ pathname: "/code", state: { emailAddress } });
     }
   };
 
@@ -52,52 +66,38 @@ function Login(props) {
     if (event.key === "Enter") handleSubmit();
   };
 
-  if (isLoading) {
-    return <LongLoadingScreen text="Signing In..." />;
-  }
-
   return (
     <div>
       <SimpleNavBar
         content={
-          <div className="form-box shadow-border">
+          <div className="form-box shadow-border" style={{ width: "600px" }}>
             <h1>Sign in to continue.</h1>
+            <p className="subtext" style={{ marginTop: "8px" }}>
+              Enter the email you used to sign up below and we'll send you a
+              login code.
+            </p>
             <FormControl variant="outlined" className={classes.formControl}>
               <TextField
                 type="email"
                 id="email"
                 label="Email"
                 variant="outlined"
-                value={email}
+                value={emailAddress}
                 onChange={handleChangeEmail}
                 onKeyPress={handleKeypressSubmit}
+                helperText={error}
+                error={error}
               />
             </FormControl>
             <br></br>
-            <FormControl variant="outlined" className={classes.formControl}>
-              <TextField
-                type="password"
-                id="password"
-                label="Password"
-                variant="outlined"
-                value={password}
-                onChange={handleChangePassword}
-                onKeyPress={handleKeypressSubmit}
-              />
-            </FormControl>
-            <br></br>
+
             <button className="Button1" type="submit" onClick={handleSubmit}>
-              Sign In
+              Get Code
             </button>
             <p className="subtext" style={{ marginTop: "8px" }}>
               Don't have an account yet?{" "}
-              <Link to="/create-account" className="link1">
+              <Link to="/signup" className="link1">
                 Create an account
-              </Link>
-            </p>
-            <p className="subtext">
-              <Link to="reset-password" className="link1">
-                Forgot your password?
               </Link>
             </p>
           </div>

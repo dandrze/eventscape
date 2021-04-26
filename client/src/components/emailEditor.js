@@ -198,7 +198,7 @@ const EmailEditor = (props) => {
             eventId={props.event.id}
             recipient={{
               firstName: props.user.firstName,
-              lastName: props.user.lastName,
+              lastName: "",
               emailAddress: props.user.emailAddress,
             }}
           />
