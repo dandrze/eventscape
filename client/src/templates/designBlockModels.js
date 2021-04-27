@@ -2,7 +2,7 @@ import { format } from "date-fns-tz";
 import { isSameDay } from "date-fns";
 
 export const heroBannerModel = (eventTitle = "default") => {
-  return `<div style=" background-image: url(https://eventscape-assets.s3.amazonaws.com/free-images/premium-dots.jpg);
+  return `<div style=" background-image: url(https://eventscape-assets.s3.amazonaws.com/free-images/abstract-5719523_1920.jpg);
   background-position: bottom;
   height: auto;
   background-size: cover;
@@ -10,6 +10,7 @@ export const heroBannerModel = (eventTitle = "default") => {
   justify-content: center;
   align-items: center;
   padding: 150px 20px;
+  box-shadow: rgba(35, 35, 35, 0.667) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div>
   <span class="hero-banner">
