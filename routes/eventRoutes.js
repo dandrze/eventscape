@@ -37,6 +37,7 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       regPageModel,
       eventPageModel,
       registrationRequired,
+      description,
     },
     communications,
   } = req.body;
@@ -64,6 +65,7 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       status: statusOptions.ACTIVE,
       registrationRequired,
       OwnerId: accountId,
+      description,
     });
 
     // create a default chatroom

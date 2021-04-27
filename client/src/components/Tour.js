@@ -32,14 +32,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const getSteps = () => {
-  return ["Upload CSV", "Verify Columns", "Confirm"];
-};
-
 const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
-  const steps = getSteps();
 
   useEffect(() => {
     if (activeStep === 4) {

@@ -12,6 +12,7 @@ const Event = sequelize.define("Event", {
   endDate: Sequelize.DATE,
   registrationRequired: Sequelize.BOOLEAN,
   status: { type: Sequelize.TEXT, defaultValue: statusOptions.DRAFT },
+  description: Sequelize.TEXT,
 });
 
 module.exports = Event;

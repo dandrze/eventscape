@@ -45,10 +45,6 @@ export default () => {
       field: "Owner.firstName",
     },
     {
-      title: "User Last Name",
-      field: "Owner.lastName",
-    },
-    {
       title: "User Email",
       field: "Owner.emailAddress",
     },
