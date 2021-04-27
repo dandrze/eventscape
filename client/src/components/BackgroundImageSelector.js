@@ -343,7 +343,7 @@ const SelectImage = ({
   };
 
   const handleClickUpload = () => {
-    setTabValue(0);
+    setTabValue(2);
   };
 
   return (
