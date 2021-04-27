@@ -98,7 +98,7 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
   const [selectedEndDateError, setSelectedEndDateError] = useState("");
   const [selectedEndDate, setSelectedEndDate] = useState(new Date());
   const [eventTimeZone, setEventTimeZone] = React.useState(momentTZ.tz.guess());
-  const [registrationRequired, setRegistrationRequired] = useState(1);
+  const [registrationRequired, setRegistrationRequired] = useState("required");
   const [requireYoutubeInstructions, setRequireYoutubeInstructions] = useState(
     "required"
   );
@@ -294,7 +294,7 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
       endDate,
       eventTimeZone,
       color,
-      Boolean(registrationRequired),
+      registrationRequired === "required",
       eventDescription
     );
 
@@ -381,12 +381,12 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
                   onChange={handleChangeRegistrationRequired}
                 >
                   <FormControlLabel
-                    value={1}
+                    value={"required"}
                     control={<Radio />}
                     label="Registration required"
                   />
                   <FormControlLabel
-                    value={0}
+                    value={"notRequired"}
                     control={<Radio />}
                     label="Open to public"
                   />
