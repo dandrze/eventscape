@@ -1531,42 +1531,54 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
       case 8:
         return (
           <Question
-            question={
-              "What would you like your event URL to be?" + registrationRequired
-                ? " This is where your attendees will find your registration page."
-                : " This is where your attendees will find your event stream page."
-            }
+            question="What would you like your event URL to be?"
             next={handleSubmitLink}
             input={
-              <Tooltip title="This link can not be changed once it's created.">
-                <FormControl variant="outlined" className={classes.formControl}>
-                  {/* Event Link */}
-                  <TextField
-                    id="event-link"
-                    label="Event Link"
+              <>
+                <label htmlFor="event-link">
+                  {registrationRequired
+                    ? " This is where your attendees will find your registration page."
+                    : " This is where your attendees will find your event stream page."}
+                </label>
+                <Tooltip title="This link can not be changed once it's created.">
+                  <FormControl
                     variant="outlined"
-                    placeholder="myevent"
-                    value={eventLink}
-                    onChange={handleChangeEventLink}
-                    onBlur={handleChangeEventLinkBlur}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          .eventscape.io
-                          <Tooltip title="Copy to clipboard" onClick={copyLink}>
-                            <FileCopyIcon
+                    className={classes.formControl}
+                  >
+                    {/* Event Link */}
+                    <TextField
+                      id="event-link"
+                      label="Event Link"
+                      variant="outlined"
+                      placeholder="myevent"
+                      value={eventLink}
+                      onChange={handleChangeEventLink}
+                      onBlur={handleChangeEventLinkBlur}
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position="end">
+                            .eventscape.io
+                            <Tooltip
+                              title="Copy to clipboard"
                               onClick={copyLink}
-                              style={{ marginLeft: "12px", cursor: "pointer" }}
-                            />
-                          </Tooltip>
-                        </InputAdornment>
-                      ),
-                    }}
-                    error={linkHelperText}
-                    helperText={linkHelperText}
-                  />
-                </FormControl>
-              </Tooltip>
+                            >
+                              <FileCopyIcon
+                                onClick={copyLink}
+                                style={{
+                                  marginLeft: "12px",
+                                  cursor: "pointer",
+                                }}
+                              />
+                            </Tooltip>
+                          </InputAdornment>
+                        ),
+                      }}
+                      error={linkHelperText}
+                      helperText={linkHelperText}
+                    />
+                  </FormControl>
+                </Tooltip>
+              </>
             }
           />
         );
