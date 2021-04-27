@@ -158,9 +158,9 @@ export const registrationFormDescription = (startTime, endTime, timeZone) => {
       })}`
     : `${format(startTimeParsed, "MMMM dd, yyyy", {
         timeZone: timeZone,
-      })} <br/> 
-      ${format(startTimeParsed, "h:mm a", { timeZone: timeZone })} -
-      ${format(endTimeParsed, "h:mm a zzz", { timeZone: timeZone })}`;
+      })}<br/>${format(startTimeParsed, "h:mm a", {
+        timeZone: timeZone,
+      })} - ${format(endTimeParsed, "h:mm a zzz", { timeZone: timeZone })}`;
 
   return `<div class="one" contenteditable="true">
     <p style="margin-top: 0;"><span style="font-size: 30px; text-align: left; font-weight: 300;">${timeFormatted}</span></p>
