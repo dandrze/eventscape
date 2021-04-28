@@ -1437,7 +1437,8 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
           />
         );
       case 5:
-        return (
+        return handleNext();
+      /*  return (
           <Question
             question="Eventscape uses Youtube Live for your streaming content. Do you know how to connect Youtube to your Eventscape event webpage?"
             next={handleNext}
@@ -1461,9 +1462,10 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
               </FormControl>
             }
           />
-        );
+        ); */
       case 6:
-        return requireYoutubeInstructions === "required" ? (
+        return handleNext();
+      /*  return requireYoutubeInstructions === "required" ? (
           <div>
             Eventscape uses Youtube Live to capture your stream. <br />
             <br />{" "}
@@ -1502,7 +1504,7 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
           </div>
         ) : (
           handleNext()
-        );
+        ); */
       case 7:
         return (
           <Question
