@@ -1,10 +1,10 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import SimpleNavBar from "../components/simpleNavBar";
 
 export default () => {
   return (
-    <SimpleNavBar
+    /*   <SimpleNavBar
       content={
         <div className="form-box shadow-border">
           <p>Event Not Found</p>
@@ -19,6 +19,11 @@ export default () => {
           </p>
         </div>
       }
+    /> */
+    <Redirect
+      to={{
+        pathname: "/my-events",
+      }}
     />
   );
 };
