@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import ReactS3Uploader from "react-s3-uploader";
 import PublishIcon from "@material-ui/icons/Publish";
 import Button from "@material-ui/core/Button";
-import { HexColorPicker, HexColorInput } from "react-colorful";
+import { RgbaColorPicker, HexColorInput } from "react-colorful";
 import Slider from "@material-ui/core/Slider";
 import Modal1 from "./Modal1";
 
@@ -27,14 +27,50 @@ const BackgroundImageSelector = ({
   const [openSelectImage, setOpenSelectImage] = useState(false);
   const [freeImageUrls, setFreeImageUrls] = useState([]);
   const [userImageUrls, setUserImageUrls] = useState([]);
-  const [color, setColor] = useState("#ffffff");
-  const [opacity, setOpacity] = useState(50);
+  const [color, setColor] = useState({ r: 0, g: 0, b: 0, a: 0 });
   const [tabValue, setTabValue] = useState(0);
+  const [currentBackgroundImageURL, setCurrentBackgroundImageURL] = useState(
+    ""
+  );
 
   useEffect(() => {
     fetchFreeImageUrls();
   }, []);
 
+  console.log(color);
+
+  useEffect(() => {
+    // get current background color overlay
+    let pageHtml = document.createElement("div");
+    pageHtml.innerHTML = model.sections[sectionIndex].html;
+
+    let backgroundDiv = pageHtml.getElementsByTagName("div")[0];
+
+    let rgbaList = backgroundDiv.style.boxShadow
+      .substring(
+        backgroundDiv.style.boxShadow.indexOf("(") + 1,
+        backgroundDiv.style.boxShadow.indexOf(")")
+      )
+      .split(", ");
+
+    console.log({
+      r: parseInt(rgbaList[0]),
+      g: parseInt(rgbaList[1]),
+      b: parseInt(rgbaList[2]),
+      a: rgbaList[3],
+    });
+
+    setColor({
+      r: parseInt(rgbaList[0]),
+      g: parseInt(rgbaList[1]),
+      b: parseInt(rgbaList[2]),
+      a: parseFloat(rgbaList[3]),
+    });
+
+    setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
+  }, []);
+
+  console.log(color);
   const fetchFreeImageUrls = async () => {
     const res = await api.get("/api/aws/s3/background-images", {
       params: { userId: user.id },
@@ -46,14 +82,6 @@ const BackgroundImageSelector = ({
     setFreeImageUrls(freeImages);
     setUserImageUrls(userImages);
   };
-
-  var currentBackgroundImageURL = model.sections[sectionIndex].html.includes(
-    "url("
-  )
-    ? model.sections[sectionIndex].html.split("url(")[1].split(")")[0]
-    : "";
-
-  currentBackgroundImageURL = currentBackgroundImageURL.replace(/&quot;/g, "");
 
   const handleChangeTab = (event, newValue) => {
     setTabValue(newValue);
@@ -90,35 +118,23 @@ const BackgroundImageSelector = ({
     updateSection(sectionIndex, newHtml.innerHTML);
   };
 
-  const handleChangeOpacity = (event, newOpacity) => {
-    setOpacity(newOpacity);
-    // update the overlay with the new opacity and current state of color
-    handleUpdateOverlay(color, newOpacity);
-  };
-
-  const opacityFormat = (value) => {
-    return value + "%";
-  };
-
-  const handleChangeColorOverlay = (newColor) => {
+  const handleUpdateOverlay = (newColor) => {
     setColor(newColor);
-    // update the overlay with the new color and current state of opacity
-    handleUpdateOverlay(newColor, opacity);
-  };
 
-  const handleUpdateOverlay = (color, opacity) => {
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
     // get a reference to the base div
     const background = newHtml.getElementsByTagName("div")[0];
 
-    // create a hex that includes opacity
-    const overlayHex = color + Math.floor((opacity / 100) * 255).toString(16);
+    // convert rgba object to string
+    const overlayRGBA = `rgba(${newColor.r}, ${newColor.g}, ${newColor.b}, ${
+      newColor.a || 0
+    })`;
 
     // Modify the styling of the base div with a large box shadow to act as the image overlay
     // This code modifies the original newHTML object
-    background.style.boxShadow = `inset 0 0 0 5000px ${overlayHex}`;
+    background.style.boxShadow = `inset 0 0 0 5000px ${overlayRGBA}`;
 
     // update the section with the new html
     updateSection(sectionIndex, newHtml.innerHTML);
@@ -156,23 +172,10 @@ const BackgroundImageSelector = ({
         ) : (
           <div style={{ padding: "18px" }}>
             <label>Background Color Overlay</label>
-            <HexColorPicker
+            <RgbaColorPicker
               color={color}
-              onChange={handleChangeColorOverlay}
+              onChange={handleUpdateOverlay}
               id="event-color"
-            />
-            <HexColorInput color={color} onChange={setColor} id="hex-input" />
-            <div>
-              <label>Opacity</label>
-            </div>
-            <Slider
-              value={opacity}
-              onChange={handleChangeOpacity}
-              min={0}
-              max={100}
-              valueLabelFormat={opacityFormat}
-              valueLabelDisplay="on"
-              style={{ marginTop: "40px" }}
             />
           </div>
         )}
@@ -378,7 +381,6 @@ const Preview = ({
   handleClickSelectImage,
   handleClickRemoveImage,
 }) => {
-  console.log(currentBackgroundImageURL);
   return (
     <div style={{ padding: "18px" }}>
       {currentBackgroundImageURL ? (
@@ -387,7 +389,7 @@ const Preview = ({
             style={{
               width: "284px",
               height: "160px",
-              backgroundImage: `url(${currentBackgroundImageURL})`,
+              backgroundImage: currentBackgroundImageURL,
               backgroundPosition: "bottom",
               backgroundSize: "cover",
             }}

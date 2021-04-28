@@ -15,6 +15,7 @@ export const heroBannerModel = (eventTitle = "default") => {
   <div>
   <span class="hero-banner">
   <h1 class="title">${eventTitle}</h1>
+  <p>Your subtitle goes here</p>
   </span>
   </div>
   </div>
