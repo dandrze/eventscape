@@ -44,15 +44,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function Event_Details({
-  event,
-  isEventUpdate,
-  history,
-  createEvent,
-  updateEvent,
-  isLinkAvailable,
-  eventType,
-}) {
+function Event_Details({ event, updateEvent, isLinkAvailable }) {
   const classes = useStyles();
   const defaultTimeZone = momentTZ.tz.guess();
 
@@ -60,13 +52,13 @@ function Event_Details({
   const [modalText, setModalText] = useState("");
 
   const [eventCat, setEventCat] = React.useState(
-    isEventUpdate && event.category ? event.category : ""
+    event.category ? event.category : ""
   );
   const [eventTitle, setEventTitle] = React.useState(
-    isEventUpdate && event.title ? event.title : ""
+    event.title ? event.title : ""
   );
   const [eventLink, setEventLink] = React.useState(
-    isEventUpdate && event.link ? event.link : ""
+    event.link ? event.link : ""
   );
 
   const [linkUnavailable, setLinkUnavailable] = React.useState(false);
@@ -74,27 +66,21 @@ function Event_Details({
   const [linkHelperText, setLinkHelperText] = React.useState("");
 
   const [selectedStartDate, setSelectedStartDate] = React.useState(
-    isEventUpdate && event.startDate ? event.startDate : new Date()
+    event.startDate ? event.startDate : new Date()
   );
   const [selectedEndDate, setSelectedEndDate] = React.useState(
-    isEventUpdate && event.endDate ? event.endDate : new Date()
+    event.endDate ? event.endDate : new Date()
   );
   const [eventTimeZone, setEventTimeZone] = React.useState(
-    isEventUpdate && event.timeZone ? event.timeZone : defaultTimeZone
+    event.timeZone ? event.timeZone : defaultTimeZone
   );
 
   const [registrationRequired, setRegistrationRequired] = React.useState(
-    eventType === "private"
-      ? true
-      : eventType === "public"
-      ? false
-      : isEventUpdate && event.registrationRequired != undefined
-      ? event.registrationRequired
-      : true
+    event.registrationRequired ? event.registrationRequired : true
   );
 
   const [color, setColor] = useState(
-    isEventUpdate && event.primaryColor ? event.primaryColor : "#B0281C"
+    event.primaryColor ? event.primaryColor : "#B0281C"
   );
   const [isLoading, setIsloading] = useState(false);
 
@@ -253,39 +239,19 @@ function Event_Details({
     setIsloading(true);
     let response = false;
 
-    if (isEventUpdate) {
-      response = await updateEvent(
-        eventTitle,
-        eventLink,
-        eventCat,
-        startDate,
-        endDate,
-        eventTimeZone,
-        color,
-        registrationRequired
-      );
+    response = await updateEvent(
+      eventTitle,
+      eventLink,
+      eventCat,
+      startDate,
+      endDate,
+      eventTimeZone,
+      color,
+      registrationRequired
+    );
 
-      console.log(response);
-    } else {
-      response = await createEvent(
-        eventTitle,
-        eventLink,
-        eventCat,
-        startDate,
-        endDate,
-        eventTimeZone,
-        color,
-        registrationRequired
-      );
-    }
     setIsloading(false);
-
-    if (response && !isEventUpdate) history.push("/design?tour=true");
   };
-
-  if (isLoading && !isEventUpdate) {
-    return <LongLoadingScreen text="Building your event..." />;
-  }
 
   return (
     <>
@@ -336,7 +302,7 @@ function Event_Details({
                 }}
                 error={linkUnavailable}
                 helperText={linkHelperText}
-                disabled={isEventUpdate}
+                disabled={true}
               />
             </FormControl>
           </Tooltip>
@@ -1094,26 +1060,23 @@ function Event_Details({
           <br></br>
           <br></br>
 
-          {/* Registration Required Checkbox. Hidden during event creation because it's selected on the event type page */}
-          {isEventUpdate ? (
-            <>
-              <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics.">
-                <FormGroup>
-                  <FormControlLabel
-                    control={
-                      <Checkbox
-                        checked={registrationRequired}
-                        onChange={handleChangeregistrationRequired}
-                        name="registrationRequired"
-                      />
-                    }
-                    label="Registration Required"
+          {/* Registration Required Checkbox. */}
+
+          <Tooltip title="If registration is not required, attendees will go directly to the event page. This is ideal for public events that do not require email communciation, registration data, or attendee-specific analytics.">
+            <FormGroup>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={registrationRequired}
+                    onChange={handleChangeregistrationRequired}
+                    name="registrationRequired"
                   />
-                </FormGroup>
-              </Tooltip>
-              <br></br>
-            </>
-          ) : null}
+                }
+                label="Registration Required"
+              />
+            </FormGroup>
+          </Tooltip>
+          <br></br>
 
           {/* Primary Color */}
           <label htmlFor="primary-color">Primary Color</label>
@@ -1127,11 +1090,11 @@ function Event_Details({
           <br></br>
 
           {/* Submit */}
-          {isLoading && isEventUpdate ? (
+          {isLoading ? (
             <CircularProgress />
           ) : (
             <button className="Button1" onClick={handleSubmit}>
-              {isEventUpdate ? "Update Event" : "Create Event"}
+              Update Event
             </button>
           )}
         </div>

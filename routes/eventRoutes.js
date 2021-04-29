@@ -68,6 +68,8 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       description,
     });
 
+    console.log(event);
+
     // create a default chatroom
     const chatRoom = await ChatRoom.create({
       event: event.id,

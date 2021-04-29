@@ -174,8 +174,14 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               Below is your livestream window. To replace the placeholder with
               your own livestream, remove the chat option, or remove the
               questions option, hover your mouse over this section and click on
-              the settings icon to the left. You will find out how to do this
-              <a href="https://www.eventscape.io/youtube-live-setup/">here</a>.
+              the settings icon to the left. You will find out how to do this{" "}
+              <a
+                style={{ fontWeight: "bold", textDecoration: "underline" }}
+                href="https://www.eventscape.io/youtube-live-setup/"
+              >
+                here
+              </a>
+              .
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button

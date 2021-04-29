@@ -286,6 +286,8 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
     setIsloading(true);
     let response = false;
 
+    console.log("handle submit form called");
+
     response = await createEvent(
       eventTitle,
       eventLink,
@@ -1534,7 +1536,10 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
         return (
           <Question
             question="What would you like your event URL to be?"
-            next={handleSubmitLink}
+            next={() => {
+              handleSubmitLink();
+              handleSubmitForm();
+            }}
             input={
               <>
                 <label htmlFor="event-link">
@@ -1584,8 +1589,8 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 9:
-        return handleSubmitForm();
+      default:
+        return null;
     }
   };
 
