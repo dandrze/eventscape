@@ -30,7 +30,7 @@ const useStyles = makeStyles(() => ({
   },
   sectionTooltip: {
     position: "absolute",
-    top: "-30px",
+    top: "-32px",
     background: "#7b7b7b",
     border: "1px solid #777777",
     padding: "8px",
@@ -52,7 +52,7 @@ function DesignBlockToolbar(props) {
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
     // set the section tooltip if it's a section that requires one, and if it's not a tour
-    if (props.section.isReact && props.model.simulateHover) {
+    if (props.section.isReact) {
       switch (props.section.reactComponent.name) {
         case "StreamChat":
           setSectionTooltip(
