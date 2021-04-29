@@ -176,10 +176,12 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
     }
   };
 
-  const handleSubmitLink = () => {
+  const handleSubmitLink = async () => {
+    const isLinkValid = await checkLinkValidity();
+
     if (!eventLink) {
       setLinkHelperText("Please add a subdomain for your event");
-    } else if (!linkHelperText) {
+    } else if (isLinkValid) {
       handleNext();
     }
   };
@@ -222,7 +224,7 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
     );
   };
 
-  const handleChangeEventLinkBlur = async (event) => {
+  const checkLinkValidity = async () => {
     // offlimit subdomain names that we might want to use in the future
     const offLimitValues = [
       "app",
@@ -246,18 +248,21 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
       setLinkHelperText(
         "This link name is unavailable. Please choose another one."
       );
-      return;
+      return false;
     }
 
     // check if any other events already used this link name
-    const res = await isLinkAvailable(eventLink);
-    if (res) {
+    const linkAvailable = await isLinkAvailable(eventLink);
+    if (linkAvailable) {
       setLinkHelperText("");
     } else {
       setLinkHelperText(
         "This link is already in use. Please choose another one."
       );
+      return false;
     }
+
+    return true;
   };
 
   const copyLink = () => {
@@ -269,7 +274,11 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
   };
 
   const handleNext = () => {
-    setStep((prevStep) => prevStep + 1);
+    if (step === 8) {
+      handleSubmitForm();
+    } else {
+      setStep((prevStep) => prevStep + 1);
+    }
   };
 
   const handleSubmitForm = async () => {
@@ -1536,10 +1545,7 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
         return (
           <Question
             question="What would you like your event URL to be?"
-            next={() => {
-              handleSubmitLink();
-              handleSubmitForm();
-            }}
+            next={handleSubmitLink}
             input={
               <>
                 <label htmlFor="event-link">
@@ -1560,7 +1566,7 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
                       placeholder="myevent"
                       value={eventLink}
                       onChange={handleChangeEventLink}
-                      onBlur={handleChangeEventLinkBlur}
+                      onBlur={checkLinkValidity}
                       InputProps={{
                         endAdornment: (
                           <InputAdornment position="end">
