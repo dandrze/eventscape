@@ -160,11 +160,8 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
 
   const handleOnDrop = (data) => {
     clearErrors();
-    console.log(data);
     setData(data);
   };
-
-  console.log(columnMap);
 
   const handleOnError = (err, file, inputElem, reason) => {
     console.log(err);

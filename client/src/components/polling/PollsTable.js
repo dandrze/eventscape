@@ -99,7 +99,6 @@ function PollsTable({
       icon: Edit,
       tooltip: "Edit Form",
       onClick: (event, rowData) => {
-        console.log(rowData);
         handleEdit(rowData);
       },
     },
@@ -109,7 +108,6 @@ function PollsTable({
       tooltip: "View Results",
       onClick: (event, rowData) => {
         handleView(rowData);
-        console.log(rowData);
       },
     }),
     {

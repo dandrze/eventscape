@@ -88,11 +88,7 @@ module.exports = (server) => {
     });
 
     socket.on("respondToPoll", async (selectedOptions) => {
-      console.log(socket.visitorId);
-      console.log(selectedOptions);
       for (let option of selectedOptions) {
-        console.log(option);
-
         PollResponse.create({
           PollOptionId: option.id,
           SiteVisitorId: socket.visitorId,

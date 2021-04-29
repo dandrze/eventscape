@@ -33,8 +33,6 @@ router.get("/api/model/id/uncached", async (req, res, next) => {
       order: [["index", "ASC"]],
     });
 
-    console.log(pageSections);
-
     res.json(pageSections);
   } catch (error) {
     next(error);
@@ -47,7 +45,6 @@ router.put("/api/model", requireAuth, async (req, res, next) => {
 
   try {
     // clear the cache
-    console.log(PageModelId);
     clearCache(`PageSection:PageModelId:${PageModelId}`);
     //  delete the old model
     await PageSection.destroy({

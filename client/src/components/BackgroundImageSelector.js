@@ -37,8 +37,6 @@ const BackgroundImageSelector = ({
     fetchFreeImageUrls();
   }, []);
 
-  console.log(color);
-
   useEffect(() => {
     // get current background color overlay
     let pageHtml = document.createElement("div");
@@ -53,13 +51,6 @@ const BackgroundImageSelector = ({
       )
       .split(", ");
 
-    console.log({
-      r: parseInt(rgbaList[0]),
-      g: parseInt(rgbaList[1]),
-      b: parseInt(rgbaList[2]),
-      a: rgbaList[3],
-    });
-
     setColor({
       r: parseInt(rgbaList[0]),
       g: parseInt(rgbaList[1]),
@@ -70,7 +61,6 @@ const BackgroundImageSelector = ({
     setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
   }, []);
 
-  console.log(color);
   const fetchFreeImageUrls = async () => {
     const res = await api.get("/api/aws/s3/background-images", {
       params: { userId: user.id },
@@ -101,7 +91,6 @@ const BackgroundImageSelector = ({
     // ensure the background is positioned center and cover
     background.style.backgroundPosition = `center`;
     background.style.backgroundSize = `cover`;
-    console.log(background.style.backgroundImage);
 
     updateSection(sectionIndex, newHtml.innerHTML);
     setOpenSelectImage(false);
@@ -189,7 +178,6 @@ const UploadImage = ({ user, setBackgroundImage }) => {
   const [percent, setPercent] = useState("");
 
   const handleProgress = (percentComplete, uploadStatus) => {
-    console.log(percentComplete);
     setPercent(percentComplete);
     setStatus(uploadStatus === "Waiting" ? "Preparing File" : uploadStatus);
   };

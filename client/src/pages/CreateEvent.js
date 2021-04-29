@@ -208,11 +208,6 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
   };
   const handleChangeTimeZone = (event) => {
     setEventTimeZone(event.target.value);
-
-    console.log("event start time in UTC: ");
-    console.log(
-      momentTZ.tz(new Date(selectedStartDate), "UTC").format("YYYYMMDD HH:mm z")
-    );
   };
 
   const handleChangeEventLink = (event) => {
@@ -294,8 +289,6 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
 
     setIsloading(true);
     let response = false;
-
-    console.log("handle submit form called");
 
     response = await createEvent(
       eventTitle,

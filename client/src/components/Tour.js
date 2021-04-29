@@ -178,6 +178,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
               <a
                 style={{ fontWeight: "bold", textDecoration: "underline" }}
                 href="https://www.eventscape.io/youtube-live-setup/"
+                target="_blank"
               >
                 here
               </a>

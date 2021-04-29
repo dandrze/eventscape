@@ -43,7 +43,6 @@ export default ({ output, errors, startOver }) => {
       title: "Errors",
       field: "rowErrors",
     },
-    
   ];
 
   const options = {
@@ -53,7 +52,7 @@ export default ({ output, errors, startOver }) => {
     toolbar: false,
   };
   console.log(errors);
-  console.log(output);
+
   return (
     <div>
       <div className={classes.heading} style={{ color: green[500] }}>
@@ -66,7 +65,8 @@ export default ({ output, errors, startOver }) => {
       </div>
       <div className={classes.paragraph}>
         Contacts causing errors will not be uploaded. See below for more
-        information. Finish the import by pressing Finish below, or fix the errors and{" "}
+        information. Finish the import by pressing Finish below, or fix the
+        errors and{" "}
         <span onClick={startOver} className={classes.link}>
           start over
         </span>

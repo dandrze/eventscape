@@ -262,8 +262,6 @@ const Froala = (props) => {
       const oldHtml = this.html.get();
       const newUrl = await imageManager(this);
 
-      console.log(newUrl);
-
       const newHtml = oldHtml.replace(/url\(.*?\)/, newUrl);
       this.html.set(newHtml);
     },
@@ -271,8 +269,6 @@ const Froala = (props) => {
 
   const imageManager = (editor) => {
     return new Promise(async (resolve, reject) => {
-      console.log(editor);
-
       const result = await editor.imageManager.show((res) => console.log(res));
       console.log(result);
       resolve(123);

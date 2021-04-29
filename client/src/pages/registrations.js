@@ -14,7 +14,6 @@ import ImportFile from "../components/ImportFile";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
 import AlertModal from "../components/AlertModal";
 
-
 const Registrations = (props) => {
   const [openForm, setOpenForm] = useState(false);
   const [openReg, setOpenReg] = useState(false);
@@ -27,11 +26,10 @@ const Registrations = (props) => {
     email: "",
   });
   const [edittingRowId, setEdittingRowId] = useState(null);
-  const [
-    triggerFetchRegistrations,
-    setTriggerFetchRegistrations,
-  ] = useState(false);
-  const [editFormErrorOpen, setEditFormErrorOpen] = useState(false)
+  const [triggerFetchRegistrations, setTriggerFetchRegistrations] = useState(
+    false
+  );
+  const [editFormErrorOpen, setEditFormErrorOpen] = useState(false);
 
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
@@ -42,7 +40,6 @@ const Registrations = (props) => {
   //Separated function because useEffect should not be an async function
   const fetchRegistrations = async () => {
     if (props.event.id) {
-      console.log("fetch reg called");
       props.fetchRegistrations(props.event.id);
       props.fetchRegistrationForm(props.event.id);
     }
@@ -54,16 +51,16 @@ const Registrations = (props) => {
   };
 
   const handleOpenForm = () => {
-    if(props.event.plan.PlanType.type === "free"){
-      setEditFormErrorOpen(true)
+    if (props.event.plan.PlanType.type === "free") {
+      setEditFormErrorOpen(true);
     } else {
-    setOpenForm(true);
+      setOpenForm(true);
     }
   };
 
   const handleGoToPlan = () => {
-    props.history.push("/plan")
-  }
+    props.history.push("/plan");
+  };
 
   const handleCloseReg = () => {
     fetchRegistrations();
@@ -165,7 +162,7 @@ const Registrations = (props) => {
           />
         }
       />
-       <AlertModal
+      <AlertModal
         open={editFormErrorOpen}
         onClose={() => setEditFormErrorOpen(false)}
         onContinue={handleGoToPlan}

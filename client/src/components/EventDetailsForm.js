@@ -178,11 +178,6 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
   };
   const handleChangeTimeZone = (event) => {
     setEventTimeZone(event.target.value);
-
-    console.log("event start time in UTC: ");
-    console.log(
-      momentTZ.tz(new Date(selectedStartDate), "UTC").format("YYYYMMDD HH:mm z")
-    );
   };
 
   const handleChangeregistrationRequired = (event) => {

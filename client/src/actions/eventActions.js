@@ -35,7 +35,6 @@ export const createEvent = (
   };
 
   try {
-    console.log("create event called");
     const res = await api.post("/api/event", {
       event,
       communications: emaillistTemplate(startDate),

@@ -137,6 +137,5 @@ export const saveStreamSettings = (index, updatedProps) => async (
 };
 
 export const simulateHover = (index) => async (dispatch) => {
-  console.log(index);
   dispatch({ type: SIMULATE_HOVER, payload: index });
 };

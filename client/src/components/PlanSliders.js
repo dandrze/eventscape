@@ -121,8 +121,6 @@ export default ({ closeAndUpdate, event, currentPlan, pricing }) => {
       isCancel: changePlanType === "cancel",
     });
 
-    console.log("update called");
-
     closeAndUpdate();
   };
 
@@ -146,7 +144,7 @@ export default ({ closeAndUpdate, event, currentPlan, pricing }) => {
   const contactUs = viewers > 5000 || streamingTime > 8; // Contact us for events with over 5000 viewers or 8 hours of streaming time.
 
   return (
-    <div style={{paddingBottom: "12px"}}>
+    <div style={{ paddingBottom: "12px" }}>
       <AlertModal
         open={essentialsAlertOpen}
         onClose={closeEssentialsAlert}
@@ -155,7 +153,7 @@ export default ({ closeAndUpdate, event, currentPlan, pricing }) => {
         closeText="Go Back"
         continueText="Cancel Pro Plan"
       />
-      <div style={{padding: "0px 18px"}}>
+      <div style={{ padding: "0px 18px" }}>
         <Typography id="unique-viewers-slider" align="center" gutterBottom>
           Maximum Viewers
         </Typography>

@@ -68,8 +68,6 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       description,
     });
 
-    console.log(event);
-
     // create a default chatroom
     const chatRoom = await ChatRoom.create({
       event: event.id,
@@ -537,9 +535,6 @@ router.post("/api/event/permissions", requireAuth, async (req, res, next) => {
       targetAccountCreated
     );
 
-    console.log("account created with " + emailAddress);
-    // }
-
     res.json(permission);
   } catch (error) {
     next(error);
@@ -550,7 +545,6 @@ router.post(
   "/api/event/transfer-ownership",
   requireAuth,
   async (req, res, next) => {
-    console.log(req.body);
     const { eventId, oldAccountId, newAccountId } = req.body;
 
     try {
