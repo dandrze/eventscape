@@ -16,15 +16,16 @@ import {
   followUp,
 } from "./emailTemplates";
 
-export const regPageModelTemplate = (
+export const regPageModelTemplate = ({
   title,
   startDate,
   endDate,
   timeZone,
-  description
-) => {
+  description,
+  logo,
+}) => {
   return [
-    { html: logoHeaderModel(), name: "banner" },
+    { html: logoHeaderModel(logo), name: "banner" },
     {
       html: heroBannerModel(title),
       name: "heroBanner",
@@ -43,11 +44,15 @@ export const regPageModelTemplate = (
   ];
 };
 
-export const eventPageModelTemplate = (title, startDate, endDate, timeZone) => {
+export const eventPageModelTemplate = ({
+  title,
+
+  logo,
+}) => {
   return [
     {
-      html: logoHeaderRightModel(),
-      name: "bannerRight",
+      html: logoHeaderModel(logo),
+      name: "banner",
     },
     {
       html: heroBannerModel(title),

@@ -32,12 +32,15 @@ export const heroBannerModel = (eventTitle = "default") => {
 `;
 };
 
-export const logoHeaderModel = () => {
+export const logoHeaderModel = (logo) => {
+  const logoUrl = logo
+    ? logo
+    : "https://eventscape-assets.s3.amazonaws.com/logos/Eventscape-your-logo-bw-2.png";
   return `<div style="background-position: bottom;
   background-size: cover;
   overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 20px; display: block;">
-            <img src="https://eventscape-assets.s3.amazonaws.com/logos/Eventscape-your-logo-bw-2.png" style="width: 150px;" class="fr-fic fr-dib fr-fil">
+            <img src="${logoUrl}" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
     </div>
     `;

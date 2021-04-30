@@ -18,7 +18,8 @@ export const createEvent = (
   timeZone,
   primaryColor,
   registrationRequired,
-  description
+  description,
+  logo
 ) => async (dispatch) => {
   const event = {
     title,
@@ -29,14 +30,18 @@ export const createEvent = (
     timeZone,
     primaryColor,
     registrationRequired,
-    regPageModel: regPageModelTemplate(
+    regPageModel: regPageModelTemplate({
       title,
       startDate,
       endDate,
       timeZone,
-      description
-    ),
-    eventPageModel: eventPageModelTemplate(title, startDate, endDate, timeZone),
+      description,
+      logo,
+    }),
+    eventPageModel: eventPageModelTemplate({
+      title,
+      logo,
+    }),
     description,
   };
 

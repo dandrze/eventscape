@@ -16,10 +16,12 @@ import MenuItem from "@material-ui/core/MenuItem";
 import InputLabel from "@material-ui/core/InputLabel";
 import Radio from "@material-ui/core/Radio";
 import RadioGroup from "@material-ui/core/RadioGroup";
+import PublishIcon from "@material-ui/icons/Publish";
 import Grid from "@material-ui/core/Grid";
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import { HexColorPicker, HexColorInput } from "react-colorful";
+import ReactS3Uploader from "react-s3-uploader";
 
 import {
   MuiPickersUtilsProvider,
@@ -82,7 +84,7 @@ const Question = ({ question, next, children, input, skip }) => {
   );
 };
 
-function CreateEvent({ createEvent, isLinkAvailable, history }) {
+function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const classes = useStyles();
 
   const [step, setStep] = useState(0);
@@ -104,6 +106,10 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
   );
   const [color, setColor] = useState("#B0281C");
   const [isLoading, setIsloading] = useState(false);
+  const [status, setStatus] = useState("");
+  const [percent, setPercent] = useState("");
+  const [logo, setLogo] = useState("");
+  const [logoHelperText, setLogoHelperText] = useState("");
 
   useEffect(() => {
     const startDate = new Date();
@@ -260,6 +266,17 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
     return true;
   };
 
+  const handleProgress = (percentComplete, uploadStatus) => {
+    setPercent(percentComplete);
+    setStatus(uploadStatus === "Waiting" ? "Preparing File" : uploadStatus);
+  };
+
+  const handleFinish = (result) => {
+    const url = `https://eventscape-assets.s3.amazonaws.com/${result.filename}`;
+
+    setLogo(url);
+  };
+
   const copyLink = () => {
     navigator.clipboard.writeText(eventLink + ".eventscape.io");
     toast.success("Copied to clipboard!", {
@@ -269,10 +286,22 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
   };
 
   const handleNext = () => {
-    if (step === 8) {
+    if (step === 9) {
       handleSubmitForm();
     } else {
       setStep((prevStep) => prevStep + 1);
+    }
+  };
+
+  const handleSubmitLogo = () => {
+    if (!logo) {
+      setLogoHelperText(
+        percent
+          ? "Please wait for the logo upload to complete before moving to the next step"
+          : "Please upload your logo"
+      );
+    } else {
+      handleNext();
     }
   };
 
@@ -299,7 +328,8 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
       eventTimeZone,
       color,
       registrationRequired === "required",
-      eventDescription
+      eventDescription,
+      logo
     );
 
     setIsloading(false);
@@ -1534,7 +1564,72 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
             }
           />
         );
+
       case 8:
+        return (
+          <Question
+            question="Let's see your logo! Upload it below."
+            next={handleSubmitLogo}
+            skip={handleNext}
+            input={
+              <>
+                <label>
+                  <div
+                    style={{
+                      width: "400px",
+                      borderRadius: "15px",
+                      height: "100px",
+                      border: "1px dashed #cccccc",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      background: "#fcfcfc",
+                      cursor: "pointer",
+                      margin: "0px 40px",
+                    }}
+                  >
+                    {status ? (
+                      <div>
+                        <label style={{ display: "block" }}>{status}</label>
+                        {percent === 100 ? null : (
+                          <label>{percent}% Complete</label>
+                        )}
+                      </div>
+                    ) : (
+                      <div>
+                        <PublishIcon
+                          style={{ fontSize: "40px", color: "#b0281c" }}
+                        />
+                        <span style={{ margin: "15px", fontWeight: 500 }}>
+                          Upload Image File
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                  <ReactS3Uploader
+                    style={{ display: "none" }}
+                    onProgress={handleProgress}
+                    onError={console.log}
+                    onFinish={handleFinish}
+                    signingUrl="/api/s3/sign"
+                    signingUrlMethod="GET"
+                    accept="image/*"
+                    s3path={`user-uploads/user-${user.id}/`}
+                    contentDisposition="auto"
+                    scrubFilename={(filename) =>
+                      filename.replace(/[^\w\d_\-.]+/gi, "")
+                    }
+                    autoUpload={true}
+                  />
+                </label>
+                <div style={{ fontSize: "12px", color: "red" }}>
+                  {logoHelperText}
+                </div>
+              </>
+            }
+          />
+        );
+      case 9:
         return (
           <Question
             question="What would you like your event URL to be?"
@@ -1616,4 +1711,8 @@ function CreateEvent({ createEvent, isLinkAvailable, history }) {
   );
 }
 
-export default connect(null, actions)(CreateEvent);
+const mapStateToProps = (state) => {
+  return { event: state.event, model: state.model, user: state.user };
+};
+
+export default connect(mapStateToProps, actions)(CreateEvent);

@@ -21,9 +21,6 @@ const Design = ({ event, model, fetchModel, user }) => {
   const page =
     useParams().page || (event.registrationRequired ? "registration" : "event");
 
-  console.log(useParams().page);
-  console.log(page);
-
   useEffect(() => {
     // only fetch the model if the event data is finished fetching. Otherwise it is an empty obect
     if (Object.keys(event).length !== 0) {
