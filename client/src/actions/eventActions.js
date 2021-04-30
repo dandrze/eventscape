@@ -29,7 +29,13 @@ export const createEvent = (
     timeZone,
     primaryColor,
     registrationRequired,
-    regPageModel: regPageModelTemplate(title, startDate, endDate, timeZone),
+    regPageModel: regPageModelTemplate(
+      title,
+      startDate,
+      endDate,
+      timeZone,
+      description
+    ),
     eventPageModel: eventPageModelTemplate(title, startDate, endDate, timeZone),
     description,
   };

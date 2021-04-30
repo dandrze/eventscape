@@ -67,7 +67,7 @@ const Question = ({ question, next, children, input, skip }) => {
             }}
             onClick={skip}
           >
-            Skip
+            Skip for now
           </button>
         ) : null}
         <button

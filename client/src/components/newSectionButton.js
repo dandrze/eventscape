@@ -213,7 +213,8 @@ const NewSectionButton = (props) => {
                             registrationFormDescription(
                               props.event.startDate,
                               props.event.endDate,
-                              props.event.timeZone
+                              props.event.timeZone,
+                              props.event.description
                             ),
                             true,
                             registrationFormReact

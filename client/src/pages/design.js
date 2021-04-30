@@ -18,15 +18,17 @@ const Design = ({ event, model, fetchModel, user }) => {
   const [openTour, setOpenTour] = useState(
     !user.tourComplete && Boolean(tourRequired)
   );
-  const page = useParams().page || "event";
+  const page =
+    useParams().page || (event.registrationRequired ? "registration" : "event");
+
+  console.log(useParams().page);
+  console.log(page);
 
   useEffect(() => {
     // only fetch the model if the event data is finished fetching. Otherwise it is an empty obect
     if (Object.keys(event).length !== 0) {
       const modelId =
-        page === pageNames.REGISTRATION
-          ? event.RegPageModelId
-          : event.EventPageModelId;
+        page === "registration" ? event.RegPageModelId : event.EventPageModelId;
 
       fetchModel(modelId);
     }

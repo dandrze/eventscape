@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, useHistory } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
@@ -229,8 +229,10 @@ function NavBar3(props) {
   const openBlocked = props.openBlocked;
   const open = props.settings.sideDrawerOpen && !openBlocked;
   const highlight = props.highlight;
-  const [openDesignNested, setOpenDesignNested] = React.useState(false);
-  const [drawerPreviouslyOpen, setDrawerPreviouslyOpen] = React.useState(true);
+  const [openDesignNested, setOpenDesignNested] = useState(
+    highlight === "design"
+  );
+  const [drawerPreviouslyOpen, setDrawerPreviouslyOpen] = useState(true);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -246,7 +248,7 @@ function NavBar3(props) {
     }
   };
 
-  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
