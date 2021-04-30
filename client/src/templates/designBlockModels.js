@@ -35,7 +35,7 @@ export const heroBannerModel = (eventTitle = "default") => {
 export const logoHeaderModel = (logo) => {
   const logoUrl = logo
     ? logo
-    : "https://eventscape-assets.s3.amazonaws.com/logos/Eventscape-your-logo-bw-2.png";
+    : "https://eventscape-assets.s3.amazonaws.com/assets/Eventscape-your-logo-grey.png";
   return `<div style="background-position: bottom;
   background-size: cover;
   overflow: hidden" data-info="background image/color. Do not modify." >
