@@ -611,7 +611,7 @@ export const sponsorGrid = (columns, rows, box) => {
   let html = `<div style="background-position: bottom;
   background-size: cover;
   overflow: hidden" data-info="background image/color. Do not modify." >
-  <h1 style="font-size: 30px;">Thank you to our sponsors</h1>
+  <h1 style="font-size: 26px;">Thank you to our sponsors</h1>
   <div class="container block-container">`;
   const columnClass = box ? "sponsor-box-border" : "sponsor-box-no-border";
   while (row < rows) {
