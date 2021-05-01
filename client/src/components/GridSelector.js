@@ -105,12 +105,20 @@ export default ({ addSection }) => {
       </div>
       <div>
         <div>Preview</div>
-        <FroalaEditorView
-          model={htmlOutput.replace(
-            `contenteditable="true"`,
-            `contenteditable="false"`
-          )}
-        />
+        <div
+          style={{
+            padding: "20px",
+            border: "1px solid #eaeaea",
+            margin: "20px 0px",
+          }}
+        >
+          <FroalaEditorView
+            model={htmlOutput.replace(
+              `contenteditable="true"`,
+              `contenteditable="false"`
+            )}
+          />
+        </div>
       </div>
       <div
         style={{
