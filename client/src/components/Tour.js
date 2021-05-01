@@ -141,8 +141,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
       case 3:
         return (
           <div
-            className="tour-box arrow-bottom"
-            style={{ position: "absolute", top: 80, right: 75 }}
+            className="tour-box arrow-bottom-left"
+            style={{ position: "absolute", top: 80, left: 310 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Click on any image, and then click <SyncAltIcon /> to replace it
@@ -167,8 +167,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
       case 4:
         return (
           <div
-            className="tour-box arrow-left-bottom"
-            style={{ position: "absolute", top: 225, left: 430 }}
+            className="tour-box arrow-bottom-left"
+            style={{ position: "absolute", top: 328, left: 350 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Below is your livestream window. To replace the placeholder with
@@ -203,6 +203,32 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
       case 5:
         return (
           <div
+            className="tour-box arrow-bottom-left"
+            style={{ position: "absolute", top: 55, left: 188 }}
+          >
+            <DialogContentText style={{ width: "100%" }}>
+              You may add a section by clicking on the + icon. Options include
+              sponsor logos, text, event schedule, and more.
+            </DialogContentText>
+            <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
+                Continue
+              </Button>
+            </div>
+          </div>
+        );
+      case 6:
+        return (
+          <div
             className="tour-box arrow-left"
             style={{ position: "absolute", top: 122, left: 215 }}
           >
@@ -226,7 +252,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div
             className="tour-box arrow-left"
@@ -253,11 +279,11 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 7:
+      case 8:
         return (
           <div
             className="tour-box arrow-left"
-            style={{ position: "absolute", top: 265, left: 215 }}
+            style={{ position: "absolute", top: 350, left: 215 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               You may view all your registrations on the Registrations tab as
@@ -280,11 +306,11 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
           </div>
         );
 
-      case 8:
+      case 9:
         return (
           <div
             className="tour-box arrow-left"
-            style={{ position: "absolute", top: 315, left: 215 }}
+            style={{ position: "absolute", top: 400, left: 215 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               The Polls tab contains everything you need to launch polls during
@@ -306,11 +332,11 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 9:
+      case 10:
         return (
           <div
             className="tour-box arrow-left"
-            style={{ position: "absolute", top: 360, left: 215 }}
+            style={{ position: "absolute", top: 450, left: 215 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               The Analytics tab shows you data on your event viewers.
@@ -331,11 +357,11 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 10:
+      case 11:
         return (
           <div
             className="tour-box arrow-left"
-            style={{ position: "absolute", top: 410, left: 215 }}
+            style={{ position: "absolute", top: 500, left: 215 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               The Messaging tab is where you interact with your attendees
@@ -469,8 +495,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
       case 3:
         return (
           <div
-            className="tour-box arrow-bottom"
-            style={{ position: "absolute", top: 80, right: 75 }}
+            className="tour-box arrow-bottom-left"
+            style={{ position: "absolute", top: 80, left: 310 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Click on any image, and then click <SyncAltIcon /> to replace it
@@ -495,8 +521,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
       case 4:
         return (
           <div
-            className="tour-box arrow-left-bottom"
-            style={{ position: "absolute", top: 225, left: 430 }}
+            className="tour-box arrow-bottom-left"
+            style={{ position: "absolute", top: 328, left: 350 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Below is your livestream window. To replace the placeholder with
@@ -524,6 +550,32 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
       case 5:
         return (
           <div
+            className="tour-box arrow-bottom-left"
+            style={{ position: "absolute", top: 55, left: 188 }}
+          >
+            <DialogContentText style={{ width: "100%" }}>
+              You may add a section by clicking on the + icon. Options include
+              sponsor logos, text, event schedule, and more.
+            </DialogContentText>
+            <div className={classes.buttonContainer}>
+              <Button
+                onClick={completeTour}
+                className="skip-tour-button disable-focus"
+              >
+                Skip Tour
+              </Button>
+              <Button
+                onClick={handleNext}
+                className="tour-button disable-focus"
+              >
+                Continue
+              </Button>
+            </div>
+          </div>
+        );
+      case 6:
+        return (
+          <div
             className="tour-box arrow-left"
             style={{ position: "absolute", top: 220, left: 215 }}
           >
@@ -547,7 +599,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 6:
+      case 7:
         return (
           <div
             className="tour-box arrow-left"
@@ -572,7 +624,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 7:
+      case 8:
         return (
           <div
             className="tour-box arrow-left"

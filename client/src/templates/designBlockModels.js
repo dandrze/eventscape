@@ -32,6 +32,37 @@ export const heroBannerModel = (eventTitle = "default") => {
 `;
 };
 
+export const heroBannerModelNarrow = (eventTitle = "default") => {
+  return `<div style=" background-image: url(https://eventscape-assets.s3.amazonaws.com/free-images/abstract-5719523_1920.jpg);
+    background-position: bottom;
+    height: auto;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 50px 20px;
+    box-shadow: rgba(35, 35, 35, 0.667) 0px 0px 0px 5000px inset;
+    overflow: hidden" data-info="background image/color. Do not modify." >
+    <div>
+    <span class="hero-banner">
+    <h1 class="title">${eventTitle}</h1>
+    </span>
+    </div>
+    </div>
+  
+      <style>
+          .title {
+              padding: 0;
+              font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+              font-weight: 300;
+              font-size: 96px;
+              color: #ffffff;
+          }
+       
+      </style>
+  `;
+};
+
 export const logoHeaderModel = (logo) => {
   const logoUrl = logo
     ? logo

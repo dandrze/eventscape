@@ -2,6 +2,7 @@ import {
   logoHeaderModel,
   logoHeaderRightModel,
   heroBannerModel,
+  heroBannerModelNarrow,
   registrationFormDescription,
   titleTimeModel,
   streamChatReact,
@@ -55,7 +56,7 @@ export const eventPageModelTemplate = ({
       name: "banner",
     },
     {
-      html: heroBannerModel(title),
+      html: heroBannerModelNarrow(title),
       name: "heroBanner",
     },
     {
