@@ -90,6 +90,7 @@ const BackgroundImageSelector = ({
   };
 
   const setBackgroundImage = (url) => {
+    setCurrentBackgroundImageURL(url);
     updateBackgroundImage(url);
     setOpenSelectImage(false);
   };
@@ -104,6 +105,7 @@ const BackgroundImageSelector = ({
     background.style.backgroundPosition = `center`;
     background.style.backgroundSize = `cover`;
 
+    setCurrentBackgroundImageURL(url);
     updateSection(sectionIndex, newHtml.innerHTML);
     setOpenSelectImage(false);
   };
@@ -396,6 +398,7 @@ const Preview = ({
   handleClickSelectImage,
   handleClickRemoveImage,
 }) => {
+  console.log(currentBackgroundImageURL);
   return (
     <div style={{ padding: "18px" }}>
       {currentBackgroundImageURL ? (
@@ -404,7 +407,7 @@ const Preview = ({
             style={{
               width: "284px",
               height: "160px",
-              backgroundImage: currentBackgroundImageURL,
+              backgroundImage: `url(${currentBackgroundImageURL})`,
               backgroundPosition: "bottom",
               backgroundSize: "cover",
             }}

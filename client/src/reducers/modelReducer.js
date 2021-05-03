@@ -19,7 +19,7 @@ export default function (
     status: "draft",
     sections: [],
     simulateHover: null,
-    backgroundColor: "rgba(0,0,0,0)",
+    backgroundColor: "rgba(0,0,0,0.3)",
     backgroundImage: "",
   },
   action
