@@ -23,6 +23,8 @@ const BackgroundImageSelector = ({
   sectionIndex,
   model,
   updateSection,
+  isPrimaryBg,
+  updateBackground,
 }) => {
   const [openSelectImage, setOpenSelectImage] = useState(false);
   const [freeImageUrls, setFreeImageUrls] = useState([]);
@@ -38,27 +40,32 @@ const BackgroundImageSelector = ({
   }, []);
 
   useEffect(() => {
-    // get current background color overlay
-    let pageHtml = document.createElement("div");
-    pageHtml.innerHTML = model.sections[sectionIndex].html;
+    if (isPrimaryBg) {
+      setCurrentBackgroundImageURL(model.background.image);
+      setColor(model.background.color);
+    } else {
+      // get current background color overlay
+      let pageHtml = document.createElement("div");
+      pageHtml.innerHTML = model.sections[sectionIndex].html;
 
-    let backgroundDiv = pageHtml.getElementsByTagName("div")[0];
+      let backgroundDiv = pageHtml.getElementsByTagName("div")[0];
 
-    let rgbaList = backgroundDiv.style.boxShadow
-      .substring(
-        backgroundDiv.style.boxShadow.indexOf("(") + 1,
-        backgroundDiv.style.boxShadow.indexOf(")")
-      )
-      .split(", ");
+      let rgbaList = backgroundDiv.style.boxShadow
+        .substring(
+          backgroundDiv.style.boxShadow.indexOf("(") + 1,
+          backgroundDiv.style.boxShadow.indexOf(")")
+        )
+        .split(", ");
 
-    setColor({
-      r: parseInt(rgbaList[0]),
-      g: parseInt(rgbaList[1]),
-      b: parseInt(rgbaList[2]),
-      a: parseFloat(rgbaList[3]),
-    });
+      setColor({
+        r: parseInt(rgbaList[0]),
+        g: parseInt(rgbaList[1]),
+        b: parseInt(rgbaList[2]),
+        a: parseFloat(rgbaList[3]),
+      });
 
-    setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
+      setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
+    }
   }, []);
 
   const fetchFreeImageUrls = async () => {
@@ -82,6 +89,10 @@ const BackgroundImageSelector = ({
   };
 
   const setBackgroundImage = (url) => {
+    updateBackground({ image: url, color });
+    setOpenSelectImage(false);
+  };
+  const setSectionBackgroundImage = (url) => {
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
@@ -129,6 +140,28 @@ const BackgroundImageSelector = ({
     updateSection(sectionIndex, newHtml.innerHTML);
   };
 
+  const handleUpdateSectionOverlay = (newColor) => {
+    setColor(newColor);
+
+    const newHtml = document.createElement("div");
+    newHtml.innerHTML = model.sections[sectionIndex].html;
+
+    // get a reference to the base div
+    const background = newHtml.getElementsByTagName("div")[0];
+
+    // convert rgba object to string
+    const overlayRGBA = `rgba(${newColor.r}, ${newColor.g}, ${newColor.b}, ${
+      newColor.a || 0
+    })`;
+
+    // Modify the styling of the base div with a large box shadow to act as the image overlay
+    // This code modifies the original newHTML object
+    background.style.boxShadow = `inset 0 0 0 5000px ${overlayRGBA}`;
+
+    // update the section with the new html
+    updateSection(sectionIndex, newHtml.innerHTML);
+  };
+
   return (
     <div>
       <Modal1
@@ -137,7 +170,9 @@ const BackgroundImageSelector = ({
         content={
           <SelectImage
             user={user}
-            setBackgroundImage={setBackgroundImage}
+            setBackgroundImage={
+              isPrimaryBg ? setBackgroundImage : setSectionBackgroundImage
+            }
             freeImageUrls={freeImageUrls}
             userImageUrls={userImageUrls}
           />
@@ -163,7 +198,9 @@ const BackgroundImageSelector = ({
             <label>Background Color Overlay</label>
             <RgbaColorPicker
               color={color}
-              onChange={handleUpdateOverlay}
+              onChange={
+                isPrimaryBg ? handleUpdateOverlay : handleUpdateSectionOverlay
+              }
               id="event-color"
             />
           </div>

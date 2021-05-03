@@ -212,7 +212,7 @@ export const registrationFormDescription = (
   </div>`;
 };
 
-export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
+export const simpleTitle = (eventTitle = "default", startTime, endTime) => {
   const startTimeParsed = Date.parse(startTime);
   const endTimeParsed = Date.parse(endTime);
 
@@ -224,7 +224,7 @@ export const titleTimeModel = (eventTitle = "default", startTime, endTime) => {
     endDifferentDay +
     format(endTimeParsed, "h:mm a zzz");
 
-  return `<div style="overflow: hidden;" contenteditable="false">
+  return `<div style="overflow: hidden; border-radius: 15px; box-shadow: rgb(250, 250, 250) 0px 0px 0px 5000px inset;" contenteditable="false">
             <div style="margin: 1rem 1rem 1rem 1rem;">
                 <div class="title1" contenteditable="true">${eventTitle}</div>
             </div>

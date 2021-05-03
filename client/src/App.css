@@ -1096,3 +1096,11 @@ select:focus {
 }
 
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
+
+.page-section-container {
+  padding: 40px;
+}
+
+.page-section {
+  margin-bottom: 20px;
+}

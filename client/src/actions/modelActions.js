@@ -13,6 +13,7 @@ import {
   UPDATE_REACT_COMPONENT,
   FLAG_UPDATE,
   SIMULATE_HOVER,
+  UPDATE_BACKGROUND,
 } from "./types";
 import { pageNames } from "../model/enums";
 
@@ -138,4 +139,9 @@ export const saveStreamSettings = (index, updatedProps) => async (
 
 export const simulateHover = (index) => async (dispatch) => {
   dispatch({ type: SIMULATE_HOVER, payload: index });
+};
+
+export const updateBackground = ({ image, color }) => async (dispatch) => {
+  console.log({ image, color });
+  dispatch({ type: UPDATE_BACKGROUND, payload: { image, color } });
 };

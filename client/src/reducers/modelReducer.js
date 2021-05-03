@@ -9,6 +9,7 @@ import {
   FLAG_UPDATE,
   UPDATE_REACT_COMPONENT,
   SIMULATE_HOVER,
+  UPDATE_BACKGROUND,
 } from "../actions/types";
 
 export default function (
@@ -17,6 +18,7 @@ export default function (
     status: "draft",
     sections: [],
     simulateHover: null,
+    background: { color: "", image: "" },
   },
   action
 ) {
@@ -58,9 +60,10 @@ export default function (
         state.sections[action.payload.index + action.payload.offset];
       newSections[action.payload.index + action.payload.offset] =
         state.sections[action.payload.index];
-      return { isUnsaved: true, sections: newSections };
+      return { ...state, isUnsaved: true, sections: newSections };
     case FETCH_PAGE_MODEL:
       return {
+        ...state,
         isUnsaved: false,
         id: action.payload.id,
         sections: action.payload.sections,
@@ -83,6 +86,8 @@ export default function (
       };
     case SIMULATE_HOVER:
       return { ...state, simulateHover: action.payload };
+    case UPDATE_BACKGROUND:
+      return { ...state, background: action.payload };
     default:
       return state;
   }

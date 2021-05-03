@@ -27,7 +27,7 @@ import paragraph2Thumb from "./designBlockThumbnails/paragraph2.png";
 import {
   logoHeaderModel,
   heroBannerModel,
-  titleTimeModel,
+  simpleTitle,
   streamChatReact,
   timeDescription,
   registrationFormReact,
@@ -188,13 +188,7 @@ const NewSectionButton = (props) => {
                         src={titleThumb}
                         handleClick={() => {
                           handleClose();
-                          handleAddSection(
-                            titleTimeModel(
-                              props.event.title,
-                              props.event.startDate,
-                              props.event.endDate
-                            )
-                          );
+                          handleAddSection(simpleTitle(props.event.title));
                         }}
                       />
                     </Grid>

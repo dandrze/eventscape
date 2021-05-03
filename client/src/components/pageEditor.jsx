@@ -14,6 +14,8 @@ import AlertModal from "./AlertModal";
 import { pageNames } from "../model/enums";
 import BrandingTop from "./BrandingTop";
 import BrandingBottom from "./BrandingBottom";
+import Modal1 from "./Modal1";
+import BackgroundImageSelector from "./BackgroundImageSelector";
 
 const PageEditor = (props) => {
   const { history } = props;
@@ -24,6 +26,7 @@ const PageEditor = (props) => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [discardOpen, setDiscardOpen] = useState(false);
   const [removeLogoErrorOpen, setRemoveLogoErrorOpen] = useState(false);
+  const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -93,6 +96,14 @@ const PageEditor = (props) => {
     setSaveLoading(false);
   };
 
+  const handleClickEditBackground = () => {
+    setOpenBackgroundImage(true);
+  };
+
+  const handleCloseBackgroundSettings = () => {
+    setOpenBackgroundImage(false);
+  };
+
   return (
     <div>
       <Prompt when={props.model.isUnsaved} message={handleBlockedNavigation} />
@@ -127,14 +138,15 @@ const PageEditor = (props) => {
 
       <div className="design">
         <div className="top-button-bar pt-5">
-        {props.event.plan.PlanType.type === "free" ? 
-          <button
-            className="Button1"
-            onClick={handleRemoveLogoError}
-            style={{ marginRight: "15px" }}
-          >
-            Remove Eventscape Logo
-          </button> : null}
+          {props.event.plan.PlanType.type === "free" ? (
+            <button
+              className="Button1"
+              onClick={handleRemoveLogoError}
+              style={{ marginRight: "15px" }}
+            >
+              Remove Eventscape Logo
+            </button>
+          ) : null}
           <Link
             className="button-bar-left"
             to={() =>
@@ -147,8 +159,17 @@ const PageEditor = (props) => {
             }
             target="_blank"
           >
-            <button className="Button1">Preview Page As Guest</button>
+            <button className="Button2" style={{ height: "32px" }}>
+              Preview Page As Guest
+            </button>
           </Link>
+          <button
+            className="Button2"
+            style={{ alignSelf: "flex-end" }}
+            onClick={handleClickEditBackground}
+          >
+            Edit Background Image
+          </button>
           {saveLoading ? (
             <div style={{ marginLeft: "auto", marginRight: "15px" }}>
               <CircularProgress />
@@ -190,14 +211,24 @@ const PageEditor = (props) => {
           )}
           <br></br>
         </div>
-        <div id="designBoard">
+        <div id="designBoard" style={{ position: "relative" }}>
           {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
-          <ul>
+          <div
+            style={{
+              backgroundImage: `url(${props.model.background.image})`,
+              width: "100%",
+              height: "100%",
+              position: "absolute",
+              backgroundSize: "cover",
+              backgroundPosition: "left",
+            }}
+          ></div>
+          <ul className="page-section-container">
             {props.model.sections.length === 0
               ? null
               : props.model.sections.map(function (section, index) {
                   return (
-                    <li key={section.id}>
+                    <li key={section.id} className="page-section">
                       <PageSectionEditor
                         section={section}
                         sectionIndex={index}
@@ -209,6 +240,19 @@ const PageEditor = (props) => {
           <BrandingBottom />
         </div>
       </div>
+      {/*Background Image Modal. */}
+
+      <Modal1
+        open={openBackgroundImage}
+        onClose={handleCloseBackgroundSettings}
+        isSideModal={true}
+        content={
+          <BackgroundImageSelector
+            isPrimaryBg={true}
+            handleClose={handleCloseBackgroundSettings}
+          />
+        }
+      />
     </div>
   );
 };
