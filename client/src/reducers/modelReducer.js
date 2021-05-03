@@ -9,7 +9,8 @@ import {
   FLAG_UPDATE,
   UPDATE_REACT_COMPONENT,
   SIMULATE_HOVER,
-  UPDATE_BACKGROUND,
+  UPDATE_BACKGROUND_IMAGE,
+  UPDATE_BACKGROUND_COLOR,
 } from "../actions/types";
 
 export default function (
@@ -18,7 +19,8 @@ export default function (
     status: "draft",
     sections: [],
     simulateHover: null,
-    background: { color: "", image: "" },
+    backgroundColor: "rgba(0,0,0,0)",
+    backgroundImage: "",
   },
   action
 ) {
@@ -86,8 +88,10 @@ export default function (
       };
     case SIMULATE_HOVER:
       return { ...state, simulateHover: action.payload };
-    case UPDATE_BACKGROUND:
-      return { ...state, background: action.payload };
+    case UPDATE_BACKGROUND_IMAGE:
+      return { ...state, backgroundImage: action.payload };
+    case UPDATE_BACKGROUND_COLOR:
+      return { ...state, backgroundColor: action.payload };
     default:
       return state;
   }

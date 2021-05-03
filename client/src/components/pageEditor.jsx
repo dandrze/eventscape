@@ -215,12 +215,13 @@ const PageEditor = (props) => {
           {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
           <div
             style={{
-              backgroundImage: `url(${props.model.background.image})`,
+              backgroundImage: `url(${props.model.backgroundImage})`,
               width: "100%",
               height: "100%",
               position: "absolute",
               backgroundSize: "cover",
               backgroundPosition: "left",
+              boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
             }}
           ></div>
           <ul className="page-section-container">

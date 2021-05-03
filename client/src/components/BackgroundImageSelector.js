@@ -24,7 +24,8 @@ const BackgroundImageSelector = ({
   model,
   updateSection,
   isPrimaryBg,
-  updateBackground,
+  updateBackgroundImage,
+  updateBackgroundColor,
 }) => {
   const [openSelectImage, setOpenSelectImage] = useState(false);
   const [freeImageUrls, setFreeImageUrls] = useState([]);
@@ -41,8 +42,8 @@ const BackgroundImageSelector = ({
 
   useEffect(() => {
     if (isPrimaryBg) {
-      setCurrentBackgroundImageURL(model.background.image);
-      setColor(model.background.color);
+      setCurrentBackgroundImageURL(model.backgroundImage);
+      setColor(model.backgroundColor);
     } else {
       // get current background color overlay
       let pageHtml = document.createElement("div");
@@ -89,7 +90,7 @@ const BackgroundImageSelector = ({
   };
 
   const setBackgroundImage = (url) => {
-    updateBackground({ image: url, color });
+    updateBackgroundImage(url);
     setOpenSelectImage(false);
   };
   const setSectionBackgroundImage = (url) => {
@@ -121,23 +122,12 @@ const BackgroundImageSelector = ({
   const handleUpdateOverlay = (newColor) => {
     setColor(newColor);
 
-    const newHtml = document.createElement("div");
-    newHtml.innerHTML = model.sections[sectionIndex].html;
-
-    // get a reference to the base div
-    const background = newHtml.getElementsByTagName("div")[0];
-
     // convert rgba object to string
     const overlayRGBA = `rgba(${newColor.r}, ${newColor.g}, ${newColor.b}, ${
       newColor.a || 0
     })`;
 
-    // Modify the styling of the base div with a large box shadow to act as the image overlay
-    // This code modifies the original newHTML object
-    background.style.boxShadow = `inset 0 0 0 5000px ${overlayRGBA}`;
-
-    // update the section with the new html
-    updateSection(sectionIndex, newHtml.innerHTML);
+    updateBackgroundColor(overlayRGBA);
   };
 
   const handleUpdateSectionOverlay = (newColor) => {

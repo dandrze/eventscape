@@ -13,7 +13,8 @@ import {
   UPDATE_REACT_COMPONENT,
   FLAG_UPDATE,
   SIMULATE_HOVER,
-  UPDATE_BACKGROUND,
+  UPDATE_BACKGROUND_COLOR,
+  UPDATE_BACKGROUND_IMAGE,
 } from "./types";
 import { pageNames } from "../model/enums";
 
@@ -141,7 +142,10 @@ export const simulateHover = (index) => async (dispatch) => {
   dispatch({ type: SIMULATE_HOVER, payload: index });
 };
 
-export const updateBackground = ({ image, color }) => async (dispatch) => {
-  console.log({ image, color });
-  dispatch({ type: UPDATE_BACKGROUND, payload: { image, color } });
+export const updateBackgroundImage = (url) => async (dispatch) => {
+  dispatch({ type: UPDATE_BACKGROUND_IMAGE, payload: url });
+};
+
+export const updateBackgroundColor = (color) => async (dispatch) => {
+  dispatch({ type: UPDATE_BACKGROUND_COLOR, payload: color });
 };
