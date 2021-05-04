@@ -190,7 +190,18 @@ const Published = (props) => {
         />
         <style>{theme(props.event.primaryColor)}</style>
         {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
-        <ul>
+        <div
+          style={{
+            backgroundImage: `url(${props.model.backgroundImage})`,
+            width: "100%",
+            height: "100%",
+            position: "absolute",
+            backgroundSize: "cover",
+            backgroundPosition: "left",
+            boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+          }}
+        ></div>
+        <ul className="floating-section-container">
           {props.model.sections.map(function (section) {
             return section.isReact ? (
               createElement(mapReactComponent[section.reactComponent.name], {
