@@ -337,17 +337,30 @@ label {
 
 .addSection {
   border: 0px;
-  background-color: transparent;
+  background-color: #b0281c;
   margin: 0;
-  padding: 0;
-  position: relative;
-  float: left;
+  padding: 6px 12px;
+  position: absolute;
+  z-index: 999;
   transition: all 0.2s ease-in-out;
+  color: #fff;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  left: calc(50% - 52px);
+  bottom: -14px;
 }
 
 .addSection:hover {
   transform: scale(1.15);
   cursor: pointer;
+}
+
+.addSectionContainer {
+  position: absolute;
+  border: 1px solid rgb(176 40 28 / 80%);
+  width: 100%;
+  left: 0px;
+  z-index: 999;
 }
 
 #plusDropIcon {
@@ -1097,10 +1110,10 @@ select:focus {
 
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
 
-.page-section-container {
+.floating-section-container {
   padding: 40px;
 }
 
-.page-section {
+.floating-section {
   margin-bottom: 20px;
 }

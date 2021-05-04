@@ -1,10 +1,7 @@
 import api from "../api/server";
-import {
-  FETCH_ATTENDEE,
-  FETCH_EVENT,
-  FETCH_PAGE_MODEL,
-} from "../actions/types";
+import { FETCH_ATTENDEE, FETCH_EVENT } from "../actions/types";
 import { pageNames } from "../model/enums";
+import { fetchModel } from "./modelActions";
 
 export const fetchLivePage = (link, hash) => async (dispatch) => {
   const event = await api.get("/api/event/link", { params: { link } });
@@ -22,12 +19,7 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
       pageType = pageNames.EVENT;
     }
 
-    const model = await api.get("/api/model/id", { params: { id: modelId } });
-
-    await dispatch({
-      type: FETCH_PAGE_MODEL,
-      payload: { id: null, sections: model.data },
-    });
+    dispatch(fetchModel(modelId));
   }
 
   return { event: event.data, pageType };

@@ -78,7 +78,7 @@ const DesignBlockPreview = ({ src, handleClick }) => {
   );
 };
 
-const NewSectionButton = (props) => {
+const NewSectionButton = ({ event, addSection, prevIndex, position }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [selection, setSelection] = React.useState("");
@@ -97,7 +97,7 @@ const NewSectionButton = (props) => {
     isReact = false,
     reactComponent = null
   ) => {
-    await props.addSection(props.prevIndex, html, isReact, reactComponent);
+    await addSection(prevIndex, html, isReact, reactComponent);
   };
 
   const handleChangeBlockCat = (event) => {
@@ -106,16 +106,18 @@ const NewSectionButton = (props) => {
 
   return (
     <div>
-      <button
-        className="addSection"
-        onClick={() => {
-          handleOpen();
-        }}
-      >
+      <div className="addSectionContainer">
         <Tooltip title="Add Design Block">
-          <img src={PlusDropIcon} id="plusDropIcon" height="40px"></img>
+          <button
+            className="addSection"
+            onClick={() => {
+              handleOpen();
+            }}
+          >
+            ADD SECTION
+          </button>
         </Tooltip>
-      </button>
+      </div>
 
       <Modal1
         open={open}
@@ -177,7 +179,7 @@ const NewSectionButton = (props) => {
                         src={heroBanner}
                         handleClick={() => {
                           handleClose();
-                          handleAddSection(heroBannerModel(props.event.title));
+                          handleAddSection(heroBannerModel(event.title));
                         }}
                       />
                     </Grid>
@@ -188,7 +190,7 @@ const NewSectionButton = (props) => {
                         src={titleThumb}
                         handleClick={() => {
                           handleClose();
-                          handleAddSection(simpleTitle(props.event.title));
+                          handleAddSection(simpleTitle(event.title));
                         }}
                       />
                     </Grid>
@@ -205,10 +207,10 @@ const NewSectionButton = (props) => {
                           handleClose();
                           handleAddSection(
                             registrationFormDescription(
-                              props.event.startDate,
-                              props.event.endDate,
-                              props.event.timeZone,
-                              props.event.description
+                              event.startDate,
+                              event.endDate,
+                              event.timeZone,
+                              event.description
                             ),
                             true,
                             registrationFormReact

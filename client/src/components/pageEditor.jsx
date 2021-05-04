@@ -27,6 +27,7 @@ const PageEditor = (props) => {
   const [discardOpen, setDiscardOpen] = useState(false);
   const [removeLogoErrorOpen, setRemoveLogoErrorOpen] = useState(false);
   const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
+  const [isHovering, setIsHovering] = useState(0);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -224,15 +225,17 @@ const PageEditor = (props) => {
               boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
             }}
           ></div>
-          <ul className="page-section-container">
+          <ul className="floating-section-container">
             {props.model.sections.length === 0
               ? null
               : props.model.sections.map(function (section, index) {
                   return (
-                    <li key={section.id} className="page-section">
+                    <li key={section.id} className="floating-section">
                       <PageSectionEditor
                         section={section}
                         sectionIndex={index}
+                        isHovering={isHovering}
+                        setIsHovering={setIsHovering}
                       />
                     </li>
                   );

@@ -189,7 +189,7 @@ const BackgroundImageSelector = ({
           <div style={{ padding: "18px" }}>
             <label>Background Color Overlay</label>
             <RgbaColorPicker
-              color={color}
+              color={color || `rgba(255,255,255,0)`}
               onChange={
                 isPrimaryBg ? handleUpdateOverlay : handleUpdateSectionOverlay
               }
@@ -398,7 +398,6 @@ const Preview = ({
   handleClickSelectImage,
   handleClickRemoveImage,
 }) => {
-  console.log(currentBackgroundImageURL);
   return (
     <div style={{ padding: "18px" }}>
       {currentBackgroundImageURL ? (

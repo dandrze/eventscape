@@ -69,6 +69,8 @@ export default function (
         isUnsaved: false,
         id: action.payload.id,
         sections: action.payload.sections,
+        backgroundImage: action.payload.backgroundImage,
+        backgroundColor: action.payload.backgroundColor,
       };
     case MODEL_ISSAVED:
       return { ...state, isUnsaved: false };
@@ -89,9 +91,9 @@ export default function (
     case SIMULATE_HOVER:
       return { ...state, simulateHover: action.payload };
     case UPDATE_BACKGROUND_IMAGE:
-      return { ...state, backgroundImage: action.payload };
+      return { ...state, isUnsaved: true, backgroundImage: action.payload };
     case UPDATE_BACKGROUND_COLOR:
-      return { ...state, backgroundColor: action.payload };
+      return { ...state, isUnsaved: true, backgroundColor: action.payload };
     default:
       return state;
   }
