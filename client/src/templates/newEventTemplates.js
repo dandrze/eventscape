@@ -28,10 +28,9 @@ export const regPageModelTemplate = ({
   logo,
 }) => {
   return [
-    { html: logoHeaderModel(logo), name: "banner" },
     {
-      html: heroBannerModel(title),
-      name: "heroBanner",
+      html: logoTitleHeaderModel(logo, title),
+      name: "title",
     },
     {
       html: registrationFormDescription(
@@ -53,10 +52,6 @@ export const eventPageModelTemplate = ({
   logo,
 }) => {
   return [
-    {
-      html: spacer(50),
-      name: "spacer",
-    },
     {
       html: logoTitleHeaderModel(logo, title),
       name: "title",
