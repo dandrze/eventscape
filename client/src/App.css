@@ -550,7 +550,7 @@ select {
 .chatContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   background: #eaeaea;
   height: 100%;
   width: 100%;
@@ -559,7 +559,7 @@ select {
 .chatTextArea {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: center;
   height: 100%;
   width: 100%;
   overflow: none;
@@ -637,8 +637,8 @@ select {
 .messageText {
   letter-spacing: 0;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-weight: 400;
-  font-size: 1rem;
+  font-weight: 300;
+  font-size: 0.9rem;
   word-wrap: break-word;
   margin: 0;
   padding: 0;
@@ -653,14 +653,14 @@ select {
   padding: 0 5%;
   margin-top: 10px;
   text-align: left;
-  line-height: 1.3rem;
+  line-height: 1rem;
 }
 
 .messageUser {
   display: inline;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
+  font-weight: 500;
+  font-size: 0.9rem;
   color: #828282;
   letter-spacing: 0.3px;
   margin: 0 12px 0 0;
@@ -708,37 +708,37 @@ select {
 
 /* Input */
 
-.form {
+.chat-input-container {
   display: flex;
-  min-height: 60px;
+  min-height: 40px;
 }
 
 .form-question {
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-top: 2px solid #d3d3d3;
+  width: auto;
+  margin: 3px;
 }
 
 .chat-input {
   border: none;
   border-radius: 0;
-  padding: 16px 0 16px 16px; /* was 5% */
   margin: 3px;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-size: 15px;
-  line-height: 18px;
+  font-size: 0.9rem;
+  line-height: 1rem;
   border-radius: 5px;
 }
 
 .input-question {
   border: none;
-  border-radius: 0;
+  border-radius: 5px;
   padding: 0 16px;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-size: 18px;
-  line-height: 24px;
+  font-size: 0.9rem;
+  line-height: 1rem;
   height: 100px;
 }
 

@@ -132,7 +132,7 @@ const StyledTab = withStyles((theme) => {
   return {
     root: {
       textTransform: "none",
-      height: "60px",
+      height: "40px",
       color: "rgba(0, 0, 0, 0.9)",
       fontSize: "18px",
       fontWeight: "300",
@@ -141,8 +141,9 @@ const StyledTab = withStyles((theme) => {
       ),
       background: "#eaeaea",
       borderRadius: "5px",
-      margin: "3px",
-      fontWeight: "400",
+      margin: "3px 3px 0px 3px",
+      fontWeight: "300",
+      fontSize: "1rem",
 
       "&:hover": {
         background: "rgba(255,255,255,0.5)",
@@ -161,7 +162,7 @@ const StyledTab = withStyles((theme) => {
 })((props) => <Tab disableRipple {...props} />);
 
 const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
-  <form className="form">
+  <form className="chat-input-container">
     <input
       className="chat-input width-80"
       type="text"
@@ -185,7 +186,7 @@ const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
 );
 
 const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
-  <div style={{ marginTop: "auto" }}>
+  <div>
     <form className="form-question">
       <textarea
         className="input-question"

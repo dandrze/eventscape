@@ -27,11 +27,6 @@ export default (primaryColor) => {
     margin-right: auto;
   }
 
- 	.fr-view button { 
-		background: ${primaryColor} !important;
-		border-color: ${primaryColor} !important;
-	 } 
-
 	 .infoBar {
 		background: ${primaryColor};
 	 }
@@ -42,6 +37,7 @@ export default (primaryColor) => {
 
 	 .theme-button {
 		background:${primaryColor} !important;
+    border-color: ${primaryColor} !important;;
      }
 
      .theme-color {
