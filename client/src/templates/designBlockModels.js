@@ -77,6 +77,37 @@ export const logoHeaderModel = (logo) => {
     `;
 };
 
+export const spacer = (height) => {
+  return `<div style="
+    opacity: 0;
+    height: ${height};
+    " >
+    .
+      </div>
+      `;
+};
+
+export const logoTitleHeaderModel = (logo, eventTitle) => {
+  const logoUrl = logo
+    ? logo
+    : "https://eventscape-assets.s3.amazonaws.com/assets/Eventscape-your-logo-grey.png";
+  return `<div style="background-position: bottom;
+    background-size: cover;
+    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    border-radius: 10px;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 24px;
+    overflow: hidden" data-info="background image/color. Do not modify." >
+    
+            <div>${eventTitle}</div>
+            <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
+  
+      </div>
+      `;
+};
+
 export const logoHeaderRightModel = () => {
   return `<div style="background-position: bottom;
   background-size: cover;
@@ -213,7 +244,7 @@ export const registrationFormDescription = (
 };
 
 export const simpleTitle = (eventTitle = "default") => {
-  return `<div style="overflow: hidden; border-radius: 15px; box-shadow: rgb(250, 250, 250) 0px 0px 0px 5000px inset;" contenteditable="false">
+  return `<div style="overflow: hidden; border-radius: 10px; box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;" contenteditable="false">
             <div style="margin: 1rem 1rem 1rem 1rem;">
                 <div class="title1" contenteditable="true">${eventTitle}</div>
             </div>

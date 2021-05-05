@@ -21,7 +21,7 @@
   overflow: hidden;
   position: relative;
   height: 0;
-  border-radius: 15px;
+  border-radius: 10px;
 }
 
 /* Side by Side */
@@ -55,5 +55,5 @@
   padding-bottom: 56.25%;
   position: relative;
   height: 0;
-  border-radius: 15px;
+  border-radius: 10px;
 }

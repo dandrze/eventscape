@@ -28,6 +28,7 @@ import {
   logoHeaderModel,
   heroBannerModel,
   simpleTitle,
+  logoTitleHeaderModel,
   streamChatReact,
   timeDescription,
   registrationFormReact,
@@ -191,6 +192,17 @@ const NewSectionButton = ({ event, addSection, prevIndex, position }) => {
                         handleClick={() => {
                           handleClose();
                           handleAddSection(simpleTitle(event.title));
+                        }}
+                      />
+                    </Grid>
+                    <Grid item xs={12}>
+                      <DesignBlockPreview
+                        src={titleThumb}
+                        handleClick={() => {
+                          handleClose();
+                          handleAddSection(
+                            logoTitleHeaderModel(null, event.title)
+                          );
                         }}
                       />
                     </Grid>

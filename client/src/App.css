@@ -399,7 +399,6 @@ label {
 }
 
 .fr-view {
-  background-color: #fff;
   width: 100%;
 }
 
@@ -552,7 +551,7 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #ffffff;
+  background: #eaeaea;
   height: 100%;
   width: 100%;
 }
@@ -561,7 +560,6 @@ select {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: #ffffff;
   height: 100%;
   width: 100%;
   overflow: none;
@@ -630,31 +628,21 @@ select {
   overflow: auto;
   flex: auto;
   height: 100%; /* need this to keep react-scroll-to-bottom working in Safari */
-  margin-bottom: 5px;
+  margin: 3px;
+  background: #fff;
 }
 
 /* Message */
 
-.messageBox {
-  background: #f3f3f3;
-  border-radius: 20px;
-  padding: 7px 11px;
-  color: white;
-  display: inline-block;
-  max-width: 80%;
-}
-
 .messageText {
-  width: 100%;
   letter-spacing: 0;
-  float: left;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-weight: 400;
-  font-size: 15px;
+  font-size: 1rem;
   word-wrap: break-word;
   margin: 0;
   padding: 0;
-  line-height: 18px;
+  color: #444444;
 }
 
 .messageText img {
@@ -662,22 +650,20 @@ select {
 }
 
 .messageContainer {
-  display: flex;
-  justify-content: flex-end;
   padding: 0 5%;
-  margin-top: 6px;
+  margin-top: 10px;
+  text-align: left;
+  line-height: 1.3rem;
 }
 
-.sentText {
-  display: flex;
-  align-items: center;
+.messageUser {
+  display: inline;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 18px;
+  font-weight: 600;
+  font-size: 1rem;
   color: #828282;
   letter-spacing: 0.3px;
-  margin: 0;
+  margin: 0 12px 0 0;
 }
 
 .pl-10 {
@@ -724,7 +710,6 @@ select {
 
 .form {
   display: flex;
-  border-top: 2px solid #d3d3d3;
   min-height: 60px;
 }
 
@@ -735,14 +720,15 @@ select {
   border-top: 2px solid #d3d3d3;
 }
 
-.input {
+.chat-input {
   border: none;
   border-radius: 0;
   padding: 16px 0 16px 16px; /* was 5% */
-  margin: 0;
+  margin: 3px;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 15px;
   line-height: 18px;
+  border-radius: 5px;
 }
 
 .input-question {
@@ -766,6 +752,8 @@ select:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 3px;
+  border-radius: 5px;
 }
 
 .send-question-text {
@@ -1112,6 +1100,8 @@ select:focus {
 
 .floating-section-container {
   padding: 40px;
+  max-width: 1200px;
+  margin: auto;
 }
 
 .floating-section {

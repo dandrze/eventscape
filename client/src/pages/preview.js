@@ -23,38 +23,42 @@ const Preview = (props) => {
   };
 
   return (
-    <div className="fr-view live-page-container">
+    <div
+      className="fr-view live-page-container"
+      style={{
+        backgroundImage: `url(${props.model.backgroundImage})`,
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+      }}
+    >
       <style>{theme(props.event.primaryColor)}</style>
       {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
-      <div
-        style={{
-          backgroundImage: `url(${props.model.backgroundImage})`,
-          width: "100%",
-          height: "100%",
-          position: "absolute",
-          backgroundSize: "cover",
-          backgroundPosition: "left",
-          boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
-        }}
-      ></div>
-      <ul className="floating-section-container">
+      <div className="floating-section-container">
         {props.model.sections.map(function (section) {
-          return section.isReact ? (
-            createElement(mapReactComponent[section.reactComponent.name], {
-              ...section.reactComponent.props,
-              sectionIndex: section.index,
-              isLive: true,
-            })
-          ) : (
-            <FroalaEditorView
-              model={section.html.replace(
-                `contenteditable="true"`,
-                `contenteditable="false"`
-              )}
-            />
+          return (
+            <div className="floating-section">
+              {section.isReact ? (
+                createElement(mapReactComponent[section.reactComponent.name], {
+                  ...section.reactComponent.props,
+                  sectionIndex: section.index,
+                  isLive: true,
+                })
+              ) : (
+                <FroalaEditorView
+                  model={section.html.replace(
+                    `contenteditable="true"`,
+                    `contenteditable="false"`
+                  )}
+                />
+              )}{" "}
+            </div>
           );
         })}
-      </ul>
+      </div>
       <BrandingBottom />
     </div>
   );

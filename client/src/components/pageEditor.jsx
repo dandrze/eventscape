@@ -27,7 +27,7 @@ const PageEditor = (props) => {
   const [discardOpen, setDiscardOpen] = useState(false);
   const [removeLogoErrorOpen, setRemoveLogoErrorOpen] = useState(false);
   const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
-  const [isHovering, setIsHovering] = useState(0);
+  const [isHovering, setIsHovering] = useState(null);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -103,6 +103,10 @@ const PageEditor = (props) => {
 
   const handleCloseBackgroundSettings = () => {
     setOpenBackgroundImage(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(null);
   };
 
   return (
@@ -221,7 +225,7 @@ const PageEditor = (props) => {
               height: "100%",
               position: "absolute",
               backgroundSize: "cover",
-              backgroundPosition: "left",
+              backgroundPosition: "center",
               boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
             }}
           ></div>
@@ -230,7 +234,11 @@ const PageEditor = (props) => {
               ? null
               : props.model.sections.map(function (section, index) {
                   return (
-                    <li key={section.id} className="floating-section">
+                    <li
+                      key={section.id}
+                      className="floating-section"
+                      onMouseLeave={handleMouseLeave}
+                    >
                       <PageSectionEditor
                         section={section}
                         sectionIndex={index}

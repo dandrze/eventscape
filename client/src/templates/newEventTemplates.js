@@ -8,6 +8,8 @@ import {
   streamChatReact,
   blankModel,
   registrationFormReact,
+  logoTitleHeaderModel,
+  spacer,
 } from "./designBlockModels";
 import {
   invitation,
@@ -52,11 +54,11 @@ export const eventPageModelTemplate = ({
 }) => {
   return [
     {
-      html: logoHeaderModel(logo),
-      name: "banner",
+      html: spacer(50),
+      name: "spacer",
     },
     {
-      html: simpleTitle(title),
+      html: logoTitleHeaderModel(logo, title),
       name: "title",
     },
     {

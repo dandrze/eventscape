@@ -36,6 +36,10 @@ export default (primaryColor) => {
 		background: ${primaryColor};
 	 }
 
+   .MuiTab-root.Mui-selected {
+     color: ${primaryColor};
+   }
+
 	 .theme-button {
 		background:${primaryColor} !important;
      }

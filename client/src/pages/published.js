@@ -197,7 +197,7 @@ const Published = (props) => {
             height: "100%",
             position: "absolute",
             backgroundSize: "cover",
-            backgroundPosition: "left",
+            backgroundPosition: "center",
             boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
           }}
         ></div>
