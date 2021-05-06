@@ -38,6 +38,9 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       eventPageModel,
       registrationRequired,
       description,
+      backgroundImage,
+      backgroundColor,
+      backgroundBlur,
     },
     communications,
   } = req.body;
@@ -46,10 +49,18 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
 
   try {
     // Store a new model in the model table for the registration page
-    const dbRegModel = await PageModel.create();
+    const dbRegModel = await PageModel.create({
+      backgroundImage,
+      backgroundColor,
+      backgroundBlur,
+    });
 
     // Store a new model in the model table for the event page
-    const dbEventModel = await PageModel.create();
+    const dbEventModel = await PageModel.create({
+      backgroundImage,
+      backgroundColor,
+      backgroundBlur,
+    });
 
     // add the event to the event table. Make it the current event
     const event = await Event.create({

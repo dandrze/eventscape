@@ -23,9 +23,15 @@
 }
 
 .form-editor-froala {
-  text-align: justify;
 }
 
 .form-editor-react {
-  background-color: #fff;
+}
+
+.registration-description {
+  margin-right: 12px;
+}
+
+.registration-form {
+  margin-left: 12px;
 }

@@ -20,6 +20,7 @@ import TelegramIcon from "@material-ui/icons/Telegram";
 import io from "socket.io-client";
 
 import api from "../api/server";
+import { props } from "bluebird";
 
 const cookies = new Cookies();
 
@@ -28,11 +29,15 @@ const ENDPOINT =
 
 let socket;
 
-const Messages = ({ messages, chatUserId }) => (
+const Messages = ({ messages, chatUserId, primaryColor }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
       <div key={i}>
-        <Message message={message} chatUserId={chatUserId} />
+        <Message
+          message={message}
+          chatUserId={chatUserId}
+          primaryColor={primaryColor}
+        />
       </div>
     ))}
   </ScrollToBottom>
@@ -41,6 +46,7 @@ const Messages = ({ messages, chatUserId }) => (
 const Message = ({
   message: { text, user, userId, id, deleted, isNotification },
   chatUserId,
+  primaryColor,
 }) => {
   let isSentByCurrentUser = false;
 
@@ -58,18 +64,18 @@ const Message = ({
   }
 
   return isSentByCurrentUser ? (
-    <div className="messageContainer justifyEnd">
-      <p className="sentText pr-10">{user}</p>
-      <div className="messageBox backgroundBlue">
-        <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
-      </div>
+    <div className={"messageContainer"}>
+      <span className="messageUser " style={{ color: primaryColor }}>
+        {user}
+      </span>
+      <span className="messageText">{ReactEmoji.emojify(text)}</span>
     </div>
   ) : (
-    <div className={"messageContainer justifyStart"}>
-      <div className="messageBox backgroundLight">
-        <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-      </div>
-      <p className="sentText pl-10 ">{user}</p>
+    <div className={"messageContainer"}>
+      <span className="messageUser " style={{ color: primaryColor }}>
+        {user}
+      </span>
+      <span className="messageText">{ReactEmoji.emojify(text)}</span>
     </div>
   );
 };
@@ -117,38 +123,48 @@ const StyledTabs = withStyles({
     justifyContent: "center",
     "& > span": {
       width: "100%",
-      backgroundColor: "white",
+      backgroundColor: "#eaeaea",
     },
   },
 })((props) => <Tabs {...props} TabIndicatorProps={{ children: <span /> }} />);
 
-const StyledTab = withStyles((theme) => ({
-  root: {
-    textTransform: "none",
-    height: "60px",
-    color: "rgba(255, 255, 255, 0.9)",
-    fontSize: "18px",
-    fontWeight: "300",
-    fontFamily: ["Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(","),
-    "&:hover": {
-      color: "#fff",
-      opacity: 1,
+const StyledTab = withStyles((theme) => {
+  return {
+    root: {
+      textTransform: "none",
+      height: "40px",
+      color: "rgba(0, 0, 0, 0.9)",
+      fontSize: "18px",
+      fontWeight: "300",
+      fontFamily: ["Roboto", '"Helvetica Neue"', "Arial", "sans-serif"].join(
+        ","
+      ),
+      background: "#eaeaea",
+      borderRadius: "5px",
+      margin: "3px 3px 0px 3px",
+      fontWeight: "300",
+      fontSize: "1rem",
+
+      "&:hover": {
+        background: "rgba(255,255,255,0.5)",
+        opacity: 1,
+      },
+      "&$selected": {
+        color: "#b0281c", // this is overwritten in theme.js with the event theme color
+        background: "#fff",
+      },
+      "&:focus": {
+        outline: 0,
+      },
     },
-    "&$selected": {
-      color: "#fff",
-      fontWeight: "400",
-    },
-    "&:focus": {
-      color: "#fff",
-    },
-  },
-  selected: {},
-}))((props) => <Tab disableRipple {...props} />);
+    selected: {},
+  };
+})((props) => <Tab disableRipple {...props} />);
 
 const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
-  <form className="form">
+  <form className="chat-input-container">
     <input
-      className="input width-80"
+      className="chat-input width-80"
       type="text"
       placeholder="Type a message..."
       value={message}
@@ -170,27 +186,25 @@ const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
 );
 
 const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
-  <div style={{ marginTop: "auto" }}>
-    <form className="form-question">
-      <textarea
-        className="input-question"
-        placeholder="Type a question..."
-        value={question}
-        onChange={({ target: { value } }) => setQuestion(value)}
-      />
-      <button
-        className="theme-button send-button max-height-60"
-        style={theme}
-        onClick={(e) => sendQuestion(e)}
-      >
-        <div className="send-question-text">Send Question</div>
-        <TelegramIcon />
-      </button>
-    </form>
-  </div>
+  <form className="form-question">
+    <textarea
+      className="input-question"
+      placeholder="Type a question..."
+      value={question}
+      onChange={({ target: { value } }) => setQuestion(value)}
+    />
+    <button
+      className="theme-button send-button max-height-60"
+      style={theme}
+      onClick={(e) => sendQuestion(e)}
+    >
+      <div className="send-question-text">Send Question</div>
+      <TelegramIcon />
+    </button>
+  </form>
 );
 
-const Chat = ({ room, userId, registrationId, settings }) => {
+const Chat = ({ event, room, userId, registrationId, settings }) => {
   const classes = useStyles();
   const [chatUserId, setChatUserId] = useState("");
   const [message, setMessage] = useState("");
@@ -390,7 +404,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
       })}
     >
       <div className="chatContainer">
-        <div className="infoBar">
+        <div>
           <StyledTabs
             value={tabValue}
             onChange={handleChangeTab}
@@ -399,7 +413,11 @@ const Chat = ({ room, userId, registrationId, settings }) => {
             variant="fullWidth"
           >
             {!chatHidden && chatTabEnabled && (
-              <StyledTab label="Chat" {...a11yProps(chatIndex)} />
+              <StyledTab
+                primaryColor="test"
+                label="Chat"
+                {...a11yProps(chatIndex)}
+              />
             )}
             {questionsTabEnabled && (
               <StyledTab label="Ask a Question" {...a11yProps(questionIndex)} />
@@ -418,6 +436,7 @@ const Chat = ({ room, userId, registrationId, settings }) => {
                 chatUserId={chatUserId}
                 deleteMessage={deleteMessage}
                 restoreMessage={restoreMessage}
+                primaryColor={event.primaryColor}
               />
               <Input
                 message={message}
@@ -451,7 +470,7 @@ Chat.defaultProps = {
   questionsTabEnabled: true,
 };
 const mapStateToProps = (state) => {
-  return { settings: state.settings };
+  return { settings: state.settings, event: state.event };
 };
 
 export default connect(mapStateToProps)(Chat);

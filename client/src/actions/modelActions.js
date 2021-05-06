@@ -13,24 +13,19 @@ import {
   UPDATE_REACT_COMPONENT,
   FLAG_UPDATE,
   SIMULATE_HOVER,
+  UPDATE_BACKGROUND_COLOR,
+  UPDATE_BACKGROUND_IMAGE,
+  UPDATE_BACKGROUND_BLUR,
 } from "./types";
 import { pageNames } from "../model/enums";
 
-export const fetchPublishedPage = (pageLink) => async (dispatch) => {
-  const model = await api.get("/api/page", { params: { link: pageLink } });
-
-  dispatch({
-    type: FETCH_PAGE_MODEL,
-    payload: model.data,
-  });
-};
-
 export const fetchModel = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
+  const { sections, backgroundColor, backgroundImage, backgroundBlur } = model.data;
 
   await dispatch({
     type: FETCH_PAGE_MODEL,
-    payload: { id, sections: model.data },
+    payload: { id, sections, backgroundColor, backgroundImage, backgroundBlur },
   });
 
   return true;
@@ -91,7 +86,7 @@ export const saveModel = (page) => async (dispatch, getState) => {
   // copy the model over to the event object
   await dispatch(localSaveModel(page));
 
-  const model = getState().model.sections;
+  const model = getState().model;
 
   // save the new model
   try {
@@ -138,4 +133,19 @@ export const saveStreamSettings = (index, updatedProps) => async (
 
 export const simulateHover = (index) => async (dispatch) => {
   dispatch({ type: SIMULATE_HOVER, payload: index });
+};
+
+export const updateBackgroundImage = (image) => async (dispatch, getState) => {
+  dispatch({ type: UPDATE_BACKGROUND_IMAGE, payload: image });
+};
+
+export const updateBackgroundColor = (color) => async (dispatch, getState) => {
+  dispatch({ type: UPDATE_BACKGROUND_COLOR, payload: color });
+};
+
+export const updateBackgroundBlur = (blurValue) => async (
+  dispatch,
+  getState
+) => {
+  dispatch({ type: UPDATE_BACKGROUND_BLUR, payload: blurValue });
 };

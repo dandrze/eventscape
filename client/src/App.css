@@ -337,17 +337,30 @@ label {
 
 .addSection {
   border: 0px;
-  background-color: transparent;
+  background-color: #b0281c;
   margin: 0;
-  padding: 0;
-  position: relative;
-  float: left;
+  padding: 6px 12px;
+  position: absolute;
+  z-index: 999;
   transition: all 0.2s ease-in-out;
+  color: #fff;
+  font-size: 0.8rem;
+  border-radius: 20px;
+  left: calc(50% - 52px);
+  bottom: -14px;
 }
 
 .addSection:hover {
   transform: scale(1.15);
   cursor: pointer;
+}
+
+.addSectionContainer {
+  position: absolute;
+  border: 1px solid rgb(176 40 28 / 80%);
+  width: 100%;
+  left: 0px;
+  z-index: 999;
 }
 
 #plusDropIcon {
@@ -386,7 +399,6 @@ label {
 }
 
 .fr-view {
-  background-color: #fff;
   width: 100%;
 }
 
@@ -538,8 +550,8 @@ select {
 .chatContainer {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: #ffffff;
+  justify-content: center;
+  background: #eaeaea;
   height: 100%;
   width: 100%;
 }
@@ -547,8 +559,7 @@ select {
 .chatTextArea {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  background: #ffffff;
+  justify-content: center;
   height: 100%;
   width: 100%;
   overflow: none;
@@ -617,31 +628,21 @@ select {
   overflow: auto;
   flex: auto;
   height: 100%; /* need this to keep react-scroll-to-bottom working in Safari */
-  margin-bottom: 5px;
+  margin: 3px;
+  background: #fff;
 }
 
 /* Message */
 
-.messageBox {
-  background: #f3f3f3;
-  border-radius: 20px;
-  padding: 7px 11px;
-  color: white;
-  display: inline-block;
-  max-width: 80%;
-}
-
 .messageText {
-  width: 100%;
   letter-spacing: 0;
-  float: left;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-weight: 400;
-  font-size: 15px;
+  font-weight: 300;
+  font-size: 0.9rem;
   word-wrap: break-word;
   margin: 0;
   padding: 0;
-  line-height: 18px;
+  color: #444444;
 }
 
 .messageText img {
@@ -649,22 +650,20 @@ select {
 }
 
 .messageContainer {
-  display: flex;
-  justify-content: flex-end;
   padding: 0 5%;
-  margin-top: 6px;
+  margin-top: 10px;
+  text-align: left;
+  line-height: 1rem;
 }
 
-.sentText {
-  display: flex;
-  align-items: center;
+.messageUser {
+  display: inline;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-weight: 300;
-  font-size: 15px;
-  line-height: 18px;
+  font-weight: 500;
+  font-size: 0.9rem;
   color: #828282;
   letter-spacing: 0.3px;
-  margin: 0;
+  margin: 0 12px 0 0;
 }
 
 .pl-10 {
@@ -709,38 +708,38 @@ select {
 
 /* Input */
 
-.form {
+.chat-input-container {
   display: flex;
-  border-top: 2px solid #d3d3d3;
-  min-height: 60px;
+  min-height: 40px;
 }
 
 .form-question {
   display: flex;
   flex-direction: column;
   height: 100%;
-  border-top: 2px solid #d3d3d3;
+  width: auto;
+  margin: 3px;
 }
 
-.input {
+.chat-input {
   border: none;
   border-radius: 0;
-  padding: 16px 0 16px 16px; /* was 5% */
-  margin: 0;
+  margin: 3px;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-size: 15px;
-  line-height: 18px;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  border-radius: 5px;
 }
 
 .input-question {
   border: none;
-  border-radius: 0;
-  padding: 0 16px;
+  border-radius: 5px;
+  padding: 16px;
   margin: 0;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-  font-size: 18px;
-  line-height: 24px;
-  height: 100px;
+  font-size: 0.9rem;
+  line-height: 1rem;
+  height: 100%;
 }
 
 input:focus,
@@ -753,6 +752,8 @@ select:focus {
   display: flex;
   justify-content: center;
   align-items: center;
+  margin: 3px;
+  border-radius: 5px;
 }
 
 .send-question-text {
@@ -1026,7 +1027,10 @@ select:focus {
 }
 
 .registration-col {
-  margin: 20px;
+  text-align: justify;
+  border-radius: 10px;
+  padding: 24px;
+  background: #eaeaea;
 }
 
 /* UL formatting within froala block */
@@ -1096,3 +1100,17 @@ select:focus {
 }
 
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
+
+.floating-section-container {
+  padding: 60px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.floating-section {
+  margin-bottom: 24px;
+}
+
+.blur {
+  backdrop-filter: blur(5px);
+}

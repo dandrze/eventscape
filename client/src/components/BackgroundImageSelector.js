@@ -15,6 +15,7 @@ import * as actions from "../actions";
 import api from "../api/server";
 
 import FoldingCube from "./FoldingCube";
+import { updateBackgroundBlur } from "../actions";
 
 const BackgroundImageSelector = ({
   event,
@@ -23,6 +24,10 @@ const BackgroundImageSelector = ({
   sectionIndex,
   model,
   updateSection,
+  isPrimaryBg,
+  updateBackgroundImage,
+  updateBackgroundColor,
+  updateBackgroundBlur,
 }) => {
   const [openSelectImage, setOpenSelectImage] = useState(false);
   const [freeImageUrls, setFreeImageUrls] = useState([]);
@@ -38,27 +43,32 @@ const BackgroundImageSelector = ({
   }, []);
 
   useEffect(() => {
-    // get current background color overlay
-    let pageHtml = document.createElement("div");
-    pageHtml.innerHTML = model.sections[sectionIndex].html;
+    if (isPrimaryBg) {
+      setCurrentBackgroundImageURL(model.backgroundImage);
+      setColor(model.backgroundColor);
+    } else {
+      // get current background color overlay
+      let pageHtml = document.createElement("div");
+      pageHtml.innerHTML = model.sections[sectionIndex].html;
 
-    let backgroundDiv = pageHtml.getElementsByTagName("div")[0];
+      let backgroundDiv = pageHtml.getElementsByTagName("div")[0];
 
-    let rgbaList = backgroundDiv.style.boxShadow
-      .substring(
-        backgroundDiv.style.boxShadow.indexOf("(") + 1,
-        backgroundDiv.style.boxShadow.indexOf(")")
-      )
-      .split(", ");
+      let rgbaList = backgroundDiv.style.boxShadow
+        .substring(
+          backgroundDiv.style.boxShadow.indexOf("(") + 1,
+          backgroundDiv.style.boxShadow.indexOf(")")
+        )
+        .split(", ");
 
-    setColor({
-      r: parseInt(rgbaList[0]),
-      g: parseInt(rgbaList[1]),
-      b: parseInt(rgbaList[2]),
-      a: parseFloat(rgbaList[3]),
-    });
+      setColor({
+        r: parseInt(rgbaList[0]),
+        g: parseInt(rgbaList[1]),
+        b: parseInt(rgbaList[2]),
+        a: parseFloat(rgbaList[3]),
+      });
 
-    setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
+      setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
+    }
   }, []);
 
   const fetchFreeImageUrls = async () => {
@@ -82,6 +92,11 @@ const BackgroundImageSelector = ({
   };
 
   const setBackgroundImage = (url) => {
+    setCurrentBackgroundImageURL(url);
+    updateBackgroundImage(url);
+    setOpenSelectImage(false);
+  };
+  const setSectionBackgroundImage = (url) => {
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
@@ -92,6 +107,7 @@ const BackgroundImageSelector = ({
     background.style.backgroundPosition = `center`;
     background.style.backgroundSize = `cover`;
 
+    setCurrentBackgroundImageURL(url);
     updateSection(sectionIndex, newHtml.innerHTML);
     setOpenSelectImage(false);
   };
@@ -108,6 +124,17 @@ const BackgroundImageSelector = ({
   };
 
   const handleUpdateOverlay = (newColor) => {
+    setColor(newColor);
+
+    // convert rgba object to string
+    const overlayRGBA = `rgba(${newColor.r}, ${newColor.g}, ${newColor.b}, ${
+      newColor.a || 0
+    })`;
+
+    updateBackgroundColor(overlayRGBA);
+  };
+
+  const handleUpdateSectionOverlay = (newColor) => {
     setColor(newColor);
 
     const newHtml = document.createElement("div");
@@ -129,6 +156,10 @@ const BackgroundImageSelector = ({
     updateSection(sectionIndex, newHtml.innerHTML);
   };
 
+  const handleChangeBlurValue = (event, newValue) => {
+    updateBackgroundBlur(newValue);
+  };
+
   return (
     <div>
       <Modal1
@@ -137,7 +168,9 @@ const BackgroundImageSelector = ({
         content={
           <SelectImage
             user={user}
-            setBackgroundImage={setBackgroundImage}
+            setBackgroundImage={
+              isPrimaryBg ? setBackgroundImage : setSectionBackgroundImage
+            }
             freeImageUrls={freeImageUrls}
             userImageUrls={userImageUrls}
           />
@@ -153,17 +186,37 @@ const BackgroundImageSelector = ({
       </Tabs>
       <div>
         {tabValue === 0 ? (
-          <Preview
-            currentBackgroundImageURL={currentBackgroundImageURL}
-            handleClickSelectImage={handleClickSelectImage}
-            handleClickRemoveImage={handleClickRemoveImage}
-          />
+          <>
+            <Preview
+              currentBackgroundImageURL={currentBackgroundImageURL}
+              handleClickSelectImage={handleClickSelectImage}
+              handleClickRemoveImage={handleClickRemoveImage}
+              blur={isPrimaryBg ? model.backgroundBlur : 0}
+            />
+            {isPrimaryBg ? (
+              <div style={{ margin: "0px 20px" }}>
+                <label>Blur</label>
+                <Slider
+                  value={model.backgroundBlur}
+                  onChange={handleChangeBlurValue}
+                  min={0}
+                  max={15}
+                  step={1}
+                  style={{ marginTop: "32px" }}
+                  marks={true}
+                  valueLabelDisplay="on"
+                />
+              </div>
+            ) : null}
+          </>
         ) : (
           <div style={{ padding: "18px" }}>
             <label>Background Color Overlay</label>
             <RgbaColorPicker
-              color={color}
-              onChange={handleUpdateOverlay}
+              color={color || `rgba(255,255,255,0)`}
+              onChange={
+                isPrimaryBg ? handleUpdateOverlay : handleUpdateSectionOverlay
+              }
               id="event-color"
             />
           </div>
@@ -368,20 +421,29 @@ const Preview = ({
   currentBackgroundImageURL,
   handleClickSelectImage,
   handleClickRemoveImage,
+  blur,
 }) => {
   return (
-    <div style={{ padding: "18px" }}>
+    <div style={{ padding: "18px 18px 0px 18px" }}>
       {currentBackgroundImageURL ? (
         <>
           <div
             style={{
               width: "284px",
               height: "160px",
-              backgroundImage: currentBackgroundImageURL,
+              backgroundImage: `url(${currentBackgroundImageURL})`,
               backgroundPosition: "bottom",
               backgroundSize: "cover",
             }}
-          ></div>
+          >
+            <div
+              style={{
+                backdropFilter: `blur(${blur}px)`,
+                height: "100%",
+                width: "100%",
+              }}
+            ></div>
+          </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Button
               style={{ padding: "15px  15px", color: "#000000" }}

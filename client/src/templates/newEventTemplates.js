@@ -4,10 +4,12 @@ import {
   heroBannerModel,
   heroBannerModelNarrow,
   registrationFormDescription,
-  titleTimeModel,
+  simpleTitle,
   streamChatReact,
   blankModel,
   registrationFormReact,
+  logoTitleHeaderModel,
+  spacer,
 } from "./designBlockModels";
 import {
   invitation,
@@ -26,10 +28,9 @@ export const regPageModelTemplate = ({
   logo,
 }) => {
   return [
-    { html: logoHeaderModel(logo), name: "banner" },
     {
-      html: heroBannerModel(title),
-      name: "heroBanner",
+      html: logoTitleHeaderModel(logo, title),
+      name: "title",
     },
     {
       html: registrationFormDescription(
@@ -52,12 +53,8 @@ export const eventPageModelTemplate = ({
 }) => {
   return [
     {
-      html: logoHeaderModel(logo),
-      name: "banner",
-    },
-    {
-      html: heroBannerModelNarrow(title),
-      name: "heroBanner",
+      html: logoTitleHeaderModel(logo, title),
+      name: "title",
     },
     {
       html: null,

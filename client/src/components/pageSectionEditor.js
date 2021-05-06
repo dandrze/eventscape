@@ -7,52 +7,51 @@ import DesignBlockToolbar from "./designBlockToolbar";
 import mapReactComponent from "./mapReactComponent";
 import theme from "../templates/theme";
 
-const PageSectionEditor = (props) => {
-  const [isHovering, setIsHovering] = useState(false);
-
+const PageSectionEditor = ({
+  event,
+  model,
+  sectionIndex,
+  section,
+  isHovering,
+  setIsHovering,
+}) => {
   const handleMouseEnter = () => {
-    setIsHovering(true);
-  };
-
-  const handleMouseLeave = () => {
-    setIsHovering(false);
+    setIsHovering(sectionIndex);
   };
 
   return (
     <div>
-      <style>{theme(props.event.primaryColor)}</style>
-      {
-        // add section button before the first design block
-        props.sectionIndex === 0 ? <NewSectionButton prevIndex={-1} /> : null
-      }
+      <style>{theme(event.primaryColor)}</style>
+
       <div
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
         // relative position ensures that the design block toolbar moves with the design block
         style={{ position: "relative" }}
       >
         <DesignBlockToolbar
           displayToolbar={
-            isHovering || props.model.simulateHover === props.sectionIndex
+            isHovering === sectionIndex || model.simulateHover === sectionIndex
           }
-          section={props.model.sections[props.sectionIndex]}
-          sectionIndex={props.sectionIndex}
-          maxIndex={props.model.sections.length}
+          section={model.sections[sectionIndex]}
+          sectionIndex={sectionIndex}
+          maxIndex={model.sections.length}
         />
-        {props.section.isReact ? (
-          createElement(mapReactComponent[props.section.reactComponent.name], {
-            ...props.section.reactComponent.props,
-            sectionIndex: props.sectionIndex,
+        {section.isReact ? (
+          createElement(mapReactComponent[section.reactComponent.name], {
+            ...section.reactComponent.props,
+            sectionIndex: sectionIndex,
             editMode: true,
           })
         ) : (
           <Froala
-            sectionIndex={props.sectionIndex}
-            html={props.model.sections[props.sectionIndex].html}
+            sectionIndex={sectionIndex}
+            html={model.sections[sectionIndex].html}
           />
         )}
       </div>
-      <NewSectionButton prevIndex={props.sectionIndex} />
+      {isHovering === sectionIndex || isHovering === sectionIndex + 1 ? (
+        <NewSectionButton prevIndex={sectionIndex} position="bottom" />
+      ) : null}
     </div>
   );
 };

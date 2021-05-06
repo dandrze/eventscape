@@ -27,17 +27,17 @@ export default (primaryColor) => {
     margin-right: auto;
   }
 
- 	.fr-view button { 
-		background: ${primaryColor} !important;
-		border-color: ${primaryColor} !important;
-	 } 
-
 	 .infoBar {
 		background: ${primaryColor};
 	 }
 
+   .MuiTab-root.Mui-selected {
+     color: ${primaryColor};
+   }
+
 	 .theme-button {
 		background:${primaryColor} !important;
+    border-color: ${primaryColor} !important;;
      }
 
      .theme-color {

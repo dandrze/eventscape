@@ -14,6 +14,8 @@ import AlertModal from "./AlertModal";
 import { pageNames } from "../model/enums";
 import BrandingTop from "./BrandingTop";
 import BrandingBottom from "./BrandingBottom";
+import Modal1 from "./Modal1";
+import BackgroundImageSelector from "./BackgroundImageSelector";
 
 const PageEditor = (props) => {
   const { history } = props;
@@ -24,6 +26,8 @@ const PageEditor = (props) => {
   const [saveLoading, setSaveLoading] = useState(false);
   const [discardOpen, setDiscardOpen] = useState(false);
   const [removeLogoErrorOpen, setRemoveLogoErrorOpen] = useState(false);
+  const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
+  const [isHovering, setIsHovering] = useState(null);
 
   useEffect(() => {
     if (confirmedNavigation) {
@@ -93,6 +97,18 @@ const PageEditor = (props) => {
     setSaveLoading(false);
   };
 
+  const handleClickEditBackground = () => {
+    setOpenBackgroundImage(true);
+  };
+
+  const handleCloseBackgroundSettings = () => {
+    setOpenBackgroundImage(false);
+  };
+
+  const handleMouseLeave = () => {
+    setIsHovering(null);
+  };
+
   return (
     <div>
       <Prompt when={props.model.isUnsaved} message={handleBlockedNavigation} />
@@ -127,28 +143,40 @@ const PageEditor = (props) => {
 
       <div className="design">
         <div className="top-button-bar pt-5">
-        {props.event.plan.PlanType.type === "free" ? 
-          <button
-            className="Button1"
-            onClick={handleRemoveLogoError}
-            style={{ marginRight: "15px" }}
-          >
-            Remove Eventscape Logo
-          </button> : null}
-          <Link
-            className="button-bar-left"
-            to={() =>
-              "/preview/" +
-              props.event.id +
-              "/" +
-              (props.page == pageNames.REGISTRATION
-                ? props.event.RegPageModelId
-                : props.event.EventPageModelId)
-            }
-            target="_blank"
-          >
-            <button className="Button1">Preview Page As Guest</button>
-          </Link>
+          <div>
+            {props.event.plan.PlanType.type === "free" ? (
+              <button
+                className="Button1"
+                onClick={handleRemoveLogoError}
+                style={{ marginRight: "15px" }}
+              >
+                Remove Eventscape Logo
+              </button>
+            ) : null}
+            <Link
+              className="button-bar-left"
+              to={() =>
+                "/preview/" +
+                props.event.id +
+                "/" +
+                (props.page == pageNames.REGISTRATION
+                  ? props.event.RegPageModelId
+                  : props.event.EventPageModelId)
+              }
+              target="_blank"
+            >
+              <button className="Button2" style={{ height: "32px" }}>
+                Preview Page As Guest
+              </button>
+            </Link>
+            <button
+              className="Button2"
+              style={{ alignSelf: "flex-end" }}
+              onClick={handleClickEditBackground}
+            >
+              Edit Background Image
+            </button>
+          </div>
           {saveLoading ? (
             <div style={{ marginLeft: "auto", marginRight: "15px" }}>
               <CircularProgress />
@@ -190,25 +218,64 @@ const PageEditor = (props) => {
           )}
           <br></br>
         </div>
-        <div id="designBoard">
-          {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
-          <ul>
-            {props.model.sections.length === 0
-              ? null
-              : props.model.sections.map(function (section, index) {
-                  return (
-                    <li key={section.id}>
-                      <PageSectionEditor
-                        section={section}
-                        sectionIndex={index}
-                      />
-                    </li>
-                  );
-                })}
-          </ul>
-          <BrandingBottom />
+        <div id="designBoard" style={{ position: "relative" }}>
+          <div
+            style={{
+              backgroundImage: `url(${props.model.backgroundImage})`,
+              width: "100%",
+              height: "auto",
+              position: "absolute",
+              backgroundSize: "cover",
+              backgroundPosition: "center",
+              boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+            }}
+          >
+            <div
+              style={{
+                backdropFilter: `blur(${props.model.backgroundBlur}px)`,
+              }}
+            >
+              {props.event.plan.PlanType.type === "free" ? (
+                <BrandingTop />
+              ) : null}
+              <div className="floating-section-container">
+                {props.model.sections.length === 0
+                  ? null
+                  : props.model.sections.map(function (section, index) {
+                      return (
+                        <div
+                          key={section.id}
+                          className="floating-section"
+                          onMouseLeave={handleMouseLeave}
+                        >
+                          <PageSectionEditor
+                            section={section}
+                            sectionIndex={index}
+                            isHovering={isHovering}
+                            setIsHovering={setIsHovering}
+                          />
+                        </div>
+                      );
+                    })}
+              </div>
+              <BrandingBottom />
+            </div>
+          </div>
         </div>
       </div>
+      {/*Background Image Modal. */}
+
+      <Modal1
+        open={openBackgroundImage}
+        onClose={handleCloseBackgroundSettings}
+        isSideModal={true}
+        content={
+          <BackgroundImageSelector
+            isPrimaryBg={true}
+            handleClose={handleCloseBackgroundSettings}
+          />
+        }
+      />
     </div>
   );
 };
