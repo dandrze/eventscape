@@ -18,9 +18,21 @@ router.get("/api/model/id", async (req, res, next) => {
       }
     );
 
-    const { backgroundColor, backgroundImage } = await PageModel.findByPk(id);
+    const {
+      backgroundColor,
+      backgroundImage,
+      backgroundBlur,
+    } = await PageModel.findByPk(id);
 
-    res.json({ id, sections, backgroundColor, backgroundImage });
+    console.log(backgroundBlur);
+
+    res.json({
+      id,
+      sections,
+      backgroundColor,
+      backgroundImage,
+      backgroundBlur,
+    });
   } catch (error) {
     next(error);
   }

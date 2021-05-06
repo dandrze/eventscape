@@ -11,7 +11,8 @@ import { statusOptions } from "../model/enums";
 
 const defaultBackgroundImage =
   "https://eventscape-assets.s3.amazonaws.com/free-images/abstract-5719523_1920.jpg";
-const defaultBackgroundColor = "rgba(0,0,0,0.4)";
+const defaultBackgroundColor = "rgba(0,0,0,0)";
+const defaultBlur = 5;
 
 export const createEvent = (
   title,
@@ -51,6 +52,7 @@ export const createEvent = (
     description,
     backgroundImage,
     backgroundColor,
+    backgroundBlur: defaultBlur,
   };
 
   console.log(event);

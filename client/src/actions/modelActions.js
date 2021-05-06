@@ -15,16 +15,17 @@ import {
   SIMULATE_HOVER,
   UPDATE_BACKGROUND_COLOR,
   UPDATE_BACKGROUND_IMAGE,
+  UPDATE_BACKGROUND_BLUR,
 } from "./types";
 import { pageNames } from "../model/enums";
 
 export const fetchModel = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
-  const { sections, backgroundColor, backgroundImage } = model.data;
+  const { sections, backgroundColor, backgroundImage, backgroundBlur } = model.data;
 
   await dispatch({
     type: FETCH_PAGE_MODEL,
-    payload: { id, sections, backgroundColor, backgroundImage },
+    payload: { id, sections, backgroundColor, backgroundImage, backgroundBlur },
   });
 
   return true;
@@ -140,4 +141,11 @@ export const updateBackgroundImage = (image) => async (dispatch, getState) => {
 
 export const updateBackgroundColor = (color) => async (dispatch, getState) => {
   dispatch({ type: UPDATE_BACKGROUND_COLOR, payload: color });
+};
+
+export const updateBackgroundBlur = (blurValue) => async (
+  dispatch,
+  getState
+) => {
+  dispatch({ type: UPDATE_BACKGROUND_BLUR, payload: blurValue });
 };

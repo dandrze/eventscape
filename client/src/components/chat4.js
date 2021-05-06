@@ -186,24 +186,22 @@ const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
 );
 
 const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
-  <div>
-    <form className="form-question">
-      <textarea
-        className="input-question"
-        placeholder="Type a question..."
-        value={question}
-        onChange={({ target: { value } }) => setQuestion(value)}
-      />
-      <button
-        className="theme-button send-button max-height-60"
-        style={theme}
-        onClick={(e) => sendQuestion(e)}
-      >
-        <div className="send-question-text">Send Question</div>
-        <TelegramIcon />
-      </button>
-    </form>
-  </div>
+  <form className="form-question">
+    <textarea
+      className="input-question"
+      placeholder="Type a question..."
+      value={question}
+      onChange={({ target: { value } }) => setQuestion(value)}
+    />
+    <button
+      className="theme-button send-button max-height-60"
+      style={theme}
+      onClick={(e) => sendQuestion(e)}
+    >
+      <div className="send-question-text">Send Question</div>
+      <TelegramIcon />
+    </button>
+  </form>
 );
 
 const Chat = ({ event, room, userId, registrationId, settings }) => {

@@ -1,5 +1,4 @@
 .stream-chat-main-container {
-  padding: 0.5rem;
   margin: 0rem;
   display: flex;
   width: 100%;
@@ -7,14 +6,15 @@
 }
 
 .container-one-video-window {
-  margin: 0.5rem;
+  margin-right: 10px;
+
   text-align: justify;
   max-width: 100%;
   overflow: hidden;
 }
 
 .container-two-chat-window {
-  margin: 0.5rem;
+  margin-left: 10px;
 }
 
 .chat-responsive {

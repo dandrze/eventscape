@@ -61,7 +61,7 @@ function RegistrationForm({
   const [emailErrorText, setEmailErrorText] = useState("");
   const [regComplete, setRegComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [displayEditMessage, setDisplayEditMessage] = useState(false)
+  const [displayEditMessage, setDisplayEditMessage] = useState(false);
 
   useEffect(() => {
     fetchFormData();
@@ -183,11 +183,11 @@ function RegistrationForm({
         content={modalText}
         continueText="OK"
       />
-      <div className="container block-container">
+      <div className="container">
         <div className="row">
           {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
           {!isEditForm ? (
-            <div className="form-editor-froala col-lg registration-col">
+            <div className="form-editor-froala col-lg registration-col registration-description">
               {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
               {isLive ? (
                 <FroalaEditorView
@@ -205,7 +205,7 @@ function RegistrationForm({
             </div>
           ) : null}
 
-          <div className="col-lg registration-col">
+          <div className="col-lg registration-col registration-form">
             {isLoading ? (
               <CircularProgress className="margin-auto" />
             ) : regComplete && !isEditForm ? (
@@ -219,18 +219,30 @@ function RegistrationForm({
               </div>
             ) : (
               <div
-                className={
-                  `margin-auto ${!isEditForm ? "form-editor-react" : ""}`
-                }
+                className={`margin-auto ${
+                  !isEditForm ? "form-editor-react" : ""
+                }`}
                 onMouseEnter={isLive ? null : () => setDisplayEditMessage(true)}
-                onMouseLeave={isLive ? null : () => setDisplayEditMessage(false)}
+                onMouseLeave={
+                  isLive ? null : () => setDisplayEditMessage(false)
+                }
               >
-                {displayEditMessage ? <div style={{    position: "absolute",
-    width: "100%",
-    height: "100%",
-    background: "rgba(1,1,1,0.4)",
-    color: "#fff",
-    padding: "86px 40px"}}>Click the gears in the top left of the section to edit the registration form.</div> : null}
+                {displayEditMessage ? (
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: "0",
+                      left: "0",
+                      height: "100%",
+                      background: "rgba(1,1,1,0.4)",
+                      color: "#fff",
+                      padding: "86px 40px",
+                    }}
+                  >
+                    Click the gears in the top left of the section to edit the
+                    registration form.
+                  </div>
+                ) : null}
                 {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
                 <div className="form-group">
                   <label>

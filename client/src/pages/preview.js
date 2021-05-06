@@ -28,38 +28,47 @@ const Preview = (props) => {
       style={{
         backgroundImage: `url(${props.model.backgroundImage})`,
         width: "100%",
-        height: "100%",
+        height: "auto",
         position: "absolute",
         backgroundSize: "cover",
         backgroundPosition: "center",
         boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
       }}
     >
-      <style>{theme(props.event.primaryColor)}</style>
-      {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
-      <div className="floating-section-container">
-        {props.model.sections.map(function (section) {
-          return (
-            <div className="floating-section">
-              {section.isReact ? (
-                createElement(mapReactComponent[section.reactComponent.name], {
-                  ...section.reactComponent.props,
-                  sectionIndex: section.index,
-                  isLive: true,
-                })
-              ) : (
-                <FroalaEditorView
-                  model={section.html.replace(
-                    `contenteditable="true"`,
-                    `contenteditable="false"`
-                  )}
-                />
-              )}{" "}
-            </div>
-          );
-        })}
+      <div
+        style={{
+          backdropFilter: `blur(${props.model.backgroundBlur}px)`,
+        }}
+      >
+        <style>{theme(props.event.primaryColor)}</style>
+        {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+        <div className="floating-section-container">
+          {props.model.sections.map(function (section) {
+            return (
+              <div className="floating-section">
+                {section.isReact ? (
+                  createElement(
+                    mapReactComponent[section.reactComponent.name],
+                    {
+                      ...section.reactComponent.props,
+                      sectionIndex: section.index,
+                      isLive: true,
+                    }
+                  )
+                ) : (
+                  <FroalaEditorView
+                    model={section.html.replace(
+                      `contenteditable="true"`,
+                      `contenteditable="false"`
+                    )}
+                  />
+                )}{" "}
+              </div>
+            );
+          })}
+        </div>
+        <BrandingBottom />
       </div>
-      <BrandingBottom />
     </div>
   );
 };

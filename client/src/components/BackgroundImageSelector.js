@@ -15,6 +15,7 @@ import * as actions from "../actions";
 import api from "../api/server";
 
 import FoldingCube from "./FoldingCube";
+import { updateBackgroundBlur } from "../actions";
 
 const BackgroundImageSelector = ({
   event,
@@ -26,6 +27,7 @@ const BackgroundImageSelector = ({
   isPrimaryBg,
   updateBackgroundImage,
   updateBackgroundColor,
+  updateBackgroundBlur,
 }) => {
   const [openSelectImage, setOpenSelectImage] = useState(false);
   const [freeImageUrls, setFreeImageUrls] = useState([]);
@@ -154,6 +156,10 @@ const BackgroundImageSelector = ({
     updateSection(sectionIndex, newHtml.innerHTML);
   };
 
+  const handleChangeBlurValue = (event, newValue) => {
+    updateBackgroundBlur(newValue);
+  };
+
   return (
     <div>
       <Modal1
@@ -180,11 +186,29 @@ const BackgroundImageSelector = ({
       </Tabs>
       <div>
         {tabValue === 0 ? (
-          <Preview
-            currentBackgroundImageURL={currentBackgroundImageURL}
-            handleClickSelectImage={handleClickSelectImage}
-            handleClickRemoveImage={handleClickRemoveImage}
-          />
+          <>
+            <Preview
+              currentBackgroundImageURL={currentBackgroundImageURL}
+              handleClickSelectImage={handleClickSelectImage}
+              handleClickRemoveImage={handleClickRemoveImage}
+              blur={isPrimaryBg ? model.backgroundBlur : 0}
+            />
+            {isPrimaryBg ? (
+              <div style={{ margin: "0px 20px" }}>
+                <label>Blur</label>
+                <Slider
+                  value={model.backgroundBlur}
+                  onChange={handleChangeBlurValue}
+                  min={0}
+                  max={15}
+                  step={1}
+                  style={{ marginTop: "32px" }}
+                  marks={true}
+                  valueLabelDisplay="on"
+                />
+              </div>
+            ) : null}
+          </>
         ) : (
           <div style={{ padding: "18px" }}>
             <label>Background Color Overlay</label>
@@ -397,9 +421,10 @@ const Preview = ({
   currentBackgroundImageURL,
   handleClickSelectImage,
   handleClickRemoveImage,
+  blur,
 }) => {
   return (
-    <div style={{ padding: "18px" }}>
+    <div style={{ padding: "18px 18px 0px 18px" }}>
       {currentBackgroundImageURL ? (
         <>
           <div
@@ -410,7 +435,15 @@ const Preview = ({
               backgroundPosition: "bottom",
               backgroundSize: "cover",
             }}
-          ></div>
+          >
+            <div
+              style={{
+                backdropFilter: `blur(${blur}px)`,
+                height: "100%",
+                width: "100%",
+              }}
+            ></div>
+          </div>
           <div style={{ display: "flex", justifyContent: "space-between" }}>
             <Button
               style={{ padding: "15px  15px", color: "#000000" }}

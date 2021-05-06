@@ -11,6 +11,7 @@ import {
   SIMULATE_HOVER,
   UPDATE_BACKGROUND_IMAGE,
   UPDATE_BACKGROUND_COLOR,
+  UPDATE_BACKGROUND_BLUR,
 } from "../actions/types";
 
 export default function (
@@ -21,6 +22,7 @@ export default function (
     simulateHover: null,
     backgroundColor: "rgba(0,0,0,0.3)",
     backgroundImage: "",
+    backgroundBlur: 0,
   },
   action
 ) {
@@ -71,6 +73,7 @@ export default function (
         sections: action.payload.sections,
         backgroundImage: action.payload.backgroundImage,
         backgroundColor: action.payload.backgroundColor,
+        backgroundBlur: action.payload.backgroundBlur
       };
     case MODEL_ISSAVED:
       return { ...state, isUnsaved: false };
@@ -94,6 +97,9 @@ export default function (
       return { ...state, isUnsaved: true, backgroundImage: action.payload };
     case UPDATE_BACKGROUND_COLOR:
       return { ...state, isUnsaved: true, backgroundColor: action.payload };
+    case UPDATE_BACKGROUND_BLUR:
+      return { ...state, isUnsaved: true, backgroundBlur: action.payload };
+
     default:
       return state;
   }

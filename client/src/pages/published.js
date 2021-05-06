@@ -161,66 +161,79 @@ const Published = (props) => {
     return <RegistrationNotFound />;
   } else if (props.event.id) {
     return (
-      <div className="fr-view live-page-container">
-        <Helmet>
-          <title>{props.event.title}</title>
-        </Helmet>
-        <Modal1
-          open={openPoll}
-          onClose={closePoll}
-          content={
-            <PollBlock
-              question={poll.question}
-              pollOptions={poll.options}
-              allowMultiple={poll.allowMultiple}
-              submitPoll={handleSubmitPoll}
-            />
-          }
-        />
-
-        <AlertModal
-          open={openResults}
-          onClose={() => setOpenResults(false)}
-          content={
-            <div style={{ padding: "40px 30px 10px", width: "500px" }}>
-              <ResultsChart question={resultsQuestion} results={results} />
-            </div>
-          }
-          closeText="Close"
-        />
-        <style>{theme(props.event.primaryColor)}</style>
-        {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+      <div
+        className="fr-view live-page-container"
+        style={{
+          backgroundImage: `url(${props.model.backgroundImage})`,
+          width: "100%",
+          height: "auto",
+          position: "absolute",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+        }}
+      >
         <div
           style={{
-            backgroundImage: `url(${props.model.backgroundImage})`,
-            width: "100%",
-            height: "100%",
-            position: "absolute",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+            backdropFilter: `blur(${props.model.backgroundBlur}px)`,
           }}
-        ></div>
-        <ul className="floating-section-container">
-          {props.model.sections.map(function (section) {
-            return section.isReact ? (
-              createElement(mapReactComponent[section.reactComponent.name], {
-                ...section.reactComponent.props,
-                sectionIndex: section.index,
-                isLive: true,
-              })
-            ) : (
-              <FroalaEditorView
-                key={section.id}
-                model={section.html.replace(
-                  `contenteditable="true"`,
-                  `contenteditable="false"`
-                )}
+        >
+          {" "}
+          <Helmet>
+            <title>{props.event.title}</title>
+          </Helmet>
+          <Modal1
+            open={openPoll}
+            onClose={closePoll}
+            content={
+              <PollBlock
+                question={poll.question}
+                pollOptions={poll.options}
+                allowMultiple={poll.allowMultiple}
+                submitPoll={handleSubmitPoll}
               />
-            );
-          })}
-        </ul>
-        <BrandingBottom />
+            }
+          />
+          <AlertModal
+            open={openResults}
+            onClose={() => setOpenResults(false)}
+            content={
+              <div style={{ padding: "40px 30px 10px", width: "500px" }}>
+                <ResultsChart question={resultsQuestion} results={results} />
+              </div>
+            }
+            closeText="Close"
+          />
+          <style>{theme(props.event.primaryColor)}</style>
+          {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+          <div className="floating-section-container">
+            {props.model.sections.map(function (section) {
+              return (
+                <div className="floating-section">
+                  {section.isReact ? (
+                    createElement(
+                      mapReactComponent[section.reactComponent.name],
+                      {
+                        ...section.reactComponent.props,
+                        sectionIndex: section.index,
+                        isLive: true,
+                      }
+                    )
+                  ) : (
+                    <FroalaEditorView
+                      key={section.id}
+                      model={section.html.replace(
+                        `contenteditable="true"`,
+                        `contenteditable="false"`
+                      )}
+                    />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+          <BrandingBottom />
+        </div>
       </div>
     );
   }
