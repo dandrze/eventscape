@@ -46,9 +46,11 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
               />
               <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
             </Helmet>
-            <video-js
+            <video
               id="my-player"
               class="video-js"
+              autoplay
+              muted
               data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true}'
               width={710}
             >
@@ -67,7 +69,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
                   supports HTML5 video
                 </a>
               </p>
-            </video-js>
+            </video>
           </>
         );
       default:
