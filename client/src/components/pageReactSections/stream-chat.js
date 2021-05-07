@@ -36,9 +36,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
             allowFullScreen
           ></iframe>
         );
-      case "custom-embed":
-        return ReactHtmlParser(html);
-      default:
+      case null:
         return (
           <>
             <Helmet>
@@ -48,14 +46,14 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
               />
               <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
             </Helmet>
-            <video
+            <video-js
               id="my-player"
               class="video-js"
-              poster="//vjs.zencdn.net/v/oceans.png"
-              data-setup='{"controls": false, "autoplay": "muted", "preload": "auto"}'
+              data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true}'
+              width={710}
             >
               <source
-                src="//vjs.zencdn.net/v/oceans.mp4"
+                src="https://eventscape-assets.s3.amazonaws.com/assets/default-event-video-v2-small.mp4"
                 type="video/mp4"
               ></source>
 
@@ -69,9 +67,11 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
                   supports HTML5 video
                 </a>
               </p>
-            </video>
+            </video-js>
           </>
         );
+      default:
+        return ReactHtmlParser(html);
     }
   };
 

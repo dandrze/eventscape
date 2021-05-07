@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 
 import { makeStyles } from "@material-ui/core/styles";
@@ -41,17 +41,16 @@ const StreamSettings = ({
   fetchChatRooms,
   event,
 }) => {
-  const [content, setContent] = React.useState(
+  const [content, setContent] = useState(
     reactComponent.props.content || "vimeo"
   );
-  const [youtubeLink, setYoutubeLink] = React.useState(
+  const [youtubeLink, setYoutubeLink] = useState(
     reactComponent.props.link || ""
   );
-  const [customHTML, setCustomHTML] = React.useState(
-    reactComponent.props.html || ""
-  );
-  const [room, setRoom] = React.useState(reactComponent.props.chatRoom);
-  const [rooms, setRooms] = React.useState([]);
+  const [customHTML, setCustomHTML] = useState(reactComponent.props.html || "");
+  const [room, setRoom] = useState(reactComponent.props.chatRoom);
+  const [rooms, setRooms] = useState([]);
+  const [embedError, setEmbedError] = useState("");
 
   const classes = useStyles();
 
@@ -74,6 +73,7 @@ const StreamSettings = ({
   };
 
   const handleChangeCustomHTML = (event) => {
+    setEmbedError("");
     setCustomHTML(event.target.value);
   };
 
@@ -82,13 +82,17 @@ const StreamSettings = ({
   };
 
   const handleSaveStreamSettings = () => {
-    saveStreamSettings(sectionIndex, {
-      content,
-      link: youtubeLink || "",
-      html: customHTML || "",
-      chatRoom: room,
-    });
-    handleClose();
+    if (content && !customHTML) {
+      setEmbedError("Please enter your embed code");
+    } else {
+      saveStreamSettings(sectionIndex, {
+        content,
+        link: youtubeLink || "",
+        html: customHTML || "",
+        chatRoom: room,
+      });
+      handleClose();
+    }
   };
 
   return (
@@ -165,6 +169,8 @@ const StreamSettings = ({
                           rows={12}
                           value={customHTML}
                           onChange={handleChangeCustomHTML}
+                          helperText={embedError}
+                          error={embedError}
                         />
                       </FormControl>
                     </>
@@ -215,6 +221,8 @@ const StreamSettings = ({
                           rows={12}
                           value={customHTML}
                           onChange={handleChangeCustomHTML}
+                          helperText={embedError}
+                          error={embedError}
                         />
                       </FormControl>
                     </>
@@ -254,6 +262,8 @@ const StreamSettings = ({
                           rows={12}
                           value={customHTML}
                           onChange={handleChangeCustomHTML}
+                          helperText={embedError}
+                          error={embedError}
                         />
                       </FormControl>
                     </>
@@ -306,6 +316,8 @@ const StreamSettings = ({
                         rows={12}
                         value={customHTML}
                         onChange={handleChangeCustomHTML}
+                        helperText={embedError}
+                        error={embedError}
                       />
                     </FormControl>
                   )}
