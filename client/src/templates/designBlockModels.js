@@ -686,7 +686,7 @@ export const sponsorGrid = (columns, rows, box) => {
 export const streamChatReact = {
   name: "StreamChat",
   props: {
-    content: "youtube-live",
+    content: null,
     link: "https://www.youtube.com/embed/KMDQR9V1Pso",
     html: "",
     chatRoom: null,

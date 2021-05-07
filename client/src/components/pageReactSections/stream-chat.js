@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
 import "../fonts.css";
 import "../pageEditor.css";
 import "./stream-chat.css";
 import Chat from "../chat4.js";
+import { Helmet } from "react-helmet";
 
 const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
   const createEmbedLink = (youtubeLink) => {
@@ -35,10 +36,42 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
             allowFullScreen
           ></iframe>
         );
-      case "custom-embed":
-        return ReactHtmlParser(html);
+      case null:
+        return (
+          <>
+            <Helmet>
+              <link
+                href="//vjs.zencdn.net/7.10.2/video-js.min.css"
+                rel="stylesheet"
+              />
+              <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
+            </Helmet>
+            <video-js
+              id="my-player"
+              class="video-js"
+              data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true}'
+              width={710}
+            >
+              <source
+                src="https://eventscape-assets.s3.amazonaws.com/assets/default-event-video-v2-small.mp4"
+                type="video/mp4"
+              ></source>
+
+              <p class="vjs-no-js">
+                To view this video please enable JavaScript, and consider
+                upgrading to a web browser that
+                <a
+                  href="https://videojs.com/html5-video-support/"
+                  target="_blank"
+                >
+                  supports HTML5 video
+                </a>
+              </p>
+            </video-js>
+          </>
+        );
       default:
-        return <p>Unknown Error</p>;
+        return ReactHtmlParser(html);
     }
   };
 
