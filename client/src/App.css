@@ -1101,6 +1101,8 @@ select:focus {
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
 
 .section-container {
+  height: auto;
+  min-height: calc(100vh - 65px);
 }
 
 .section-block {
