@@ -219,7 +219,11 @@ const PageEditor = (props) => {
           )}
           <br></br>
         </div>
-        <div id="designBoard" style={{ position: "relative" }}>
+        <div
+          id="designBoard"
+          style={{ position: "relative" }}
+          onMouseLeave={handleMouseLeave}
+        >
           <div
             style={{
               backgroundImage: `url(${props.model.backgroundImage})`,
@@ -244,11 +248,7 @@ const PageEditor = (props) => {
                   ? null
                   : props.model.sections.map(function (section, index) {
                       return (
-                        <div
-                          key={section.id}
-                          className="section-block"
-                          onMouseLeave={handleMouseLeave}
-                        >
+                        <div key={section.id} className="section-block">
                           <PageSectionEditor
                             section={section}
                             sectionIndex={index}

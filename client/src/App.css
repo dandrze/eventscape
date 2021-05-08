@@ -1028,7 +1028,7 @@ select:focus {
 
 .registration-col {
   text-align: justify;
-  padding: 24px;
+  padding: 48px;
   background: #eaeaea;
 }
 
@@ -1106,13 +1106,11 @@ select:focus {
 }
 
 .section-block {
-  padding: 0px 10px;
-  max-width: 1400px;
   margin: auto;
 }
 
 .inner-section-block {
-  margin: 10px;
+  margin: 20px 10px 0px;
   border-radius: 10px;
 }
 

@@ -10,6 +10,7 @@ export const heroBannerModel = (eventTitle = "default") => {
   justify-content: center;
   align-items: center;
   padding: 150px 20px;
+  width: 100%
   box-shadow: rgba(35, 35, 35, 0.667) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div>
@@ -40,6 +41,7 @@ export const heroBannerModelNarrow = (eventTitle = "default") => {
     display: flex;
     justify-content: center;
     align-items: center;
+    width: 100%;
     padding: 50px 20px;
     box-shadow: rgba(35, 35, 35, 0.667) 0px 0px 0px 5000px inset;
     overflow: hidden" data-info="background image/color. Do not modify." >
@@ -91,20 +93,22 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
   const logoUrl = logo
     ? logo
     : "https://eventscape-assets.s3.amazonaws.com/assets/Eventscape-your-logo-grey.png";
-  return `<div style="background-position: bottom;
+  return `<div style="padding: 20px 5% 0px; margin: 0px 10px;">
+  <div style="background-position: bottom;
     background-size: cover;
     box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
     border-radius: 10px;
-    margin: 10px;
+    margin: auto;
     align-items: center;
     display: flex;
     justify-content: space-between;
-    padding: 12px 24px;
+    padding: 12px 48px;
     overflow: hidden" data-info="background image/color. Do not modify." >
     
             <div>${eventTitle}</div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
   
+      </div>
       </div>
       `;
 };
@@ -534,6 +538,8 @@ export const blankModel = () => {
 export const scheduleTable1 = () => {
   return `<div style="background-position: bottom;
   background-size: cover;
+  width: 100%;
+  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="block-container" style="overflow: hidden;">
   <h2 class="theme-color">Agenda</h2>
@@ -579,6 +585,8 @@ export const scheduleTable1 = () => {
 export const scheduleTable2 = () => {
   return `<div style="background-position: bottom;
   background-size: cover;
+  width: 100%;
+  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="block-container" style="overflow: hidden;">
     <h2 class="theme-color">Agenda</h2>
@@ -624,6 +632,8 @@ export const scheduleTable2 = () => {
 export const paragraph1 = () => {
   return `<div style="background-position: bottom;
   background-size: cover;
+  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  width: 100%;
   overflow: hidden" data-info="background image/color. Do not modify." ><div class="container block-container" style="overflow: hidden;">
   <div class="col">
      <p>
@@ -638,6 +648,8 @@ export const paragraph1 = () => {
 export const paragraph2 = () => {
   return `<div style="background-position: bottom;
   background-size: cover;
+  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  width: 100%;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="container block-container" style="overflow: hidden;">
   <div class="row">

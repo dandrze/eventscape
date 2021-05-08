@@ -1,12 +1,11 @@
 .stream-chat-main-container {
-  margin: 0rem;
+  padding: 0px 5% 20px;
   display: flex;
   width: 100%;
   box-sizing: border-box;
 }
 
 .container-one-video-window {
-
   text-align: justify;
   max-width: 100%;
   overflow: hidden;
