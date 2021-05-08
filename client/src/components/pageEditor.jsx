@@ -143,12 +143,12 @@ const PageEditor = (props) => {
 
       <div className="design">
         <div className="top-button-bar pt-5">
-          <div>
+          <div style={{ display: "flex", flexWrap: "wrap" }}>
             {props.event.plan.PlanType.type === "free" ? (
               <button
                 className="Button1"
                 onClick={handleRemoveLogoError}
-                style={{ marginRight: "15px" }}
+                style={{ margin: "12px 12px 0px 0px" }}
               >
                 Remove Eventscape Logo
               </button>
@@ -164,6 +164,7 @@ const PageEditor = (props) => {
                   : props.event.EventPageModelId)
               }
               target="_blank"
+              style={{ margin: "12px 12px 0px 0px" }}
             >
               <button className="Button2" style={{ height: "32px" }}>
                 Preview Page As Guest
@@ -171,7 +172,7 @@ const PageEditor = (props) => {
             </Link>
             <button
               className="Button2"
-              style={{ alignSelf: "flex-end" }}
+              style={{ alignSelf: "flex-end", margin: "12px 12px 0px 0px" }}
               onClick={handleClickEditBackground}
             >
               Edit Background Image
@@ -238,14 +239,14 @@ const PageEditor = (props) => {
               {props.event.plan.PlanType.type === "free" ? (
                 <BrandingTop />
               ) : null}
-              <div className="floating-section-container">
+              <div className="section-container">
                 {props.model.sections.length === 0
                   ? null
                   : props.model.sections.map(function (section, index) {
                       return (
                         <div
                           key={section.id}
-                          className="floating-section"
+                          className="section-block"
                           onMouseLeave={handleMouseLeave}
                         >
                           <PageSectionEditor

@@ -183,11 +183,11 @@ function RegistrationForm({
         content={modalText}
         continueText="OK"
       />
-      <div className="container">
-        <div className="row">
+      <div>
+        <div className="row" style={{ margin: "0px" }}>
           {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
           {!isEditForm ? (
-            <div className="form-editor-froala col-lg registration-col registration-description">
+            <div className="form-editor-froala col-lg registration-col inner-section-block">
               {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
               {isLive ? (
                 <FroalaEditorView
@@ -205,7 +205,7 @@ function RegistrationForm({
             </div>
           ) : null}
 
-          <div className="col-lg registration-col registration-form">
+          <div className="col-lg registration-col inner-section-block">
             {isLoading ? (
               <CircularProgress className="margin-auto" />
             ) : regComplete && !isEditForm ? (

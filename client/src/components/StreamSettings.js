@@ -82,7 +82,7 @@ const StreamSettings = ({
   };
 
   const handleSaveStreamSettings = () => {
-    if (content && !customHTML) {
+    if (content && content != "youtube-live" && !customHTML) {
       setEmbedError("Please enter your embed code");
     } else {
       saveStreamSettings(sectionIndex, {

@@ -1,18 +1,18 @@
 .branding-top-container {
-    background-color: white;
-    display: flex;
-    align-items: center;
-    justify-content: end;
-    padding: 10px 1rem;
-    border-bottom: 1px solid #d1d1d1;
-    margin-bottom: 0px;
+  background-color: #f7f7f7;
+  display: flex;
+  align-items: center;
+  justify-content: end;
+  padding: 10px 1rem;
+  border-bottom: 1px solid #ffffff;
+  margin-bottom: 0px;
 }
 
 .branding-button {
-    color: #d1d1d1;
-    transition: all 0.1s ease-in-out;
+  color:var(--main-color);;
+  transition: all 0.1s ease-in-out;
 }
 
 .branding-button:hover {
-    color: var(--main-color);
+  color: #ffffff;
 }

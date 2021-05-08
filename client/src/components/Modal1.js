@@ -62,8 +62,6 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
               <div>
                 <div
                   style={{
-                    overflowY: "scroll",
-                    overflowX: "scroll",
                     maxHeight: "90vh",
                     maxWidth: "95vw",
                   }}

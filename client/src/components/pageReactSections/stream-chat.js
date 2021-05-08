@@ -48,11 +48,11 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
             </Helmet>
             <video
               id="my-player"
-              class="video-js"
+              class="video-js  vjs-16-9"
               autoplay
               muted
-              data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true}'
-              width={710}
+              data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true, "fluid": true}'
+              style={{ width: "100%" }}
             >
               <source
                 src="https://eventscape-assets.s3.amazonaws.com/assets/default-event-video-v2-small.mp4"
@@ -79,12 +79,12 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
 
   return (
     <div>
-      <section className="stream-chat-main-container">
+      <section className="stream-chat-main-container ">
         <div className="container-one-video-window">
-          <div className="video-responsive">{displayStream()}</div>
+          <div className="video-responsive inner-section-block">{displayStream()}</div>
         </div>
-        <div className="container-two-chat-window">
-          <div className="chat-responsive">
+        <div className="container-two-chat-window ">
+          <div className="chat-responsive inner-section-block">
             <div className="video-responsive-iframe">
               <Chat
                 room={chatRoom}

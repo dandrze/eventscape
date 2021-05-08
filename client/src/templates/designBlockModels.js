@@ -95,6 +95,7 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     background-size: cover;
     box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
     border-radius: 10px;
+    margin: 10px;
     align-items: center;
     display: flex;
     justify-content: space-between;

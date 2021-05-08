@@ -42,10 +42,10 @@ const Preview = (props) => {
       >
         <style>{theme(props.event.primaryColor)}</style>
         {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
-        <div className="floating-section-container">
+        <div className="section-container">
           {props.model.sections.map(function (section) {
             return (
-              <div className="floating-section">
+              <div className="section-block">
                 {section.isReact ? (
                   createElement(
                     mapReactComponent[section.reactComponent.name],
