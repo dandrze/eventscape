@@ -16,6 +16,7 @@ import "./newSectionButton.css";
 import logoHeader from "./designBlockThumbnails/logoHeaderGrey.png";
 import heroBanner from "./designBlockThumbnails/heroBanner.png";
 import titleThumb from "./designBlockThumbnails/title.png";
+import titleLogoThumb from "./designBlockThumbnails/titleLogo.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
 import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png";
@@ -175,7 +176,7 @@ const NewSectionButton = ({ event, addSection, prevIndex, position }) => {
                 {blockCat === "title" && (
                   <Grid container spacing={3}>
                     {/* Registration Page Title */}
-                    <Grid item xs={12}>
+                    {/*    <Grid item xs={12}>
                       <DesignBlockPreview
                         src={heroBanner}
                         handleClick={() => {
@@ -183,7 +184,7 @@ const NewSectionButton = ({ event, addSection, prevIndex, position }) => {
                           handleAddSection(heroBannerModel(event.title));
                         }}
                       />
-                    </Grid>
+                    </Grid> */}
 
                     {/* Event page title */}
                     <Grid item xs={12}>
@@ -197,7 +198,7 @@ const NewSectionButton = ({ event, addSection, prevIndex, position }) => {
                     </Grid>
                     <Grid item xs={12}>
                       <DesignBlockPreview
-                        src={titleThumb}
+                        src={titleLogoThumb}
                         handleClick={() => {
                           handleClose();
                           handleAddSection(

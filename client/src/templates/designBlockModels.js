@@ -69,12 +69,23 @@ export const logoHeaderModel = (logo) => {
   const logoUrl = logo
     ? logo
     : "https://eventscape-assets.s3.amazonaws.com/assets/Eventscape-your-logo-grey.png";
-  return `<div style="background-position: bottom;
-  background-size: cover;
-  overflow: hidden" data-info="background image/color. Do not modify." >
+  return `  <div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
+    background-size: cover;
+    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    border-radius: 10px;
+    margin: auto;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 48px;
+    overflow: hidden" data-info="background image/color. Do not modify." >
         <div style="margin: 20px; display: block;">
             <img src="${logoUrl}" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
+    </div>
+    </div>
     </div>
     `;
 };
@@ -93,7 +104,9 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
   const logoUrl = logo
     ? logo
     : "https://eventscape-assets.s3.amazonaws.com/assets/Eventscape-your-logo-grey.png";
-  return `<div style="padding: 20px 5% 0px; margin: 0px 10px;">
+  return `
+  <div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
   <div style="background-position: bottom;
     background-size: cover;
     box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
@@ -105,22 +118,39 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     padding: 12px 48px;
     overflow: hidden" data-info="background image/color. Do not modify." >
     
-            <div>${eventTitle}</div>
+    <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+            <div style="font-weight: 300;">${eventTitle}</div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
-  
+    <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+      </div>
       </div>
       </div>
       `;
 };
 
 export const logoHeaderRightModel = () => {
-  return `<div style="background-position: bottom;
-  background-size: cover;
-  overflow: hidden" data-info="background image/color. Do not modify." >
+  return `div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
+    background-size: cover;
+    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    border-radius: 10px;
+    margin: auto;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 48px;
+    overflow: hidden" data-info="background image/color. Do not modify." >
+    <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
         <div style="margin: 20px; display: block;">
             <img src="https://eventscape-assets.s3.amazonaws.com/logos/Eventscape-your-logo-bw-2.png" style="width: 150px;" class="fr-fic fr-dib fr-fir">
         </div>
+        <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
     </div>
+    <div>
+    <div>
     `;
 };
 
@@ -249,10 +279,25 @@ export const registrationFormDescription = (
 };
 
 export const simpleTitle = (eventTitle = "default") => {
-  return `<div style="overflow: hidden; border-radius: 10px; box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;" contenteditable="false">
-            <div style="margin: 1rem 1rem 1rem 1rem;">
+  return `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
+    background-size: cover;
+    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    border-radius: 10px;
+    margin: auto;
+    align-items: center;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 48px;
+    overflow: hidden" data-info="background image/color. Do not modify." >
+    <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
                 <div class="title1" contenteditable="true">${eventTitle}</div>
+                <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
             </div>
+        </div>
         </div>
         
         <style>
@@ -536,12 +581,18 @@ export const blankModel = () => {
 };
 
 export const scheduleTable1 = () => {
-  return `<div style="background-position: bottom;
+  return `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
   background-size: cover;
   width: 100%;
+  border-radius: 10px;
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="block-container" style="overflow: hidden;">
+
+  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
   <h2 class="theme-color">Agenda</h2>
     <table class="schedule-table schedule-table1">
     <tbody>
@@ -577,18 +628,27 @@ export const scheduleTable1 = () => {
         </tr>
     </tbody>
   </table>
+  <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
+      </div>
+      </div>
       </div>
       </div>
       `;
 };
 
 export const scheduleTable2 = () => {
-  return `<div style="background-position: bottom;
+  return `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
   background-size: cover;
   width: 100%;
+  border-radius: 10px;
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="block-container" style="overflow: hidden;">
+  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
     <h2 class="theme-color">Agenda</h2>
       <table class="schedule-table schedule-table2">
       <tbody>
@@ -624,32 +684,50 @@ export const scheduleTable2 = () => {
           </tr>
       </tbody>
     </table>
+
+    <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
+        </div>
+        </div>
         </div>
         </div>
         `;
 };
 
 export const paragraph1 = () => {
-  return `<div style="background-position: bottom;
+  return `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
   background-size: cover;
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   width: 100%;
-  overflow: hidden" data-info="background image/color. Do not modify." ><div class="container block-container" style="overflow: hidden;">
+  border-radius: 10px;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <div class="container block-container" style="overflow: hidden;">
   <div class="col">
+  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
      <p>
      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
      </p>
+     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
      </div>
+          </div>
+          </div>
           </div>
           </div>
           `;
 };
 
 export const paragraph2 = () => {
-  return `<div style="background-position: bottom;
+  return `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
   background-size: cover;
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   width: 100%;
+  border-radius: 10px;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="container block-container" style="overflow: hidden;">
   <div class="row">
@@ -672,7 +750,9 @@ export const paragraph2 = () => {
 export const sponsorGrid = (columns, rows, box) => {
   let column = 0;
   let row = 0;
-  let html = `<div style="background-position: bottom;
+  let html = `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
   background-size: cover;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <h1 style="font-size: 26px;">Thank you to our sponsors</h1>
@@ -683,6 +763,8 @@ export const sponsorGrid = (columns, rows, box) => {
     while (column < columns) {
       html += `<div class="col-lg ${columnClass}">
                 <img src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
+            </div>
+            </div>
             </div>`;
       column += 1;
     }

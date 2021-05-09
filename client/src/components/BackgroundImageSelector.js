@@ -141,7 +141,7 @@ const BackgroundImageSelector = ({
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
     // get a reference to the base div
-    const background = newHtml.getElementsByTagName("div")[0];
+    const background = newHtml.getElementsByTagName("div")[2];
 
     // convert rgba object to string
     const overlayRGBA = `rgba(${newColor.r}, ${newColor.g}, ${newColor.b}, ${

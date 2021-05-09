@@ -80,11 +80,11 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
   return (
     <div>
       <section className="stream-chat-main-container ">
-        <div className="container-one-video-window">
-          <div className="video-responsive inner-section-block">{displayStream()}</div>
+        <div className="container-one-video-window inner-section-block">
+          <div className="video-responsive ">{displayStream()}</div>
         </div>
-        <div className="container-two-chat-window ">
-          <div className="chat-responsive inner-section-block">
+        <div className="container-two-chat-window inner-section-block">
+          <div className="chat-responsive">
             <div className="video-responsive-iframe">
               <Chat
                 room={chatRoom}
