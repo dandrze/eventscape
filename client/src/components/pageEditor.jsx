@@ -243,11 +243,10 @@ const PageEditor = (props) => {
             }}
           >
             <div
-              style={
-                {
-                  //backdropFilter: `blur(${props.model.backgroundBlur}px)`,
-                }
-              }
+              style={{
+                backdropFilter: `blur(${props.model.backgroundBlur}px)`,
+                WebkitBackdropFilter: `blur(${props.model.backgroundBlur}px)`,
+              }}
             >
               {props.event.plan.PlanType.type === "free" ? (
                 <BrandingTop />

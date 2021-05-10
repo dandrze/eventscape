@@ -438,7 +438,8 @@ const Preview = ({
           >
             <div
               style={{
-                //backdropFilter: `blur(${blur}px)`,
+                backdropFilter: `blur(${blur}px)`,
+                WebkitBackdropFilter: `blur(${blur}px)`,
                 height: "100%",
                 width: "100%",
               }}
