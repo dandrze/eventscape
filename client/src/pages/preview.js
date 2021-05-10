@@ -36,9 +36,11 @@ const Preview = (props) => {
       }}
     >
       <div
-        style={{
-          backdropFilter: `blur(${props.model.backgroundBlur}px)`,
-        }}
+        style={
+          {
+            //backdropFilter: `blur(${props.model.backgroundBlur}px)`,
+          }
+        }
       >
         <style>{theme(props.event.primaryColor)}</style>
         {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}

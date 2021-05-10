@@ -1102,7 +1102,7 @@ select:focus {
 
 .section-container {
   height: auto;
-  min-height: calc(100vh - 65px);
+  min-height: calc(100vh - 55px);
   padding-top: 10px;
   padding-bottom: 45px;
   margin: auto;
@@ -1118,7 +1118,7 @@ select:focus {
 }
 
 .blur {
-  backdrop-filter: blur(5px);
+  /*backdrop-filter: blur(5px);*/
 }
 
 .description-text {
