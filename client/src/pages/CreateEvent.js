@@ -1698,7 +1698,8 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
         <div
           style={{
             alignSelf: "baseline",
-            width: "800px",
+            maxWidth: "800px",
+            width: "100vw",
             background: "white",
             padding: "60px",
             marginTop: "120px",
