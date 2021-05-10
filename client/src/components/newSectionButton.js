@@ -80,7 +80,7 @@ const DesignBlockPreview = ({ src, handleClick }) => {
   );
 };
 
-const NewSectionButton = ({ event, addSection, prevIndex, position }) => {
+const NewSectionButton = ({ event, addSection, prevIndex }) => {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const [selection, setSelection] = React.useState("");

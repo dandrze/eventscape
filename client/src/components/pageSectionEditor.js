@@ -22,7 +22,9 @@ const PageSectionEditor = ({
   return (
     <div>
       <style>{theme(event.primaryColor)}</style>
-
+      {(isHovering === sectionIndex) & (sectionIndex === 0) ? (
+        <NewSectionButton prevIndex={-1} />
+      ) : null}
       <div
         onMouseEnter={handleMouseEnter}
         // relative position ensures that the design block toolbar moves with the design block
@@ -50,7 +52,7 @@ const PageSectionEditor = ({
         )}
       </div>
       {isHovering === sectionIndex || isHovering === sectionIndex + 1 ? (
-        <NewSectionButton prevIndex={sectionIndex} position="bottom" />
+        <NewSectionButton prevIndex={sectionIndex} />
       ) : null}
     </div>
   );
