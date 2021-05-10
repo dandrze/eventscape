@@ -183,11 +183,18 @@ const PageEditor = (props) => {
               <CircularProgress />
             </div>
           ) : (
-            <div style={{ flexGrow: 1, textAlign: "right" }}>
+            <div
+              style={{
+                flexGrow: 1,
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "flex-end",
+              }}
+            >
               {props.model.isUnsaved ? (
                 <>
                   <button
-                    className="Button1"
+                    className="Button2"
                     onClick={() => setDiscardOpen(true)}
                     style={{ marginLeft: "12px" }}
                   >

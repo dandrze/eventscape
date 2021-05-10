@@ -1,5 +1,5 @@
 .branding-top-container {
-  background-color: #f7f7f7;
+  background-color: #eaeaea;
   display: flex;
   align-items: center;
   justify-content: end;
@@ -9,10 +9,11 @@
 }
 
 .branding-button {
-  color:var(--main-color);;
+  color: #929292;
   transition: all 0.1s ease-in-out;
 }
 
 .branding-button:hover {
-  color: #ffffff;
+  text-decoration: underline;
+  color: var(--main-color);
 }

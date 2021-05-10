@@ -20,7 +20,7 @@ export default function BrandingTop(props) {
         style={{ marginLeft: "auto", fontSize: "16px" }}
         className="branding-button"
       >
-        Create Event
+        Create your own event page
       </a>
     </div>
   );

@@ -196,10 +196,7 @@ const StreamSettings = ({
                             Click <strong>Embed</strong> in the window that pops
                             up
                           </li>
-                          <li>
-                            Select <strong>640x360</strong> as the{" "}
-                            <strong>Player Size</strong>
-                          </li>
+
                           <li>
                             Click <strong>Copy</strong>
                           </li>

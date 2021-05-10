@@ -18,6 +18,7 @@
   overflow: hidden;
   position: relative;
   height: 0;
+  border-radius: 10px;
 }
 
 /* Side by Side */

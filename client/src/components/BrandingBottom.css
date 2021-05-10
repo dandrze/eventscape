@@ -1,10 +1,10 @@
 .branding-bottom-container {
-  background-color: white;
+  background-color: #eaeaea;
   display: flex;
   align-items: center;
   justify-content: end;
   padding: 10px 1rem;
-  border-top: 1px solid rgba(0, 0, 0, 0);
+  border-top: 1px solid #1d1d1d;
   margin-top: -1px;
   position: absolute;
   bottom: 0;
