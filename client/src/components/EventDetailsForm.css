@@ -1,53 +1,53 @@
 .title {
-    margin-top: 5rem;
+  margin-top: 5rem;
 }
 
 .event-details-box {
-    margin-top: 4rem;
-    margin-bottom: 6rem;
+  margin-top: 4rem;
+  margin-bottom: 6rem;
 }
 
-#event-cat-select, #event-time-zone-select{
+#event-cat-select,
+#event-time-zone-select {
   text-align: left;
 }
 
-#date-time-container {
-    margin-bottom: 0px;
+.date-time-container {
+  margin-bottom: 0px;
+  padding: 0px 8px;
 }
 
 #primary-color {
-    margin: 0 auto;
-    min-width: 100%;
+  margin: 0 auto;
+  min-width: 100%;
 }
 
 #hex-input {
-    width: 25%;
-    min-width: 90px;
-    color: grey;
-    font-family: Roboto, 'Helvetica Neue', Ariel, sans-serif;
-    border-radius: 4px;
-    margin-top: 1rem;
-    text-align: center;
+  width: 25%;
+  min-width: 90px;
+  color: grey;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  border-radius: 4px;
+  margin-top: 1rem;
+  text-align: center;
 }
 
 .react-colorful {
-    height: 300px;
-    min-width: 100%;
+  height: 300px;
+  min-width: 100%;
 }
 
 .react-colorful__saturation {
-    border-radius: 3px 3px 0 0;
+  border-radius: 3px 3px 0 0;
 }
 
 .react-colorful__hue {
-    height: 30px;
-    border-radius: 0 0 3px 3px;
+  height: 30px;
+  border-radius: 0 0 3px 3px;
 }
 
 #date-left {
-    margin-right: 8px;
 }
 
 #date-right {
-    margin-left: 8px;
 }

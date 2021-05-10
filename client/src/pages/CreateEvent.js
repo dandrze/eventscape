@@ -461,8 +461,8 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
               <>
                 <MuiPickersUtilsProvider utils={DateFnsUtils}>
                   {/* Start Date & Time */}
-                  <Grid container spacing={0}>
-                    <Grid item xs={6} id="date-time-container">
+                  <Grid container>
+                    <Grid item sm={6} xs={12} className="date-time-container">
                       <div id="date-left">
                         <FormControl
                           variant="outlined"
@@ -485,7 +485,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                         </FormControl>
                       </div>
                     </Grid>
-                    <Grid item xs={6} id="date-time-container">
+                    <Grid item sm={6} xs={12} className="date-time-container">
                       <div id="date-right">
                         <FormControl
                           variant="outlined"
@@ -512,7 +512,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                     </Grid>
                   </Grid>
                 </MuiPickersUtilsProvider>
-                <FormControl variant="outlined" className={classes.formControl}>
+                <FormControl variant="outlined" className={`${classes.formControl} date-time-container`}>
                   {/* Time Zone */}
                   <InputLabel
                     id="event-time-zone"
@@ -1702,7 +1702,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             width: "100vw",
             background: "white",
             padding: "60px",
-            marginTop: "120px",
+            marginTop: "15%",
           }}
         >
           {getStepContent()}
