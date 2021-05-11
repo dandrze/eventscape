@@ -68,7 +68,10 @@ function Login(props) {
     <div>
       <SimpleNavBar
         content={
-          <div className="form-box shadow-border" style={{ width: "600px" }}>
+          <div
+            className="form-box shadow-border"
+            style={{ maxWidth: "600px", width: "100vw" }}
+          >
             <h1>Sign in to continue.</h1>
             <p className="subtext" style={{ marginTop: "8px" }}>
               Enter the email you used to sign up below and we'll send you a

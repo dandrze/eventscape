@@ -134,6 +134,14 @@ const useStyles = makeStyles((theme) => ({
     overflowY: "scroll", // Added to fix froala cursor jumping bug
     height: "calc(100vh - 64px)", // Added to fix froala cursor jumping bug
   },
+  fullWidth: {
+    flexGrow: 1,
+    //padding: theme.spacing(3),
+    padding: "24px 0px 0px",
+    margin: "64px 0px 0px 0px",
+    overflowY: "scroll", // Added to fix froala cursor jumping bug
+    height: "calc(100vh - 64px)", // Added to fix froala cursor jumping bug
+  },
   currentEvent: {
     display: "block",
     color: MenuText,
@@ -777,7 +785,9 @@ function NavBar3(props) {
           </List>
         </Drawer>
       )}
-      <div className={classes.content}>{content}</div>
+      <div className={props.fullWidth ? classes.fullWidth : classes.content}>
+        {content}
+      </div>
     </div>
   );
 }
