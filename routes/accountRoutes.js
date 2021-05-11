@@ -103,7 +103,10 @@ router.get("/api/account/email-exists", async (req, res, next) => {
 
   try {
     const account = await Account.findOne({
-      where: { emailAddress, registrationComplete: true },
+      where: {
+        emailAddress: emailAddress.toLowerCase(),
+        registrationComplete: true,
+      },
     });
 
     res.json(Boolean(account));

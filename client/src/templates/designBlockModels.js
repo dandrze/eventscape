@@ -107,7 +107,7 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
   return `
   <div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
   <div style="padding: 10px;">
-  <div style="background-position: bottom;
+  <div id="title-logo-banner" style="background-position: bottom;
     background-size: cover;
     box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
     border-radius: 10px;
@@ -119,7 +119,7 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     overflow: hidden" data-info="background image/color. Do not modify." >
     
     <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-            <div style="font-weight: 300;">${eventTitle}</div>
+            <div style="font-weight: 300; font-size: 26px;">${eventTitle}</div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
       </div>
@@ -448,20 +448,7 @@ export const streamChatModel = () => {
                 max-height: 500px;
             }
 
-            .video-responsive{
-                overflow:hidden;
-                padding-bottom:56.25%;
-                position:relative;
-                height:0;
-            }
-
-            .video-responsive-iframe{
-                left:0;
-                top:0;
-                height:100%;
-                width:100%;
-                position:absolute;
-            }
+         
 
             ul {
                 list-style: none;
@@ -842,17 +829,4 @@ allowfullscreen
 
 
 
-            .video-responsive{
-                overflow:hidden;
-                padding-bottom:56.25%;
-                position:relative;
-                height:0;
-            }
-            .video-responsive-iframe{
-                left:0;
-                top:0;
-                height:100%;
-                width:100%;
-                position:absolute;
-            }
         </style>*/

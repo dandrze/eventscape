@@ -16,7 +16,7 @@ import "./newSectionButton.css";
 import logoHeader from "./designBlockThumbnails/logoHeaderGrey.png";
 import heroBanner from "./designBlockThumbnails/heroBanner.png";
 import titleThumb from "./designBlockThumbnails/title.png";
-import titleLogoThumb from "./designBlockThumbnails/titleLogo.png";
+import titleLogoThumb from "./designBlockThumbnails/titleLogoWhite.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
 import blankThumb from "./designBlockThumbnails/blank.png";
 import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png";

@@ -1136,3 +1136,13 @@ select:focus {
   text-decoration: underline;
   font-weight: bold;
 }
+
+@media only screen and (max-width: 600px) {
+  #title-logo-banner {
+    flex-direction: column-reverse;
+  }
+
+  #title-logo-banner * {
+    margin: 10px auto;
+  }
+}

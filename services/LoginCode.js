@@ -14,19 +14,16 @@ const sendCode = async (emailAddress) => {
     account.loginCodeExpiration = loginCodeExpiration;
     account.save();
 
-    sendEmail(
-      {
-        to: emailAddress,
-        subject: "Eventscape Login Code",
-        html: `<p>Hello!</p>
-  <p>here is your login code for Eventscape:</p>
+    sendEmail({
+      to: emailAddress,
+      subject: "Eventscape Login Code",
+      html: `<p>Hello!</p>
+  <p>Here is your login code for Eventscape:</p>
   <p style="font-size: 16px; font-weight: 600;">${loginCode}</p>
-  <p>This code expires after 15 minutes</p>
+  <p>This code expires after 15 minutes.</p>
   <p>If you did not request a login from EventScape, please ignore this email. </p>`,
-        useTemplate: true,
-      },
-      { email: "notifications@eventscape.io", name: "Eventscape" }
-    );
+      useTemplate: true,
+    });
     return true;
   } else {
     return false;
