@@ -209,12 +209,12 @@ function RegistrationForm({
             <CircularProgress className="margin-auto" />
           ) : regComplete && !isEditForm ? (
             <div className="margin-auto">
-              <div>Thank you for registering for {event.title}</div>
+              <p>Thank you for registering for {event.title}</p>
               <br />
-              <div>
+              <p>
                 A confirmation email was sent to {emailAddress}. Please check
                 your spam if you don't see it in your inbox.
-              </div>
+              </p>
             </div>
           ) : (
             <div

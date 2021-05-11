@@ -14,10 +14,14 @@ const retrieveJobs = async () => {
   });
 
   const activeCommunications = communications.filter(
-    (communication) => communication.status === statusOptions.ACTIVE
+    (communication) =>
+      communication.status === statusOptions.ACTIVE &&
+      communication.Event.status === statusOptions.ACTIVE
   );
   const inactiveCommunications = communications.filter(
-    (communication) => communication.status != statusOptions.ACTIVE
+    (communication) =>
+      communication.status != statusOptions.ACTIVE ||
+      communication.Event.status != statusOptions.ACTIVE
   );
 
   const currentJobs = scheduledJobIds();
