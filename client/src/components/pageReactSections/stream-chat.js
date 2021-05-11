@@ -5,7 +5,6 @@ import "../fonts.css";
 import "../pageEditor.css";
 import "./stream-chat.css";
 import Chat from "../chat4.js";
-import { Helmet } from "react-helmet";
 
 const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
   const createEmbedLink = (youtubeLink) => {
@@ -42,11 +41,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
           <div>
             <div>
               <video
-                id="my-player"
-                class="video-js  vjs-16-9"
-                autoplay
-                muted
-                data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true, "fluid": true}'
+                playsInline autoPlay loop muted 
                 style={{ width: "100%" }}
               >
                 <source
@@ -75,13 +70,6 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
 
   return (
     <div>
-      <Helmet>
-        <link
-          href="//vjs.zencdn.net/7.10.2/video-js.min.css"
-          rel="stylesheet"
-        />
-        <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
-      </Helmet>
       <section className="stream-chat-main-container ">
         <div className="container-one-video-window inner-section-block">
           <div className="video-responsive ">{displayStream()}</div>

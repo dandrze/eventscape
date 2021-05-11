@@ -3,6 +3,8 @@
   display: flex;
   width: 100%;
   box-sizing: border-box;
+  max-width: 1400px;
+  margin: auto;
 }
 
 .container-one-video-window {
