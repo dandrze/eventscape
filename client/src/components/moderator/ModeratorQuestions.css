@@ -1,77 +1,64 @@
-.moderator-questions-header {
-    color: white;
-    font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
-    font-weight: 400;
-    font-size: 18px;
-    width: 100%;
-    display: inline-flex;
-    align-items: center;
-    flex-direction: column;
-    justify-content: center;
-    min-height: 58px !important;
-}
-
 .questionContainer {
-    display: flex;
-    justify-content: flex-start;
-    padding: 10px 5%;
-    margin: 0;
-    font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
+  display: flex;
+  justify-content: flex-start;
+  padding: 10px 5%;
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
 }
 
 .questionSendTime {
-    display: flex;
-    align-items: top;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 18px;
-    color: #828282;
-    letter-spacing: 0.3px;
-    margin: 0;
-    min-width: 65px;
+  display: flex;
+  align-items: top;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 18px;
+  color: #828282;
+  letter-spacing: 0.3px;
+  margin: 0px 10px 0px 0px;
+  min-width: 65px;
 }
 
 .questionMiddleContainer {
-    padding: 0px;
-    align-items: top;
-    text-align: left;
-    margin-right: 5px;
+  padding: 0px;
+  align-items: top;
+  text-align: left;
+  margin-right: 5px;
 }
 
 .questionNameTextContainer {
-    display: flex;
-    flex-wrap: wrap;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .questionUsername {
-    font-weight: 600;
-    color: #828282;
-    letter-spacing: 0.3px;
-    margin-right: 7px;
+  font-weight: 600;
+  color: #828282;
+  letter-spacing: 0.3px;
+  margin-right: 7px;
 }
 
 .questionText {
-    letter-spacing: 0;
-    font-weight: 300;
-    font-size: 15px;
-    line-height: 18px;
-    color: black;
+  letter-spacing: 0;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 18px;
+  color: black;
 }
 
 .questionUsernameEmail {
-    font-weight: 300;
-    font-size: 12px;
-    line-height: 12px;
-    color: #828282;
-    letter-spacing: 0.3px;
-    margin-top: 3px;
+  font-weight: 300;
+  font-size: 12px;
+  line-height: 12px;
+  color: #828282;
+  letter-spacing: 0.3px;
+  margin-top: 3px;
 }
 
 .check-question {
-    margin-left: auto;
-    cursor: pointer;
+  margin-left: auto;
+  cursor: pointer;
 }
 
 .questionChecked {
-    background-color: rgb(159, 208, 159);
+  background-color: rgb(159, 208, 159);
 }

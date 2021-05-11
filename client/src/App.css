@@ -578,13 +578,21 @@ select {
 
 /* Info Bar */
 
-.infoBar {
-  background: #b0281c;
+.moderator-chat-header {
+  background: #fff;
   height: 60px;
+  margin: 3px;
+  color: #b0281c;
+  border-radius: 10px;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 50px;
+  text-align: center;
 }
 
-.infoBar.grey {
-  background: #7d7a7a;
+.moderator-chat-header.grey {
+  background: none;
+  color: grey;
 }
 
 .leftInnerContainer {
@@ -704,6 +712,7 @@ select {
 
 .delete-chat-message {
   cursor: pointer;
+  margin-right: 10px;
 }
 
 /* Input */
@@ -729,6 +738,7 @@ select {
   font-size: 0.9rem;
   line-height: 1rem;
   border-radius: 5px;
+  flex-grow: 1;
 }
 
 .input-question {
@@ -1115,10 +1125,6 @@ select:focus {
 .inner-section-block {
   margin: 10px;
   border-radius: 10px;
-}
-
-.blur {
-  /*backdrop-filter: blur(5px);*/
 }
 
 .description-text {

@@ -130,7 +130,7 @@ const ModeratorQuestions = ({ room, userId }) => {
   return (
     <div className="chatOuterContainer">
       <div className="chatContainer">
-        <div className="infoBar moderator-questions-header">Questions</div>
+        <div className="moderator-chat-header ">Questions</div>
         <Questions questions={questions} setChecked={setChecked} />
       </div>
     </div>

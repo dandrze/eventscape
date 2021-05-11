@@ -5,81 +5,72 @@
 }*/
 
 .room-bar {
-    flex-grow: 1;
-    width: 100%;
-    margin-bottom: 40px;
+  flex-grow: 1;
+  width: 100%;
+  margin-bottom: 40px;
 }
 
 .chat-options-l {
-    margin: 0px;
-    text-align: left;
-    width: 50%;
-    float: left;
-    padding: 70px 35px 0 0;
+  margin: 0px;
+  text-align: left;
+  width: 50%;
+  float: left;
+  padding: 70px 35px 0 0;
 }
 
 .chat-options-r {
-    text-align: left;
-    width: 50%;
-    float: right;
-    padding: 70px 0 0 35px;
+  text-align: left;
+  width: 50%;
+  float: right;
+  padding: 70px 0 0 35px;
 }
 
 .moderator-chat-main-container {
-    display: flex;
+  display: flex;
 }
 
 .container-one-chat-window {
-	margin: 0rem;
-	text-align: justify;
-	max-width: 100%;
-    overflow: hidden;
+  margin: 0rem;
+  text-align: justify;
+  max-width: 100%;
+  overflow: hidden;
 }
 
 .container-two-question-window {
-
 }
 
 .chat-moderator-responsive {
-	overflow: hidden;
-	position: relative;
-    height: 0;
-    padding-bottom: calc(400px + 28.13%);
+  overflow: hidden;
+  position: relative;
+  height: 0;
+  padding-bottom: calc(400px + 28.13%);
+  border-radius: 10px;
 }
 
 /* Side by Side */
 @media only screen and (min-width: 1201px) {
-	.container-one-chat-window {
-        flex: 1;
-        margin: 0 35px 0 0;
-	}
+  .container-one-chat-window {
+    flex: 1;
+    margin: 0 35px 0 0;
+  }
 
-	.container-two-question-window {
-        flex: 1;
-        margin: 0 0 0 35px;
-	}
-
-	/*.chat-moderator-responsive {
-		padding-bottom: 112.5%;
-	}*/
+  .container-two-question-window {
+    flex: 1;
+    margin: 0 0 0 35px;
+  }
 }
 
 /* Over Under */
 @media only screen and (max-width: 1200px) {
-	.moderator-chat-main-container {
-		flex-direction: column;
-    }
-    
-    .container-one-chat-window {
-		margin: 0 0 35px 0;
-	}
+  .moderator-chat-main-container {
+    flex-direction: column;
+  }
 
-	.container-two-question-window {
-		margin: 35px 0 0 0;
-	}
+  .container-one-chat-window {
+    margin: 0 0 35px 0;
+  }
 
-	/*.chat-moderator-responsive {
-		padding-bottom: calc(175px + 28.13%);
-	}*/
+  .container-two-question-window {
+    margin: 35px 0 0 0;
+  }
 }
-

@@ -27,9 +27,6 @@ export default (primaryColor) => {
     margin-right: auto;
   }
 
-	 .infoBar {
-		background: ${primaryColor};
-	 }
 
    .MuiTab-root.Mui-selected {
      color: ${primaryColor};

@@ -63,12 +63,8 @@ const Message = ({
 
   const deletedClassName = deleted ? "deleted-message" : null;
 
-  return isSentByCurrentUser ? (
-    <div className={"messageContainer justifyEnd " + deletedClassName}>
-      <p className="sentText pr-10">{user}</p>
-      <div className="messageBox backgroundBlue">
-        <p className="messageText colorWhite">{ReactEmoji.emojify(text)}</p>
-      </div>
+  return (
+    <div className={"messageContainer " + deletedClassName}>
       {/* Moderator Controls */}
       {deleted ? (
         <Tooltip title="Restore chat message" className="delete-chat-message">
@@ -79,31 +75,18 @@ const Message = ({
           <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
         </Tooltip>
       )}
-    </div>
-  ) : (
-    <div className={"messageContainer justifyStart " + deletedClassName}>
-      {/* Moderator Controls */}
-      {deleted ? (
-        <Tooltip title="Restore chat message" className="delete-chat-message">
-          <ReplayIcon onClick={() => restoreMessage(id)} />
-        </Tooltip>
-      ) : (
-        <Tooltip title="Delete chat message" className="delete-chat-message">
-          <DeleteOutlineIcon onClick={() => deleteMessage(id)} />
-        </Tooltip>
-      )}
-      <div className="messageBox backgroundLight">
-        <p className="messageText colorDark">{ReactEmoji.emojify(text)}</p>
-      </div>
-      <p className="sentText pl-10 ">{user}</p>
+      <span className="messageUser" style={{ color: "#b0281c" }}>
+        {user}
+      </span>
+      <span className="messageText">{ReactEmoji.emojify(text)}</span>
     </div>
   );
 };
 
 const Input = ({ setMessage, sendMessage, message, theme, sendLoading }) => (
-  <form className="form">
+  <form className="form chat-input-container">
     <input
-      className="input width-80"
+      className="chat-input"
       type="text"
       placeholder="Type a message..."
       value={message}
@@ -275,8 +258,8 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
         <div
           className={
             chatHidden
-              ? "infoBar moderator-questions-header grey"
-              : "infoBar moderator-questions-header"
+              ? "moderator-chat-header  grey"
+              : "moderator-chat-header "
           }
         >
           Chat {chatHidden ? "(Hidden)" : ""}
