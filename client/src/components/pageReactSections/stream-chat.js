@@ -25,6 +25,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
   const displayStream = () => {
     const youtubeSrc = createEmbedLink(link);
 
+    console.log(content);
     switch (content) {
       case "youtube-live":
         return (
@@ -38,47 +39,49 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
         );
       case null:
         return (
-          <>
-            <Helmet>
-              <link
-                href="//vjs.zencdn.net/7.10.2/video-js.min.css"
-                rel="stylesheet"
-              />
-              <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
-            </Helmet>
-            <video
-              id="my-player"
-              class="video-js  vjs-16-9"
-              autoplay
-              muted
-              data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true, "fluid": true}'
-              style={{ width: "100%" }}
-            >
-              <source
-                src="https://eventscape-assets.s3.amazonaws.com/assets/default-event-video-v2-small.mp4"
-                type="video/mp4"
-              ></source>
+          <div>
+            <div>
+              <video
+                id="my-player"
+                class="video-js  vjs-16-9"
+                autoplay
+                muted
+                data-setup='{"controls": false, "autoplay": "muted", "preload": "auto", "loop":true, "fluid": true}'
+                style={{ width: "100%" }}
+              >
+                <source
+                  src="https://eventscape-assets.s3.amazonaws.com/assets/default-event-video-v2-small.mp4"
+                  type="video/mp4"
+                ></source>
 
-              <p class="vjs-no-js">
-                To view this video please enable JavaScript, and consider
-                upgrading to a web browser that
-                <a
-                  href="https://videojs.com/html5-video-support/"
-                  target="_blank"
-                >
-                  supports HTML5 video
-                </a>
-              </p>
-            </video>
-          </>
+                <p class="vjs-no-js">
+                  To view this video please enable JavaScript, and consider
+                  upgrading to a web browser that
+                  <a
+                    href="https://videojs.com/html5-video-support/"
+                    target="_blank"
+                  >
+                    supports HTML5 video
+                  </a>
+                </p>
+              </video>
+            </div>
+          </div>
         );
       default:
-        return ReactHtmlParser(html);
+        return <div>{ReactHtmlParser(html)}</div>;
     }
   };
 
   return (
     <div>
+      <Helmet>
+        <link
+          href="//vjs.zencdn.net/7.10.2/video-js.min.css"
+          rel="stylesheet"
+        />
+        <script src="//vjs.zencdn.net/7.10.2/video.min.js"></script>
+      </Helmet>
       <section className="stream-chat-main-container ">
         <div className="container-one-video-window inner-section-block">
           <div className="video-responsive ">{displayStream()}</div>
