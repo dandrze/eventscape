@@ -31,7 +31,7 @@ const sendEmail = async (
                 </td>
           </tr>
           <tr><td style="padding: 20px; border-bottom: 1px solid #e2e2e2;">${html}</td></tr>
-          <tr><td align="center"  style="padding: 20px;"><a href="https://www.eventscape.io">eventscape.io</a></td></tr>
+          <tr><td align="center"  style="padding: 20px; color: grey;"><a href="https://www.eventscape.io">www.eventscape.io</a></td></tr>
       </table>
     </center>
   </body>
