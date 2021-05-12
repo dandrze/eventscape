@@ -72,7 +72,9 @@ export default ({ output, errors, startOver }) => {
         </span>
         .
       </div>
-      <MaterialTable columns={columns} data={errors} options={options} />;
+      <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
+        <MaterialTable columns={columns} data={errors} options={options} />
+      </div>
     </div>
   );
 };

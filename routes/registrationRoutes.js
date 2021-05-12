@@ -85,7 +85,7 @@ router.put("/api/registration", requireAuth, async (req, res, next) => {
 });
 
 router.post("/api/registration/bulk", requireAuth, async (req, res, next) => {
-  const { registrations, eventId } = req.body;
+  const { registrations, eventId, shouldSendEmail } = req.body;
 
   try {
     // add EventId to registration object
@@ -94,12 +94,40 @@ router.post("/api/registration/bulk", requireAuth, async (req, res, next) => {
       return registration;
     });
 
+    // fetch event data
+    const event = await Event.findByPk(eventId);
+
     for (let registration of registrations) {
       const result = await Registration.create(registration);
       // create a unique hash based on the id
       result.hash = md5(result.id);
-      // do not wait for save to complete before moving to next registration in list to improve performance
-      result.save();
+      const newRegistration = await result.save();
+
+      if (shouldSendEmail) {
+        // get all emails for new registrants
+        const communications = await Communication.findAll({
+          where: {
+            EventId: eventId,
+            recipients: recipientsOptions.NEW_REGISTRANTS,
+            status: statusOptions.ACTIVE,
+          },
+        });
+
+        for (var communication of communications) {
+          const { success, failed } = await Mailer.mapVariablesAndSendEmail(
+            [{ ...result.dataValues, Event: event.dataValues }],
+            communication.subject,
+            communication.html
+          );
+
+          if (failed > 0) {
+            res
+              .status(500)
+              .json({ message: "Error when sending confirmation email" });
+            return;
+          }
+        }
+      }
     }
 
     res.json();
@@ -218,7 +246,6 @@ router.post("/api/form", requireAuth, async (req, res, next) => {
 // public endpoint. Required to populate custom fields.
 router.get("/api/form", async (req, res, next) => {
   const { event } = req.query;
-
 
   try {
     const registrationForm = await RegistrationForm.findOne({

@@ -7,6 +7,8 @@ import Step from "@material-ui/core/Step";
 import StepLabel from "@material-ui/core/StepLabel";
 import Button from "@material-ui/core/Button";
 import Typography from "@material-ui/core/Typography";
+import Checkbox from "@material-ui/core/Checkbox";
+import FormControlLabel from "@material-ui/core/FormControlLabel";
 
 import ColumnMapping from "./ColumnMapping";
 import { validateEmailFormat } from "../utils/validationFunctions";
@@ -42,7 +44,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const getSteps = () => {
-  return ["Upload CSV", "Verify Columns", "Confirm"];
+  return ["Upload CSV", "Verify Columns", "Review", "Confirm"];
 };
 
 const ImportFile = ({ handleClose, triggerUpdate, event }) => {
@@ -59,6 +61,7 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
   const [errors, setErrors] = useState([]);
   const [output, setOutput] = useState([]);
   const [uploadComplete, setUploadComplete] = useState(false);
+  const [shouldSendEmail, setShouldSendEmail] = useState(true);
   const steps = getSteps();
 
   const isStepFailed = (step) => {
@@ -78,7 +81,7 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
         break;
       case 1:
         // logic to handle going from mapping columns to viewing result (including errors)
-        if (!columnMap.emailAddress) {
+        if (columnMap.emailAddress === null) {
           setStepHasError(1);
           setAlertMessage("Please select your Email Address column");
           //exit the function
@@ -130,11 +133,16 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
         setOutput(_output);
         break;
       case 2:
+        setActiveStep((prevActiveStep) => prevActiveStep + 1);
+
+        return;
+      case 3:
         setUploadComplete(false);
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
         const response = await api.post("/api/registration/bulk", {
           registrations: output,
           eventId: event.id,
+          shouldSendEmail,
         });
 
         triggerUpdate();
@@ -174,6 +182,10 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
   const handleUpdateColumnMap = (updatedColumnMap) => {
     clearErrors();
     setColumnMap(updatedColumnMap);
+  };
+
+  const handleChangeShouldSendEmail = (event) => {
+    setShouldSendEmail(event.target.value);
   };
 
   const getStepContent = (step) => {
@@ -218,7 +230,22 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
           />
         );
       case 3:
-        return <div>All Done</div>;
+        return (
+          <div style={{ paddingTop: "50px" }}>
+            <p>You're all set!</p>
+
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={shouldSendEmail}
+                  onChange={handleChangeShouldSendEmail}
+                  color="primary"
+                />
+              }
+              label="Send registration email to newly imported attendees"
+            />
+          </div>
+        );
       default:
         return "Unknown step";
     }
@@ -250,9 +277,7 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
           <div>
             {uploadComplete ? (
               <div className={classes.postUpload}>
-                <Typography className={classes.instructions}>
-                  Upload successfully completed
-                </Typography>
+                <p>Upload successfully completed.</p>
                 <Button onClick={handleClose} className={classes.button}>
                   Close
                 </Button>
