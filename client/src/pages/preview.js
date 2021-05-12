@@ -45,6 +45,7 @@ const Preview = (props) => {
       >
         <style>{theme(props.event.primaryColor)}</style>
         {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+        <div className="centering-spacer"></div>
         <div className="section-container">
           {props.model.sections.map(function (section) {
             return (

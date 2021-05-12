@@ -54,7 +54,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
                   upgrading to a web browser that
                   <a
                     href="https://videojs.com/html5-video-support/"
-                    target="_blank"
+                    target="_blank" rel="noopener noreferrer"
                   >
                     supports HTML5 video
                   </a>

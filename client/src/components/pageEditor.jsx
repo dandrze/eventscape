@@ -163,7 +163,7 @@ const PageEditor = (props) => {
                   ? props.event.RegPageModelId
                   : props.event.EventPageModelId)
               }
-              target="_blank"
+              target="_blank" rel="noopener noreferrer"
               style={{ margin: "12px 12px 0px 0px" }}
             >
               <button className="Button2" style={{ height: "32px" }}>
