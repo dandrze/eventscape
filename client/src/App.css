@@ -404,7 +404,8 @@ label {
 
 .live-page-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
 }
 
 /* Form displaying in registration blocks */
@@ -1119,10 +1120,11 @@ select:focus {
 
 .section-container {
   height: auto;
-  min-height: calc(100vh - 55px);
+  /*   min-height: 100vh;
   padding-top: 10px;
-  padding-bottom: 45px;
-  margin: auto;
+  padding-bottom: 45px; */
+  margin: 0px auto 50px;
+  flex-grow: 1;
 }
 
 .section-block {

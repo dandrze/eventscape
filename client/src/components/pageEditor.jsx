@@ -266,7 +266,6 @@ const PageEditor = (props) => {
                       );
                     })}
               </div>
-              <BrandingBottom />
             </div>
           </div>
         </div>
