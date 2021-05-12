@@ -42,7 +42,6 @@ const BackgroundImageSelector = ({
     fetchFreeImageUrls();
   }, []);
 
-  console.log(color);
   useEffect(() => {
     if (isPrimaryBg) {
       setCurrentBackgroundImageURL(model.backgroundImage);
@@ -126,8 +125,9 @@ const BackgroundImageSelector = ({
     setOpenSelectImage(false);
   };
 
-  const handleClickRemoveImage = () => {
+  const removeSectionImage = () => {
     const newHtml = document.createElement("div");
+    console.log({ model, sectionIndex });
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
     const background = newHtml.getElementsByTagName("div")[0];
@@ -135,6 +135,11 @@ const BackgroundImageSelector = ({
     background.style.backgroundImage = "";
 
     updateSection(sectionIndex, newHtml.innerHTML);
+  };
+
+  const removePrimaryBgImage = () => {
+    setCurrentBackgroundImageURL("");
+    updateBackgroundImage("");
   };
 
   const handleUpdateOverlay = (newColor) => {
@@ -204,7 +209,9 @@ const BackgroundImageSelector = ({
             <Preview
               currentBackgroundImageURL={currentBackgroundImageURL}
               handleClickSelectImage={handleClickSelectImage}
-              handleClickRemoveImage={handleClickRemoveImage}
+              handleClickRemoveImage={
+                isPrimaryBg ? removePrimaryBgImage : removeSectionImage
+              }
               blur={isPrimaryBg ? model.backgroundBlur : 0}
             />
             {isPrimaryBg ? (
