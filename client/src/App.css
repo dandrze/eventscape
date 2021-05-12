@@ -1038,7 +1038,7 @@ select:focus {
 }
 
 .registration-col {
-  text-align: justify;
+  text-align: center;
   padding: 48px;
   background: #eaeaea;
 }
