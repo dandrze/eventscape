@@ -165,9 +165,8 @@ const Published = (props) => {
         className="fr-view live-page-container"
         style={{
           backgroundImage: `url(${props.model.backgroundImage})`,
-          width: "100%",
+          width: "100vw",
           height: "auto",
-          position: "absolute",
           backgroundSize: "cover",
           backgroundPosition: "center",
           boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
@@ -177,6 +176,9 @@ const Published = (props) => {
           style={{
             backdropFilter: `blur(${props.model.backgroundBlur}px)`,
             WebkitBackdropFilter: `blur(${props.model.backgroundBlur}px)`,
+            margin: "auto",
+            minHeight: "100vh",
+            height: "100%",
           }}
         >
           {" "}

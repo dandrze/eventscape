@@ -18,7 +18,6 @@ import heroBanner from "./designBlockThumbnails/heroBanner.png";
 import titleThumb from "./designBlockThumbnails/title.png";
 import titleLogoThumb from "./designBlockThumbnails/titleLogoWhite.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
-import blankThumb from "./designBlockThumbnails/blank.png";
 import timeDescriptionThumb from "./designBlockThumbnails/timeDescription.png";
 import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
 import scheduleTable1Thumb from "./designBlockThumbnails/scheduleTable1.png";
@@ -116,7 +115,7 @@ const NewSectionButton = ({ event, addSection, prevIndex }) => {
               handleOpen();
             }}
           >
-            ADD SECTION
+            ADD DESIGN BLOCK
           </button>
         </Tooltip>
       </div>
@@ -153,7 +152,6 @@ const NewSectionButton = ({ event, addSection, prevIndex }) => {
                   <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
                   <MenuItem value={"sponsors"}>Sponsors</MenuItem>
                   <MenuItem value={"text"}>Text</MenuItem>
-                  <MenuItem value={"columns-blank"}>Columns (Blank)</MenuItem>
                 </Select>
               </FormControl>
 
@@ -316,21 +314,6 @@ const NewSectionButton = ({ event, addSection, prevIndex }) => {
                         addSection={(html) => {
                           handleClose();
                           handleAddSection(html);
-                        }}
-                      />
-                    </Grid>
-                  </Grid>
-                )}
-
-                {blockCat === "columns-blank" && (
-                  <Grid container spacing={3}>
-                    {/* Blank */}
-                    <Grid item xs={12}>
-                      <DesignBlockPreview
-                        src={blankThumb}
-                        handleClick={() => {
-                          handleClose();
-                          handleAddSection("");
                         }}
                       />
                     </Grid>

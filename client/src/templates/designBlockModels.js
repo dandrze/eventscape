@@ -119,7 +119,9 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     overflow: hidden" data-info="background image/color. Do not modify." >
     
     <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-            <div style="font-weight: 300; font-size: 26px;">${eventTitle}</div>
+            <div style="flex-grow: 1; text-align: left;">
+            <p style="font-weight: 300; font-size: 26px;">${eventTitle}</p>
+            </div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
       </div>

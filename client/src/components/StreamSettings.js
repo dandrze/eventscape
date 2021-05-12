@@ -143,6 +143,7 @@ const StreamSettings = ({
                               Go to your{" "}
                               <a
                                 className="url"
+                                target="_blank" rel="noopener noreferrer"
                                 href="https://player.wowza.com/builder"
                               >
                                 Wowza Player Builder
@@ -186,7 +187,11 @@ const StreamSettings = ({
                           <ol>
                             <li>
                               Log into{" "}
-                              <a className="url" href="https://livestream.com/">
+                              <a
+                                className="url"
+                                target="_blank" rel="noopener noreferrer"
+                                href="https://livestream.com/"
+                              >
                                 Livestream.com
                               </a>
                             </li>
@@ -236,7 +241,11 @@ const StreamSettings = ({
                           <ol>
                             <li>
                               Log into{" "}
-                              <a className="url" href="https://vimeo.com/">
+                              <a
+                                className="url"
+                                target="_blank" rel="noopener noreferrer"
+                                href="https://vimeo.com/"
+                              >
                                 Vimeo
                               </a>
                             </li>
@@ -293,7 +302,8 @@ const StreamSettings = ({
                             textDecoration: "underline",
                             color: "#b0281c",
                           }}
-                          target="_blank"
+                          target="_blank" rel="noopener noreferrer"
+                          
                           href="https://www.eventscape.io/youtube-live-setup/"
                         >
                           here

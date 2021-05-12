@@ -158,7 +158,7 @@ const Registrations = (props) => {
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}
             standardFields={standardFields}
-            isEditForm={true}
+            isManualEntry={true}
           />
         }
       />

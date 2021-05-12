@@ -34,10 +34,10 @@ function RegistrationForm({
   registerText,
   prePopulatedValues,
   sectionIndex,
-  isEditForm,
   addRegistration,
   resendRegistrationEmail,
   isLive,
+  isManualEntry,
 }) {
   const classes = useStyles();
 
@@ -127,7 +127,7 @@ function RegistrationForm({
       setModalText("Please enter your last name");
       openModal();
     } else if (
-      !isEditForm &&
+      !isManualEntry &&
       (await fetchRegistration(emailAddress, event.id))
     ) {
       setModalText("Registration already exists under email: " + emailAddress);
@@ -183,9 +183,12 @@ function RegistrationForm({
         content={modalText}
         continueText="OK"
       />
-      <div className="row" style={{ margin: "auto", padding: "10px 5%" }}>
+      <div
+        className="registration-section"
+        style={{ margin: "auto", padding: "0px 10px" }}
+      >
         {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
-        {!isEditForm ? (
+        {!isManualEntry ? (
           <div className="form-editor-froala col-lg registration-col inner-section-block">
             {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
             {isLive ? (
@@ -207,7 +210,7 @@ function RegistrationForm({
         <div className="col-lg registration-col inner-section-block">
           {isLoading ? (
             <CircularProgress className="margin-auto" />
-          ) : regComplete && !isEditForm ? (
+          ) : regComplete && !isManualEntry ? (
             <div className="margin-auto">
               <p>Thank you for registering for {event.title}</p>
               <br />
@@ -219,12 +222,12 @@ function RegistrationForm({
           ) : (
             <div
               className={`margin-auto ${
-                !isEditForm ? "form-editor-react" : ""
+                !isManualEntry ? "form-editor-react" : ""
               }`}
-              onMouseEnter={isLive ? null : () => setDisplayEditMessage(true)}
-              onMouseLeave={isLive ? null : () => setDisplayEditMessage(false)}
+              onMouseEnter={() => setDisplayEditMessage(true)}
+              onMouseLeave={() => setDisplayEditMessage(false)}
             >
-              {displayEditMessage ? (
+              {!isLive && !isManualEntry && displayEditMessage ? (
                 <div
                   style={{
                     position: "absolute",
@@ -288,7 +291,7 @@ function RegistrationForm({
                 answer_data={prePopulatedValues}
                 className="form-editor-react"
               />
-              {!isEditForm ? (
+              {!isManualEntry ? (
                 <label>
                   <span>Already registered? Click </span>
                   <span

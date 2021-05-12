@@ -20,7 +20,7 @@ export default function BrandingTop(props) {
         style={{ marginLeft: "auto", fontSize: "16px" }}
         className="branding-button"
       >
-        Create EventCached
+        Create Event
       </a>
     </div>
   );

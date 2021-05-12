@@ -404,7 +404,8 @@ label {
 
 .live-page-container {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  display: flex;
 }
 
 /* Form displaying in registration blocks */
@@ -1037,9 +1038,16 @@ select:focus {
 }
 
 .registration-col {
-  text-align: justify;
+  text-align: center;
   padding: 48px;
   background: #eaeaea;
+}
+
+.registration-section {
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 1400px;
+  margin: auto;
 }
 
 /* UL formatting within froala block */
@@ -1112,10 +1120,10 @@ select:focus {
 
 .section-container {
   height: auto;
-  min-height: calc(100vh - 55px);
-  padding-top: 10px;
-  padding-bottom: 45px;
-  margin: auto;
+
+  padding-bottom: 10px;
+  margin: 0px auto 50px;
+  flex-grow: 1;
 }
 
 .section-block {
@@ -1135,6 +1143,11 @@ select:focus {
   color: #b0281c;
   text-decoration: underline;
   font-weight: bold;
+}
+
+.centering-spacer {
+  min-height: 0px;
+  height: calc(46vh - 350px);
 }
 
 @media only screen and (max-width: 600px) {

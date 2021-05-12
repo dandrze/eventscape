@@ -45,7 +45,20 @@ const BackgroundImageSelector = ({
   useEffect(() => {
     if (isPrimaryBg) {
       setCurrentBackgroundImageURL(model.backgroundImage);
-      setColor(model.backgroundColor);
+
+      // extract rgba values from the backgroundColor string
+      const rgbaValues = model.backgroundColor
+        .split("(")[1]
+        .split(")")[0]
+        .split(",");
+
+      // Set the color to those rgba values
+      setColor({
+        r: parseInt(rgbaValues[0]),
+        g: parseInt(rgbaValues[1]),
+        b: parseInt(rgbaValues[2]),
+        a: parseFloat(rgbaValues[3]),
+      });
     } else {
       // get current background color overlay
       let pageHtml = document.createElement("div");
@@ -112,8 +125,9 @@ const BackgroundImageSelector = ({
     setOpenSelectImage(false);
   };
 
-  const handleClickRemoveImage = () => {
+  const removeSectionImage = () => {
     const newHtml = document.createElement("div");
+    console.log({ model, sectionIndex });
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
     const background = newHtml.getElementsByTagName("div")[0];
@@ -121,6 +135,11 @@ const BackgroundImageSelector = ({
     background.style.backgroundImage = "";
 
     updateSection(sectionIndex, newHtml.innerHTML);
+  };
+
+  const removePrimaryBgImage = () => {
+    setCurrentBackgroundImageURL("");
+    updateBackgroundImage("");
   };
 
   const handleUpdateOverlay = (newColor) => {
@@ -190,7 +209,9 @@ const BackgroundImageSelector = ({
             <Preview
               currentBackgroundImageURL={currentBackgroundImageURL}
               handleClickSelectImage={handleClickSelectImage}
-              handleClickRemoveImage={handleClickRemoveImage}
+              handleClickRemoveImage={
+                isPrimaryBg ? removePrimaryBgImage : removeSectionImage
+              }
               blur={isPrimaryBg ? model.backgroundBlur : 0}
             />
             {isPrimaryBg ? (

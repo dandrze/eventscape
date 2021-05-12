@@ -163,7 +163,7 @@ const PageEditor = (props) => {
                   ? props.event.RegPageModelId
                   : props.event.EventPageModelId)
               }
-              target="_blank"
+              target="_blank" rel="noopener noreferrer"
               style={{ margin: "12px 12px 0px 0px" }}
             >
               <button className="Button2" style={{ height: "32px" }}>
@@ -236,7 +236,6 @@ const PageEditor = (props) => {
               backgroundImage: `url(${props.model.backgroundImage})`,
               width: "100%",
               height: "auto",
-              position: "absolute",
               backgroundSize: "cover",
               backgroundPosition: "center",
               boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
@@ -267,7 +266,6 @@ const PageEditor = (props) => {
                       );
                     })}
               </div>
-              <BrandingBottom />
             </div>
           </div>
         </div>
