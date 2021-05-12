@@ -42,10 +42,24 @@ const BackgroundImageSelector = ({
     fetchFreeImageUrls();
   }, []);
 
+  console.log(color);
   useEffect(() => {
     if (isPrimaryBg) {
       setCurrentBackgroundImageURL(model.backgroundImage);
-      setColor(model.backgroundColor);
+
+      // extract rgba values from the backgroundColor string
+      const rgbaValues = model.backgroundColor
+        .split("(")[1]
+        .split(")")[0]
+        .split(",");
+
+      // Set the color to those rgba values
+      setColor({
+        r: parseInt(rgbaValues[0]),
+        g: parseInt(rgbaValues[1]),
+        b: parseInt(rgbaValues[2]),
+        a: parseFloat(rgbaValues[3]),
+      });
     } else {
       // get current background color overlay
       let pageHtml = document.createElement("div");
