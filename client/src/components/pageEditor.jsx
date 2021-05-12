@@ -236,7 +236,6 @@ const PageEditor = (props) => {
               backgroundImage: `url(${props.model.backgroundImage})`,
               width: "100%",
               height: "auto",
-              position: "absolute",
               backgroundSize: "cover",
               backgroundPosition: "center",
               boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
