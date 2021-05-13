@@ -21,7 +21,12 @@ import { pageNames } from "../model/enums";
 
 export const fetchModel = (id) => async (dispatch) => {
   const model = await api.get("/api/model/id", { params: { id } });
-  const { sections, backgroundColor, backgroundImage, backgroundBlur } = model.data;
+  const {
+    sections,
+    backgroundColor,
+    backgroundImage,
+    backgroundBlur,
+  } = model.data;
 
   await dispatch({
     type: FETCH_PAGE_MODEL,
@@ -123,7 +128,23 @@ export const saveStreamSettings = (index, updatedProps) => async (
 ) => {
   const reactComponent = getState().model.sections[index].reactComponent;
 
-  reactComponent.props = updatedProps;
+  reactComponent.props.link = updatedProps.link;
+  reactComponent.props.content = updatedProps.content;
+  reactComponent.props.html = updatedProps.html;
+
+  dispatch({
+    type: UPDATE_REACT_COMPONENT,
+    payload: { index, reactComponent: reactComponent },
+  });
+};
+
+export const saveChatSettings = (index, chatRoom) => async (
+  dispatch,
+  getState
+) => {
+  const reactComponent = getState().model.sections[index].reactComponent;
+
+  reactComponent.props.chatRoom = chatRoom;
 
   dispatch({
     type: UPDATE_REACT_COMPONENT,
