@@ -5,6 +5,8 @@ import PublishIcon from "@material-ui/icons/Publish";
 import Button from "@material-ui/core/Button";
 import { RgbaColorPicker, HexColorInput } from "react-colorful";
 import Slider from "@material-ui/core/Slider";
+import TextField from "@material-ui/core/TextField";
+
 import Modal1 from "./Modal1";
 
 /* Tabs */
@@ -179,6 +181,61 @@ const BackgroundImageSelector = ({
     updateBackgroundBlur(newValue);
   };
 
+  const handleChangeColorR = (event) => {
+    const inputValue = event.target.value;
+    let outputValue;
+
+    if (inputValue < 0) {
+      outputValue = 0;
+    } else if (inputValue > 255) {
+      outputValue = 255;
+    } else {
+      outputValue = Math.floor(inputValue);
+    }
+    setColor({ ...color, r: outputValue });
+  };
+  const handleChangeColorG = (event) => {
+    const inputValue = event.target.value;
+    let outputValue;
+
+    if (inputValue < 0) {
+      outputValue = 0;
+    } else if (inputValue > 255) {
+      outputValue = 255;
+    } else {
+      outputValue = Math.floor(inputValue);
+    }
+
+    setColor({ ...color, g: outputValue });
+  };
+  const handleChangeColorB = (event) => {
+    const inputValue = event.target.value;
+    let outputValue;
+
+    if (inputValue < 0) {
+      outputValue = 0;
+    } else if (inputValue > 255) {
+      outputValue = 255;
+    } else {
+      outputValue = Math.floor(inputValue);
+    }
+
+    setColor({ ...color, b: outputValue });
+  };
+  const handleChangeColorA = (event) => {
+    const inputValue = event.target.value;
+    let outputValue;
+
+    if (inputValue < 0) {
+      outputValue = 0;
+    } else if (inputValue > 1) {
+      outputValue = 1;
+    } else {
+      outputValue = inputValue;
+    }
+    setColor({ ...color, a: outputValue });
+  };
+
   return (
     <div>
       <Modal1
@@ -239,6 +296,38 @@ const BackgroundImageSelector = ({
                 isPrimaryBg ? handleUpdateOverlay : handleUpdateSectionOverlay
               }
               id="event-color"
+            />
+            <TextField
+              margin="normal"
+              label="r"
+              value={color.r}
+              onChange={handleChangeColorR}
+              variant="outlined"
+              style={{ width: "70px", padding: "0px 6px" }}
+            />
+            <TextField
+              margin="normal"
+              label="g"
+              value={color.g}
+              onChange={handleChangeColorG}
+              variant="outlined"
+              style={{ width: "70px", padding: "0px 6px" }}
+            />
+            <TextField
+              margin="normal"
+              label="b"
+              value={color.b}
+              onChange={handleChangeColorB}
+              variant="outlined"
+              style={{ width: "70px", padding: "0px 6px" }}
+            />
+            <TextField
+              margin="normal"
+              label="a"
+              value={color.a}
+              onChange={handleChangeColorA}
+              variant="outlined"
+              style={{ width: "70px", padding: "0px 6px" }}
             />
           </div>
         )}
