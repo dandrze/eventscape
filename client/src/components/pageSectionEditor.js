@@ -77,14 +77,6 @@ const PageSectionEditor = ({
   );
 };
 
-const DesignBlockPreview = ({ src, handleClick }) => {
-  return (
-    <Tooltip title="Click to add">
-      <img src={src} id="designBlockThumbnail" onClick={handleClick} />
-    </Tooltip>
-  );
-};
-
 const mapStateToProps = (state) => {
   return { model: state.model, event: state.event };
 };

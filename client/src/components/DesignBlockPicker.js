@@ -86,10 +86,6 @@ const DesignBlockPicker = ({
     setBlockCat(event.target.value);
   };
 
-  const handleMouseEnter = () => {
-    setIsHovering(sectionIndex);
-  };
-
   return (
     <div>
       <div className="block-picker-container">

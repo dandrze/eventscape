@@ -81,10 +81,15 @@ const EnterCode = ({ signInWithCode, location, history }) => {
               >
                 Login
               </button>
-              <p className="subtext" style={{ marginTop: "8px" }}>
-                If you're having login issues, send us a message by clicking on
-                the support icon in the bottom right and we'll help you right
-                away!
+              <p className="subtext" style={{ marginTop: "1.5rem" }}>
+                Code not working? Request a new code{" "}
+                <a href="/login" className="link1">
+                  here
+                </a>
+                .<br />
+                <br /> If you're having login issues, send us a message by
+                clicking on the support icon in the bottom right and we'll help
+                you right away!
               </p>
             </>
           ) : (
