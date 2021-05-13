@@ -54,7 +54,7 @@ export const registrationConfirmation = {
 									padding: 8%;">
 				<div style="text-align: left;">Hello {first_name},</div>
 				<br>
-				<div style="text-align: left;">Your registration has been confirmed for {event_name} starting {start_date}.</div>
+				<div style="text-align: left;">You are confirmed to attend {event_name} starting {start_date}.</div>
 				<br>
 				<div style="text-align: left;">A few minutes before the event begins, please click the following button to join.</div>
 				<br>
