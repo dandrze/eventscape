@@ -9,10 +9,9 @@ import {
 } from "../templates/newEventTemplates";
 import { statusOptions } from "../model/enums";
 
-const defaultBackgroundImage =
-  "https://eventscape-assets.s3.amazonaws.com/free-images/abstract-5719523_1920.jpg";
-const defaultBackgroundColor = "rgba(0,0,0,0)";
-const defaultBlur = 5;
+const defaultBackgroundImage = "";
+const defaultBackgroundColor = "rgba(32,33,36,1)";
+const defaultBlur = 0;
 
 export const createEvent = (
   title,
