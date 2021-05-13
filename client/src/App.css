@@ -405,7 +405,7 @@ label {
 .live-page-container {
   width: 100vw;
   min-height: 100vh;
-  display: flex;
+  position: relative;
 }
 
 /* Form displaying in registration blocks */
@@ -1120,10 +1120,13 @@ select:focus {
 
 .section-container {
   height: auto;
-
-  padding-bottom: 10px;
-  margin: 0px auto 50px;
+  padding-bottom: 60px;
+  margin: 0px auto;
   flex-grow: 1;
+}
+
+.section-container {
+  z-index: 2;
 }
 
 .section-block {
@@ -1148,6 +1151,22 @@ select:focus {
 .centering-spacer {
   min-height: 0px;
   height: calc(46vh - 350px);
+}
+
+.page-background {
+  width: calc(100% + 60px);
+  height: calc(100% + 60px);
+  margin: -20px;
+  background-size: cover;
+  background-position: center;
+  position: absolute;
+}
+
+.page-container {
+  position: absolute;
+  left: 0;
+  overflow: hidden;
+  width: 100vw;
 }
 
 @media only screen and (max-width: 600px) {

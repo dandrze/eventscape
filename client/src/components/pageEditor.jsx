@@ -163,7 +163,8 @@ const PageEditor = (props) => {
                   ? props.event.RegPageModelId
                   : props.event.EventPageModelId)
               }
-              target="_blank" rel="noopener noreferrer"
+              target="_blank"
+              rel="noopener noreferrer"
               style={{ margin: "12px 12px 0px 0px" }}
             >
               <button className="Button2" style={{ height: "32px" }}>
@@ -232,40 +233,31 @@ const PageEditor = (props) => {
           onMouseLeave={handleMouseLeave}
         >
           <div
+            className="page-background"
             style={{
               backgroundImage: `url(${props.model.backgroundImage})`,
-              width: "100%",
-              height: "auto",
-              backgroundSize: "cover",
-              backgroundPosition: "center",
+
               boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
             }}
-          >
-            <div
-              style={{
-                backdropFilter: `blur(${props.model.backgroundBlur}px)`,
-                WebkitBackdropFilter: `blur(${props.model.backgroundBlur}px)`,
-              }}
-            >
-              {props.event.plan.PlanType.type === "free" ? (
-                <BrandingTop />
-              ) : null}
-              <div className="section-container">
-                {props.model.sections.length === 0
-                  ? null
-                  : props.model.sections.map(function (section, index) {
-                      return (
-                        <div key={section.id} className="section-block">
-                          <PageSectionEditor
-                            section={section}
-                            sectionIndex={index}
-                            isHovering={isHovering}
-                            setIsHovering={setIsHovering}
-                          />
-                        </div>
-                      );
-                    })}
-              </div>
+          ></div>
+
+          <div>
+            {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+            <div className="section-container">
+              {props.model.sections.length === 0
+                ? null
+                : props.model.sections.map(function (section, index) {
+                    return (
+                      <div key={section.id} className="section-block">
+                        <PageSectionEditor
+                          section={section}
+                          sectionIndex={index}
+                          isHovering={isHovering}
+                          setIsHovering={setIsHovering}
+                        />
+                      </div>
+                    );
+                  })}
             </div>
           </div>
         </div>
