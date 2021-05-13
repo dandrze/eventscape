@@ -119,8 +119,14 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     overflow: hidden" data-info="background image/color. Do not modify." >
     
     <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-            <div style="flex-grow: 1; text-align: left;">
-            <p style="font-weight: 300; font-size: 26px;">${eventTitle}</p>
+            <div style="flex-grow: 1;
+            text-align: left;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-content: flex-start;
+            justify-content: center;">
+                <p style="font-weight: 300; font-size: 26px; margin: 0;">${eventTitle}</p>
             </div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
@@ -771,7 +777,7 @@ export const streamChatReact = {
   name: "StreamChat",
   props: {
     content: null,
-    link: "https://www.youtube.com/embed/KMDQR9V1Pso",
+    link: "",
     html: "",
     chatRoom: null,
   },

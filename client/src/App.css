@@ -1121,7 +1121,7 @@ select:focus {
 .section-container {
   height: auto;
 
-  padding-bottom: 10px;
+  padding: 10px 0px;
   margin: 0px auto 50px;
   flex-grow: 1;
 }

@@ -321,7 +321,7 @@ const PageSectionEditor = ({
         }
       />
       {(isHovering === sectionIndex) & (sectionIndex === 0) ? (
-        <NewSectionButton />
+        <NewSectionButton openSectionPicker={handleOpen} />
       ) : null}
       <div
         onMouseEnter={handleMouseEnter}
