@@ -64,7 +64,7 @@ const BackgroundImageSelector = ({
       let pageHtml = document.createElement("div");
       pageHtml.innerHTML = model.sections[sectionIndex].html;
 
-      let backgroundDiv = pageHtml.getElementsByTagName("div")[0];
+      let backgroundDiv = pageHtml.getElementsByTagName("div")[2];
 
       let rgbaList = backgroundDiv.style.boxShadow
         .substring(
