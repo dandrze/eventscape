@@ -119,8 +119,14 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     overflow: hidden" data-info="background image/color. Do not modify." >
     
     <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-            <div style="flex-grow: 1; text-align: left;">
-            <p style="font-weight: 300; font-size: 26px;">${eventTitle}</p>
+            <div style="flex-grow: 1;
+            text-align: left;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            align-content: flex-start;
+            justify-content: center;">
+                <p style="font-weight: 300; font-size: 26px; margin: 0;">${eventTitle}</p>
             </div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
@@ -743,8 +749,10 @@ export const sponsorGrid = (columns, rows, box) => {
   <div style="padding: 10px;">
   <div style="background-position: bottom;
   background-size: cover;
+  border-radius: 10px;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
-  <h1 style="font-size: 26px;">Thank you to our sponsors</h1>
+  <h1 style="font-size: 26px; margin: 50px 50px 0px 50px">Thank you to our sponsors</h1>
   <div class="container block-container">`;
   const columnClass = box ? "sponsor-box-border" : "sponsor-box-no-border";
   while (row < rows) {
@@ -752,8 +760,6 @@ export const sponsorGrid = (columns, rows, box) => {
     while (column < columns) {
       html += `<div class="col-lg ${columnClass}">
                 <img src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
-            </div>
-            </div>
             </div>`;
       column += 1;
     }
@@ -762,7 +768,7 @@ export const sponsorGrid = (columns, rows, box) => {
     // reset column counter back to 0 for the next row
     column = 0;
   }
-  html += `</div></div>`;
+  html += `</div></div></div></div>`;
 
   return html;
 };
@@ -771,7 +777,7 @@ export const streamChatReact = {
   name: "StreamChat",
   props: {
     content: null,
-    link: "https://www.youtube.com/embed/KMDQR9V1Pso",
+    link: "",
     html: "",
     chatRoom: null,
   },

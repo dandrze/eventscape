@@ -38,6 +38,7 @@ const StreamSettings = ({
   reactComponent,
   handleClose,
   saveStreamSettings,
+  saveChatSettings,
   fetchChatRooms,
   event,
 }) => {
@@ -89,10 +90,14 @@ const StreamSettings = ({
         content,
         link: youtubeLink || "",
         html: customHTML || "",
-        chatRoom: room,
       });
       handleClose();
     }
+  };
+
+  const handleSaveChatSettings = () => {
+    saveChatSettings(sectionIndex, room);
+    handleClose();
   };
 
   return (
@@ -143,7 +148,8 @@ const StreamSettings = ({
                               Go to your{" "}
                               <a
                                 className="url"
-                                target="_blank" rel="noopener noreferrer"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 href="https://player.wowza.com/builder"
                               >
                                 Wowza Player Builder
@@ -189,7 +195,8 @@ const StreamSettings = ({
                               Log into{" "}
                               <a
                                 className="url"
-                                target="_blank" rel="noopener noreferrer"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 href="https://livestream.com/"
                               >
                                 Livestream.com
@@ -243,7 +250,8 @@ const StreamSettings = ({
                               Log into{" "}
                               <a
                                 className="url"
-                                target="_blank" rel="noopener noreferrer"
+                                target="_blank"
+                                rel="noopener noreferrer"
                                 href="https://vimeo.com/"
                               >
                                 Vimeo
@@ -302,8 +310,8 @@ const StreamSettings = ({
                             textDecoration: "underline",
                             color: "#b0281c",
                           }}
-                          target="_blank" rel="noopener noreferrer"
-                          
+                          target="_blank"
+                          rel="noopener noreferrer"
                           href="https://www.eventscape.io/youtube-live-setup/"
                         >
                           here
@@ -340,7 +348,7 @@ const StreamSettings = ({
                     className="Button1"
                     onClick={handleSaveStreamSettings}
                   >
-                    Update Section
+                    Update Stream Settings
                   </button>
                 </Grid>
               </Grid>
@@ -391,11 +399,8 @@ const StreamSettings = ({
                   />
                 </Grid>
                 <Grid item xs={12} id="save-button">
-                  <button
-                    className="Button1"
-                    onClick={handleSaveStreamSettings}
-                  >
-                    Update Section
+                  <button className="Button1" onClick={handleSaveChatSettings}>
+                    Update Chat Settings
                   </button>
                 </Grid>
               </Grid>
