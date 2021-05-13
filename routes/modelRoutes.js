@@ -56,8 +56,6 @@ router.get("/api/model/id/uncached", async (req, res, next) => {
 router.put("/api/model", requireAuth, async (req, res, next) => {
   const { model } = req.body;
 
-  console.log(model);
-
   try {
     // clear the cache
     clearCache(`PageSection:PageModelId:${model.id}`);
@@ -68,6 +66,7 @@ router.put("/api/model", requireAuth, async (req, res, next) => {
     // update the background values
     pageModel.backgroundColor = model.backgroundColor;
     pageModel.backgroundImage = model.backgroundImage;
+    pageModel.backgroundBlur = model.backgroundBlur;
     await pageModel.save();
 
     //  delete the old model

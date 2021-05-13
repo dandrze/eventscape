@@ -229,15 +229,15 @@ const PageEditor = (props) => {
         </div>
         <div
           id="designBoard"
-          style={{ position: "relative" }}
+          style={{ position: "relative", overflow: "hidden" }}
           onMouseLeave={handleMouseLeave}
         >
           <div
             className="page-background"
             style={{
               backgroundImage: `url(${props.model.backgroundImage})`,
-
               boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+              filter: `blur(${props.model.backgroundBlur}px)`,
             }}
           ></div>
 
