@@ -448,21 +448,16 @@ const Preview = ({
     <div style={{ padding: "18px 18px 0px 18px" }}>
       {currentBackgroundImageURL ? (
         <>
-          <div
-            style={{
-              width: "284px",
-              height: "160px",
-              backgroundImage: `url(${currentBackgroundImageURL})`,
-              backgroundPosition: "bottom",
-              backgroundSize: "cover",
-            }}
-          >
+          <div style={{ width: "284px", height: "160px", overflow: "hidden" }}>
             <div
               style={{
-                backdropFilter: `blur(${blur}px)`,
-                WebkitBackdropFilter: `blur(${blur}px)`,
-                height: "100%",
-                width: "100%",
+                width: "297px",
+                height: "180px",
+                margin: "-10px",
+                backgroundImage: `url(${currentBackgroundImageURL})`,
+                backgroundPosition: "bottom",
+                backgroundSize: "cover",
+                filter: `blur(${blur}px)`,
               }}
             ></div>
           </div>

@@ -23,27 +23,18 @@ const Preview = (props) => {
   };
 
   return (
-    <div
-      className="fr-view live-page-container"
-      style={{
-        backgroundImage: `url(${props.model.backgroundImage})`,
-        width: "100vw",
-        height: "auto",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
-      }}
-    >
+    <div className="page-container">
+      <style>{theme(props.event.primaryColor)}</style>
+
       <div
+        className="page-background"
         style={{
-          backdropFilter: `blur(${props.model.backgroundBlur}px)`,
-          WebkitBackdropFilter: `blur(${props.model.backgroundBlur}px)`,
-          margin: "auto",
-          minHeight: "100vh",
-          height: "100%",
+          backgroundImage: `url(${props.model.backgroundImage})`,
+          boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+          filter: `blur(${props.model.backgroundBlur}px)`,
         }}
-      >
-        <style>{theme(props.event.primaryColor)}</style>
+      ></div>
+      <div className="fr-view live-page-container">
         {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
         <div className="centering-spacer"></div>
         <div className="section-container">
