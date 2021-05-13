@@ -113,7 +113,7 @@ const BackgroundImageSelector = ({
     const newHtml = document.createElement("div");
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
-    const background = newHtml.getElementsByTagName("div")[0];
+    const background = newHtml.getElementsByTagName("div")[2];
 
     background.style.backgroundImage = `url(${url})`;
     // ensure the background is positioned center and cover
@@ -130,7 +130,7 @@ const BackgroundImageSelector = ({
     console.log({ model, sectionIndex });
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
-    const background = newHtml.getElementsByTagName("div")[0];
+    const background = newHtml.getElementsByTagName("div")[2];
 
     background.style.backgroundImage = "";
 
