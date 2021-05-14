@@ -138,15 +138,16 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
+
       case 3:
         return (
           <div
-            className="tour-box arrow-bottom-left"
-            style={{ position: "absolute", top: 80, left: 310 }}
+            className="tour-box arrow-top"
+            style={{ position: "absolute", top: 180, left: 225 }}
           >
             <DialogContentText style={{ width: "100%" }}>
-              Click on any image, and then click <SyncAltIcon /> to replace it
-              with your own.
+              Edit the background image, color, and image blur by clicking on
+              Edit Page Background
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
@@ -164,69 +165,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
+
       case 4:
-        return (
-          <div
-            className="tour-box arrow-bottom-left"
-            style={{ position: "absolute", top: 328, left: 350 }}
-          >
-            <DialogContentText style={{ width: "100%" }}>
-              Below is your livestream window. To replace the placeholder with
-              your own livestream, remove the chat option, or remove the
-              questions option, hover your mouse over this section and click on
-              the settings icon to the left. You will find out how to do this{" "}
-              <a
-                style={{ fontWeight: "bold", textDecoration: "underline" }}
-                href="https://www.eventscape.io/youtube-live-setup/"
-                target="_blank" rel="noopener noreferrer"
-              >
-                here
-              </a>
-              .
-            </DialogContentText>
-            <div className={classes.buttonContainer}>
-              <Button
-                onClick={completeTour}
-                className="skip-tour-button disable-focus"
-              >
-                Skip Tour
-              </Button>
-              <Button
-                onClick={handleNext}
-                className="tour-button disable-focus"
-              >
-                Continue
-              </Button>
-            </div>
-          </div>
-        );
-      case 5:
-        return (
-          <div
-            className="tour-box arrow-bottom-left"
-            style={{ position: "absolute", top: 55, left: 188 }}
-          >
-            <DialogContentText style={{ width: "100%" }}>
-              You may add a section by clicking on the + icon. Options include
-              sponsor logos, text, event schedule, and more.
-            </DialogContentText>
-            <div className={classes.buttonContainer}>
-              <Button
-                onClick={completeTour}
-                className="skip-tour-button disable-focus"
-              >
-                Skip Tour
-              </Button>
-              <Button
-                onClick={handleNext}
-                className="tour-button disable-focus"
-              >
-                Continue
-              </Button>
-            </div>
-          </div>
-        );
-      case 6:
         return (
           <div
             className="tour-box arrow-left"
@@ -252,11 +192,11 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 7:
+      case 5:
         return (
           <div
             className="tour-box arrow-left"
-            style={{ position: "absolute", top: 165, left: 215 }}
+            style={{ position: "absolute", top: 260, left: 215 }}
           >
             <DialogContentText style={{ width: "100%" }}>
               When a user registers for an event, they'll be automatically sent
@@ -279,7 +219,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 8:
+      case 6:
         return (
           <div
             className="tour-box arrow-left"
@@ -306,7 +246,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
           </div>
         );
 
-      case 9:
+      case 7:
         return (
           <div
             className="tour-box arrow-left"
@@ -332,7 +272,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 10:
+      case 8:
         return (
           <div
             className="tour-box arrow-left"
@@ -357,7 +297,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 11:
+      case 9:
         return (
           <div
             className="tour-box arrow-left"
@@ -492,15 +432,16 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
+
       case 3:
         return (
           <div
-            className="tour-box arrow-bottom-left"
-            style={{ position: "absolute", top: 80, left: 310 }}
+            className="tour-box arrow-top"
+            style={{ position: "absolute", top: 180, left: 225 }}
           >
             <DialogContentText style={{ width: "100%" }}>
-              Click on any image, and then click <SyncAltIcon /> to replace it
-              with your own.
+              Edit the background image, color, and image blur by clicking on
+              Edit Page Background
             </DialogContentText>
             <div className={classes.buttonContainer}>
               <Button
@@ -518,62 +459,8 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
+
       case 4:
-        return (
-          <div
-            className="tour-box arrow-bottom-left"
-            style={{ position: "absolute", top: 328, left: 350 }}
-          >
-            <DialogContentText style={{ width: "100%" }}>
-              Below is your livestream window. To replace the placeholder with
-              your own livestream, remove the chat option, or remove the
-              questions option, hover your mouse over this section and click on
-              the settings icon to the left. You will find out how to do this
-              <a href="https://www.eventscape.io/youtube-live-setup/">here</a>.
-            </DialogContentText>
-            <div className={classes.buttonContainer}>
-              <Button
-                onClick={completeTour}
-                className="skip-tour-button disable-focus"
-              >
-                Skip Tour
-              </Button>
-              <Button
-                onClick={handleNext}
-                className="tour-button disable-focus"
-              >
-                Continue
-              </Button>
-            </div>
-          </div>
-        );
-      case 5:
-        return (
-          <div
-            className="tour-box arrow-bottom-left"
-            style={{ position: "absolute", top: 55, left: 188 }}
-          >
-            <DialogContentText style={{ width: "100%" }}>
-              You may add a section by clicking on the + icon. Options include
-              sponsor logos, text, event schedule, and more.
-            </DialogContentText>
-            <div className={classes.buttonContainer}>
-              <Button
-                onClick={completeTour}
-                className="skip-tour-button disable-focus"
-              >
-                Skip Tour
-              </Button>
-              <Button
-                onClick={handleNext}
-                className="tour-button disable-focus"
-              >
-                Continue
-              </Button>
-            </div>
-          </div>
-        );
-      case 6:
         return (
           <div
             className="tour-box arrow-left"
@@ -599,7 +486,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 7:
+      case 5:
         return (
           <div
             className="tour-box arrow-left"
@@ -624,7 +511,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
             </div>
           </div>
         );
-      case 8:
+      case 6:
         return (
           <div
             className="tour-box arrow-left"
