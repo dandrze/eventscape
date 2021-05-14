@@ -210,6 +210,7 @@ const Published = (props) => {
           <style>{theme(props.event.primaryColor)}</style>
           {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
           <div className="section-container">
+            <div className="centering-spacer"></div>
             {props.model.sections.map(function (section) {
               return (
                 <div className="section-block">
