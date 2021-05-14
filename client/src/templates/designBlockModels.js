@@ -750,15 +750,25 @@ export const sponsorGrid = (columns, rows, box) => {
   <div style="background-position: bottom;
   background-size: cover;
   border-radius: 10px;
-  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
-  <h1 style="font-size: 26px; margin: 50px 50px 0px 50px">Thank you to our sponsors</h1>
+  <h1 style="font-size: 26px; margin: 50px 50px 0px 50px; color: #606060">Thank You to our Sponsors</h1>
   <div class="container block-container">`;
-  const columnClass = box ? "sponsor-box-border" : "sponsor-box-no-border";
+  const boxStyle = box
+    ? `margin: 15px;
+    padding: 15px 5px;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075) !important;
+    border: 1px solid #eaeaea;
+    border-radius: 10px;
+    background: #ffffff;`
+    : `margin: 0px;
+    background: #ffffff;`;
   while (row < rows) {
     html += `<div class="row">`;
     while (column < columns) {
-      html += `<div class="col-lg ${columnClass}">
+      html += `<div class="col-lg" style="display: flex;
+      align-content: center;
+      justify-content: center; ${boxStyle}">
                 <img src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
             </div>`;
       column += 1;

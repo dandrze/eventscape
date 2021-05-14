@@ -176,7 +176,7 @@ const PageEditor = (props) => {
               style={{ alignSelf: "flex-end", margin: "12px 12px 0px 0px" }}
               onClick={handleClickEditBackground}
             >
-              Edit Background Image
+              Edit Page Background
             </button>
           </div>
           {saveLoading ? (

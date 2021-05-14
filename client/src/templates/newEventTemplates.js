@@ -62,10 +62,6 @@ export const eventPageModelTemplate = ({
       isReact: true,
       reactComponent: streamChatReact,
     },
-    {
-      html: blankModel(),
-      name: "blankModel",
-    },
   ];
 };
 
