@@ -81,9 +81,13 @@ export const logoHeaderModel = (logo) => {
     justify-content: space-between;
     padding: 12px 48px;
     overflow: hidden" data-info="background image/color. Do not modify." >
+    <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
         <div style="margin: 20px; display: block;">
             <img src="${logoUrl}" style="width: 150px;" class="fr-fic fr-dib fr-fil">
         </div>
+        <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
     </div>
     </div>
     </div>
@@ -725,8 +729,12 @@ export const paragraph2 = () => {
   border-radius: 10px;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="container block-container" style="overflow: hidden;">
+
   <div class="row">
+  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
     <div class="col-md-6 col-mobile-margin">
+
      <p>
      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
      </p>
@@ -735,7 +743,10 @@ export const paragraph2 = () => {
      <p>
      Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
      </p>
+
      </div>
+     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+
      </div>
           </div>
           </div>
@@ -752,6 +763,8 @@ export const sponsorGrid = (columns, rows, box) => {
   border-radius: 10px;
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
+  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+
   <h1 style="font-size: 26px; margin: 50px 50px 0px 50px; color: #606060">Thank You to our Sponsors</h1>
   <div class="container block-container">`;
   const boxStyle = box
@@ -778,7 +791,9 @@ export const sponsorGrid = (columns, rows, box) => {
     // reset column counter back to 0 for the next row
     column = 0;
   }
-  html += `</div></div></div></div>`;
+  html += `</div>
+  <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+  </div></div></div>`;
 
   return html;
 };

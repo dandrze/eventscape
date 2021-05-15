@@ -71,7 +71,10 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                   style={{ margin: "6px", color: "#28a745" }}
                 />
                 <span className={classes.paragraphText}>Live</span>
-                <a href={`https://${event.link}.eventscape.io/`}>
+                <a
+                  href={`https://${event.link}.eventscape.io/`}
+                  target="_blank"
+                >
                   <ExitToAppIcon
                     className="color-on-hover"
                     style={{ marginLeft: "24px", cursor: "pointer" }}
