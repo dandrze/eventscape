@@ -76,7 +76,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
   );
 
   const [registrationRequired, setRegistrationRequired] = React.useState(
-    event.registrationRequired ? event.registrationRequired : true
+    event.registrationRequired
   );
 
   const [color, setColor] = useState(
