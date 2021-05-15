@@ -1,6 +1,7 @@
 import React, { useEffect, useState, forwardRef } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
@@ -45,6 +46,15 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
     }
   };
 
+  const copyLink = (event) => {
+    event.target.select();
+    document.execCommand("copy");
+    toast.success("Event link copied to clipboard!", {
+      autoClose: 1500,
+      pauseOnHover: false,
+    });
+  };
+
   return (
     <div className="container-width">
       <NavBar3
@@ -71,15 +81,13 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                   style={{ margin: "6px", color: "#28a745" }}
                 />
                 <span className={classes.paragraphText}>Live</span>
-                <a
-                  href={`https://${event.link}.eventscape.io/`}
-                  target="_blank"
-                >
-                  <ExitToAppIcon
-                    className="color-on-hover"
-                    style={{ marginLeft: "24px", cursor: "pointer" }}
-                  />
-                </a>
+
+                <ExitToAppIcon
+                  className="color-on-hover"
+                  style={{ marginLeft: "24px", cursor: "pointer" }}
+                  onClick={copyLink}
+                />
+
                 <span
                   style={{ marginLeft: "6px", fontSize: "1rem" }}
                 >{`https://${event.link}.eventscape.io/`}</span>
