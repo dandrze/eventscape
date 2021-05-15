@@ -210,7 +210,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
-  const [chatHidden, setChatHidden] = useState(true);
+  const [chatHidden, setChatHidden] = useState(false);
   const [tabValue, setTabValue] = React.useState(0);
   const [chatReady, setChatReady] = useState(false);
   const [chatTabEnabled, setChatTabEnabled] = useState(false);
