@@ -161,53 +161,42 @@ const Published = (props) => {
     return <RegistrationNotFound />;
   } else if (props.event.id) {
     return (
-      <div
-        className="fr-view live-page-container"
-        style={{
-          backgroundImage: `url(${props.model.backgroundImage})`,
-          width: "100vw",
-          height: "auto",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
-        }}
-      >
+      <div className="page-container">
+        <Helmet>
+          <title>{props.event.title}</title>
+        </Helmet>
+        <Modal1
+          open={openPoll}
+          onClose={closePoll}
+          content={
+            <PollBlock
+              question={poll.question}
+              pollOptions={poll.options}
+              allowMultiple={poll.allowMultiple}
+              submitPoll={handleSubmitPoll}
+            />
+          }
+        />
+        <AlertModal
+          open={openResults}
+          onClose={() => setOpenResults(false)}
+          content={
+            <div style={{ padding: "40px 30px 10px", width: "500px" }}>
+              <ResultsChart question={resultsQuestion} results={results} />
+            </div>
+          }
+          closeText="Close"
+        />
+        <style>{theme(props.event.primaryColor)}</style>
         <div
+          className="page-background"
           style={{
-            backdropFilter: `blur(${props.model.backgroundBlur}px)`,
-            WebkitBackdropFilter: `blur(${props.model.backgroundBlur}px)`,
-            margin: "auto",
-            minHeight: "100vh",
-            height: "100%",
+            backgroundImage: `url(${props.model.backgroundImage})`,
+            boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+            filter: `blur(${props.model.backgroundBlur}px)`,
           }}
-        >
-          {" "}
-          <Helmet>
-            <title>{props.event.title}</title>
-          </Helmet>
-          <Modal1
-            open={openPoll}
-            onClose={closePoll}
-            content={
-              <PollBlock
-                question={poll.question}
-                pollOptions={poll.options}
-                allowMultiple={poll.allowMultiple}
-                submitPoll={handleSubmitPoll}
-              />
-            }
-          />
-          <AlertModal
-            open={openResults}
-            onClose={() => setOpenResults(false)}
-            content={
-              <div style={{ padding: "40px 30px 10px", width: "500px" }}>
-                <ResultsChart question={resultsQuestion} results={results} />
-              </div>
-            }
-            closeText="Close"
-          />
-          <style>{theme(props.event.primaryColor)}</style>
+        ></div>
+        <div className="fr-view live-page-container">
           {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
           <div className="section-container">
             <div className="centering-spacer"></div>
