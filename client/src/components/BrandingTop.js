@@ -2,7 +2,7 @@ import React from "react";
 import "./BrandingTop.css";
 
 // Icons:
-import EventscapeLogo from "../icons/eventscape-logo-d1d1d1.svg";
+import EventscapeLogo from "../icons/eventscape logos-929292.svg";
 
 export default function BrandingTop(props) {
   return (
