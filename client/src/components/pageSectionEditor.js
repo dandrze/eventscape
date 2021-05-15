@@ -20,8 +20,10 @@ const PageSectionEditor = ({
   setIsHovering,
 }) => {
   const [open, setOpen] = useState(false);
+  const [insertAfter, setInsertAfter] = useState(0);
 
-  const handleOpen = () => {
+  const openPickDesignBlock = (_insertAfter) => {
+    setInsertAfter(_insertAfter);
     setOpen(true);
   };
 
@@ -39,10 +41,18 @@ const PageSectionEditor = ({
       <Modal1
         open={open}
         onClose={handleClose}
-        content={<DesignBlockPicker handleClose={handleClose} />}
+        content={
+          <DesignBlockPicker
+            handleClose={handleClose}
+            sectionIndex={insertAfter}
+          />
+        }
       />
-      {(isHovering === sectionIndex) & (sectionIndex === 0) ? (
-        <NewSectionButton openSectionPicker={handleOpen} />
+      {/* Add an insert design block button before the section */}
+      {isHovering === sectionIndex ? (
+        <NewSectionButton
+          openSectionPicker={() => openPickDesignBlock(sectionIndex - 1)}
+        />
       ) : null}
       <div
         onMouseEnter={handleMouseEnter}
@@ -70,8 +80,12 @@ const PageSectionEditor = ({
           />
         )}
       </div>
-      {isHovering === sectionIndex || isHovering === sectionIndex + 1 ? (
-        <NewSectionButton openSectionPicker={handleOpen} />
+      {/* Add an insert design block button after the section */}
+
+      {isHovering === sectionIndex ? (
+        <NewSectionButton
+          openSectionPicker={() => openPickDesignBlock(sectionIndex)}
+        />
       ) : null}
     </div>
   );
