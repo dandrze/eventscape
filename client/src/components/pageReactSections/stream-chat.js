@@ -24,7 +24,6 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
   const displayStream = () => {
     const youtubeSrc = createEmbedLink(link);
 
-    console.log(content);
     switch (content) {
       case "youtube-live":
         return (
@@ -40,10 +39,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
         return (
           <div>
             <div>
-              <video
-                playsInline autoPlay loop muted 
-                style={{ width: "100%" }}
-              >
+              <video playsInline autoPlay loop muted style={{ width: "100%" }}>
                 <source
                   src="https://eventscape-assets.s3.amazonaws.com/assets/default-event-video-v2-small.mp4"
                   type="video/mp4"
@@ -54,7 +50,8 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
                   upgrading to a web browser that
                   <a
                     href="https://videojs.com/html5-video-support/"
-                    target="_blank" rel="noopener noreferrer"
+                    target="_blank"
+                    rel="noopener noreferrer"
                   >
                     supports HTML5 video
                   </a>

@@ -71,6 +71,7 @@ const PageSectionEditor = ({
           createElement(mapReactComponent[section.reactComponent.name], {
             ...section.reactComponent.props,
             sectionIndex: sectionIndex,
+            key: sectionIndex,
             editMode: true,
           })
         ) : (

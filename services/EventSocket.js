@@ -45,9 +45,12 @@ module.exports = (server) => {
         siteVisitor.long = geoData.long;
         await siteVisitor.save();
 
-        const siteVisit = await SiteVisit.create({
-          EventId,
-          SiteVisitorId: siteVisitor.id,
+        const [siteVisit] = await SiteVisit.findOrCreate({
+          where: {
+            EventId,
+            SiteVisitorId: siteVisitor.id,
+            loggedOutAt: null,
+          },
         });
         socket.visitId = siteVisit.id;
         socket.visitorId = siteVisitor.id;
@@ -119,6 +122,8 @@ module.exports = (server) => {
       const siteVisit = await SiteVisit.findByPk(socket.visitId, {
         include: SiteVisitor,
       });
+
+      console.log({ siteVisit, socketId: socket.visitId });
 
       if (siteVisit) {
         siteVisit.loggedOutAt = new Date();

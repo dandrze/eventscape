@@ -181,6 +181,7 @@ module.exports = (server) => {
         clearCache(`ChatRoom:MessageHistory:${room}`);
 
         io.to(room.toString()).emit("message", {
+          room,
           user: chatUser.name,
           userId: chatUser.id,
           text: message,

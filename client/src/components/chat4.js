@@ -301,6 +301,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     });
 
     socket.on("message", (message) => {
+      console.log({ room, message });
       setMessages((messages) => [...messages, message]);
     });
 
@@ -361,13 +362,14 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     socket.on("disconnect", function () {
       console.log("socket disconnected", socket);
     });
-  }, [reconnect]);
+  }, [reconnect, room]);
 
   const sendMessage = (event) => {
     event.preventDefault();
 
     if (message && chatReady) {
       setChatReady(false);
+      console.log({ room, message });
       socket.emit("sendMessage", { chatUserId, room, message }, () => {
         setMessage("");
         setChatReady(true);
