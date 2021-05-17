@@ -130,8 +130,7 @@ const useStyles = makeStyles((theme) => ({
     //padding: theme.spacing(3),
     padding: "24px 0px 0px",
     margin: "64px 0px 0px 0px",
-    width: "100%",
-    minWidth: "500px",
+    width: "calc(100vw - 240px)",
     overflowY: "scroll", // Added to fix froala cursor jumping bug
     height: "calc(100vh - 64px)", // Added to fix froala cursor jumping bug
   },
@@ -720,9 +719,7 @@ function NavBar3(props) {
           </List>
         </Drawer>
       )}
-      <div className={props.fullWidth ? classes.fullWidth : classes.content}>
-        {content}
-      </div>
+
       {/* Side Nav for Account Settings */}
       {displaySideNavAccount === "true" && (
         <Drawer
@@ -788,6 +785,9 @@ function NavBar3(props) {
           </List>
         </Drawer>
       )}
+      <div className={props.fullWidth ? classes.fullWidth : classes.content}>
+        {content}
+      </div>
     </div>
   );
 }
