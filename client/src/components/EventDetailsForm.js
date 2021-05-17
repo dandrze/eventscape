@@ -51,15 +51,11 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
   const [openModal, setOpenModal] = useState(false);
   const [modalText, setModalText] = useState("");
 
-  const [eventCat, setEventCat] = React.useState(
+  const [category, setCategory] = React.useState(
     event.category ? event.category : ""
   );
-  const [eventTitle, setEventTitle] = React.useState(
-    event.title ? event.title : ""
-  );
-  const [eventLink, setEventLink] = React.useState(
-    event.link ? event.link : ""
-  );
+  const [title, setTitle] = React.useState(event.title ? event.title : "");
+  const [link, setLink] = React.useState(event.link ? event.link : "");
 
   const [linkUnavailable, setLinkUnavailable] = React.useState(false);
 
@@ -71,7 +67,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
   const [selectedEndDate, setSelectedEndDate] = React.useState(
     event.endDate ? event.endDate : new Date()
   );
-  const [eventTimeZone, setEventTimeZone] = React.useState(
+  const [timeZone, setTimeZone] = React.useState(
     event.timeZone ? event.timeZone : defaultTimeZone
   );
 
@@ -79,7 +75,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     event.registrationRequired
   );
 
-  const [color, setColor] = useState(
+  const [primaryColor, setPrimaryColor] = useState(
     event.primaryColor ? event.primaryColor : "#B0281C"
   );
   const [isLoading, setIsloading] = useState(false);
@@ -102,14 +98,14 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
   const closeModal = () => setOpenModal(false);
 
-  const handleChangeEventCat = (event) => {
-    setEventCat(event.target.value);
+  const handleChangeCategory = (event) => {
+    setCategory(event.target.value);
   };
-  const handleChangeEventTitle = (event) => {
-    setEventTitle(event.target.value);
+  const handleChangeTitle = (event) => {
+    setTitle(event.target.value);
   };
-  const handleChangeEventLink = (event) => {
-    setEventLink(
+  const handleChangeLink = (event) => {
+    setLink(
       event.target.value
         .toLowerCase()
         .trim()
@@ -117,7 +113,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     );
   };
 
-  const handleChangeEventLinkBlur = async (event) => {
+  const handleChangeLinkBlur = async (event) => {
     // offlimit subdomain names that we might want to use in the future
     const offLimitValues = [
       "app",
@@ -137,7 +133,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     ];
 
     // check if the event link is one of the offlimit names
-    if (offLimitValues.includes(eventLink)) {
+    if (offLimitValues.includes(link)) {
       setLinkUnavailable(true);
       setLinkHelperText(
         "This link name is unavailable. Please choose another one."
@@ -146,7 +142,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     }
 
     // check if any other events already used this link name
-    const res = await isLinkAvailable(eventLink);
+    const res = await isLinkAvailable(link);
     if (res) {
       setLinkUnavailable(false);
       setLinkHelperText("");
@@ -177,7 +173,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     }
   };
   const handleChangeTimeZone = (event) => {
-    setEventTimeZone(event.target.value);
+    setTimeZone(event.target.value);
   };
 
   const handleChangeregistrationRequired = (event) => {
@@ -185,7 +181,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
   };
 
   const copyLink = () => {
-    navigator.clipboard.writeText(eventLink + ".eventscape.io");
+    navigator.clipboard.writeText(link + ".eventscape.io");
     toast.success("Copied to clipboard!", {
       autoClose: 1500,
       pauseOnHover: false,
@@ -200,17 +196,17 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
       setOpenModal(true);
       return null;
     }
-    if (!eventTitle) {
+    if (!title) {
       setModalText("Please enter a title.");
       setOpenModal(true);
       return null;
     }
-    if (!eventLink) {
+    if (!link) {
       setModalText("Please enter a link name.");
       setOpenModal(true);
       return null;
     }
-    if (!eventCat) {
+    if (!category) {
       setModalText("Please select a category.");
       setOpenModal(true);
       return null;
@@ -234,16 +230,18 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     setIsloading(true);
     let response = false;
 
-    response = await updateEvent(
-      eventTitle,
-      eventLink,
-      eventCat,
+    response = await updateEvent({
+      title,
+      link,
+      category,
       startDate,
       endDate,
-      eventTimeZone,
-      color,
-      registrationRequired
-    );
+      timeZone,
+      primaryColor,
+      registrationRequired,
+    });
+
+    if (response) toast.success("Event successfully saved.");
 
     setIsloading(false);
   };
@@ -267,8 +265,8 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
               id="title"
               label="Event Title"
               variant="outlined"
-              value={eventTitle}
-              onChange={handleChangeEventTitle}
+              value={title}
+              onChange={handleChangeTitle}
             />
           </FormControl>
           <Tooltip title="This link can not be changed once it's created.">
@@ -279,9 +277,9 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
                 label="Event Link"
                 variant="outlined"
                 placeholder="myevent"
-                value={eventLink}
-                onChange={handleChangeEventLink}
-                onBlur={handleChangeEventLinkBlur}
+                value={link}
+                onChange={handleChangeLink}
+                onBlur={handleChangeLinkBlur}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
@@ -311,8 +309,8 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
               labelId="event-cat"
               id="event-cat-select"
               required="true"
-              value={eventCat}
-              onChange={handleChangeEventCat}
+              value={category}
+              onChange={handleChangeCategory}
             >
               <MenuItem value="">
                 <em>Select Category</em>
@@ -400,7 +398,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
               labelId="event-time-zone"
               id="event-time-zone-select"
               required="true"
-              value={eventTimeZone}
+              value={timeZone}
               onChange={handleChangeTimeZone}
             >
               <MenuItem value={"Africa/Abidjan"}>Africa/Abidjan</MenuItem>
@@ -1079,8 +1077,16 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
           <label htmlFor="primary-color">
             Tip: picking a darker color will help buttons stand out.
           </label>
-          <HexColorPicker color={color} onChange={setColor} id="event-color" />
-          <HexColorInput color={color} onChange={setColor} id="hex-input" />
+          <HexColorPicker
+            color={primaryColor}
+            onChange={setPrimaryColor}
+            id="event-color"
+          />
+          <HexColorInput
+            color={primaryColor}
+            onChange={setPrimaryColor}
+            id="hex-input"
+          />
           <br></br>
           <br></br>
 

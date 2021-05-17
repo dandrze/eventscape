@@ -31,6 +31,7 @@ import {
 import * as actions from "../actions";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import SimpleNavBar from "../components/simpleNavBar";
+import { updateEvent } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -88,10 +89,10 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const classes = useStyles();
 
   const [step, setStep] = useState(0);
-  const [eventCat, setEventCat] = useState("");
-  const [eventCatError, setEventCatError] = useState("");
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventTitleError, setEventTitleError] = useState("");
+  const [category, setCategory] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventDescriptionError, setEventDescriptionError] = useState("");
   const [eventLink, setEventLink] = React.useState("");
@@ -110,6 +111,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const [percent, setPercent] = useState("");
   const [logo, setLogo] = useState("");
   const [logoHelperText, setLogoHelperText] = useState("");
+  const [eventId, setEventId] = useState(null);
 
   useEffect(() => {
     const startDate = new Date();
@@ -125,14 +127,15 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     setSelectedEndDate(endDate);
   }, []);
 
-  const handleChangeEventTitle = (event) => {
+  const handleChangeTitle = (event) => {
     event.preventDefault();
-    setEventTitle(event.target.value);
+    setTitle(event.target.value);
   };
 
-  const handleChangeEventCat = (event) => {
-    setEventCat(event.target.value);
+  const handleChangeCategory = (event) => {
+    setCategory(event.target.value);
   };
+
   const handleChangeEventDescription = (event) => {
     setEventDescription(event.target.value);
   };
@@ -145,25 +148,32 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     setRequireYoutubeInstructions(event.target.value);
   };
 
-  const handleSubmitTitle = () => {
-    if (eventTitle) {
-      setEventTitleError("");
+  const handleSubmitTitle = async () => {
+    if (title) {
+      setTitleError("");
+      const id = await createEvent(title);
+
+      setEventId(id);
+
       handleNext();
     } else {
-      setEventTitleError("Please enter a title for your event");
+      setTitleError("Please enter a title for your event");
     }
   };
 
-  const handleSubmitCat = () => {
-    if (eventCat) {
-      setEventCatError("");
+  const handleSubmitCat = async () => {
+    if (category) {
+      setCategoryError("");
+      await updateEvent({ eventId, category });
       handleNext();
     } else {
-      setEventCatError("Please select a category");
+      setCategoryError("Please select a category");
     }
   };
 
-  const handleSubmitRegistrationRequired = () => {
+  const handleSubmitRegistrationRequired = async () => {
+    await updateEvent({ eventId, registrationRequired });
+
     handleNext();
   };
 
@@ -320,9 +330,9 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     let response = false;
 
     response = await createEvent(
-      eventTitle,
+      title,
       eventLink,
-      eventCat,
+      category,
       startDate,
       endDate,
       eventTimeZone,
@@ -340,6 +350,24 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     switch (step) {
       case 0:
         return (
+          <div>
+            <div>
+              Let's get started. <br />
+              Simply answer a few questions about your event and you'll have
+              your very own branded livestream website up and running in just
+              1-2 minutes.
+            </div>
+            <button
+              className="Button1"
+              style={{ width: "150px", marginTop: "30px", marginLeft: "12px" }}
+              onClick={handleNext}
+            >
+              Next
+            </button>
+          </div>
+        );
+      case 1:
+        return (
           <Question
             question="What is the name of your event?"
             next={handleSubmitTitle}
@@ -348,16 +376,16 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                 <TextField
                   id="title"
                   variant="outlined"
-                  value={eventTitle}
-                  onChange={handleChangeEventTitle}
-                  helperText={eventTitleError}
-                  error={eventTitleError}
+                  value={title}
+                  onChange={handleChangeTitle}
+                  helperText={titleError}
+                  error={titleError}
                 />
               </FormControl>
             }
           />
         );
-      case 1:
+      case 2:
         return (
           <Question
             question="What type of event is it?"
@@ -373,10 +401,10 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                   labelId="event-cat"
                   id="event-cat-select"
                   required="true"
-                  value={eventCat}
-                  onChange={handleChangeEventCat}
-                  helperText={eventCatError}
-                  error={eventCatError}
+                  value={category}
+                  onChange={handleChangeCategory}
+                  helperText={categoryError}
+                  error={categoryError}
                 >
                   <MenuItem value="">
                     <em>Select Category</em>
@@ -403,7 +431,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 2:
+      case 3:
         return (
           <Question
             next={handleSubmitRegistrationRequired}
@@ -430,7 +458,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           />
         );
 
-      case 3:
+      case 4:
         return (
           <Question
             question="Describe your event in 1-2 brief sentences."
@@ -452,7 +480,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 4:
+      case 5:
         return (
           <Question
             question="When does your event start and end?"
@@ -512,7 +540,10 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                     </Grid>
                   </Grid>
                 </MuiPickersUtilsProvider>
-                <FormControl variant="outlined" className={`${classes.formControl} date-time-container`}>
+                <FormControl
+                  variant="outlined"
+                  className={`${classes.formControl} date-time-container`}
+                >
                   {/* Time Zone */}
                   <InputLabel
                     id="event-time-zone"
@@ -1470,7 +1501,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 5:
+      case 6:
         return handleNext();
       /*  return (
           <Question
@@ -1497,7 +1528,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         ); */
-      case 6:
+      case 7:
         return handleNext();
       /*  return requireYoutubeInstructions === "required" ? (
           <div>
@@ -1539,7 +1570,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
         ) : (
           handleNext()
         ); */
-      case 7:
+      case 8:
         return (
           <Question
             question="Do you have a brand color you'd like to use? If so, select it below."
@@ -1565,7 +1596,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           />
         );
 
-      case 8:
+      case 9:
         return (
           <Question
             question="Let's see your logo! Upload it below."
@@ -1629,7 +1660,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 9:
+      case 10:
         return (
           <Question
             question="What would you like your event URL to be?"

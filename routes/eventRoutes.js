@@ -24,7 +24,7 @@ const { inviteUser } = require("../services/Invitations");
 const { clearCache } = require("../services/sequelizeRedis");
 const { sendEmail } = require("../services/Mailer");
 
-router.post("/api/event", requireAuth, async (req, res, next) => {
+router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
   const {
     event: {
       title,
@@ -138,6 +138,58 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
     const account = await Account.findByPk(accountId);
     account.currentEventId = event.id;
     account.save();
+
+    // add a permission in the permissions table for the event creator
+    await Permission.create({
+      EventId: event.id,
+      AccountId: accountId,
+      role: "owner",
+      eventDetails: true,
+      communication: true,
+      registration: true,
+      analytics: true,
+      messaging: true,
+      design: true,
+      polls: true,
+    });
+
+    // create a default plan and invoice
+    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
+
+    const invoice = await Invoice.create({ EventId: event.id });
+    const plan = await Plan.create({
+      EventId: event.id,
+      PlanTypeId: defaultFreePlan.id,
+    });
+    const invoiceLineItem = await InvoiceLineItem.create({
+      InvoiceId: invoice.id,
+      type: "plan",
+      PlanId: plan.id,
+    });
+
+    res.json(event);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/api/event", requireAuth, async (req, res, next) => {
+  const { title } = req.body;
+
+  const accountId = req.user.id;
+
+  try {
+    const event = await Event.create({
+      title,
+      OwnerId: accountId,
+    });
+
+    // create a default chatroom
+    const chatRoom = await ChatRoom.create({
+      event: event.id,
+      isDefault: true,
+      name: "Main (Default)",
+    });
 
     // add a permission in the permissions table for the event creator
     await Permission.create({
@@ -468,6 +520,7 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
 
   const {
+    eventId,
     title,
     link,
     category,
@@ -481,30 +534,24 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
 
   try {
     const account = await Account.findByPk(accountId);
-    const event = await Event.findByPk(account.currentEventId);
+    const event = eventId || (await Event.findByPk(account.currentEventId));
     const eventTimeChanged = event.startDate != startDate;
 
     clearCache(`Event:link:${event.link}`);
 
-    // update event attributes
-    event.title = title;
-    event.link = link;
-    event.category = category;
-    event.startDate = startDate;
-    event.endDate = endDate;
-    event.timeZone = timeZone;
-    event.primaryColor = primaryColor;
-    event.status = status;
-    event.registrationRequired = registrationRequired;
+    // update event attributes. If they are not provided, use the previous values
+    event.title = title || event.title;
+    event.link = link || event.link;
+    event.category = category || event.category;
+    event.startDate = startDate || event.startDate;
+    event.endDate = endDate || event.endDate;
+    event.timeZone = timeZone || event.timeZone;
+    event.primaryColor = primaryColor || event.primaryColor;
+    event.status = status || event.status;
+    event.registrationRequired =
+      registrationRequired || event.registrationRequired;
 
     await event.save();
-
-    // update scheduled emails if the event time changed
-    if (eventTimeChanged) {
-      const communications = await Communication.findAll({
-        where: { EventId: event.id },
-      });
-    }
 
     res.send(event);
   } catch (error) {
