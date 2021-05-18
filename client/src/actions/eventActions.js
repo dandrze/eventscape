@@ -14,7 +14,7 @@ const defaultBackgroundImage =
 const defaultBackgroundColor = "rgba(30, 30, 31, 0.384)";
 const defaultBlur = 5;
 
-export const createEvent = (
+export const finalizeEvent = (
   title,
   link,
   category,
@@ -58,7 +58,7 @@ export const createEvent = (
   console.log(event);
 
   try {
-    const res = await api.post("/api/event", {
+    const res = await api.post("/api/event/finalize", {
       event,
       communications: emaillistTemplate(startDate),
     });
@@ -71,7 +71,21 @@ export const createEvent = (
   }
 };
 
-export const updateEvent = (
+export const createEvent = (title) => async (dispatch) => {
+  try {
+    const res = await api.post("/api/event", { title });
+
+    console.log(res);
+
+    return res.data.id;
+  } catch (err) {
+    toast.error("Error when creating new event: " + err.response.data.message);
+    return false;
+  }
+};
+
+export const updateEvent = ({
+  eventId,
   title,
   link,
   category,
@@ -79,25 +93,25 @@ export const updateEvent = (
   endDate,
   timeZone,
   primaryColor,
-  registrationRequired
-) => async (dispatch, getState) => {
-  const updatedEvent = {
-    title,
-    link,
-    category,
-    startDate,
-    endDate,
-    timeZone,
-    primaryColor,
-    registrationRequired,
-    status: getState().event.status,
-  };
-
+  registrationRequired,
+  description,
+}) => async (dispatch, getState) => {
   try {
-    const res = await api.put("/api/event", updatedEvent);
+    const res = await api.put("/api/event", {
+      eventId,
+      title,
+      link,
+      category,
+      startDate,
+      endDate,
+      timeZone,
+      primaryColor,
+      registrationRequired,
+      description,
+      status: getState().event.status,
+    });
 
     await dispatch(fetchEvent());
-    toast.success("Event successfully saved.");
     return true;
   } catch (err) {
     toast.error("Error when updating event: " + err.response.data.message);

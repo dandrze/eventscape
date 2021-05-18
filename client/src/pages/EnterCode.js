@@ -27,12 +27,17 @@ const EnterCode = ({ signInWithCode, location, history }) => {
   const urlParams = new URLSearchParams(window.location.search);
   const targetEventId = urlParams.get("eventid");
   const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/my-events";
+  const isNewUser = location.state ? location.state.isNewUser : null;
 
   const verifyCode = async () => {
     const auth = await signInWithCode(emailAddress, code);
 
     if (auth.success) {
-      history.push("/my-events");
+      if (isNewUser) {
+        history.push("create-event");
+      } else {
+        history.push("/");
+      }
     }
     if (auth.error) {
       setError(auth.error);

@@ -61,7 +61,10 @@ function Create_Account(props) {
         firstName,
       });
 
-      props.history.push({ pathname: "/code", state: { emailAddress } });
+      props.history.push({
+        pathname: "/code",
+        state: { emailAddress, isNewUser: true },
+      });
     }
   };
   const handleChangeFirstName = (event) => {

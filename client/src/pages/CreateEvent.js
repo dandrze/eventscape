@@ -84,22 +84,29 @@ const Question = ({ question, next, children, input, skip }) => {
   );
 };
 
-function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
+function CreateEvent({
+  user,
+  createEvent,
+  updateEvent,
+  finalizeEvent,
+  isLinkAvailable,
+  history,
+}) {
   const classes = useStyles();
 
   const [step, setStep] = useState(0);
-  const [eventCat, setEventCat] = useState("");
-  const [eventCatError, setEventCatError] = useState("");
-  const [eventTitle, setEventTitle] = useState("");
-  const [eventTitleError, setEventTitleError] = useState("");
+  const [category, setCategory] = useState("");
+  const [categoryError, setCategoryError] = useState("");
+  const [title, setTitle] = useState("");
+  const [titleError, setTitleError] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventDescriptionError, setEventDescriptionError] = useState("");
-  const [eventLink, setEventLink] = React.useState("");
-  const [linkHelperText, setLinkHelperText] = React.useState("");
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDateError, setSelectedEndDateError] = useState("");
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
-  const [eventTimeZone, setEventTimeZone] = React.useState(momentTZ.tz.guess());
+  const [link, setLink] = useState("");
+  const [linkHelperText, setLinkHelperText] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDateError, setEndDateError] = useState("");
+  const [endDate, setEndDate] = useState(new Date());
+  const [timeZone, setTimeZone] = useState(momentTZ.tz.guess());
   const [registrationRequired, setRegistrationRequired] = useState("required");
   const [requireYoutubeInstructions, setRequireYoutubeInstructions] = useState(
     "required"
@@ -110,29 +117,31 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const [percent, setPercent] = useState("");
   const [logo, setLogo] = useState("");
   const [logoHelperText, setLogoHelperText] = useState("");
+  const [eventId, setEventId] = useState(null);
 
   useEffect(() => {
     const startDate = new Date();
     startDate.setMonth(startDate.getMonth() + 1);
     startDate.setHours(19);
     startDate.setMinutes(0);
-    setSelectedStartDate(startDate);
+    setStartDate(startDate);
 
     const endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 1);
     endDate.setHours(21);
     endDate.setMinutes(0);
-    setSelectedEndDate(endDate);
+    setEndDate(endDate);
   }, []);
 
-  const handleChangeEventTitle = (event) => {
+  const handleChangeTitle = (event) => {
     event.preventDefault();
-    setEventTitle(event.target.value);
+    setTitle(event.target.value);
   };
 
-  const handleChangeEventCat = (event) => {
-    setEventCat(event.target.value);
+  const handleChangeCategory = (event) => {
+    setCategory(event.target.value);
   };
+
   const handleChangeEventDescription = (event) => {
     setEventDescription(event.target.value);
   };
@@ -145,31 +154,42 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     setRequireYoutubeInstructions(event.target.value);
   };
 
-  const handleSubmitTitle = () => {
-    if (eventTitle) {
-      setEventTitleError("");
+  const handleSubmitTitle = async () => {
+    if (title) {
+      setTitleError("");
+      const id = await createEvent(title);
+
+      setEventId(id);
+
       handleNext();
     } else {
-      setEventTitleError("Please enter a title for your event");
+      setTitleError("Please enter a title for your event");
     }
   };
 
-  const handleSubmitCat = () => {
-    if (eventCat) {
-      setEventCatError("");
+  const handleSubmitCat = async () => {
+    if (category) {
+      setCategoryError("");
+      updateEvent({ eventId, category });
       handleNext();
     } else {
-      setEventCatError("Please select a category");
+      setCategoryError("Please select a category");
     }
   };
 
-  const handleSubmitRegistrationRequired = () => {
+  const handleSubmitRegistrationRequired = async () => {
+    updateEvent({
+      eventId,
+      registrationRequired: registrationRequired === "required",
+    });
+
     handleNext();
   };
 
   const handleSubmitDescription = () => {
     if (eventDescription) {
       setEventDescriptionError("");
+      updateEvent({ eventId, description: eventDescription });
       handleNext();
     } else {
       setEventDescriptionError("Please add a description");
@@ -177,7 +197,8 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleSubmitDates = () => {
-    if (!selectedEndDateError && eventTimeZone) {
+    if (!endDateError && timeZone) {
+      updateEvent({ eventId, startDate, endDate, timeZone });
       handleNext();
     }
   };
@@ -185,39 +206,45 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const handleSubmitLink = async () => {
     const isLinkValid = await checkLinkValidity();
 
-    if (!eventLink) {
+    if (!link) {
       setLinkHelperText("Please add a subdomain for your event");
     } else if (isLinkValid) {
+      updateEvent({ eventId, link });
       handleNext();
     }
   };
 
+  const handleSubmitColor = () => {
+    updateEvent({ eventId, primaryColor: color });
+    handleNext();
+  };
+
   const handleStartDateChange = (startDate) => {
-    setSelectedStartDate(startDate);
-    setSelectedEndDateError("");
+    setStartDate(startDate);
+    setEndDateError("");
 
     // if the new date is after the end date, push the end date 1 day after this new start date
-    if (startDate > new Date(selectedEndDate)) {
+    if (startDate > new Date(endDate)) {
       const pushedDate = new Date();
       pushedDate.setTime(startDate.getTime() + 1000 * 60 * 60 * 2);
-      setSelectedEndDate(pushedDate);
+      setEndDate(pushedDate);
     }
   };
   const handleEndDateChange = (endDate) => {
-    if (endDate < new Date(selectedStartDate)) {
-      setSelectedEndDateError("End date cannot be before the start date.");
+    if (endDate < new Date(startDate)) {
+      setEndDateError("End date cannot be before the start date.");
     } else {
-      setSelectedEndDateError("");
+      setEndDateError("");
 
-      setSelectedEndDate(endDate);
+      setEndDate(endDate);
     }
   };
   const handleChangeTimeZone = (event) => {
-    setEventTimeZone(event.target.value);
+    setTimeZone(event.target.value);
   };
 
-  const handleChangeEventLink = (event) => {
-    setEventLink(
+  const handleChangeLink = (event) => {
+    setLink(
       event.target.value
         .toLowerCase()
         .trim()
@@ -245,7 +272,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     ];
 
     // check if the event link is one of the offlimit names
-    if (offLimitValues.includes(eventLink)) {
+    if (offLimitValues.includes(link)) {
       setLinkHelperText(
         "This link name is unavailable. Please choose another one."
       );
@@ -253,7 +280,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     }
 
     // check if any other events already used this link name
-    const linkAvailable = await isLinkAvailable(eventLink);
+    const linkAvailable = await isLinkAvailable(link);
     if (linkAvailable) {
       setLinkHelperText("");
     } else {
@@ -278,7 +305,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const copyLink = () => {
-    navigator.clipboard.writeText(eventLink + ".eventscape.io");
+    navigator.clipboard.writeText(link + ".eventscape.io");
     toast.success("Copied to clipboard!", {
       autoClose: 1500,
       pauseOnHover: false,
@@ -286,11 +313,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleNext = () => {
-    if (step === 9) {
-      handleSubmitForm();
-    } else {
-      setStep((prevStep) => prevStep + 1);
-    }
+    setStep((prevStep) => prevStep + 1);
   };
 
   const handleSubmitLogo = () => {
@@ -306,26 +329,16 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleSubmitForm = async () => {
-    // If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
-    const startDate =
-      typeof selectedStartDate === "string"
-        ? new Date(selectedStartDate)
-        : selectedStartDate;
-    const endDate =
-      typeof selectedEndDate === "string"
-        ? new Date(selectedEndDate)
-        : selectedEndDate;
-
     setIsloading(true);
     let response = false;
 
-    response = await createEvent(
-      eventTitle,
-      eventLink,
-      eventCat,
+    response = await finalizeEvent(
+      title,
+      link,
+      category,
       startDate,
       endDate,
-      eventTimeZone,
+      timeZone,
       color,
       registrationRequired === "required",
       eventDescription,
@@ -340,6 +353,24 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     switch (step) {
       case 0:
         return (
+          <div>
+            <div>
+              Let's get started. <br />
+              Simply answer a few questions about your event and you'll have
+              your very own branded livestream website up and running in just
+              1-2 minutes.
+            </div>
+            <button
+              className="Button1"
+              style={{ width: "150px", marginTop: "30px", marginLeft: "12px" }}
+              onClick={handleNext}
+            >
+              Next
+            </button>
+          </div>
+        );
+      case 1:
+        return (
           <Question
             question="What is the name of your event?"
             next={handleSubmitTitle}
@@ -348,16 +379,16 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                 <TextField
                   id="title"
                   variant="outlined"
-                  value={eventTitle}
-                  onChange={handleChangeEventTitle}
-                  helperText={eventTitleError}
-                  error={eventTitleError}
+                  value={title}
+                  onChange={handleChangeTitle}
+                  helperText={titleError}
+                  error={titleError}
                 />
               </FormControl>
             }
           />
         );
-      case 1:
+      case 2:
         return (
           <Question
             question="What type of event is it?"
@@ -373,10 +404,10 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                   labelId="event-cat"
                   id="event-cat-select"
                   required="true"
-                  value={eventCat}
-                  onChange={handleChangeEventCat}
-                  helperText={eventCatError}
-                  error={eventCatError}
+                  value={category}
+                  onChange={handleChangeCategory}
+                  helperText={categoryError}
+                  error={categoryError}
                 >
                   <MenuItem value="">
                     <em>Select Category</em>
@@ -403,7 +434,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 2:
+      case 3:
         return (
           <Question
             next={handleSubmitRegistrationRequired}
@@ -430,7 +461,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           />
         );
 
-      case 3:
+      case 4:
         return (
           <Question
             question="Describe your event in 1-2 brief sentences."
@@ -452,7 +483,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 4:
+      case 5:
         return (
           <Question
             question="When does your event start and end?"
@@ -476,7 +507,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                             format="MM/dd/yyyy hh:mm a"
                             margin="none"
                             id="event-start-date"
-                            value={selectedStartDate}
+                            value={startDate}
                             onChange={handleStartDateChange}
                             KeyboardButtonProps={{
                               "aria-label": "change date",
@@ -499,20 +530,23 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                             format="MM/dd/yyyy hh:mm a"
                             margin="none"
                             id="event-start-date"
-                            value={selectedEndDate}
+                            value={endDate}
                             onChange={handleEndDateChange}
                             KeyboardButtonProps={{
                               "aria-label": "change date",
                             }}
-                            error={selectedEndDateError}
-                            helperText={selectedEndDateError}
+                            error={endDateError}
+                            helperText={endDateError}
                           />
                         </FormControl>
                       </div>
                     </Grid>
                   </Grid>
                 </MuiPickersUtilsProvider>
-                <FormControl variant="outlined" className={`${classes.formControl} date-time-container`}>
+                <FormControl
+                  variant="outlined"
+                  className={`${classes.formControl} date-time-container`}
+                >
                   {/* Time Zone */}
                   <InputLabel
                     id="event-time-zone"
@@ -524,7 +558,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                     labelId="event-time-zone"
                     id="event-time-zone-select"
                     required="true"
-                    value={eventTimeZone}
+                    value={timeZone}
                     onChange={handleChangeTimeZone}
                   >
                     <MenuItem value={"Africa/Abidjan"}>Africa/Abidjan</MenuItem>
@@ -1470,7 +1504,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 5:
+      case 6:
         return handleNext();
       /*  return (
           <Question
@@ -1497,7 +1531,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         ); */
-      case 6:
+      case 7:
         return handleNext();
       /*  return requireYoutubeInstructions === "required" ? (
           <div>
@@ -1539,12 +1573,12 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
         ) : (
           handleNext()
         ); */
-      case 7:
+      case 8:
         return (
           <Question
             question="Do you have a brand color you'd like to use? If so, select it below."
             skip={handleNext}
-            next={handleNext}
+            next={handleSubmitColor}
             input={
               <>
                 <label htmlFor="primary-color">
@@ -1565,7 +1599,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           />
         );
 
-      case 8:
+      case 9:
         return (
           <Question
             question="Let's see your logo! Upload it below."
@@ -1629,7 +1663,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
             }
           />
         );
-      case 9:
+      case 10:
         return (
           <Question
             question="What would you like your event URL to be?"
@@ -1652,8 +1686,8 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                       label="Event Link"
                       variant="outlined"
                       placeholder="myevent"
-                      value={eventLink}
-                      onChange={handleChangeEventLink}
+                      value={link}
+                      onChange={handleChangeLink}
                       onBlur={checkLinkValidity}
                       InputProps={{
                         endAdornment: (
@@ -1684,7 +1718,23 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           />
         );
       default:
-        return null;
+        return (
+          <div>
+            <div>
+              Great Job! <br /> <br />
+              You've successfully created your event website. Click Next below
+              to start editing the look and feel of your website, add your
+              livestream, and more.
+            </div>
+            <button
+              className="Button1"
+              style={{ width: "150px", marginTop: "30px", marginLeft: "12px" }}
+              onClick={handleSubmitForm}
+            >
+              Next
+            </button>
+          </div>
+        );
     }
   };
 

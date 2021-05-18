@@ -24,7 +24,7 @@ const { inviteUser } = require("../services/Invitations");
 const { clearCache } = require("../services/sequelizeRedis");
 const { sendEmail } = require("../services/Mailer");
 
-router.post("/api/event", requireAuth, async (req, res, next) => {
+router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
   const {
     event: {
       title,
@@ -165,6 +165,25 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
       InvoiceId: invoice.id,
       type: "plan",
       PlanId: plan.id,
+    });
+
+    res.json(event);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/api/event", requireAuth, async (req, res, next) => {
+  const { title } = req.body;
+
+  console.log(title);
+
+  const accountId = req.user.id;
+
+  try {
+    const event = await Event.create({
+      title,
+      OwnerId: accountId,
     });
 
     res.json(event);
@@ -467,7 +486,10 @@ router.put("/api/event/id/status", requireAuth, async (req, res, next) => {
 router.put("/api/event", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
 
+  console.log(req.body);
+
   const {
+    eventId,
     title,
     link,
     category,
@@ -477,34 +499,31 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     primaryColor,
     status,
     registrationRequired,
+    description,
   } = req.body;
 
   try {
     const account = await Account.findByPk(accountId);
-    const event = await Event.findByPk(account.currentEventId);
+    const event = await Event.findByPk(eventId || account.currentEventId);
     const eventTimeChanged = event.startDate != startDate;
 
     clearCache(`Event:link:${event.link}`);
 
-    // update event attributes
-    event.title = title;
-    event.link = link;
-    event.category = category;
-    event.startDate = startDate;
-    event.endDate = endDate;
-    event.timeZone = timeZone;
-    event.primaryColor = primaryColor;
-    event.status = status;
-    event.registrationRequired = registrationRequired;
+    // update event attributes. If they are not provided, use the previous values
+    event.title = title || event.title;
+    event.link = link || event.link;
+    event.category = category || event.category;
+    event.startDate = startDate || event.startDate;
+    event.endDate = endDate || event.endDate;
+    event.timeZone = timeZone || event.timeZone;
+    event.primaryColor = primaryColor || event.primaryColor;
+    event.status = status || event.status;
+    event.description = description || event.description;
+    if (registrationRequired != null) {
+      event.registrationRequired = registrationRequired;
+    }
 
     await event.save();
-
-    // update scheduled emails if the event time changed
-    if (eventTimeChanged) {
-      const communications = await Communication.findAll({
-        where: { EventId: event.id },
-      });
-    }
 
     res.send(event);
   } catch (error) {
