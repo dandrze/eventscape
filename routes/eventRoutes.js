@@ -176,47 +176,14 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
 router.post("/api/event", requireAuth, async (req, res, next) => {
   const { title } = req.body;
 
+  console.log(title);
+
   const accountId = req.user.id;
 
   try {
     const event = await Event.create({
       title,
       OwnerId: accountId,
-    });
-
-    // create a default chatroom
-    const chatRoom = await ChatRoom.create({
-      event: event.id,
-      isDefault: true,
-      name: "Main (Default)",
-    });
-
-    // add a permission in the permissions table for the event creator
-    await Permission.create({
-      EventId: event.id,
-      AccountId: accountId,
-      role: "owner",
-      eventDetails: true,
-      communication: true,
-      registration: true,
-      analytics: true,
-      messaging: true,
-      design: true,
-      polls: true,
-    });
-
-    // create a default plan and invoice
-    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
-
-    const invoice = await Invoice.create({ EventId: event.id });
-    const plan = await Plan.create({
-      EventId: event.id,
-      PlanTypeId: defaultFreePlan.id,
-    });
-    const invoiceLineItem = await InvoiceLineItem.create({
-      InvoiceId: invoice.id,
-      type: "plan",
-      PlanId: plan.id,
     });
 
     res.json(event);
@@ -519,6 +486,8 @@ router.put("/api/event/id/status", requireAuth, async (req, res, next) => {
 router.put("/api/event", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
 
+  console.log(req.body);
+
   const {
     eventId,
     title,
@@ -530,11 +499,12 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     primaryColor,
     status,
     registrationRequired,
+    description,
   } = req.body;
 
   try {
     const account = await Account.findByPk(accountId);
-    const event = eventId || (await Event.findByPk(account.currentEventId));
+    const event = await Event.findByPk(eventId || account.currentEventId);
     const eventTimeChanged = event.startDate != startDate;
 
     clearCache(`Event:link:${event.link}`);
@@ -548,8 +518,10 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     event.timeZone = timeZone || event.timeZone;
     event.primaryColor = primaryColor || event.primaryColor;
     event.status = status || event.status;
-    event.registrationRequired =
-      registrationRequired || event.registrationRequired;
+    event.description = description || event.description;
+    if (registrationRequired != null) {
+      event.registrationRequired = registrationRequired;
+    }
 
     await event.save();
 

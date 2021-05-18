@@ -58,7 +58,7 @@ export const finalizeEvent = (
   console.log(event);
 
   try {
-    const res = await api.post("/api/event", {
+    const res = await api.post("/api/event/finalize", {
       event,
       communications: emaillistTemplate(startDate),
     });
@@ -73,9 +73,11 @@ export const finalizeEvent = (
 
 export const createEvent = (title) => async (dispatch) => {
   try {
-    const res = await api.post("/api/event", title);
+    const res = await api.post("/api/event", { title });
 
-    return res.data.event.id;
+    console.log(res);
+
+    return res.data.id;
   } catch (err) {
     toast.error("Error when creating new event: " + err.response.data.message);
     return false;
@@ -92,6 +94,7 @@ export const updateEvent = ({
   timeZone,
   primaryColor,
   registrationRequired,
+  description,
 }) => async (dispatch, getState) => {
   try {
     const res = await api.put("/api/event", {
@@ -104,6 +107,7 @@ export const updateEvent = ({
       timeZone,
       primaryColor,
       registrationRequired,
+      description,
       status: getState().event.status,
     });
 

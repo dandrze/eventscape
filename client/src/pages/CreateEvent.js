@@ -31,7 +31,6 @@ import {
 import * as actions from "../actions";
 import LongLoadingScreen from "../components/LongLoadingScreen";
 import SimpleNavBar from "../components/simpleNavBar";
-import { updateEvent } from "../actions";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -85,7 +84,14 @@ const Question = ({ question, next, children, input, skip }) => {
   );
 };
 
-function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
+function CreateEvent({
+  user,
+  createEvent,
+  updateEvent,
+  finalizeEvent,
+  isLinkAvailable,
+  history,
+}) {
   const classes = useStyles();
 
   const [step, setStep] = useState(0);
@@ -95,12 +101,12 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const [titleError, setTitleError] = useState("");
   const [eventDescription, setEventDescription] = useState("");
   const [eventDescriptionError, setEventDescriptionError] = useState("");
-  const [eventLink, setEventLink] = React.useState("");
-  const [linkHelperText, setLinkHelperText] = React.useState("");
-  const [selectedStartDate, setSelectedStartDate] = useState(new Date());
-  const [selectedEndDateError, setSelectedEndDateError] = useState("");
-  const [selectedEndDate, setSelectedEndDate] = useState(new Date());
-  const [eventTimeZone, setEventTimeZone] = React.useState(momentTZ.tz.guess());
+  const [link, setLink] = useState("");
+  const [linkHelperText, setLinkHelperText] = useState("");
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDateError, setEndDateError] = useState("");
+  const [endDate, setEndDate] = useState(new Date());
+  const [timeZone, setTimeZone] = useState(momentTZ.tz.guess());
   const [registrationRequired, setRegistrationRequired] = useState("required");
   const [requireYoutubeInstructions, setRequireYoutubeInstructions] = useState(
     "required"
@@ -118,13 +124,13 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     startDate.setMonth(startDate.getMonth() + 1);
     startDate.setHours(19);
     startDate.setMinutes(0);
-    setSelectedStartDate(startDate);
+    setStartDate(startDate);
 
     const endDate = new Date();
     endDate.setMonth(endDate.getMonth() + 1);
     endDate.setHours(21);
     endDate.setMinutes(0);
-    setSelectedEndDate(endDate);
+    setEndDate(endDate);
   }, []);
 
   const handleChangeTitle = (event) => {
@@ -164,7 +170,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const handleSubmitCat = async () => {
     if (category) {
       setCategoryError("");
-      await updateEvent({ eventId, category });
+      updateEvent({ eventId, category });
       handleNext();
     } else {
       setCategoryError("Please select a category");
@@ -172,7 +178,10 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleSubmitRegistrationRequired = async () => {
-    await updateEvent({ eventId, registrationRequired });
+    updateEvent({
+      eventId,
+      registrationRequired: registrationRequired === "required",
+    });
 
     handleNext();
   };
@@ -180,6 +189,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const handleSubmitDescription = () => {
     if (eventDescription) {
       setEventDescriptionError("");
+      updateEvent({ eventId, description: eventDescription });
       handleNext();
     } else {
       setEventDescriptionError("Please add a description");
@@ -187,7 +197,8 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleSubmitDates = () => {
-    if (!selectedEndDateError && eventTimeZone) {
+    if (!endDateError && timeZone) {
+      updateEvent({ eventId, startDate, endDate, timeZone });
       handleNext();
     }
   };
@@ -195,39 +206,45 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   const handleSubmitLink = async () => {
     const isLinkValid = await checkLinkValidity();
 
-    if (!eventLink) {
+    if (!link) {
       setLinkHelperText("Please add a subdomain for your event");
     } else if (isLinkValid) {
+      updateEvent({ eventId, link });
       handleNext();
     }
   };
 
+  const handleSubmitColor = () => {
+    updateEvent({ eventId, primaryColor: color });
+    handleNext();
+  };
+
   const handleStartDateChange = (startDate) => {
-    setSelectedStartDate(startDate);
-    setSelectedEndDateError("");
+    setStartDate(startDate);
+    setEndDateError("");
 
     // if the new date is after the end date, push the end date 1 day after this new start date
-    if (startDate > new Date(selectedEndDate)) {
+    if (startDate > new Date(endDate)) {
       const pushedDate = new Date();
       pushedDate.setTime(startDate.getTime() + 1000 * 60 * 60 * 2);
-      setSelectedEndDate(pushedDate);
+      setEndDate(pushedDate);
     }
   };
   const handleEndDateChange = (endDate) => {
-    if (endDate < new Date(selectedStartDate)) {
-      setSelectedEndDateError("End date cannot be before the start date.");
+    if (endDate < new Date(startDate)) {
+      setEndDateError("End date cannot be before the start date.");
     } else {
-      setSelectedEndDateError("");
+      setEndDateError("");
 
-      setSelectedEndDate(endDate);
+      setEndDate(endDate);
     }
   };
   const handleChangeTimeZone = (event) => {
-    setEventTimeZone(event.target.value);
+    setTimeZone(event.target.value);
   };
 
-  const handleChangeEventLink = (event) => {
-    setEventLink(
+  const handleChangeLink = (event) => {
+    setLink(
       event.target.value
         .toLowerCase()
         .trim()
@@ -255,7 +272,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     ];
 
     // check if the event link is one of the offlimit names
-    if (offLimitValues.includes(eventLink)) {
+    if (offLimitValues.includes(link)) {
       setLinkHelperText(
         "This link name is unavailable. Please choose another one."
       );
@@ -263,7 +280,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
     }
 
     // check if any other events already used this link name
-    const linkAvailable = await isLinkAvailable(eventLink);
+    const linkAvailable = await isLinkAvailable(link);
     if (linkAvailable) {
       setLinkHelperText("");
     } else {
@@ -288,7 +305,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const copyLink = () => {
-    navigator.clipboard.writeText(eventLink + ".eventscape.io");
+    navigator.clipboard.writeText(link + ".eventscape.io");
     toast.success("Copied to clipboard!", {
       autoClose: 1500,
       pauseOnHover: false,
@@ -296,11 +313,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleNext = () => {
-    if (step === 9) {
-      handleSubmitForm();
-    } else {
-      setStep((prevStep) => prevStep + 1);
-    }
+    setStep((prevStep) => prevStep + 1);
   };
 
   const handleSubmitLogo = () => {
@@ -316,26 +329,16 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
   };
 
   const handleSubmitForm = async () => {
-    // If the date is not changed by material UI. It's still formatted as a string so we need to convert it to a date object
-    const startDate =
-      typeof selectedStartDate === "string"
-        ? new Date(selectedStartDate)
-        : selectedStartDate;
-    const endDate =
-      typeof selectedEndDate === "string"
-        ? new Date(selectedEndDate)
-        : selectedEndDate;
-
     setIsloading(true);
     let response = false;
 
-    response = await createEvent(
+    response = await finalizeEvent(
       title,
-      eventLink,
+      link,
       category,
       startDate,
       endDate,
-      eventTimeZone,
+      timeZone,
       color,
       registrationRequired === "required",
       eventDescription,
@@ -504,7 +507,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                             format="MM/dd/yyyy hh:mm a"
                             margin="none"
                             id="event-start-date"
-                            value={selectedStartDate}
+                            value={startDate}
                             onChange={handleStartDateChange}
                             KeyboardButtonProps={{
                               "aria-label": "change date",
@@ -527,13 +530,13 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                             format="MM/dd/yyyy hh:mm a"
                             margin="none"
                             id="event-start-date"
-                            value={selectedEndDate}
+                            value={endDate}
                             onChange={handleEndDateChange}
                             KeyboardButtonProps={{
                               "aria-label": "change date",
                             }}
-                            error={selectedEndDateError}
-                            helperText={selectedEndDateError}
+                            error={endDateError}
+                            helperText={endDateError}
                           />
                         </FormControl>
                       </div>
@@ -555,7 +558,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                     labelId="event-time-zone"
                     id="event-time-zone-select"
                     required="true"
-                    value={eventTimeZone}
+                    value={timeZone}
                     onChange={handleChangeTimeZone}
                   >
                     <MenuItem value={"Africa/Abidjan"}>Africa/Abidjan</MenuItem>
@@ -1575,7 +1578,7 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           <Question
             question="Do you have a brand color you'd like to use? If so, select it below."
             skip={handleNext}
-            next={handleNext}
+            next={handleSubmitColor}
             input={
               <>
                 <label htmlFor="primary-color">
@@ -1683,8 +1686,8 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
                       label="Event Link"
                       variant="outlined"
                       placeholder="myevent"
-                      value={eventLink}
-                      onChange={handleChangeEventLink}
+                      value={link}
+                      onChange={handleChangeLink}
                       onBlur={checkLinkValidity}
                       InputProps={{
                         endAdornment: (
@@ -1715,7 +1718,23 @@ function CreateEvent({ user, createEvent, isLinkAvailable, history }) {
           />
         );
       default:
-        return null;
+        return (
+          <div>
+            <div>
+              Great Job! <br /> <br />
+              You've successfully created your event website. Click Next below
+              to start editing the look and feel of your website, add your
+              livestream, and more.
+            </div>
+            <button
+              className="Button1"
+              style={{ width: "150px", marginTop: "30px", marginLeft: "12px" }}
+              onClick={handleSubmitForm}
+            >
+              Next
+            </button>
+          </div>
+        );
     }
   };
 
