@@ -374,14 +374,14 @@ label {
   float: left;
 }
 
-#designBlockThumbnail {
+.designBlockThumbnail {
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
 }
 
-#designBlockThumbnail:hover {
+.designBlockThumbnail:hover {
   transform: scale(1.05);
   cursor: pointer;
 }

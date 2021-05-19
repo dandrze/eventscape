@@ -97,7 +97,7 @@ export const logoHeaderModel = (logo) => {
 export const spacer = (height) => {
   return `<div style="
     opacity: 0;
-    height: ${height};
+    height: ${height}px;
     " >
     .
       </div>
@@ -811,6 +811,10 @@ export const streamChatReact = {
 export const registrationFormReact = {
   name: "RegistrationForm",
   props: {},
+};
+
+export const spacerSm = () => {
+  return ``;
 };
 
 /*<iframe 
