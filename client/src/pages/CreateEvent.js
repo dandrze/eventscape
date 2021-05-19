@@ -245,10 +245,7 @@ function CreateEvent({
 
   const handleChangeLink = (event) => {
     setLink(
-      event.target.value
-        .toLowerCase()
-        .trim()
-        .replace(/[\[\](){}?*+\^\/$\\.|]/g, "")
+      event.target.value.toLowerCase().replace(/[\[\](){}?*+\^\/$\\.|\s]/g, "")
     );
   };
 
