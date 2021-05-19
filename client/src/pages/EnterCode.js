@@ -55,10 +55,7 @@ const EnterCode = ({ signInWithCode, location, history }) => {
   return (
     <SimpleNavBar
       content={
-        <div
-          className="form-box shadow-border"
-          style={{ maxWidth: "600px", width: "100vw" }}
-        >
+        <div className="form-box shadow-border registration-box">
           {emailAddress ? (
             <>
               <h1>Email Sent!</h1>

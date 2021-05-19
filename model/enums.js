@@ -16,6 +16,7 @@ const statusOptions = {
   ACTIVE: "Active",
   DISABLED: "Disabled",
   COMPLETE: "Complete",
+  INCOMPLETE: "Incomplete",
 };
 
 const emailVariableNames = [

@@ -61,7 +61,7 @@ const Question = ({ question, next, children, input, skip }) => {
           <button
             className="Button1"
             style={{
-              width: "150px",
+              width: "140px",
               marginTop: "30px",
               color: "#5d5d5d",
               border: "none",
@@ -333,6 +333,7 @@ function CreateEvent({
     let response = false;
 
     response = await finalizeEvent(
+      eventId,
       title,
       link,
       category,
@@ -1608,20 +1609,7 @@ function CreateEvent({
             input={
               <>
                 <label>
-                  <div
-                    style={{
-                      width: "400px",
-                      borderRadius: "15px",
-                      height: "100px",
-                      border: "1px dashed #cccccc",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      background: "#fcfcfc",
-                      cursor: "pointer",
-                      margin: "0px 40px",
-                    }}
-                  >
+                  <div className="create-event-upload-file">
                     {status ? (
                       <div>
                         <label style={{ display: "block" }}>{status}</label>
@@ -1744,20 +1732,7 @@ function CreateEvent({
 
   return (
     <SimpleNavBar
-      content={
-        <div
-          style={{
-            alignSelf: "baseline",
-            maxWidth: "800px",
-            width: "100vw",
-            background: "white",
-            padding: "60px",
-            marginTop: "15%",
-          }}
-        >
-          {getStepContent()}
-        </div>
-      }
+      content={<div className="create-event-question">{getStepContent()}</div>}
     />
   );
 }
