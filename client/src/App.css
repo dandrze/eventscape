@@ -168,7 +168,7 @@ label {
 
 .Button1:hover {
   color: var(--main-color);
-  background-color: #ffffff;
+  background-color: #ffffff !important;
   cursor: pointer;
 }
 

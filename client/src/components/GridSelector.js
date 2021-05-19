@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
 export default ({ addSection }) => {
   const classes = useStyles();
 
-  const [columns, setColumns] = useState(3);
-  const [rows, setRows] = useState(2);
+  const [columns, setColumns] = useState(5);
+  const [rows, setRows] = useState(1);
   const [boxStyle, setBoxStyle] = useState("box");
 
   const htmlOutput = sponsorGrid(columns, rows, boxStyle === "box");
@@ -127,14 +127,14 @@ export default ({ addSection }) => {
           display: "flex",
         }}
       >
-        <Button
+        <button
           onClick={handleSubmit}
           variant="contained"
           color="primary"
           className="Button1"
         >
           Add Block
-        </Button>
+        </button>
       </div>
     </div>
   );

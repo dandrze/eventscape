@@ -764,8 +764,9 @@ export const sponsorGrid = (columns, rows, box) => {
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-
-  <h1 style="font-size: 26px; margin: 50px 50px 0px 50px; color: #606060">Thank You to our Sponsors</h1>
+    <div>
+    <h2 class="theme-color" style="margin: 50px auto 0px auto; width: fit-content;">Thank You to our Sponsors</h2>
+  </div>
   <div class="container block-container">`;
   const boxStyle = box
     ? `margin: 15px;
