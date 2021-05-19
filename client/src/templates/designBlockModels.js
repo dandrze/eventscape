@@ -782,7 +782,7 @@ export const sponsorGrid = (columns, rows, box) => {
       html += `<div class="col-lg" style="display: flex;
       align-content: center;
       justify-content: center; ${boxStyle}">
-                <img src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
+                <img style="object-fit: contain;" src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
             </div>`;
       column += 1;
     }
