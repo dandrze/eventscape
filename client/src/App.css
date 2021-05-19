@@ -223,6 +223,10 @@ label {
   outline: none;
 }
 
+.btn-big {
+  padding: 16px 50px;
+}
+
 .form-box {
   background-color: white;
   padding: 60px;
