@@ -81,9 +81,7 @@ function Create_Account(props) {
       <SimpleNavBar
         content={
           <div className="form-box shadow-border registration-box">
-            <h1>
-              Create your<br></br>free account to<br></br>continue.
-            </h1>
+            <h1>Create your free account to continue.</h1>
             <p>Enter your name and email to receive a login code.</p>
             <FormControl variant="outlined" className={classes.formControl}>
               <TextField

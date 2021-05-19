@@ -225,7 +225,7 @@ label {
 
 .form-box {
   background-color: white;
-  padding: 70px;
+  padding: 60px;
 
   max-width: 100%;
   margin: 0 auto;
@@ -233,7 +233,7 @@ label {
 }
 
 .registration-box {
-  max-width: 550px;
+  max-width: 600px;
   margin-top: 60px;
   margin-bottom: 60px;
 }
