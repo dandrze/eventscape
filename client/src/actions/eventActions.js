@@ -15,6 +15,7 @@ const defaultBackgroundColor = "rgba(30, 30, 31, 0.384)";
 const defaultBlur = 5;
 
 export const finalizeEvent = (
+  eventId,
   title,
   link,
   category,
@@ -59,6 +60,7 @@ export const finalizeEvent = (
 
   try {
     const res = await api.post("/api/event/finalize", {
+      eventId,
       event,
       communications: emaillistTemplate(startDate),
     });

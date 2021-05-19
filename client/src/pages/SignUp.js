@@ -80,14 +80,7 @@ function Create_Account(props) {
     <div>
       <SimpleNavBar
         content={
-          <div
-            className="form-box shadow-border"
-            style={{
-              maxWidth: "550px",
-              marginTop: "60px",
-              marginBottom: "60px",
-            }}
-          >
+          <div className="form-box shadow-border registration-box">
             <h1>
               Create your<br></br>free account to<br></br>continue.
             </h1>

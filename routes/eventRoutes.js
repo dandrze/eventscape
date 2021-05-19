@@ -43,6 +43,7 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
       backgroundBlur,
     },
     communications,
+    eventId,
   } = req.body;
 
   const accountId = req.user.id;
@@ -62,22 +63,24 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
       backgroundBlur,
     });
 
-    // add the event to the event table. Make it the current event
-    const event = await Event.create({
-      title,
-      link,
-      category,
-      startDate,
-      endDate,
-      timeZone,
-      primaryColor,
-      RegPageModelId: dbRegModel.id,
-      EventPageModelId: dbEventModel.id,
-      status: statusOptions.ACTIVE,
-      registrationRequired,
-      OwnerId: accountId,
-      description,
-    });
+    // add the remaining parts of the event which was created during the first step in the questionnaire
+    const event = await Event.findByPk(eventId);
+    event.title = title;
+
+    event.link = link;
+    event.category = category;
+    event.startDate = startDate;
+    event.endDate = endDate;
+    event.timeZone = timeZone;
+    event.primaryColor = primaryColor;
+    event.RegPageModelId = dbRegModel.id;
+    event.EventPageModelId = dbEventModel.id;
+    event.status = statusOptions.ACTIVE;
+    event.registrationRequired = registrationRequired;
+    event.OwnerId = accountId;
+    event.description = description;
+
+    const savedEvent = await event.save();
 
     // create a default chatroom
     const chatRoom = await ChatRoom.create({
@@ -184,6 +187,7 @@ router.post("/api/event", requireAuth, async (req, res, next) => {
     const event = await Event.create({
       title,
       OwnerId: accountId,
+      status: statusOptions.INCOMPLETE,
     });
 
     res.json(event);
@@ -497,7 +501,6 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     endDate,
     timeZone,
     primaryColor,
-    status,
     registrationRequired,
     description,
   } = req.body;
@@ -517,7 +520,6 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     event.endDate = endDate || event.endDate;
     event.timeZone = timeZone || event.timeZone;
     event.primaryColor = primaryColor || event.primaryColor;
-    event.status = status || event.status;
     event.description = description || event.description;
     if (registrationRequired != null) {
       event.registrationRequired = registrationRequired;
@@ -698,6 +700,30 @@ router.put("/api/event/permissions", requireAuth, async (req, res, next) => {
     permission.save();
 
     res.json(permission);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.post("/api/event/reminder", requireAuth, async (req, res, next) => {
+  try {
+    const { emailAddress, event } = req.body;
+
+    const html = `<p>Hello,</p>
+<p>Thank you for creating ${event.title} on Eventscape from your mobile device!</p>
+<p>To continue editing the photos and content of your site, click the following link on a laptop or desktop computer:</p>
+<p><a href="https://app.eventscape.io/?eventid=${event.id}&tour=true">https://app.eventscape.io/?eventid=${event.id}&tour=true</a></p>
+<p>Thank you,</p>
+<p>The Eventscape team</p>`;
+
+    sendEmail({
+      to: emailAddress,
+      subject: `Continue Designing ${event.title}`,
+      html,
+      useTemplate: true,
+    });
+
+    res.status(200).send();
   } catch (error) {
     next(error);
   }

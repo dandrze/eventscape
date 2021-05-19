@@ -9,8 +9,13 @@ import Button from "@material-ui/core/Button";
 import { shadows } from "@material-ui/system";
 import Box from "@material-ui/core/Box";
 import SyncAltIcon from "@material-ui/icons/SyncAlt";
+import TextField from "@material-ui/core/TextField";
+import FormControl from "@material-ui/core/FormControl";
+
+import { isMobile } from "react-device-detect";
 
 import * as actions from "../actions";
+import api from "../api/server";
 
 const useStyles = makeStyles((theme) => ({
   content: {
@@ -32,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
+const Tour = ({ closeTour, simulateHover, setTourCompleted, event, user }) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
 
@@ -51,6 +56,58 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
   const completeTour = () => {
     setTourCompleted();
     closeTour();
+  };
+
+  const MobileConfirmation = ({ close }) => {
+    const [emailAddress, setEmailAddress] = useState(user.emailAddress);
+
+    const handleChangeEmailAddress = (event) => {
+      setEmailAddress(event.target.value);
+    };
+
+    const sendReminderEmail = async () => {
+      const res = await api.post("/api/event/reminder", {
+        emailAddress,
+        event,
+      });
+      close();
+    };
+    return (
+      <div
+        className={classes.content}
+        style={{ width: "100%", marginTop: "20px" }}
+      >
+        <DialogContentText style={{ width: "100%" }}>
+          Your event has been successfully created! Now it’s time to edit the
+          look of your site to match your brand. This will be a lot easier if
+          you are on a desktop computer. Click the button below to email
+          yourself a link to continue on desktop.
+        </DialogContentText>
+        <FormControl
+          variant="outlined"
+          className={classes.formControl}
+          style={{ width: "100%", margin: "10px" }}
+        >
+          <TextField
+            label="Email Address"
+            variant="outlined"
+            value={emailAddress}
+            onChange={handleChangeEmailAddress}
+          />
+        </FormControl>
+
+        <div className={classes.buttonContainer}>
+          <Button
+            onClick={sendReminderEmail}
+            color="primary"
+            disableFocusRipple
+            style={{ margin: "auto", width: "150px" }}
+          >
+            Send Link
+          </Button>
+        </div>
+      </div>
+    );
   };
 
   const getStepWithReg = (step) => {
@@ -584,9 +641,13 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
         disableAutoFocus={true}
       >
         <Fade in={true}>
-          {event.registrationRequired
-            ? getStepWithReg(activeStep)
-            : getStepWithoutReg(activeStep)}
+          {isMobile ? (
+            <MobileConfirmation close={closeTour} />
+          ) : event.registrationRequired ? (
+            getStepWithReg(activeStep)
+          ) : (
+            getStepWithoutReg(activeStep)
+          )}
         </Fade>
       </Modal>
     </div>
@@ -596,6 +657,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event }) => {
 const mapStateToProps = (state) => {
   return {
     event: state.event,
+    user: state.user,
   };
 };
 

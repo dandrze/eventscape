@@ -232,6 +232,11 @@ label {
   box-sizing: border-box;
 }
 
+.registration-box {
+  max-width: 550px;
+  margin-top: 60px;
+  margin-bottom: 60px;
+}
 .form-width {
   max-width: 750px;
   margin: 60px auto 0 auto;
@@ -1023,6 +1028,28 @@ select:focus {
   border-bottom: 15px solid transparent;
 }
 
+.create-event-question {
+  align-self: baseline;
+  max-width: 800px;
+  width: 100vw;
+  background: white;
+  padding: 60px;
+  margin-top: 15%;
+}
+
+.create-event-upload-file {
+  width: 400px;
+  border-radius: 15px;
+  height: 100px;
+  border: 1px dashed #cccccc;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fcfcfc;
+  cursor: pointer;
+  margin: 0px 40px;
+}
+
 /* **************************** START CSS FOR DESIGN BLOCKS *******************************************/
 
 .registration-col {
@@ -1164,5 +1191,21 @@ select:focus {
 
   #title-logo-banner * {
     margin: 10px auto;
+  }
+}
+
+@media only screen and (max-width: 450px) {
+  .registration-box {
+    padding: 20px;
+    margin: 0px;
+  }
+
+  .create-event-question {
+    padding: 20px;
+  }
+
+  .create-event-upload-file {
+    margin: 0px;
+    width: 300px;
   }
 }
