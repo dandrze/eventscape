@@ -47,7 +47,12 @@ const getSteps = () => {
   return ["Upload CSV", "Verify Columns", "Review", "Confirm"];
 };
 
-const ImportFile = ({ handleClose, triggerUpdate, event }) => {
+const ImportFile = ({
+  handleClose,
+  triggerUpdate,
+  event,
+  registrationData,
+}) => {
   const classes = useStyles();
   const [activeStep, setActiveStep] = useState(0);
   const [data, setData] = useState(null);
@@ -62,7 +67,12 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
   const [output, setOutput] = useState([]);
   const [uploadComplete, setUploadComplete] = useState(false);
   const [shouldSendEmail, setShouldSendEmail] = useState(true);
+
   const steps = getSteps();
+
+  const existingEmailAddresses = registrationData.data.map(
+    (reg) => reg.emailAddress
+  );
 
   const isStepFailed = (step) => {
     return step === stepHasError;
@@ -102,11 +112,15 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
             columnMap.lastName != null ? row.data[columnMap.lastName] : "";
           var rowErrors = "";
 
+          console.log({ emailAddress, existingEmailAddresses });
+
           // flag any errors that could cause problems in our code in the future
           if (!emailAddress) {
             rowErrors += "Email Address missing\n";
           } else if (_output.find((row) => row.emailAddress === emailAddress)) {
             rowErrors += "Duplicate email address\n";
+          } else if (existingEmailAddresses.includes(emailAddress)) {
+            rowErrors += "Email already registered\n";
           } else if (!validateEmailFormat(emailAddress)) {
             rowErrors += "Invalid email format\n";
           }
@@ -322,6 +336,7 @@ const ImportFile = ({ handleClose, triggerUpdate, event }) => {
 const mapStateToProps = (state) => {
   return {
     event: state.event,
+    registrationData: state.registration,
   };
 };
 

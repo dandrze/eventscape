@@ -374,14 +374,14 @@ label {
   float: left;
 }
 
-#designBlockThumbnail {
+.designBlockThumbnail {
   width: 100%;
   border: 1px solid rgba(0, 0, 0, 0.05);
   box-shadow: 3px 3px 16px rgba(0, 0, 0, 0.2);
   transition: all 0.2s ease-in-out;
 }
 
-#designBlockThumbnail:hover {
+.designBlockThumbnail:hover {
   transform: scale(1.05);
   cursor: pointer;
 }
@@ -1133,7 +1133,7 @@ select:focus {
 .section-container {
   height: auto;
   margin: 0px auto;
-  padding: 10px 0px;
+  padding: 10px 0px 50px;
   flex-grow: 1;
 }
 
@@ -1190,6 +1190,15 @@ select:focus {
   align-items: center;
 }
 
+.CookieConsent {
+  z-index: 9999 !important;
+  padding: 0px 100px;
+}
+
+.CookieConsent div:first-child {
+  flex: 1 0 !important;
+}
+
 @media only screen and (max-width: 600px) {
   #title-logo-banner {
     flex-direction: column-reverse;
@@ -1218,5 +1227,9 @@ select:focus {
   .simple-nav-container {
     margin-top: 85px;
     height: calc(100vh - 90px);
+  }
+
+  .CookieConsent {
+    padding: 0px !important;
   }
 }

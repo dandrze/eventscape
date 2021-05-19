@@ -30,6 +30,7 @@ import {
   scheduleTable2,
   paragraph1,
   paragraph2,
+  spacer,
 } from "../templates/designBlockModels";
 import GridSelector from "./GridSelector";
 import * as actions from "../actions";
@@ -112,6 +113,7 @@ const DesignBlockPicker = ({
             <MenuItem value={"stream-messaging"}>Stream/Messaging</MenuItem>
             <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
             <MenuItem value={"sponsors"}>Sponsors</MenuItem>
+            <MenuItem value={"spacers"}>Spacers</MenuItem>
             <MenuItem value={"text"}>Text</MenuItem>
           </Select>
         </FormControl>
@@ -267,6 +269,56 @@ const DesignBlockPicker = ({
               </Grid>
             </Grid>
           )}
+          {blockCat === "spacers" && (
+            <Grid container spacing={3}>
+              {/*Schedule Table Option 1 */}
+              <Grid item xs={12}>
+                <div
+                  className="designBlockThumbnail"
+                  style={{
+                    textAlign: "center",
+                    padding: "10px",
+                  }}
+                  onClick={() => {
+                    handleClose();
+                    handleAddSection(spacer(20));
+                  }}
+                >
+                  Small
+                </div>
+              </Grid>
+              <Grid item xs={12}>
+                <div
+                  className="designBlockThumbnail"
+                  style={{
+                    textAlign: "center",
+                    padding: "20px",
+                  }}
+                  onClick={() => {
+                    handleClose();
+                    handleAddSection(spacer(50));
+                  }}
+                >
+                  Medium
+                </div>
+              </Grid>
+              <Grid item xs={12}>
+                <div
+                  className="designBlockThumbnail"
+                  style={{
+                    textAlign: "center",
+                    padding: "30px",
+                  }}
+                  onClick={() => {
+                    handleClose();
+                    handleAddSection(spacer(100));
+                  }}
+                >
+                  Large
+                </div>
+              </Grid>
+            </Grid>
+          )}
         </div>
       </div>
     </div>
@@ -276,7 +328,7 @@ const DesignBlockPicker = ({
 const DesignBlockPreview = ({ src, handleClick }) => {
   return (
     <Tooltip title="Click to add">
-      <img src={src} id="designBlockThumbnail" onClick={handleClick} />
+      <img src={src} className="designBlockThumbnail" onClick={handleClick} />
     </Tooltip>
   );
 };

@@ -27,8 +27,6 @@ const cookies = new Cookies();
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
 
-let socket;
-
 const Messages = ({ messages, chatUserId, primaryColor }) => (
   <ScrollToBottom className="messages">
     {messages.map((message, i) => (
@@ -218,6 +216,11 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   const [reconnect, setReconnect] = useState(false);
   const [isInitialConnect, setIsInitialConnect] = useState(true);
   const connectRef = useRef();
+  const socket = io(ENDPOINT, {
+    path: "/api/socket/chat",
+    transports: ["websocket"],
+  });
+
   // set a ref to isInitialConnect so we can access the latest state from within the on connect callback
   connectRef.current = isInitialConnect;
 
@@ -242,10 +245,6 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   }, [room, settings.triggerSectionReactUpdate]);
 
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      path: "/api/socket/chat",
-      transports: ["websocket"],
-    });
     socket.on("connect", () => {
       setChatReady(true);
 
@@ -307,6 +306,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
 
     // receive multiple messages at once (i.e. full history when joining a room)
     socket.on("bulkMessage", (bulkMessages) => {
+      console.log({ room, bulkMessages, socket });
       setMessages((messages) => [...messages, ...bulkMessages]);
     });
 
