@@ -130,7 +130,7 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
             flex-direction: column;
             align-content: flex-start;
             justify-content: center;">
-                <p style="font-weight: 300; font-size: 26px; margin: 0;">${eventTitle}</p>
+                <p style="font-weight: 300; font-size: 30px; margin: 0;">${eventTitle}</p>
             </div>
             <img class="fr-dib fr-fir" src="${logoUrl}" style="width: 150px;" >
     <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
