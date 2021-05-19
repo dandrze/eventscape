@@ -26,14 +26,6 @@ const useStyles = makeStyles((theme) => ({
     // necessary for content to be below app bar
     ...theme.mixins.toolbar,
   },
-  content: {
-    flexGrow: 1,
-    //padding: theme.spacing(3),
-    padding: "0px",
-    margin: "125px 0px",
-    display: "flex",
-    alignItems: "center",
-  },
 }));
 
 export default function SimpleNavBar(props) {
@@ -52,7 +44,7 @@ export default function SimpleNavBar(props) {
           ></img>
         </Toolbar>
       </AppBar>
-      <main className={classes.content}>{content}</main>
+      <main className="simple-nav-container">{content}</main>
     </div>
   );
 }

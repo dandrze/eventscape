@@ -1182,6 +1182,15 @@ select:focus {
   width: 100vw;
 }
 
+.simple-nav-container {
+  flex-grow: 1;
+  background: #f8f8f8;
+  padding: 0px;
+  margin-top: 125px;
+  display: flex;
+  align-items: center;
+}
+
 @media only screen and (max-width: 600px) {
   #title-logo-banner {
     flex-direction: column-reverse;
@@ -1205,5 +1214,9 @@ select:focus {
   .create-event-upload-file {
     margin: 0px;
     width: 300px;
+  }
+
+  .simple-nav-container {
+    margin-top: 65px;
   }
 }
