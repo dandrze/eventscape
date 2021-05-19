@@ -1218,4 +1218,8 @@ select:focus {
   .simple-nav-container {
     margin-top: 85px;
   }
+
+  .CookieConsent {
+    padding: 0px !important;
+  }
 }
