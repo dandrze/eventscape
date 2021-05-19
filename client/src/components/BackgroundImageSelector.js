@@ -79,7 +79,7 @@ const BackgroundImageSelector = ({
         r: parseInt(rgbaList[0]),
         g: parseInt(rgbaList[1]),
         b: parseInt(rgbaList[2]),
-        a: parseFloat(rgbaList[3]),
+        a: parseFloat(rgbaList[3] || 1),
       });
 
       setCurrentBackgroundImageURL(backgroundDiv.style.backgroundImage);
@@ -192,7 +192,11 @@ const BackgroundImageSelector = ({
     } else {
       outputValue = Math.floor(inputValue);
     }
-    setColor({ ...color, r: outputValue });
+    if (isPrimaryBg) {
+      handleUpdateOverlay({ ...color, r: outputValue });
+    } else {
+      handleUpdateSectionOverlay({ ...color, r: outputValue });
+    }
   };
   const handleChangeColorG = (event) => {
     const inputValue = event.target.value;
@@ -206,7 +210,11 @@ const BackgroundImageSelector = ({
       outputValue = Math.floor(inputValue);
     }
 
-    setColor({ ...color, g: outputValue });
+    if (isPrimaryBg) {
+      handleUpdateOverlay({ ...color, g: outputValue });
+    } else {
+      handleUpdateSectionOverlay({ ...color, g: outputValue });
+    }
   };
   const handleChangeColorB = (event) => {
     const inputValue = event.target.value;
@@ -220,7 +228,11 @@ const BackgroundImageSelector = ({
       outputValue = Math.floor(inputValue);
     }
 
-    setColor({ ...color, b: outputValue });
+    if (isPrimaryBg) {
+      handleUpdateOverlay({ ...color, b: outputValue });
+    } else {
+      handleUpdateSectionOverlay({ ...color, b: outputValue });
+    }
   };
   const handleChangeColorA = (event) => {
     const inputValue = event.target.value;
@@ -233,8 +245,14 @@ const BackgroundImageSelector = ({
     } else {
       outputValue = inputValue;
     }
-    setColor({ ...color, a: outputValue });
+    if (isPrimaryBg) {
+      handleUpdateOverlay({ ...color, a: outputValue });
+    } else {
+      handleUpdateSectionOverlay({ ...color, a: outputValue });
+    }
   };
+
+  console.log(color);
 
   return (
     <div>
