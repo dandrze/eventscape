@@ -234,8 +234,6 @@ label {
 
 .registration-box {
   max-width: 600px;
-  margin-top: 60px;
-  margin-bottom: 60px;
 }
 .form-width {
   max-width: 750px;
@@ -1202,7 +1200,6 @@ select:focus {
 
   .create-event-question {
     padding: 20px;
-    margin-top: 65px;
   }
 
   .create-event-upload-file {

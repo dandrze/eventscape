@@ -75,7 +75,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event, user }) => {
     return (
       <div
         className={classes.content}
-        style={{ width: "100%", marginTop: "20px" }}
+        style={{ width: "100%", marginTop: "20%" }}
       >
         <DialogContentText style={{ width: "100%" }}>
           Your event has been successfully created! Now it’s time to edit the
