@@ -1217,5 +1217,6 @@ select:focus {
 
   .simple-nav-container {
     margin-top: 85px;
+    height: calc(100vh - 90px);
   }
 }
