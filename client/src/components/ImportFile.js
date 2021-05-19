@@ -2,19 +2,22 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { CSVReader } from "react-papaparse";
 import { makeStyles } from "@material-ui/core/styles";
-import Stepper from "@material-ui/core/Stepper";
-import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
-import Button from "@material-ui/core/Button";
-import Typography from "@material-ui/core/Typography";
-import Checkbox from "@material-ui/core/Checkbox";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
+import {
+  CircularProgress,
+  Tooltip,
+  FormControlLabel,
+  Checkbox,
+  Typography,
+  Button,
+  StepLabel,
+  Step,
+  Stepper,
+} from "@material-ui/core";
 
 import ColumnMapping from "./ColumnMapping";
 import { validateEmailFormat } from "../utils/validationFunctions";
 import ImportCsvConfirmationTable from "./ImportCsvConfirmationTable";
 import api from "../api/server";
-import { CircularProgress } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -248,16 +251,18 @@ const ImportFile = ({
           <div style={{ paddingTop: "50px" }}>
             <p>You're all set!</p>
 
-            <FormControlLabel
-              control={
-                <Checkbox
-                  checked={shouldSendEmail}
-                  onChange={handleChangeShouldSendEmail}
-                  color="primary"
-                />
-              }
-              label="Send registration email to newly imported attendees"
-            />
+            <Tooltip title="If you are doing an early import and there are still one or two reminder emails scheduled to go out with the link to join the event, then it's not necessary to send a copy of the registration email. If you're doing an import shortly before the event and the reminder emails have already gone out, it's 100% necessary to send a copy of the registration email as that's the only way the newly imported attendees will receive their event link to join the event.">
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={shouldSendEmail}
+                    onChange={handleChangeShouldSendEmail}
+                    color="primary"
+                  />
+                }
+                label="Send registration email to newly imported attendees"
+              />
+            </Tooltip>
           </div>
         );
       default:
