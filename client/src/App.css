@@ -1202,6 +1202,7 @@ select:focus {
 
   .create-event-question {
     padding: 20px;
+    margin-top: 65px;
   }
 
   .create-event-upload-file {
