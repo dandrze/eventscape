@@ -1190,6 +1190,15 @@ select:focus {
   align-items: center;
 }
 
+.CookieConsent {
+  z-index: 9999 !important;
+  padding: 0px 100px;
+}
+
+.CookieConsent div:first-child {
+  flex: 1 0 !important;
+}
+
 @media only screen and (max-width: 600px) {
   #title-logo-banner {
     flex-direction: column-reverse;

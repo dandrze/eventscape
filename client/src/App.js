@@ -108,7 +108,6 @@ function App({ user, location, fetchUser, attendee }) {
           location="bottom"
           buttonText="I accept"
           cookieName="CookieConsent"
-          style={{ padding: "0px 100px", zIndex: 9999 }}
           buttonStyle={{
             color: "#ffffff",
             backgroundColor: "#b0281c",
@@ -161,7 +160,6 @@ function App({ user, location, fetchUser, attendee }) {
           location="bottom"
           buttonText="I accept"
           cookieName="CookieConsent"
-          style={{ padding: "0px 100px", zIndex: 9999 }}
           buttonStyle={{
             color: "#ffffff",
             backgroundColor: "#b0281c",
