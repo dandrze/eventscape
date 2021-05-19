@@ -73,6 +73,10 @@ router.put("/api/billing/plan", requireAuth, async (req, res, next) => {
 
   try {
     const plan = await Plan.findByPk(planId);
+    const event = await Event.findOne({
+      where: { id: eventId },
+      include: "Owner",
+    });
 
     plan.viewers = viewers;
     plan.streamingTime = streamingTime;
@@ -86,12 +90,12 @@ router.put("/api/billing/plan", requireAuth, async (req, res, next) => {
       sendEmail({
         to: "kevin.richardson@eventscape.io",
         subject: "A user upgraded their event to premium",
-        html: `<p>Event Id ${eventId} has upgraded their plan to premium. <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
+        html: `<p>Event Id ${eventId} has upgraded their plan to premium. <br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
       });
       sendEmail({
         to: "david.andrzejewski@eventscape.io",
         subject: "A user upgraded their event to premium",
-        html: `<p>Event Id ${eventId} has upgraded their plan to premium. <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
+        html: `<p>Event Id ${eventId} has upgraded their plan to premium. <br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
       });
     }
 
@@ -103,12 +107,12 @@ router.put("/api/billing/plan", requireAuth, async (req, res, next) => {
       sendEmail({
         to: "kevin.richardson@eventscape.io",
         subject: "A user downgraded their event to essentials",
-        html: `<p>Event Id ${eventId} has downgraded their plan to essentials.`,
+        html: `<p>Event Id ${eventId} has downgraded their plan to essentials.<br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} `,
       });
       sendEmail({
         to: "david.andrzejewski@eventscape.io",
         subject: "A user downgraded their event to essentials",
-        html: `<p>Event Id ${eventId} has downgraded their plan to essentials.`,
+        html: `<p>Event Id ${eventId} has downgraded their plan to essentials.<br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} `,
       });
     }
 
