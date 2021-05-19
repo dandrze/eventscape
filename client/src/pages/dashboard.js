@@ -46,9 +46,8 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
     }
   };
 
-  const copyLink = (event) => {
-    event.target.select();
-    document.execCommand("copy");
+  const copyLink = () => {
+    navigator.clipboard.writeText(`https://${event.link}.eventscape.io/`);
     toast.success("Event link copied to clipboard!", {
       autoClose: 1500,
       pauseOnHover: false,
