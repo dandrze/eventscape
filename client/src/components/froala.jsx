@@ -239,10 +239,8 @@ const Froala = (props) => {
     dragInline: false,
     paragraphMultipleStyles: false,
     paragraphStyles: {
-      //"font-weight-100": "Thin",
       "font-weight-300": "Light",
       "font-weight-400": "Regular",
-      //"font-weight-500": "Medium",
       "font-weight-700": "Bold",
     },
 

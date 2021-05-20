@@ -27,9 +27,6 @@
 
 .schedule-table tbody tr td:first-child {
   text-align: right;
-}
-
-.schedule-table tbody tr td:first-child p {
   font-weight: 500;
   color: #404040;
 }

@@ -597,16 +597,16 @@ export const scheduleTable1 = () => {
     <tbody>
       <tr>
         <td style="width: 35%;" >
-        <p>9:00AM - 11:00AM</p>
+        9:00AM - 11:00AM
         </td>
         <td style="width: 65%;">
         <h4>Introduction</h4>
-        <p>Speakers introduce themselves.</p>
+        Speakers introduce themselves.
         </td>
       </tr>
       <tr>
         <td style="width: 35%;" >
-        <p>11:00AM - 2:00PM</p>
+        11:00AM - 2:00PM
         </td>
         <td style="width: 65%;">
         <h4>Workshop: How to build your own livestreaming website</h4>
@@ -618,7 +618,7 @@ export const scheduleTable1 = () => {
         </tr>
     <tr>
         <td style="width: 35%;" >
-        <p>2:00PM - 3:00PM</p>
+        2:00PM - 3:00PM
         </td>
         <td style="width: 65%;">
         <h4>Live Q&A Panel</h4>
@@ -653,7 +653,7 @@ export const scheduleTable2 = () => {
       <tbody>
         <tr>
           <td style="width: 35%;" >
-          <p>9:00AM - 11:00AM</p>
+          9:00AM - 11:00AM
           </td>
           <td style="width: 65%;">
           <h4>Introduction</h4>
@@ -662,7 +662,7 @@ export const scheduleTable2 = () => {
         </tr>
         <tr>
           <td style="width: 35%;" >
-          <p>11:00AM - 2:00PM</p>
+          11:00AM - 2:00PM
           </td>
           <td style="width: 65%;">
           <h4>Workshop: How to build your own livestreaming website</h4>
@@ -674,7 +674,7 @@ export const scheduleTable2 = () => {
           </tr>
       <tr>
           <td style="width: 35%;" >
-          <p>2:00PM - 3:00PM</p>
+          2:00PM - 3:00PM
           </td>
           <td style="width: 65%;">
           <h4>Live Q&A Panel</h4>
