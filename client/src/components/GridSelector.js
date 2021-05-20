@@ -127,12 +127,7 @@ export default ({ addSection }) => {
           display: "flex",
         }}
       >
-        <button
-          onClick={handleSubmit}
-          variant="contained"
-          color="primary"
-          className="Button1"
-        >
+        <button onClick={handleSubmit} color="primary" className="Button1">
           Add Block
         </button>
       </div>

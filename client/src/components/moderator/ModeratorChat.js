@@ -21,8 +21,6 @@ import io from "socket.io-client";
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
 
-let socket;
-
 const Messages = ({
   messages,
   chatUserId,
@@ -122,11 +120,12 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
   // set a reference to isInitialConnect so we can access it from inside the on connect callback
   connectRef.current = isInitialConnect;
 
+  const socket = io(ENDPOINT, {
+    path: "/api/socket/chat",
+    transports: ["websocket"],
+  });
+
   useEffect(() => {
-    socket = io(ENDPOINT, {
-      path: "/api/socket/chat",
-      transports: ["websocket"],
-    });
     socket.on("connect", () => {
       console.log("Connected to socket");
 
