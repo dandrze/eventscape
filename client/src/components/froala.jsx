@@ -29,6 +29,7 @@ import "froala-editor/js/plugins/word_paste.min.js";
 import "froala-editor/js/plugins/quick_insert.min.js";
 import "froala-editor/js/plugins/image_manager.min.js";
 import "froala-editor/js/plugins/inline_class.min.js";
+import "froala-editor/js/plugins/paragraph_style.min.js";
 
 import "froala-editor/css/plugins/image.min.css";
 import "froala-editor/css/plugins/video.min.css";
@@ -105,7 +106,8 @@ const Froala = (props) => {
     toolbarButtons: {
       moreText: {
         buttons: [
-          "bold",
+          "paragraphStyle",
+
           "italic",
           "underline",
           "fontFamily",
@@ -130,7 +132,6 @@ const Froala = (props) => {
           "formatOL",
           "formatUL",
           "paragraphFormat",
-          "paragraphStyle",
           "lineHeight",
           "outdent",
           "indent",
@@ -211,8 +212,7 @@ const Froala = (props) => {
       "imageSize",
       //"imageTUI", // Not currenlty working
     ],
-    key:
-      "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
+    key: "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
     // By default all plugins are enabled
     /*pluginsEnabled: [
       "image", 
@@ -237,6 +237,14 @@ const Froala = (props) => {
       "file" 
     ],*/
     dragInline: false,
+    paragraphMultipleStyles: false,
+    paragraphStyles: {
+      //"font-weight-100": "Thin",
+      "font-weight-300": "Light",
+      "font-weight-400": "Regular",
+      //"font-weight-500": "Medium",
+      "font-weight-700": "Bold",
+    },
 
     events: {
       "image.removed": async (img) => {
@@ -251,6 +259,8 @@ const Froala = (props) => {
   };
 
   // Custom button to add variables (WIP)
+  FroalaEditor.DefineIcon("paragraphStyle", { NAME: "bold", SVG_KEY: "bold" });
+
   FroalaEditor.DefineIcon("updateHeroImage", { NAME: "plus", SVG_KEY: "add" });
   FroalaEditor.RegisterCommand("updateHeroImage", {
     title: "Update Hero Image",
