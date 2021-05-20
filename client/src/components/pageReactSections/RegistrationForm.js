@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
@@ -62,10 +63,28 @@ function RegistrationForm({
   const [regComplete, setRegComplete] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [displayEditMessage, setDisplayEditMessage] = useState(false);
+  const [backgroundBoxShadow, setBackgroundBoxShadow] = useState("");
+  const [backgroundImage, setBackgroundImage] = useState("");
 
   useEffect(() => {
     fetchFormData();
   }, [settings.triggerSectionReactUpdate]);
+
+  useEffect(() => {
+    getBackgroundStyle();
+  }, [model.sections[sectionIndex]]);
+
+  const getBackgroundStyle = () => {
+    let pageHtml = document.createElement("div");
+    pageHtml.innerHTML = model.sections[sectionIndex].html;
+
+    let backgroundDiv = pageHtml.getElementsByTagName("div")[2];
+
+    if (backgroundDiv) {
+      setBackgroundBoxShadow(backgroundDiv.style.boxShadow);
+      setBackgroundImage(backgroundDiv.style.backgroundImage);
+    }
+  };
 
   const closeModal = () => {
     setOpen(false);
@@ -174,6 +193,8 @@ function RegistrationForm({
     }
   };
 
+  console.log(backgroundBoxShadow);
+
   return (
     <div>
       <AlertModal
@@ -189,7 +210,7 @@ function RegistrationForm({
       >
         {/* if we're editing an input, just show the form. Otherwise we're dipslaying the entire component to the end user*/}
         {!isManualEntry ? (
-          <div className="form-editor-froala col-lg registration-col inner-section-block">
+          <div className="col-lg registration-description">
             {/* If it's the live page, make sure the froala html sections are not edittable by guests */}
             {isLive ? (
               <FroalaEditorView
@@ -207,7 +228,16 @@ function RegistrationForm({
           </div>
         ) : null}
 
-        <div className="col-lg registration-col inner-section-block">
+        <div
+          className="col-lg registration-col inner-section-block"
+          style={{
+            boxShadow: backgroundBoxShadow,
+            backgroundImage,
+            backgroundPosition: "center bottom",
+            backgroundSize: "cover",
+            borderRadius: "10px",
+          }}
+        >
           {isLoading ? (
             <CircularProgress className="margin-auto" />
           ) : regComplete && !isManualEntry ? (

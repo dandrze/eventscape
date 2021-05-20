@@ -1132,6 +1132,10 @@ select:focus {
   cursor: pointer;
 }
 
+.registration-description {
+  padding: 0px !important;
+}
+
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
 
 .section-container {
