@@ -1053,12 +1053,6 @@ select:focus {
 
 /* **************************** START CSS FOR DESIGN BLOCKS *******************************************/
 
-.registration-col {
-  text-align: center;
-  padding: 48px;
-  background: #eaeaea;
-}
-
 .registration-section {
   display: flex;
   flex-wrap: wrap;
@@ -1130,6 +1124,14 @@ select:focus {
 .form-editor-react.edit-mode:hover {
   box-shadow: 0px 0px 0px 3px #c3c3c3;
   cursor: pointer;
+}
+
+.registration-column {
+  padding: 0px !important;
+}
+
+.registration-description div {
+  height: 100%;
 }
 
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/

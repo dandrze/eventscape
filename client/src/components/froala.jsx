@@ -256,7 +256,7 @@ const Froala = (props) => {
     },
   };
 
-  // Custom button to add variables (WIP)
+  // Changes the itcon on paragraph style to the bold icon
   FroalaEditor.DefineIcon("paragraphStyle", { NAME: "bold", SVG_KEY: "bold" });
 
   FroalaEditor.DefineIcon("updateHeroImage", { NAME: "plus", SVG_KEY: "add" });

@@ -164,8 +164,9 @@ function DesignBlockToolbar(props) {
               <DeleteOutlined />
             </div>
           </Tooltip>
-          {props.section.isReact ? null : (
-            // Only show if it is not a react section (it is a froala section)
+          {props.section.isReact &&
+          props.section.reactComponent.name === "StreamChat" ? null : (
+            // Show for any section other than stream chat
             <Tooltip title="Edit Block Background">
               <div
                 className="design-block-toolbar-button"
