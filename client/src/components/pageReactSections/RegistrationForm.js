@@ -237,7 +237,7 @@ function RegistrationForm({
               backgroundSize: "cover",
               borderRadius: "10px",
               padding: "12px 48px",
-              margin: "10px",
+              height: "100%",
             }}
           >
             {isLoading ? (
