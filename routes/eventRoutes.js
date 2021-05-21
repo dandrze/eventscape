@@ -490,8 +490,6 @@ router.put("/api/event/id/status", requireAuth, async (req, res, next) => {
 router.put("/api/event", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
 
-  console.log(req.body);
-
   const {
     eventId,
     title,
@@ -507,7 +505,10 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
 
   try {
     const account = await Account.findByPk(accountId);
-    const event = await Event.findByPk(eventId || account.currentEventId);
+    const event = await Event.findByPk(eventId);
+    if (!event) {
+      res.status(400).send({ message: "Event not found" });
+    }
     const eventTimeChanged = event.startDate != startDate;
 
     clearCache(`Event:link:${event.link}`);

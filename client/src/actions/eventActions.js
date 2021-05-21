@@ -14,22 +14,9 @@ const defaultBackgroundImage =
 const defaultBackgroundColor = "rgba(30, 30, 31, 0.384)";
 const defaultBlur = 5;
 
-export const finalizeEvent = (
-  eventId,
-  title,
-  link,
-  category,
-  startDate,
-  endDate,
-  timeZone,
-  primaryColor,
-  registrationRequired,
-  description,
-  logo,
-  backgroundImage = defaultBackgroundImage,
-  backgroundColor = defaultBackgroundColor
-) => async (dispatch) => {
-  const event = {
+export const finalizeEvent =
+  (
+    eventId,
     title,
     link,
     category,
@@ -38,40 +25,57 @@ export const finalizeEvent = (
     timeZone,
     primaryColor,
     registrationRequired,
-    regPageModel: regPageModelTemplate({
+    description,
+    logo,
+    backgroundImage = defaultBackgroundImage,
+    backgroundColor = defaultBackgroundColor
+  ) =>
+  async (dispatch) => {
+    const event = {
       title,
+      link,
+      category,
       startDate,
       endDate,
       timeZone,
+      primaryColor,
+      registrationRequired,
+      regPageModel: regPageModelTemplate({
+        title,
+        startDate,
+        endDate,
+        timeZone,
+        description,
+        logo,
+      }),
+      eventPageModel: eventPageModelTemplate({
+        title,
+        logo,
+      }),
       description,
-      logo,
-    }),
-    eventPageModel: eventPageModelTemplate({
-      title,
-      logo,
-    }),
-    description,
-    backgroundImage,
-    backgroundColor,
-    backgroundBlur: defaultBlur,
+      backgroundImage,
+      backgroundColor,
+      backgroundBlur: defaultBlur,
+    };
+
+    console.log(event);
+
+    try {
+      const res = await api.post("/api/event/finalize", {
+        eventId,
+        event,
+        communications: emaillistTemplate(startDate),
+      });
+
+      await dispatch(fetchEvent());
+      return true;
+    } catch (err) {
+      toast.error(
+        "Error when creating new event: " + err.response.data.message
+      );
+      return false;
+    }
   };
-
-  console.log(event);
-
-  try {
-    const res = await api.post("/api/event/finalize", {
-      eventId,
-      event,
-      communications: emaillistTemplate(startDate),
-    });
-
-    await dispatch(fetchEvent());
-    return true;
-  } catch (err) {
-    toast.error("Error when creating new event: " + err.response.data.message);
-    return false;
-  }
-};
 
 export const createEvent = (title) => async (dispatch) => {
   try {
@@ -86,40 +90,42 @@ export const createEvent = (title) => async (dispatch) => {
   }
 };
 
-export const updateEvent = ({
-  eventId,
-  title,
-  link,
-  category,
-  startDate,
-  endDate,
-  timeZone,
-  primaryColor,
-  registrationRequired,
-  description,
-}) => async (dispatch, getState) => {
-  try {
-    const res = await api.put("/api/event", {
-      eventId,
-      title,
-      link,
-      category,
-      startDate,
-      endDate,
-      timeZone,
-      primaryColor,
-      registrationRequired,
-      description,
-      status: getState().event.status,
-    });
+export const updateEvent =
+  ({
+    eventId,
+    title,
+    link,
+    category,
+    startDate,
+    endDate,
+    timeZone,
+    primaryColor,
+    registrationRequired,
+    description,
+  }) =>
+  async (dispatch, getState) => {
+    try {
+      const res = await api.put("/api/event", {
+        eventId,
+        title,
+        link,
+        category,
+        startDate,
+        endDate,
+        timeZone,
+        primaryColor,
+        registrationRequired,
+        description,
+        status: getState().event.status,
+      });
 
-    await dispatch(fetchEvent());
-    return true;
-  } catch (err) {
-    toast.error("Error when updating event: " + err.response.data.message);
-    return false;
-  }
-};
+      await dispatch(fetchEvent());
+      return true;
+    } catch (err) {
+      toast.error("Error when updating event: " + err.response.data.message);
+      return false;
+    }
+  };
 
 export const fetchEvent = () => async (dispatch, getState) => {
   // call the api and return the event in json
@@ -167,22 +173,6 @@ export const fetchEventFromId = (id) => async (dispatch) => {
     return event;
   } else {
     return null;
-  }
-};
-
-export const publishPage = () => async (dispatch, getState) => {
-  // save the model
-  await dispatch(saveModel());
-
-  const newEvent = { ...getState().event, status: statusOptions.ACTIVE };
-
-  try {
-    const res = await api.put("/api/event", newEvent);
-
-    await dispatch(fetchEvent());
-    toast.success("Page successfully published");
-  } catch (err) {
-    toast.error("Error when saving: " + err.response.data.message);
   }
 };
 

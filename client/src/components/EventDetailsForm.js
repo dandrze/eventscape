@@ -231,6 +231,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     let response = false;
 
     response = await updateEvent({
+      eventId: event.id,
       title,
       link,
       category,
