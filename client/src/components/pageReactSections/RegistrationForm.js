@@ -39,6 +39,7 @@ function RegistrationForm({
   resendRegistrationEmail,
   isLive,
   isManualEntry,
+  isEditRegistration,
 }) {
   const classes = useStyles();
 
@@ -71,7 +72,7 @@ function RegistrationForm({
   }, [settings.triggerSectionReactUpdate]);
 
   useEffect(() => {
-    getBackgroundStyle();
+    if (!isManualEntry) getBackgroundStyle();
   }, [model.sections[sectionIndex]]);
 
   const getBackgroundStyle = () => {
@@ -146,7 +147,7 @@ function RegistrationForm({
       setModalText("Please enter your last name");
       openModal();
     } else if (
-      !isManualEntry &&
+      !isEditRegistration &&
       (await fetchRegistration(emailAddress, event.id))
     ) {
       setModalText("Registration already exists under email: " + emailAddress);

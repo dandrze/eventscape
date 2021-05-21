@@ -18,7 +18,7 @@ const Registrations = (props) => {
   const [openForm, setOpenForm] = useState(false);
   const [openReg, setOpenReg] = useState(false);
   const [openImport, setOpenImport] = useState(false);
-  const [regButtonText, setRegButtonText] = useState("Edit Registration");
+  const [isEditRegistration, setIsEditRegistration] = useState();
   const [edittingValues, setEdittingValues] = useState([]);
   const [standardFields, setStandardFields] = useState({
     firstName: "",
@@ -26,9 +26,8 @@ const Registrations = (props) => {
     email: "",
   });
   const [edittingRowId, setEdittingRowId] = useState(null);
-  const [triggerFetchRegistrations, setTriggerFetchRegistrations] = useState(
-    false
-  );
+  const [triggerFetchRegistrations, setTriggerFetchRegistrations] =
+    useState(false);
   const [editFormErrorOpen, setEditFormErrorOpen] = useState(false);
 
   // UseEffect mimicks OnComponentDidMount
@@ -76,7 +75,7 @@ const Registrations = (props) => {
   };
 
   const handleAddReg = () => {
-    setRegButtonText("Add Registration");
+    setIsEditRegistration(false);
     setOpenReg(true);
   };
 
@@ -85,7 +84,8 @@ const Registrations = (props) => {
   };
 
   const handleEditReg = (id, incomingstandardFields, incomingValues) => {
-    setRegButtonText("Edit Registration");
+    setIsEditRegistration(true);
+
     setEdittingValues(incomingValues);
     setStandardFields(incomingstandardFields);
     setEdittingRowId(id);
@@ -151,14 +151,19 @@ const Registrations = (props) => {
       <Modal1
         open={openReg}
         onClose={handleCloseReg}
-        title="Add a new registration"
+        title={
+          isEditRegistration ? "Edit Registration" : "Add New Registration"
+        }
         content={
           <RegistrationForm
-            registerText={regButtonText}
+            registerText={
+              isEditRegistration ? "Edit Registration" : "Add Registration"
+            }
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}
             standardFields={standardFields}
             isManualEntry={true}
+            isEditRegistration={isEditRegistration}
           />
         }
       />
