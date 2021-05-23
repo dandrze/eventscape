@@ -108,9 +108,8 @@ function CreateEvent({
   const [endDate, setEndDate] = useState(new Date());
   const [timeZone, setTimeZone] = useState(momentTZ.tz.guess());
   const [registrationRequired, setRegistrationRequired] = useState("required");
-  const [requireYoutubeInstructions, setRequireYoutubeInstructions] = useState(
-    "required"
-  );
+  const [requireYoutubeInstructions, setRequireYoutubeInstructions] =
+    useState("required");
   const [color, setColor] = useState("#B0281C");
   const [isLoading, setIsloading] = useState(false);
   const [status, setStatus] = useState("");
@@ -245,7 +244,12 @@ function CreateEvent({
 
   const handleChangeLink = (event) => {
     setLink(
-      event.target.value.toLowerCase().replace(/[\[\](){}?*+\^\/$\\.|\s]/g, "")
+      event.target.value
+        .toLowerCase()
+        .replace(
+          /[\[\]()\:\?\=\'\"\@\#\$\%\&\*\`\~\_\!\;\;\<\>{}?*+\^\/$\\.|\s]/g,
+          ""
+        )
     );
   };
 
