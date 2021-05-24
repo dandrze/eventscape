@@ -84,10 +84,12 @@ router.post("/api/account", async (req, res, next) => {
 
           <p>Kind regards,</p>
           
-          <p>David Andrzejewski</p>
-          <p>Event Success Manager</p>
-          <p>Eventscape</p>`,
-          useTemplate: false,
+          <strong>David Andrzejewski | Event Success Manager</strong>
+          <p>PH4 - 73 Richmond Street West</p>
+          <p>Toronto, Ontario, Canada, M5V 1V6</p>
+          <p>+1 (912) 403-9854</p>
+          <a href="https://www.eventscape.io">Eventscape.io</a>`,
+          useTemplate: true,
         },
         {
           email: "david.andrzejewski@eventscape.io",
@@ -159,10 +161,12 @@ router.post("/api/account", async (req, res, next) => {
 
           <p>Kind regards,</p>
           
-          <p>David Andrzejewski</p>
-          <p>Event Success Manager</p>
-          <p>Eventscape</p>`,
-            useTemplate: false,
+          <strong>David Andrzejewski | Event Success Manager</strong>
+          <p>PH4 - 73 Richmond Street West</p>
+          <p>Toronto, Ontario, Canada, M5V 1V6</p>
+          <p>+1 (912) 403-9854</p>
+          <a href="https://www.eventscape.io">Eventscape.io</a>`,
+            useTemplate: true,
           },
           {
             email: "david.andrzejewski@eventscape.io",
@@ -184,10 +188,12 @@ router.post("/api/account", async (req, res, next) => {
 
             <p>Kind regards,</p>
             
-            <p>David Andrzejewski</p>
-            <p>Event Success Manager</p>
-            <p>Eventscape</p>`,
-            useTemplate: false,
+            <strong>David Andrzejewski | Event Success Manager</strong>
+          <p>PH4 - 73 Richmond Street West</p>
+          <p>Toronto, Ontario, Canada, M5V 1V6</p>
+          <p>+1 (912) 403-9854</p>
+          <a href="https://www.eventscape.io">Eventscape.io</a>`,
+            useTemplate: true,
           },
           {
             email: "david.andrzejewski@eventscape.io",
