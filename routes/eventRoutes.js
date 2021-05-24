@@ -18,6 +18,7 @@ const {
   PlanType,
   InvoiceLineItem,
   Poll,
+  PollOption,
 } = require("../db").models;
 const { recipientsOptions, statusOptions } = require("../model/enums");
 const { inviteUser } = require("../services/Invitations");
@@ -312,12 +313,23 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
     const polls = await Poll.findAll({ where: { EventId } });
 
     for (var poll of polls) {
-      Poll.create({
+      // for each poll created in the original event
+      // create a copy of the poll
+      const pollCopy = await Poll.create({
         EventId: event.id,
         question: poll.question,
         allowMultiple: poll.allowMultiple,
         isLaunched: false,
       });
+
+      // copy poll options from original poll
+      const pollOptions = await PollOption.findAll({
+        where: { PollId: poll.id },
+      });
+
+      for (var pollOption of pollOptions) {
+        PollOption.create({ PollId: pollCopy.id, text: pollOption.text });
+      }
     }
 
     // create a default plan and invoice
