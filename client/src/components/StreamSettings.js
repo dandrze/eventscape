@@ -127,9 +127,7 @@ const StreamSettings = ({
                     >
                       <MenuItem value={"vimeo"}>Vimeo</MenuItem>
                       <MenuItem value={"wowza"}>Wowza</MenuItem>
-                      <MenuItem value={"livestreamcom"}>
-                        Livestream.com
-                      </MenuItem>
+
                       <MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
                       <MenuItem value={"custom-embed"}>
                         Custom HTML Embed (Advanced)
@@ -184,62 +182,7 @@ const StreamSettings = ({
                       </FormControl>
                     </>
                   )}
-                  {content === "livestreamcom" && (
-                    <>
-                      <p className="description-text">
-                        Use the steps below to embed your video hosted on
-                        Livestream.com:
-                        <div>
-                          <ol>
-                            <li>
-                              Log into{" "}
-                              <a
-                                className="url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://livestream.com/"
-                              >
-                                Livestream.com
-                              </a>
-                            </li>
-                            <li>Go to your event page.</li>
-                            <li>
-                              Click the share icon in the top right corner
-                              <img src="https://media.screensteps.com/image_assets/assets/001/016/181/original/d667da90-0da4-4b86-9f21-0a9c0e0b2a39.png" />
-                            </li>
-                            <li>
-                              Click <strong>Embed</strong> in the window that
-                              pops up
-                            </li>
 
-                            <li>
-                              Click <strong>Copy</strong>
-                            </li>
-                            <li>
-                              Return to this page and paste your embed code in
-                              the text box below
-                            </li>
-                          </ol>
-                        </div>
-                      </p>
-                      <FormControl
-                        variant="outlined"
-                        className={classes.formControl}
-                      >
-                        <TextField
-                          id="custom-HTML"
-                          label="Livestream.com Embed Code"
-                          variant="outlined"
-                          multiline
-                          rows={12}
-                          value={customHTML}
-                          onChange={handleChangeCustomHTML}
-                          helperText={embedError}
-                          error={embedError}
-                        />
-                      </FormControl>
-                    </>
-                  )}
                   {content === "vimeo" && (
                     <>
                       <p className="description-text">
@@ -257,11 +200,12 @@ const StreamSettings = ({
                                 Vimeo
                               </a>
                             </li>
+                            <li>Click New video, then Create live event.</li>
+                            <li>Enter the requested info, then click next.</li>
+                            <li>On the Embed tab, click Event Embed code.</li>
                             <li>
-                              To get your video's embed code, select the video
-                              from the Video Manager, then click the Embed
-                              button. The embed code will be copied to your
-                              clipboard. Return to this page.
+                              Make sure responsive is selected, then click Copy
+                              code.
                             </li>
                             <li>
                               Return to this page and paste your embed code in
