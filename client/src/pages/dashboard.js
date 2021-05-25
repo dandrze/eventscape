@@ -10,6 +10,8 @@ import NavBar3 from "../components/navBar3.js";
 import * as actions from "../actions";
 import { Divider } from "@material-ui/core";
 
+import { statusOptions } from "../model/enums";
+
 const useStyles = makeStyles((theme) => ({
   halfCard: {
     padding: "50px",
@@ -77,9 +79,15 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
               <h2>{event.title}</h2>
               <div>
                 <FiberManualRecordIcon
-                  style={{ margin: "6px", color: "#28a745" }}
+                  style={{
+                    margin: "6px",
+                    color:
+                      event.status === statusOptions.ACTIVE
+                        ? "#28a745"
+                        : "#000000",
+                  }}
                 />
-                <span className={classes.paragraphText}>Live</span>
+                <span className={classes.paragraphText}>{event.status}</span>
 
                 <ExitToAppIcon
                   className="color-on-hover"

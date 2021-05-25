@@ -2,7 +2,8 @@ import React, { forwardRef, useState } from "react";
 import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { withRouter } from "react-router-dom";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "./FoldingCube";
+
 
 import { Paper } from "@material-ui/core";
 
@@ -250,7 +251,8 @@ const BillingHistoryTable = (props) => {
   } else {
     return (
       <div style={{ width: "630px", padding: "50px" }}>
-        <CircularProgress />
+        <FoldingCube />
+        <FoldingCube />
       </div>
     );
   }

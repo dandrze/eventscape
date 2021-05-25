@@ -22,7 +22,8 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "./FoldingCube";
+
 
 import * as actions from "../actions";
 import { recipientsOptions } from "../model/enums";
@@ -184,7 +185,7 @@ function ScheduledEmails(props) {
               "No Emails Found"
             ) : (
               <div style={{ padding: "50px" }}>
-                <CircularProgress />
+                <FoldingCube />
               </div>
             ),
           },

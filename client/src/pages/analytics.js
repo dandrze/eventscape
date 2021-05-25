@@ -1,6 +1,7 @@
 import React, { Component, useEffect, useState } from "react";
 import { connect } from "react-redux";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../components/FoldingCube";
+
 
 import NavBar3 from "../components/navBar3.js";
 import Tabs from "../components/Tabs";
@@ -85,7 +86,7 @@ const Analytics = (props) => {
                       {data.loaded ? (
                         data.current
                       ) : (
-                        <CircularProgress size={30} />
+                        <FoldingCube size={30} />
                       )}
                     </h2>
                   </div>
@@ -95,7 +96,7 @@ const Analytics = (props) => {
                       {data.loaded ? (
                         data.unique
                       ) : (
-                        <CircularProgress size={30} />
+                        <FoldingCube size={30} />
                       )}
                     </h2>
                   </div>
@@ -112,7 +113,7 @@ const Analytics = (props) => {
                       />
                     ) : (
                       <div style={{ textAlign: "center" }}>
-                        <CircularProgress size={40} className="margin-auto" />
+                        <FoldingCube size={40} className="margin-auto" />
                       </div>
                     )}
                   </div>
@@ -123,7 +124,7 @@ const Analytics = (props) => {
                   </div>
                   {!data.loaded ? (
                     <div style={{ textAlign: "center" }}>
-                      <CircularProgress size={40} />
+                      <FoldingCube size={40} />
                     </div>
                   ) : data.visitorData ? (
                     <WorldMap
@@ -139,7 +140,7 @@ const Analytics = (props) => {
                     <LoginsTable data={data.visitorData} />
                   ) : (
                     <div style={{ textAlign: "center" }}>
-                      <CircularProgress size={40} className="margin-auto" />
+                      <FoldingCube size={40} className="margin-auto" />
                     </div>
                   )}
                 </div>

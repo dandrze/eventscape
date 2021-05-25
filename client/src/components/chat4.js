@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "./FoldingCube";
+
 import Cookies from "universal-cookie";
 import createUUID from "react-uuid";
 import { toast } from "react-toastify";

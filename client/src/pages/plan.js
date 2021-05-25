@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../components/FoldingCube";
+
 import GroupIcon from "@material-ui/icons/Group";
 import PersonIcon from "@material-ui/icons/Person";
 import Slider from "@material-ui/core/Slider";
@@ -163,7 +164,7 @@ const Plan = ({ event, fetchEvent }) => {
                 />
               )
             ) : (
-              <CircularProgress />
+              <FoldingCube />
             )}
           </div>
         }

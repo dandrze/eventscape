@@ -28,7 +28,8 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import Checkbox from "@material-ui/core/Checkbox";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../components/FoldingCube";
+
 
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
@@ -369,7 +370,7 @@ const Permissions = ({ event, user }) => {
               </Button>
             </div>
           ) : transferStatus === "Loading" ? (
-            <CircularProgress />
+            <FoldingCube />
           ) : transferStatus === "Complete" ? (
             <div style={{ width: "400px" }}>
               <p>Your transfer is complete.</p>

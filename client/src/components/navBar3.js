@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import clsx from "clsx";
 import { makeStyles, useTheme, withStyles } from "@material-ui/core/styles";
@@ -16,6 +16,13 @@ import ListItem from "@material-ui/core/ListItem";
 import ListItemIcon from "@material-ui/core/ListItemIcon";
 import ListItemText from "@material-ui/core/ListItemText";
 import Avatar from "@material-ui/core/Avatar";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
+import Tooltip from "@material-ui/core/Tooltip";
+import Menu from "@material-ui/core/Menu";
+import Button from "@material-ui/core/Button";
+import InputLabel from "@material-ui/core/InputLabel";
 
 /* colapsible side nav experimenting, move later */
 import ExpandLess from "@material-ui/icons/ExpandLess";
@@ -25,10 +32,6 @@ import Collapse from "@material-ui/core/Collapse";
 import "./navBar3.css";
 
 import * as actions from "../actions";
-import Tooltip from "@material-ui/core/Tooltip";
-import Menu from "@material-ui/core/Menu";
-import MenuItem from "@material-ui/core/MenuItem";
-import Button from "@material-ui/core/Button";
 
 /* Icons top bar */
 import EventscapeLogo from "../icons/eventscape-logo-eaeaea.svg";
@@ -61,6 +64,8 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import AccountIcon from "../icons/account.svg";
 import KeyIcon from "../icons/key.svg";
 import CreditCardIcon from "../icons/credit-card.svg";
+
+import { statusOptions } from "../model/enums";
 
 /* colour palette */
 const MenuText = "#EAEAEA";
@@ -149,9 +154,7 @@ const useStyles = makeStyles((theme) => ({
     fontFamily: "Roboto, 'Helvetica Neue', Arial, sans-serif",
     fontWeight: "300",
   },
-  addEvent: {
-    marginLeft: "auto",
-  },
+
   profile: {
     marginLeft: "0px",
   },
@@ -241,6 +244,18 @@ function NavBar3(props) {
     highlight === "design"
   );
   const [drawerPreviouslyOpen, setDrawerPreviouslyOpen] = useState(true);
+  const [events, setEvents] = useState([]);
+
+  useEffect(() => {
+    const fetchEventList = async () => {
+      const eventList = await props.fetchEventList();
+      console.log(eventList);
+
+      setEvents(eventList);
+    };
+
+    fetchEventList();
+  }, []);
 
   const classes = useStyles();
   const theme = useTheme();
@@ -281,6 +296,15 @@ function NavBar3(props) {
     if (drawerPreviouslyOpen === false) {
       handleDrawerClose();
     }
+  };
+
+  const handleChangeEvent = async (event) => {
+    if (event.target.value === 0) {
+      return props.history.push("/my-events");
+    }
+    props.setCurrentEvent(event.target.value);
+    const res = await props.fetchEvent();
+    window.location.reload();
   };
 
   const handleGoToLiveSite = () => {
@@ -337,48 +361,105 @@ function NavBar3(props) {
           {displaySideNav === "true" && (
             <>
               <Tooltip title="View Live Website">
-                <Button onClick={handleGoToLiveSite}>
+                <Button
+                  onClick={handleGoToLiveSite}
+                  className="vertical-button"
+                >
                   <img
                     className="profile"
                     src={Internet_icon}
                     alt="user"
                     height="30px"
                   ></img>
+                  <div
+                    style={{
+                      color: "#fff",
+                      fontSize: "0.6rem",
+                      textTransform: "none",
+                      marginTop: "3px",
+                    }}
+                  >
+                    View Live
+                  </div>
+                </Button>
+              </Tooltip>
+              <Tooltip title="Create a new event">
+                <Button href="/create-event" className="vertical-button">
+                  <img
+                    className="profile"
+                    src={plus_icon}
+                    alt="user"
+                    height="30px"
+                  ></img>
+                  <div
+                    style={{
+                      color: "#fff",
+                      fontSize: "0.6rem",
+                      textTransform: "none",
+                      marginTop: "3px",
+                    }}
+                  >
+                    Create Event
+                  </div>
                 </Button>
               </Tooltip>
 
               <Tooltip title="Change Event">
-                <Link to="/my-events">
-                  <div className="current_event_container">
-                    <Typography
-                      className={classes.currentEvent}
-                      variant="h6"
-                      noWrap
+                <FormControl
+                  variant="outlined"
+                  style={{ margin: "5px auto 5px 20px" }}
+                >
+                  {/* Category */}
+                  <InputLabel
+                    id="event-select-label"
+                    className="mui-select-css-fix-dark"
+                  >
+                    Current Event
+                  </InputLabel>
+                  <Select
+                    id="event-select"
+                    labelId="event-select-label"
+                    variant="outlined"
+                    className="white-dropdown"
+                    value={props.event.id}
+                    onChange={handleChangeEvent}
+                    style={{
+                      minWidth: "300px",
+                    }}
+                  >
+                    <MenuItem value={0}>
+                      See All Past and Deleted Events
+                    </MenuItem>
+                    <Divider style={{ margin: "0px 0px 10px" }} />
+                    <div
+                      style={{
+                        padding: "0px 15px 5px",
+                        color: "grey",
+                        fontStyle: "italic",
+                      }}
                     >
-                      {props.event.title}
-                    </Typography>
-                    <img
-                      className="swap_icon"
-                      src={swap_icon}
-                      alt="swap_icon"
-                      height="30px"
-                    ></img>
-                  </div>
-                </Link>
+                      Upcoming Events
+                    </div>
+                    {events.map((event) => {
+                      const today = new Date();
+
+                      // If the event from the event list is in the future and not deleted,
+                      // or if the event is the currently editting event, display it in the list (in case the user is editting a past event)
+                      if (
+                        (new Date(event.startDate) > today &&
+                          event.status != statusOptions.DELETED) ||
+                        event.id === props.event.id
+                      ) {
+                        return (
+                          <MenuItem value={event.id}>{event.title}</MenuItem>
+                        );
+                      }
+                    })}
+                  </Select>
+                </FormControl>
               </Tooltip>
             </>
           )}
-
-          <Tooltip title="Create a new event">
-            <Button className={classes.addEvent} href="/create-event">
-              <img
-                className="profile"
-                src={plus_icon}
-                alt="user"
-                height="30px"
-              ></img>
-            </Button>
-          </Tooltip>
 
           <Tooltip title="Account">
             <Button
@@ -801,4 +882,4 @@ const mapStateToProps = (state) => {
   };
 };
 
-export default connect(mapStateToProps, actions)(NavBar3);
+export default connect(mapStateToProps, actions)(withRouter(NavBar3));

@@ -9,7 +9,8 @@ import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
 import Tooltip from "@material-ui/core/Tooltip";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../FoldingCube";
+
 import Cookies from "universal-cookie";
 
 /* Icons */
@@ -17,6 +18,7 @@ import TelegramIcon from "@material-ui/icons/Telegram";
 import DeleteOutlineIcon from "@material-ui/icons/DeleteOutline";
 import ReplayIcon from "@material-ui/icons/Replay";
 import io from "socket.io-client";
+import CircularProgress from "@material-ui/core/CircularProgress";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";

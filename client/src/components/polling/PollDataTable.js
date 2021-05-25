@@ -18,7 +18,8 @@ import LastPage from "@material-ui/icons/LastPage";
 import Remove from "@material-ui/icons/Remove";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../FoldingCube";
+
 import TableActionButton from "../TableActionButton";
 
 import api from "../../api/server";
@@ -161,7 +162,7 @@ function PollDataTable({ settings, event }) {
               "No poll responses."
             ) : (
               <div style={{ padding: "50px" }}>
-                <CircularProgress />
+                <FoldingCube />
               </div>
             ),
           },

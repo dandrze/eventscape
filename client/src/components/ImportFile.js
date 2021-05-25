@@ -18,6 +18,7 @@ import ColumnMapping from "./ColumnMapping";
 import { validateEmailFormat } from "../utils/validationFunctions";
 import ImportCsvConfirmationTable from "./ImportCsvConfirmationTable";
 import api from "../api/server";
+import FoldingCube from "./FoldingCube"
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -306,7 +307,7 @@ const ImportFile = ({
                 <Typography className={classes.instructions}>
                   Uploading registrations...
                 </Typography>
-                <CircularProgress />
+                <FoldingCube />
               </div>
             )}
           </div>

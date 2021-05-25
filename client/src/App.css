@@ -524,10 +524,20 @@ select {
 
 .mui-select-css-fix {
   /* fixing flawed material UI CSS */
-  background-color: white;
+  background-color: #fff;
   padding-left: 6px !important;
   padding-right: 6px !important;
   border-radius: 6px;
+}
+
+.mui-select-css-fix-dark {
+  /* fixing flawed material UI CSS */
+  background-color: #2e2e2e;
+  color: #fff !important;
+  padding-left: 6px !important;
+  padding-right: 6px !important;
+  border-radius: 6px;
+  font-weight: 500 !important;
 }
 .margin-auto {
   margin: auto;
@@ -1223,6 +1233,20 @@ select:focus {
 
 .CookieConsent div:first-child {
   flex: 1 0 !important;
+}
+
+.white-dropdown {
+  border: 1px solid #fff;
+  color: #fff;
+}
+
+.white-dropdown * {
+  color: #fff !important;
+}
+
+.vertical-button span {
+  display: flex;
+  flex-direction: column;
 }
 
 @media only screen and (max-width: 600px) {

@@ -20,7 +20,8 @@ import SaveAlt from "@material-ui/icons/SaveAlt";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import ListIcon from "@material-ui/icons/List";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../FoldingCube";
+
 import BarChartIcon from "@material-ui/icons/BarChart";
 
 import TableActionButton from "../TableActionButton";
@@ -149,7 +150,7 @@ function PollsTable({
               "No Polls Found. Create a new poll by click the + icon in the top right of the table"
             ) : (
               <div style={{ padding: "50px" }}>
-                <CircularProgress />
+                <FoldingCube />
               </div>
             ),
           },

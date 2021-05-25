@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "./FoldingCube";
+
 import SimpleNavBar from "./simpleNavBar";
 
 export default ({ message }) => {

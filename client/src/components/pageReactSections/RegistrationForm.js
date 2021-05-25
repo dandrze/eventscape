@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
-import CircularProgress from "@material-ui/core/CircularProgress";
+
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
 import { ReactFormGenerator } from "../react-form-builder2/lib";
@@ -14,7 +14,11 @@ import Froala from "../froala";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
+import CircularProgress from "@material-ui/core/CircularProgress";
 import Modal1 from "../Modal1";
+import FoldingCube from "../FoldingCube"
+
+
 
 import { isValidEmailFormat } from "../../hooks/validation";
 

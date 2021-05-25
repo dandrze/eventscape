@@ -8,10 +8,10 @@ import React, {
 import { Route, Redirect, Switch } from "react-router-dom";
 import { connect } from "react-redux";
 import { ToastContainer } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
-import CircularProgress from "@material-ui/core/CircularProgress";
 import CookieConsent from "react-cookie-consent";
 
+import "react-toastify/dist/ReactToastify.css";
+import FoldingCube from "./components/FoldingCube";
 import "./App.css";
 import "./components/fonts.css";
 import LongLoadingScreen from "./components/LongLoadingScreen";

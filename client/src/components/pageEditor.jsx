@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { Prompt } from "react-router";
 
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "./FoldingCube";
+
 
 import "./pageEditor.css";
 import * as actions from "../actions";
@@ -181,7 +182,7 @@ const PageEditor = (props) => {
           </div>
           {saveLoading ? (
             <div style={{ marginLeft: "auto", marginRight: "15px" }}>
-              <CircularProgress />
+              <FoldingCube />
             </div>
           ) : (
             <div

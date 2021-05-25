@@ -7,6 +7,7 @@ import * as actions from "../actions";
 import ModeratorDashboard from "../components/moderator/ModeratorDashboard.js";
 import { CircularProgress } from "@material-ui/core";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
+import FoldingCube from "../components/FoldingCube"
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -51,7 +52,7 @@ const Messaging = (props) => {
                   })
                 ) : (
                   <div className="form-box shadow-border">
-                    <CircularProgress />
+                    <FoldingCube />
                   </div>
                 )}
               </div>

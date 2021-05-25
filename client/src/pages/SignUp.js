@@ -6,7 +6,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
 import SimpleNavBar from "../components/simpleNavBar";
 import * as actions from "../actions";
-import { CircularProgress } from "@material-ui/core";
+import FoldingCube from "../components/FoldingCube"
 
 import { isValidEmailFormat } from "../hooks/validation";
 
@@ -114,7 +114,7 @@ function Create_Account(props) {
 
             <br></br>
             {isLoading ? (
-              <CircularProgress />
+              <FoldingCube />
             ) : (
               <button
                 className="Button1 gtag-signup"

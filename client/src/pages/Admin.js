@@ -18,7 +18,8 @@ import LastPage from "@material-ui/icons/LastPage";
 import Remove from "@material-ui/icons/Remove";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../components/FoldingCube";
+
 
 import api from "../api/server";
 

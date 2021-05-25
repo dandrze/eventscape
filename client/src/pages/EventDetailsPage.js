@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../components/FoldingCube";
+
 
 import NavBar3 from "../components/navBar3.js";
 import EventDetailsForm from "../components/EventDetailsForm";
@@ -23,7 +24,7 @@ class WebsiteSettings extends React.Component {
                 <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
               )
             ) : (
-              <CircularProgress style={{ marginTop: "30vh" }} />
+              <FoldingCube style={{ marginTop: "30vh" }} />
             )
           }
         />

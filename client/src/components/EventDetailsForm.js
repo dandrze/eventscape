@@ -20,7 +20,8 @@ import Select from "@material-ui/core/Select";
 import TextField from "@material-ui/core/TextField";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Tooltip from "@material-ui/core/Tooltip";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "./FoldingCube";
+
 
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
@@ -1093,7 +1094,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
           {/* Submit */}
           {isLoading ? (
-            <CircularProgress />
+            <FoldingCube />
           ) : (
             <button className="Button1" onClick={handleSubmit}>
               Update Event

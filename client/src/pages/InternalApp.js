@@ -26,6 +26,7 @@ import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
 import Dashboard from "./dashboard";
 import { CircularProgress } from "@material-ui/core";
+import FoldingCube from "../components/FoldingCube"
 
 const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -60,7 +61,7 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
             justifyContent: "center",
           }}
         >
-          <CircularProgress />
+          <FoldingCube />
         </div>
       );
     }

@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { connect } from "react-redux";
 import * as actions from "../actions";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../components/FoldingCube";
+
 import Modal1 from "../components/Modal1";
 import NavBar3 from "../components/navBar3.js";
 import PageEditor from "../components/pageEditor";
@@ -48,7 +49,7 @@ const Design = ({ event, model, fetchModel, user }) => {
               <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
             )
           ) : (
-            <CircularProgress style={{ marginTop: "30vh" }} />
+            <FoldingCube style={{ marginTop: "30vh" }} />
           )
         }
       />

@@ -36,9 +36,8 @@ const BackgroundImageSelector = ({
   const [userImageUrls, setUserImageUrls] = useState([]);
   const [color, setColor] = useState({ r: 0, g: 0, b: 0, a: 0 });
   const [tabValue, setTabValue] = useState(0);
-  const [currentBackgroundImageURL, setCurrentBackgroundImageURL] = useState(
-    ""
-  );
+  const [currentBackgroundImageURL, setCurrentBackgroundImageURL] =
+    useState("");
 
   useEffect(() => {
     fetchFreeImageUrls();
@@ -251,8 +250,6 @@ const BackgroundImageSelector = ({
       handleUpdateSectionOverlay({ ...color, a: outputValue });
     }
   };
-
-  console.log(color);
 
   return (
     <div>

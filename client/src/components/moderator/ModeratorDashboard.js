@@ -3,7 +3,8 @@ import { connect } from "react-redux";
 import { toast } from "react-toastify";
 
 import { makeStyles } from "@material-ui/core/styles";
-import CircularProgress from "@material-ui/core/CircularProgress";
+import FoldingCube from "../FoldingCube";
+
 import FormGroup from "@material-ui/core/FormGroup";
 import FormControlLabel from "@material-ui/core/FormControlLabel";
 import Tooltip from "@material-ui/core/Tooltip";
@@ -148,7 +149,7 @@ const ModeratorDashboard = ({
     setQuestionsHistory(history);
   };
 
-  if (!isLoaded) return <CircularProgress />;
+  if (!isLoaded) return <FoldingCube />;
   return (
     <div className="form-box shadow-border" style={{ marginBottom: "60px" }}>
       {/* The components below are used to download csvs. Upon render they will download the data in the data prop*/}
