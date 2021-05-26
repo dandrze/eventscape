@@ -156,7 +156,7 @@ const useStyles = makeStyles((theme) => ({
   },
 
   profile: {
-    marginLeft: "0px",
+    marginLeft: "auto",
   },
   small: {
     width: theme.spacing(3),
@@ -404,60 +404,58 @@ function NavBar3(props) {
                 </Button>
               </Tooltip>
 
-              <Tooltip title="Change Event">
-                <FormControl
-                  variant="outlined"
-                  style={{ margin: "5px auto 5px 20px" }}
+              <FormControl
+                variant="outlined"
+                style={{ margin: "5px auto 5px 20px" }}
+              >
+                {/* Category */}
+                <InputLabel
+                  id="event-select-label"
+                  className="mui-select-css-fix-dark"
                 >
-                  {/* Category */}
-                  <InputLabel
-                    id="event-select-label"
-                    className="mui-select-css-fix-dark"
-                  >
-                    Current Event
-                  </InputLabel>
-                  <Select
-                    id="event-select"
-                    labelId="event-select-label"
-                    variant="outlined"
-                    className="white-dropdown"
-                    value={props.event.id}
-                    onChange={handleChangeEvent}
+                  Current Event
+                </InputLabel>
+                <Select
+                  id="event-select"
+                  labelId="event-select-label"
+                  variant="outlined"
+                  className="white-dropdown align-left"
+                  value={props.event.id}
+                  onChange={handleChangeEvent}
+                  style={{
+                    minWidth: "300px",
+                  }}
+                >
+                  <MenuItem value={null}>
+                    See All Past and Deleted Events
+                  </MenuItem>
+                  <Divider style={{ margin: "0px 0px 10px" }} />
+                  <div
                     style={{
-                      minWidth: "300px",
+                      padding: "0px 15px 5px",
+                      color: "grey",
+                      fontStyle: "italic",
                     }}
                   >
-                    <MenuItem value={0}>
-                      See All Past and Deleted Events
-                    </MenuItem>
-                    <Divider style={{ margin: "0px 0px 10px" }} />
-                    <div
-                      style={{
-                        padding: "0px 15px 5px",
-                        color: "grey",
-                        fontStyle: "italic",
-                      }}
-                    >
-                      Upcoming Events
-                    </div>
-                    {events.map((event) => {
-                      const today = new Date();
+                    Upcoming Events
+                  </div>
+                  {events.map((event) => {
+                    const today = new Date();
 
-                      // If the event from the event list is in the future and not deleted,
-                      // or if the event is the currently editting event, display it in the list (in case the user is editting a past event)
-                      if (
-                        (new Date(event.startDate) > today &&
-                          event.status != statusOptions.DELETED) ||
-                        event.id === props.event.id
-                      ) {
-                        return (
-                          <MenuItem value={event.id}>{event.title}</MenuItem>
-                        );
-                      }
-                    })}
-                  </Select>
-                </FormControl>
-              </Tooltip>
+                    // If the event from the event list is in the future and not deleted,
+                    // or if the event is the currently editting event, display it in the list (in case the user is editting a past event)
+                    if (
+                      (new Date(event.startDate) > today &&
+                        event.status != statusOptions.DELETED) ||
+                      event.id === props.event.id
+                    ) {
+                      return (
+                        <MenuItem value={event.id}>{event.title}</MenuItem>
+                      );
+                    }
+                  })}
+                </Select>
+              </FormControl>
             </>
           )}
 
