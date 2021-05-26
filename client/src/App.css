@@ -547,6 +547,33 @@ select {
   text-align: left;
 }
 
+.line-title {
+  text-align: center;
+  width: 100%;
+  display: table;
+  white-space: nowrap;
+}
+
+.line-title::before {
+  border-top: 1px solid #9b9b9b;
+  content: "";
+  display: table-cell;
+  position: relative;
+  top: 0.5em;
+  width: 45%;
+  right: 1.5%;
+}
+
+.line-title::after {
+  border-top: 1px solid #9b9b9b;
+  content: "";
+  display: table-cell;
+  position: relative;
+  top: 0.5em;
+  width: 45%;
+  left: 1.5%;
+}
+
 .fr-popup {
   /* ensures froala buttons are always on top. Must be greater than 1300 because the material ui pop up modal is 1300 */
   z-index: 2000 !important;

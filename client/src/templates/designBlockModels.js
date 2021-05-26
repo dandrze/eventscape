@@ -782,9 +782,10 @@ export const sponsorGrid = (columns, rows, box) => {
   overflow: hidden" data-info="background image/color. Do not modify." >
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
     <div>
-    <h2 class="theme-color" style="margin: 50px auto 0px auto; width: fit-content;">Thank You to our Sponsors</h2>
+    <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 0px; font-size: 1.3rem;">THANK YOU TO OUR SPONSORS</h2>
   </div>
-  <div class="container block-container">`;
+  <div class="container block-container">
+  `;
   const boxStyle = box
     ? `margin: 15px;
     padding: 15px 5px;
@@ -797,12 +798,61 @@ export const sponsorGrid = (columns, rows, box) => {
   while (row < rows) {
     html += `<div class="row">`;
     while (column < columns) {
-      html += `<div class="col-lg" style="display: flex;
+      html += `<div class="col-sm" style="display: flex;
       align-content: center;
       justify-content: center; ${boxStyle}">
                 <img style="object-fit: contain;" src="https://eventscape-assets.s3.amazonaws.com/Sponsor+Logo.png">
             </div>`;
       column += 1;
+    }
+    html += `</div>`;
+    row += 1;
+    // reset column counter back to 0 for the next row
+    column = 0;
+  }
+  html += `</div>
+  <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+  </div></div></div>`;
+
+  return html;
+};
+
+export const speakerGrid = (columns, rows, box) => {
+  let column = 0;
+  let row = 0;
+  let headshotIndex = 0;
+  let html = `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
+  <div style="padding: 10px;">
+  <div style="background-position: bottom;
+  background-size: cover;
+  border-radius: 10px;
+  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  overflow: hidden" data-info="background image/color. Do not modify." >
+  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+    <div>
+    <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 0px; font-size: 1.3rem;">SPEAKERS</h2>
+  </div>
+  <div class="container block-container">
+  `;
+
+  while (row < rows) {
+    html += `<div class="row">`;
+    while (column < columns) {
+      html += `<div class="col" style="display: flex;
+      align-content: center;
+      justify-content: center; 
+      flex-direction: column;
+      margin: 20px 10px;">
+                <img style="object-fit: cover; border-radius: 50%; width: 100%; height: 100%; margin-bottom: 10px;" src="https://eventscape-assets.s3.amazonaws.com/assets/headshots/headshot-${headshotIndex}.jpg">
+                <div style="text-align: center; font-weight: 600; font-size: 20px;">Speaker Name</div>
+                <div style="text-align: center; font-weight: 300; font-size: 20px; ">Speaker Title</div>
+            </div>`;
+      column += 1;
+      if (headshotIndex === 7) {
+        headshotIndex = 0;
+      } else {
+        headshotIndex += 1;
+      }
     }
     html += `</div>`;
     row += 1;
