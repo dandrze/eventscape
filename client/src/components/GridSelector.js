@@ -7,7 +7,7 @@ import Select from "@material-ui/core/Select";
 import { Button } from "@material-ui/core";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
-import { sponsorGrid } from "../templates/designBlockModels";
+import { sponsorGrid, speakerGrid } from "../templates/designBlockModels";
 
 const useStyles = makeStyles((theme) => ({
   gridSelectors: {
@@ -16,14 +16,17 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default ({ addSection }) => {
+export default ({ addSection, type }) => {
   const classes = useStyles();
 
   const [columns, setColumns] = useState(5);
   const [rows, setRows] = useState(1);
   const [boxStyle, setBoxStyle] = useState("box");
 
-  const htmlOutput = sponsorGrid(columns, rows, boxStyle === "box");
+  const htmlOutput =
+    type === "sponsors"
+      ? sponsorGrid(columns, rows, boxStyle === "box")
+      : speakerGrid(columns, rows);
 
   const handleChangeColumns = (event) => {
     setColumns(event.target.value);
@@ -84,24 +87,26 @@ export default ({ addSection }) => {
             })}
           </Select>
         </FormControl>
-        <FormControl
-          variant="outlined"
-          className={classes.gridSelectors}
-          style={{ width: "30%" }}
-        >
-          <InputLabel id="rows-select-label" className="mui-select-css-fix">
-            Border
-          </InputLabel>
-          <Select
-            labelId="rows-select-label"
+        {type === "sponsors" ? (
+          <FormControl
             variant="outlined"
-            value={boxStyle}
-            onChange={handleChangeStyle}
+            className={classes.gridSelectors}
+            style={{ width: "30%" }}
           >
-            <MenuItem value="box">Box</MenuItem>;
-            <MenuItem value="none">None</MenuItem>;
-          </Select>
-        </FormControl>
+            <InputLabel id="rows-select-label" className="mui-select-css-fix">
+              Border
+            </InputLabel>
+            <Select
+              labelId="rows-select-label"
+              variant="outlined"
+              value={boxStyle}
+              onChange={handleChangeStyle}
+            >
+              <MenuItem value="box">Box</MenuItem>;
+              <MenuItem value="none">None</MenuItem>;
+            </Select>
+          </FormControl>
+        ) : null}
       </div>
       <div>
         <div>Preview</div>
