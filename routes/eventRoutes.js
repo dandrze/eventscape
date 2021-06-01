@@ -513,6 +513,9 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     primaryColor,
     registrationRequired,
     description,
+    maxDevicesEnabled,
+    maxDevices,
+    geoFencingEnabled,
   } = req.body;
 
   try {
@@ -537,6 +540,9 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     if (registrationRequired != null) {
       event.registrationRequired = registrationRequired;
     }
+    event.maxDevicesEnabled = maxDevicesEnabled || event.maxDevicesEnabled;
+    event.maxDevices = maxDevices || event.maxDevices;
+    event.geoFencingEnabled = geoFencingEnabled || event.geoFencingEnabled;
 
     await event.save();
 

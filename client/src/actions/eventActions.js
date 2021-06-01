@@ -90,42 +90,17 @@ export const createEvent = (title) => async (dispatch) => {
   }
 };
 
-export const updateEvent =
-  ({
-    eventId,
-    title,
-    link,
-    category,
-    startDate,
-    endDate,
-    timeZone,
-    primaryColor,
-    registrationRequired,
-    description,
-  }) =>
-  async (dispatch, getState) => {
-    try {
-      const res = await api.put("/api/event", {
-        eventId,
-        title,
-        link,
-        category,
-        startDate,
-        endDate,
-        timeZone,
-        primaryColor,
-        registrationRequired,
-        description,
-        status: getState().event.status,
-      });
+export const updateEvent = (event) => async (dispatch, getState) => {
+  try {
+    const res = await api.put("/api/event", event);
 
-      await dispatch(fetchEvent());
-      return true;
-    } catch (err) {
-      toast.error("Error when updating event: " + err.response.data.message);
-      return false;
-    }
-  };
+    await dispatch(fetchEvent());
+    return true;
+  } catch (err) {
+    toast.error("Error when updating event: " + err.response.data.message);
+    return false;
+  }
+};
 
 export const fetchEvent = () => async (dispatch, getState) => {
   // call the api and return the event in json
