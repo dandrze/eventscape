@@ -1,13 +1,8 @@
 var socketIo = require("socket.io");
 const redisAdapter = require("./socketioRedisAdapter");
 
-const {
-  SiteVisit,
-  SiteVisitor,
-  PollResponse,
-  Poll,
-  PollOption,
-} = require("../db").models;
+const { SiteVisit, SiteVisitor, PollResponse, Poll, PollOption } =
+  require("../db").models;
 
 module.exports = (server) => {
   const io = socketIo(server, {
@@ -43,6 +38,7 @@ module.exports = (server) => {
         siteVisitor.countryCode = geoData.countryCode;
         siteVisitor.lat = geoData.lat;
         siteVisitor.long = geoData.long;
+
         await siteVisitor.save();
 
         const [siteVisit] = await SiteVisit.findOrCreate({
