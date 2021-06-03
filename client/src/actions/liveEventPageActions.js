@@ -4,36 +4,42 @@ import { pageNames } from "../model/enums";
 import { fetchModel } from "./modelActions";
 
 export const fetchLivePage = (link, hash) => async (dispatch) => {
-  const event = await api.get("/api/event/link", { params: { link } });
+  const res = await api.get("/api/event/link", { params: { link } });
 
-  if (event.data) {
-    await dispatch({ type: FETCH_EVENT, payload: event.data });
+  const event = res.data;
+
+  if (event) {
+    await dispatch({ type: FETCH_EVENT, payload: event });
 
     var modelId, pageType;
 
-    if (event.data.registrationRequired && !hash) {
-      modelId = event.data.RegPageModelId;
+    if (event.registrationRequired && !hash) {
+      modelId = event.RegPageModelId;
       pageType = pageNames.REGISTRATION;
     } else {
-      modelId = event.data.EventPageModelId;
+      modelId = event.EventPageModelId;
       pageType = pageNames.EVENT;
     }
 
     dispatch(fetchModel(modelId));
   }
 
-  return { event: event.data, pageType };
+  return { event, pageType };
 };
 
 export const fetchAttendeeData = (hash, EventId) => async (dispatch) => {
-  const attendee = await api.get("/api/attendee/hash", {
+  const res = await api.get("/api/attendee/hash", {
     params: { hash, EventId },
   });
 
+  const { registration, activeDevices } = res.data;
+
+  console.log({ registration, activeDevices });
+
   await dispatch({
     type: FETCH_ATTENDEE,
-    payload: attendee.data,
+    payload: registration,
   });
 
-  return attendee.data;
+  return { registration, activeDevices };
 };

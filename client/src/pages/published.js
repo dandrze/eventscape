@@ -39,6 +39,7 @@ const Published = (props) => {
   const [results, setResults] = useState([]);
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [page, setPage] = useState("");
+  const [error, setError] = useState("");
 
   useEffect(() => {
     if (!cookies.get("uuid")) cookies.set("uuid", uuid());
@@ -53,24 +54,31 @@ const Published = (props) => {
       hash
     );
 
-    if (hash) {
-      const attendee = await props.fetchAttendeeData(hash, event.id);
-      attendeeId = attendee.id;
+    // for private events only
+    if (hash && event) {
+      const { registration, activeDevices } = await props.fetchAttendeeData(
+        hash,
+        event.id
+      );
+      attendeeId = registration.id;
+
+      console.log(event);
+      // check if the max device limit has already been reached if there is a limit
+      if (event.maxDevicesEnabled && activeDevices.length >= event.maxDevices) {
+        setError("maxDevices");
+        setIsLoaded(true);
+        return null;
+      }
     }
 
     // Get user geo location
     try {
       const geoData = await axios.get("https://ipapi.co/json");
 
-      var {
-        latitude,
-        longitude,
-        city,
-        country_name,
-        country_code,
-      } = geoData.data;
+      var { latitude, longitude, city, country_name, country_code } =
+        geoData.data;
     } catch {
-      // return null if our subsrciption ran out
+      // return null if our subscription ran out
       var latitude,
         longitude,
         city,
@@ -152,9 +160,30 @@ const Published = (props) => {
     return <SimpleLoadingScreen />;
   } else if (!props.event.id) {
     return (
-      <>
-        <p>Invalid Link. Please check your link and try again. </p>
-      </>
+      <ErrorBox
+        content={<p>Invalid Link. Please check your link and try again. </p>}
+      />
+    );
+  } else if (error === "maxDevices") {
+    return (
+      <ErrorBox
+        content={
+          <div>
+            <p>
+              You've reached the maximum device limit for your registration.
+            </p>
+            <p>
+              Please close the event on one of your other devices and try again
+            </p>
+            <button
+              className="Button1"
+              onClick={() => window.location.reload()}
+            >
+              Try Again
+            </button>
+          </div>
+        }
+      />
     );
   } else if (hash && !props.attendee) {
     // if there is a hash but no attendee returned
@@ -230,6 +259,14 @@ const Published = (props) => {
       </div>
     );
   }
+};
+
+const ErrorBox = ({ content }) => {
+  return (
+    <div style={{ display: "flex", alignItems: "center", height: "100vh" }}>
+      <div className="form-box shadow-border">{content}</div>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => {

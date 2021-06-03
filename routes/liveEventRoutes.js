@@ -1,6 +1,6 @@
 const express = require("express");
 const md5 = require("md5");
-const { Registration } = require("../db").models;
+const { Registration, SiteVisit, SiteVisitor } = require("../db").models;
 
 const router = express.Router();
 
@@ -9,17 +9,34 @@ router.get("/api/attendee/hash", async (req, res, next) => {
   const { hash, EventId } = req.query;
 
   try {
-    var attendee;
+    var registration;
+    var siteVisitors,
+      activeDevices = [];
+
     // if the hash is a testing hash, return a test attendee
     if (hash === md5("tester")) {
       // there is a test registration associated with this hash. It isn't tied to a single event
-      attendee = await Registration.findOne({ where: { hash } });
+      registration = await Registration.findOne({ where: { hash } });
     } else {
       // get the attendee information based on the hash
-      attendee = await Registration.findOne({ where: { hash, EventId } });
+      registration = await Registration.findOne({ where: { hash, EventId } });
     }
 
-    res.json(attendee);
+    if (registration) {
+      siteVisitors = await SiteVisitor.findAll({
+        where: { RegistrationId: registration.id },
+        include: SiteVisit,
+      });
+
+      activeDevices = siteVisitors.filter(
+        (siteVisitor) =>
+          siteVisitor.SiteVisits.filter(
+            (siteVisit) => siteVisit.loggedOutAt === null
+          ).length > 0
+      );
+    }
+
+    res.json({ registration, activeDevices });
   } catch (error) {
     next(error);
   }
