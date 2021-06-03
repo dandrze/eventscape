@@ -101,7 +101,7 @@ Event.hasMany(Invoice);
 Plan.belongsTo(Event);
 Event.hasOne(Plan);
 
-//Permission.sync({ alter: true });
+Event.sync({ alter: true });
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {

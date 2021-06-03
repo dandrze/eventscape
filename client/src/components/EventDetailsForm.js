@@ -22,7 +22,6 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Tooltip from "@material-ui/core/Tooltip";
 import FoldingCube from "./FoldingCube";
 
-
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
@@ -74,6 +73,18 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
   const [registrationRequired, setRegistrationRequired] = React.useState(
     event.registrationRequired
+  );
+
+  const [maxDevices, setMaxDevices] = React.useState(
+    event.maxDevices ? event.maxDevices : 1
+  );
+
+  const [maxDevicesEnabled, setMaxDevicesEnabled] = React.useState(
+    event.maxDevicesEnabled != null ? event.maxDevicesEnabled : false
+  );
+
+  const [geoFencingEnabled, setGeoFencingEnabled] = React.useState(
+    event.geoFencingEnabled != null ? event.geoFencingEnabled : false
   );
 
   const [primaryColor, setPrimaryColor] = useState(
@@ -181,6 +192,18 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     setRegistrationRequired(event.target.checked);
   };
 
+  const handleChangeMaxDevices = (event) => {
+    setMaxDevices(event.target.value);
+  };
+
+  const handleChangeMaxDevicesEnabled = (event) => {
+    setMaxDevicesEnabled(event.target.checked);
+  };
+
+  const handleChangeGeoFencingEnabled = (event) => {
+    setGeoFencingEnabled(event.target.checked);
+  };
+
   const copyLink = () => {
     navigator.clipboard.writeText(link + ".eventscape.io");
     toast.success("Copied to clipboard!", {
@@ -241,6 +264,9 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
       timeZone,
       primaryColor,
       registrationRequired,
+      maxDevicesEnabled,
+      maxDevices,
+      geoFencingEnabled,
     });
 
     if (response) toast.success("Event successfully saved.");
@@ -1071,7 +1097,50 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
               />
             </FormGroup>
           </Tooltip>
-          <br></br>
+
+          {registrationRequired ? (
+            /* Option to restrict number of active devices per event */
+            <FormGroup style={{ paddingLeft: "20px" }}>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={maxDevicesEnabled}
+                    onChange={handleChangeMaxDevicesEnabled}
+                  />
+                }
+                label={
+                  <span>
+                    Restrict event link to maximum
+                    <TextField
+                      className="tight-input"
+                      type="number"
+                      onChange={handleChangeMaxDevices}
+                      value={maxDevices}
+                      style={{
+                        maxWidth: "45px",
+                        margin: "0px 5px",
+                        padding: "2px",
+                      }}
+                    />
+                    devices
+                  </span>
+                }
+              />
+            </FormGroup>
+          ) : null}
+
+          {/* Option to restrict event to certain regions*/}
+          <FormGroup>
+            <FormControlLabel
+              control={
+                <Checkbox
+                  checked={geoFencingEnabled}
+                  onChange={handleChangeGeoFencingEnabled}
+                />
+              }
+              label="Allow or block entry from specific countries/regions"
+            />
+          </FormGroup>
 
           {/* Primary Color */}
           <label htmlFor="primary-color">Primary Color</label>

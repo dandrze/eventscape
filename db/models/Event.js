@@ -13,6 +13,9 @@ const Event = sequelize.define("Event", {
   registrationRequired: Sequelize.BOOLEAN,
   status: { type: Sequelize.TEXT, defaultValue: statusOptions.DRAFT },
   description: Sequelize.TEXT,
+  maxDevicesEnabled: Sequelize.BOOLEAN,
+  maxDevices: Sequelize.INTEGER,
+  geoFencingEnabled: Sequelize.BOOLEAN,
 });
 
 module.exports = Event;

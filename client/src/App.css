@@ -1092,6 +1092,10 @@ select:focus {
   margin: 0px 40px;
 }
 
+.tight-input input {
+  padding: 2px !important;
+}
+
 /* **************************** START CSS FOR DESIGN BLOCKS *******************************************/
 
 .registration-section {
