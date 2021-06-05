@@ -1243,7 +1243,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
                   return (
                     <span>
                       {index === 0 ? null : ", "}
-                      {country.name}{" "}
+                      {country.name}
                     </span>
                   );
                 })}
