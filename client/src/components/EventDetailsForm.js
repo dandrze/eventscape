@@ -212,7 +212,13 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
   };
 
   const handleChangeMaxDevices = (event) => {
-    setMaxDevices(event.target.value);
+    setMaxDevices(
+      event.target.value > 9
+        ? 9
+        : event.target.value < 0
+        ? 0
+        : event.target.value
+    );
   };
 
   const handleChangeMaxDevicesEnabled = (event) => {
@@ -1187,33 +1193,35 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
           {registrationRequired ? (
             /* Option to restrict number of active devices per event */
-            <FormGroup style={{ paddingLeft: "20px" }}>
-              <FormControlLabel
-                control={
-                  <Checkbox
-                    checked={maxDevicesEnabled}
-                    onChange={handleChangeMaxDevicesEnabled}
-                  />
-                }
-                label={
-                  <span>
-                    Restrict event link to maximum
-                    <TextField
-                      className="tight-input"
-                      type="number"
-                      onChange={handleChangeMaxDevices}
-                      value={maxDevices}
-                      style={{
-                        maxWidth: "45px",
-                        margin: "0px 5px",
-                        padding: "2px",
-                      }}
+            <Tooltip title="When enabled, each attendee will be able to open their unique event link on only the number of devices you specify (recommended for greater security).">
+              <FormGroup style={{ paddingLeft: "20px" }}>
+                <FormControlLabel
+                  control={
+                    <Checkbox
+                      checked={maxDevicesEnabled}
+                      onChange={handleChangeMaxDevicesEnabled}
                     />
-                    devices
-                  </span>
-                }
-              />
-            </FormGroup>
+                  }
+                  label={
+                    <span>
+                      Restrict event link to maximum
+                      <TextField
+                        className="tight-input"
+                        type="number"
+                        onChange={handleChangeMaxDevices}
+                        value={maxDevices}
+                        style={{
+                          maxWidth: "45px",
+                          margin: "0px 5px",
+                          padding: "2px",
+                        }}
+                      />
+                      device(s)
+                    </span>
+                  }
+                />
+              </FormGroup>
+            </Tooltip>
           ) : null}
 
           {/* Option to restrict event to certain regions*/}
