@@ -16,6 +16,8 @@ const Event = sequelize.define("Event", {
   maxDevicesEnabled: Sequelize.BOOLEAN,
   maxDevices: Sequelize.INTEGER,
   geoFencingEnabled: Sequelize.BOOLEAN,
+  countryCodes: Sequelize.ARRAY(Sequelize.TEXT),
+  countryRestrictionType: Sequelize.TEXT,
 });
 
 module.exports = Event;

@@ -62,7 +62,6 @@ const Published = (props) => {
       );
       attendeeId = registration.id;
 
-      console.log(event);
       // check if the max device limit has already been reached if there is a limit
       if (event.maxDevicesEnabled && activeDevices.length >= event.maxDevices) {
         setError("maxDevices");
@@ -86,6 +85,29 @@ const Published = (props) => {
         city,
         country_name,
         country_code = null;
+    }
+
+    // if geo fencing is enabled, check to confirm if the users region is on the allowed or on blocked list
+    if (event.geoFencingEnabled) {
+      // If the country is not on the only allow list, show the user the country error
+      if (
+        event.countryRestrictionType === "allowOnly" &&
+        !event.countryCodes.includes(country_code)
+      ) {
+        setError("country");
+        setIsLoaded(true);
+        return null;
+      }
+
+      // if the country is on the block list, show the user the country error
+      if (
+        event.countryRestrictionType === "block" &&
+        event.countryCodes.includes(country_code)
+      ) {
+        setError("country");
+        setIsLoaded(true);
+        return null;
+      }
     }
 
     // if the pagetype is event, turn on analytics
@@ -183,6 +205,16 @@ const Published = (props) => {
             >
               Try Again
             </button>
+          </div>
+        }
+      />
+    );
+  } else if (error === "country") {
+    return (
+      <ErrorBox
+        content={
+          <div>
+            <p>Sorry this event is not available in your region.</p>
           </div>
         }
       />

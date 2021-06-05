@@ -515,6 +515,8 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
     description,
     maxDevicesEnabled,
     maxDevices,
+    countryRestrictionType,
+    countryCodes,
     geoFencingEnabled,
   } = req.body;
 
@@ -544,6 +546,9 @@ router.put("/api/event", requireAuth, async (req, res, next) => {
       event.maxDevicesEnabled = maxDevicesEnabled;
     }
     event.maxDevices = maxDevices || event.maxDevices;
+    event.countryRestrictionType =
+      countryRestrictionType || event.countryRestrictionType;
+    event.countryCodes = countryCodes || event.countryCodes;
     if (geoFencingEnabled != null) {
       event.geoFencingEnabled = geoFencingEnabled;
     }

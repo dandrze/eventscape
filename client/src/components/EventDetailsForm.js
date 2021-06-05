@@ -2,7 +2,24 @@ import React, { useState, useEffect } from "react";
 import { Route, withRouter } from "react-router-dom";
 import { toast } from "react-toastify";
 import { connect } from "react-redux";
-import Grid from "@material-ui/core/Grid";
+import momentTZ from "moment-timezone";
+import {
+  Grid,
+  Checkbox,
+  FormControlLabel,
+  FormGroup,
+  RadioGroup,
+  Radio,
+  Tooltip,
+  InputAdornment,
+  TextField,
+  Select,
+  FormControl,
+  MenuItem,
+  InputLabel,
+} from "@material-ui/core";
+import Autocomplete from "@material-ui/lab/Autocomplete";
+
 import "date-fns";
 import DateFnsUtils from "@date-io/date-fns";
 import {
@@ -13,26 +30,17 @@ import {
 } from "@material-ui/pickers";
 import "./EventDetailsForm.css";
 import { makeStyles } from "@material-ui/core/styles";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import Select from "@material-ui/core/Select";
-import TextField from "@material-ui/core/TextField";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Tooltip from "@material-ui/core/Tooltip";
-import FoldingCube from "./FoldingCube";
 
 import { HexColorPicker, HexColorInput } from "react-colorful";
 import "react-colorful/dist/index.css";
 import * as actions from "../actions";
-import momentTZ from "moment-timezone";
 import AlertModal from "../components/AlertModal";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormControlLabel from "@material-ui/core/FormControlLabel";
-import Checkbox from "@material-ui/core/Checkbox";
 import FileCopyIcon from "@material-ui/icons/FileCopy";
 
-import LongLoadingScreen from "../components/LongLoadingScreen";
+import Modal1 from "../components/Modal1";
+import FoldingCube from "./FoldingCube";
+import countryOptions from "../model/countries";
+import countries from "../model/countries";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -91,6 +99,17 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     event.primaryColor ? event.primaryColor : "#B0281C"
   );
   const [isLoading, setIsloading] = useState(false);
+
+  const [openGeoFencing, setOpenGeoFencing] = useState(false);
+
+  const [countryRestrictionType, setCountryRestrictionType] =
+    useState("allowOnly");
+
+  const [selectedCountries, setSelectedCountries] = useState(
+    event.countryCodes.length
+      ? countries.filter((country) => event.countryCodes.includes(country.code))
+      : countries.filter((country) => country.code === "US")
+  );
 
   useEffect(() => {
     if (!event.startDate) {
@@ -202,6 +221,11 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
   const handleChangeGeoFencingEnabled = (event) => {
     setGeoFencingEnabled(event.target.checked);
+    if (event.target.checked) setOpenGeoFencing(true);
+  };
+
+  const handleChangeCountryRestrictionType = (event) => {
+    setCountryRestrictionType(event.target.value);
   };
 
   const copyLink = () => {
@@ -210,6 +234,10 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
       autoClose: 1500,
       pauseOnHover: false,
     });
+  };
+
+  const handleCloseGeoFencing = () => {
+    setOpenGeoFencing(false);
   };
 
   const handleSubmit = async () => {
@@ -266,6 +294,10 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
       registrationRequired,
       maxDevicesEnabled,
       maxDevices,
+      countryRestrictionType,
+      countryCodes: geoFencingEnabled
+        ? selectedCountries.map((country) => country.code)
+        : [],
       geoFencingEnabled,
     });
 
@@ -273,6 +305,8 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
     setIsloading(false);
   };
+
+  console.log(selectedCountries);
 
   return (
     <>
@@ -283,6 +317,59 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
         content={modalText}
         closeText="Cancel"
         continueText="OK"
+      />
+      <Modal1
+        open={openGeoFencing}
+        onClose={handleCloseGeoFencing}
+        content={
+          <div style={{ maxWidth: "430px" }}>
+            <h2>Allow or block entry from specific countries/regions</h2>
+            <FormControl component="fieldset">
+              <RadioGroup
+                value={countryRestrictionType}
+                onChange={handleChangeCountryRestrictionType}
+              >
+                <FormControlLabel
+                  value={"allowOnly"}
+                  control={<Radio />}
+                  label="Only allow entry from the following countries/regions"
+                />
+                <FormControlLabel
+                  value={"block"}
+                  control={<Radio />}
+                  label="Block entry from the following countries/regions"
+                />
+              </RadioGroup>
+            </FormControl>
+            <Autocomplete
+              multiple
+              onChange={(event, newCountries) => {
+                setSelectedCountries(newCountries);
+              }}
+              options={countryOptions}
+              value={selectedCountries}
+              getOptionLabel={(option) => option.name}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  variant="standard"
+                  label="Countries/Regions"
+                  placeholder="Start typing a country name"
+                />
+              )}
+            />
+            <button
+              className={
+                selectedCountries.length === 0 ? "Button1-disabled" : "Button1"
+              }
+              onClick={handleCloseGeoFencing}
+              style={{ margin: "20px", float: "right" }}
+              disabled={selectedCountries.length === 0}
+            >
+              Save
+            </button>
+          </div>
+        }
       />
       <div style={{ maxWidth: "750px" }}>
         <h1 className="title">Event Details</h1>
@@ -1141,6 +1228,37 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
               label="Allow or block entry from specific countries/regions"
             />
           </FormGroup>
+          {geoFencingEnabled ? (
+            <div
+              className="MuiTypography-body1"
+              style={{ color: "grey", marginLeft: "30px", textAlign: "left" }}
+            >
+              <span>
+                {countryRestrictionType === "allowOnly"
+                  ? "Only allow users from: "
+                  : "Block users from: "}
+              </span>
+              <span>
+                {selectedCountries.map((country, index) => {
+                  return (
+                    <span>
+                      {index === 0 ? null : ", "}
+                      {country.name}{" "}
+                    </span>
+                  );
+                })}
+              </span>
+              <span
+                style={{ marginLeft: "10px", fontSize: "0.9rem" }}
+                className="link1"
+                onClick={() => setOpenGeoFencing(true)}
+              >
+                Edit
+              </span>
+            </div>
+          ) : null}
+
+          <br></br>
 
           {/* Primary Color */}
           <label htmlFor="primary-color">Primary Color</label>
@@ -1174,6 +1292,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     </>
   );
 }
+
 const mapStateToProps = (state) => {
   return { event: state.event };
 };
