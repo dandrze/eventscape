@@ -106,7 +106,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     useState("allowOnly");
 
   const [selectedCountries, setSelectedCountries] = useState(
-    event.countryCodes.length
+    event.countryCodes?.length
       ? countries.filter((country) => event.countryCodes.includes(country.code))
       : countries.filter((country) => country.code === "US")
   );
@@ -366,11 +366,11 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
             />
             <button
               className={
-                selectedCountries.length === 0 ? "Button1-disabled" : "Button1"
+                selectedCountries?.length === 0 ? "Button1-disabled" : "Button1"
               }
               onClick={handleCloseGeoFencing}
               style={{ margin: "20px", float: "right" }}
-              disabled={selectedCountries.length === 0}
+              disabled={selectedCountries?.length === 0}
             >
               Save
             </button>
