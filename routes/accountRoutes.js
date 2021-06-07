@@ -69,12 +69,12 @@ router.post("/api/account", async (req, res, next) => {
       sendEmail(
         {
           to: account.emailAddress,
-          subject: "Your Event Success Manager",
+          subject: "Welcome to Eventscape",
           html: `<p>Hi ${account.firstName},</p>
 
           <p>Welcome to Eventscape!</p>
           
-          <p>My name is David and I want to formally introduce myself as your new Event Success Manager moving forward. I will be your primary point of contact as you build and launch your event.</p> 
+          <p>My name is David and I want to formally introduce myself, I am the Head of Product and will be your primary point of contact as you build and launch your event. It's my job to ensure you have everything you need for a successful event.</p> 
           
           <p>May I ask what type of event are you looking to create? I will ensure you have everything you need to accomplish your goal. </p>
           
@@ -84,7 +84,7 @@ router.post("/api/account", async (req, res, next) => {
 
           <p>Kind regards,</p>
           
-          <strong>David Andrzejewski | Event Success Manager</strong>
+          <strong>David Andrzejewski | Head of Product</strong>
           <p>PH4 - 73 Richmond Street West</p>
           <p>Toronto, Ontario, Canada, M5V 1V6</p>
           <p>+1 (912) 403-9854</p>
@@ -161,7 +161,7 @@ router.post("/api/account", async (req, res, next) => {
 
           <p>Kind regards,</p>
           
-          <strong>David Andrzejewski | Event Success Manager</strong>
+          <strong>David Andrzejewski | Head of Product</strong>
           <p>PH4 - 73 Richmond Street West</p>
           <p>Toronto, Ontario, Canada, M5V 1V6</p>
           <p>+1 (912) 403-9854</p>
@@ -188,7 +188,7 @@ router.post("/api/account", async (req, res, next) => {
 
             <p>Kind regards,</p>
             
-            <strong>David Andrzejewski | Event Success Manager</strong>
+            <strong>David Andrzejewski | Head of Product</strong>
           <p>PH4 - 73 Richmond Street West</p>
           <p>Toronto, Ontario, Canada, M5V 1V6</p>
           <p>+1 (912) 403-9854</p>

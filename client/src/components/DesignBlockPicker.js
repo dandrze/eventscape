@@ -113,7 +113,7 @@ const DesignBlockPicker = ({
             <MenuItem value={"stream-messaging"}>Stream/Messaging</MenuItem>
             <MenuItem value={"schedule"}>Schedule/Program</MenuItem>
             <MenuItem value={"sponsors"}>Sponsors</MenuItem>
-            <MenuItem value={"speakers"}>Speakers</MenuItem>
+            {/* <MenuItem value={"speakers"}>Speakers</MenuItem> */}
             <MenuItem value={"spacers"}>Spacers</MenuItem>
             <MenuItem value={"text"}>Text</MenuItem>
           </Select>

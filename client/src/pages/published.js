@@ -87,8 +87,8 @@ const Published = (props) => {
         country_code = null;
     }
 
-    // if geo fencing is enabled, check to confirm if the users region is on the allowed or on blocked list
-    if (event.geoFencingEnabled) {
+    // if geo fencing is enabled and there is geo data avaialble, check to confirm if the users region is on the allowed or on blocked list
+    if (event.geoFencingEnabled && country_code) {
       // If the country is not on the only allow list, show the user the country error
       if (
         event.countryRestrictionType === "allowOnly" &&
