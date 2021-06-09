@@ -836,16 +836,17 @@ export const speakerGrid = (columns, rows, box) => {
   `;
 
   while (row < rows) {
-    html += `<div class="row">`;
+    html += `<div style="display: flex; flex-wrap: wrap">`;
     while (column < columns) {
-      html += `<div class="col" style="display: flex;
+      html += `<div  style="display: flex;
       align-content: center;
       justify-content: center; 
       flex-direction: column;
-      margin: 20px 10px;">
-                <img style="object-fit: cover; border-radius: 50%; width: 100%; height: 100%; margin-bottom: 10px;" src="https://eventscape-assets.s3.amazonaws.com/assets/headshots/headshot-${headshotIndex}.jpg">
-                <div style="text-align: center; font-weight: 600; font-size: 20px;">Speaker Name</div>
-                <div style="text-align: center; font-weight: 300; font-size: 20px; ">Speaker Title</div>
+      width: 220px;
+      margin: 20px auto;">
+                <img style="object-fit: cover; border-radius: 50%; width: 150px; height: 150px; margin: 0px auto 20px;" src="https://eventscape-assets.s3.amazonaws.com/assets/headshots/headshot-${headshotIndex}.jpg">
+                <div style="text-align: center; font-weight: 500; font-size: 20px; color: rgb(33, 37, 41)">Speaker Name</div>
+                <div style="text-align: center; font-weight: 300; font-size: 20px; color: rgb(33, 37, 41)">Speaker Title</div>
             </div>`;
       column += 1;
       if (headshotIndex === 7) {
