@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
@@ -64,6 +64,17 @@ function Login(props) {
     if (event.key === "Enter") handleSubmit();
   };
 
+  // if the user is already logged in, take them straight to the app homepage
+  if (props.user?.id) {
+    return (
+      <Redirect
+        to={{
+          pathname: "/",
+        }}
+      />
+    );
+  }
+
   return (
     <div>
       <SimpleNavBar
@@ -105,4 +116,8 @@ function Login(props) {
   );
 }
 
-export default connect(null, actions)(Login);
+const mapStateToProps = (state) => {
+  return { user: state.user };
+};
+
+export default connect(mapStateToProps, actions)(Login);
