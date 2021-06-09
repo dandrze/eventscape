@@ -31,7 +31,7 @@ function Login(props) {
   const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/";
 
   const handleChangeEmail = (event) => {
-    setEmailAddress(event.target.value);
+    setEmailAddress(event.target.value.toLowerCase());
   };
 
   const emailExists = async () => {
