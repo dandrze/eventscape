@@ -43,6 +43,10 @@ export const regPageModelTemplate = ({
       isReact: true,
       reactComponent: registrationFormReact,
     },
+    {
+      html: spacer(100),
+      name: "spacer",
+    },
   ];
 };
 
@@ -61,6 +65,10 @@ export const eventPageModelTemplate = ({
       name: "streamChat",
       isReact: true,
       reactComponent: streamChatReact,
+    },
+    {
+      html: spacer(100),
+      name: "spacer",
     },
   ];
 };
