@@ -372,7 +372,6 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
 
     if (message && chatReady) {
       setChatReady(false);
-      console.log({ room, message });
       if (socket)
         socket.emit("sendMessage", { chatUserId, room, message }, () => {
           setMessage("");
