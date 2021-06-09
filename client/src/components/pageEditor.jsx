@@ -4,7 +4,6 @@ import { Prompt } from "react-router";
 
 import FoldingCube from "./FoldingCube";
 
-
 import "./pageEditor.css";
 import * as actions from "../actions";
 import PageSectionEditor from "./pageSectionEditor";
@@ -230,17 +229,26 @@ const PageEditor = (props) => {
         </div>
         <div
           id="designBoard"
-          style={{ position: "relative", overflow: "hidden" }}
+          style={{ position: "relative" }}
           onMouseLeave={handleMouseLeave}
         >
           <div
-            className="page-background"
             style={{
-              backgroundImage: `url(${props.model.backgroundImage})`,
-              boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
-              filter: `blur(${props.model.backgroundBlur}px)`,
+              position: "absolute",
+              overflow: "hidden",
+              width: "100%",
+              height: "100%",
             }}
-          ></div>
+          >
+            <div
+              className="page-background"
+              style={{
+                backgroundImage: `url(${props.model.backgroundImage})`,
+                boxShadow: `inset 0 0 0 10000px ${props.model.backgroundColor}`,
+                filter: `blur(${props.model.backgroundBlur}px)`,
+              }}
+            ></div>
+          </div>
 
           <div>
             {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}

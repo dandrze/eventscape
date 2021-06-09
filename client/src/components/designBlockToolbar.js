@@ -139,7 +139,7 @@ function DesignBlockToolbar(props) {
       {(props.displayToolbar === true) &
       (openSettings === false) &
       (deleteConfirmOpen === false) ? (
-        <div className="toolbar_container">
+        <div className="toolbar-container">
           <Tooltip title="Move Up">
             <div
               className="design-block-toolbar-button"

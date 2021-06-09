@@ -203,14 +203,30 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
   const accountId = req.user.id;
 
   try {
-    // Store a new model in the model table for the registration page
-    const dbRegModel = await PageModel.create();
-
-    // Store a new model in the model table for the event page
-    const dbEventModel = await PageModel.create();
-
     // fetch data from the original event
     const originalEvent = await Event.findByPk(EventId);
+
+    // Fetch original events page models
+    const originalRegModel = await PageModel.findByPk(
+      originalEvent.RegPageModelId
+    );
+    const originalEventModel = await PageModel.findByPk(
+      originalEvent.EventPageModelId
+    );
+
+    // Store a new model in the model table for the registration page
+    const newRegModel = await PageModel.create({
+      backgroundImage: originalRegModel.backgroundImage,
+      backgroundBlur: originalRegModel.backgroundBlur,
+      backgroundColor: originalRegModel.backgroundColor,
+    });
+
+    // Store a new model in the model table for the event page
+    const newEventModel = await PageModel.create({
+      backgroundImage: originalEventModel.backgroundImage,
+      backgroundBlur: originalEventModel.backgroundBlur,
+      backgroundColor: originalEventModel.backgroundColor,
+    });
 
     // Create a new event with the desired link, the original name + copy, and all the rest of the original details
     const event = await Event.create({
@@ -221,9 +237,9 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       endDate: originalEvent.endDate,
       timeZone: originalEvent.timeZone,
       primaryColor: originalEvent.primaryColor,
-      OwnerId: originalEvent.AccountId,
-      RegPageModelId: dbRegModel.id,
-      EventPageModelId: dbEventModel.id,
+      OwnerId: accountId,
+      RegPageModelId: newRegModel.id,
+      EventPageModelId: newEventModel.id,
       registrationRequired: originalEvent.registrationRequired,
       status: originalEvent.status,
     });
@@ -247,7 +263,7 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       }
 
       await PageSection.create({
-        PageModelId: dbRegModel.id,
+        PageModelId: newRegModel.id,
         index: section.index,
         html: section.html,
         isReact: section.isReact,
@@ -267,7 +283,7 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       }
 
       await PageSection.create({
-        PageModelId: dbEventModel.id,
+        PageModelId: newEventModel.id,
         index: section.index,
         html: section.html,
         isReact: section.isReact,
