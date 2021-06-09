@@ -30,7 +30,6 @@ import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import FoldingCube from "./FoldingCube";
 
-
 import * as actions from "../actions";
 import api from "../api/server";
 import PlanSliders from "./PlanSliders";
@@ -98,8 +97,8 @@ const BillingTable = ({ event, plan, handleClickUpdate }) => {
               <br></br>
               <br></br>
               <span className="billing-subtext">
-                *additional viewers or time will be billed at $
-                {lineItem.Plan.PlanType.pricePerViewerHour} per viewer per hour.
+                *additional viewers or time will be billed at $0.01 per viewer
+                per minute.
               </span>
             </div>
           ),
