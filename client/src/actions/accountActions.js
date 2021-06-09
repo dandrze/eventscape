@@ -43,15 +43,19 @@ export const fetchUser = () => async (dispatch) => {
   }
 };
 
-export const createAccount = (userData) => async (dispatch) => {
-  try {
-    const res = await api.post("/api/account", { userData });
+export const createAccount =
+  (emailAddress, firstName, isMobile) => async (dispatch) => {
+    try {
+      const res = await api.post("/api/account", {
+        userData: { emailAddress, firstName },
+        isMobile,
+      });
 
-    return res.data;
-  } catch (err) {
-    toast.error("Error when creating new account: " + err.toString());
-  }
-};
+      return res.data;
+    } catch (err) {
+      toast.error("Error when creating new account: " + err.toString());
+    }
+  };
 
 export const checkEmailExists = (emailAddress) => async (dispatch) => {
   try {
@@ -68,22 +72,21 @@ export const checkEmailExists = (emailAddress) => async (dispatch) => {
   }
 };
 
-export const updateAccountContact = (userId, contactData) => async (
-  dispatch
-) => {
-  try {
-    const res = await api.put("/api/account", { userId, contactData });
+export const updateAccountContact =
+  (userId, contactData) => async (dispatch) => {
+    try {
+      const res = await api.put("/api/account", { userId, contactData });
 
-    if (res.data) {
-      dispatch({ type: FETCH_USER, payload: res.data });
+      if (res.data) {
+        dispatch({ type: FETCH_USER, payload: res.data });
+      }
+      toast.success("Contact details successfully updated!");
+
+      return res.data;
+    } catch (err) {
+      toast.error("Error when updating contact details: " + err.toString());
     }
-    toast.success("Contact details successfully updated!");
-
-    return res.data;
-  } catch (err) {
-    toast.error("Error when updating contact details: " + err.toString());
-  }
-};
+  };
 
 export const setTourCompleted = () => async (dispatch) => {
   const res = await api.post("/api/account/tour-complete");

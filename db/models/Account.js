@@ -10,6 +10,7 @@ const Account = sequelize.define("Account", {
   tourComplete: { type: Sequelize.BOOLEAN, defaultValue: false },
   loginCode: Sequelize.INTEGER,
   loginCodeExpiration: Sequelize.DATE,
+  createdOnMobile: Sequelize.BOOLEAN,
 });
 
 module.exports = Account;

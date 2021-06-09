@@ -30,7 +30,7 @@ router.put("/api/account", requireAuth, async (req, res) => {
 
 // public endpoint
 router.post("/api/account", async (req, res, next) => {
-  const { userData } = req.body;
+  const { userData, isMobile } = req.body;
   const { emailAddress, firstName } = userData;
 
   let account;
@@ -48,9 +48,10 @@ router.post("/api/account", async (req, res, next) => {
       account = unregisteredAccount;
     } else {
       account = await Account.create({
-        emailAddress: emailAddress.toLowerCase(),
+        emailAddress,
         firstName,
         registrationComplete: true,
+        createdOnMobile: isMobile,
       });
     }
 

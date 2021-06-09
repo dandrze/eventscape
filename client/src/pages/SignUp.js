@@ -4,9 +4,10 @@ import { Link, useParams } from "react-router-dom";
 import TextField from "@material-ui/core/TextField";
 import { makeStyles } from "@material-ui/core/styles";
 import FormControl from "@material-ui/core/FormControl";
+import { isMobile } from "react-device-detect";
 import SimpleNavBar from "../components/simpleNavBar";
 import * as actions from "../actions";
-import FoldingCube from "../components/FoldingCube"
+import FoldingCube from "../components/FoldingCube";
 
 import { isValidEmailFormat } from "../hooks/validation";
 
@@ -34,7 +35,7 @@ function Create_Account(props) {
   const urlParams = new URLSearchParams(window.location.search);
 
   const handleChangeEmail = (event) => {
-    setEmailAddress(event.target.value);
+    setEmailAddress(event.target.value.toLowerCase());
     setEmailErrorText("");
   };
 
@@ -56,10 +57,7 @@ function Create_Account(props) {
       );
     } else {
       setIsLoading(true);
-      const res = await props.createAccount({
-        emailAddress,
-        firstName,
-      });
+      const res = await props.createAccount(emailAddress, firstName, isMobile);
 
       props.history.push({
         pathname: "/code",

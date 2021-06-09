@@ -102,6 +102,7 @@ Plan.belongsTo(Event);
 Event.hasOne(Plan);
 
 Event.sync({ alter: true });
+Account.sync({ alter: true });
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
