@@ -497,7 +497,7 @@ function NavBar3(props) {
 
             <Divider />
 
-            {displaySideNav === "false" && (
+            {displaySideNav === "false" && props.event.title && (
               <Link to="/">
                 <StyledMenuItem>
                   <ListItemIcon>

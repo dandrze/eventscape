@@ -26,10 +26,12 @@ function AccountSettings(props) {
   );
 
   const handleChangeEmailAddress = (event) => {
+    event.preventDefault();
     setEmailAddress(event.target.value);
   };
 
   const handleChangeFName = (event) => {
+    event.preventDefault();
     setFName(event.target.value);
   };
 
@@ -85,7 +87,7 @@ function AccountSettings(props) {
 }
 
 const mapStateToProps = (state) => {
-  return { event: state.event, user: state.user };
+  return { user: state.user };
 };
 
 export default connect(mapStateToProps, actions)(AccountSettings);
