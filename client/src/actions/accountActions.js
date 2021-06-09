@@ -12,11 +12,16 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
       password: code,
     });
 
-    cookies.set("user", {
-      emailAddress: res.data.emailAddress,
-      id: res.data.id,
-      firstName: res.data.firstName,
-    });
+    console.log(res.data);
+    cookies.set(
+      "user",
+      JSON.stringify({
+        test: "test",
+        emailAddress: res.data.user.emailAddress,
+        id: res.data.user.id,
+        firstName: res.data.user.firstName,
+      })
+    );
 
     dispatch({ type: FETCH_USER, payload: res.data.user });
 
