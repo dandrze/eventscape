@@ -299,7 +299,7 @@ function NavBar3(props) {
   };
 
   const handleChangeEvent = async (event) => {
-    if (event.target.value === 0) {
+    if (event.target.value === "all") {
       return props.history.push("/my-events");
     }
     props.setCurrentEvent(event.target.value);
@@ -426,7 +426,7 @@ function NavBar3(props) {
                     minWidth: "300px",
                   }}
                 >
-                  <MenuItem value={null}>
+                  <MenuItem value={"all"}>
                     See All Past and Deleted Events
                   </MenuItem>
                   <Divider style={{ margin: "0px 0px 10px" }} />
