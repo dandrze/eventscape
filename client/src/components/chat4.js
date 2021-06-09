@@ -369,7 +369,6 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
 
   const sendMessage = (event) => {
     event.preventDefault();
-    console.log(socket);
 
     if (message && chatReady) {
       setChatReady(false);
