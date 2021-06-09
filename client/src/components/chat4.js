@@ -216,11 +216,8 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   const [questionsTabEnabled, setQuestionsTabEnabled] = useState(false);
   const [reconnect, setReconnect] = useState(false);
   const [isInitialConnect, setIsInitialConnect] = useState(true);
+  const [socket, setSocket] = useState(null);
   const connectRef = useRef();
-  const socket = io(ENDPOINT, {
-    path: "/api/socket/chat",
-    transports: ["websocket"],
-  });
 
   // set a ref to isInitialConnect so we can access the latest state from within the on connect callback
   connectRef.current = isInitialConnect;
@@ -246,7 +243,12 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   }, [room, settings.triggerSectionReactUpdate]);
 
   useEffect(() => {
-    socket.on("connect", () => {
+    const _socket = io(ENDPOINT, {
+      path: "/api/socket/chat",
+      transports: ["websocket"],
+    });
+
+    _socket.on("connect", () => {
       setChatReady(true);
 
       // if there is no userId (eventscape account) or registrationId (registered user) then we need a uuid to idenfity the anonymous visitor
@@ -257,7 +259,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
         uuid = cookies.get("uuid");
       }
 
-      socket.emit(
+      _socket.emit(
         "join",
         {
           userId,
@@ -275,50 +277,48 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       );
     });
 
-    socket.io.on("reconnect", () => {
+    _socket.io.on("reconnect", () => {
       console.log("reconnected!");
     });
-    socket.on("reconnect_attempt", () => {
+    _socket.on("reconnect_attempt", () => {
       console.log("reconnect attempt!");
     });
 
-    socket.on("reconnect_failed", () => {
+    _socket.on("reconnect_failed", () => {
       console.log("reconnect failed!");
     });
 
-    socket.on("connect_error", (error) => {
+    _socket.on("connect_error", (error) => {
       setMessages((messages) => [
         ...messages,
         { text: error, isNotification: true },
       ]);
     });
 
-    socket.on("error", (error) => {
+    _socket.on("error", (error) => {
       setMessages((messages) => [
         ...messages,
         { text: error, isNotification: true },
       ]);
     });
 
-    socket.on("message", (message) => {
-      console.log({ room, message });
+    _socket.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
 
     // receive multiple messages at once (i.e. full history when joining a room)
-    socket.on("bulkMessage", (bulkMessages) => {
-      console.log({ room, bulkMessages, socket });
+    _socket.on("bulkMessage", (bulkMessages) => {
       setMessages((messages) => [...messages, ...bulkMessages]);
     });
 
-    socket.on("notification", (message) => {
+    _socket.on("notification", (message) => {
       setMessages((messages) => [
         ...messages,
         { ...message, isNotification: true },
       ]);
     });
 
-    socket.on("delete", (id) => {
+    _socket.on("delete", (id) => {
       //map through the messages array and add the deleted flag to the message with the target id
       setMessages((messages) =>
         messages.map((msg) => {
@@ -331,7 +331,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       );
     });
 
-    socket.on("restore", (id) => {
+    _socket.on("restore", (id) => {
       //map through the messages array and add the deleted flag to the message with the target id
       setMessages((messages) =>
         messages.map((msg) => {
@@ -344,11 +344,11 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       );
     });
 
-    socket.on("chatHidden", (chatHidden) => {
+    _socket.on("chatHidden", (chatHidden) => {
       setChatHidden(chatHidden);
     });
 
-    socket.on("deleteAll", () => {
+    _socket.on("deleteAll", () => {
       setMessages((messages) =>
         messages.map((msg) => {
           return { ...msg, deleted: true };
@@ -356,25 +356,29 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       );
     });
 
-    socket.on("refresh", () => {
+    _socket.on("refresh", () => {
       setMessages([]);
     });
 
-    socket.on("disconnect", function () {
-      console.log("socket disconnected", socket);
+    _socket.on("disconnect", function () {
+      console.log("socket disconnected", _socket);
     });
+
+    setSocket(_socket);
   }, [reconnect, room]);
 
   const sendMessage = (event) => {
     event.preventDefault();
+    console.log(socket);
 
     if (message && chatReady) {
       setChatReady(false);
       console.log({ room, message });
-      socket.emit("sendMessage", { chatUserId, room, message }, () => {
-        setMessage("");
-        setChatReady(true);
-      });
+      if (socket)
+        socket.emit("sendMessage", { chatUserId, room, message }, () => {
+          setMessage("");
+          setChatReady(true);
+        });
     }
   };
 
@@ -382,21 +386,22 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     event.preventDefault();
 
     if (question) {
-      socket.emit("sendQuestion", { chatUserId, room, question }, () => {
-        setQuestion("");
-        toast.success("Your question was submitted to the hosts!");
-      });
+      if (socket)
+        socket.emit("sendQuestion", { chatUserId, room, question }, () => {
+          setQuestion("");
+          toast.success("Your question was submitted to the hosts!");
+        });
     } else if (!question) {
       toast.error("Please enter a question.");
     }
   };
 
   const deleteMessage = (id) => {
-    socket.emit("deleteMessage", { id, room });
+    if (socket) socket.emit("deleteMessage", { id, room });
   };
 
   const restoreMessage = (id) => {
-    socket.emit("restoreMessage", { id, room });
+    if (socket) socket.emit("restoreMessage", { id, room });
   };
 
   return (

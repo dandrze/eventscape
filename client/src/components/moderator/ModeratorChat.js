@@ -117,23 +117,24 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
   const [sendLoading, setSendLoading] = useState(false);
   const [chatHidden, setChatHidden] = useState(false);
   const [isInitialConnect, setIsInitialConnect] = useState(true);
+  const [socket, setSocket] = useState(null);
   const connectRef = useRef();
 
   // set a reference to isInitialConnect so we can access it from inside the on connect callback
   connectRef.current = isInitialConnect;
 
-  const socket = io(ENDPOINT, {
-    path: "/api/socket/chat",
-    transports: ["websocket"],
-  });
-
   useEffect(() => {
-    socket.on("connect", () => {
+    const _socket = io(ENDPOINT, {
+      path: "/api/socket/chat",
+      transports: ["websocket"],
+    });
+
+    _socket.on("connect", () => {
       console.log("Connected to socket");
 
       // join room
       // Or if reconnecting, rejoin the room with the flag isInitialConnect = false
-      socket.emit(
+      _socket.emit(
         "join",
         { userId, room, isInitialConnect: connectRef.current },
         (id) => {
@@ -144,37 +145,37 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
         }
       );
     });
-    socket.on("connect_error", (error) => {
+    _socket.on("connect_error", (error) => {
       setMessages((messages) => [
         ...messages,
         { text: error, isNotification: true },
       ]);
     });
 
-    socket.on("error", (error) => {
+    _socket.on("error", (error) => {
       setMessages((messages) => [
         ...messages,
         { text: error, isNotification: true },
       ]);
     });
 
-    socket.on("message", (message) => {
+    _socket.on("message", (message) => {
       setMessages((messages) => [...messages, message]);
     });
 
     // receive multiple messages at once (i.e. full history when joining a room)
-    socket.on("bulkMessage", (bulkMessages) => {
+    _socket.on("bulkMessage", (bulkMessages) => {
       setMessages((messages) => [...messages, ...bulkMessages]);
     });
 
-    socket.on("notification", (message) => {
+    _socket.on("notification", (message) => {
       setMessages((messages) => [
         ...messages,
         { ...message, isNotification: true },
       ]);
     });
 
-    socket.on("delete", (id) => {
+    _socket.on("delete", (id) => {
       //map through the messages array and add the deleted flag to the message with the target id
       setMessages((messages) =>
         messages.map((msg) => {
@@ -187,7 +188,7 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       );
     });
 
-    socket.on("restore", (id) => {
+    _socket.on("restore", (id) => {
       //map through the messages array and add the deleted flag to the message with the target id
       setMessages((messages) =>
         messages.map((msg) => {
@@ -200,11 +201,11 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       );
     });
 
-    socket.on("chatHidden", (chatHidden) => {
+    _socket.on("chatHidden", (chatHidden) => {
       setChatHidden(chatHidden);
     });
 
-    socket.on("deleteAll", () => {
+    _socket.on("deleteAll", () => {
       setMessages((messages) =>
         messages.map((msg) => {
           return { ...msg, deleted: true };
@@ -212,9 +213,11 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       );
     });
 
-    socket.on("refresh", () => {
+    _socket.on("refresh", () => {
       setMessages([]);
     });
+
+    setSocket(_socket);
   }, []);
 
   // code below pulls in functions from messaging for moderator actions
