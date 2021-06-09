@@ -2,7 +2,7 @@ import React, { useEffect, useState, forwardRef } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
-import ExitToAppIcon from "@material-ui/icons/ExitToApp";
+import FileCopy from "@material-ui/icons/FileCopy";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -89,7 +89,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                 />
                 <span className={classes.paragraphText}>{event.status}</span>
 
-                <ExitToAppIcon
+                <FileCopy
                   className="color-on-hover"
                   style={{ marginLeft: "24px", cursor: "pointer" }}
                   onClick={copyLink}
