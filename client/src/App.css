@@ -601,6 +601,7 @@ select {
   height: 100%;
   width: 100%;
   position: absolute;
+  border-radius: 10px;
 }
 /* CSS BELOW IS FOR CHAT BOXES */
 .chatOuterContainer {
