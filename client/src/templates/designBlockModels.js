@@ -844,7 +844,7 @@ export const speakerGrid = (columns, box) => {
   while (column < columns) {
     html += `<div  style="display: flex;
       align-content: center;
-      justify-content: center; 
+      justify-content: flex-start; 
       flex-direction: column;
       width: 300px;
       margin: 50px auto;">
