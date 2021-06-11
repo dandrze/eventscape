@@ -623,7 +623,7 @@ export const scheduleTable1 = () => {
         </td>
         <td style="width: 65%;">
         <h4>Introduction</h4>
-        Speakers introduce themselves.
+        <p>Speakers introduce themselves.</p>
         </td>
       </tr>
       <tr>

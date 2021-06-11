@@ -10,7 +10,7 @@ import Select from "@material-ui/core/Select";
 import "./newSectionButton.css";
 
 /* Design Block Thumbnails: */
-import logoHeader from "./designBlockThumbnails/logoHeaderGrey.png";
+import logoHeader from "./designBlockThumbnails/logoHeader.png";
 import titleThumb from "./designBlockThumbnails/title.png";
 import titleLogoThumb from "./designBlockThumbnails/titleLogoWhite.png";
 import streamChatThumb from "./designBlockThumbnails/streamChat.png";
