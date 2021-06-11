@@ -156,9 +156,7 @@ const Registrations = (props) => {
         }
         content={
           <RegistrationForm
-            registerText={
-              isEditRegistration ? "Edit Registration" : "Add Registration"
-            }
+            SubmitButtonText={isEditRegistration ? "Save" : "Submit"}
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}
             standardFields={standardFields}

@@ -34,7 +34,7 @@ function RegistrationForm({
   standardFields,
   onSubmitCallback,
   fetchRegistration,
-  registerText,
+  SubmitButtonText,
   prePopulatedValues,
   sectionIndex,
   addRegistration,
@@ -260,6 +260,7 @@ function RegistrationForm({
                 className={`margin-auto ${
                   !isManualEntry ? "form-editor-react" : ""
                 }`}
+                style={{ minWidth: "350px" }}
                 onMouseEnter={() => setDisplayEditMessage(true)}
                 onMouseLeave={() => setDisplayEditMessage(false)}
               >
@@ -321,7 +322,7 @@ function RegistrationForm({
                   <div className="errorMessage">{emailError}</div>
                 </div>
                 <ReactFormGenerator
-                  action_name={registerText || "Register now"}
+                  action_name={SubmitButtonText || "Register now"}
                   onSubmit={handleSubmit}
                   data={formData}
                   answer_data={prePopulatedValues}
