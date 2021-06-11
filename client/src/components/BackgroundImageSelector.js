@@ -550,7 +550,7 @@ const Preview = ({
 }) => {
   return (
     <div style={{ padding: "18px 18px 0px 18px" }}>
-      {currentBackgroundImageURL ? (
+      {currentBackgroundImageURL && currentBackgroundImageURL != "initial" ? (
         <>
           <div style={{ width: "284px", height: "160px", overflow: "hidden" }}>
             <div

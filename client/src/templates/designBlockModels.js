@@ -11,7 +11,7 @@ export const heroBannerModel = (eventTitle = "default") => {
   align-items: center;
   padding: 150px 20px;
   width: 100%
-  box-shadow: rgba(35, 35, 35, 0.667) 0px 0px 0px 5000px inset;
+  box-shadow: rgba(255, 255, 255, 0.667) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div>
   <span class="hero-banner">
@@ -73,13 +73,14 @@ export const logoHeaderModel = (logo) => {
   <div style="padding: 10px;">
   <div style="background-position: bottom;
     background-size: cover;
-    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    box-shadow: rgba(255, 255, 255, 0) 0px 0px 0px 5000px inset;
     border-radius: 10px;
     margin: auto;
     align-items: center;
     display: flex;
     justify-content: space-between;
     padding: 12px 48px;
+    background: #ffffff;
     overflow: hidden" data-info="background image/color. Do not modify." >
     <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
 
@@ -113,7 +114,8 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
   <div style="padding: 10px;">
   <div id="title-logo-banner" style="background-position: bottom;
     background-size: cover;
-    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    box-shadow: rgb(255, 255, 255, 0) 0px 0px 0px 5000px inset;
+    background: #ffffff;
     border-radius: 10px;
     margin: auto;
     align-items: center;
@@ -145,7 +147,8 @@ export const logoHeaderRightModel = () => {
   <div style="padding: 10px;">
   <div style="background-position: bottom;
     background-size: cover;
-    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    box-shadow: rgb(255, 255, 255, 0) 0px 0px 0px 5000px inset;
+    background: #ffffff;
     border-radius: 10px;
     margin: auto;
     align-items: center;
@@ -288,7 +291,8 @@ export const registrationFormDescription = (
   <div>
   <div style="background-position: bottom;
     background-size: cover;
-    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    box-shadow: rgb(255 255 255 0) 0px 0px 0px 5000px inset;
+    background: #ffffff;
     border-radius: 10px;
     margin: auto;
     align-items: center;
@@ -312,7 +316,8 @@ export const simpleTitle = (eventTitle = "default") => {
   <div style="padding: 10px;">
   <div style="background-position: bottom;
     background-size: cover;
-    box-shadow: rgb(234 234 234) 0px 0px 0px 5000px inset;
+    box-shadow: rgb(255 255 255 0) 0px 0px 0px 5000px inset;
+    background: #ffffff;
     border-radius: 10px;
     margin: auto;
     align-items: center;
@@ -603,13 +608,13 @@ export const scheduleTable1 = () => {
   background-size: cover;
   width: 100%;
   border-radius: 10px;
-  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="block-container" style="overflow: hidden;">
 
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
 
-  <h2 class="theme-color">Agenda</h2>
+  <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 20px; font-size: 1.3rem;">AGENDA</h2>
     <table class="schedule-table schedule-table1">
     <tbody>
       <tr>
@@ -660,12 +665,12 @@ export const scheduleTable2 = () => {
   background-size: cover;
   width: 100%;
   border-radius: 10px;
-  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <div class="block-container" style="overflow: hidden;">
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
 
-    <h2 class="theme-color">Agenda</h2>
+    <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 20px; font-size: 1.3rem;">AGENDA</h2>
       <table class="schedule-table schedule-table2">
       <tbody>
         <tr>
@@ -715,11 +720,11 @@ export const paragraph1 = () => {
   <div style="padding: 10px;">
   <div style="background-position: bottom;
   background-size: cover;
-  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   width: 100%;
   border-radius: 10px;
   overflow: hidden" data-info="background image/color. Do not modify." >
-  <div class="container block-container" style="overflow: hidden;">
+  <div class="block-container" style="overflow: hidden;">
   <div class="col">
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
 
@@ -741,11 +746,11 @@ export const paragraph2 = () => {
   <div style="padding: 10px;">
   <div style="background-position: bottom;
   background-size: cover;
-  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   width: 100%;
   border-radius: 10px;
   overflow: hidden" data-info="background image/color. Do not modify." >
-  <div class="container block-container" style="overflow: hidden;">
+  <div class="block-container" style="overflow: hidden;">
 
   <div class="row">
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
@@ -778,13 +783,13 @@ export const sponsorGrid = (columns, rows, box) => {
   <div style="background-position: bottom;
   background-size: cover;
   border-radius: 10px;
-  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-    <div>
-    <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 0px; font-size: 1.3rem;">THANK YOU TO OUR SPONSORS</h2>
-  </div>
-  <div class="container block-container">
+  <div class="block-container">
+  <div>
+  <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 20px; font-size: 1.3rem;">THANK YOU TO OUR SPONSORS</h2>
+</div>
   `;
   const boxStyle = box
     ? `margin: 15px;
@@ -826,12 +831,12 @@ export const speakerGrid = (columns, box) => {
   <div style="background-position: bottom;
   background-size: cover;
   border-radius: 10px;
-  box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
+  box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-  <div class="container block-container">
+  <div class="block-container">
   <div>
-  <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 0px; font-size: 1.3rem;">SPEAKERS</h2>
+  <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 20px; font-size: 1.3rem;">SPEAKERS</h2>
 </div>
   `;
 

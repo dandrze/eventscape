@@ -16,9 +16,7 @@ import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
 import CircularProgress from "@material-ui/core/CircularProgress";
 import Modal1 from "../Modal1";
-import FoldingCube from "../FoldingCube"
-
-
+import FoldingCube from "../FoldingCube";
 
 import { isValidEmailFormat } from "../../hooks/validation";
 
@@ -237,6 +235,7 @@ function RegistrationForm({
           <div
             style={{
               boxShadow: backgroundBoxShadow,
+              background: "#ffffff",
               backgroundImage,
               backgroundPosition: "center bottom",
               backgroundSize: "cover",
