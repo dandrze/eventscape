@@ -1,10 +1,13 @@
 import React, { useState } from "react";
-import Button from "@material-ui/core/Button";
-import Dialog from "@material-ui/core/Dialog";
-import DialogActions from "@material-ui/core/DialogActions";
-import DialogContent from "@material-ui/core/DialogContent";
-import DialogContentText from "@material-ui/core/DialogContentText";
-import TextField from "@material-ui/core/TextField";
+import {
+  Button,
+  InputAdornment,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  TextField,
+} from "@material-ui/core";
 
 export default function AlertModal({
   onClose,
@@ -14,6 +17,7 @@ export default function AlertModal({
   closeText,
   continueText,
   textInputLabel,
+  inputAdornment = null,
 }) {
   const [input, setInput] = useState("");
 
@@ -53,6 +57,17 @@ export default function AlertModal({
             onChange={handleChangeInput}
             variant="outlined"
             style={{ margin: "0px 30px" }}
+            InputProps={
+              inputAdornment
+                ? {
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        {inputAdornment}
+                      </InputAdornment>
+                    ),
+                  }
+                : null
+            }
           />
         ) : null}
         <DialogActions>

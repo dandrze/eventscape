@@ -4,7 +4,6 @@ import MaterialTable from "material-table";
 import { withRouter } from "react-router-dom";
 import FoldingCube from "./FoldingCube";
 
-
 import { Paper } from "@material-ui/core";
 
 /*Material-Table Icons*/
@@ -241,6 +240,10 @@ const Table = (props) => {
           closeText="Cancel"
           continueText="Continue"
           textInputLabel={textInputLabel}
+          // If the input is for a new link, add .eventscape.io as the input adornment
+          inputAdornment={
+            textInputLabel === "New Link" ? ".eventscape.io" : null
+          }
         />
         <MaterialTable
           title="Employee Details"
