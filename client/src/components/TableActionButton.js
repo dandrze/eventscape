@@ -1,7 +1,5 @@
 import React from "react";
-import AddBox from "@material-ui/icons/AddBox";
-import ListIcon from "@material-ui/icons/List";
-import SaveAlt from "@material-ui/icons/SaveAlt";
+import { AddBox, Edit, List, SaveAlt } from "@material-ui/icons";
 
 export default ({ label, type }) => {
   return (
@@ -9,9 +7,11 @@ export default ({ label, type }) => {
       {type === "add" ? (
         <AddBox style={{ color: "#b0281c" }} />
       ) : type === "data" ? (
-        <ListIcon style={{ color: "#b0281c" }} />
+        <List style={{ color: "#b0281c" }} />
       ) : type === "export" ? (
         <SaveAlt style={{ color: "#b0281c" }} />
+      ) : type === "edit" ? (
+        <Edit style={{ color: "#b0281c" }} />
       ) : null}
       <span style={{ fontSize: "16px", margin: "0px 5px", color: "#b0281c" }}>
         {label}
