@@ -53,7 +53,7 @@ export default ({ addSection, type }) => {
           style={{ width: "30%" }}
         >
           <InputLabel id="columns-select-label" className="mui-select-css-fix">
-            Columns
+            {type === "sponsors" ? "Columns" : "Number of speakers"}
           </InputLabel>
 
           <Select
@@ -62,31 +62,33 @@ export default ({ addSection, type }) => {
             value={columns}
             onChange={handleChangeColumns}
           >
-            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((index) => {
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((index) => {
               return <MenuItem value={index}>{index}</MenuItem>;
             })}
           </Select>
         </FormControl>
 
-        <FormControl
-          variant="outlined"
-          className={classes.gridSelectors}
-          style={{ width: "30%" }}
-        >
-          <InputLabel id="rows-select-label" className="mui-select-css-fix">
-            Rows
-          </InputLabel>
-          <Select
-            labelId="rows-select-label"
+        {type === "sponsors" ? (
+          <FormControl
             variant="outlined"
-            value={rows}
-            onChange={handleChangeRows}
+            className={classes.gridSelectors}
+            style={{ width: "30%" }}
           >
-            {[1, 2, 3, 4, 5].map((index) => {
-              return <MenuItem value={index}>{index}</MenuItem>;
-            })}
-          </Select>
-        </FormControl>
+            <InputLabel id="rows-select-label" className="mui-select-css-fix">
+              Rows
+            </InputLabel>
+            <Select
+              labelId="rows-select-label"
+              variant="outlined"
+              value={rows}
+              onChange={handleChangeRows}
+            >
+              {[1, 2, 3, 4, 5].map((index) => {
+                return <MenuItem value={index}>{index}</MenuItem>;
+              })}
+            </Select>
+          </FormControl>
+        ) : null}
         {type === "sponsors" ? (
           <FormControl
             variant="outlined"

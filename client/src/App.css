@@ -576,8 +576,7 @@ select {
   display: table-cell;
   position: relative;
   top: 0.5em;
-  width: 45%;
-  right: 1.5%;
+  width: 40%;
 }
 
 .line-title::after {
@@ -586,8 +585,7 @@ select {
   display: table-cell;
   position: relative;
   top: 0.5em;
-  width: 45%;
-  left: 1.5%;
+  width: 40%;
 }
 
 .fr-popup {

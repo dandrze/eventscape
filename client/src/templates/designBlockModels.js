@@ -298,7 +298,7 @@ export const registrationFormDescription = (
     overflow: hidden" data-info="background image/color. Do not modify." >
     <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
     <div class="one" contenteditable="true">
-    <p style="margin-top: 0;"><span style="font-size: 30px; text-align: left; font-weight: 300;">${timeFormatted}</span></p>
+    <p style="margin-top: 0; text-align: left;"><span style="font-size: 30px; text-align: left; font-weight: 300;">${timeFormatted}</span></p>
     <p style="text-align: left;">${descriptionBody}</p>
   </div> 
    <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
@@ -817,7 +817,7 @@ export const sponsorGrid = (columns, rows, box) => {
   return html;
 };
 
-export const speakerGrid = (columns, rows, box) => {
+export const speakerGrid = (columns, box) => {
   let column = 0;
   let row = 0;
   let headshotIndex = 0;
@@ -829,37 +829,33 @@ export const speakerGrid = (columns, rows, box) => {
   box-shadow: rgb(234, 234, 234) 0px 0px 0px 5000px inset;
   overflow: hidden" data-info="background image/color. Do not modify." >
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-    <div>
-    <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 0px; font-size: 1.3rem;">SPEAKERS</h2>
-  </div>
   <div class="container block-container">
+  <div>
+  <h2 class="line-title" style="font-weight: 500; color: #9b9b9b; margin-top: 50px; margin-bottom: 0px; font-size: 1.3rem;">SPEAKERS</h2>
+</div>
   `;
 
-  while (row < rows) {
-    html += `<div style="display: flex; flex-wrap: wrap">`;
-    while (column < columns) {
-      html += `<div  style="display: flex;
+  html += `<div style="display: flex; flex-wrap: wrap">`;
+  while (column < columns) {
+    html += `<div  style="display: flex;
       align-content: center;
       justify-content: center; 
       flex-direction: column;
-      width: 220px;
-      margin: 20px auto;">
+      width: 300px;
+      margin: 50px auto;">
                 <img style="object-fit: cover; border-radius: 50%; width: 150px; height: 150px; margin: 0px auto 20px;" src="https://eventscape-assets.s3.amazonaws.com/assets/headshots/headshot-${headshotIndex}.jpg">
                 <div style="text-align: center; font-weight: 500; font-size: 20px; color: rgb(33, 37, 41)">Speaker Name</div>
                 <div style="text-align: center; font-weight: 300; font-size: 20px; color: rgb(33, 37, 41)">Speaker Title</div>
             </div>`;
-      column += 1;
-      if (headshotIndex === 7) {
-        headshotIndex = 0;
-      } else {
-        headshotIndex += 1;
-      }
+    column += 1;
+    if (headshotIndex === 7) {
+      headshotIndex = 0;
+    } else {
+      headshotIndex += 1;
     }
-    html += `</div>`;
-    row += 1;
-    // reset column counter back to 0 for the next row
-    column = 0;
   }
+  html += `</div>`;
+
   html += `</div>
   <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
   </div></div></div>`;
