@@ -426,9 +426,7 @@ function NavBar3(props) {
                     minWidth: "300px",
                   }}
                 >
-                  <MenuItem value={"all"}>
-                    See All Past and Deleted Events
-                  </MenuItem>
+                  <MenuItem value={"all"}>Manage Events</MenuItem>
                   <Divider style={{ margin: "0px 0px 10px" }} />
                   <div
                     style={{
