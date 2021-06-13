@@ -240,7 +240,7 @@ function RegistrationForm({
               backgroundPosition: "center bottom",
               backgroundSize: "cover",
               borderRadius: "10px",
-              padding: "12px 48px",
+              padding: "calc(15px + 1.5vw)",
               height: "100%",
             }}
           >

@@ -1,18 +1,11 @@
 import {
-  logoHeaderModel,
-  logoHeaderRightModel,
-  heroBannerModel,
-  heroBannerModelNarrow,
   registrationFormDescription,
-  simpleTitle,
   streamChatReact,
-  blankModel,
   registrationFormReact,
   logoTitleHeaderModel,
   spacer,
 } from "./designBlockModels";
 import {
-  invitation,
   registrationConfirmation,
   reminderOneDay,
   reminderOneHour,
