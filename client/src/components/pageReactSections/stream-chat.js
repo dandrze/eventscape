@@ -7,6 +7,7 @@ import "./stream-chat.css";
 import Chat from "../chat4.js";
 
 const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
+  console.log({ link, content, html, chatRoom, attendee });
   const createEmbedLink = (youtubeLink) => {
     const splitLink = youtubeLink.split("/");
     var streamCode = splitLink[splitLink.length - 1];

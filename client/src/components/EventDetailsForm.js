@@ -264,11 +264,6 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
       setOpenModal(true);
       return null;
     }
-    if (!category) {
-      setModalText("Please select a category.");
-      setOpenModal(true);
-      return null;
-    }
 
     if (selectedEndDate < selectedStartDate) {
       setModalText("End Date must be after Start Date.");

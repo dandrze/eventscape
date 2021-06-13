@@ -1299,6 +1299,36 @@ select:focus {
   flex-direction: column;
 }
 
+.icon-button {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  justify-content: flex-end;
+  cursor: pointer;
+  margin: 0px 3px;
+}
+
+.advanced-options-container {
+  position: absolute;
+  top: 70px;
+  z-index: 99999;
+  background: #f5f5f5;
+  border-radius: 5px;
+  border: 1px solid #ababab;
+}
+
+.advanced-option {
+  width: 175px;
+  display: flex;
+  padding: 5px;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.advanced-option:hover {
+  background: #fff;
+}
+
 @media only screen and (max-width: 600px) {
   #title-logo-banner {
     flex-direction: column-reverse;

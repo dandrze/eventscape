@@ -40,11 +40,12 @@ const Published = (props) => {
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [page, setPage] = useState("");
   const [error, setError] = useState("");
+  const [forceRefresh, setForceRefresh] = useState(true);
 
   useEffect(() => {
     if (!cookies.get("uuid")) cookies.set("uuid", uuid());
     fetchDataAsync();
-  }, []);
+  }, [forceRefresh]);
 
   const fetchDataAsync = async () => {
     var attendeeId = null;
@@ -146,6 +147,10 @@ const Published = (props) => {
         setResultsQuestion(question);
         setAllowMultiple(allowMultiple);
         setOpenResults(true);
+      });
+
+      socket.on("refreshPage", () => {
+        setForceRefresh(!forceRefresh);
       });
 
       socket.emit("join", {
@@ -259,7 +264,7 @@ const Published = (props) => {
             filter: `blur(${props.model.backgroundBlur}px)`,
           }}
         ></div>
-        <div className="fr-view live-page-container">
+        <div className="fr-view live-page-container" key={forceRefresh}>
           {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
           <div className="section-container">
             <div className="centering-spacer"></div>
