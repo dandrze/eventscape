@@ -114,6 +114,10 @@ module.exports = (server) => {
       io.to(eventId.toString()).emit("closeResults");
     });
 
+    socket.on("pushRefreshPage", async (eventId) => {
+      io.to(eventId.toString()).emit("refreshPage");
+    });
+
     socket.on("disconnect", async (reason) => {
       const siteVisit = await SiteVisit.findByPk(socket.visitId, {
         include: SiteVisitor,
