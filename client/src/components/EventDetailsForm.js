@@ -213,10 +213,12 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
   const handleChangeMaxDevices = (event) => {
     setMaxDevices(
-      event.target.value > 9
+      Number.isNaN(event.target.value)
+        ? 1
+        : event.target.value > 9
         ? 9
-        : event.target.value < 0
-        ? 0
+        : event.target.value < 1
+        ? 1
         : event.target.value
     );
   };
