@@ -4,9 +4,9 @@ import { Prompt } from "react-router";
 import { Link, withRouter } from "react-router-dom";
 import io from "socket.io-client";
 import { toast } from "react-toastify";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import FoldingCube from "./FoldingCube";
-
 import "./pageEditor.css";
 import * as actions from "../actions";
 import PageSectionEditor from "./pageSectionEditor";
@@ -162,7 +162,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
         onContinue={() => {
           handlePushRefresh();
         }}
-        content="This will update the content and refresh the stream for all your viewers. Please ensure the page is saved if you made any changes to the content or the stream. Click Continue to refresh your viewer's content."
+        content="This will update the content and refresh the stream for all your viewers. Please ensure the page is saved if you made any changes to the content or the stream. Click CONTINUE to refresh your viewer's content."
         closeText="Go back"
         continueText="Continue"
       />
@@ -238,16 +238,18 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
                     onClick={() => setShowAdvancedOptions(false)}
                   />
                   <div className="advanced-options-container">
-                    <div
-                      className="advanced-option"
-                      onClick={handleClickRefresh}
-                    >
-                      <IconButton
-                        label="Refresh Live Content"
-                        icon="refresh"
-                        horizontal
-                      />
-                    </div>
+                    <Tooltip title="Use this function if you switch your stream, update page content, or need to force a refresh on your viewers page.">
+                      <div
+                        className="advanced-option"
+                        onClick={handleClickRefresh}
+                      >
+                        <IconButton
+                          label="Refresh Live Content"
+                          icon="refresh"
+                          horizontal
+                        />
+                      </div>
+                    </Tooltip>
                   </div>
                 </>
               ) : null}
