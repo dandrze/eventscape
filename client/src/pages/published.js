@@ -193,11 +193,11 @@ const Published = (props) => {
       <ErrorBox
         content={
           <div>
+            <p>Hello {props.attendee.firstName},</p>
+            <p>You’ve reached the maximum device limit for your event link.</p>
             <p>
-              You've reached the maximum device limit for your registration.
-            </p>
-            <p>
-              Please close the event on one of your other devices and try again
+              Please close the event on one of your other devices, then click
+              Try Again.
             </p>
             <button
               className="Button1"
@@ -205,6 +205,20 @@ const Published = (props) => {
             >
               Try Again
             </button>
+            <p
+              style={{
+                fontSize: "0.8rem",
+                fontWeight: "400",
+                color: "#8a8a8a",
+                marginTop: "20px",
+              }}
+            >
+              Not {props.attendee.firstName}? Click{" "}
+              <a className="link1" href="/">
+                here
+              </a>{" "}
+              to receive your own event link.
+            </p>
           </div>
         }
       />
