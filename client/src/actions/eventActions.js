@@ -13,6 +13,8 @@ const defaultBackgroundImage =
   "https://eventscape-assets.s3.amazonaws.com/free-images/abstract-1963884_1920.jpg";
 const defaultBackgroundColor = "rgba(30, 30, 31, 0.384)";
 const defaultBlur = 5;
+const maxDevicesEnabledDefault = true;
+const maxDevicesDefault = 1;
 
 export const finalizeEvent =
   (
@@ -56,9 +58,9 @@ export const finalizeEvent =
       backgroundImage,
       backgroundColor,
       backgroundBlur: defaultBlur,
+      maxDevicesEnabled: maxDevicesEnabledDefault,
+      maxDevices: maxDevicesDefault,
     };
-
-    console.log(event);
 
     try {
       const res = await api.post("/api/event/finalize", {

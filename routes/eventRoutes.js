@@ -42,6 +42,8 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
       backgroundImage,
       backgroundColor,
       backgroundBlur,
+      maxDevicesEnabled,
+      maxDevices,
     },
     communications,
     eventId,
@@ -80,6 +82,8 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
     event.registrationRequired = registrationRequired;
     event.OwnerId = accountId;
     event.description = description;
+    event.maxDevices = maxDevices;
+    event.maxDevicesEnabled = maxDevicesEnabled;
 
     const savedEvent = await event.save();
 

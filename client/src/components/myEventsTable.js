@@ -116,10 +116,7 @@ const Table = (props) => {
       title: "Status",
       field: "status",
     },
-    {
-      title: "",
-      field: "edit",
-    },
+ 
   ];
 
   const options = {
