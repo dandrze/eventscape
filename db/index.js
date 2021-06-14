@@ -19,8 +19,8 @@ const Poll = require("./models/Poll");
 const PollOption = require("./models/PollOption");
 const PollResponse = require("./models/PollResponse");
 const Permission = require("./models/Permission");
-const Plan = require("./models/Plan");
-const PlanType = require("./models/PlanType");
+const Package = require("./models/Package");
+const PackageType = require("./models/PackageType");
 const InvoiceLineItem = require("./models/InvoiceLineItem");
 const Invoice = require("./models/Invoice");
 const CustomLineItem = require("./models/CustomLineItem");
@@ -86,23 +86,25 @@ Poll.hasMany(PollOption);
 PollResponse.belongsTo(SiteVisitor);
 PollResponse.belongsTo(PollOption);
 
-InvoiceLineItem.belongsTo(Plan);
+InvoiceLineItem.belongsTo(Package);
 InvoiceLineItem.belongsTo(CustomLineItem);
 
 InvoiceLineItem.belongsTo(Invoice);
 Invoice.hasMany(InvoiceLineItem);
 
-Plan.belongsTo(PlanType);
-PlanType.hasMany(Plan);
+Package.belongsTo(PackageType);
+PackageType.hasMany(Package);
 
 Invoice.belongsTo(Event);
 Event.hasMany(Invoice);
 
-Plan.belongsTo(Event);
-Event.hasOne(Plan);
+Package.belongsTo(Event);
+Event.hasOne(Package);
 
 Event.sync({ alter: true });
 Account.sync({ alter: true });
+
+//sequelize.sync({ alter: true });
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
@@ -131,8 +133,8 @@ module.exports = {
     PollOption,
     PollResponse,
     Permission,
-    PlanType,
-    Plan,
+    PackageType,
+    Package,
     InvoiceLineItem,
     Invoice,
     CustomLineItem,

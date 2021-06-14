@@ -90,7 +90,7 @@ function DesignBlockToolbar(props) {
   const handleOpenSettings = () => {
     if (
       props.section.reactComponent.name === "RegistrationForm" &&
-      props.event.plan.PlanType.type === "free"
+      props.event.package.PackageType.type === "free"
     ) {
       setEditFormErrorOpen(true);
     } else {
@@ -121,8 +121,8 @@ function DesignBlockToolbar(props) {
     }
   };
 
-  const handleGoToPlan = () => {
-    props.history.push("/plan");
+  const handleGoToPackage = () => {
+    props.history.push("/package");
   };
 
   return (
@@ -130,8 +130,8 @@ function DesignBlockToolbar(props) {
       <AlertModal
         open={editFormErrorOpen}
         onClose={() => setEditFormErrorOpen(false)}
-        onContinue={handleGoToPlan}
-        content="The edit registration form option is available for events on a Pro plan. Please upgrade to continue."
+        onContinue={handleGoToPackage}
+        content="The edit registration form option is available for events on a Pro package. Please upgrade to continue."
         closeText="Close"
         continueText="Upgrade Now"
       />

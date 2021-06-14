@@ -50,15 +50,15 @@ const Registrations = (props) => {
   };
 
   const handleOpenForm = () => {
-    if (props.event.plan.PlanType.type === "free") {
+    if (props.event.package.PackageType.type === "free") {
       setEditFormErrorOpen(true);
     } else {
       setOpenForm(true);
     }
   };
 
-  const handleGoToPlan = () => {
-    props.history.push("/plan");
+  const handleGoToPackage = () => {
+    props.history.push("/package");
   };
 
   const handleCloseReg = () => {
@@ -168,8 +168,8 @@ const Registrations = (props) => {
       <AlertModal
         open={editFormErrorOpen}
         onClose={() => setEditFormErrorOpen(false)}
-        onContinue={handleGoToPlan}
-        content="The edit registration form option is available for events on a Pro plan. Please upgrade to continue."
+        onContinue={handleGoToPackage}
+        content="The edit registration form option is available for events on a Pro package. Please upgrade to continue."
         closeText="Close"
         continueText="Upgrade Now"
       />

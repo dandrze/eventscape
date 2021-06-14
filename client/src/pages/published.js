@@ -279,7 +279,9 @@ const Published = (props) => {
           }}
         ></div>
         <div className="fr-view live-page-container" key={forceRefresh}>
-          {props.event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+          {props.event.package.PackageType.type === "free" ? (
+            <BrandingTop />
+          ) : null}
           <div className="section-container">
             <div className="centering-spacer"></div>
             {props.model.sections.map(function (section) {

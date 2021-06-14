@@ -20,7 +20,6 @@ import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
 import FoldingCube from "../components/FoldingCube";
 
-
 import api from "../api/server";
 
 export default () => {
@@ -73,16 +72,16 @@ export default () => {
       ),
     },
     {
-      title: "Event Plan Type",
-      field: "Plan.PlanType.name",
+      title: "Event Package Type",
+      field: "Package.PackageType.name",
     },
     {
-      title: "Event Plan Viewers",
-      field: "Plan.viewers",
+      title: "Event Package Viewers",
+      field: "Package.viewers",
     },
     {
-      title: "Event Plan Hours",
-      field: "Plan.streamingTime",
+      title: "Event Package Hours",
+      field: "Package.streamingTime",
     },
   ];
 

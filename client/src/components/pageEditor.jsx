@@ -97,7 +97,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
 
   const handleRemoveLogoErrorContinue = () => {
     setRemoveLogoErrorOpen(false);
-    history.push("/plan");
+    history.push("/package");
   };
 
   const handleCancelChanges = async () => {
@@ -180,7 +180,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
         open={removeLogoErrorOpen}
         onClose={handleRemoveLogoErrorClose}
         onContinue={handleRemoveLogoErrorContinue}
-        content="The remove logo option is available for events on a Pro plan. Please upgrade to continue."
+        content="The remove logo option is available for events on a Pro package. Please upgrade to continue."
         closeText="Close"
         continueText="Upgrade Now"
       />
@@ -188,7 +188,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
       <div className="design">
         <div className="top-button-bar pt-5">
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {event.plan.PlanType.type === "free" ? (
+            {event.package.PackageType.type === "free" ? (
               <button
                 className="Button1"
                 onClick={handleRemoveLogoError}
@@ -325,7 +325,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
           </div>
 
           <div>
-            {event.plan.PlanType.type === "free" ? <BrandingTop /> : null}
+            {event.package.PackageType.type === "free" ? <BrandingTop /> : null}
             <div className="section-container">
               {model.sections.length === 0
                 ? null

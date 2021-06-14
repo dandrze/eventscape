@@ -12,7 +12,7 @@ import Communication from "./communication";
 import Registrations from "./registrations";
 import Analytics from "./analytics";
 import Messaging from "./messaging";
-import Plan from "./plan";
+import Package from "./package";
 import Preview from "./preview";
 import EventDetailsPage from "./EventDetailsPage";
 import AccountSettingsContact from "./account-settings-contact";
@@ -26,7 +26,7 @@ import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
 import Dashboard from "./dashboard";
 import { CircularProgress } from "@material-ui/core";
-import FoldingCube from "../components/FoldingCube"
+import FoldingCube from "../components/FoldingCube";
 
 const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   const urlParams = new URLSearchParams(window.location.search);
@@ -106,7 +106,7 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
             path="/messaging"
             render={() => requireEvent(Messaging)}
           />
-          <Route exact path="/plan" render={() => requireEvent(Plan)} />
+          <Route exact path="/package" render={() => requireEvent(Package)} />
           <Route
             exact
             path="/preview/:event/:model"

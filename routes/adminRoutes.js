@@ -3,7 +3,7 @@ const router = express.Router();
 
 const requireAuth = require("../middlewares/requireAuth");
 
-const { Plan, PlanType, Event, Account } = require("../db").models;
+const { Package, PackageType, Event, Account } = require("../db").models;
 const { Op } = require("sequelize");
 
 router.get("/api/admin/data", requireAuth, async (req, res, next) => {
@@ -12,7 +12,7 @@ router.get("/api/admin/data", requireAuth, async (req, res, next) => {
       const events = await Event.findAll({
         include: [
           { model: Account, as: "Owner" },
-          { model: Plan, include: PlanType },
+          { model: Package, include: PackageType },
         ],
       });
 

@@ -2,7 +2,6 @@ import React, { Component, useEffect, useState } from "react";
 import { connect } from "react-redux";
 import FoldingCube from "../components/FoldingCube";
 
-
 import NavBar3 from "../components/navBar3.js";
 import Tabs from "../components/Tabs";
 import Chart from "chart.js/dist/Chart.bundle";
@@ -83,21 +82,13 @@ const Analytics = (props) => {
                   <div className="form-box shadow-border currentUV">
                     <h3>Current Unique Viewers</h3>
                     <h2>
-                      {data.loaded ? (
-                        data.current
-                      ) : (
-                        <FoldingCube size={30} />
-                      )}
+                      {data.loaded ? data.current : <FoldingCube size={30} />}
                     </h2>
                   </div>
                   <div className="form-box shadow-border totalUV">
                     <h3>Total Unique Viewers</h3>
                     <h2>
-                      {data.loaded ? (
-                        data.unique
-                      ) : (
-                        <FoldingCube size={30} />
-                      )}
+                      {data.loaded ? data.unique : <FoldingCube size={30} />}
                     </h2>
                   </div>
                 </div>
@@ -130,7 +121,7 @@ const Analytics = (props) => {
                     <WorldMap
                       data={mapData}
                       className="margin-auto"
-                      disabled={props.event.plan.PlanType.type === "free"}
+                      disabled={props.event.package.PackageType.type === "free"}
                     />
                   ) : null}
                 </div>

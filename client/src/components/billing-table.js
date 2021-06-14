@@ -32,7 +32,6 @@ import FoldingCube from "./FoldingCube";
 
 import * as actions from "../actions";
 import api from "../api/server";
-import PlanSliders from "./PlanSliders";
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -58,7 +57,7 @@ const tableIcons = {
   ViewColumn: forwardRef((props, ref) => <ViewColumn {...props} ref={ref} />),
 };
 
-const BillingTable = ({ event, plan, handleClickUpdate }) => {
+const BillingTable = ({ event, eventPackage, handleClickUpdate }) => {
   const [data, setData] = useState([
     {
       description: null,
@@ -69,7 +68,7 @@ const BillingTable = ({ event, plan, handleClickUpdate }) => {
 
   useEffect(() => {
     fetchData();
-  }, [plan]);
+  }, [eventPackage]);
 
   const fetchData = async () => {
     const res = await api.get("/api/billing/invoice", {
@@ -80,20 +79,20 @@ const BillingTable = ({ event, plan, handleClickUpdate }) => {
     var totalCost = 0;
 
     const lineItems = invoice.InvoiceLineItems.map((lineItem) => {
-      if (lineItem.type === "plan") {
-        const totalPlanCost =
-          lineItem.Plan.PlanType.fixedPrice +
-          lineItem.Plan.viewers *
-            lineItem.Plan.streamingTime *
-            lineItem.Plan.PlanType.pricePerViewerHour;
+      if (lineItem.type === "package") {
+        const totalPackageCost =
+          lineItem.Package.PackageType.fixedPrice +
+          lineItem.Package.viewers *
+            lineItem.Package.streamingTime *
+            lineItem.Package.PackageType.pricePerViewerHour;
 
-        totalCost += totalPlanCost;
+        totalCost += totalPackageCost;
 
         return {
           description: (
             <div>
-              {lineItem.Plan.PlanType.name} ({lineItem.Plan.viewers} viewers,{" "}
-              {lineItem.Plan.streamingTime}h)
+              {lineItem.Package.PackageType.name} ({lineItem.Package.viewers}{" "}
+              viewers, {lineItem.Package.streamingTime}h)
               <br></br>
               <br></br>
               <span className="billing-subtext">
@@ -102,10 +101,10 @@ const BillingTable = ({ event, plan, handleClickUpdate }) => {
               </span>
             </div>
           ),
-          amount: `$${totalPlanCost}`,
+          amount: `$${totalPackageCost}`,
           actions: (
             <button className="Button1" onClick={handleClickUpdate}>
-              Change Plan
+              Change Package
             </button>
           ),
         };

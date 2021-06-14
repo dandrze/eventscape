@@ -14,8 +14,8 @@ const {
   Permission,
   Account,
   Invoice,
-  Plan,
-  PlanType,
+  Package,
+  PackageType,
   InvoiceLineItem,
   Poll,
   PollOption,
@@ -157,18 +157,20 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
       polls: true,
     });
 
-    // create a default plan and invoice
-    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
+    // create a default package and invoice
+    const defaultFreePackage = await PackageType.findOne({
+      where: { type: "free" },
+    });
 
     const invoice = await Invoice.create({ EventId: event.id });
-    const plan = await Plan.create({
+    const package = await Package.create({
       EventId: event.id,
-      PlanTypeId: defaultFreePlan.id,
+      PackageTypeId: defaultFreePackage.id,
     });
     const invoiceLineItem = await InvoiceLineItem.create({
       InvoiceId: invoice.id,
-      type: "plan",
-      PlanId: plan.id,
+      type: "package",
+      PackageId: package.id,
     });
 
     res.json(event);
@@ -348,18 +350,20 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       }
     }
 
-    // create a default plan and invoice
-    const defaultFreePlan = await PlanType.findOne({ where: { type: "free" } });
+    // create a default package and invoice
+    const defaultFreePackage = await PackageType.findOne({
+      where: { type: "free" },
+    });
 
     const invoice = await Invoice.create({ EventId: event.id });
-    const plan = await Plan.create({
+    const package = await Package.create({
       EventId: event.id,
-      PlanTypeId: defaultFreePlan.id,
+      PackageTypeId: defaultFreePackage.id,
     });
     InvoiceLineItem.create({
       InvoiceId: invoice.id,
-      type: "plan",
-      PlanId: plan.id,
+      type: "package",
+      PackageId: package.id,
     });
 
     res.json(event);
@@ -387,9 +391,9 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
     // if there's no event (i.e. on create event page), return an empty object
     if (!event) return res.send();
 
-    const plan = await Plan.findOne({
+    const package = await Package.findOne({
       where: { EventId: event.id },
-      include: PlanType,
+      include: PackageType,
     });
 
     const permissions = await Permission.findAll({
@@ -399,7 +403,7 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
       include: Account,
     });
 
-    res.json({ ...event.dataValues, plan, permissions });
+    res.json({ ...event.dataValues, package, permissions });
   } catch (error) {
     next(error);
   }
@@ -460,12 +464,12 @@ router.get("/api/event/id", async (req, res, next) => {
     const event = await Event.findByPk(id);
 
     if (event) {
-      const plan = await Plan.findOne({
+      const package = await Package.findOne({
         where: { EventId: event.id },
-        include: PlanType,
+        include: PackageType,
       });
 
-      res.json({ ...event.dataValues, plan });
+      res.json({ ...event.dataValues, package });
     } else {
       res.json();
     }
@@ -488,12 +492,12 @@ router.get("/api/event/link", async (req, res, next) => {
     );
 
     if (event) {
-      const plan = await Plan.findOne({
+      const package = await Package.findOne({
         where: { EventId: event.id },
-        include: PlanType,
+        include: PackageType,
       });
 
-      res.json({ ...event.dataValues, plan });
+      res.json({ ...event.dataValues, package });
     } else res.json();
   } catch (error) {
     next(error);
