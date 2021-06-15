@@ -153,6 +153,10 @@ const Published = (props) => {
         setForceRefresh(!forceRefresh);
       });
 
+      socket.on("connect_error", (err) => {
+        console.log(`connect_error due to ${err.message}`);
+      });
+
       socket.emit("join", {
         EventId: event.id,
         uuid: cookies.get("uuid"),

@@ -288,11 +288,8 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       console.log("reconnect failed!");
     });
 
-    _socket.on("connect_error", (error) => {
-      setMessages((messages) => [
-        ...messages,
-        { text: error, isNotification: true },
-      ]);
+    _socket.on("connect_error", (err) => {
+      console.log(`connect_error due to ${err.message}`);
     });
 
     _socket.on("error", (error) => {
