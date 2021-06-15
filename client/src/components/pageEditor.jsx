@@ -214,7 +214,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
             </Link>
             <IconButton
               label="Edit Background"
-              icon="visibility"
+              icon="background"
               onClick={handleClickEditBackground}
             />
             <div style={{ display: "flex", position: "relative" }}>
