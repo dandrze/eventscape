@@ -155,7 +155,7 @@ const Published = (props) => {
       });
 
       socket.on("refreshPage", () => {
-        setForceRefresh(forceRefresh + 1);
+        setForceRefresh((forceRefresh) => forceRefresh + 1);
       });
 
       socket.on("connect_error", (err) => {
