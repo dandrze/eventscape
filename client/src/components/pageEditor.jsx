@@ -270,13 +270,11 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
             >
               {model.isUnsaved ? (
                 <>
-                  <button
-                    className="Button2"
+                  <IconButton
+                    label="Discard Changes"
+                    icon="cancel"
                     onClick={() => setDiscardOpen(true)}
-                    style={{ marginLeft: "12px" }}
-                  >
-                    Discard Changes
-                  </button>
+                  />
 
                   <button
                     className="Button1"

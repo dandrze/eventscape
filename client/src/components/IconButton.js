@@ -2,6 +2,7 @@ import React from "react";
 import { ReactComponent as ViewIcon } from "../icons/view2.svg";
 import { ReactComponent as CodeIcon } from "../icons/code.svg";
 import { ReactComponent as BackgroundIcon } from "../icons/background.svg";
+import { ReactComponent as CancelIcon } from "../icons/cancel.svg";
 import CachedIcon from "@material-ui/icons/Cached";
 
 export default ({ label, icon, onClick, horizontal }) => {
@@ -19,6 +20,8 @@ export default ({ label, icon, onClick, horizontal }) => {
         <CodeIcon fill="#b0281c" style={{ width: "30px", height: "26px" }} />
       ) : icon === "refresh" ? (
         <CachedIcon color="primary" style={{ fontSize: "25px" }} />
+      ) : icon === "cancel" ? (
+        <CancelIcon fill="#b0281c" style={{ height: "18px", margin: "4px" }} />
       ) : null}
       <p
         style={{
