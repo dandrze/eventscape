@@ -40,7 +40,7 @@ const Published = (props) => {
   const [allowMultiple, setAllowMultiple] = useState(false);
   const [page, setPage] = useState("");
   const [error, setError] = useState("");
-  const [forceRefresh, setForceRefresh] = useState(true);
+  const [forceRefresh, setForceRefresh] = useState(0);
 
   useEffect(() => {
     if (!cookies.get("uuid")) cookies.set("uuid", uuid());
@@ -64,7 +64,12 @@ const Published = (props) => {
       attendeeId = registration.id;
 
       // check if the max device limit has already been reached if there is a limit
-      if (event.maxDevicesEnabled && activeDevices.length >= event.maxDevices) {
+      // Only perform check on initial visit, not on refreshes pushed by event moderator
+      if (
+        event.maxDevicesEnabled &&
+        forceRefresh === 0 &&
+        activeDevices.length >= event.maxDevices
+      ) {
         setError("maxDevices");
         setIsLoaded(true);
         return null;
@@ -150,7 +155,7 @@ const Published = (props) => {
       });
 
       socket.on("refreshPage", () => {
-        setForceRefresh(!forceRefresh);
+        setForceRefresh(forceRefresh + 1);
       });
 
       socket.on("connect_error", (err) => {

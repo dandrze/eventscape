@@ -8,6 +8,8 @@ export const fetchLivePage = (link, hash) => async (dispatch) => {
 
   const event = res.data;
 
+  console.log("fetched live page");
+
   if (event) {
     await dispatch({ type: FETCH_EVENT, payload: event });
 
