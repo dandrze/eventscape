@@ -309,8 +309,6 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
     setIsloading(false);
   };
 
-  console.log(selectedCountries);
-
   return (
     <>
       <AlertModal

@@ -12,7 +12,6 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
       password: code,
     });
 
-    console.log(res.data);
     cookies.set(
       "user",
       JSON.stringify({

@@ -18,7 +18,7 @@ import ColumnMapping from "./ColumnMapping";
 import { validateEmailFormat } from "../utils/validationFunctions";
 import ImportCsvConfirmationTable from "./ImportCsvConfirmationTable";
 import api from "../api/server";
-import FoldingCube from "./FoldingCube"
+import FoldingCube from "./FoldingCube";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -115,8 +115,6 @@ const ImportFile = ({
           const lastName =
             columnMap.lastName != null ? row.data[columnMap.lastName] : "";
           var rowErrors = "";
-
-          console.log({ emailAddress, existingEmailAddresses });
 
           // flag any errors that could cause problems in our code in the future
           if (!emailAddress) {

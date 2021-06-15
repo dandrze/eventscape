@@ -249,7 +249,6 @@ function NavBar3(props) {
   useEffect(() => {
     const fetchEventList = async () => {
       const eventList = await props.fetchEventList();
-      console.log(eventList);
 
       setEvents(eventList);
     };

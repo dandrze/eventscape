@@ -83,8 +83,6 @@ export const createEvent = (title) => async (dispatch) => {
   try {
     const res = await api.post("/api/event", { title });
 
-    console.log(res);
-
     return res.data.id;
   } catch (err) {
     toast.error("Error when creating new event: " + err.response.data.message);
@@ -155,8 +153,6 @@ export const fetchEventFromId = (id) => async (dispatch) => {
 
 export const isLinkAvailable = (link) => async (dispatch) => {
   const res = await api.get("/api/event/link", { params: { link } });
-
-  console.log(res);
 
   if (res.data) {
     return false;
