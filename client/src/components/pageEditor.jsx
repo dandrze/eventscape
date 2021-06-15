@@ -217,7 +217,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
               icon="visibility"
               onClick={handleClickEditBackground}
             />
-            <div style={{ display: "flex", position: "relative" }}>
+            {/* <div style={{ display: "flex", position: "relative" }}>
               <IconButton
                 label="Advanced"
                 icon="code"
@@ -225,7 +225,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
               />
               {showAdvancedOptions ? (
                 <>
-                  {/* The div below allows the user to click anywhere to hide the advanced options */}
+                  {/* The div below allows the user to click anywhere to hide the advanced options }
                   <div
                     style={{
                       position: "fixed",
@@ -253,7 +253,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
                   </div>
                 </>
               ) : null}
-            </div>
+            </div> */}
           </div>
           {saveLoading ? (
             <div style={{ marginLeft: "auto", marginRight: "15px" }}>
