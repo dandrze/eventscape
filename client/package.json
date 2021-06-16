@@ -29,6 +29,7 @@
     "material-table": "^1.69.0",
     "material-ui-popup-state": "^1.6.1",
     "moment-timezone": "^0.5.31",
+    "node-sass": "^4.14.1",
     "npm": "^6.14.8",
     "prop-types": "^15.7.2",
     "proxy-polyfill": "^0.3.2",
