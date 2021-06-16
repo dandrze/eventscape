@@ -30,7 +30,6 @@ const useStyles = makeStyles((theme) => ({
     bottom: "100px",
     padding: "18px",
   },
-  centerModal: { padding: "18px 60px" },
 }));
 
 export default function Modal1({ onClose, open, content, title, isSideModal }) {
@@ -78,7 +77,7 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
           </Slide>
         ) : (
           <Fade in={open}>
-            <div className={`${classes.paper} ${classes.centerModal}`}>
+            <div className={`${classes.paper} `}>
               <div>
                 <div className="cancel-bar">
                   <Tooltip title="Close">
@@ -96,6 +95,7 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
                     overflowX: "scroll",
                     maxHeight: "90vh",
                     maxWidth: "95vw",
+                    padding: "18px 60px",
                   }}
                 >
                   <div>
