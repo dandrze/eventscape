@@ -8,7 +8,7 @@ module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/event",
     cors: {
-      origin: "http://localhost:3000",
+      origin: "*",
       methods: ["GET", "POST"],
       transports: ["websocket"],
     },
