@@ -61,18 +61,20 @@ const Published = (props) => {
         hash,
         event.id
       );
-      attendeeId = registration.id;
+      if (registration && activeDevices) {
+        attendeeId = registration.id;
 
-      // check if the max device limit has already been reached if there is a limit
-      // Only perform check on initial visit, not on refreshes pushed by event moderator
-      if (
-        event.maxDevicesEnabled &&
-        forceRefresh === 0 &&
-        activeDevices.length >= event.maxDevices
-      ) {
-        setError("maxDevices");
-        setIsLoaded(true);
-        return null;
+        // check if the max device limit has already been reached if there is a limit
+        // Only perform check on initial visit, not on refreshes pushed by event moderator
+        if (
+          event.maxDevicesEnabled &&
+          forceRefresh === 0 &&
+          activeDevices.length >= event.maxDevices
+        ) {
+          setError("maxDevices");
+          setIsLoaded(true);
+          return null;
+        }
       }
     }
 

@@ -9,16 +9,6 @@ import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import "./newSectionButton.css";
 
-/* Design Block Thumbnails: */
-import logoHeader from "./designBlockThumbnails/logoHeader.png";
-import titleThumb from "./designBlockThumbnails/title.png";
-import titleLogoThumb from "./designBlockThumbnails/titleLogoWhite.png";
-import streamChatThumb from "./designBlockThumbnails/streamChat.png";
-import registrationHeaderThumb from "./designBlockThumbnails/registrationHeader.png";
-import scheduleTable1Thumb from "./designBlockThumbnails/scheduleTable1.png";
-import scheduleTable2Thumb from "./designBlockThumbnails/scheduleTable2.png";
-import paragraph1Thumb from "./designBlockThumbnails/paragraph1.png";
-import paragraph2Thumb from "./designBlockThumbnails/paragraph2.png";
 import {
   logoHeaderModel,
   simpleTitle,
@@ -125,7 +115,9 @@ const DesignBlockPicker = ({
               {/* Logo Header */}
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={logoHeader}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/logoHeader.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(logoHeaderModel());
@@ -151,7 +143,9 @@ const DesignBlockPicker = ({
               {/* Event page title */}
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={titleThumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/title.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(simpleTitle(event.title));
@@ -160,7 +154,9 @@ const DesignBlockPicker = ({
               </Grid>
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={titleLogoThumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/titleLogoWhite.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(logoTitleHeaderModel(null, event.title));
@@ -175,7 +171,9 @@ const DesignBlockPicker = ({
               {/* Description Registration */}
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={registrationHeaderThumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/registrationHeader.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(
@@ -199,7 +197,9 @@ const DesignBlockPicker = ({
               {/* Stream Chat */}
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={streamChatThumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/streamChat.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(null, true, streamChatReact);
@@ -214,7 +214,9 @@ const DesignBlockPicker = ({
               {/*Schedule Table Option 1 */}
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={scheduleTable1Thumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/scheduleTable1.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(scheduleTable1());
@@ -224,7 +226,9 @@ const DesignBlockPicker = ({
               {/*Schedule Table Option 2*/}
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={scheduleTable2Thumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/scheduleTable2.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(scheduleTable2());
@@ -238,7 +242,9 @@ const DesignBlockPicker = ({
             <Grid container spacing={3}>
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={paragraph1Thumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/paragraph1.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(paragraph1());
@@ -247,7 +253,9 @@ const DesignBlockPicker = ({
               </Grid>
               <Grid item xs={12}>
                 <DesignBlockPreview
-                  src={paragraph2Thumb}
+                  src={
+                    "https://eventscape-assets.s3.amazonaws.com/assets/design-block-thumbnails/paragraph2.png"
+                  }
                   handleClick={() => {
                     handleClose();
                     handleAddSection(paragraph2());
