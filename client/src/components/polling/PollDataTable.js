@@ -65,8 +65,6 @@ function PollDataTable({ settings, event }) {
     setData(res.data);
   };
 
-  console.log(data);
-
   const columns = [
     {
       title: "Visitor Id",
