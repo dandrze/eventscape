@@ -34,8 +34,6 @@ export const fetchAttendeeData = (hash, EventId) => async (dispatch) => {
 
   const { registration, activeDevices } = res.data;
 
-  console.log({ registration, activeDevices });
-
   await dispatch({
     type: FETCH_ATTENDEE,
     payload: registration,

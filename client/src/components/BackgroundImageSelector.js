@@ -128,7 +128,6 @@ const BackgroundImageSelector = ({
 
   const removeSectionImage = () => {
     const newHtml = document.createElement("div");
-    console.log({ model, sectionIndex });
     newHtml.innerHTML = model.sections[sectionIndex].html;
 
     const background = newHtml.getElementsByTagName("div")[2];
