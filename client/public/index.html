@@ -67,9 +67,9 @@
         return "";
       }
 
-      var user = JSON.parse(getCookie("user"));
-
-      var userId = user.id || null; // Replace your_user_id with your own if available.
+      var userCookie = getCookie("user");
+      var user = userCookie ? JSON.parse(getCookie("user")) : null;
+      var userId = user.id || null;
       window.hj("identify", userId, {
         emailAddress: user.emailAddress || null,
         firstName: user.firstName || null,
