@@ -106,12 +106,11 @@ const Froala = (props) => {
     toolbarButtons: {
       moreText: {
         buttons: [
+          "fontSize",
           "paragraphStyle",
-
           "italic",
           "underline",
           "fontFamily",
-          "fontSize",
           "strikeThrough",
           "subscript",
           "superscript",
@@ -120,7 +119,7 @@ const Froala = (props) => {
           "inlineClass",
           "inlineStyle",
         ],
-        buttonsVisible: 3,
+        buttonsVisible: 4,
       },
       moreParagraph: {
         buttons: [
@@ -243,6 +242,35 @@ const Froala = (props) => {
       "font-weight-400": "Regular",
       "font-weight-700": "Bold",
     },
+    fontSizeSelection: true,
+    fontSize: [
+      "6",
+      "8",
+      "9",
+      "10",
+      "11",
+      "12",
+      "14",
+      "16",
+      "18",
+      "20",
+      "22",
+      "24",
+      "26",
+      "28",
+      "30",
+      "32",
+      "34",
+      "36",
+      "38",
+      "40",
+      "42",
+      "48",
+      "56",
+      "60",
+      "72",
+      "96",
+    ],
 
     events: {
       "image.removed": async (img) => {
