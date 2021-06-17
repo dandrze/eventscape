@@ -5,6 +5,7 @@ import { Link, withRouter } from "react-router-dom";
 import io from "socket.io-client";
 import { toast } from "react-toastify";
 import Tooltip from "@material-ui/core/Tooltip";
+import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
 
 import FoldingCube from "./FoldingCube";
 import "./pageEditor.css";
@@ -219,7 +220,21 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
             />
             <div style={{ display: "flex", position: "relative" }}>
               <IconButton
-                label="Advanced"
+                label={
+                  <span
+                    style={{
+                      display: "flex",
+                      alignContent: "flex-end",
+                      justifyContent: "flex-end",
+                      alignItems: "flex-end",
+                    }}
+                  >
+                    <span>Advanced</span>
+                    <ExpandMoreIcon
+                      style={{ height: "18px", margin: "0px -8px 0px -4px" }}
+                    />
+                  </span>
+                }
                 icon="code"
                 onClick={handleClickAdvanced}
               />

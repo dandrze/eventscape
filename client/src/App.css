@@ -1304,15 +1304,19 @@ select:focus {
   align-content: center;
   align-items: center;
   justify-content: flex-end;
+  margin: 10px 3px 0px;
   cursor: pointer;
-  margin: 0px 3px;
+}
+
+.icon-button:hover {
+  background: #f1f1f1;
 }
 
 .advanced-options-container {
   position: absolute;
   top: 70px;
   z-index: 99999;
-  background: #f5f5f5;
+  background: #fff;
   border-radius: 5px;
   border: 1px solid #ababab;
 }
@@ -1326,7 +1330,7 @@ select:focus {
 }
 
 .advanced-option:hover {
-  background: #fff;
+  background: #f1f1f1;
 }
 
 @media only screen and (max-width: 600px) {
