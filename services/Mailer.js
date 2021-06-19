@@ -4,11 +4,11 @@ const keys = require("../config/keys");
 sgMail.setApiKey(keys.sendGridKey);
 
 const sendEmail = async (
-  email = { to: "", subject: "", html: "", useTemplate: false },
-  from = { email: "notifications@eventscape.io", name: "Eventscape" }
+  email = { to: "", subject: "", html: "", isEventEmail },
+  from = { email: "notifications@eventscape.io", name: "Eventscape" },
 ) => {
-  const { to, subject, html, useTemplate } = email;
-  const template = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  const { to, subject, html, isEventEmail} = email;
+  const appTemplate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
   <html lang="en">
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -37,12 +37,38 @@ const sendEmail = async (
   </body>
   </html>`;
 
+  const eventTemplate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+  <html lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  
+    <title></title>
+  
+    <style type="text/css">
+    </style>    
+  </head>
+  <body style="margin:0; padding:0; background-color:#F2F2F2;">
+    <center>
+      <table width="600px" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFF">
+       
+          <tr><td style="padding: 20px; border-bottom: 1px solid #e2e2e2;">${html}</td></tr>
+          <tr><td align="center"  style="padding: 20px; color: grey;">
+          <p>You're receiving this email because you registered for an event on eventscape.io</p>
+          <p>If you did not register for a event, please email support@eventscape.io to remove your email from our list</p>
+          <a href="https://www.eventscape.io">www.eventscape.io</a></td></tr>
+      </table>
+    </center>
+  </body>
+  </html>`;
+
   const msg = {
     to,
     from,
     subject,
     //text: emailContent.replace(/(<([^>]+)>)/gi, ""),
-    html: useTemplate ? template : html,
+    html: isEventEmail ? eventTemplate : appTemplate,
   };
 
   try {
@@ -128,7 +154,7 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
         to: recipient.emailAddress,
         subject: updatedSubject,
         html: updatedHtml,
-        useTemplate: true,
+        isEventEmail: true
       });
       if (isSuccessful) {
         success++;

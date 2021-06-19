@@ -90,7 +90,6 @@ router.post("/api/account", async (req, res, next) => {
           <p>Toronto, Ontario, Canada, M5V 1V6</p>
           <p>+1 (912) 403-9854</p>
           <a href="https://www.eventscape.io">Eventscape.io</a>`,
-          useTemplate: true,
         },
         {
           email: "david.andrzejewski@eventscape.io",
@@ -132,7 +131,6 @@ router.post("/api/account", async (req, res, next) => {
 					text-align: left;">Finish Setting Up Your Event</button></a></div>
             <br/>
           <p>The Eventscape Team</p>`,
-            useTemplate: true,
           },
           {
             email: "notifications@eventscape.io",
@@ -167,7 +165,6 @@ router.post("/api/account", async (req, res, next) => {
           <p>Toronto, Ontario, Canada, M5V 1V6</p>
           <p>+1 (912) 403-9854</p>
           <a href="https://www.eventscape.io">Eventscape.io</a>`,
-            useTemplate: true,
           },
           {
             email: "david.andrzejewski@eventscape.io",
@@ -194,7 +191,6 @@ router.post("/api/account", async (req, res, next) => {
           <p>Toronto, Ontario, Canada, M5V 1V6</p>
           <p>+1 (912) 403-9854</p>
           <a href="https://www.eventscape.io">Eventscape.io</a>`,
-            useTemplate: true,
           },
           {
             email: "david.andrzejewski@eventscape.io",

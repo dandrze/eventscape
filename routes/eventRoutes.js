@@ -676,7 +676,6 @@ router.post(
         to: newOwnerAccount.emailAddress,
         subject,
         html,
-        useTemplate: true,
       });
 
       res.json();
@@ -772,7 +771,6 @@ router.post("/api/event/reminder", requireAuth, async (req, res, next) => {
       to: emailAddress,
       subject: `Continue Designing ${event.title}`,
       html,
-      useTemplate: true,
     });
 
     res.status(200).send();
