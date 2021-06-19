@@ -22,6 +22,8 @@ import IconButton from "./IconButton";
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
 
+const TEST_USER_HASH = "f5d1278e8109edd94e1e4197e04873b9";
+
 let socket;
 
 const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
@@ -141,6 +143,21 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
     setIsHovering(null);
   };
 
+  const handleGoToSite = () => {
+    const hash =
+      page === pageNames.EVENT && event.registrationRequired
+        ? TEST_USER_HASH
+        : "";
+    switch (process.env.NODE_ENV) {
+      case "development":
+        return window.open(`http://${event.link}.localhost:3000/${hash}`);
+      case "staging":
+        return window.open(`http://${event.link}.eventscape.ca/${hash}`);
+      case "production":
+        return window.open(`https://${event.link}.eventscape.io/${hash}`);
+    }
+  };
+
   return (
     <div>
       <Prompt when={model.isUnsaved} message={handleBlockedNavigation} />
@@ -198,21 +215,13 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
                 Remove Eventscape Logo
               </button>
             ) : null}
-            <Link
-              style={{ display: "flex" }}
-              to={() =>
-                "/preview/" +
-                event.id +
-                "/" +
-                (page == pageNames.REGISTRATION
-                  ? event.RegPageModelId
-                  : event.EventPageModelId)
-              }
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <IconButton label="View as Guest" icon="visibility" />
-            </Link>
+
+            <IconButton
+              onClick={handleGoToSite}
+              label="View as Guest"
+              icon="visibility"
+            />
+
             <IconButton
               label="Edit Background"
               icon="background"
