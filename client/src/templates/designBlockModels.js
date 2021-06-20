@@ -431,7 +431,7 @@ export const sponsorGrid = (columns, rows, box) => {
   padding: calc(15px + 1.5vw);
   overflow: hidden;">
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-  <div class="block-container">
+  <div>
   <div>
   <!-- Header on top of line -->
 
@@ -506,7 +506,7 @@ export const speakerGrid = (columns, box) => {
   padding: calc(15px + 1.5vw);
   overflow: hidden;">
   <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-  <div class="block-container">
+  <div >
   <div>
   <!-- Header on top of line -->
 
