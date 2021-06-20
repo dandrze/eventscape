@@ -227,57 +227,59 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
               icon="background"
               onClick={handleClickEditBackground}
             />
-            <div style={{ display: "flex", position: "relative" }}>
-              <IconButton
-                label={
-                  <span
-                    style={{
-                      display: "flex",
-                      alignContent: "flex-end",
-                      justifyContent: "flex-end",
-                      alignItems: "flex-end",
-                    }}
-                  >
-                    <span>Advanced</span>
-                    <ExpandMoreIcon
-                      style={{ height: "18px", margin: "0px -8px 0px -4px" }}
+            {page === "event" && (
+              <div style={{ display: "flex", position: "relative" }}>
+                <IconButton
+                  label={
+                    <span
+                      style={{
+                        display: "flex",
+                        alignContent: "flex-end",
+                        justifyContent: "flex-end",
+                        alignItems: "flex-end",
+                      }}
+                    >
+                      <span>Advanced</span>
+                      <ExpandMoreIcon
+                        style={{ height: "18px", margin: "0px -8px 0px -4px" }}
+                      />
+                    </span>
+                  }
+                  icon="code"
+                  onClick={handleClickAdvanced}
+                />
+                {showAdvancedOptions ? (
+                  <>
+                    {/* The div below allows the user to click anywhere to hide the advanced options */}
+                    <div
+                      style={{
+                        position: "fixed",
+                        height: "100%",
+                        width: "100%",
+                        top: 0,
+                        left: 0,
+                        zIndex: 9999,
+                      }}
+                      onClick={() => setShowAdvancedOptions(false)}
                     />
-                  </span>
-                }
-                icon="code"
-                onClick={handleClickAdvanced}
-              />
-              {showAdvancedOptions ? (
-                <>
-                  {/* The div below allows the user to click anywhere to hide the advanced options */}
-                  <div
-                    style={{
-                      position: "fixed",
-                      height: "100%",
-                      width: "100%",
-                      top: 0,
-                      left: 0,
-                      zIndex: 9999,
-                    }}
-                    onClick={() => setShowAdvancedOptions(false)}
-                  />
-                  <div className="advanced-options-container">
-                    <Tooltip title="Use this function if you switch your stream, update page content, or need to force a refresh on your viewers page.">
-                      <div
-                        className="advanced-option"
-                        onClick={handleClickRefresh}
-                      >
-                        <IconButton
-                          label="Refresh Live Content"
-                          icon="refresh"
-                          horizontal
-                        />
-                      </div>
-                    </Tooltip>
-                  </div>
-                </>
-              ) : null}
-            </div>
+                    <div className="advanced-options-container">
+                      <Tooltip title="Use this function if you switch your stream, update page content, or need to force a refresh on your viewers page.">
+                        <div
+                          className="advanced-option"
+                          onClick={handleClickRefresh}
+                        >
+                          <IconButton
+                            label="Refresh Live Content"
+                            icon="refresh"
+                            horizontal
+                          />
+                        </div>
+                      </Tooltip>
+                    </div>
+                  </>
+                ) : null}
+              </div>
+            )}
           </div>
           {saveLoading ? (
             <div style={{ marginLeft: "auto", marginRight: "15px" }}>
