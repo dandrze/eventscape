@@ -295,7 +295,6 @@ const Published = (props) => {
             <BrandingTop />
           ) : null}
           <div className="section-container">
-            <div className="centering-spacer"></div>
             {props.model.sections.map(function (section) {
               return (
                 <div className="section-block">

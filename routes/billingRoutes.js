@@ -1,4 +1,5 @@
 const express = require("express");
+const md5 = require("md5");
 const router = express.Router();
 
 const requireAuth = require("../middlewares/requireAuth");
@@ -86,12 +87,24 @@ router.put("/api/billing/package", requireAuth, async (req, res, next) => {
       sendEmail({
         to: "kevin.richardson@eventscape.io",
         subject: "A user upgraded their event to premium",
-        html: `<p>Event Id ${eventId} has upgraded their package to premium. <br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
+        html: `<p>Event Id ${eventId} has upgraded their package to premium. <br/> User Email: ${
+          event.Owner.emailAddress
+        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+          event.title
+        } <br/> Event Link: ${event.link}.eventscape.io/${
+          event.registrationRequired ? md5(String(event.id)) : ""
+        } <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
       });
       sendEmail({
         to: "david.andrzejewski@eventscape.io",
         subject: "A user upgraded their event to premium",
-        html: `<p>Event Id ${eventId} has upgraded their package to premium. <br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
+        html: `<p>Event Id ${eventId} has upgraded their package to premium. <br/> User Email: ${
+          event.Owner.emailAddress
+        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+          event.title
+        } <br/> Event Link: ${event.link}.eventscape.io/${
+          event.registrationRequired ? md5(String(event.id)) : ""
+        } <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
       });
     }
 
@@ -105,12 +118,24 @@ router.put("/api/billing/package", requireAuth, async (req, res, next) => {
       sendEmail({
         to: "kevin.richardson@eventscape.io",
         subject: "A user downgraded their event to essentials",
-        html: `<p>Event Id ${eventId} has downgraded their package to essentials.<br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} `,
+        html: `<p>Event Id ${eventId} has downgraded their package to essentials.<br/> User Email: ${
+          event.Owner.emailAddress
+        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+          event.title
+        } <br/> Event Link: https://${event.link}.eventscape.io/${
+          event.registrationRequired ? md5(String(event.id)) : ""
+        } <br/> `,
       });
       sendEmail({
         to: "david.andrzejewski@eventscape.io",
         subject: "A user downgraded their event to essentials",
-        html: `<p>Event Id ${eventId} has downgraded their package to essentials.<br/> User Email: ${event.Owner.emailAddress} <br/> User Id: ${event.Owner.id} `,
+        html: `<p>Event Id ${eventId} has downgraded their package to essentials.<br/> User Email: ${
+          event.Owner.emailAddress
+        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+          event.title
+        } <br/> Event Link: https://${event.link}.eventscape.io/${
+          event.registrationRequired ? md5(String(event.id)) : ""
+        } <br/> `,
       });
     }
 
