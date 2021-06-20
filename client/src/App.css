@@ -1197,18 +1197,17 @@ select:focus {
 /* **************************** END CSS FOR DESIGN BLOCKS *******************************************/
 
 .section-container {
-  height: auto;
-  margin: 0px auto;
-  padding: 10px 0px 50px;
-  flex-grow: 1;
-}
-
-.section-container {
   z-index: 2;
+  min-height: calc(100vh - 56px);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .section-block {
-  margin: auto;
+  margin: 0px auto;
+  width: 100%;
 }
 
 .inner-section-block {
