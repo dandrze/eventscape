@@ -29,6 +29,7 @@
     "jstimezonedetect": "^1.0.7",
     "material-table": "^1.69.0",
     "material-ui-popup-state": "^1.6.1",
+    "md5": "^2.3.0",
     "moment-timezone": "^0.5.31",
     "node-sass": "^4.14.1",
     "npm": "^6.14.8",

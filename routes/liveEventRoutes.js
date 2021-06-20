@@ -13,27 +13,34 @@ router.get("/api/attendee/hash", async (req, res, next) => {
     var siteVisitors,
       activeDevices = [];
 
-    // if the hash is a testing hash, return a test attendee
-    if (hash === md5("tester")) {
+    // if the hash is a testing hash (hashed event id), return a test attendee
+    if (hash === md5(String(EventId))) {
       // there is a test registration associated with this hash. It isn't tied to a single event
-      registration = await Registration.findOne({ where: { hash } });
+      registration = {
+        isTestUser: true,
+        firstName: "Test",
+        lastName: "User",
+        emailAddress: "test@user.com",
+      };
+      // Set activeDevices to 0 so that it doesn't trigger a device limit block
+      activeDevices = 0;
     } else {
       // get the attendee information based on the hash
       registration = await Registration.findOne({ where: { hash, EventId } });
-    }
 
-    if (registration) {
-      siteVisitors = await SiteVisitor.findAll({
-        where: { RegistrationId: registration.id },
-        include: SiteVisit,
-      });
+      if (registration) {
+        siteVisitors = await SiteVisitor.findAll({
+          where: { RegistrationId: registration.id },
+          include: SiteVisit,
+        });
 
-      activeDevices = siteVisitors.filter(
-        (siteVisitor) =>
-          siteVisitor.SiteVisits.filter(
-            (siteVisit) => siteVisit.loggedOutAt === null
-          ).length > 0
-      );
+        activeDevices = siteVisitors.filter(
+          (siteVisitor) =>
+            siteVisitor.SiteVisits.filter(
+              (siteVisit) => siteVisit.loggedOutAt === null
+            ).length > 0
+        );
+      }
     }
 
     res.json({ registration, activeDevices });

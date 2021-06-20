@@ -6,6 +6,7 @@ import io from "socket.io-client";
 import { toast } from "react-toastify";
 import Tooltip from "@material-ui/core/Tooltip";
 import ExpandMoreIcon from "@material-ui/icons/ExpandMore";
+import md5 from "md5";
 
 import FoldingCube from "./FoldingCube";
 import "./pageEditor.css";
@@ -21,8 +22,6 @@ import IconButton from "./IconButton";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
-
-const TEST_USER_HASH = "f5d1278e8109edd94e1e4197e04873b9";
 
 let socket;
 
@@ -144,9 +143,13 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
   };
 
   const handleGoToSite = () => {
+    console.log(event.id);
+    console.log(md5(String(event.id)));
+    // the event page will need a registered user's hash to access.
+    // For testing purposes the md5 encryption of the event id will return a test user
     const hash =
       page === pageNames.EVENT && event.registrationRequired
-        ? TEST_USER_HASH
+        ? md5(String(event.id))
         : "";
     switch (process.env.NODE_ENV) {
       case "development":

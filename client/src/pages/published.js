@@ -61,6 +61,7 @@ const Published = (props) => {
         hash,
         event.id
       );
+
       if (registration && activeDevices) {
         attendeeId = registration.id;
 
