@@ -4,21 +4,20 @@ import { connect } from "react-redux";
 
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 
-import { ReactFormGenerator } from "../react-form-builder2/lib";
-import AlertModal from "../AlertModal";
+import { ReactFormGenerator } from "../../../react-form-builder2/lib";
+import AlertModal from "../../../AlertModal";
 import "./RegistrationForm.css";
-import api from "../../api/server";
-import * as actions from "../../actions";
-import Froala from "../froala";
+import api from "../../../../api/server";
+import * as actions from "../../../../actions";
+import Froala from "../../../froala";
 
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
-import CircularProgress from "@material-ui/core/CircularProgress";
-import Modal1 from "../Modal1";
-import FoldingCube from "../FoldingCube";
+import Modal1 from "../../../Modal1";
+import FoldingCube from "../../../FoldingCube";
 
-import { isValidEmailFormat } from "../../hooks/validation";
+import { isValidEmailFormat } from "../../../../hooks/validation";
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -245,7 +244,7 @@ function RegistrationForm({
             }}
           >
             {isLoading ? (
-              <CircularProgress className="margin-auto" />
+              <FoldingCube className="margin-auto" />
             ) : regComplete && !isManualEntry ? (
               <div className="margin-auto">
                 <p>Thank you for registering for {event.title}</p>
@@ -277,7 +276,7 @@ function RegistrationForm({
                     }}
                   >
                     Click the gears in the top left of the section to edit the
-                    registration form.
+                    registration form. test.
                   </div>
                 ) : null}
                 {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}

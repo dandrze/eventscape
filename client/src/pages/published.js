@@ -300,7 +300,10 @@ const Published = (props) => {
                 <div className="section-block">
                   {section.isReact ? (
                     createElement(
-                      mapReactComponent[section.reactComponent.name],
+                      mapReactComponent[section.reactComponent.name][
+                        section.reactComponent.version || "1.0"
+                      ],
+
                       {
                         ...section.reactComponent.props,
                         sectionIndex: section.index,

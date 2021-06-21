@@ -570,6 +570,7 @@ export const speakerGrid = (columns, box) => {
 
 export const streamChatReact = {
   name: "StreamChat",
+  version: "1.0",
   props: {
     content: null,
     link: "",
@@ -580,6 +581,7 @@ export const streamChatReact = {
 
 export const registrationFormReact = {
   name: "RegistrationForm",
+  version: "1.0",
   props: {},
 };
 

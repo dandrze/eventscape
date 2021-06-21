@@ -8,7 +8,7 @@ import NavBar3 from "../components/navBar3.js";
 import RegistrationTable2 from "../components/RegistrationTable2.js";
 import * as actions from "../actions";
 import FormBuilder from "../components/FormBuilder";
-import RegistrationForm from "../components/pageReactSections/RegistrationForm";
+import NewRegistration from "../components/NewRegistration";
 import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
@@ -155,7 +155,7 @@ const Registrations = (props) => {
           isEditRegistration ? "Edit Registration" : "Add New Registration"
         }
         content={
-          <RegistrationForm
+          <NewRegistration
             SubmitButtonText={isEditRegistration ? "Save" : "Submit"}
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}

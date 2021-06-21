@@ -1,10 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
-import "../fonts.css";
-import "../pageEditor.css";
-import "./stream-chat.css";
-import Chat from "../chat4.js";
+import "../../../fonts.css";
+import "../../../pageEditor.css";
+import "./StreamChat.css";
+import Chat from "../../../chat4.js";
 
 const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
   const createEmbedLink = (youtubeLink) => {

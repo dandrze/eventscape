@@ -1,4 +1,8 @@
-import StreamChat from "./pageReactSections/stream-chat";
-import RegistrationForm from "./pageReactSections/RegistrationForm";
+import StreamChat_1_0 from "./pageReactSections/streamChat/1.0/StreamChat";
+import RegistrationForm_1_0 from "./pageReactSections/registrationForm/1.0/RegistrationForm";
+import RegistrationForm_1_1 from "./pageReactSections/registrationForm/1.1/RegistrationForm";
 
-export default { StreamChat, RegistrationForm };
+export default {
+  StreamChat: { "1.0": StreamChat_1_0 },
+  RegistrationForm: { "1.0": RegistrationForm_1_0, 1.1: RegistrationForm_1_1 },
+};

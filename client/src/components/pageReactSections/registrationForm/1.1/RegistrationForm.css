@@ -1,0 +1,23 @@
+.reg-form {
+  padding: 25px;
+  width: 500px;
+  margin: auto;
+}
+
+.submitButton {
+  font-family: Helvetica, Arial, sans-serif;
+  font-weight: bold;
+  font-size: 14px;
+  color: white;
+  padding: 16px;
+  border-width: 0px;
+  border-radius: 6px;
+}
+
+.submitButton:hover {
+  opacity: 0.8;
+}
+
+.btn {
+  margin: auto;
+}

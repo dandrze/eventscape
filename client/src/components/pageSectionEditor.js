@@ -68,12 +68,17 @@ const PageSectionEditor = ({
           maxIndex={model.sections.length}
         />
         {section.isReact ? (
-          createElement(mapReactComponent[section.reactComponent.name], {
-            ...section.reactComponent.props,
-            sectionIndex: sectionIndex,
-            key: sectionIndex,
-            editMode: true,
-          })
+          createElement(
+            mapReactComponent[section.reactComponent.name][
+              section.reactComponent.version || "1.0"
+            ],
+            {
+              ...section.reactComponent.props,
+              sectionIndex: sectionIndex,
+              key: sectionIndex,
+              editMode: true,
+            }
+          )
         ) : (
           <Froala
             sectionIndex={sectionIndex}
