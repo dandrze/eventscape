@@ -143,8 +143,6 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
   };
 
   const handleGoToSite = () => {
-    console.log(event.id);
-    console.log(md5(String(event.id)));
     // the event page will need a registered user's hash to access.
     // For testing purposes the md5 encryption of the event id will return a test user
     const hash =
