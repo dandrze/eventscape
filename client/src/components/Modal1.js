@@ -95,7 +95,7 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
                     overflowX: "scroll",
                     maxHeight: "90vh",
                     maxWidth: "95vw",
-                    padding: "18px 60px",
+                    padding: "18px 60px 60px 60px",
                   }}
                 >
                   <div>
