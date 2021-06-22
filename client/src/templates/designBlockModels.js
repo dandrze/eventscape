@@ -47,7 +47,7 @@ export const logoTitleHeaderModel = (logo, eventTitle) => {
     : "https://eventscape-assets.s3.amazonaws.com/assets/Eventscape-your-logo-grey.png";
   return `
   <div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
-  <div style="padding: 10px;">
+  <div style="padding: 10px; ">
   <div id="title-logo-banner" style="background-position: bottom;
     background-size: cover;
     box-shadow: rgb(255, 255, 255, 0) 0px 0px 0px 5000px inset;

@@ -1203,6 +1203,8 @@ select:focus {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: 10px;
+  padding-bottom: 40px;
 }
 
 .section-block {
