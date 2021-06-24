@@ -246,6 +246,8 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     const _socket = io(ENDPOINT, {
       path: "/api/socket/chat",
       transports: ["websocket"],
+      // rejectUnauthorized for testing purposes only! Not to be deployed to prod!
+      rejectUnauthorized: false,
     });
 
     _socket.on("connect", () => {

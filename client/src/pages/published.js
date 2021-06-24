@@ -124,6 +124,8 @@ const Published = (props) => {
       socket = io(ENDPOINT, {
         path: "/api/socket/event",
         transports: ["websocket"],
+        // rejectUnauthorized for testing purposes only! Not to be deployed to prod!
+        rejectUnauthorized: false,
       });
 
       socket.io.on("reconnect", () => {
