@@ -290,6 +290,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
 
     _socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
+      console.log(err);
     });
 
     _socket.on("error", (error) => {
@@ -357,7 +358,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       setMessages([]);
     });
 
-    socket.on("disconnect", (reason) => {
+    _socket.on("disconnect", (reason) => {
       console.log("socket disconnected. reason: ");
       console.log(reason);
     });
