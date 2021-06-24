@@ -214,7 +214,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   const [chatReady, setChatReady] = useState(false);
   const [chatTabEnabled, setChatTabEnabled] = useState(false);
   const [questionsTabEnabled, setQuestionsTabEnabled] = useState(false);
-  const [reconnect, setReconnect] = useState(false);
+  const [reconnect, setReconnect] = useState(0);
   const [isInitialConnect, setIsInitialConnect] = useState(true);
   const [socket, setSocket] = useState(null);
   const connectRef = useRef();
@@ -291,7 +291,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     _socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
       console.log(err);
-      setForceRefresh((forceRefresh) => forceRefresh + 1);
+      setReconnect((reconnect) => reconnect + 1);
     });
 
     _socket.on("error", (error) => {
