@@ -246,8 +246,6 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     const _socket = io(ENDPOINT, {
       path: "/api/socket/chat",
       transports: ["websocket"],
-      // rejectUnauthorized for testing purposes only! Not to be deployed to prod!
-      rejectUnauthorized: false,
     });
 
     _socket.on("connect", () => {
@@ -359,8 +357,9 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       setMessages([]);
     });
 
-    _socket.on("disconnect", function () {
-      console.log("socket disconnected", _socket);
+    socket.on("disconnect", (reason) => {
+      console.log("socket disconnected. reason: ");
+      console.log(reason);
     });
 
     setSocket(_socket);

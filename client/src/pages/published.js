@@ -124,8 +124,6 @@ const Published = (props) => {
       socket = io(ENDPOINT, {
         path: "/api/socket/event",
         transports: ["websocket"],
-        // rejectUnauthorized for testing purposes only! Not to be deployed to prod!
-        rejectUnauthorized: false,
       });
 
       socket.io.on("reconnect", () => {
@@ -165,6 +163,11 @@ const Published = (props) => {
 
       socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);
+      });
+
+      socket.on("disconnect", (reason) => {
+        console.log("socket disconnected. reason: ");
+        console.log(reason);
       });
 
       socket.emit("join", {
