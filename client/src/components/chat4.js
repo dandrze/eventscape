@@ -291,6 +291,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     _socket.on("connect_error", (err) => {
       console.log(`connect_error due to ${err.message}`);
       console.log(err);
+      setForceRefresh((forceRefresh) => forceRefresh + 1);
     });
 
     _socket.on("error", (error) => {
