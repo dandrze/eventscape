@@ -1,27 +1,28 @@
 import React from "react";
-import { Link } from "react-router-dom";
 
 import FoldingCube from "./FoldingCube";
 
 import SimpleNavBar from "./simpleNavBar";
 
-export default () => {
+export default (props) => {
+  const handleGoHome = (event) => {
+    event.preventDefault();
+    window.location.replace("/");
+  };
   return (
     <SimpleNavBar
       content={
         <div className="form-box shadow-border">
-          <p>Oops there was an error.</p>
+          <p>Something went wrong...</p>
           <p>Let's get you back home.</p>
-          <Link
-            to={{
-              pathname: "/",
-              key: Math.random() /*a unique key forces a refresh even if the user is currently on the target pathname*/,
-            }}
+
+          <button
+            onClick={handleGoHome}
+            className="Button1"
+            style={{ margin: "auto" }}
           >
-            <button className="Button1" style={{ margin: "auto" }}>
-              Back to home
-            </button>
-          </Link>
+            Back to home
+          </button>
         </div>
       }
     />
