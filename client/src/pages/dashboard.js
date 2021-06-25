@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import FileCopy from "@material-ui/icons/FileCopy";
+import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -89,15 +90,19 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                 />
                 <span className={classes.paragraphText}>{event.status}</span>
 
-                <FileCopy
-                  className="color-on-hover"
-                  style={{ marginLeft: "24px", cursor: "pointer" }}
-                  onClick={copyLink}
-                />
+                <a
+                  href={`https://${event.link}.eventscape.io/`}
+                  target="_blank"
+                >
+                  <ExitToAppIcon
+                    className="color-on-hover"
+                    style={{ marginLeft: "24px", cursor: "pointer" }}
+                  />
 
-                <span
-                  style={{ marginLeft: "6px", fontSize: "1rem" }}
-                >{`https://${event.link}.eventscape.io/`}</span>
+                  <span
+                    style={{ marginLeft: "6px", fontSize: "1rem" }}
+                  >{`https://${event.link}.eventscape.io/`}</span>
+                </a>
               </div>
               <div style={{ display: "flex", margin: "1rem 0px" }}>
                 <div className={"shadow-border " + classes.halfCard}>
