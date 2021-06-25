@@ -1,4 +1,4 @@
-.headerContainer {
+.giller-headerContainer {
   width: 100%;
   background-color: white;
   overflow: hidden;
@@ -9,13 +9,13 @@
   padding: 0;
 }
 
-.logo {
+.giller-logo {
   height: 90px;
   margin: 10px 25px;
   float: left;
 }
 
-.mainContainer {
+.giller-mainContainer {
   background-color: #000000;
   width: 100%;
   padding: 0;
@@ -27,23 +27,33 @@
   left: 0;
 }
 
-.videoContainer {
+.giller-videoContainer {
   margin: 70px 10% 20px 10%;
 }
 
-.selectContainer {
+.giller-video-responsive {
+  width: 100%;
+  height: 100%;
+}
+
+#giller-video-responsive-iframe {
+  width: 100%;
+  height: 100%;
+}
+
+.giller-selectContainer {
   position: relative;
   float: left;
   margin-top: 10px;
   margin-bottom: 10px;
 }
 
-#caption-select {
+#giller-caption-select {
   text-align: left;
   color: white;
 }
 
-#caption-label {
+#giller-caption-label {
   /* fixing flawed material UI CSS */
   padding-left: 6px;
   padding-right: 6px;
@@ -51,16 +61,16 @@
   background-color: #000000;
 }
 
-#paragraph {
+#giller-paragraph {
   display: inline-block;
   color: white;
   text-align: justify;
   font-family: PTSansRegular, Arial, Helvetica, sans-serif;
   font-size: 18px;
-  margin-top: 20px;
+  margin-top: 40px;
 }
 
-.scotia-logo {
+.giller-scotia-logo {
   width: 90%;
   max-width: 350px;
   float: left;

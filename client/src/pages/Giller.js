@@ -22,15 +22,15 @@ function Giller(props) {
       </Helmet>
       <Favicon url={SGPfavicon} />
 
-      <div className="headerContainer">
-        <img src={SGPlogo} className="logo"></img>
+      <div className="giller-headerContainer">
+        <img src={SGPlogo} className="giller-logo"></img>
       </div>
 
-      <div className="mainContainer">
-        <div className="videoContainer">
-          <div className="video-responsive">
+      <div className="giller-mainContainer">
+        <div className="giller-videoContainer">
+          <div className="giller-video-responsive">
             <iframe
-              className="video-responsive-iframe"
+              id="giller-video-responsive-iframe"
               src="https://www.youtube.com/embed/fhnQ-mBfgT0?modestbranding=1;showinfo=0;rel=0"
               frameBorder="0"
               allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
@@ -38,7 +38,7 @@ function Giller(props) {
             ></iframe>
           </div>
 
-          <div id="paragraph">
+          <div id="giller-paragraph">
             <p>
               Hosted by Jael Richardson, Between the Pages: An Evening with the
               Scotiabank Giller Prize Finalists will be an hour of readings,
@@ -47,7 +47,7 @@ function Giller(props) {
             </p>
             <p>Presented by</p>
           </div>
-          <img src={ScotiaLogo} className="scotia-logo"></img>
+          <img src={ScotiaLogo} className="giller-scotia-logo"></img>
         </div>
       </div>
     </div>
