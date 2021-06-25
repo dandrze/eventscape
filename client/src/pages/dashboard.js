@@ -1,15 +1,12 @@
-import React, { useEffect, useState, forwardRef } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-import { toast } from "react-toastify";
-import FileCopy from "@material-ui/icons/FileCopy";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
 
 import NavBar3 from "../components/navBar3.js";
 import * as actions from "../actions";
-import { Divider } from "@material-ui/core";
 
 import { statusOptions } from "../model/enums";
 
@@ -47,14 +44,6 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
     if (event.id) {
       fetchRegistrations(event.id);
     }
-  };
-
-  const copyLink = () => {
-    navigator.clipboard.writeText(`https://${event.link}.eventscape.io/`);
-    toast.success("Event link copied to clipboard!", {
-      autoClose: 1500,
-      pauseOnHover: false,
-    });
   };
 
   return (
