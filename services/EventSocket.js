@@ -59,11 +59,15 @@ module.exports = (server) => {
       if (uuid) {
         try {
           const siteVisitor = await SiteVisitor.findOne({ where: { uuid } });
-          const siteVisit = await SiteVisit.findOne({
-            where: { SiteVisitorId: siteVisitor.id },
-          });
-          socket.visitId = siteVisit.id;
-          socket.visitorId = siteVisitor.id;
+          if (siteVisitor) {
+            const siteVisit = await SiteVisit.findOne({
+              where: { SiteVisitorId: siteVisitor.id },
+            });
+            if (siteVisit) {
+              socket.visitId = siteVisit.id;
+              socket.visitorId = siteVisitor.id;
+            }
+          }
         } catch {
           console.log("Site visitor doesn't exist");
         }
@@ -122,8 +126,6 @@ module.exports = (server) => {
       const siteVisit = await SiteVisit.findByPk(socket.visitId, {
         include: SiteVisitor,
       });
-
-      console.log({ siteVisit, socketId: socket.visitId });
 
       if (siteVisit) {
         siteVisit.loggedOutAt = new Date();
