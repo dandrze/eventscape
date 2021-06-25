@@ -164,6 +164,7 @@ const Input = ({ setMessage, sendMessage, message, theme, chatReady }) => (
   <form className="chat-input-container">
     <input
       className="chat-input width-80"
+      id="chatbox-text-input"
       type="text"
       placeholder="Type a message..."
       value={message}
