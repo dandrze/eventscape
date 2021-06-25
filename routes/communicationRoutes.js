@@ -25,14 +25,8 @@ router.get("/api/communication/all", requireAuth, async (req, res, next) => {
 
 router.post("/api/communication", requireAuth, async (req, res, next) => {
   const { EventId, email } = req.body;
-  const {
-    recipients,
-    status,
-    subject,
-    minutesFromEvent,
-    html,
-    emailList,
-  } = email;
+  const { recipients, status, subject, minutesFromEvent, html, emailList } =
+    email;
 
   try {
     const communication = await Communication.create({
@@ -170,7 +164,7 @@ router.post("/api/communication/test", requireAuth, async (req, res, next) => {
     firstName,
     lastName,
     emailAddress,
-    hash: md5("tester"),
+    hash: md5(String(EventId)),
   };
 
   // pull all relevant data to map to variables and put them into a list
