@@ -119,7 +119,8 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
       "imageAlt",
       "imageSize",
     ],
-    key: "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
+    key:
+      "gVG3C-8D1F1B4D5A3C1ud1BI1IMNBUMRWAi1AYMSTRBUZYB-16D4E3D2B2C3H2C1B10D3B1==",
     imageUploadToS3: settings.s3Hash,
     //pluginsEnabled: ["image", "link", "draggable", ""],
     dragInline: false,
