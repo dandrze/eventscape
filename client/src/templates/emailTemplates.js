@@ -70,7 +70,6 @@ export const registrationConfirmation = {
 					border-color: {primary_color};
 					border-style: solid;
 					height: min-content;
-					cursor: pointer;
 					text-align: left;">Join Now</button></a></div>
 				<br>
 				<div style="text-align: left, font-size: 10px;">Or click {event_link}</div>
@@ -139,7 +138,6 @@ export const reminderOneDay = {
 					border-color: {primary_color};
 					border-style: solid;
 					height: min-content;
-					cursor: pointer;
 					text-align: left;">Join Now</button></a></div>
 				<br>
 				<div style="text-align: left, font-size: 10px;">Or click {event_link}</div>
@@ -208,7 +206,6 @@ border-radius: 6px;
 border-color: {primary_color};
 border-style: solid;
 height: min-content;
-cursor: pointer;
 text-align: left;">Join Now</button></a></div>
 <br>
 <div style="text-align: left, font-size: 10px;">Or click {event_link}</div>
