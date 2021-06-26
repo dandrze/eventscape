@@ -10,7 +10,13 @@ module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/event",
     cors: {
-      origin: "http://2rfr.localhost:3000",
+      origin: [
+        "http://app.localhost:3000",
+        "http://test.localhost:3000",
+        "http://test1.localhost:3000",
+        "http://test2.localhost:3000",
+        "http://test3.localhost:3000",
+      ],
       methods: ["GET", "POST"],
       credentials: true,
     },
