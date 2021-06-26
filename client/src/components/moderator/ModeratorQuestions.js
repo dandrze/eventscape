@@ -82,6 +82,7 @@ const ModeratorQuestions = ({ room, userId }) => {
     socket = io(ENDPOINT, {
       path: "/api/socket/chat",
       transports: ["websocket"],
+      rejectUnauthorized: false,
     });
     socket.on("connect", () => {
       console.log(socket.id);

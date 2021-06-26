@@ -247,6 +247,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     const _socket = io(ENDPOINT, {
       path: "/api/socket/chat",
       transports: ["websocket"],
+      rejectUnauthorized: false,
     });
 
     _socket.on("connect", () => {

@@ -124,6 +124,7 @@ const Published = (props) => {
       socket = io(ENDPOINT, {
         path: "/api/socket/event",
         transports: ["websocket"],
+        rejectUnauthorized: false,
       });
 
       socket.io.on("reconnect", () => {

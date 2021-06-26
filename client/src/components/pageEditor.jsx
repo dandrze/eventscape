@@ -47,6 +47,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
     socket = io(ENDPOINT, {
       path: "/api/socket/event",
       transports: ["websocket"],
+      rejectUnauthorized: false,
     });
 
     socket.emit("join", {
