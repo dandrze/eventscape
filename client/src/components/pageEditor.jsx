@@ -47,6 +47,8 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
     socket = io(ENDPOINT, {
       path: "/api/socket/event",
       transports: ["polling"],
+      withCredentials: true,
+      rejectUnauthorized: false,
     });
 
     socket.emit("join", {

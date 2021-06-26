@@ -22,8 +22,9 @@ module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/chat",
     cors: {
-      origin: "*",
+      origin: "http://2rfr.localhost:3000",
       methods: ["GET", "POST"],
+      credentials: true,
     },
     transports: ["polling"],
     upgrade: false,
