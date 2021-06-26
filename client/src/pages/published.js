@@ -124,8 +124,6 @@ const Published = (props) => {
       socket = io(ENDPOINT, {
         path: "/api/socket/event",
         transports: ["polling"],
-        withCredentials: true,
-        rejectUnauthorized: false,
       });
 
       socket.io.on("reconnect", () => {

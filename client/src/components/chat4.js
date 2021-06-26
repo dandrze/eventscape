@@ -247,8 +247,6 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     const _socket = io(ENDPOINT, {
       path: "/api/socket/chat",
       transports: ["polling"],
-      withCredentials: true,
-      rejectUnauthorized: false,
     });
 
     _socket.on("connect", () => {

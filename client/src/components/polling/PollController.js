@@ -51,8 +51,6 @@ const PollController = ({
     socket = io(ENDPOINT, {
       path: "/api/socket/event",
       transports: ["polling"],
-      withCredentials: true,
-      rejectUnauthorized: false,
     });
 
     socket.on("connect", () => {

@@ -12,7 +12,6 @@ module.exports = (server) => {
     cors: {
       origin: "*",
       methods: ["GET", "POST"],
-      credentials: true,
     },
     transports: ["polling"],
     upgrade: false,
