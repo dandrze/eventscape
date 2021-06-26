@@ -123,7 +123,7 @@ const Published = (props) => {
     if (pageType == pageNames.EVENT) {
       socket = io(ENDPOINT, {
         path: "/api/socket/event",
-        transports: ["polling"],
+        transports: ["websocket"],
       });
 
       socket.io.on("reconnect", () => {

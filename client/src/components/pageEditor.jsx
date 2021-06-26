@@ -46,14 +46,14 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
   useEffect(() => {
     socket = io(ENDPOINT, {
       path: "/api/socket/event",
-      transports: ["polling"],
+      transports: ["websocket"],
     });
 
     socket.emit("join", {
       EventId: event.id,
       isModerator: true,
     });
-  }, []);
+  });
 
   const showNavAlert = (nextLocation) => {
     setOpen(true);
