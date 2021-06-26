@@ -1,4 +1,7 @@
 var socketIo = require("socket.io");
+const { createAdapter } = require("@socket.io/cluster-adapter");
+const { setupWorker } = require("@socket.io/sticky");
+
 const redisAdapter = require("./socketioRedisAdapter");
 
 const {
@@ -22,10 +25,16 @@ module.exports = (server) => {
       origin: "*",
       methods: ["GET", "POST"],
     },
-    transports: ["websocket"],
+    transports: ["polling"],
+    upgrade: false,
   });
 
+  // adapter for redis for sync across servers (dynos)
   io.adapter(redisAdapter);
+
+  // adapter for sticky sessions across PM2 nodes in a single server (only required for long polling)
+  io.adapter(createAdapter());
+  setupWorker(io);
 
   io.on("connection", function (socket) {
     socket.on(

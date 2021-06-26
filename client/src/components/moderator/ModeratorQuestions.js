@@ -81,7 +81,7 @@ const ModeratorQuestions = ({ room, userId }) => {
   useEffect(() => {
     socket = io(ENDPOINT, {
       path: "/api/socket/chat",
-      transports: ["websocket"],
+      transports: ["polling"],
     });
     socket.on("connect", () => {
       console.log(socket.id);

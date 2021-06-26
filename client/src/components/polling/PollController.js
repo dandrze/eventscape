@@ -50,7 +50,7 @@ const PollController = ({
   useEffect(() => {
     socket = io(ENDPOINT, {
       path: "/api/socket/event",
-      transports: ["websocket"],
+      transports: ["polling"],
     });
 
     socket.on("connect", () => {
