@@ -164,7 +164,6 @@ const Published = (props) => {
       socket.on("connect_error", (err) => {
         console.log(`connect_error due to ${err.message}`);
         console.log(err);
-        setForceRefresh((forceRefresh) => forceRefresh + 1);
       });
 
       socket.on("disconnect", (reason) => {
