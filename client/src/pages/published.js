@@ -21,6 +21,7 @@ import PollBlock from "../components/polling/PollBlock";
 import ResultsChart from "../components/polling/ResultsChart";
 import AlertModal from "../components/AlertModal";
 import SimpleLoadingScreen from "../components/SimpleLoadingScreen";
+import DemoOnlyMessage from "../components/DemoOnlyMessage";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -332,6 +333,7 @@ const Published = (props) => {
             })}
           </div>
           <BrandingBottom />
+          <DemoOnlyMessage />
         </div>
       </div>
     );
