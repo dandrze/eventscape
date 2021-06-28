@@ -246,7 +246,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   useEffect(() => {
     const _socket = io(ENDPOINT, {
       path: "/api/socket/chat",
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
       rejectUnauthorized: false,
     });
 
