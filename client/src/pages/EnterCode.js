@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme) => ({
 const EnterCode = ({ signInWithCode, location, history }) => {
   const [error, setError] = useState("");
   const emailAddress = location.state ? location.state.emailAddress : null;
-  const [code, setCode] = useState(null);
+  const [entryCode, setEntryCode] = useState("");
   const classes = useStyles();
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -30,7 +30,7 @@ const EnterCode = ({ signInWithCode, location, history }) => {
   const isNewUser = location.state ? location.state.isNewUser : null;
 
   const verifyCode = async () => {
-    const auth = await signInWithCode(emailAddress, code);
+    const auth = await signInWithCode(emailAddress, entryCode);
 
     if (auth.success) {
       if (isNewUser) {
@@ -49,7 +49,9 @@ const EnterCode = ({ signInWithCode, location, history }) => {
   };
 
   const handleChangeCode = (event) => {
-    if (event.target.value.length <= 6) setCode(event.target.value);
+    if (!isNaN(event.target.value) && event.target.value.length <= 6) {
+      setEntryCode(event.target.value);
+    }
   };
 
   return (
@@ -69,7 +71,7 @@ const EnterCode = ({ signInWithCode, location, history }) => {
                   id="code"
                   label="6 Digit Code"
                   variant="outlined"
-                  value={code}
+                  value={entryCode}
                   onChange={handleChangeCode}
                   onKeyPress={handleKeypressSubmit}
                   helperText={error}
