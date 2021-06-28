@@ -46,7 +46,8 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
   useEffect(() => {
     socket = io(ENDPOINT, {
       path: "/api/socket/event",
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
+      rejectUnauthorized: false,
     });
 
     socket.emit("join", {

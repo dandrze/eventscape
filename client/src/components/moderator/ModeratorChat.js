@@ -126,7 +126,8 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
   useEffect(() => {
     const _socket = io(ENDPOINT, {
       path: "/api/socket/chat",
-      transports: ["websocket"],
+      transports: ["websocket", "polling"],
+      rejectUnauthorized: false,
     });
 
     _socket.on("connect", () => {

@@ -7,13 +7,12 @@ const { SiteVisit, SiteVisitor, PollResponse, Poll, PollOption } =
 module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/event",
-    cors: {
-      origin: "*",
-      methods: ["GET", "POST"],
-    },
-    transports: ["websocket"],
+    cors: true,
+    transports: ["websocket", "polling"],
+    upgrade: true,
   });
 
+  // Redis adapter for multi server
   io.adapter(redisAdapter);
 
   io.on("connection", (socket) => {
