@@ -18,9 +18,15 @@ const { clearCache } = require("../services/sequelizeRedis");
 module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/chat",
-    cors: true,
-    transports: ["websocket", "polling"],
+    cors: {
+      origin: ["http://test1.localhost:3000/", "http://app.localhost:3000/"],
+      methods: ["GET", "POST"],
+      credentials: true,
+      transports: ["websocket", "polling"],
+    },
     upgrade: true,
+    pingTimeout: 30000,
+    allowEIO3: true,
   });
 
   // Redis adapter for multi server

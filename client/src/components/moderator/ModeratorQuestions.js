@@ -83,6 +83,8 @@ const ModeratorQuestions = ({ room, userId }) => {
       path: "/api/socket/chat",
       transports: ["websocket", "polling"],
       rejectUnauthorized: false,
+            withCredentials: true,
+
     });
     socket.on("connect", () => {
       console.log(socket.id);

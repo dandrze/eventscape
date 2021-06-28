@@ -248,6 +248,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
       path: "/api/socket/chat",
       transports: ["websocket", "polling"],
       rejectUnauthorized: false,
+      withCredentials: true,
     });
 
     _socket.on("connect", () => {
@@ -296,10 +297,9 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     });
 
     _socket.on("error", (error) => {
-      setMessages((messages) => [
-        ...messages,
-        { text: error, isNotification: true },
-      ]);
+      console.log(error);
+      console.log(error.data);
+      console.log(error.message);
     });
 
     _socket.on("message", (message) => {
@@ -363,6 +363,8 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
     _socket.on("disconnect", (reason) => {
       console.log("socket disconnected. reason: ");
       console.log(reason);
+      console.log(reason.message);
+      console.log(reason.data);
     });
 
     setSocket(_socket);

@@ -125,6 +125,7 @@ const Published = (props) => {
         path: "/api/socket/event",
         transports: ["websocket", "polling"],
         rejectUnauthorized: false,
+        withCredentials: true,
       });
 
       socket.io.on("reconnect", () => {

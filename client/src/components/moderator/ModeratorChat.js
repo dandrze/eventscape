@@ -128,6 +128,7 @@ const ModeratorChat = forwardRef(({ room, userId }, ref) => {
       path: "/api/socket/chat",
       transports: ["websocket", "polling"],
       rejectUnauthorized: false,
+      withCredentials: true,
     });
 
     _socket.on("connect", () => {

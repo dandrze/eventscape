@@ -52,6 +52,7 @@ const PollController = ({
       path: "/api/socket/event",
       transports: ["websocket", "polling"],
       rejectUnauthorized: false,
+      withCredentials: true,
     });
 
     socket.on("connect", () => {

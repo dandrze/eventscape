@@ -48,6 +48,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
       path: "/api/socket/event",
       transports: ["websocket", "polling"],
       rejectUnauthorized: false,
+      withCredentials: true,
     });
 
     socket.emit("join", {
