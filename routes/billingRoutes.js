@@ -101,7 +101,7 @@ router.delete("/api/billing/license", requireAuth, async (req, res, next) => {
     event.status = statusOptions.DRAFT;
     await event.save();
 
-    /*  sendEmail({
+    sendEmail({
       to: "kevin@eventscape.io",
       subject: "A user removed their event license",
       html: `<p>Event Id ${eventId} has downgraded their license to demo only.<br/> User Email: ${
@@ -122,7 +122,7 @@ router.delete("/api/billing/license", requireAuth, async (req, res, next) => {
       } <br/> Event Link: https://${event.link}.eventscape.io/${
         event.registrationRequired ? md5(String(event.id)) : ""
       } <br/> `,
-    }); */
+    });
 
     // Clear the cached event which has a license in it
     clearCache(`Event:link:${event.link}`);
