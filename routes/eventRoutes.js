@@ -452,7 +452,7 @@ router.get("/api/event/link", async (req, res, next) => {
     const [event, eventCacheHit] = await EventCached.findOneCached(
       eventCacheKey,
       {
-        where: { link, status: statusOptions.ACTIVE },
+        where: { link },
         include: License,
       }
     );
