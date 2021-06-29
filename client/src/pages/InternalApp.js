@@ -12,7 +12,7 @@ import Communication from "./communication";
 import Registrations from "./registrations";
 import Analytics from "./analytics";
 import Messaging from "./messaging";
-import Package from "./package";
+import License from "./license";
 import Preview from "./preview";
 import EventDetailsPage from "./EventDetailsPage";
 import AccountSettingsContact from "./account-settings-contact";
@@ -106,7 +106,7 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
             path="/messaging"
             render={() => requireEvent(Messaging)}
           />
-          <Route exact path="/package" render={() => requireEvent(Package)} />
+          <Route exact path="/license" render={() => requireEvent(License)} />
           <Route
             exact
             path="/preview/:event/:model"

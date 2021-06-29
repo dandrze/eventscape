@@ -121,7 +121,6 @@ const Analytics = (props) => {
                     <WorldMap
                       data={mapData}
                       className="margin-auto"
-                      disabled={props.event.package.PackageType.type === "free"}
                     />
                   ) : null}
                 </div>

@@ -120,7 +120,6 @@ export const fetchEvent = () => async (dispatch, getState) => {
         payload: {
           ...event.data,
           permissions: currentUserPermissions[0],
-          package: event.data.package,
         },
       });
       return event;

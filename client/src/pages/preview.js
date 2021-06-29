@@ -35,9 +35,6 @@ const Preview = (props) => {
         }}
       ></div>
       <div className="fr-view live-page-container">
-        {props.event.package.PackageType.type === "free" ? (
-          <BrandingTop />
-        ) : null}
         <div className="section-container">
           <div className="centering-spacer"></div>
           {props.model.sections.map(function (section) {

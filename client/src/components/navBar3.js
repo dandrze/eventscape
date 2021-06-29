@@ -775,20 +775,20 @@ function NavBar3(props) {
               </Link>
             ) : null}
             {props.event.permissions?.role === "owner" ? (
-              <Link to="/package">
+              <Link to="/license">
                 <ListItem
                   button
-                  key="package"
+                  key="license"
                   className={clsx({
-                    [classes.highlight]: highlight === "package",
+                    [classes.highlight]: highlight === "license",
                   })}
                 >
-                  <Tooltip title="Package">
+                  <Tooltip title="License">
                     <ListItemIcon>
                       <img src={InvoiceIcon} height="20px"></img>
                     </ListItemIcon>
                   </Tooltip>
-                  <ListItemText primary="Package" />
+                  <ListItemText primary="License" />
                 </ListItem>
               </Link>
             ) : null}

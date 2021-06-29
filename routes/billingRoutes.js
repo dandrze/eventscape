@@ -4,144 +4,115 @@ const router = express.Router();
 
 const requireAuth = require("../middlewares/requireAuth");
 
-const {
-  Invoice,
-  InvoiceLineItem,
-  Package,
-  PackageType,
-  CustomLineItem,
-  Event,
-  Account,
-} = require("../db").models;
+const { Invoice, InvoiceLineItem, License, CustomLineItem, Event, Account } =
+  require("../db").models;
 
 const { sendEmail } = require("../services/Mailer");
+const { clearCache } = require("../services/sequelizeRedis");
 
-router.get("/api/billing/invoice", requireAuth, async (req, res, next) => {
+router.get("/api/billing/license", requireAuth, async (req, res, next) => {
   const { eventId } = req.query;
 
   try {
-    const invoice = await Invoice.findOne({
+    const license = await License.findOne({
       where: { EventId: eventId },
-      include: [
-        {
-          model: InvoiceLineItem,
-          include: [{ model: Package, include: PackageType }, CustomLineItem],
-        },
-      ],
     });
 
-    res.json(invoice);
+    res.json(license);
   } catch (error) {
     next(error);
   }
 });
 
-// public route
-router.get("/api/billing/pricing", async (req, res, next) => {
-  try {
-    const packageTypes = await PackageType.findAll();
-
-    res.json(packageTypes);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.get("/api/billing/package", requireAuth, async (req, res, next) => {
-  const { eventId } = req.query;
+router.post("/api/billing/license", requireAuth, async (req, res, next) => {
+  const { eventId, type, includeCDN } = req.body;
 
   try {
-    const package = await Package.findOne({
-      where: { EventId: eventId },
-      include: PackageType,
+    const license = await License.create({
+      EventId: eventId,
+      type,
+      includeCDN,
     });
 
-    res.json(package);
-  } catch (error) {
-    next(error);
-  }
-});
-
-router.put("/api/billing/package", requireAuth, async (req, res, next) => {
-  const { packageId, viewers, streamingTime, isUpgrade, isCancel, eventId } =
-    req.body;
-
-  try {
-    const package = await Package.findByPk(packageId);
     const event = await Event.findOne({
       where: { id: eventId },
       include: "Owner",
     });
 
-    package.viewers = viewers;
-    package.streamingTime = streamingTime;
+    sendEmail({
+      to: "kevin@eventscape.io",
+      subject: "A user added a license",
+      html: `<p>Event Id ${eventId} has upgraded to a license. <br/> User Email: ${
+        event.Owner.emailAddress
+      } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+        event.title
+      } <br/> Event Link: ${event.link}.eventscape.io/${
+        event.registrationRequired ? md5(String(event.id)) : ""
+      } <br/> Event Type: ${type}
+        <br/> Includes CDN: ${includeCDN}`,
+    });
+    sendEmail({
+      to: "david@eventscape.io",
+      subject: "A user added a license",
+      html: `<p>Event Id ${eventId} has upgraded to a license. <br/> User Email: ${
+        event.Owner.emailAddress
+      } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+        event.title
+      } <br/> Event Link: ${event.link}.eventscape.io/${
+        event.registrationRequired ? md5(String(event.id)) : ""
+      } <br/> Event Type: ${type}
+        <br/> Includes CDN: ${includeCDN}`,
+    });
 
-    if (isUpgrade) {
-      const paidPackage = await PackageType.findOne({
-        where: { type: "paid" },
-      });
+    // Clear the cache which has the old event data without a license
+    clearCache(`Event:link:${event.link}`);
 
-      // point the package to the new paid package
-      package.PackageTypeId = paidPackage.id;
+    res.json(license);
+  } catch (error) {
+    next(error);
+  }
+});
 
-      sendEmail({
-        to: "kevin.richardson@eventscape.io",
-        subject: "A user upgraded their event to premium",
-        html: `<p>Event Id ${eventId} has upgraded their package to premium. <br/> User Email: ${
-          event.Owner.emailAddress
-        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
-          event.title
-        } <br/> Event Link: ${event.link}.eventscape.io/${
-          event.registrationRequired ? md5(String(event.id)) : ""
-        } <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
-      });
-      sendEmail({
-        to: "david.andrzejewski@eventscape.io",
-        subject: "A user upgraded their event to premium",
-        html: `<p>Event Id ${eventId} has upgraded their package to premium. <br/> User Email: ${
-          event.Owner.emailAddress
-        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
-          event.title
-        } <br/> Event Link: ${event.link}.eventscape.io/${
-          event.registrationRequired ? md5(String(event.id)) : ""
-        } <br/> Viewers: ${viewers} <br/> Streaming Hours: ${streamingTime}</p>`,
-      });
-    }
+router.delete("/api/billing/license", requireAuth, async (req, res, next) => {
+  const { eventId } = req.query;
 
-    if (isCancel) {
-      const freePackage = await PackageType.findOne({
-        where: { type: "free" },
-      });
+  try {
+    const license = await License.findOne({ where: { EventId: eventId } });
 
-      package.PackageTypeId = freePackage.id;
+    await license.destroy();
 
-      sendEmail({
-        to: "kevin.richardson@eventscape.io",
-        subject: "A user downgraded their event to essentials",
-        html: `<p>Event Id ${eventId} has downgraded their package to essentials.<br/> User Email: ${
-          event.Owner.emailAddress
-        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
-          event.title
-        } <br/> Event Link: https://${event.link}.eventscape.io/${
-          event.registrationRequired ? md5(String(event.id)) : ""
-        } <br/> `,
-      });
-      sendEmail({
-        to: "david.andrzejewski@eventscape.io",
-        subject: "A user downgraded their event to essentials",
-        html: `<p>Event Id ${eventId} has downgraded their package to essentials.<br/> User Email: ${
-          event.Owner.emailAddress
-        } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
-          event.title
-        } <br/> Event Link: https://${event.link}.eventscape.io/${
-          event.registrationRequired ? md5(String(event.id)) : ""
-        } <br/> `,
-      });
-    }
+    const event = await Event.findOne({
+      where: { id: eventId },
+      include: "Owner",
+    });
 
-    const savedPackage = await package.save();
+    sendEmail({
+      to: "kevin@eventscape.io",
+      subject: "A user removed their event license",
+      html: `<p>Event Id ${eventId} has downgraded their license to demo only.<br/> User Email: ${
+        event.Owner.emailAddress
+      } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+        event.title
+      } <br/> Event Link: https://${event.link}.eventscape.io/${
+        event.registrationRequired ? md5(String(event.id)) : ""
+      } <br/> `,
+    });
+    sendEmail({
+      to: "david@eventscape.io",
+      subject: "A user removed their event license",
+      html: `<p>Event Id ${eventId} has downgraded their license to demo only.<br/> User Email: ${
+        event.Owner.emailAddress
+      } <br/> User Id: ${event.Owner.id} <br/> Event Name: ${
+        event.title
+      } <br/> Event Link: https://${event.link}.eventscape.io/${
+        event.registrationRequired ? md5(String(event.id)) : ""
+      } <br/> `,
+    });
 
-    res.json(savedPackage);
+    // Clear the cached event which has a license in it
+    clearCache(`Event:link:${event.link}`);
+
+    res.status(200).send();
   } catch (error) {
     next(error);
   }

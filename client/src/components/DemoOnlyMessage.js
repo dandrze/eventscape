@@ -30,7 +30,14 @@ export default (props) => {
       </div>
       <div style={{ fontWeight: "300", fontSize: "1rem" }}>
         For demo and testing purposes only. <br />
-        Purchase a license to remove this message.
+        Add an{" "}
+        <a
+          href="https://app.eventscape.io/license"
+          style={{ textDecoration: "underline" }}
+        >
+          Event License
+        </a>{" "}
+        to remove this message.
       </div>
     </div>
   );

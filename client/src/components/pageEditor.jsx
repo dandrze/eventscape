@@ -31,7 +31,6 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
   const [saveLoading, setSaveLoading] = useState(false);
   const [discardOpen, setDiscardOpen] = useState(false);
-  const [removeLogoErrorOpen, setRemoveLogoErrorOpen] = useState(false);
   const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
   const [isHovering, setIsHovering] = useState(null);
   const [showAdvancedOptions, setShowAdvancedOptions] = useState(false);
@@ -89,19 +88,6 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
   const handleDiscardAlertContinue = () => {
     handleCancelChanges();
     setDiscardOpen(false);
-  };
-
-  const handleRemoveLogoError = () => {
-    setRemoveLogoErrorOpen(true);
-  };
-
-  const handleRemoveLogoErrorClose = () => {
-    setRemoveLogoErrorOpen(false);
-  };
-
-  const handleRemoveLogoErrorContinue = () => {
-    setRemoveLogoErrorOpen(false);
-    history.push("/package");
   };
 
   const handleCancelChanges = async () => {
@@ -197,28 +183,9 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
         continueText="Yes"
       />
 
-      <AlertModal
-        open={removeLogoErrorOpen}
-        onClose={handleRemoveLogoErrorClose}
-        onContinue={handleRemoveLogoErrorContinue}
-        content="The remove logo option is available for events on a Pro package. Please upgrade to continue."
-        closeText="Close"
-        continueText="Upgrade Now"
-      />
-
       <div className="design">
         <div className="top-button-bar pt-5">
           <div style={{ display: "flex", flexWrap: "wrap" }}>
-            {event.package.PackageType.type === "free" ? (
-              <button
-                className="Button1"
-                onClick={handleRemoveLogoError}
-                style={{ margin: "12px 12px 0px 0px" }}
-              >
-                Remove Eventscape Logo
-              </button>
-            ) : null}
-
             <IconButton
               onClick={handleGoToSite}
               label="View as Guest"
@@ -354,7 +321,6 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
           </div>
 
           <div>
-            {event.package.PackageType.type === "free" ? <BrandingTop /> : null}
             <div className="section-container">
               {model.sections.length === 0
                 ? null

@@ -72,16 +72,16 @@ export default () => {
       ),
     },
     {
-      title: "Event Package Type",
-      field: "Package.PackageType.name",
+      title: "License",
+      field: "License.basePrice",
     },
     {
-      title: "Event Package Viewers",
-      field: "Package.viewers",
+      title: "License Price Per Viewer",
+      field: "License.pricePerViewer",
     },
     {
-      title: "Event Package Hours",
-      field: "Package.streamingTime",
+      title: "License Max Streaming Time",
+      field: "License.maxStreamingTime",
     },
   ];
 

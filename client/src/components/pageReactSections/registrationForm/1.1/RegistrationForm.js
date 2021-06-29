@@ -320,7 +320,7 @@ function RegistrationForm({
                   />
                   <div className="errorMessage">{emailError}</div>
                 </div>
-                {event.package.PackageType.type === "free" ? null : (
+              
                   <ReactFormGenerator
                     action_name={SubmitButtonText || "Register now"}
                     onSubmit={handleSubmit}
@@ -328,7 +328,7 @@ function RegistrationForm({
                     answer_data={prePopulatedValues}
                     className="form-editor-react"
                   />
-                )}
+             
                 {!isManualEntry ? (
                   <label>
                     <span>Already registered? Click </span>

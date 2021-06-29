@@ -93,15 +93,12 @@ const RegistrationTable2 = (props) => {
 
   // loads the registration data into the state
   useEffect(() => {
-    // if the event is a premium package map the custom column data from the react-form-builder2 format to the material format. Otherwise do not populate the columns with the custom fields.
-    const columns =
-      props.event.package.PackageType.type === "free"
-        ? []
-        : props.registration.columns
-            .map((column) => {
-              return { title: column.label, field: column.field_name };
-            })
-            .filter(Boolean);
+    //  map the custom column data from the react-form-builder2 format to the material format.
+    const columns = props.registration.columns
+      .map((column) => {
+        return { title: column.label, field: column.field_name };
+      })
+      .filter(Boolean);
 
     // Add the basic registration components
     columns.unshift({ title: "Email Address", field: "emailAddress" });

@@ -50,15 +50,7 @@ const Registrations = (props) => {
   };
 
   const handleOpenForm = () => {
-    if (props.event.package.PackageType.type === "free") {
-      setEditFormErrorOpen(true);
-    } else {
-      setOpenForm(true);
-    }
-  };
-
-  const handleGoToPackage = () => {
-    props.history.push("/package");
+    setOpenForm(true);
   };
 
   const handleCloseReg = () => {
@@ -165,14 +157,7 @@ const Registrations = (props) => {
           />
         }
       />
-      <AlertModal
-        open={editFormErrorOpen}
-        onClose={() => setEditFormErrorOpen(false)}
-        onContinue={handleGoToPackage}
-        content="The edit registration form option is available for events on a Pro package. Please upgrade to continue."
-        closeText="Close"
-        continueText="Upgrade Now"
-      />
+
       <NavBar3
         displaySideNav="true"
         highlight="registrations"

@@ -324,9 +324,8 @@ function RegistrationForm({
                 <ReactFormGenerator
                   action_name={SubmitButtonText || "Register now"}
                   onSubmit={handleSubmit}
-                  // If the event package is free, do not show the custom form fields in formData
                   data={
-                    event.package.PackageType.type === "free" ? [] : formData
+                 formData
                   }
                   answer_data={prePopulatedValues}
                   className="form-editor-react"

@@ -14,8 +14,7 @@ const {
   Permission,
   Account,
   Invoice,
-  Package,
-  PackageType,
+  License,
   InvoiceLineItem,
   Poll,
   PollOption,
@@ -159,22 +158,6 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
       messaging: true,
       design: true,
       polls: true,
-    });
-
-    // create a default package and invoice
-    const defaultFreePackage = await PackageType.findOne({
-      where: { type: "free" },
-    });
-
-    const invoice = await Invoice.create({ EventId: event.id });
-    const package = await Package.create({
-      EventId: event.id,
-      PackageTypeId: defaultFreePackage.id,
-    });
-    const invoiceLineItem = await InvoiceLineItem.create({
-      InvoiceId: invoice.id,
-      type: "package",
-      PackageId: package.id,
     });
 
     res.json(event);
@@ -354,22 +337,6 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
       }
     }
 
-    // create a default package and invoice
-    const defaultFreePackage = await PackageType.findOne({
-      where: { type: "free" },
-    });
-
-    const invoice = await Invoice.create({ EventId: event.id });
-    const package = await Package.create({
-      EventId: event.id,
-      PackageTypeId: defaultFreePackage.id,
-    });
-    InvoiceLineItem.create({
-      InvoiceId: invoice.id,
-      type: "package",
-      PackageId: package.id,
-    });
-
     res.json(event);
   } catch (error) {
     next(error);
@@ -384,21 +351,20 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
     var event;
     // if the account has an event they are currently editting, then fetch that event
     if (account.currentEventId) {
-      event = await Event.findByPk(account.currentEventId);
+      event = await Event.findOne({
+        where: { id: account.currentEventId },
+        include: License,
+      });
     } else {
       // else just fetch the first event they are an owner of as a fallback
       event = await Event.findOne({
         where: { OwnerId: accountId },
+        include: License,
       });
     }
 
     // if there's no event (i.e. on create event page), return an empty object
     if (!event) return res.send();
-
-    const package = await Package.findOne({
-      where: { EventId: event.id },
-      include: PackageType,
-    });
 
     const permissions = await Permission.findAll({
       where: {
@@ -407,7 +373,7 @@ router.get("/api/event/current", requireAuth, async (req, res, next) => {
       include: Account,
     });
 
-    res.json({ ...event.dataValues, package, permissions });
+    res.json({ ...event.dataValues, permissions });
   } catch (error) {
     next(error);
   }
@@ -465,15 +431,10 @@ router.get("/api/event/id", async (req, res, next) => {
   const { id } = req.query;
 
   try {
-    const event = await Event.findByPk(id);
+    const event = await Event.findOne({ where: { id }, include: License });
 
     if (event) {
-      const package = await Package.findOne({
-        where: { EventId: event.id },
-        include: PackageType,
-      });
-
-      res.json({ ...event.dataValues, package });
+      res.json({ ...event.dataValues });
     } else {
       res.json();
     }
@@ -492,17 +453,11 @@ router.get("/api/event/link", async (req, res, next) => {
       eventCacheKey,
       {
         where: { link, status: statusOptions.ACTIVE },
+        include: License,
       }
     );
 
-    if (event) {
-      const package = await Package.findOne({
-        where: { EventId: event.id },
-        include: PackageType,
-      });
-
-      res.json({ ...event.dataValues, package });
-    } else res.json();
+    res.json(event);
   } catch (error) {
     next(error);
   }

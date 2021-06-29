@@ -19,8 +19,7 @@ const Poll = require("./models/Poll");
 const PollOption = require("./models/PollOption");
 const PollResponse = require("./models/PollResponse");
 const Permission = require("./models/Permission");
-const Package = require("./models/Package");
-const PackageType = require("./models/PackageType");
+const License = require("./models/License");
 const InvoiceLineItem = require("./models/InvoiceLineItem");
 const Invoice = require("./models/Invoice");
 const CustomLineItem = require("./models/CustomLineItem");
@@ -86,25 +85,22 @@ Poll.hasMany(PollOption);
 PollResponse.belongsTo(SiteVisitor);
 PollResponse.belongsTo(PollOption);
 
-InvoiceLineItem.belongsTo(Package);
+InvoiceLineItem.belongsTo(License);
 InvoiceLineItem.belongsTo(CustomLineItem);
 
 InvoiceLineItem.belongsTo(Invoice);
 Invoice.hasMany(InvoiceLineItem);
 
-Package.belongsTo(PackageType);
-PackageType.hasMany(Package);
-
 Invoice.belongsTo(Event);
 Event.hasMany(Invoice);
 
-Package.belongsTo(Event);
-Event.hasOne(Package);
+License.belongsTo(Event);
+Event.hasOne(License);
 
 //Event.sync({ alter: true });
 //Account.sync({ alter: true });
 
-//sequelize.sync({ alter: true });
+sequelize.sync({ alter: true });
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
@@ -133,8 +129,7 @@ module.exports = {
     PollOption,
     PollResponse,
     Permission,
-    PackageType,
-    Package,
+    License,
     InvoiceLineItem,
     Invoice,
     CustomLineItem,

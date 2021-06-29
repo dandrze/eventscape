@@ -47,7 +47,6 @@ function DesignBlockToolbar(props) {
   const [openSettings, setOpenSettings] = useState(false);
   const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
   const [sectionTooltip, setSectionTooltip] = useState("");
-  const [editFormErrorOpen, setEditFormErrorOpen] = useState(false);
 
   // UseEffect mimicks OnComponentDidMount
   useEffect(() => {
@@ -88,14 +87,7 @@ function DesignBlockToolbar(props) {
 
   // Settings:
   const handleOpenSettings = () => {
-    if (
-      props.section.reactComponent.name === "RegistrationForm" &&
-      props.event.package.PackageType.type === "free"
-    ) {
-      setEditFormErrorOpen(true);
-    } else {
-      setOpenSettings(true);
-    }
+    setOpenSettings(true);
   };
 
   const handleCloseSettings = () => {
@@ -121,20 +113,8 @@ function DesignBlockToolbar(props) {
     }
   };
 
-  const handleGoToPackage = () => {
-    props.history.push("/package");
-  };
-
   return (
     <div>
-      <AlertModal
-        open={editFormErrorOpen}
-        onClose={() => setEditFormErrorOpen(false)}
-        onContinue={handleGoToPackage}
-        content="The edit registration form option is available for events on a Pro package. Please upgrade to continue."
-        closeText="Close"
-        continueText="Upgrade Now"
-      />
       {/* Toolbar */}
       {(props.displayToolbar === true) &
       (openSettings === false) &
