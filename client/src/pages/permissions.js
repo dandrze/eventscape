@@ -30,7 +30,6 @@ import LibraryAdd from "@material-ui/icons/LibraryAdd";
 import Checkbox from "@material-ui/core/Checkbox";
 import FoldingCube from "../components/FoldingCube";
 
-
 import Button from "@material-ui/core/Button";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -61,10 +60,8 @@ const Permissions = ({ event, user }) => {
   const [openTransferModal, setOpenTransferModal] = useState(false);
   const [transferTarget, setTransferTarget] = useState({});
   const [transferStatus, setTransferStatus] = useState("Not Started");
-  const [
-    newCollaboratorEmailAddress,
-    setNewCollaboratorEmailAddress,
-  ] = useState("");
+  const [newCollaboratorEmailAddress, setNewCollaboratorEmailAddress] =
+    useState("");
   const [newEmailErrorText, setNewEmailErrorText] = useState("");
 
   useEffect(() => {
@@ -308,7 +305,7 @@ const Permissions = ({ event, user }) => {
   };
 
   return (
-    <div className="shadow-border container-width">
+    <div>
       <Modal1
         open={openAddModal}
         onClose={() => setOpenAddModal(false)}
@@ -398,7 +395,7 @@ const Permissions = ({ event, user }) => {
           // only display content once the event is loaded
           event.id ? (
             event.permissions?.role === "owner" ? (
-              <div>
+              <div className="container-width">
                 <div className="top-button-bar">
                   <button className="Button1" onClick={handleClickTransfer}>
                     Transfer Ownership

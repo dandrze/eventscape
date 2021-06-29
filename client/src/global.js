@@ -1,1 +1,8 @@
 global.emailSendDateMaxDays = 180;
+
+global.PRICE_PER_VIEWER_NO_CDN = 0.39;
+global.PRICE_PER_VIEWER = 0.99;
+global.PRICE_PER_REGISTRATION_NO_CDN = 0.29;
+global.PRICE_PER_REGISTRATION = 0.75;
+global.BASE_PRICE = 99;
+global.BASE_PRICE_NO_CDN = 89;

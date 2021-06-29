@@ -47,7 +47,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
   };
 
   return (
-    <div className="container-width">
+    <div>
       <NavBar3
         displaySideNav="true"
         highlight="dashboard"

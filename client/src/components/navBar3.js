@@ -67,6 +67,8 @@ import CreditCardIcon from "../icons/credit-card.svg";
 
 import { statusOptions } from "../model/enums";
 
+import DraftModeMessage from "./DraftModeMessage";
+
 /* colour palette */
 const MenuText = "#EAEAEA";
 const MenuBackground = "#2F2F2F";
@@ -138,6 +140,7 @@ const useStyles = makeStyles((theme) => ({
     width: "calc(100vw - 240px)",
     overflowY: "scroll", // Added to fix froala cursor jumping bug
     height: "calc(100vh - 64px)", // Added to fix froala cursor jumping bug
+    position: "relative",
   },
   fullWidth: {
     flexGrow: 1,
@@ -320,7 +323,6 @@ function NavBar3(props) {
   return (
     <div className={classes.root}>
       <CssBaseline />
-
       <AppBar
         position="fixed"
         className={clsx(classes.appBar, {
@@ -396,6 +398,7 @@ function NavBar3(props) {
                       fontSize: "0.6rem",
                       textTransform: "none",
                       marginTop: "3px",
+                      width: "60px",
                     }}
                   >
                     Create Event
@@ -862,6 +865,12 @@ function NavBar3(props) {
         </Drawer>
       )}
       <div className={props.fullWidth ? classes.fullWidth : classes.content}>
+        {props.event.License ? null : (
+          <DraftModeMessage
+            inApp={true}
+            isAdmin={props.event.permissions?.role === "owner"}
+          />
+        )}
         {content}
       </div>
     </div>

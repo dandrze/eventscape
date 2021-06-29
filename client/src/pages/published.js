@@ -21,7 +21,7 @@ import PollBlock from "../components/polling/PollBlock";
 import ResultsChart from "../components/polling/ResultsChart";
 import AlertModal from "../components/AlertModal";
 import SimpleLoadingScreen from "../components/SimpleLoadingScreen";
-import DemoOnlyMessage from "../components/DemoOnlyMessage";
+import DraftModeMessage from "../components/DraftModeMessage";
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -300,6 +300,12 @@ const Published = (props) => {
           }}
         ></div>
         <div className="fr-view live-page-container" key={forceRefresh}>
+          {props.event.License ? null : (
+            <>
+              <div style={{ height: "20px" }} />
+              <DraftModeMessage />
+            </>
+          )}
           <div className="section-container">
             {props.model.sections.map(function (section) {
               return (
@@ -330,7 +336,6 @@ const Published = (props) => {
             })}
           </div>
           <BrandingBottom />
-          {props.event.License ? null : <DemoOnlyMessage />}
         </div>
       </div>
     );

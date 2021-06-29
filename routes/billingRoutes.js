@@ -3,6 +3,7 @@ const md5 = require("md5");
 const router = express.Router();
 
 const requireAuth = require("../middlewares/requireAuth");
+const { statusOptions } = require("../model/enums");
 
 const { Invoice, InvoiceLineItem, License, CustomLineItem, Event, Account } =
   require("../db").models;
@@ -25,12 +26,20 @@ router.get("/api/billing/license", requireAuth, async (req, res, next) => {
 });
 
 router.post("/api/billing/license", requireAuth, async (req, res, next) => {
-  const { eventId, type, includeCDN } = req.body;
+  const {
+    eventId,
+    basePrice,
+    pricePerViewer,
+    pricePerRegistration,
+    includeCDN,
+  } = req.body;
 
   try {
     const license = await License.create({
       EventId: eventId,
-      type,
+      pricePerViewer,
+      pricePerRegistration,
+      basePrice,
       includeCDN,
     });
 
@@ -38,6 +47,9 @@ router.post("/api/billing/license", requireAuth, async (req, res, next) => {
       where: { id: eventId },
       include: "Owner",
     });
+
+    event.status = statusOptions.ACTIVE;
+    await event.save();
 
     sendEmail({
       to: "kevin@eventscape.io",
@@ -48,7 +60,7 @@ router.post("/api/billing/license", requireAuth, async (req, res, next) => {
         event.title
       } <br/> Event Link: ${event.link}.eventscape.io/${
         event.registrationRequired ? md5(String(event.id)) : ""
-      } <br/> Event Type: ${type}
+      } <br/> Is Registration Event: ${event.registrationRequired}
         <br/> Includes CDN: ${includeCDN}`,
     });
     sendEmail({
@@ -60,8 +72,8 @@ router.post("/api/billing/license", requireAuth, async (req, res, next) => {
         event.title
       } <br/> Event Link: ${event.link}.eventscape.io/${
         event.registrationRequired ? md5(String(event.id)) : ""
-      } <br/> Event Type: ${type}
-        <br/> Includes CDN: ${includeCDN}`,
+      } <br/> Is Registration Event: ${event.registrationRequired}
+      <br/> Includes CDN: ${includeCDN}`,
     });
 
     // Clear the cache which has the old event data without a license
@@ -86,7 +98,10 @@ router.delete("/api/billing/license", requireAuth, async (req, res, next) => {
       include: "Owner",
     });
 
-    sendEmail({
+    event.status = statusOptions.DRAFT;
+    await event.save();
+
+    /*  sendEmail({
       to: "kevin@eventscape.io",
       subject: "A user removed their event license",
       html: `<p>Event Id ${eventId} has downgraded their license to demo only.<br/> User Email: ${
@@ -107,7 +122,7 @@ router.delete("/api/billing/license", requireAuth, async (req, res, next) => {
       } <br/> Event Link: https://${event.link}.eventscape.io/${
         event.registrationRequired ? md5(String(event.id)) : ""
       } <br/> `,
-    });
+    }); */
 
     // Clear the cached event which has a license in it
     clearCache(`Event:link:${event.link}`);
