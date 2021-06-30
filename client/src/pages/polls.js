@@ -12,8 +12,7 @@ import PollController from "../components/polling/PollController";
 import ResultsChart from "../components/polling/ResultsChart";
 import PollDataTable from "../components/polling/PollDataTable";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
-import FoldingCube from "../components/FoldingCube"
-
+import FoldingCube from "../components/FoldingCube";
 
 const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
   const [open, setOpen] = useState(false);
@@ -170,7 +169,7 @@ const Polls = ({ event, polling, fetchPolls, fetchPollResultsFromId }) => {
                     style={{ marginLeft: "auto" }}
                     onClick={handleLaunchPoll}
                   >
-                    Launch Poll
+                    Launch Polls
                   </button>
                 </div>
                 {dataFetched ? (
