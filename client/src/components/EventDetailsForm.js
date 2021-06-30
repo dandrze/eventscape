@@ -1205,6 +1205,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
                         type="number"
                         onChange={handleChangeMaxDevices}
                         value={maxDevices}
+                        disabled={!maxDevicesEnabled}
                         style={{
                           maxWidth: "45px",
                           margin: "0px 5px",
