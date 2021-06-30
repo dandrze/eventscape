@@ -112,7 +112,7 @@ function PollsTable({
       },
     }),
     {
-      icon: () => <TableActionButton label="View Data" type="data" />,
+      icon: () => <TableActionButton label="Poll Responses" type="data" />,
       isFreeAction: true,
       onClick: (event) => {
         openData();
