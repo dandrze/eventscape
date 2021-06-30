@@ -1,12 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {
-  ChatRoom,
-  ChatUser,
-  ChatMessage,
-  ChatQuestion,
-  Registration,
-} = require("../db").models;
+const { ChatRoom, ChatUser, ChatMessage, ChatQuestion, Registration } =
+  require("../db").models;
 
 const requireAuth = require("../middlewares/requireAuth");
 const { clearCache } = require("../services/sequelizeRedis");
@@ -129,23 +124,18 @@ router.put(
 );
 
 router.get("/api/chatroom/default", async (req, res, next) => {
-  //This route gets the default chatroom for an event. If the chatroom doesn't exist it creates one
+  //This route gets the default chatroom for an event.
   const { event } = req.query;
 
   try {
-    const [newRoom, created] = await ChatRoom.findOrCreate({
+    const chatRoom = await ChatRoom.findOne({
       where: {
         event,
         isDefault: true,
       },
     });
 
-    if (created) {
-      newRoom.name = "Main Room (Default)";
-      await newRoom.save();
-    }
-
-    res.json({ id: newRoom.id });
+    res.json({ id: chatRoom.id });
   } catch (error) {
     next(error);
   }
