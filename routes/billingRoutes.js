@@ -5,8 +5,7 @@ const router = express.Router();
 const requireAuth = require("../middlewares/requireAuth");
 const { statusOptions } = require("../model/enums");
 
-const { Invoice, InvoiceLineItem, License, CustomLineItem, Event, Account } =
-  require("../db").models;
+const { License, LicenseModel, Event } = require("../db").models;
 
 const { sendEmail } = require("../services/Mailer");
 const { clearCache } = require("../services/sequelizeRedis");
@@ -24,6 +23,24 @@ router.get("/api/billing/license", requireAuth, async (req, res, next) => {
     next(error);
   }
 });
+
+router.get(
+  "/api/billing/license-model",
+  requireAuth,
+  async (req, res, next) => {
+    try {
+      // fetches the latest license model by default
+      const licenseModel = await LicenseModel.findAll({
+        limit: 1,
+        order: [["id", "DESC"]],
+      });
+
+      res.json(licenseModel[0]);
+    } catch (error) {
+      next(error);
+    }
+  }
+);
 
 router.post("/api/billing/license", requireAuth, async (req, res, next) => {
   const {

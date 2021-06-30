@@ -10,6 +10,26 @@ import Modal1 from "../components/Modal1";
 import api from "../api/server";
 
 const License = ({ event }) => {
+  const [licenseModel, setLicenseModel] = useState({
+    basePrice: null,
+    basePriceWithCDN: null,
+    maxStreamingTime: null,
+    pricePerRegistration: null,
+    pricePerRegistrationWithCDN: null,
+    pricePerViewer: null,
+    pricePerViewerWithCDN: null,
+  });
+  useEffect(() => {
+    fetchLicenseModel();
+  }, []);
+
+  const fetchLicenseModel = async () => {
+    const res = await api.get("/api/billing/license-model");
+
+    console.log(res.data);
+    setLicenseModel(res.data);
+  };
+
   const [openAddLicense, setOpenAddLicense] = useState(false);
   const [includeCDN, setIncludeCDN] = useState(true);
 
@@ -22,12 +42,14 @@ const License = ({ event }) => {
       eventId: event.id,
       includeCDN,
       pricePerViewer: includeCDN
-        ? global.PRICE_PER_VIEWER
-        : global.PRICE_PER_VIEWER_NO_CDN,
+        ? licenseModel.pricePerViewerWithCDN
+        : licenseModel.pricePerViewer,
       pricePerRegistration: includeCDN
-        ? global.PRICE_PER_REGISTRATION
-        : global.PRICE_PER_REGISTRATION_NO_CDN,
-      basePrice: includeCDN ? global.BASE_PRICE : global.BASE_PRICE_NO_CDN,
+        ? licenseModel.pricePerRegistrationWithCDN
+        : licenseModel.pricePerRegistration,
+      basePrice: includeCDN
+        ? licenseModel.basePriceWithCDN
+        : licenseModel.basePrice,
       includeCDN,
     });
 
@@ -64,13 +86,16 @@ const License = ({ event }) => {
 
                 <h3>Open Event</h3>
                 <p>
-                  ${includeCDN ? global.BASE_PRICE : global.BASE_PRICE_NO_CDN}{" "}
+                  $
+                  {includeCDN
+                    ? licenseModel.basePriceWithCDN
+                    : licenseModel.basePrice}{" "}
                   USD
                   <br />
                   +<br />
                   {includeCDN
-                    ? (global.PRICE_PER_VIEWER * 100).toFixed(0)
-                    : (global.PRICE_PER_VIEWER_NO_CDN * 100).toFixed(0)}
+                    ? (licenseModel.pricePerViewerWithCDN * 100).toFixed(0)
+                    : (licenseModel.pricePerViewer * 100).toFixed(0)}
                   &#162; / Event Viewer<sup>1</sup>
                 </p>
                 {includeCDN ? (
@@ -96,13 +121,18 @@ const License = ({ event }) => {
 
                 <h3>Registration Event</h3>
                 <p>
-                  ${includeCDN ? global.BASE_PRICE : global.BASE_PRICE_NO_CDN}{" "}
+                  $
+                  {includeCDN
+                    ? licenseModel.basePriceWithCDN
+                    : licenseModel.basePrice}{" "}
                   USD
                   <br />
                   +<br />
                   {includeCDN
-                    ? (global.PRICE_PER_REGISTRATION * 100).toFixed(0)
-                    : (global.PRICE_PER_REGISTRATION_NO_CDN * 100).toFixed(0)}
+                    ? (licenseModel.pricePerRegistrationWithCDN * 100).toFixed(
+                        0
+                      )
+                    : (licenseModel.pricePerRegistration * 100).toFixed(0)}
                   &#162; / Registration
                 </p>
                 {includeCDN ? (

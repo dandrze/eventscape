@@ -73,7 +73,18 @@ import DraftModeMessage from "./DraftModeMessage";
 const MenuText = "#EAEAEA";
 const MenuBackground = "#2F2F2F";
 
-const eventSpecificPages = ["license", "messaging", "analytics", "polls", "registrations", "permissions", "communication", "design", "event-details", "dashboard"]
+const eventSpecificPages = [
+  "license",
+  "messaging",
+  "analytics",
+  "polls",
+  "registrations",
+  "permissions",
+  "communication",
+  "design",
+  "event-details",
+  "dashboard",
+];
 
 const drawerWidth = 240;
 
@@ -321,8 +332,6 @@ function NavBar3(props) {
         return window.open(`https://${props.event.link}.eventscape.io`);
     }
   };
-
-  console.log(highlight);
 
   return (
     <div className={classes.root}>

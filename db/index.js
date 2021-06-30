@@ -20,6 +20,7 @@ const PollOption = require("./models/PollOption");
 const PollResponse = require("./models/PollResponse");
 const Permission = require("./models/Permission");
 const License = require("./models/License");
+const LicenseModel = require("./models/LicenseModel");
 const InvoiceLineItem = require("./models/InvoiceLineItem");
 const Invoice = require("./models/Invoice");
 const CustomLineItem = require("./models/CustomLineItem");
@@ -100,7 +101,7 @@ Event.hasOne(License);
 //Event.sync({ alter: true });
 //Account.sync({ alter: true });
 
-sequelize.sync({ alter: true });
+//sequelize.sync({ alter: true });
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
@@ -130,6 +131,7 @@ module.exports = {
     PollResponse,
     Permission,
     License,
+    LicenseModel,
     InvoiceLineItem,
     Invoice,
     CustomLineItem,

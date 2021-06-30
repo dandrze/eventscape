@@ -120,7 +120,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                 </div>
               </div>
 
-              <div>Event Onboarding Checklist</div>
+              {/*   <div>Event Onboarding Checklist</div>
 
               <ChecklistItem
                 checked
@@ -156,7 +156,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                     </a>
                   </span>
                 }
-              />
+              /> */}
             </div>
           ) : null
         }
