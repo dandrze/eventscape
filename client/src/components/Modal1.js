@@ -8,8 +8,9 @@ import Cancel from "../icons/cancel.svg";
 import Slide from "@material-ui/core/Slide";
 
 const useStyles = makeStyles((theme) => ({
-  primaryColor: {
+  modalTitle: {
     color: "#b0281c",
+    textAlign: "center",
   },
   modal: {
     display: "flex",
@@ -66,9 +67,7 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
                   }}
                 >
                   <div>
-                    {title ? (
-                      <h2 className={classes.primaryColor}>{title}</h2>
-                    ) : null}
+                    {title ? <h2 className={classes.title}>{title}</h2> : null}
                     <div>{content}</div>
                   </div>
                 </div>
@@ -100,7 +99,7 @@ export default function Modal1({ onClose, open, content, title, isSideModal }) {
                 >
                   <div>
                     {title ? (
-                      <h2 className={classes.primaryColor}>{title}</h2>
+                      <h2 className={classes.modalTitle}>{title}</h2>
                     ) : null}
                     <div>{content}</div>
                   </div>
