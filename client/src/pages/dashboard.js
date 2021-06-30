@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChecklistItem = ({ text, isComplete }) => {
+const ChecklistItem = ({ text, checked }) => {
   return (
     <div
       className="shadow-border"
@@ -42,7 +42,7 @@ const ChecklistItem = ({ text, isComplete }) => {
         width: "100%",
       }}
     >
-      {isComplete ? (
+      {checked ? (
         <CheckBoxIcon style={{ margin: "10px" }} />
       ) : (
         <CheckBoxOutlineBlankIcon style={{ margin: "10px" }} />
@@ -120,18 +120,43 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                 </div>
               </div>
 
-              {/*    <div>Event Checklist</div>
+              <div>Event Onboarding Checklist</div>
+
+              <ChecklistItem
+                checked
+                text={
+                  <span>
+                    Review your{" "}
+                    <a href="/design/registration" className="link1">
+                      registration page
+                    </a>{" "}
+                    design.
+                  </span>
+                }
+              />
 
               <ChecklistItem
                 text={
                   <span>
-                    Design your{" "}
-                    <a href="/design/registration" className="link1">
-                      registration page
+                    Review your{" "}
+                    <a href="/design/event" className="link1">
+                      event page
+                    </a>{" "}
+                    design.
+                  </span>
+                }
+              />
+
+              <ChecklistItem
+                text={
+                  <span>
+                    Create your{" "}
+                    <a href="/registration" className="link1">
+                      registration, reminder and follow up emails
                     </a>
                   </span>
                 }
-              /> */}
+              />
             </div>
           ) : null
         }

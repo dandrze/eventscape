@@ -44,6 +44,8 @@ function App({ user, location, fetchUser, attendee }) {
     if (!user.id) fetchDataAsync();
   }, []);
 
+  console.log(process.env.NODE_ENV_BASE_PRICE_WITH_CDN)
+
   useEffect(() => {
     if (isApp) {
       initTawk(
