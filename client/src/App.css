@@ -702,6 +702,7 @@ select {
   height: 100%; /* need this to keep react-scroll-to-bottom working in Safari */
   margin: 3px;
   background: #fff;
+  border-radius: 5px;
 }
 
 /* Message */
@@ -791,7 +792,7 @@ select {
   flex-direction: column;
   height: 100%;
   width: auto;
-  margin: 3px;
+  margin: 0px;
 }
 
 .chat-input {
@@ -809,7 +810,7 @@ select {
   border: none;
   border-radius: 5px;
   padding: 16px;
-  margin: 0;
+  margin: 3px;
   font-family: Roboto, "Helvetica Neue", Ariel, sans-serif;
   font-size: 0.9rem;
   line-height: 1rem;
