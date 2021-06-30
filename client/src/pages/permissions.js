@@ -395,7 +395,7 @@ const Permissions = ({ event, user }) => {
           // only display content once the event is loaded
           event.id ? (
             event.permissions?.role === "owner" ? (
-              <div className="container-width">
+              <div className="container-width shadow-border">
                 <div className="top-button-bar">
                   <button className="Button1" onClick={handleClickTransfer}>
                     Transfer Ownership

@@ -161,6 +161,9 @@ const EmailList = (props) => {
               data={data}
               options={options}
               icons={tableIcons}
+              components={{
+                Container: (props) => <Paper {...props} elevation={0} />,
+              }}
               editable={{
                 onRowAdd: (newData) =>
                   new Promise(async (resolve) => {

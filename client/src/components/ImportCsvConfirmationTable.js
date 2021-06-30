@@ -4,6 +4,7 @@ import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ErrorIcon from "@material-ui/icons/Error";
 import { green, red } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
+import { Paper } from "@material-ui/core";
 
 const useStyles = makeStyles((theme) => ({
   heading: {
@@ -73,7 +74,14 @@ export default ({ output, errors, startOver }) => {
         .
       </div>
       <div style={{ maxHeight: "400px", overflowY: "scroll" }}>
-        <MaterialTable columns={columns} data={errors} options={options} />
+        <MaterialTable
+          columns={columns}
+          data={errors}
+          options={options}
+          components={{
+            Container: (props) => <Paper {...props} elevation={0} />,
+          }}
+        />
       </div>
     </div>
   );

@@ -3,6 +3,8 @@ import { connect } from "react-redux";
 import MaterialTable from "material-table";
 import { forwardRef } from "react";
 
+import { Paper } from "@material-ui/core";
+
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -154,6 +156,9 @@ function PollDataTable({ settings, event }) {
         data={data}
         options={options}
         icons={tableIcons}
+        components={{
+          Container: (props) => <Paper {...props} elevation={0} />,
+        }}
         localization={{
           body: {
             emptyDataSourceMessage: settings.loaded ? (

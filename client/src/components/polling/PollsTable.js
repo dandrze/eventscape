@@ -23,6 +23,7 @@ import ListIcon from "@material-ui/icons/List";
 import FoldingCube from "../FoldingCube";
 
 import BarChartIcon from "@material-ui/icons/BarChart";
+import { Paper } from "@material-ui/core";
 
 import TableActionButton from "../TableActionButton";
 
@@ -136,6 +137,9 @@ function PollsTable({
         options={options}
         icons={tableIcons}
         actions={actions}
+        components={{
+          Container: (props) => <Paper {...props} elevation={0} />,
+        }}
         editable={{
           onRowDelete: (oldData) =>
             new Promise((resolve) => {

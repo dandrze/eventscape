@@ -3,6 +3,8 @@ import { forwardRef } from "react";
 
 import { Link } from "react-router-dom";
 import MaterialTable from "material-table";
+import { Paper } from "@material-ui/core";
+
 /*Material-Table Icons*/
 import AddBox from "@material-ui/icons/AddBox";
 import ArrowDownward from "@material-ui/icons/ArrowDownward";
@@ -145,6 +147,9 @@ export default () => {
         data={data}
         options={options}
         icons={tableIcons}
+        components={{
+          Container: (props) => <Paper {...props} elevation={0} />,
+        }}
       />
     </div>
   );
