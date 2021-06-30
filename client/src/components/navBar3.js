@@ -73,6 +73,8 @@ import DraftModeMessage from "./DraftModeMessage";
 const MenuText = "#EAEAEA";
 const MenuBackground = "#2F2F2F";
 
+const eventSpecificPages = ["license", "messaging", "analytics", "polls", "registrations", "permissions", "communication", "design", "event-details", "dashboard"]
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => ({
@@ -319,6 +321,8 @@ function NavBar3(props) {
         return window.open(`https://${props.event.link}.eventscape.io`);
     }
   };
+
+  console.log(highlight);
 
   return (
     <div className={classes.root}>
@@ -865,12 +869,13 @@ function NavBar3(props) {
         </Drawer>
       )}
       <div className={props.fullWidth ? classes.fullWidth : classes.content}>
-        {props.event.License ? null : (
+        {/*If there is no license, show the draft mode bar if the user is on an event specific page*/}
+        {!props.event.License && eventSpecificPages.includes(highlight) ? (
           <DraftModeMessage
             inApp={true}
             isAdmin={props.event.permissions?.role === "owner"}
           />
-        )}
+        ) : null}
         {content}
       </div>
     </div>

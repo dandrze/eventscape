@@ -134,11 +134,13 @@ const License = ({ event }) => {
                 <sup>1</sup> An Event Viewer is someone who viewed the event
                 between the start and end time for at least 20 minutes.
               </p>
-              <p className="subtext">
-                <sup>2</sup> Event length is start time to end time (not
-                including rehearsals, etc.). For events longer than 4 hours,
-                send us a message using the chat in the bottom right.
-              </p>
+              {includeCDN ? (
+                <p className="subtext">
+                  <sup>2</sup> Event length is start time to end time (not
+                  including rehearsals, etc.). For events longer than 4 hours,
+                  send us a message using the chat in the bottom right.
+                </p>
+              ) : null}
               <p className="subtext">
                 <sup>3</sup>{" "}
                 {event.registrationRequired
@@ -212,22 +214,20 @@ const License = ({ event }) => {
                       ) : null}
                     </div>
                     <div style={{ margin: "20px 0px 20px", textAlign: "left" }}>
-                      <p className="subtext">
-                        <sup>2</sup> Event length is start time to end time (not
-                        including rehearsals, etc.). For events longer than 4
-                        hours send us a message using the chat in the bottom
-                        right.
-                      </p>
+                      {event.License.includeCDN ? (
+                        <p className="subtext">
+                          <sup>2</sup> Event length is start time to end time
+                          (not including rehearsals, etc.). For events longer
+                          than 4 hours send us a message using the chat in the
+                          bottom right.
+                        </p>
+                      ) : null}
                       <p className="subtext">
                         License can be cancelled up until 1 hour before the
                         event.
                       </p>
                       <p className="subtext">
                         Registrations will be counted until the event end time.
-                      </p>
-                      <p className="subtext">
-                        Add now, pay later. You will be billed after your event
-                        is complete.
                       </p>
                     </div>
                   </>
@@ -246,7 +246,7 @@ const License = ({ event }) => {
                       <p style={{ marginBottom: "10px" }}>
                         {event.License.includeCDN
                           ? "Content Delivery Network included"
-                          : "Bring your own Content Delivery Network"}
+                          : "Bring Your Own Content Delivery Network"}
                       </p>
                       {event.License.includeCDN ? (
                         <>
@@ -266,20 +266,17 @@ const License = ({ event }) => {
                         event between the start and end time for at least 20
                         minutes.
                       </p>
-                      <p className="subtext">
-                        <sup>2</sup> Event length is start time to end time (not
-                        including rehearsals, etc.). For events longer than 4
-                        hours send us a message using the chat in the bottom
-                        right.
-                      </p>
+                      {event.License.includeCDN ? (
+                        <p className="subtext">
+                          <sup>2</sup> Event length is start time to end time
+                          (not including rehearsals, etc.). For events longer
+                          than 4 hours send us a message using the chat in the
+                          bottom right.
+                        </p>
+                      ) : null}
                       <p className="subtext">
                         License can be cancelled up until 1 hour before the
                         event.
-                      </p>
-
-                      <p className="subtext">
-                        Add now, pay later. You will be billed after your event
-                        is complete.
                       </p>
                     </div>
                   </>

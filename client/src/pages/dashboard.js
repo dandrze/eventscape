@@ -5,6 +5,8 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
+import CheckBoxIcon from "@material-ui/icons/CheckBox";
+import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
 
 import NavBar3 from "../components/navBar3.js";
 import * as actions from "../actions";
@@ -19,13 +21,7 @@ const useStyles = makeStyles((theme) => ({
     margin: "30px",
     width: "50%",
   },
-  fullCard: {
-    padding: "50px",
-    textAlign: "left",
-    background: "#ffffff",
-    margin: "30px",
-    width: "100%",
-  },
+
   paragraphText: {
     fontSize: "1rem",
   },
@@ -33,6 +29,28 @@ const useStyles = makeStyles((theme) => ({
     height: "1rem",
   },
 }));
+
+const ChecklistItem = ({ text, isComplete }) => {
+  return (
+    <div
+      className="shadow-border"
+      style={{
+        padding: "10px",
+        textAlign: "left",
+        background: "#ffffff",
+        margin: "10px",
+        width: "100%",
+      }}
+    >
+      {isComplete ? (
+        <CheckBoxIcon style={{ margin: "10px" }} />
+      ) : (
+        <CheckBoxOutlineBlankIcon style={{ margin: "10px" }} />
+      )}
+      <span style={{ fontSize: "1rem" }}>{text}</span>
+    </div>
+  );
+};
 
 const Dashboard = ({ event, registration, fetchRegistrations }) => {
   const classes = useStyles();
@@ -75,7 +93,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                     color:
                       event.status === statusOptions.ACTIVE
                         ? "#28a745"
-                        : "#000000",
+                        : "#ffb200",
                   }}
                 />
                 <span className={classes.paragraphText}>{event.status}</span>
@@ -102,25 +120,18 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                 </div>
               </div>
 
-              {/*  <div>Event Checklist</div>
-              <div className={"shadow-border " + classes.fullCard}>
-                <h3>Prepare your registration emails.</h3>
-                <div className={classes.paragraphText}>
-                  Create your registration emails which are sent to users when
-                  they sign up. We have a few templates to get you started.
-                </div>
-                <div className={classes.spacer} />
-                <button
-                  className="Button1"
-                  //onClick={handleAddReg}
-                  //style={{ marginLeft: "20px" }}
-                >
-                  Create registration email
-                </button>
-              </div>
-              <div className={"shadow-border " + classes.fullCard}>
-                Checklist item
-              </div> */}
+              {/*    <div>Event Checklist</div>
+
+              <ChecklistItem
+                text={
+                  <span>
+                    Design your{" "}
+                    <a href="/design/registration" className="link1">
+                      registration page
+                    </a>
+                  </span>
+                }
+              /> */}
             </div>
           ) : null
         }
