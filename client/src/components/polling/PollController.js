@@ -270,10 +270,10 @@ const PollController = ({
           setOpenRepeatAlert(false);
         }}
         content={
-          "This poll has been launched before. To launch it again, you will need to clear the previous results"
+          "This poll has been launched before. To launch it again, you will need to clear the previous results."
         }
         closeText="Go Back"
-        continueText="Clear Results + Continue"
+        continueText="Clear Results + Relaunch Poll"
       />
       <div>{renderStep()}</div>
     </div>
