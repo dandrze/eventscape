@@ -60,6 +60,18 @@ const Table = (props) => {
   const [textInputLabel, setTextInputLabel] = useState("");
   const [onContinueAction, setOnContinueAction] = useState("");
 
+  const handleSelectEvent = async (rowData) => {
+    // Set this event as the current event
+    const res = await props.setCurrentEvent(rowData.id);
+
+    // fetch the new event
+    props.setLoaded(false);
+    await props.fetchEvent();
+    props.setLoaded(true);
+
+    props.history.push("/");
+  };
+
   const data = props.eventList
     .filter((event) => {
       const startDate = new Date(event.startDate);
@@ -106,7 +118,13 @@ const Table = (props) => {
   const columns = [
     {
       title: "Event Name",
-      field: "name",
+      render: (rowData) => {
+        return (
+          <div onClick={() => handleSelectEvent(rowData)} className="link1">
+            {rowData.name}
+          </div>
+        );
+      },
     },
     {
       title: "Event Date",
@@ -116,7 +134,6 @@ const Table = (props) => {
       title: "Status",
       field: "status",
     },
- 
   ];
 
   const options = {
@@ -146,15 +163,7 @@ const Table = (props) => {
       icon: Edit,
       tooltip: "Edit Event",
       onClick: async (event, rowData) => {
-        // Set this event as the current event
-        const res = await props.setCurrentEvent(rowData.id);
-
-        // fetch the new event
-        props.setLoaded(false);
-        await props.fetchEvent();
-        props.setLoaded(true);
-
-        props.history.push("/");
+        handleSelectEvent(rowData);
       },
     },
     {
