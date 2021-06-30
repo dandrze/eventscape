@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import NavBar3 from "../components/navBar3.js";
 import * as actions from "../actions";
@@ -78,20 +79,21 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                   }}
                 />
                 <span className={classes.paragraphText}>{event.status}</span>
+                <Tooltip title="Open link in new tab">
+                  <a
+                    href={`https://${event.link}.eventscape.io/`}
+                    target="_blank"
+                  >
+                    <ExitToAppIcon
+                      className="color-on-hover"
+                      style={{ marginLeft: "24px", cursor: "pointer" }}
+                    />
 
-                <a
-                  href={`https://${event.link}.eventscape.io/`}
-                  target="_blank"
-                >
-                  <ExitToAppIcon
-                    className="color-on-hover"
-                    style={{ marginLeft: "24px", cursor: "pointer" }}
-                  />
-
-                  <span
-                    style={{ marginLeft: "6px", fontSize: "1rem" }}
-                  >{`https://${event.link}.eventscape.io/`}</span>
-                </a>
+                    <span
+                      style={{ marginLeft: "6px", fontSize: "1rem" }}
+                    >{`https://${event.link}.eventscape.io/`}</span>
+                  </a>
+                </Tooltip>
               </div>
               <div style={{ display: "flex", margin: "1rem 0px" }}>
                 <div className={"shadow-border " + classes.halfCard}>
