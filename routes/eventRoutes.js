@@ -90,7 +90,7 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
     const chatRoom = await ChatRoom.create({
       event: event.id,
       isDefault: true,
-      name: "Main (Default)",
+      name: "Main Chat(Default)",
     });
 
     // Store the section HTML for the reg page model
@@ -237,7 +237,7 @@ router.post("/api/event/duplicate", requireAuth, async (req, res, next) => {
     const chatRoom = await ChatRoom.create({
       event: event.id,
       isDefault: true,
-      name: "Main (Default)",
+      name: "Main Chat(Default)",
     });
 
     // Store the section HTML for the reg page model

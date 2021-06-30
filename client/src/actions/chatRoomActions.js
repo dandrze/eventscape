@@ -8,14 +8,6 @@ export const fetchChatRooms = (event) => async (dispatch) => {
   return chatRooms;
 };
 
-export const fetchDefaultChatRoom = (event) => async (dispatch) => {
-  const chatRoom = await api.get("/api/chatroom/default", {
-    params: { event },
-  });
-
-  return chatRoom.data;
-};
-
 export const addChatRoom = (room, event) => async (dispatch) => {
   const response = await api.post("/api/chatroom", {
     room,
@@ -64,17 +56,16 @@ export const deleteChatRoom = (id) => async (dispatch) => {
   }
 };
 
-export const updateChatUserName = (AccountId, ChatRoomId, name) => async (
-  dispatch
-) => {
-  const response = await api.put("/api/chatuser", {
-    AccountId,
-    name,
-    ChatRoomId,
-  });
+export const updateChatUserName =
+  (AccountId, ChatRoomId, name) => async (dispatch) => {
+    const response = await api.put("/api/chatuser", {
+      AccountId,
+      name,
+      ChatRoomId,
+    });
 
-  return response;
-};
+    return response;
+  };
 
 export const fetchChatUser = (AccountId, ChatRoomId) => async (dispatch) => {
   const response = await api.get("/api/chatuser", {
