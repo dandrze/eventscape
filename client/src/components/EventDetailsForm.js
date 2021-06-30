@@ -455,7 +455,7 @@ function Event_Details({ event, updateEvent, isLinkAvailable }) {
 
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             {/* Start Date & Time */}
-            <Grid container spacing={0}>
+            <Grid container spacing={2}>
               <Grid item xs={6} id="date-time-container">
                 <div id="date-left">
                   <FormControl
