@@ -169,7 +169,17 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
         onContinue={() => {
           handlePushRefresh();
         }}
-        content="This will update the content and refresh the stream for all your viewers. Please ensure the page is saved if you made any changes to the content or the stream. Click CONTINUE to refresh your viewer's content."
+        content={
+          <span>
+            This will update the content and refresh the stream for all your
+            viewers. Allow up to 10 seconds for this update to complete across
+            all viewers' browsers. <br />
+            <br /> Please ensure the page is saved if you made any changes to
+            the content or the stream. <br />
+            <br />
+            Click CONTINUE to refresh your viewer's content.
+          </span>
+        }
         closeText="Go back"
         continueText="Continue"
       />
