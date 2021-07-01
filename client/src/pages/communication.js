@@ -39,6 +39,7 @@ const Communication = (props) => {
   };
 
   const handleEditEmail = (data) => {
+    console.log(data);
     setData(data);
     setOpenEditor(true);
   };

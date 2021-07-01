@@ -36,9 +36,6 @@ import "froala-editor/css/third_party/image_tui.min.css";
 import "froala-editor/css/plugins/quick_insert.min.css";
 
 const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
-  const cleanedHtml = html
-    ? html.replace(/href=\".*?\"/, `href="#disabled_during_editting"`)
-    : "";
   const config = {
     enter: FroalaEditor.ENTER_DIV,
     toolbarButtons: {
@@ -141,7 +138,7 @@ const FroalaEmail = ({ html, handleHtmlChange, settings }) => {
     <div>
       <FroalaEditorComponent
         config={config}
-        model={cleanedHtml}
+        model={html}
         onModelChange={handleHtmlChange}
       />
     </div>

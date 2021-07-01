@@ -109,9 +109,11 @@ function SendTestEmail({ subject, html, eventId, sendTestEmail, recipient }) {
                 value={lastName}
                 onChange={handleChangeLastName}
               ></input>
-              <button className="Button1" onClick={handleSend}>
-                Send!
-              </button>
+              <div style={{ textAlign: "center" }}>
+                <button className="Button1" onClick={handleSend}>
+                  Send!
+                </button>
+              </div>
             </div>
           </div>
         </Fade>

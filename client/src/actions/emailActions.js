@@ -3,24 +3,22 @@ import { toast } from "react-toastify";
 import api from "../api/server";
 import { FETCH_COMMUNICATION_LIST, FETCH_EMAIL_LIST } from "./types";
 
-export const fetchCommunicationList = (EventId) => async (
-  dispatch,
-  getState
-) => {
-  // call the api and return the event in json
-  try {
-    const res = await api.get("/api/communication/all", {
-      params: { EventId },
-    });
+export const fetchCommunicationList =
+  (EventId) => async (dispatch, getState) => {
+    // call the api and return the event in json
+    try {
+      const res = await api.get("/api/communication/all", {
+        params: { EventId },
+      });
 
-    dispatch({ type: FETCH_COMMUNICATION_LIST, payload: res.data });
+      dispatch({ type: FETCH_COMMUNICATION_LIST, payload: res.data });
 
-    return true;
-  } catch (err) {
-    toast.error(`Error when fetching emails: ` + err.toString());
-    return false;
-  }
-};
+      return true;
+    } catch (err) {
+      toast.error(`Error when fetching emails: ` + err.toString());
+      return false;
+    }
+  };
 
 export const fetchEmailList = (emailId) => async (dispatch, getState) => {
   // call the api and return the event in json

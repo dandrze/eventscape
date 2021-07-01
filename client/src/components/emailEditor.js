@@ -34,9 +34,7 @@ const EmailEditor = (props) => {
   const [preposition, setPreposition] = useState(
     props.data.minutesFromEvent <= 0 ? -1 : 1
   );
-  const [html, setHtml] = useState(
-    props.data.html.replace(/{primary_color}/g, props.event.primaryColor) || ""
-  );
+  const [html, setHtml] = useState("");
   const [status, setStatus] = useState(
     props.data.status || statusOptions.DRAFT
   );
@@ -46,6 +44,16 @@ const EmailEditor = (props) => {
     props.data.recipients || recipientsOptions.NEW_REGISTRANTS
   );
   */
+
+  useEffect(() => {
+    const htmlWithColor =
+      props.data.html.replace(/{primary_color}/g, props.event.primaryColor) ||
+      "";
+    // keeping the href in the email is causing a lot of bugs before the event link is added.
+    // the code below replaces the href with a placeholder that doesn't do anything
+    const htmlWithLinksDisabled = disableLinks(htmlWithColor);
+    setHtml(htmlWithLinksDisabled);
+  }, []);
 
   useEffect(() => {
     validateSendTime(days, hours, mins);
@@ -67,6 +75,13 @@ const EmailEditor = (props) => {
     }
   };*/
 
+  const disableLinks = (inputHtml) => {
+    return inputHtml.replace("href", "data-href");
+  };
+
+  const enableLinks = (inputHtml) => {
+    return inputHtml.replace("data-href", "href");
+  };
   const handleChangeStatus = (event) => {
     setStatus(event.target.value);
   };
@@ -99,7 +114,8 @@ const EmailEditor = (props) => {
   };
 
   const isEmailValid = (email) => {
-    const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    const re =
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
     return re.test(email);
   };
@@ -121,7 +137,7 @@ const EmailEditor = (props) => {
           status,
           subject,
           minutesFromEvent,
-          html,
+          html: enableLinks(html),
         });
       } else {
         await props.addEmail({
@@ -129,7 +145,7 @@ const EmailEditor = (props) => {
           status,
           subject,
           minutesFromEvent,
-          html,
+          html: enableLinks(html),
         });
       }
 
@@ -194,7 +210,7 @@ const EmailEditor = (props) => {
         <div className="button-bar-left">
           <SendTestEmail
             subject={subject}
-            html={html}
+            html={enableLinks(html)}
             eventId={props.event.id}
             recipient={{
               firstName: props.user.firstName,
