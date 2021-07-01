@@ -163,7 +163,12 @@ const Published = (props) => {
       });
 
       socket.on("refreshPage", () => {
-        setForceRefresh((forceRefresh) => forceRefresh + 1);
+        // delay by a random number of miliseconds between 0 and 10,000 (10s) to not overload the server
+        const randomDelayMS = Math.floor(Math.random() * 10000);
+        setTimeout(
+          () => setForceRefresh((forceRefresh) => forceRefresh + 1),
+          randomDelayMS
+        );
       });
 
       socket.on("connect_error", (err) => {
