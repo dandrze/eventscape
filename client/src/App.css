@@ -1032,6 +1032,21 @@ select:focus {
   border-bottom: 15px solid #fc7468;
 }
 
+.tour-box.arrow-top-left {
+  margin-top: 40px;
+}
+
+.tour-box.arrow-top-left:after {
+  content: " ";
+  position: absolute;
+  left: 30px;
+  top: -15px;
+  border-top: none;
+  border-right: 15px solid transparent;
+  border-left: 15px solid transparent;
+  border-bottom: 15px solid #fc7468;
+}
+
 .tour-box.arrow-right:after {
   content: " ";
   position: absolute;

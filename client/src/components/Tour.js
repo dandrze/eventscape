@@ -200,7 +200,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event, user }) => {
         return (
           <div
             className="tour-box arrow-top"
-            style={{ position: "absolute", top: 180, left: 225 }}
+            style={{ position: "absolute", top: 190, left: "-20px" }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Edit the background image, color, and image blur by clicking on
@@ -494,7 +494,7 @@ const Tour = ({ closeTour, simulateHover, setTourCompleted, event, user }) => {
         return (
           <div
             className="tour-box arrow-top"
-            style={{ position: "absolute", top: 180, left: 225 }}
+            style={{ position: "absolute", top: 190, left: "-20px" }}
           >
             <DialogContentText style={{ width: "100%" }}>
               Edit the background image, color, and image blur by clicking on
