@@ -49,7 +49,6 @@
     "react-form-builder2": "^0.6.1",
     "react-froala-wysiwyg": "^3.2.2-1",
     "react-html-parser": "^2.0.2",
-    "react-jvectormap": "0.0.16",
     "react-papaparse": "^3.11.1",
     "react-popup": "^0.10.0",
     "react-redux": "^7.2.1",
@@ -89,5 +88,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "webpack-bundle-analyzer": "^4.4.2"
   }
 }

@@ -1,7 +1,5 @@
 import React, { useEffect, useState, memo } from "react";
-import LockSharpIcon from "@material-ui/icons/LockSharp";
-import { VectorMap } from "react-jvectormap";
-import { Link } from "react-router-dom";
+//import { VectorMap } from "react-jvectormap";
 
 const WorldMap = memo(({ data }) => {
   const visitorLocations = data
@@ -19,7 +17,7 @@ const WorldMap = memo(({ data }) => {
 
   return (
     <div style={{ width: "100%", height: 550, position: "relative" }}>
-      <VectorMap
+      {/*  <VectorMap
         map={"world_mill"}
         backgroundColor="#FFFF"
         markerStyle={{
@@ -52,8 +50,7 @@ const WorldMap = memo(({ data }) => {
           height: "100%",
         }}
         containerClassName="map"
-      />
-     
+      /> */}
     </div>
   );
 });
