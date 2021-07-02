@@ -1,27 +1,26 @@
-import React, { createElement, useEffect, useState } from "react";
+import React, { createElement, useEffect, useState, lazy } from "react";
 import { useParams } from "react-router-dom";
 import io from "socket.io-client";
 import Cookies from "universal-cookie";
 import uuid from "react-uuid";
 import axios from "axios";
-
 import { connect } from "react-redux";
 import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { Helmet } from "react-helmet";
-
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
 import theme from "../templates/theme";
-import RegistrationNotFound from "../components/RegistrationNotFound";
-import { pageNames } from "../model/enums";
-import BrandingTop from "../components/BrandingTop";
 import BrandingBottom from "../components/BrandingBottom";
-import Modal1 from "../components/Modal1";
-import PollBlock from "../components/polling/PollBlock";
-import ResultsChart from "../components/polling/ResultsChart";
-import AlertModal from "../components/AlertModal";
 import SimpleLoadingScreen from "../components/SimpleLoadingScreen";
 import DraftModeMessage from "../components/DraftModeMessage";
+
+const Modal1 = lazy(() => import("../components/Modal1"));
+const PollBlock = lazy(() => import("../components/polling/PollBlock"));
+const ResultsChart = lazy(() => import("../components/polling/ResultsChart"));
+const AlertModal = lazy(() => import("../components/AlertModal"));
+const RegistrationNotFound = lazy(() =>
+  import("../components/RegistrationNotFound")
+);
 
 const ENDPOINT =
   process.env.NODE_ENV === "development" ? "http://localhost:5000/" : "/";
@@ -123,7 +122,7 @@ const Published = (props) => {
     }
 
     // if the pagetype is event, turn on analytics
-    if (pageType == pageNames.EVENT) {
+    if (pageType == "event") {
       socket = io(ENDPOINT, {
         path: "/api/socket/event",
         transports: ["websocket", "polling"],

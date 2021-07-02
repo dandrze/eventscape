@@ -11,7 +11,6 @@ import { ToastContainer } from "react-toastify";
 import CookieConsent from "react-cookie-consent";
 
 import "react-toastify/dist/ReactToastify.css";
-import FoldingCube from "./components/FoldingCube";
 import "./App.css";
 import "./components/fonts.css";
 import LongLoadingScreen from "./components/LongLoadingScreen";
@@ -19,7 +18,6 @@ import * as actions from "./actions";
 import initTawk from "./utils/tawk";
 
 // lazy loading is used so only the relevant component is loaded rather than all components
-const Landing = lazy(() => import("./pages/landing"));
 const SignUp = lazy(() => import("./pages/SignUp"));
 const Published = lazy(() => import("./pages/published"));
 const Giller = lazy(() => import("./pages/Giller"));
