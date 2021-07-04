@@ -101,7 +101,7 @@ Event.hasOne(License);
 //Event.sync({ alter: true });
 //Account.sync({ alter: true });
 
-sequelize.sync({ alter: true });
+//sequelize.sync({ alter: true });
 
 // any models wrapped with sequelizeRedis can be used with redis caching
 module.exports = {
