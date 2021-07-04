@@ -73,7 +73,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "postinstall": "node-prune"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -91,6 +92,7 @@
     ]
   },
   "devDependencies": {
+    "inspectpack": "^4.7.1",
     "webpack-bundle-analyzer": "^4.4.2"
   }
 }
