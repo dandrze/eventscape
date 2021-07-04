@@ -27,7 +27,6 @@
     "immutability-helper": "^3.1.1",
     "immutable": "^3.8.2",
     "install": "^0.13.0",
-    "jquery": "^3.6.0",
     "jstimezonedetect": "^1.0.7",
     "material-table": "^1.69.0",
     "material-ui-popup-state": "^1.6.1",
@@ -50,6 +49,7 @@
     "react-form-builder2": "^0.6.1",
     "react-froala-wysiwyg": "^3.2.2-1",
     "react-html-parser": "^2.0.2",
+    "react-jvectormap": "^0.0.16",
     "react-papaparse": "^3.11.1",
     "react-popup": "^0.10.0",
     "react-redux": "^7.2.1",
@@ -91,7 +91,6 @@
     ]
   },
   "devDependencies": {
-    "webpack-bundle-analyzer": "^4.4.2",
-    "webpack-cli": "^4.7.2"
+    "webpack-bundle-analyzer": "^4.4.2"
   }
 }
