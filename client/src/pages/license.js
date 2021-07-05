@@ -335,8 +335,8 @@ const License = ({ event }) => {
                   </h3>
                   <p style={{ fontSize: "1rem" }}>
                     You may build, test, and demo your event website in draft
-                    mode. A message will appear on your event website indicating
-                    that you are currently in draft mode. Add a license below to
+                    mode. A red banner will appear will appear indicating your
+                    event is currently in draft mode. Add a license below to
                     remove the message from your event website.
                   </p>
 
