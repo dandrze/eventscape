@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { connect } from "react-redux";
 import ScrollToBottom from "react-scroll-to-bottom";
 import ReactEmoji from "react-emoji";
-import FoldingCube from "./FoldingCube";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import Cookies from "universal-cookie";
 import createUUID from "react-uuid";
@@ -21,7 +21,6 @@ import TelegramIcon from "@material-ui/icons/Telegram";
 import io from "socket.io-client";
 
 import api from "../api/server";
-import { props } from "bluebird";
 
 const cookies = new Cookies();
 
@@ -193,14 +192,16 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
       value={question}
       onChange={({ target: { value } }) => setQuestion(value)}
     />
-    <button
-      className="theme-button send-button max-height-60"
-      style={theme}
-      onClick={(e) => sendQuestion(e)}
-    >
-      <div className="send-question-text">Send Question</div>
-      <TelegramIcon />
-    </button>
+    <Tooltip title="Send question directly to event host.">
+      <button
+        className="theme-button send-button max-height-60"
+        style={theme}
+        onClick={(e) => sendQuestion(e)}
+      >
+        <div className="send-question-text">Send Question</div>
+        <TelegramIcon />
+      </button>
+    </Tooltip>
   </form>
 );
 

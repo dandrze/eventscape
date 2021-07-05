@@ -46,7 +46,6 @@ import "froala-editor/css/plugins/quick_insert.min.css";
 
 import * as actions from "../actions";
 import api from "../api/server";
-import { resolve } from "bluebird";
 
 const Froala = (props) => {
   const [userClicked, setUserClicked] = useState(false);
@@ -286,30 +285,6 @@ const Froala = (props) => {
 
   // Changes the itcon on paragraph style to the bold icon
   FroalaEditor.DefineIcon("paragraphStyle", { NAME: "bold", SVG_KEY: "bold" });
-
-  FroalaEditor.DefineIcon("updateHeroImage", { NAME: "plus", SVG_KEY: "add" });
-  FroalaEditor.RegisterCommand("updateHeroImage", {
-    title: "Update Hero Image",
-    focus: true,
-    undo: true,
-    refreshAfterCallback: true,
-    callback: async function () {
-      //this.html.insert("Event start date");
-      const oldHtml = this.html.get();
-      const newUrl = await imageManager(this);
-
-      const newHtml = oldHtml.replace(/url\(.*?\)/, newUrl);
-      this.html.set(newHtml);
-    },
-  });
-
-  const imageManager = (editor) => {
-    return new Promise(async (resolve, reject) => {
-      const result = await editor.imageManager.show((res) => console.log(res));
-      console.log(result);
-      resolve(123);
-    });
-  };
 
   return (
     <div onFocus={handleUserInput} onBlur={handleOnComponentBlur}>
