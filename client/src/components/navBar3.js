@@ -397,8 +397,22 @@ function NavBar3(props) {
                   </div>
                 </Button>
               </Tooltip>
-              <Tooltip title="Create a new event">
-                <Button href="/create-event" className="vertical-button">
+              <Tooltip
+                title={
+                  <div>
+                    Create a new event. <br />
+                    <br />
+                    TIP: You may duplicate an existing event by clicking on the
+                    Current Event, then Manage Events, then the plus icon next
+                    to your event in the table.
+                  </div>
+                }
+              >
+                <Button
+                  href="/create-event"
+                  className="vertical-button"
+                  tooltip="test"
+                >
                   <img
                     className="profile"
                     src={plus_icon}

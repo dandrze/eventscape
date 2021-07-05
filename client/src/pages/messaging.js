@@ -1,23 +1,11 @@
-import React, { Component, useEffect } from "react";
+import React, { useEffect } from "react";
 import { connect } from "react-redux";
 import NavBar3 from "../components/navBar3.js";
 import "./messaging.css";
-import { makeStyles } from "@material-ui/core/styles";
 import * as actions from "../actions";
 import ModeratorDashboard from "../components/moderator/ModeratorDashboard.js";
-import { CircularProgress } from "@material-ui/core";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
-import FoldingCube from "../components/FoldingCube"
-
-const useStyles = makeStyles((theme) => ({
-  formControl: {
-    margin: "20px 0px",
-    minWidth: "100%",
-  },
-  selectEmpty: {
-    marginTop: theme.spacing(2),
-  },
-}));
+import FoldingCube from "../components/FoldingCube";
 
 const Messaging = (props) => {
   const [chatRooms, setChatRooms] = React.useState([]);

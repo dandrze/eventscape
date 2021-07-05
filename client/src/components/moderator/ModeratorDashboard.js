@@ -112,6 +112,8 @@ const ModeratorDashboard = ({
       params: { roomId: room.id },
     });
 
+    console.log(chatMessages);
+
     const history = chatMessages.data.map((chatMessage) => {
       return {
         Message: chatMessage.text,
@@ -119,6 +121,7 @@ const ModeratorDashboard = ({
           dateStyle: "long",
           timeStyle: "long",
         }),
+        Deleted: chatMessage.deleted ? "Yes" : "No",
         Name: chatMessage.ChatUser.name || "",
         "Email Address": chatMessage.ChatUser.Registration?.emailAddress || "",
       };
@@ -153,9 +156,19 @@ const ModeratorDashboard = ({
   return (
     <div className="form-box shadow-border" style={{ marginBottom: "60px" }}>
       {/* The components below are used to download csvs. Upon render they will download the data in the data prop*/}
-      {chatHistory ? <CSVDownload data={chatHistory} target="_blank" rel="noopener noreferrer" /> : null}
+      {chatHistory ? (
+        <CSVDownload
+          data={chatHistory}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
+      ) : null}
       {questionsHistory ? (
-        <CSVDownload data={questionsHistory} target="_blank" rel="noopener noreferrer" />
+        <CSVDownload
+          data={questionsHistory}
+          target="_blank"
+          rel="noopener noreferrer"
+        />
       ) : null}
 
       <div className="room-bar">
