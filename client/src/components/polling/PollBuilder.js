@@ -126,6 +126,13 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
         eventId: event.id,
       });
     } else {
+      console.log({
+        pollId: pollData.id,
+        question,
+        options,
+        allowMultiple,
+        //allowShare,
+      });
       const editResponse = await api.put("/api/polling/poll", {
         pollId: pollData.id,
         question,

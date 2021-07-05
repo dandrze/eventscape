@@ -108,7 +108,7 @@ const PollController = ({
       allowMultiple: polls[selectedPollIndex].allowMultiple,
     });
     try {
-      const res = await api.put("/api/polling/poll", {
+      const res = await api.post("/api/polling/poll/launch", {
         pollId: polls[selectedPollIndex].id,
       });
     } catch (err) {

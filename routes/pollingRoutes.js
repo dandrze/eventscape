@@ -1,12 +1,7 @@
 const express = require("express");
 const router = express.Router();
-const {
-  Poll,
-  PollOption,
-  PollResponse,
-  SiteVisitor,
-  Registration,
-} = require("../db").models;
+const { Poll, PollOption, PollResponse, SiteVisitor, Registration } =
+  require("../db").models;
 
 const { clearCache } = require("../services/sequelizeRedis");
 const { fetchPollResults } = require("../services/pollQueries");
@@ -126,7 +121,7 @@ router.delete("/api/polling/results", requireAuth, async (req, res, next) => {
   }
 });
 
-router.put("/api/polling/poll", requireAuth, async (req, res, next) => {
+router.post("/api/polling/poll/launch", requireAuth, async (req, res, next) => {
   const { pollId } = req.body;
 
   try {
@@ -178,6 +173,9 @@ router.delete("/api/polling/poll", requireAuth, async (req, res, next) => {
 
 router.put("/api/polling/poll", requireAuth, async (req, res, next) => {
   const { pollId, question, options, allowMultiple, allowShare } = req.body;
+
+  console.log(options);
+  console.log("polling called");
 
   try {
     const poll = await Poll.findByPk(pollId);
