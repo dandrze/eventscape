@@ -12,7 +12,8 @@
 
 node_modules
 analyze.js
-/scripts
+client/scripts
+testSize.js
 
 # our keys will be here in plain text, so make sure this isn't pushed to git
 dev.js

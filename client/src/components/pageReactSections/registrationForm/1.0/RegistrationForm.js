@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, lazy } from "react";
 import ReactDOM from "react-dom";
 import { connect } from "react-redux";
 
@@ -9,8 +9,6 @@ import AlertModal from "../../../AlertModal";
 import "./RegistrationForm.css";
 import api from "../../../../api/server";
 import * as actions from "../../../../actions";
-import Froala from "../../../froala";
-
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import FormControl from "@material-ui/core/FormControl";
@@ -18,6 +16,8 @@ import Modal1 from "../../../Modal1";
 import FoldingCube from "../../../FoldingCube";
 
 import { isValidEmailFormat } from "../../../../hooks/validation";
+
+const Froala = lazy(() => import("../../../froala"));
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -195,8 +195,6 @@ function RegistrationForm({
     }
   };
 
-  console.log(backgroundBoxShadow);
-
   return (
     <div>
       <AlertModal
@@ -324,9 +322,7 @@ function RegistrationForm({
                 <ReactFormGenerator
                   action_name={SubmitButtonText || "Register now"}
                   onSubmit={handleSubmit}
-                  data={
-                 formData
-                  }
+                  data={formData}
                   answer_data={prePopulatedValues}
                   className="form-editor-react"
                 />

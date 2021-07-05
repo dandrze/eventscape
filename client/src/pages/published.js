@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 import uuid from "react-uuid";
 import axios from "axios";
 import { connect } from "react-redux";
-import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
+//import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { Helmet } from "react-helmet";
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";
@@ -316,27 +316,27 @@ const Published = (props) => {
             {props.model.sections.map(function (section) {
               return (
                 <div className="section-block">
-                  {section.isReact ? (
-                    createElement(
-                      mapReactComponent[section.reactComponent.name][
-                        section.reactComponent.version || "1.0"
-                      ],
+                  {section.isReact
+                    ? createElement(
+                        mapReactComponent[section.reactComponent.name][
+                          section.reactComponent.version || "1.0"
+                        ],
 
-                      {
-                        ...section.reactComponent.props,
-                        sectionIndex: section.index,
-                        isLive: true,
-                      }
-                    )
-                  ) : (
-                    <FroalaEditorView
+                        {
+                          ...section.reactComponent.props,
+                          sectionIndex: section.index,
+                          isLive: true,
+                        }
+                      )
+                    : null
+                      /*     <FroalaEditorView
                       key={section.id}
                       model={section.html.replace(
                         `contenteditable="true"`,
                         `contenteditable="false"`
                       )}
-                    />
-                  )}
+                    /> */
+                  }
                 </div>
               );
             })}

@@ -13,7 +13,6 @@ import Registrations from "./registrations";
 import Analytics from "./analytics";
 import Messaging from "./messaging";
 import License from "./license";
-import Preview from "./preview";
 import EventDetailsPage from "./EventDetailsPage";
 import AccountSettingsContact from "./account-settings-contact";
 import AccountSettingsPayments from "./account-settings-payments";
@@ -107,11 +106,6 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
             render={() => requireEvent(Messaging)}
           />
           <Route exact path="/license" render={() => requireEvent(License)} />
-          <Route
-            exact
-            path="/preview/:event/:model"
-            render={() => requireEvent(Preview)}
-          />
           <Route
             exact
             path="/account-settings-contact"
