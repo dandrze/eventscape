@@ -119,7 +119,7 @@ const License = ({ event }) => {
                   Current Event Type<sup>3</sup>
                 </div>
 
-                <h3>Registration Event</h3>
+                <h3>Registration Required</h3>
                 <p>
                   $
                   {includeCDN
@@ -175,7 +175,7 @@ const License = ({ event }) => {
                 <sup>3</sup>{" "}
                 {event.registrationRequired
                   ? "If registration is switched off after enabling this license, the license will automatically switch to the Open Event license."
-                  : "If registration is swtiched on after enabling this license, the license will automatically switch to the Registration Event license."}
+                  : "If registration is swtiched on after enabling this license, the license will automatically switch to the Registration Required license."}
               </p>
               <p className="subtext">
                 License can be cancelled up until 1 hour before the event.
@@ -217,7 +217,7 @@ const License = ({ event }) => {
                 {event.registrationRequired ? (
                   <>
                     <div className="license-box center">
-                      <h3>Registration Event</h3>
+                      <h3>Registration Required</h3>
                       <p>
                         ${event.License.basePrice} USD
                         <br />
