@@ -13,6 +13,7 @@ import theme from "../templates/theme";
 import BrandingBottom from "../components/BrandingBottom";
 import SimpleLoadingScreen from "../components/SimpleLoadingScreen";
 import DraftModeMessage from "../components/DraftModeMessage";
+import "../components/froala_style.min.css";
 
 const Modal1 = lazy(() => import("../components/Modal1"));
 const PollBlock = lazy(() => import("../components/polling/PollBlock"));
