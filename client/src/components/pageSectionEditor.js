@@ -18,6 +18,7 @@ const PageSectionEditor = ({
   section,
   isHovering,
   setIsHovering,
+  openStreamSettings,
 }) => {
   const [open, setOpen] = useState(false);
   const [insertAfter, setInsertAfter] = useState(0);
@@ -66,6 +67,7 @@ const PageSectionEditor = ({
           section={model.sections[sectionIndex]}
           sectionIndex={sectionIndex}
           maxIndex={model.sections.length}
+          openStreamSettings={openStreamSettings}
         />
         {section.isReact ? (
           createElement(

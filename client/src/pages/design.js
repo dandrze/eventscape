@@ -15,6 +15,9 @@ import Tour from "../components/Tour";
 const Design = ({ event, model, fetchModel, user }) => {
   // fetch the tour param from the url. If it's a new event, tourRequired will be set to the string "true", otherwise it will be null (falsey)
   const tourRequired = new URLSearchParams(window.location.search).get("tour");
+  const openStreamSettings = new URLSearchParams(window.location.search).get(
+    "stream"
+  );
   // open the tour if the user has not completed the tour and if a tour is required
   const [openTour, setOpenTour] = useState(
     !user.tourComplete && Boolean(tourRequired)
@@ -44,7 +47,11 @@ const Design = ({ event, model, fetchModel, user }) => {
         content={
           model.sections.length ? (
             event.permissions?.design ? (
-              <PageEditor key={model} page={page} />
+              <PageEditor
+                key={model}
+                page={page}
+                openStreamSettings={openStreamSettings}
+              />
             ) : (
               <AccessDeniedScreen message="Please contact the event owner to provide you with permissions to this page." />
             )

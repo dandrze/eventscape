@@ -5,11 +5,11 @@ import ExitToAppIcon from "@material-ui/icons/ExitToApp";
 import FiberManualRecordIcon from "@material-ui/icons/FiberManualRecord";
 import { makeStyles } from "@material-ui/core/styles";
 import Tooltip from "@material-ui/core/Tooltip";
-import CheckBoxIcon from "@material-ui/icons/CheckBox";
-import CheckBoxOutlineBlankIcon from "@material-ui/icons/CheckBoxOutlineBlank";
+import Checkbox from "@material-ui/core/Checkbox";
 
 import NavBar3 from "../components/navBar3.js";
 import * as actions from "../actions";
+import api from "../api/server";
 
 import { statusOptions } from "../model/enums";
 
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const ChecklistItem = ({ text, checked }) => {
+const ChecklistItem = ({ text, checked, hidden, handleCheckItem }) => {
   return (
     <div
       className="shadow-border"
@@ -40,14 +40,23 @@ const ChecklistItem = ({ text, checked }) => {
         background: "#ffffff",
         margin: "10px",
         width: "100%",
+        display: hidden ? "none" : "",
       }}
+      onClick={handleCheckItem}
     >
-      {checked ? (
-        <CheckBoxIcon style={{ margin: "10px" }} />
-      ) : (
-        <CheckBoxOutlineBlankIcon style={{ margin: "10px" }} />
-      )}
-      <span style={{ fontSize: "1rem" }}>{text}</span>
+      <Checkbox
+        checked={checked}
+        onChange={handleCheckItem}
+        inputProps={{ "aria-label": "primary checkbox" }}
+      />
+      <span
+        style={{
+          fontSize: "1rem",
+          textDecoration: checked ? "line-through" : "",
+        }}
+      >
+        {text}
+      </span>
     </div>
   );
 };
@@ -63,6 +72,14 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
     if (event.id) {
       fetchRegistrations(event.id);
     }
+  };
+
+  const handleCheckItem = (checklistItem) => {
+    console.log("checked");
+    const response = api.post("/api/event/checklist-item", {
+      eventId: event.id,
+      checklistItem,
+    });
   };
 
   return (
@@ -113,50 +130,101 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                   </a>
                 </Tooltip>
               </div>
-              <div style={{ display: "flex", margin: "1rem 0px" }}>
+              {/*  <div style={{ display: "flex", margin: "1rem 0px" }}>
                 <div className={"shadow-border " + classes.halfCard}>
                   <h3>Total Registrations</h3>
                   <h2>{registration.data.length}</h2>
                 </div>
+              </div> */}
+
+              <div style={{ marginTop: "60px" }}>
+                Event Onboarding Checklist
               </div>
 
-              {/*   <div>Event Onboarding Checklist</div>
+              <ChecklistItem
+                handleCheckItem={() => handleCheckItem("stream")}
+                text={
+                  <span>
+                    Add a{" "}
+                    <Link to="/design/event?stream=true">
+                      <span className="link1">stream</span>
+                    </Link>{" "}
+                    to your event page.
+                  </span>
+                }
+              />
 
               <ChecklistItem
-                checked
+                handleCheckItem={() => handleCheckItem("registration-page")}
+                // Hide checklist item if registration is not required
+                hidden={!event.registrationRequired}
                 text={
                   <span>
                     Review your{" "}
-                    <a href="/design/registration" className="link1">
-                      registration page
-                    </a>{" "}
+                    <Link to="/design/registration">
+                      <span className="link1">registration page</span>
+                    </Link>{" "}
                     design.
                   </span>
                 }
               />
 
               <ChecklistItem
+                handleCheckItem={() => handleCheckItem("permissions")}
                 text={
                   <span>
-                    Review your{" "}
-                    <a href="/design/event" className="link1">
-                      event page
-                    </a>{" "}
-                    design.
+                    Add your{" "}
+                    <Link to="/permissions">
+                      <span className="link1">team members</span>
+                    </Link>
+                    .
                   </span>
                 }
               />
 
               <ChecklistItem
+                handleCheckItem={() => handleCheckItem("communication")}
+                // Hide checklist item if registration is not required
+                hidden={!event.registrationRequired}
                 text={
                   <span>
                     Create your{" "}
-                    <a href="/registration" className="link1">
-                      registration, reminder and follow up emails
-                    </a>
+                    <Link to="/communication">
+                      <span className="link1">
+                        registration, reminder and follow up emails
+                      </span>
+                      .
+                    </Link>
                   </span>
                 }
-              /> */}
+              />
+
+              <ChecklistItem
+                handleCheckItem={() => handleCheckItem("registrations")}
+                // Hide checklist item if registration is not required
+                hidden={!event.registrationRequired}
+                text={
+                  <span>
+                    Customize your{" "}
+                    <Link to="/registrations">
+                      <span className="link1">registration form</span>.
+                    </Link>
+                  </span>
+                }
+              />
+
+              <ChecklistItem
+                handleCheckItem={() => handleCheckItem("polls")}
+                text={
+                  <span>
+                    Create{" "}
+                    <Link to="/polls">
+                      <span className="link1">polls</span>
+                    </Link>{" "}
+                    to use during your event.
+                  </span>
+                }
+              />
             </div>
           ) : null
         }

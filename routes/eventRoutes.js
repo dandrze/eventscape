@@ -734,4 +734,20 @@ router.post("/api/event/reminder", requireAuth, async (req, res, next) => {
   }
 });
 
+router.post(
+  "/api/event/checklist-item",
+  requireAuth,
+  async (req, res, next) => {
+    try {
+      const { eventId, checklistItem } = req.body;
+
+      console.log({ eventId, checklistItem });
+
+      res.status(200).send();
+    } catch (error) {
+      next(error);
+    }
+  }
+);
+
 module.exports = router;

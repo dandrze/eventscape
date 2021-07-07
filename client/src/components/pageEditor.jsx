@@ -25,7 +25,15 @@ const ENDPOINT =
 
 let socket;
 
-const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
+const PageEditor = ({
+  history,
+  model,
+  event,
+  page,
+  fetchModel,
+  saveModel,
+  openStreamSettings,
+}) => {
   const [open, setOpen] = useState(false);
   const [location, setLocation] = useState(null);
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
@@ -342,6 +350,7 @@ const PageEditor = ({ history, model, event, page, fetchModel, saveModel }) => {
                           sectionIndex={index}
                           isHovering={isHovering}
                           setIsHovering={setIsHovering}
+                          openStreamSettings={openStreamSettings}
                         />
                       </div>
                     );

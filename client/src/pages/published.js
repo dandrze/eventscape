@@ -316,27 +316,27 @@ const Published = (props) => {
             {props.model.sections.map(function (section) {
               return (
                 <div className="section-block">
-                  {section.isReact
-                    ? createElement(
-                        mapReactComponent[section.reactComponent.name][
-                          section.reactComponent.version || "1.0"
-                        ],
+                  {section.isReact ? (
+                    createElement(
+                      mapReactComponent[section.reactComponent.name][
+                        section.reactComponent.version || "1.0"
+                      ],
 
-                        {
-                          ...section.reactComponent.props,
-                          sectionIndex: section.index,
-                          isLive: true,
-                        }
-                      )
-                    : null
-                      /*     <FroalaEditorView
+                      {
+                        ...section.reactComponent.props,
+                        sectionIndex: section.index,
+                        isLive: true,
+                      }
+                    )
+                  ) : (
+                    <FroalaEditorView
                       key={section.id}
                       model={section.html.replace(
                         `contenteditable="true"`,
                         `contenteditable="false"`
                       )}
-                    /> */
-                  }
+                    />
+                  )}
                 </div>
               );
             })}

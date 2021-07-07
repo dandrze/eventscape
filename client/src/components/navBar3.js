@@ -8,7 +8,6 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import List from "@material-ui/core/List";
 import CssBaseline from "@material-ui/core/CssBaseline";
-import Typography from "@material-ui/core/Typography";
 import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import { deepOrange, deepPurple } from "@material-ui/core/colors";
@@ -36,7 +35,6 @@ import * as actions from "../actions";
 /* Icons top bar */
 import EventscapeLogo from "../icons/eventscape-logo-eaeaea.svg";
 import Internet_icon from "../icons/internet.svg";
-import swap_icon from "../icons/swap.svg";
 import plus_icon from "../icons/plus.svg";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
@@ -54,7 +52,6 @@ import NotepadIcon from "../icons/notepad.svg";
 import GraphIcon from "../icons/graph.svg";
 import ChatIcon from "../icons/chat.svg";
 import InvoiceIcon from "../icons/invoice3.svg";
-import PollIcon from "../icons/poll-1.svg";
 import CharChartIcon from "../icons/bar-chart.svg";
 import TeamIcon from "../icons/team.svg";
 import DashboardIcon from "../icons/dashboard.svg";
@@ -62,8 +59,6 @@ import DashboardIcon from "../icons/dashboard.svg";
 /* Icons side nav account */
 import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import AccountIcon from "../icons/account.svg";
-import KeyIcon from "../icons/key.svg";
-import CreditCardIcon from "../icons/credit-card.svg";
 
 import { statusOptions } from "../model/enums";
 
