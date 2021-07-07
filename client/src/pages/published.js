@@ -5,7 +5,7 @@ import Cookies from "universal-cookie";
 import uuid from "react-uuid";
 import axios from "axios";
 import { connect } from "react-redux";
-//import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
+import FroalaEditorView from "react-froala-wysiwyg/FroalaEditorView";
 import { Helmet } from "react-helmet";
 import * as actions from "../actions";
 import mapReactComponent from "../components/mapReactComponent";

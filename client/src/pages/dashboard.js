@@ -130,14 +130,14 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                   </a>
                 </Tooltip>
               </div>
-              {/*  <div style={{ display: "flex", margin: "1rem 0px" }}>
+              <div style={{ display: "flex", margin: "1rem 0px" }}>
                 <div className={"shadow-border " + classes.halfCard}>
                   <h3>Total Registrations</h3>
                   <h2>{registration.data.length}</h2>
                 </div>
-              </div> */}
+              </div>
 
-              <div style={{ marginTop: "60px" }}>
+              {/*  <div style={{ marginTop: "60px" }}>
                 Event Onboarding Checklist
               </div>
 
@@ -224,7 +224,7 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                     to use during your event.
                   </span>
                 }
-              />
+              /> */}
             </div>
           ) : null
         }
