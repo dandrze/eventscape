@@ -45,7 +45,7 @@ function DesignBlockToolbar(props) {
   const classes = useStyles();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   // Open the stream settings right away if the parent passed down openStreamSettings=true and the component is the streamchat
-  const [openSettings, setOpenSettings] = useState(props.openStreamSettings && props.section.reactComponent?.name === "StreamChat");
+  const [openSettings, setOpenSettings] = useState(false);
   const [openBackgroundImage, setOpenBackgroundImage] = useState(false);
   const [sectionTooltip, setSectionTooltip] = useState("");
 
