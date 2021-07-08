@@ -27,3 +27,5 @@ client/logfile
 testing/
 
 build/
+
+package-lock.json
