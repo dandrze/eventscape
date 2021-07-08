@@ -118,6 +118,7 @@ const Table = (props) => {
   const columns = [
     {
       title: "Event Name",
+      customSort: (a, b) => (a.name < b.name ? -1 : 1),
       render: (rowData) => {
         return (
           <div onClick={() => handleSelectEvent(rowData)} className="link1">

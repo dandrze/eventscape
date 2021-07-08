@@ -97,6 +97,7 @@ export default function LoginsTable({ data }) {
     },
     {
       title: "First Login",
+      customSort: (a, b) => new Date(a.createdAt) - new Date(b.createdAt),
       render: (rowData) => (
         <span>
           {new Date(rowData.createdAt).toLocaleString("en-us", {
@@ -108,6 +109,7 @@ export default function LoginsTable({ data }) {
     },
     {
       title: "Last Logout",
+      customSort: (a, b) => new Date(a.lastLogout) - new Date(b.lastLogout),
       render: (rowData) => (
         <span>
           {rowData.lastLogout
@@ -121,6 +123,7 @@ export default function LoginsTable({ data }) {
     },
     {
       title: "Total Time Viewed",
+      customSort: (a, b) => a.timeViewed - b.timeViewed,
       render: (rowData) => (
         <span>
           {(rowData.timeViewed / 60000).toFixed(2).toString() + " Minutes"}
