@@ -115,7 +115,7 @@ const Froala = (props) => {
           "superscript",
           "textColor",
           "backgroundColor",
-          "inlineClass",
+
           "inlineStyle",
         ],
         buttonsVisible: 4,
@@ -150,7 +150,7 @@ const Froala = (props) => {
         buttonsVisible: 3,
       },
       moreMisc: {
-        buttons: ["undo", "redo", "html", "inlineClass"],
+        buttons: ["undo", "redo", "html", "trackChanges"],
         buttonsVisible: 4,
       },
     },
