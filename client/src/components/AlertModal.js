@@ -18,6 +18,7 @@ export default function AlertModal({
   continueText,
   textInputLabel,
   inputAdornment = null,
+  errorText = null,
 }) {
   const [input, setInput] = useState("");
 
@@ -55,6 +56,8 @@ export default function AlertModal({
             type="standard"
             value={input}
             onChange={handleChangeInput}
+            helperText={errorText}
+            error={errorText ? true : false}
             variant="outlined"
             style={{ margin: "0px 30px" }}
             InputProps={

@@ -59,6 +59,7 @@ const Table = (props) => {
   const [actionRowId, setActionRowId] = useState(null);
   const [textInputLabel, setTextInputLabel] = useState("");
   const [onContinueAction, setOnContinueAction] = useState("");
+  const [alertModalError, setAlertModalError] = useState("");
 
   const handleSelectEvent = async (rowData) => {
     // Set this event as the current event
@@ -217,11 +218,34 @@ const Table = (props) => {
       await props.deleteEvent(actionRowId);
     }
     if (onContinueAction == "duplicate") {
+      const specialChars = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/;
+
+      if (specialChars.test(input)) {
+        setModalText(
+          "Please enter a new unique subdomain link for this event. Please use only lower case letters, numbers and dashes (-)"
+        );
+        setAlertModalError(
+          "This subdomain link contains illegal characters. Please use only lower case letters, numbers and dashes (-)"
+        );
+        setTextInputLabel("link");
+        setOnContinueAction("duplicate");
+        setOpenModal(true);
+
+        return null;
+      }
+
       const res = await props.isLinkAvailable(input);
       if (res) {
+        setModalText("");
+        setAlertModalError("");
+        setTextInputLabel("");
+        setOnContinueAction("");
         await props.duplicateEvent(actionRowId, input);
       } else {
         setModalText(
+          "Please enter a new unique subdomain link for this event. Please use only lower case letters, numbers and dashes (-)"
+        );
+        setAlertModalError(
           "This subdomain link is not available. Please select a different link. Please use only lower case letters, numbers and dashes (-)"
         );
         setTextInputLabel("link");
@@ -247,6 +271,7 @@ const Table = (props) => {
           closeText="Cancel"
           continueText="Continue"
           textInputLabel={textInputLabel}
+          errorText={alertModalError}
           // If the input is for a new link, add .eventscape.io as the input adornment
           inputAdornment={
             textInputLabel === "New Link" ? ".eventscape.io" : null
