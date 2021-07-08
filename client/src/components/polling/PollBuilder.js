@@ -144,6 +144,8 @@ const PollBuilder = ({ handleClose, event, pollData, isAdd }) => {
     handleClose();
   };
 
+  console.log(options);
+
   return (
     <div style={{ width: "650px" }}>
       <AlertModal

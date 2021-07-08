@@ -7,6 +7,8 @@ export const fetchPolls = (eventId) => async (dispatch) => {
 
   try {
     const res = await api.get("/api/polling/poll/all", { params: { eventId } });
+
+    console.log(res.data);
     dispatch({ type: FETCH_POLLS, payload: res.data });
     return true;
   } catch (err) {
@@ -40,24 +42,22 @@ export const fetchPollResults = () => async (dispatch, getState) => {
   }
 };
 
-export const fetchPollResultsFromId = (pollId) => async (
-  dispatch,
-  getState
-) => {
-  // call the api and return the polls in json
+export const fetchPollResultsFromId =
+  (pollId) => async (dispatch, getState) => {
+    // call the api and return the polls in json
 
-  try {
-    const resultsRes = await api.get("/api/polling/results", {
-      params: { pollId },
-    });
+    try {
+      const resultsRes = await api.get("/api/polling/results", {
+        params: { pollId },
+      });
 
-    const { results, totalResponded } = resultsRes.data;
+      const { results, totalResponded } = resultsRes.data;
 
-    dispatch({ type: FETCH_RESULTS, payload: { results, totalResponded } });
+      dispatch({ type: FETCH_RESULTS, payload: { results, totalResponded } });
 
-    return true;
-  } catch (err) {
-    toast.error("Error when fetching polls: " + err.toString());
-    return false;
-  }
-};
+      return true;
+    } catch (err) {
+      toast.error("Error when fetching polls: " + err.toString());
+      return false;
+    }
+  };

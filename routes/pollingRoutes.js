@@ -15,7 +15,7 @@ router.get("/api/polling/poll/all", requireAuth, async (req, res, next) => {
       where: {
         EventId: eventId,
       },
-      include: PollOption,
+      include: { model: PollOption, separate: true, order: [["id", "ASC"]] },
       order: [["id", "ASC"]],
     });
 
