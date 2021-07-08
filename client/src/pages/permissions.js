@@ -58,7 +58,7 @@ const Permissions = ({ event, user }) => {
   const [data, setData] = useState([]);
   const [openAddModal, setOpenAddModal] = useState(false);
   const [openTransferModal, setOpenTransferModal] = useState(false);
-  const [transferTarget, setTransferTarget] = useState({});
+  const [transferTarget, setTransferTarget] = useState(null);
   const [transferStatus, setTransferStatus] = useState("Not Started");
   const [newCollaboratorEmailAddress, setNewCollaboratorEmailAddress] =
     useState("");
@@ -303,14 +303,22 @@ const Permissions = ({ event, user }) => {
   };
 
   const handleTransferOwnership = async () => {
-    setTransferStatus("Loading");
-    const res = await api.post("/api/event/transfer-ownership", {
-      eventId: event.id,
-      oldAccountId: user.id,
-      newAccountId: transferTarget.AccountId,
-    });
+    if (transferTarget) {
+      setTransferStatus("Loading");
+      const res = await api.post("/api/event/transfer-ownership", {
+        eventId: event.id,
+        oldAccountId: user.id,
+        newAccountId: transferTarget.AccountId,
+      });
 
-    setTransferStatus("Complete");
+      setTransferStatus("Complete");
+    }
+  };
+
+  const handleConfirmTransferOwnership = () => {
+    if (transferTarget) {
+      setTransferStatus("Confirm");
+    }
   };
 
   return (
@@ -356,19 +364,22 @@ const Permissions = ({ event, user }) => {
                 onChange={handleChangeTransferTarget}
                 className={classes.dropDown}
               >
-                {data.map((user, index) => {
-                  return (
-                    <MenuItem value={user}>
-                      {user.Account.emailAddress}
-                    </MenuItem>
-                  );
+                {data.map((collaborator, index) => {
+                  // only display collaborators that are not the current user
+                  if (collaborator.Account.id !== user.id) {
+                    return (
+                      <MenuItem value={collaborator}>
+                        {collaborator.Account.emailAddress}
+                      </MenuItem>
+                    );
+                  }
                 })}
               </Select>
               <div style={{ height: "40px" }} />
               <Button
                 variant="contained"
                 color="primary"
-                onClick={handleTransferOwnership}
+                onClick={handleConfirmTransferOwnership}
                 class="Button1"
                 style={{ width: "150px", alignSelf: "flex-end" }}
               >
@@ -377,6 +388,26 @@ const Permissions = ({ event, user }) => {
             </div>
           ) : transferStatus === "Loading" ? (
             <FoldingCube />
+          ) : transferStatus === "Confirm" ? (
+            <div style={{ width: "400px" }}>
+              <p>
+                Are you sure you want to transfer ownership of this event? This
+                cannot be reversed by your account. You will need to ask the new
+                owner to transfer ownership back to you.
+              </p>
+              <div style={{ height: "40px" }} />
+              <a href="/">
+                <Button
+                  variant="contained"
+                  color="primary"
+                  class="Button1"
+                  style={{ width: "150px", alignSelf: "flex-end" }}
+                  onClick={handleTransferOwnership}
+                >
+                  Confirm Transfer
+                </Button>
+              </a>
+            </div>
           ) : transferStatus === "Complete" ? (
             <div style={{ width: "400px" }}>
               <p>Your transfer is complete.</p>
