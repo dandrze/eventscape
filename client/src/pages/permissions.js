@@ -119,6 +119,8 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Status",
+      customSort: (a, b) =>
+        a.Account.registrationComplete - b.Account.registrationComplete,
       render: (rowData) =>
         rowData.Account.registrationComplete
           ? "Active"
@@ -126,6 +128,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Event Details",
+      customSort: (a, b) => a.eventDetails - b.eventDetails,
       render: (rowData) => (
         <Checkbox
           checked={rowData.eventDetails}
@@ -137,6 +140,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Design",
+      customSort: (a, b) => a.design - b.design,
       render: (rowData) => (
         <Checkbox
           checked={rowData.design}
@@ -148,6 +152,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Communication",
+      customSort: (a, b) => a.communication - b.communication,
       render: (rowData) => (
         <Checkbox
           checked={rowData.communication}
@@ -159,6 +164,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Registration",
+      customSort: (a, b) => a.registration - b.registration,
       render: (rowData) => (
         <Checkbox
           checked={rowData.registration}
@@ -170,6 +176,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Polls",
+      customSort: (a, b) => a.polls - b.polls,
       render: (rowData) => (
         <Checkbox
           checked={rowData.polls}
@@ -181,6 +188,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Analytics",
+      customSort: (a, b) => a.analytics - b.analytics,
       render: (rowData) => (
         <Checkbox
           checked={rowData.analytics}
@@ -192,6 +200,7 @@ const Permissions = ({ event, user }) => {
     },
     {
       title: "Messaging",
+      customSort: (a, b) => a.messaging - b.messaging,
       render: (rowData) => (
         <Checkbox
           checked={rowData.messaging}
