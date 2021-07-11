@@ -1,5 +1,4 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
 
 const { Account, Event } = require("../db").models;
 const { clearCache } = require("../services/sequelizeRedis");
