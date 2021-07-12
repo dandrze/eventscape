@@ -3,5 +3,5 @@ version: 0.2
 phases:
   install:
     commands:
-      - npm install --prefix client && npm run build --prefix client
+      - npm install
       - pip install --upgrade awscli
