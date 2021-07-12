@@ -5,7 +5,7 @@
   "main": "server.js",
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "start": "node server.js",
+    "start": "pm2-runtime start ecosystem.config.js",
     "server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-dev) NODE_ENV=development pm2 start ecosystem.config.js",
     "server-local": "cross-env DATABASE_URL=postgresql://localhost/eventscapelocal IS_LOCAL=true NODE_ENV=development pm2 start ecosystem.config.js",
     "node-dev": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-dev) NODE_ENV=development node server.js",
