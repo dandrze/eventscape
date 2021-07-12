@@ -15,6 +15,7 @@ export default ({ isAdmin, inApp }) => {
         width: "100%",
         top: inApp ? "-20px" : "0px",
         padding: "2px",
+        zIndex: inApp ? 0 : 99999999,
       }}
     >
       {isAdmin ? (
