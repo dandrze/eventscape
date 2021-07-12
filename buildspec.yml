@@ -5,3 +5,7 @@ phases:
     commands:
       - npm install
       - pip install --upgrade awscli
+
+artifacts:
+  files:
+    - "**/*"
