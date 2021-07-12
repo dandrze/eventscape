@@ -4,7 +4,6 @@ phases:
   install:
     commands:
       - npm install
-      - npm install -g pm2
       - pip install --upgrade awscli
 
 artifacts:
