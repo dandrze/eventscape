@@ -126,8 +126,13 @@ const PageEditor = ({
 
   const handlePushRefresh = () => {
     setShowRefreshConfirmation(false);
-    socket.emit("pushRefreshPage", event.id);
-    toast.success("Successfully refreshed page content for all viewers");
+    socket.emit("pushRefreshPage", event.id, (response) => {
+      console.log(response.duration);
+      toast.info("Started page content refresh for all viewers");
+      toast.success("Completed page content refresh for all viewers", {
+        delay: response.duration,
+      });
+    });
   };
 
   const handleCloseBackgroundSettings = () => {

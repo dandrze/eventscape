@@ -124,8 +124,21 @@ module.exports = (server) => {
       io.to(eventId.toString()).emit("closeResults");
     });
 
-    socket.on("pushRefreshPage", async (eventId) => {
-      io.to(eventId.toString()).emit("refreshPage");
+    socket.on("pushRefreshPage", async (eventId, callback) => {
+      // count how many active users are on this event page
+      const count = await SiteVisit.count({
+        where: { EventId: eventId, loggedOutAt: null },
+      });
+
+      // emit an event to refresh the page. Delay the refresh randomly between 0 and the duration to spread the requests out
+      io.to(eventId.toString()).emit("refreshPage", {
+        duration: count * 10,
+      });
+
+      // return the duration to the admin client for notification purposes
+      callback({
+        duration: count * 10,
+      });
     });
 
     socket.on("disconnect", async (reason) => {

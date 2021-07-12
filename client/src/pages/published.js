@@ -162,9 +162,9 @@ const Published = (props) => {
         setOpenResults(true);
       });
 
-      socket.on("refreshPage", () => {
-        // delay by a random number of miliseconds between 0 and 10,000 (10s) to not overload the server
-        const randomDelayMS = Math.floor(Math.random() * 10000);
+      socket.on("refreshPage", ({ duration }) => {
+        // delay by a random number of miliseconds between 0 and the duration set by the socket to not overload the server
+        const randomDelayMS = Math.floor(Math.random() * duration);
         setTimeout(
           () => setForceRefresh((forceRefresh) => forceRefresh + 1),
           randomDelayMS
