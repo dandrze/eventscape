@@ -197,18 +197,15 @@ export const blankModel = () => {
 export const scheduleTable1 = () => {
   return `
   <div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
-  <div style="padding: 10px;">
-  <div data-info="background image/color. Do not modify." style="background-position: bottom;
+	<div style="padding: 10px;">
+		<div data-info="background image/color. Do not modify." style="background-position: bottom;
   background-size: cover;
   border-radius: 10px;
   box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   padding: calc(15px + 1.5vw);
   overflow: hidden;">
-
-
-  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
-
-  <!-- Header on top of line -->
+			<!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+			<!-- Header on top of line -->
 
 			<table style="width: 100%; line-height: 1px; margin: 20px 0px;">
 				<tbody>
@@ -236,126 +233,121 @@ export const scheduleTable1 = () => {
 			</table>
 			<!-- End of header  -->
 
-    <table class="schedule-table schedule-table1">
-    <tbody>
-      <tr>
-        <td style="width: 35%;" >
-        9:00AM - 11:00AM
-        </td>
-        <td style="width: 65%;">
-        <h4>Introduction</h4>
-        <p>Speakers introduce themselves.</p>
-        </td>
-      </tr>
-      <tr>
-        <td style="width: 35%;" >
-        11:00AM - 2:00PM
-        </td>
-        <td style="width: 65%;">
-        <h4>Workshop: How to build your own livestreaming website</h4>
-        <p>Learn how to build a website for your live stream event! 
-        <br> Speakers: 
-            <br>- Karen Johnson - EVP
-            <br>- Mike Chin - SVP</p>
-        </td>
-        </tr>
-    <tr>
-        <td style="width: 35%;" >
-        2:00PM - 3:00PM
-        </td>
-        <td style="width: 65%;">
-        <h4>Live Q&A Panel</h4>
-        <p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
-        </td>
-        </tr>
-    </tbody>
-  </table>
-  <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+			<table class="schedule-table schedule-table1">
+				<tbody>
+					<tr>
+						<td style="width: 35%;">10:00AM - 10:05AM</td>
+						<td style="width: 65%;">
 
-      </div>
-      </div>
-      </div>
+							<h4>Introductions</h4>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 35%;">10:05AM - 10:45AM</td>
+						<td style="width: 65%;">
+
+							<h4 class="font-weight-400">Workshop: How To Build Your Own Livestream Website</h4>
+
+							<p>Speakers:</p>
+
+							<ul style="list-style-position: inside;">
+								<li><span>Karen Johnson, EVP</span></li>
+								<li><span>Mike Chin, SVP</span></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 35%;">10:45AM - 11:00AM</td>
+						<td style="width: 65%;">
+
+							<h4>Live Q&amp;A Panel</h4>
+
+							<p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+		</div></div></div>
+
       `;
 };
 
 export const scheduleTable2 = () => {
   return `<div style="padding: 0 10px; margin: 0px auto; max-width: 1400px;">
-  <div style="padding: 10px;">
-  <div data-info="background image/color. Do not modify." style="background-position: bottom;
+	<div style="padding: 10px;">
+		<div data-info="background image/color. Do not modify." style="background-position: bottom;
   background-size: cover;
   border-radius: 10px;
   box-shadow: rgb(255, 255, 255) 0px 0px 0px 5000px inset;
   padding: calc(15px + 1.5vw);
   overflow: hidden;">
-  <!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+			<!-- ************************* ONLY EDIT CODE BELOW THIS LINE ************************* -->
+			<!-- Header on top of line -->
 
-  <!-- Header on top of line -->
+			<table style="width: 100%; line-height: 1px; margin: 20px 0px;">
+				<tbody>
+					<tr>
+						<td style="width: 50%; border-top: none; border-right: none; border-bottom: 1px solid #9b9b9b; border-left: none;">
+							<br>
+						</td>
+						<td rowspan="2" style="padding: 0px calc(15px + 1.5vw); white-space: nowrap; border: none; width: auto;">
 
-  <table style="width: 100%; line-height: 1px; margin: 20px 0px;">
-    <tbody>
-      <tr>
-        <td style="width: 50%; border-top: none; border-right: none; border-bottom: 1px solid #9b9b9b; border-left: none;">
-          <br>
-        </td>
-        <td rowspan="2" style="padding: 0px calc(15px + 1.5vw); white-space: nowrap; border: none; width: auto;">
+							<h2 style="font-weight: 500; color: #9b9b9b; margin: 0; font-size: 1.3rem;">AGENDA</h2>
+						</td>
+						<td style="width: 50%; border-top: none; border-right: none; border-bottom: 1px solid #9b9b9b; border-left: none;">
+							<br>
+						</td>
+					</tr>
+					<tr>
+						<td style="border: none;">
+							<br>
+						</td>
+						<td style="border: none;">
+							<br>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- End of header  -->
 
-          <h2 style="font-weight: 500; color: #9b9b9b; margin: 0; font-size: 1.3rem;">AGENDA</h2>
-        </td>
-        <td style="width: 50%; border-top: none; border-right: none; border-bottom: 1px solid #9b9b9b; border-left: none;">
-          <br>
-        </td>
-      </tr>
-      <tr>
-        <td style="border: none;">
-          <br>
-        </td>
-        <td style="border: none;">
-          <br>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <!-- End of header  -->      <table class="schedule-table schedule-table2">
-      <tbody>
-        <tr>
-          <td style="width: 35%;" >
-          9:00AM - 11:00AM
-          </td>
-          <td style="width: 65%;">
-          <h4>Introduction</h4>
-          <p>Speakers introduce themselves.</p>
-          </td>
-        </tr>
-        <tr>
-          <td style="width: 35%;" >
-          11:00AM - 2:00PM
-          </td>
-          <td style="width: 65%;">
-          <h4>Workshop: How to build your own livestreaming website</h4>
-          <p>Learn how to build a website for your live stream event! 
-          <br> Speakers: 
-              <br>- Karen Johnson - EVP
-              <br>- Mike Chin - SVP</p>
-          </td>
-          </tr>
-      <tr>
-          <td style="width: 35%;" >
-          2:00PM - 3:00PM
-          </td>
-          <td style="width: 65%;">
-          <h4>Live Q&A Panel</h4>
-          <p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
-          </td>
-          </tr>
-      </tbody>
-    </table>
+			<table class="schedule-table schedule-table2">
+				<tbody>
+					<tr>
+						<td style="width: 35%;">10:00AM - 10:05AM</td>
+						<td style="width: 65%;">
 
-    <!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+							<h4>Introductions</h4>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 35%;">10:05AM - 10:45AM</td>
+						<td style="width: 65%;">
 
-        </div>
-        </div>
-        </div>
-        </div>
+							<h4>Workshop: How To Build Your Own Livestream Website</h4>
+
+							<p>Speakers:</p>
+
+							<ul style="list-style-position: inside;">
+								<li><span>Karen Johnson, EVP</span></li>
+								<li><span>Mike Chin, SVP</span></li>
+							</ul>
+						</td>
+					</tr>
+					<tr>
+						<td style="width: 35%;">10:45AM - 11:00AM</td>
+						<td style="width: 65%;">
+
+							<h4>Live Q&amp;A Panel</h4>
+
+							<p>Enter your questions into the questions tab, and our panel of experts will answer them live!</p>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!-- ************************* ONLY EDIT CODE ABOVE THIS LINE ************************* -->
+		</div></div></div>
+
         `;
 };
 
