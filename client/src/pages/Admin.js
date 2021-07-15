@@ -20,8 +20,9 @@ import LastPage from "@material-ui/icons/LastPage";
 import Remove from "@material-ui/icons/Remove";
 import Search from "@material-ui/icons/Search";
 import ViewColumn from "@material-ui/icons/ViewColumn";
-import FoldingCube from "../components/FoldingCube";
+import md5 from "md5";
 
+import FoldingCube from "../components/FoldingCube";
 import api from "../api/server";
 
 export default () => {
@@ -35,6 +36,20 @@ export default () => {
     setData(res.data);
 
     console.log(res);
+  };
+
+  const handleGoToSite = (link, registrationRequired, eventId) => {
+    // the event page will need a registered user's hash to access.
+    // For testing purposes the md5 encryption of the event id will return a test user
+    const hash = registrationRequired ? md5(String(eventId)) : "";
+    switch (process.env.NODE_ENV) {
+      case "development":
+        return window.open(`http://${link}.localhost:3000/${hash}`);
+      case "staging":
+        return window.open(`http://${link}.eventscape.ca/${hash}`);
+      case "production":
+        return window.open(`https://${link}.eventscape.io/${hash}`);
+    }
   };
 
   const columns = [
@@ -57,7 +72,7 @@ export default () => {
 
     {
       title: "Event Title",
-      customSort: (a, b) => (a.name < b.name ? -1 : 1),
+      customSort: (a, b) => (a.title < b.title ? -1 : 1),
       render: (rowData) => {
         return (
           <a href={`/?eventid=${rowData.id}`} target="_blank" className="link1">
@@ -68,7 +83,23 @@ export default () => {
     },
     {
       title: "Event Link",
-      field: "link",
+      customSort: (a, b) => (a.link < b.link ? -1 : 1),
+      render: (rowData) => {
+        return (
+          <div
+            onClick={() => {
+              handleGoToSite(
+                rowData.link,
+                rowData.registrationRequired,
+                rowData.id
+              );
+            }}
+            className="link1"
+          >
+            {rowData.link}
+          </div>
+        );
+      },
     },
     {
       title: "Event Start Date",
@@ -167,7 +198,7 @@ export default () => {
   };
 
   return (
-    <div className="form-box shadow-border">
+    <div className="shadow-border">
       <MaterialTable
         title="Admin Dashboard"
         columns={columns}
