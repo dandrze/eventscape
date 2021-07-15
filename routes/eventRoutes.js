@@ -384,13 +384,16 @@ router.put(
   requireAuth,
   async (req, res, next) => {
     const accountId = req.user.id;
+    const accountType = req.user.type;
     const { eventId } = req.body;
 
     try {
       const permission = await Permission.findOne({
         where: { AccountId: accountId, EventId: eventId },
       });
-      if (permission) {
+
+      // if the user has permissions to the current event, or the user is an admin, set the event to their current event. Otherwise send an error
+      if (permission || accountType == "admin") {
         const account = await Account.findByPk(accountId);
         account.currentEventId = eventId;
         await account.save();
