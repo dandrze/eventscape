@@ -97,8 +97,7 @@ const DesignBlockPicker = ({
             value={blockCat}
             onChange={handleChangeBlockCat}
           >
-            <MenuItem value={"logo-header"}>Logo Header</MenuItem>
-            <MenuItem value={"title"}>Title</MenuItem>
+            <MenuItem value={"title"}>Title/Logo</MenuItem>
             <MenuItem value={"registration"}>Registration</MenuItem>
             <MenuItem value={"stream-messaging"}>Stream/Messaging</MenuItem>
             <MenuItem value={"schedule"}>Agenda</MenuItem>
@@ -110,7 +109,7 @@ const DesignBlockPicker = ({
         </FormControl>
 
         <div className={classes.root}>
-          {blockCat === "logo-header" && (
+          {blockCat === "title" && (
             <Grid container spacing={3}>
               {/* Logo Header */}
               <Grid item xs={12}>
@@ -124,23 +123,7 @@ const DesignBlockPicker = ({
                   }}
                 />
               </Grid>
-            </Grid>
-          )}
 
-          {blockCat === "title" && (
-            <Grid container spacing={3}>
-              {/* Registration Page Title */}
-              {/*    <Grid item xs={12}>
-                      <DesignBlockPreview
-                        src={heroBanner}
-                        handleClick={() => {
-                          handleClose();
-                          handleAddSection(heroBannerModel(event.title));
-                        }}
-                      />
-                    </Grid> */}
-
-              {/* Event page title */}
               <Grid item xs={12}>
                 <DesignBlockPreview
                   src={
