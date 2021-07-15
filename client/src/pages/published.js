@@ -14,6 +14,7 @@ import BrandingBottom from "../components/BrandingBottom";
 import SimpleLoadingScreen from "../components/SimpleLoadingScreen";
 import DraftModeMessage from "../components/DraftModeMessage";
 import "../components/froala_style.min.css";
+import { statusOptions } from "../model/enums";
 
 const Modal1 = lazy(() => import("../components/Modal1"));
 const PollBlock = lazy(() => import("../components/polling/PollBlock"));
@@ -269,6 +270,17 @@ const Published = (props) => {
   } else if (hash && !props.attendee) {
     // if there is a hash but no attendee returned
     return <RegistrationNotFound />;
+  } else if (props.event.status === statusOptions.DELETED) {
+    // if there is a hash but no attendee returned
+    return (
+      <ErrorBox
+        content={
+          <div>
+            <p>This event has been deleted.</p>
+          </div>
+        }
+      />
+    );
   } else if (props.event.id) {
     return (
       <div className="page-container">
