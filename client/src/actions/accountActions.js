@@ -12,6 +12,10 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
       password: code,
     });
 
+    if (res.data.error) {
+      return { error: res.data.error[0] };
+    }
+
     cookies.set(
       "user",
       JSON.stringify({
@@ -24,12 +28,9 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
 
     dispatch({ type: FETCH_USER, payload: res.data.user });
 
-    if (res.data.error) {
-      return { error: res.data.error[0] };
-    } else {
-      return { success: true };
-    }
+    return { success: true };
   } catch (err) {
+    console.log(err);
     toast.error("Error when signing in: " + err.response.data.message);
     return { error: err.response.data.message };
   }
