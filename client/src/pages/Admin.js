@@ -128,6 +128,20 @@ export default () => {
       ),
     },
     {
+      title: "Event Duration",
+      render: (rowData) => (
+        <span>
+          {(
+            (new Date(rowData.endDate) - new Date(rowData.startDate)) /
+            1000 /
+            60 /
+            60
+          ).toFixed(2)}{" "}
+          hrs
+        </span>
+      ),
+    },
+    {
       title: "Status",
       field: "status",
     },
