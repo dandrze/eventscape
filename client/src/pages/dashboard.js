@@ -110,6 +110,8 @@ const Dashboard = ({ event, registration, fetchRegistrations }) => {
                     color:
                       event.status === statusOptions.ACTIVE
                         ? "#28a745"
+                        : event.status === statusOptions.DELETED
+                        ? "#bb0c0c"
                         : "#ffb200",
                   }}
                 />
