@@ -291,7 +291,7 @@ const Permissions = ({ event, user }) => {
   };
 
   const handleChangeNewCollaboratorEmailAddress = (event) => {
-    setNewCollaboratorEmailAddress(event.target.value);
+    setNewCollaboratorEmailAddress(event.target.value.toLowerCase());
   };
 
   const handleClickTransfer = () => {
