@@ -72,6 +72,10 @@ export default () => {
     },
     {
       title: "Event Start Date",
+      defaultFilter: "future",
+      customFilterAndSearch: (term, rowData) =>
+        (term === "future" && new Date(rowData.startDate) > new Date()) ||
+        (term === "past" && new Date(rowData.startDate) < new Date()),
       render: (rowData) => (
         <span>
           {new Date(rowData.startDate).toLocaleString("en-us", {
@@ -80,6 +84,21 @@ export default () => {
           })}
         </span>
       ),
+    },
+    {
+      title: "Event End Date",
+      render: (rowData) => (
+        <span>
+          {new Date(rowData.endDate).toLocaleString("en-us", {
+            dateStyle: "long",
+            timeStyle: "long",
+          })}
+        </span>
+      ),
+    },
+    {
+      title: "Status",
+      field: "status",
     },
     {
       title: "License",
@@ -128,7 +147,7 @@ export default () => {
     exportAllData: true,
     showTitle: true,
     pageSize: 100,
-
+    filtering: true,
     headerStyle: {
       backgroundColor: "#F0F1F4",
       color: "black",
