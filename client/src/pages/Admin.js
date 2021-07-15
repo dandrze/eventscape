@@ -60,7 +60,7 @@ export default () => {
       customSort: (a, b) => (a.name < b.name ? -1 : 1),
       render: (rowData) => {
         return (
-          <a href={`/?eventid=${rowData.id}`} className="link1">
+          <a href={`/?eventid=${rowData.id}`} target="_blank" className="link1">
             {rowData.title}
           </a>
         );
