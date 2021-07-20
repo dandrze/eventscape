@@ -63,7 +63,7 @@ const DesignBlockPicker = ({
   handleClose,
 }) => {
   const classes = useStyles();
-  const [blockCat, setBlockCat] = useState("logo-header");
+  const [blockCat, setBlockCat] = useState("title");
 
   const handleAddSection = async (
     html,
