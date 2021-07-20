@@ -442,23 +442,31 @@ function CreateEvent({
             next={handleSubmitRegistrationRequired}
             question="Does your event require attendees to register or is it open to the public?"
             input={
-              <FormControl component="fieldset">
-                <RadioGroup
-                  value={registrationRequired}
-                  onChange={handleChangeRegistrationRequired}
-                >
-                  <FormControlLabel
-                    value={"required"}
-                    control={<Radio />}
-                    label="Registration required"
-                  />
-                  <FormControlLabel
-                    value={"notRequired"}
-                    control={<Radio />}
-                    label="Open to public"
-                  />
-                </RadioGroup>
-              </FormControl>
+              <>
+                <label style={{ marginBottom: "30px" }}>
+                  Registration required allows attendee names & emails to be
+                  included in chat, questions, polls & analytics. Open events
+                  are ideal for events that require minimal steps to join and
+                  are okay with attendees being anonymous.
+                </label>
+                <FormControl component="fieldset">
+                  <RadioGroup
+                    value={registrationRequired}
+                    onChange={handleChangeRegistrationRequired}
+                  >
+                    <FormControlLabel
+                      value={"required"}
+                      control={<Radio />}
+                      label="Registration required"
+                    />
+                    <FormControlLabel
+                      value={"notRequired"}
+                      control={<Radio />}
+                      label="Open to public"
+                    />
+                  </RadioGroup>
+                </FormControl>
+              </>
             }
           />
         );
