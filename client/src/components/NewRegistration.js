@@ -23,10 +23,8 @@ function RegistrationForm({
   standardFields,
   onSubmitCallback,
   fetchRegistration,
-  SubmitButtonText,
   prePopulatedValues,
   addRegistration,
-  resendRegistrationEmail,
   isEditRegistration,
 }) {
   const classes = useStyles();
@@ -135,7 +133,7 @@ function RegistrationForm({
         <div className="col-lg registration-column">
           <div>
             {/* the mandatory div below is copying the classnames from the react-form-builder2 generated components so the styling is the same*/}
-            <div className="form-group">
+            <div className="form-group" style={{ minWidth: "300px" }}>
               <label>
                 <span>First Name</span>
                 <span className="label-required badge badge-danger">
@@ -176,12 +174,18 @@ function RegistrationForm({
               <div className="errorMessage">{emailError}</div>
             </div>
             <ReactFormGenerator
-              action_name={SubmitButtonText || "Register now"}
+              action_name={isEditRegistration ? "Save" : "Submit*"}
               onSubmit={handleSubmit}
               data={formData}
               answer_data={prePopulatedValues}
               className="form-editor-react"
             />
+            {!isEditRegistration ? (
+              <label style={{ marginTop: "15px" }}>
+                * When the submit button is pressed, the new registrant will
+                receive a registration confirmation email.
+              </label>
+            ) : null}
           </div>
         </div>
       </div>

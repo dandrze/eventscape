@@ -12,7 +12,6 @@ import NewRegistration from "../components/NewRegistration";
 import { toast } from "react-toastify";
 import ImportFile from "../components/ImportFile";
 import AccessDeniedScreen from "../components/AccessDeniedScreen";
-import AlertModal from "../components/AlertModal";
 
 const Registrations = (props) => {
   const [openForm, setOpenForm] = useState(false);
@@ -28,7 +27,6 @@ const Registrations = (props) => {
   const [edittingRowId, setEdittingRowId] = useState(null);
   const [triggerFetchRegistrations, setTriggerFetchRegistrations] =
     useState(false);
-  const [editFormErrorOpen, setEditFormErrorOpen] = useState(false);
 
   // UseEffect mimicks OnComponentDidMount
   // get the list of registrations
@@ -62,12 +60,10 @@ const Registrations = (props) => {
     setOpenImport(false);
   };
 
-  const handleOpenReg = () => {
-    setOpenForm(true);
-  };
-
   const handleAddReg = () => {
     setIsEditRegistration(false);
+    setEdittingValues(null);
+    setStandardFields(null);
     setOpenReg(true);
   };
 
@@ -148,7 +144,6 @@ const Registrations = (props) => {
         }
         content={
           <NewRegistration
-            SubmitButtonText={isEditRegistration ? "Save" : "Submit"}
             onSubmitCallback={handleSubmitReg}
             prePopulatedValues={edittingValues}
             standardFields={standardFields}
