@@ -7,6 +7,13 @@ const inviteUser = (
   eventId,
   isNewAccount
 ) => {
+  console.log({
+    emailAddress,
+    inviterFirstName,
+    eventTitle,
+    eventId,
+    isNewAccount,
+  });
   const existingUserHtml = `
     <p style="text-align: left">Hello there,</p>
     <p style="text-align: left">Great news! ${inviterFirstName} has invited you to collaborate on their event, "${eventTitle}"</p>

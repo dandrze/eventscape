@@ -24,19 +24,22 @@ const EnterCode = ({ signInWithCode, location, history }) => {
   const [entryCode, setEntryCode] = useState("");
   const classes = useStyles();
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const targetEventId = urlParams.get("eventid");
-  const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/my-events";
+  const eventId = location.state ? location.state.eventId : null;
   const isNewUser = location.state ? location.state.isNewUser : null;
 
   const verifyCode = async () => {
     const auth = await signInWithCode(emailAddress, entryCode);
 
     if (auth.success) {
-      if (isNewUser) {
+      if (eventId) {
+        // if their url contained a target event, go that event
+        history.push(`/?eventid=${eventId}`);
+      } else if (isNewUser) {
+        // If it's a new user and they are not being invited to an event already (passed in by eventId), create a new event
         history.push("create-event");
       } else {
-        history.push("/");
+        // else push them to the dashboard
+        history.push(`/`);
       }
     }
     if (auth.error) {

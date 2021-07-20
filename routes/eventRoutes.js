@@ -401,9 +401,15 @@ router.put(
         res.json();
       } else {
         const event = await Event.findByPk(eventId);
-        res.status(400).send({
-          message: `You do not have permissions for the event titled: ${event.title}. Please contact the owner of this event to give you permissions.`,
-        });
+        if (event) {
+          res.status(400).send({
+            message: `You do not have permissions for the event titled: ${event.title}. Please contact the owner of this event to give you permissions.`,
+          });
+        } else {
+          res.status(400).send({
+            message: `The event you are trying to open does not exist.`,
+          });
+        }
       }
     } catch (error) {
       next(error);

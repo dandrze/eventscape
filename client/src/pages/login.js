@@ -27,8 +27,7 @@ function Login(props) {
   const [error, setError] = useState("");
 
   const urlParams = new URLSearchParams(window.location.search);
-  const targetEventId = urlParams.get("eventid");
-  const targetUrl = targetEventId ? `/?eventid=${targetEventId}` : "/";
+  const eventId = urlParams.get("eventid");
 
   const handleChangeEmail = (event) => {
     setEmailAddress(event.target.value.toLowerCase());
@@ -56,7 +55,10 @@ function Login(props) {
       );
     } else {
       api.post("/auth/send-code", { emailAddress });
-      props.history.push({ pathname: "/code", state: { emailAddress } });
+      props.history.push({
+        pathname: "/code",
+        state: { emailAddress, eventId },
+      });
     }
   };
 

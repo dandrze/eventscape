@@ -33,6 +33,7 @@ function Create_Account(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const urlParams = new URLSearchParams(window.location.search);
+  const eventId = urlParams.get("eventid");
 
   const handleChangeEmail = (event) => {
     setEmailAddress(event.target.value.toLowerCase());
@@ -61,7 +62,7 @@ function Create_Account(props) {
 
       props.history.push({
         pathname: "/code",
-        state: { emailAddress, isNewUser: true },
+        state: { emailAddress, isNewUser: true, eventId },
       });
     }
   };
