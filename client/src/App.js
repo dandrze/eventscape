@@ -30,6 +30,7 @@ function App({ user, location, fetchUser, attendee }) {
   const path = window.location.host.split(".");
   const urlParams = new URLSearchParams(window.location.search);
   const targetEventId = urlParams.get("eventid");
+  //const affiliate = urlParams.get("src");
 
   const [dataFetched, setDataFetched] = useState(false);
 

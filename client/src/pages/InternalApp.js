@@ -20,11 +20,8 @@ import PageNotFound from "./PageNotFound";
 import EventNotFound from "./EventNotFound";
 import Polls from "./polls";
 import Permissions from "./permissions";
-import Test from "./test";
-import LongLoadingScreen from "../components/LongLoadingScreen";
 import CreateEvent from "./CreateEvent";
 import Dashboard from "./dashboard";
-import { CircularProgress } from "@material-ui/core";
 import FoldingCube from "../components/FoldingCube";
 
 const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
@@ -43,7 +40,6 @@ const InternalApp = ({ event, setCurrentEvent, fetchEvent }) => {
   };
 
   const requireEvent = (component) => {
-    console.log(event);
     // Doesn't render the component until the event is loaded into redux. This avoids any rendering errors with an empty event object.
     if (event.id) {
       return createElement(component);

@@ -5,9 +5,10 @@ sgMail.setApiKey(keys.sendGridKey);
 
 const sendEmail = async (
   email = { to: "", subject: "", html: "", isEventEmail },
-  from = { email: "notifications@eventscape.io", name: "Eventscape" },
+  from = { email: "notifications@eventscape.io", name: "Eventscape" }
 ) => {
-  const { to, subject, html, isEventEmail} = email;
+  console.log(email);
+  const { to, subject, html, isEventEmail } = email;
   const appTemplate = `<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
   <html lang="en">
   <head>
@@ -73,8 +74,10 @@ const sendEmail = async (
 
   try {
     const response = await sgMail.send(msg);
+    console.log(response);
     return true;
   } catch (error) {
+    console.log(error);
     return false;
   }
 };
@@ -154,7 +157,7 @@ const mapVariablesAndSendEmail = async (recipientsList, subject, html) => {
         to: recipient.emailAddress,
         subject: updatedSubject,
         html: updatedHtml,
-        isEventEmail: true
+        isEventEmail: true,
       });
       if (isSuccessful) {
         success++;
