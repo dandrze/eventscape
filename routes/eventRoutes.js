@@ -580,7 +580,7 @@ router.post("/api/event/permissions", requireAuth, async (req, res, next) => {
       account.firstName,
       event.title,
       event.id,
-      targetAccountCreated
+      targetAccountCreated || !targetAccount.registrationComplete // checks if the user has created an account yet
     );
 
     res.json(permission);

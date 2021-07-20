@@ -125,7 +125,10 @@ function Create_Account(props) {
             )}
             <p className="subtext" style={{ marginTop: "8px" }}>
               Already have an account?{" "}
-              <Link to="/login" className="link1">
+              <Link
+                to={`${eventId ? `/login?eventid=${eventId}` : "/login"}`}
+                className="link1"
+              >
                 Sign in
               </Link>
             </p>
