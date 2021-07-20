@@ -201,7 +201,7 @@ const ImportFile = ({
   };
 
   const handleChangeShouldSendEmail = (event) => {
-    setShouldSendEmail(event.target.value);
+    setShouldSendEmail(event.target.checked);
   };
 
   const getStepContent = (step) => {
