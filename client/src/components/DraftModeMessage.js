@@ -16,7 +16,11 @@ export default ({ isAdmin, inApp }) => {
         top: inApp ? "-20px" : "0px",
         padding: "2px",
         zIndex: inApp ? 0 : 99999999,
+        cursor: "pointer",
       }}
+      onClick={() =>
+        (window.location.href = "https://app.eventscape.io/license")
+      }
     >
       {isAdmin ? (
         <div style={{ fontWeight: "500", fontSize: "14px" }}>
