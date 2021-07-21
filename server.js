@@ -32,6 +32,20 @@ if (process.env.NODE_ENV === "production") app.use(secure);
 // Compress to improve page load times
 app.use(compression());
 
+// serve static files
+if (process.env.NODE_ENV != "development") {
+  // if we don't recognize the route, look into the client/build folder
+  // will catch things like main.js and main.css
+  app.use(express.static("client/build"));
+
+  // if there is no route in the client/build folder then:
+  // if we don't regonize the route, serve the html document
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
+
 // passport set up for user auth
 app.use(bodyParser.json());
 app.use(
@@ -61,12 +75,6 @@ app.use(require("./routes/billingRoutes"));
 app.use(require("./routes/awsRoutes"));
 app.use(require("./routes/adminRoutes"));
 
-app.get("/loaderio-feb5ca360d9f5cdf226bcd9fb3240326", async (req, res) => {
-  file = `${__dirname}/public/loaderio-verification.txt`;
-
-  res.download(file);
-});
-
 app.use(
   "/api/s3",
   require("react-s3-uploader/s3router")({
@@ -83,19 +91,6 @@ app.use((err, req, res, next) => {
   logger.error(err.stack);
   handleError(err, res);
 });
-
-if (process.env.NODE_ENV != "development") {
-  // if we don't recognize the route, look into the client/build folder
-  // will catch things like main.js and main.css
-  app.use(express.static("client/build"));
-
-  // if there is no route in the client/build folder then:
-  // if we don't regonize the route, serve the html document
-  const path = require("path");
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
 
 const server = http.createServer(app);
 
