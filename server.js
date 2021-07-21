@@ -32,19 +32,8 @@ if (process.env.NODE_ENV === "production") app.use(secure);
 // Compress to improve page load times
 app.use(compression());
 
-// serve static files
-if (process.env.NODE_ENV != "development") {
-  // if we don't recognize the route, look into the client/build folder
-  // will catch things like main.js and main.css
-  app.use(express.static("client/build"));
-
-  // if there is no route in the client/build folder then:
-  // if we don't regonize the route, serve the html document
-  const path = require("path");
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
+// Serve react files
+app.use(express.static("client/build"));
 
 // passport set up for user auth
 app.use(bodyParser.json());
@@ -74,6 +63,15 @@ app.use(require("./routes/pollingRoutes"));
 app.use(require("./routes/billingRoutes"));
 app.use(require("./routes/awsRoutes"));
 app.use(require("./routes/adminRoutes"));
+
+// serve static files
+if (process.env.NODE_ENV != "development") {
+  // if we don't regonize the route, serve the html document
+  const path = require("path");
+  app.get("*", (req, res) => {
+    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
+  });
+}
 
 app.use(
   "/api/s3",
