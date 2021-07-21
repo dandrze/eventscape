@@ -170,30 +170,26 @@ module.exports = (server) => {
     socket.on(
       "sendMessage",
       async ({ chatUserId, room, message }, callback) => {
-        if (chatUserId) {
-          const chatUser = await ChatUser.findOne({
-            where: { id: chatUserId },
-          });
+        const chatUser = await ChatUser.findOne({
+          where: { id: chatUserId },
+        });
 
-          const chatMessage = await ChatMessage.create({
-            ChatRoomId: room,
-            text: message,
-            ChatUserId: chatUserId,
-          });
+        const chatMessage = await ChatMessage.create({
+          ChatRoomId: room,
+          text: message,
+          ChatUserId: chatUserId,
+        });
 
-          // Now that there is a new message, the chatroom history cached value is no longer valid so clear it
-          clearCache(`ChatRoom:MessageHistory:${room}`);
+        // Now that there is a new message, the chatroom history cached value is no longer valid so clear it
+        clearCache(`ChatRoom:MessageHistory:${room}`);
 
-          io.to(room.toString()).emit("message", {
-            room,
-            user: chatUser.name,
-            userId: chatUser.id,
-            text: message,
-            id: chatMessage.id,
-          });
-        } else {
-          console.log("Chatuser id not provided");
-        }
+        io.to(room.toString()).emit("message", {
+          room,
+          user: chatUser.name,
+          userId: chatUser.id,
+          text: message,
+          id: chatMessage.id,
+        });
 
         callback();
       }

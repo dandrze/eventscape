@@ -207,7 +207,7 @@ const InputAskQuestion = ({ setQuestion, sendQuestion, question, theme }) => (
 
 const Chat = ({ event, room, userId, registrationId, settings }) => {
   const classes = useStyles();
-  const [chatUserId, setChatUserId] = useState("");
+  const [chatUserId, setChatUserId] = useState(null);
   const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const [question, setQuestion] = useState("");
@@ -374,7 +374,7 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
   const sendMessage = (event) => {
     event.preventDefault();
 
-    if (message && chatReady) {
+    if (message && chatReady && chatUserId) {
       setChatReady(false);
       if (socket)
         socket.emit("sendMessage", { chatUserId, room, message }, () => {
