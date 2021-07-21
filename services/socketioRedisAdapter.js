@@ -16,6 +16,4 @@ if (process.env.NODE_ENV === "production") {
 }
 const subClient = pubClient.duplicate();
 
-console.log("socket client created");
-
 module.exports = redisAdapter({ pubClient, subClient });

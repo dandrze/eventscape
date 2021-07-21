@@ -107,8 +107,6 @@ export const fetchEvent = () => async (dispatch, getState) => {
   try {
     const event = await api.get("/api/event/current");
 
-    console.log(event);
-
     // if an event exists, update redux
     if (event.data) {
       var permissions;

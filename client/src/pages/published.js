@@ -57,8 +57,6 @@ const Published = (props) => {
       hash
     );
 
-    console.log({ event, hash });
-
     // for private events only
     if (hash && event) {
       const { registration, activeDevices } = await props.fetchAttendeeData(

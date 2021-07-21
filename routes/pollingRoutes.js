@@ -174,9 +174,6 @@ router.delete("/api/polling/poll", requireAuth, async (req, res, next) => {
 router.put("/api/polling/poll", requireAuth, async (req, res, next) => {
   const { pollId, question, options, allowMultiple, allowShare } = req.body;
 
-  console.log(options);
-  console.log("polling called");
-
   try {
     const poll = await Poll.findByPk(pollId);
     poll.question = question;

@@ -169,8 +169,6 @@ router.post("/api/event/finalize", requireAuth, async (req, res, next) => {
 router.post("/api/event", requireAuth, async (req, res, next) => {
   const { title } = req.body;
 
-  console.log(title);
-
   const accountId = req.user.id;
 
   try {
@@ -750,7 +748,6 @@ router.post(
     try {
       const { eventId, checklistItem } = req.body;
 
-      console.log({ eventId, checklistItem });
 
       res.status(200).send();
     } catch (error) {

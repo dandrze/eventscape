@@ -61,7 +61,6 @@ const PollController = ({
 
     socket.io.on("reconnect", () => {
       console.log("reconnected!");
-      console.log(socket);
 
       socket.emit("rejoin", { eventId: event.id });
     });

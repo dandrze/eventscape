@@ -8,7 +8,6 @@ export const fetchPolls = (eventId) => async (dispatch) => {
   try {
     const res = await api.get("/api/polling/poll/all", { params: { eventId } });
 
-    console.log(res.data);
     dispatch({ type: FETCH_POLLS, payload: res.data });
     return true;
   } catch (err) {

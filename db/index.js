@@ -118,6 +118,7 @@ module.exports = {
     Event,
     EventCached: sequelizeRedis.getModel(Event, { ttl: 60 * 60 }),
     PageModel,
+    PageModelCached: sequelizeRedis.getModel(PageModel, { ttl: 60 * 60 }),
     PageSection,
     PageSectionCached: sequelizeRedis.getModel(PageSection, { ttl: 60 * 60 }),
     AccountCached: sequelizeRedis.getModel(Account, { ttl: 60 * 60 }),

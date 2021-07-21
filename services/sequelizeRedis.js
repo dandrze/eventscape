@@ -6,7 +6,6 @@ const sequelizeRedis = new SequelizeRedis(redisClient);
 
 const clearCache = (key) => {
   redisClient.del(key);
-  console.log("deleted");
 };
 
 module.exports = { sequelizeRedis, clearCache };

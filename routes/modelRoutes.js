@@ -1,5 +1,6 @@
 const express = require("express");
-const { PageSection, PageSectionCached, PageModel } = require("../db").models;
+const { PageSection, PageSectionCached, PageModel, PageModelCached } =
+  require("../db").models;
 const { clearCache } = require("../services/sequelizeRedis");
 const requireAuth = require("../middlewares/requireAuth");
 
@@ -10,7 +11,7 @@ router.get("/api/model/id", async (req, res, next) => {
   const { id } = req.query;
   try {
     const pageSectionCacheKey = `PageSection:PageModelId:${id}`;
-    const [sections, sectionCacheHit] = await PageSectionCached.findAllCached(
+    const [sections] = await PageSectionCached.findAllCached(
       pageSectionCacheKey,
       {
         where: { PageModelId: id },
@@ -18,13 +19,13 @@ router.get("/api/model/id", async (req, res, next) => {
       }
     );
 
-    const {
-      backgroundColor,
-      backgroundImage,
-      backgroundBlur,
-    } = await PageModel.findByPk(id);
+    const pageModelCacheKey = `PageModel:PageModelId:${id}`;
+    const [pageModel] = await PageModelCached.findByPkCached(
+      pageModelCacheKey,
+      id
+    );
 
-    console.log(backgroundBlur);
+    const { backgroundColor, backgroundImage, backgroundBlur } = pageModel;
 
     res.json({
       id,
@@ -39,6 +40,7 @@ router.get("/api/model/id", async (req, res, next) => {
 });
 
 // publicly accessible route
+// used to test performance
 router.get("/api/model/id/uncached", async (req, res, next) => {
   const { id } = req.query;
   try {
@@ -59,6 +61,7 @@ router.put("/api/model", requireAuth, async (req, res, next) => {
   try {
     // clear the cache
     clearCache(`PageSection:PageModelId:${model.id}`);
+    clearCache(`PageModel:PageModelId:${model.id}`);
 
     // fetch model from database
     const pageModel = await PageModel.findByPk(model.id);

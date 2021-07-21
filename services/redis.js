@@ -18,6 +18,4 @@ if (process.env.NODE_ENV === "production") {
 } else {
   redisClient = redis.createClient(keys.redisUrl);
 }
-console.log("seq client created");
-
 module.exports = redisClient;
