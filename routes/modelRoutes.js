@@ -11,7 +11,8 @@ router.get("/api/model/id", async (req, res, next) => {
   const { id } = req.query;
   try {
     const pageSectionCacheKey = `PageSection:PageModelId:${id}`;
-    const [sections] = await PageSectionCached.findAllCached(
+
+    const [sections, sectionsCacheHit] = await PageSectionCached.findAllCached(
       pageSectionCacheKey,
       {
         where: { PageModelId: id },
@@ -19,21 +20,30 @@ router.get("/api/model/id", async (req, res, next) => {
       }
     );
 
+    // If anything goes wrong with the database call and returns an empty array, clear the empty array from the cache
+    if (sections.length === 0) clearCache(pageSectionCacheKey);
+
     const pageModelCacheKey = `PageModel:PageModelId:${id}`;
-    const [pageModel] = await PageModelCached.findByPkCached(
+    const [pageModel, pageModelCacheHit] = await PageModelCached.findByPkCached(
       pageModelCacheKey,
       id
     );
 
-    const { backgroundColor, backgroundImage, backgroundBlur } = pageModel;
+    if (pageModel) {
+      const { backgroundColor, backgroundImage, backgroundBlur } = pageModel;
 
-    res.json({
-      id,
-      sections,
-      backgroundColor,
-      backgroundImage,
-      backgroundBlur,
-    });
+      res.json({
+        id,
+        sections,
+        backgroundColor,
+        backgroundImage,
+        backgroundBlur,
+      });
+    } else {
+      // if a page model is not found or there is an error, clear the cache (don't cache the empty model), and return an error
+      clearCache(pageModelCacheKey);
+      next({ statusCode: 500, message: "page model not found" });
+    }
   } catch (error) {
     next(error);
   }
