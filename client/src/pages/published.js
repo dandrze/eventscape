@@ -64,7 +64,8 @@ const Published = (props) => {
         event.id
       );
 
-      if (registration && activeDevices) {
+      // if a registration is found, assign the registration id to the attendeeId variable and check if the visit exceeds the max devices limit if in place
+      if (registration) {
         attendeeId = registration.id;
 
         // check if the max device limit has already been reached if there is a limit
@@ -72,7 +73,7 @@ const Published = (props) => {
         if (
           event.maxDevicesEnabled &&
           forceRefresh === 0 &&
-          activeDevices.length >= event.maxDevices
+          activeDevices >= event.maxDevices
         ) {
           setError("maxDevices");
           setIsLoaded(true);
