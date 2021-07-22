@@ -31,15 +31,10 @@ router.get("/api/attendee/hash", async (req, res, next) => {
       if (registration) {
         siteVisitors = await SiteVisitor.findAll({
           where: { RegistrationId: registration.id },
-          include: SiteVisit,
+          include: { model: SiteVisit, where: { loggedOutAt: null } },
         });
 
-        activeDevices = siteVisitors.filter(
-          (siteVisitor) =>
-            siteVisitor.SiteVisits.filter(
-              (siteVisit) => siteVisit.loggedOutAt === null
-            ).length > 0
-        );
+        activeDevices = siteVisitors.length;
       }
     }
 
