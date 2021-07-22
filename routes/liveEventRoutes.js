@@ -29,11 +29,13 @@ router.get("/api/attendee/hash", async (req, res, next) => {
       registration = await Registration.findOne({ where: { hash, EventId } });
 
       if (registration) {
+        // find all SiteVisitors for this registration which have a SiteVisit which has not logged out at (a device currently watching the event)
         siteVisitors = await SiteVisitor.findAll({
           where: { RegistrationId: registration.id },
           include: { model: SiteVisit, where: { loggedOutAt: null } },
         });
 
+        // The number of sitevisitors is the number of browsers or devices that are viewing the event
         activeDevices = siteVisitors.length;
       }
     }
