@@ -1,7 +1,13 @@
 const express = require("express");
 const router = express.Router();
-const { ChatRoom, ChatUser, ChatMessage, ChatQuestion, Registration } =
-  require("../db").models;
+const {
+  ChatRoom,
+  ChatUser,
+  ChatMessage,
+  ChatQuestion,
+  Registration,
+  ChatRoomCached,
+} = require("../db").models;
 
 const requireAuth = require("../middlewares/requireAuth");
 const { clearCache } = require("../services/sequelizeRedis");
@@ -145,7 +151,11 @@ router.get("/api/chatroom/id", async (req, res, next) => {
   const { roomId } = req.query;
 
   try {
-    const chatRoom = await ChatRoom.findByPk(roomId);
+    const chatRoomCacheKey = `ChatRoom:id:${roomId}`;
+    const [chatRoom, chatRoomCacheHit] = await ChatRoomCached.findByPkCached(
+      chatRoomCacheKey,
+      roomId
+    );
 
     res.json(chatRoom);
   } catch (error) {

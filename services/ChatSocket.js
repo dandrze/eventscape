@@ -44,10 +44,6 @@ module.exports = (server) => {
         if (!isInitialConnect) {
           return socket.join(room.toString());
         }
-        // Get the chat room. If the chatroom is cached, pull that.
-        const chatRoomCacheKey = `ChatRoom:id:${room}`;
-        const [chatRoom, chatRoomCacheHit] =
-          await ChatRoomCached.findByPkCached(chatRoomCacheKey, room);
 
         // Find all chat messages for a room. If there is a cached version of this query, then pull that instead
         const messageHistoryCacheKey = `ChatRoom:MessageHistory:${room}`;
@@ -93,13 +89,6 @@ module.exports = (server) => {
         }
 
         socket.join(room.toString());
-
-        // push the hidden state (true or false)
-        if (chatRoom) socket.emit("chatHidden", chatRoom.chatHidden);
-
-        /*       socket.emit("notification", {
-          text: "You are now connected to room " + room,
-        }); */
 
         //push the message history
         socket.emit(

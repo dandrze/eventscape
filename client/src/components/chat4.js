@@ -238,8 +238,11 @@ const Chat = ({ event, room, userId, registrationId, settings }) => {
         params: { roomId: room },
       });
 
+      console.log(chatRoom.data);
+
       setChatTabEnabled(chatRoom.data.chatEnabled);
       setQuestionsTabEnabled(chatRoom.data.questionsEnabled);
+      setChatHidden(chatRoom.data.chatHidden);
     };
     fetchChatRoomData();
   }, [room, settings.triggerSectionReactUpdate]);
