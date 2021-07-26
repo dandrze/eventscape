@@ -132,12 +132,12 @@ module.exports = (server) => {
 
       // emit an event to refresh the page. Delay the refresh randomly between 0 and the duration to spread the requests out
       io.to(eventId.toString()).emit("refreshPage", {
-        duration: count * 10,
+        duration: count * 30,
       });
 
       // return the duration to the admin client for notification purposes
       callback({
-        duration: count * 10,
+        duration: count * 30,
       });
     });
 
