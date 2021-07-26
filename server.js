@@ -7,6 +7,8 @@ const cookieSession = require("cookie-session");
 const flash = require("connect-flash");
 const http = require("http");
 
+const cluster = require("cluster");
+
 const keys = require("./config/keys");
 require("./services/passport");
 require("./services/cron-scheduler")();
@@ -20,11 +22,10 @@ const logger = require("./services/winston");
 
 const PORT = process.env.PORT || 5000;
 
+var workers = {};
+const count = require("os").cpus().length || 1;
+
 const app = express();
-/* console.log(`server process is: ${process.pid}`);
-console.log(`Dyno is: ${process.env.DYNO}`);
-console.log(`PM2 id is: ${process.env.pm_id}`);
-console.log(`PM2 name is: ${process.env.name}`); */
 
 // Force HTTPS
 if (process.env.NODE_ENV === "production") app.use(secure);
@@ -65,13 +66,13 @@ app.use(require("./routes/awsRoutes"));
 app.use(require("./routes/adminRoutes"));
 
 // serve static files
-if (process.env.NODE_ENV != "development") {
+/* if (process.env.NODE_ENV != "development") {
   // if we don't regonize the route, serve the html document
   const path = require("path");
   app.get("*", (req, res) => {
     res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
   });
-}
+} */
 
 app.use(
   "/api/s3",
@@ -108,3 +109,24 @@ process.on("SIGINT", exitHandler(0, "SIGINT"));
 server.listen(PORT, () => {
   console.log("listening on port " + PORT);
 });
+
+function spawn() {
+  var worker = cluster.fork();
+  workers[worker.pid] = worker;
+  return worker;
+}
+
+if (cluster.isMaster) {
+  for (var i = 0; i < count; i++) {
+    spawn();
+  }
+  cluster.on("death", function (worker) {
+    console.log("worker " + worker.pid + " died. spawning a new process...");
+    delete workers[worker.pid];
+    spawn();
+  });
+} else {
+  server.listen(PORT, () => {
+    console.log("listening on port " + PORT);
+  });
+}
