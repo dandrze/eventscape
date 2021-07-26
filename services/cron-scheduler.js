@@ -45,8 +45,8 @@ const retrieveJobs = async () => {
 module.exports = () => {
   // starts a cron job to check for new scheduled jobs every 5 minutes on the first process of the first dyno (or of the development server if in dev)
   if (
-    (process.env.DYNO == "web.1" || process.env.NODE_ENV === "development") &&
-    process.env.pm_id == 0
+    (process.env.DYNO == "web.1" || process.env.NODE_ENV === "development")/*  &&
+    process.env.pm_id == 0 */
   ) {
     // retrieve all jobs as soon as the server starts
     retrieveJobs();
