@@ -21,7 +21,7 @@ const dialectOptions = process.env.IS_LOCAL
 
 // Heroku specific - if the app is in the production environment, leverage the connection pool available on the paid postgres instance
 if (process.env.NODE_ENV === "production") {
-  sequelize = new Sequelize(process.env.DATABASE_CONNECTION_POOL_URL, {
+  sequelize = new Sequelize(process.env.DATABASE_URL, {
     dialectOptions,
     logging,
   });
