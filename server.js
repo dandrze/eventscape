@@ -13,6 +13,9 @@ require("./services/cron-scheduler")();
 const terminate = require("./terminate");
 const { handleError, ErrorHandler } = require("./services/error");
 
+if (process.env.NODE_ENV === "production" || process.env.NODE_ENV === "staging")
+  require("newrelic");
+
 console.log(process.env.NODE_ENV);
 console.log(process.env.ENV);
 
