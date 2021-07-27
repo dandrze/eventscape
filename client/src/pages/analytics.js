@@ -31,7 +31,6 @@ const Analytics = (props) => {
       if (props.event.id) {
         // fetch data from API
         const visitors = await props.fetchCurrentVisitors(props.event.id);
-        console.log(visitors)
         // set the counts for current and unique visitors (returned from the server api)
         setData({
           current: visitors.currentCount,

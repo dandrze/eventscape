@@ -1,6 +1,8 @@
 const express = require("express");
 const { SiteVisit, Registration, SiteVisitor, Event } = require("../db").models;
 const requireAuth = require("../middlewares/requireAuth");
+const redisClient = require("../services/redis");
+
 
 const router = express.Router();
 
@@ -11,6 +13,15 @@ router.get(
     const { EventId } = req.query;
 
     try {
+      const cacheKey = `VisitorData:EventId:${EventId}`
+       const cachedVisitorData = await redisClient.getAsync(cacheKey)
+
+        if(cachedVisitorData){
+          console.log(true)
+          return res.json(JSON.parse(cachedVisitorData));
+        } 
+        console.log(false)
+
       const currentCount = await SiteVisit.count({
         where: {
           loggedOutAt: null,
@@ -64,7 +75,14 @@ router.get(
 
       const history = await createVisitHistory(visitData, EventId);
 
-      res.json({ currentCount, uniqueCount, visitorData, history, siteVisitors });
+      const output = { currentCount, uniqueCount, visitorData, history }
+
+      // cache the output so that this expensive calculation is performed at most every 30 seconds
+      redisClient.set(cacheKey, JSON.stringify(output))
+      // expire cache at 29 seconds
+      redisClient.expire(cacheKey, 29)
+
+      res.json(output);
     } catch (error) {
       next(error);
     }
