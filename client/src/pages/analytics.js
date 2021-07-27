@@ -31,6 +31,7 @@ const Analytics = (props) => {
       if (props.event.id) {
         // fetch data from API
         const visitors = await props.fetchCurrentVisitors(props.event.id);
+        console.log(visitors)
         // set the counts for current and unique visitors (returned from the server api)
         setData({
           current: visitors.currentCount,
@@ -49,18 +50,16 @@ const Analytics = (props) => {
           }, 60000);
         }
 
-        // fetch data again in 10 seconds
+        // fetch data again in 30 seconds
         timeout = setTimeout(() => {
           fetchDataAsync();
-        }, 10000);
+        }, 30000);
       }
     };
 
     // fetch data once when mounted
     fetchDataAsync();
 
-    // then fetch data every 30 seconds
-    //const interval = setInterval(() => fetchDataAsync(), 10 * 1000);
 
     // cleanup. Clears the timeout when component unmounts.
     return () => {

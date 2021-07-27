@@ -61,9 +61,10 @@ router.get(
         return { ...visitor, timeViewed, lastLogout };
       });
 
+
       const history = await createVisitHistory(visitData, EventId);
 
-      res.json({ currentCount, uniqueCount, visitorData, history });
+      res.json({ currentCount, uniqueCount, visitorData, history, siteVisitors });
     } catch (error) {
       next(error);
     }
