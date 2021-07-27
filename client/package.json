@@ -17,6 +17,7 @@
     "bootstrap": "^3.4.1",
     "bootstrap-slider": "^10.6.2",
     "chart.js": "^2.9.3",
+    "dangerously-set-html-content": "^1.0.8",
     "date-fns": "^2.22.1",
     "date-fns-tz": "^1.0.12",
     "font-awesome": "^4.7.0",
