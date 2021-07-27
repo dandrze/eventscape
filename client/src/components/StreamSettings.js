@@ -153,7 +153,7 @@ const StreamSettings = ({
                     >
                       <MenuItem value={"vimeo"}>Vimeo</MenuItem>
                       <MenuItem value={"wowza"}>Wowza</MenuItem>
-
+                      <MenuItem value={"dacast"}>Dacast</MenuItem>
                       <MenuItem value={"youtube-live"}>Youtube Live</MenuItem>
                       <MenuItem value={"custom-embed"}>
                         Custom HTML Embed (Advanced)
@@ -197,6 +197,47 @@ const StreamSettings = ({
                         <TextField
                           id="custom-HTML"
                           label="Wowza Embed Code"
+                          variant="outlined"
+                          multiline
+                          rows={12}
+                          value={customHTML}
+                          onChange={handleChangeCustomHTML}
+                          helperText={embedError}
+                          error={embedError}
+                        />
+                      </FormControl>
+                    </>
+                  )}
+
+                  {content === "dacast" && (
+                    <>
+                      <p className="description-text">
+                        Use the steps below to embed your video hosted on
+                        Dacast:
+                        <div>
+                          <ol>
+                            <li>
+                              Go to your{" "}
+                              <a
+                                className="url"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                href="https://www.dacast.com/"
+                              >
+                                Dacast player
+                              </a>
+                            </li>
+                            <li>Do some stuff...</li>
+                          </ol>
+                        </div>
+                      </p>
+                      <FormControl
+                        variant="outlined"
+                        className={classes.formControl}
+                      >
+                        <TextField
+                          id="custom-HTML"
+                          label="Dacast Embed Code"
                           variant="outlined"
                           multiline
                           rows={12}

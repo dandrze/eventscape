@@ -23,12 +23,6 @@
   border-radius: 10px;
 }
 
-/* Specific to make dacast embed code work */
-
-.video-responsive > div > div > div {
-  position: inherit !important;
-}
-
 /* Side by Side */
 @media only screen and (min-width: 1101px) {
   .container-one-video-window {
