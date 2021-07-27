@@ -16,7 +16,7 @@ const retrieveJobs = async () => {
   const activeCommunications = communications.filter(
     (communication) =>
       communication.status === statusOptions.ACTIVE &&
-      communication.Event.status === statusOptions.ACTIVE
+      communication.Event.status != statusOptions.DELETED
   );
   const inactiveCommunications = communications.filter(
     (communication) =>
@@ -44,9 +44,7 @@ const retrieveJobs = async () => {
 
 module.exports = () => {
   // starts a cron job to check for new scheduled jobs every 5 minutes on the first process of the first dyno (or of the development server if in dev)
-  if (
-    (process.env.DYNO == "web.1" || process.env.NODE_ENV === "development")
-  ) {
+  if (process.env.DYNO == "web.1" || process.env.NODE_ENV === "development") {
     // retrieve all jobs as soon as the server starts
     retrieveJobs();
     cron.schedule("*/5 * * * *", () => {
