@@ -178,15 +178,17 @@ const StreamSettings = ({
                               >
                                 Wowza Player Builder
                               </a>
+                              .
                             </li>
                             <li>
                               Input your desired settings and click{" "}
-                              <strong>Get Embed Code</strong>
+                              <strong>Get Embed Code</strong>.
                             </li>
                             <li>
                               Return to this page and paste your embed code in
-                              the text box below
+                              the text box below.
                             </li>
+                            <li>Click Update Stream Settings</li>
                           </ol>
                         </div>
                       </p>
@@ -198,6 +200,7 @@ const StreamSettings = ({
                           id="custom-HTML"
                           label="Wowza Embed Code"
                           variant="outlined"
+                          placeholder={`Sample: \n\n <div id='wowza_player'></div>\n<script id='player_embed' src='//player.cloud.wowza.com/hosted/xpz3nc0l/wowza.js' type='text/javascript'></script>`}
                           multiline
                           rows={12}
                           value={customHTML}
@@ -217,17 +220,20 @@ const StreamSettings = ({
                         <div>
                           <ol>
                             <li>
-                              Go to your{" "}
-                              <a
-                                className="url"
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                href="https://www.dacast.com/"
-                              >
-                                Dacast player
-                              </a>
+                              Log in to your Dacast account. Under the Live
+                              Streams tab, find the stream you want to embed and
+                              click the “Edit” button.
                             </li>
-                            <li>Do some stuff...</li>
+                            <li>
+                              Find and copy the JavaScript embed code (be sure
+                              to not select the iFrame or short link as these
+                              will not work).
+                            </li>
+                            <li>
+                              Copy the JavaScript embed code and paste it in the
+                              field below.
+                            </li>
+                            <li>Click Update Stream Settings</li>
                           </ol>
                         </div>
                       </p>
@@ -239,6 +245,7 @@ const StreamSettings = ({
                           id="custom-HTML"
                           label="Dacast Embed Code"
                           variant="outlined"
+                          placeholder={`Sample: \n\n <script id="your-script-id" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=your-content-id"  class="dacast-video"></script>`}
                           multiline
                           rows={12}
                           value={customHTML}
@@ -276,8 +283,9 @@ const StreamSettings = ({
                             </li>
                             <li>
                               Return to this page and paste your embed code in
-                              the text box below
+                              the text box below.
                             </li>
+                            <li>Click Update Stream Settings</li>
                           </ol>
                         </div>
                       </p>
@@ -289,6 +297,7 @@ const StreamSettings = ({
                           id="custom-HTML"
                           label="Vimeo Embed Code"
                           variant="outlined"
+                          placeholder={`Sample:\n\n<div style="padding:56.25% 0 0 0;position:relative;"><iframe src="https://player.vimeo.com/video/your-video-number frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen style="position:absolute;top:0;left:0;width:100%;height:100%;"></iframe></div>`}
                           multiline
                           rows={12}
                           value={customHTML}
