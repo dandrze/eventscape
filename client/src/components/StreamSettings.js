@@ -215,8 +215,7 @@ const StreamSettings = ({
                   {content === "dacast" && (
                     <>
                       <p className="description-text">
-                        Use the steps below to embed your video hosted on
-                        Dacast:
+                        Use the steps below to embed your stream from Dacast:
                         <div>
                           <ol>
                             <li>
@@ -243,7 +242,7 @@ const StreamSettings = ({
                       >
                         <TextField
                           id="custom-HTML"
-                          label="Dacast Embed Code"
+                          label="Dacast Javascript Embed Code"
                           variant="outlined"
                           placeholder={`Sample: \n\n <script id="your-script-id" width="100%" height="100%" src="https://player.dacast.com/js/player.js?contentId=your-content-id"  class="dacast-video"></script>`}
                           multiline
