@@ -6,12 +6,10 @@
   "scripts": {
     "dev": "concurrently \"npm run server\" \"npm run client\"",
     "start": "node server.js",
-    "server": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-dev) NODE_ENV=development pm2 start ecosystem.config.js",
-    "server-local": "cross-env DATABASE_URL=postgresql://localhost/eventscapelocal IS_LOCAL=true NODE_ENV=development pm2 start ecosystem.config.js",
-    "node-dev": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-dev) NODE_ENV=development node server.js",
-    "node-local": "cross-env DATABASE_URL=postgresql://localhost/eventscapelocal IS_LOCAL=true NODE_ENV=development node server.js",
-    "node-prod": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscapeio) NODE_ENV=development node server.js",
-    "node-staging": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-staging) NODE_ENV=development node server.js",
+    "server-dev": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-dev) NODE_ENV=development node server.js",
+    "server-local": "cross-env DATABASE_URL=postgresql://localhost/eventscapelocal IS_LOCAL=true NODE_ENV=development node server.js",
+    "server-prod": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscapeio) NODE_ENV=development node server.js",
+    "server-staging": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-staging) NODE_ENV=development node server.js",
     "client": "npm run start --prefix client",
     "heroku-postbuild": "npm install --prefix client && npm run build --prefix client",
     "deploy-s3": "cross-env NODE_ENV=production aws s3 sync build/ s3://eventscape-react-app"

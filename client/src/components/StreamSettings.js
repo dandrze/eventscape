@@ -74,8 +74,30 @@ const StreamSettings = ({
   };
 
   const handleChangeCustomHTML = (event) => {
-    setEmbedError("");
-    setCustomHTML(event.target.value);
+    const embedCode = event.target.value;
+
+    if (embedCode.includes("<script ")) {
+      const safeSrcs = [
+        `src="https://player.dacast.com`,
+        `src='//player.cloud.wowza.com`,
+      ];
+
+      // if the embedCode contains an src that is not one of the safeSrcs, then flag an error
+      if (!safeSrcs.some((safeSrc) => embedCode.includes(safeSrc))) {
+        setEmbedError(
+          "There was an issue with your embed code. Please contact support."
+        );
+      } else if (!embedCode.includes("></script>")) {
+        setEmbedError(
+          "There was an issue with your embed code. Please contact support."
+        );
+      } else {
+        setEmbedError("");
+      }
+    } else {
+      setEmbedError("");
+    }
+    setCustomHTML(embedCode);
   };
 
   const handleChangeRoom = (event) => {
@@ -83,6 +105,10 @@ const StreamSettings = ({
   };
 
   const handleSaveStreamSettings = () => {
+    // If there are any errors, do not continue
+    if (embedError) {
+      return null;
+    }
     if (content && content != "youtube-live" && !customHTML) {
       setEmbedError("Please enter your embed code");
     } else {

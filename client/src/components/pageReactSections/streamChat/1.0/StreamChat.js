@@ -1,12 +1,16 @@
 import React, { useEffect, useRef } from "react";
 import ReactHtmlParser from "react-html-parser";
 import { connect } from "react-redux";
+import DangerousInnerHtml from 'dangerously-set-html-content'
 import "../../../fonts.css";
 import "../../../pageEditor.css";
 import "./StreamChat.css";
 import Chat from "../../../chat4.js";
 
+
+
 const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
+
   const createEmbedLink = (youtubeLink) => {
     const splitLink = youtubeLink.split("/");
     var streamCode = splitLink[splitLink.length - 1];
@@ -20,6 +24,8 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
 
     return `https://www.youtube.com/embed/${streamCode}?rel=0;&modestbranding=1&showinfo=0&autoplay=1&mute=1&loop=1`;
   };
+
+  
 
   const displayStream = () => {
     const youtubeSrc = createEmbedLink(link);
@@ -61,7 +67,7 @@ const StreamChat = ({ link, content, html, chatRoom, attendee }) => {
           </div>
         );
       default:
-        return <div>{ReactHtmlParser(html)}</div>;
+        return <DangerousInnerHtml html={html} />
     }
   };
 

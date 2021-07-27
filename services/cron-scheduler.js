@@ -21,7 +21,7 @@ const retrieveJobs = async () => {
   const inactiveCommunications = communications.filter(
     (communication) =>
       communication.status != statusOptions.ACTIVE ||
-      communication.Event.status != statusOptions.ACTIVE
+      communication.Event.status === statusOptions.DELETED
   );
 
   const currentJobs = scheduledJobIds();
