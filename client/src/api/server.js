@@ -2,7 +2,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const instance = axios.create({
-  baseURL: "/",
+  baseURL: "http://app.eventscape.ca/",
 });
 
 instance.interceptors.response.use(
