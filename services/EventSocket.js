@@ -8,7 +8,7 @@ module.exports = (server) => {
   const io = socketIo(server, {
     path: "/api/socket/event",
     cors: {
-      origin: ["http://test1.localhost:3000/", "http://app.localhost:3000/"],
+      origin: ["http://test1.localhost:3000/", "http://app.localhost:3000/", "http://eventscape-react-app-test.s3-website-us-east-1.amazonaws.com"],
       methods: ["GET", "POST"],
       credentials: true,
       transports: ["websocket", "polling"],

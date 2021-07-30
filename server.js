@@ -44,7 +44,7 @@ var corsOptions = {
   origin: 'http://eventscape-react-app-test.s3-website-us-east-1.amazonaws.com',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
-//app.use(cors(corsOptions))
+app.use(cors(corsOptions))
 
 
 // passport set up for user auth
