@@ -39,6 +39,7 @@ app.use(compression());
 // Allow CORS from S3 bucket for testing
 var corsOptions = {
   origin: ["http://app.localhost:3000/", /\.emeryhill\.com$/, "/"],
+  credentials: true,
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));

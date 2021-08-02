@@ -10,6 +10,7 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
     const res = await api.post("/auth/login/local", {
       username: emailAddress,
       password: code,
+      withCredentials: true,
     });
 
     console.log(res);
@@ -42,7 +43,7 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
 
 export const fetchUser = () => async (dispatch) => {
   try {
-    const res = await api.get("/auth/current-user");
+    const res = await api.get("/auth/current-user", { withCredentials: true });
 
     dispatch({ type: FETCH_USER, payload: res.data });
 
