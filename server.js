@@ -38,7 +38,11 @@ app.use(compression());
 
 // Allow CORS from S3 bucket for testing
 var corsOptions = {
-  origin: ["http://app.localhost:3000/", /\.emeryhill\.com$/, "/"],
+  origin: [
+    "http://app.localhost:3000/",
+    /\.emeryhill\.com$/,
+    "https://eventscape-staging.herokuapp.com/",
+  ],
   credentials: true,
   optionsSuccessStatus: 200,
 };
