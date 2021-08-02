@@ -16,6 +16,8 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
       return { error: res.data.error[0] };
     }
 
+    console.log(res.data);
+
     cookies.set(
       "user",
       JSON.stringify({
