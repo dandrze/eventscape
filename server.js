@@ -1,6 +1,6 @@
 const compression = require("compression");
 const express = require("express");
-const cors = require('cors')
+const cors = require("cors");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 const secure = require("express-force-https");
@@ -36,16 +36,12 @@ if (process.env.NODE_ENV === "production") app.use(secure);
 // Compress to improve page load times
 app.use(compression());
 
-// Serve react files
-app.use(express.static("client/build"));
-
 // Allow CORS from S3 bucket for testing
 var corsOptions = {
-  origin: 'http://eventscape-react-app-test.s3-website-us-east-1.amazonaws.com',
-  optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
-}
-app.use(cors(corsOptions))
-
+  origin: "http://eventscape-react-app-test.s3-website-us-east-1.amazonaws.com",
+  optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
+};
+app.use(cors(corsOptions));
 
 // passport set up for user auth
 app.use(bodyParser.json());
@@ -75,15 +71,6 @@ app.use(require("./routes/pollingRoutes"));
 app.use(require("./routes/billingRoutes"));
 app.use(require("./routes/awsRoutes"));
 app.use(require("./routes/adminRoutes"));
-
-// serve static files
-if (process.env.NODE_ENV != "development") {
-  // if we don't regonize the route, serve the html document
-  const path = require("path");
-  app.get("*", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "client", "build", "index.html"));
-  });
-}
 
 app.use(
   "/api/s3",
