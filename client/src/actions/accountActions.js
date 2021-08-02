@@ -7,10 +7,14 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
   const cookies = new Cookies();
 
   try {
-    const res = await api.post("/auth/login/local", {
-      username: emailAddress,
-      password: code,
-    });
+    const res = await api.post(
+      "/auth/login/local",
+      {
+        username: emailAddress,
+        password: code,
+      },
+      { headers: { "Access-Control-Allow-Credentials": true } }
+    );
 
     console.log(res);
 
