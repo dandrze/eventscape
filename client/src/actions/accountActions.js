@@ -12,6 +12,8 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
       password: code,
     });
 
+    console.log(res);
+
     if (res.data.error) {
       return { error: res.data.error[0] };
     }

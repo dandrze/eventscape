@@ -46,6 +46,7 @@ passport.use(
     });
 
     if (password.toString() === user.loginCode.toString() && !codeExpired) {
+      console.log(user);
       return done(null, user);
     } else {
       return done(null, false, {
