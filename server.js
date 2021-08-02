@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === "production") app.use(secure);
 app.use(compression());
 
 // Allow CORS from S3 bucket for testing
-/* var corsOptions = {
+var corsOptions = {
   origin: [
     "http://app.localhost:3000/",
     "https://app.emeryhill.com",
@@ -47,21 +47,8 @@ app.use(compression());
   credentials: true,
   optionsSuccessStatus: 200,
 };
-app.use(cors(corsOptions)); */
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header("Access-Control-Allow-Origin", req.headers.origin);
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
-  );
-  if ("OPTIONS" == req.method) {
-    res.send(200);
-  } else {
-    next();
-  }
-});
+app.use(cors(corsOptions));
+app.options("*", cors());
 
 // passport set up for user auth
 app.use(bodyParser.json());
