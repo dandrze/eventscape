@@ -48,10 +48,6 @@ var corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Credentials", true);
-});
-
 // passport set up for user auth
 app.use(bodyParser.json());
 app.use(
