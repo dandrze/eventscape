@@ -38,8 +38,7 @@ app.use(compression());
 
 // Allow CORS from S3 bucket for testing
 var corsOptions = {
-  origin:
-    "https://eventscape-react-app-test.s3-website-us-east-1.amazonaws.com",
+  origin: "*",
   optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 };
 app.use(cors(corsOptions));
