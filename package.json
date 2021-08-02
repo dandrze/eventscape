@@ -11,7 +11,6 @@
     "server-prod": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscapeio) NODE_ENV=development node server.js",
     "server-staging": "cross-env DATABASE_URL=$(heroku config:get DATABASE_URL -a eventscape-staging) NODE_ENV=development node server.js",
     "client": "npm run start --prefix client",
-    "heroku-postbuild": "npm install --prefix client && npm run build --prefix client",
     "deploy-s3": "cross-env NODE_ENV=production && npm run build --prefix client && aws s3 sync client/build/ s3://eventscape-react-app-test"
   },
   "keywords": [],
