@@ -40,6 +40,7 @@ app.use(compression());
 var corsOptions = {
   origin: [
     "http://app.localhost:3000/",
+    "https://app.emeryhill.com",
     /\.emeryhill\.com$/,
     "https://eventscape-staging.herokuapp.com/",
   ],
