@@ -16,7 +16,7 @@ router.post(
 );
 
 router.get("/auth/success", async (req, res) => {
-  console.log(req.user);
+  console.log(req);
   res.json({ user: req.user, error: null });
 });
 
