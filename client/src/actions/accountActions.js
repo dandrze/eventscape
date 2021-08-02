@@ -46,7 +46,7 @@ export const signInWithCode = (emailAddress, code) => async (dispatch) => {
 
 export const fetchUser = () => async (dispatch) => {
   try {
-    const res = await api.get("/auth/current-user");
+    const res = await api.get("/auth/current-user", { withCredentials: true });
 
     dispatch({ type: FETCH_USER, payload: res.data });
 

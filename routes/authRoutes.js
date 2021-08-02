@@ -1,8 +1,6 @@
 const express = require("express");
 const passport = require("passport");
 const { sendCode } = require("../services/LoginCode");
-const { Account } = require("../db").models;
-const { clearCache } = require("../services/sequelizeRedis");
 
 const router = express.Router();
 
