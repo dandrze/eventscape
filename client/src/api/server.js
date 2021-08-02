@@ -1,8 +1,7 @@
 import axios from "axios";
-import { toast } from "react-toastify";
 
 const instance = axios.create({
-  baseURL: "/",
+  baseURL: "https://eventscape-staging.herokuapp.com/",
 });
 
 instance.interceptors.response.use(
