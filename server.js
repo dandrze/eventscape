@@ -41,14 +41,12 @@ var corsOptions = {
   origin: [
     "http://app.localhost:3000/",
     "https://app.emeryhill.com",
-    /\.emeryhill\.com$/,
     "https://eventscape-staging.herokuapp.com/",
   ],
   credentials: true,
   optionsSuccessStatus: 200,
 };
 app.use(cors(corsOptions));
-app.options("*", cors());
 
 // passport set up for user auth
 app.use(bodyParser.json());
