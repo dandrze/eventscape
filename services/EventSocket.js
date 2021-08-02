@@ -11,6 +11,7 @@ module.exports = (server) => {
       origin: [
         "http://test1.localhost:3000/",
         "http://app.localhost:3000/",
+        "https://scaletest.emeryhill.com/",
         /\.emeryhill\.com$/,
       ],
       methods: ["GET", "POST"],
