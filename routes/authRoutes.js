@@ -16,8 +16,7 @@ router.post(
 );
 
 router.get("/auth/success", async (req, res) => {
-  console.log(req.get("access-control-allow-credentials"));
-  console.log(req.get("access-control-allow-origin"));
+  console.log(JSON.stringify(req.headers));
 
   res.json({ user: req.user, error: null });
 });
