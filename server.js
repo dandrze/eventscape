@@ -43,27 +43,14 @@ var corsOptions = {
   optionsSuccessStatus: 200,
   methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
-//app.use(cors(corsOptions));
-app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", "https://app.emeryhill.com");
-  res.header("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
-  res.header("Access-Control-Allow-Credentials", true);
-  res.header(
-    "Access-Control-Allow-Headers",
-    "X-Requested-With, X-HTTP-Method-Override, Content-Type, Accept"
-  );
-
-  next();
-});
+app.use(cors(corsOptions));
 
 // passport set up for user auth
 app.use(bodyParser.json());
 app.use(session({ secret: "cats", cookie: { httpOnly: false } }));
 
-if (app.get("env") === "production") {
-  app.set("trust proxy", 1); // trust first proxy
-  sess.cookie.secure = true; // serve secure cookies
-}
+app.set("trust proxy", 1); // trust first proxy
+session.cookie.secure = true; // serve secure cookies
 
 app.use(passport.initialize());
 app.use(passport.session());

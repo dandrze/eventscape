@@ -8,7 +8,7 @@ const saltRounds = 10;
 // this is called after the strategy is complete and when done(null, user) is called
 // it takes the user and then serializes it and puts it into a cookie in the users browser for future server calls
 passport.serializeUser((user, done) => {
-  console.log(user);
+  console.log("user serialized");
   done(null, user.id);
 });
 
