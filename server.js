@@ -47,10 +47,9 @@ app.use(cors(corsOptions));
 
 // passport set up for user auth
 app.use(bodyParser.json());
-app.use(session({ secret: "cats", cookie: { httpOnly: false } }));
+app.use(session({ secret: "cats", cookie: { httpOnly: false, secure: true } }));
 
 app.set("trust proxy", 1); // trust first proxy
-session.cookie.secure = true; // serve secure cookies
 
 app.use(passport.initialize());
 app.use(passport.session());
