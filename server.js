@@ -45,8 +45,9 @@ var corsOptions = {
 app.use(cors(corsOptions));
 
 // passport set up for user auth
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(session({ secret: "session-secret-1212" }));
+app.use(bodyParser.json());
+app.use(session({ secret: "cats" }));
+
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
