@@ -46,7 +46,7 @@ app.use(cors(corsOptions));
 
 // passport set up for user auth
 app.use(bodyParser.json());
-app.use(session({ secret: "cats" }));
+app.use(session({ secret: "cats", cookie: { secure: true } }));
 
 app.use(passport.initialize());
 app.use(passport.session());
