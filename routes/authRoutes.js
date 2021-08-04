@@ -6,11 +6,16 @@ const router = express.Router();
 
 router.post(
   "/auth/login/local",
-  passport.authenticate("local", {
+  /* passport.authenticate("local", {
     successRedirect: "/auth/success",
     failureRedirect: "/auth/fail",
     failureFlash: true,
-  })
+  }) */
+  (req, res) => {
+    // If this function gets called, authentication was successful.
+    // `req.user` contains the authenticated user.
+    console.log(req.user);
+  }
 );
 
 router.get("/auth/success", async (req, res) => {
