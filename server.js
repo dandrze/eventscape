@@ -42,7 +42,12 @@ var corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200,
 };
-app.use(cors(corsOptions));
+//app.use(cors(corsOptions));
+app.use(function (req, res, next) {
+  res.header("Access-Control-Allow-Origin", "https://app.emeryhill.com");
+  res.header("Access-Control-Allow-Credentials", true);
+  next();
+});
 
 // passport set up for user auth
 app.use(bodyParser.json());
