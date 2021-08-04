@@ -16,6 +16,7 @@ const router = express.Router();
 router.get("/auth/login/local", async (req, res) => {
   console.log(req.headers);
   console.log(req.session);
+  console.log(req.cookies);
 });
 
 router.get("/auth/success", async (req, res) => {
