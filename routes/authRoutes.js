@@ -4,26 +4,16 @@ const { sendCode } = require("../services/LoginCode");
 
 const router = express.Router();
 
-/* router.post(
+router.post(
   "/auth/login/local",
   passport.authenticate("local", {
     successRedirect: "/auth/success",
     failureRedirect: "/auth/fail",
     failureFlash: true,
   })
-); */
-
-router.post("/auth/login/local", async (req, res) => {
-  console.log(req.headers);
-  console.log(req.session);
-  console.log(req.cookies);
-});
+);
 
 router.get("/auth/success", async (req, res) => {
-  console.log(req.user);
-  console.log(req.session);
-  console.log(req.headers);
-
   res.json({ user: req.user, error: null });
 });
 

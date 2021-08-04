@@ -41,6 +41,7 @@ var corsOptions = {
   origin: "https://app.emeryhill.com",
   credentials: true,
   optionsSuccessStatus: 200,
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 };
 //app.use(cors(corsOptions));
 app.use(function (req, res, next) {

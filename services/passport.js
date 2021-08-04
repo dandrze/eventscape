@@ -8,6 +8,7 @@ const saltRounds = 10;
 // this is called after the strategy is complete and when done(null, user) is called
 // it takes the user and then serializes it and puts it into a cookie in the users browser for future server calls
 passport.serializeUser((user, done) => {
+  console.log(user);
   done(null, user.id);
 });
 
@@ -36,14 +37,6 @@ passport.use(
     }
 
     const codeExpired = new Date() > new Date(user.loginCodeExpiration);
-
-    console.log({
-      codeExpired,
-      password,
-      code: user.loginCode,
-      codeDate: new Date(user.loginCodeExpiration),
-      currentDate: new Date(),
-    });
 
     if (password.toString() === user.loginCode.toString() && !codeExpired) {
       console.log(user);
